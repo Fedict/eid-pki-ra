@@ -83,21 +83,19 @@
 
 	<simpleType name="emailAddressType">
 		<restriction base="string">
-			<pattern value="[A-Za-z0-9._\+-]+@[A-Za-z0-9._-]+\.[A-Za-z]+" />
+			<maxLength value="128" />
 		</restriction>
 	</simpleType>
 
 	<simpleType name="idType">
 		<restriction base="string">
-			<minLength value="0" />
 			<maxLength value="64" />
 		</restriction>
 	</simpleType>
 
 	<simpleType name="phoneNumberType">
 		<restriction base="string">
-			<maxLength value="32" />
-			<pattern value="\+\d[\d ]+\d" />
+			<maxLength value="32" />			
 		</restriction>
 	</simpleType>
 
@@ -119,7 +117,6 @@
 
 	<simpleType name="validityPeriodMonthsType">
 		<restriction base="integer">
-			<enumeration value="15" />
 		</restriction>
 	</simpleType>
 </schema>
