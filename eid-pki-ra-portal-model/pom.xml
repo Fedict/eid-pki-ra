@@ -28,6 +28,7 @@
 			<groupId>org.jboss.seam</groupId>
 			<artifactId>jboss-seam</artifactId>
 			<scope>provided</scope>
+			<type>ejb</type>
 		</dependency>
 
 		<dependency>
@@ -40,6 +41,13 @@
 			<groupId>javax.persistence</groupId>
 			<artifactId>persistence-api</artifactId>
 			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<scope>test</scope>
+			<classifier>jdk15</classifier>
 		</dependency>
 	</dependencies>
 </project>

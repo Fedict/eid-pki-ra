@@ -135,7 +135,6 @@
 					</modules>
 
 					<jboss>
-						<version>${version.jboss.app}</version>
 						<loader-repository>eid-pki-ra:app=ejb3</loader-repository>
 					</jboss>
 				</configuration>

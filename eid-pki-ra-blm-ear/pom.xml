@@ -88,7 +88,6 @@
 			<artifactId>eid-pki-ra-blm-model</artifactId>
 			<type>ejb</type>
 		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -148,7 +147,6 @@
 					</modules>
 
 					<jboss>
-						<version>${version.jboss.app}</version>
 						<loader-repository>eid-pki-ra:app=ejb3</loader-repository>
 					</jboss>
 				</configuration>
