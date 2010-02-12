@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--  eID PKI RA Project. -->
+	<!--  Copyright (C) 2010 FedICT. -->
+	<!-- -->
+	<!--  This is free software; you can redistribute it and/or modify it -->
+	<!--  under the terms of the GNU Lesser General Public License version -->
+	<!--  3.0 as published by the Free Software Foundation. -->
+	<!-- -->
+	<!--  This software is distributed in the hope that it will be useful, -->
+	<!--  but WITHOUT ANY WARRANTY; without even the implied warranty of -->
+	<!--  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU -->
+	<!--  Lesser General Public License for more details. -->
+	<!-- -->
+	<!--  You should have received a copy of the GNU Lesser General Public -->
+	<!--  License along with this software; if not, see -->
+	<!--  http://www.gnu.org/licenses/. -->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.fedict.be/eid/pki-ra" xmlns:tns="http://www.fedict.be/eid/pki-ra"
+	elementFormDefault="qualified" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+
+	<import id="xmldsig" namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd" />
+
+	<element name="CertificateRevocationRequest" type="tns:certificateRevocationRequestType" />
+	<element name="CertificateRevocationResponse" type="tns:certificateRevocationResponseType" />
+	<element name="CertificateSigningRequest" type="tns:certificateRequestType" />
+	<element name="CertificateResponse" type="tns:certificateResponseType" />
+
+	<complexType name="certificateRequestType">
+		<sequence>
+			<element name="RequestId" minOccurs="1" maxOccurs="1" type="tns:idType" />
+			<element name="DistinguishedName" type="token" minOccurs="1" maxOccurs="1" />
+			<element name="CertificateType" type="tns:certificateTypeType" minOccurs="1" maxOccurs="1" />
+			<element name="ValidityPeriodMonths" type="tns:validityPeriodMonthsType" minOccurs="1" maxOccurs="1" />
+			<element name="CSR" type="base64Binary" minOccurs="1" maxOccurs="1" />
+			<element name="Description" type="string" minOccurs="0" maxOccurs="1" />
+			<element name="Operator" type="tns:entityType" minOccurs="1" maxOccurs="1" />
+			<element ref="dsig:Signature" minOccurs="0" maxOccurs="1" />
+		</sequence>
+	</complexType>
+
+	<complexType name="certificateResponseType">
+		<sequence>
+			<element name="RequestId" type="tns:idType" minOccurs="1" maxOccurs="1" />
+			<element name="ResponseId" type="tns:idType" minOccurs="1" maxOccurs="1" />
+			<element name="Result" type="tns:resultType" minOccurs="1" maxOccurs="1" />
+			<element name="ResultMessage" type="tns:resultMessageType" minOccurs="0" maxOccurs="1" />
+		</sequence>
+	</complexType>
+
+	<complexType name="certificateRevocationRequestType">
+		<sequence>
+			<element name="RequestId" type="tns:idType" minOccurs="1" maxOccurs="1" />
+			<element name="Certificate" type="base64Binary" minOccurs="1" maxOccurs="1" />
+			<element name="Operator" type="tns:entityType" minOccurs="1" maxOccurs="1" />
+			<element ref="dsig:Signature" minOccurs="0" maxOccurs="1" />
+		</sequence>
+	</complexType>
+
+	<complexType name="certificateRevocationResponseType">
+		<sequence>
+			<element name="RequestId" type="tns:idType" minOccurs="1" maxOccurs="1" />
+			<element name="ResponseId" type="tns:idType" minOccurs="1" maxOccurs="1" />
+			<element name="Result" type="tns:resultType" minOccurs="1" maxOccurs="1" />
+			<element name="ResultMessage" type="tns:resultMessageType" minOccurs="0" maxOccurs="1" />
+		</sequence>
+	</complexType>
+
+	<complexType name="entityType">
+		<sequence>
+			<element name="Name" minOccurs="1" maxOccurs="1" type="string" />
+			<element name="Function" type="string" minOccurs="1" maxOccurs="1" />
+			<element name="Email" type="tns:emailAddressType" minOccurs="1" maxOccurs="1" />
+			<element name="Phone" type="tns:phoneNumberType" minOccurs="1" maxOccurs="1" />
+		</sequence>
+	</complexType>
+
+	<simpleType name="certificateTypeType">
+		<restriction base="string">
+			<enumeration value="Server" />
+			<enumeration value="Client" />
+			<enumeration value="Code" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="emailAddressType">
+		<restriction base="string">
+			<pattern value="[A-Za-z0-9._\+-]+@[A-Za-z0-9._-]+\.[A-Za-z]+" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="idType">
+		<restriction base="string">
+			<minLength value="0" />
+			<maxLength value="64" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="phoneNumberType">
+		<restriction base="string">
+			<maxLength value="32" />
+			<pattern value="\+\d[\d ]+\d" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="resultMessageType">
+		<restriction base="string">
+			<maxLength value="256"></maxLength>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="resultType">
+		<restriction base="string">
+			<enumeration value="Success" />
+			<enumeration value="Invalid Message" />
+			<enumeration value="Invalid Signature" />
+			<enumeration value="Not Authorized" />
+			<enumeration value="General Failure" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="validityPeriodMonthsType">
+		<restriction base="integer">
+			<enumeration value="15" />
+		</restriction>
+	</simpleType>
+</schema>
