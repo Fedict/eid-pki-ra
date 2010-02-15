@@ -22,7 +22,7 @@
 	<url>http://code.google.com/p/eid-pki-ra/</url>
 	<developers>
 		<developer>
-			<name>Jan Van de Bergh</name>
+			<name>Jan Van den Bergh</name>
 			<email>j.vandenbergh@aca-it.be</email>
 		</developer>
 		<developer>
@@ -261,12 +261,6 @@
 			</dependency>
 
 			<dependency>
-				<groupId>org.jboss.el</groupId>
-				<artifactId>jboss-el</artifactId>
-				<version>2.0.1.GA</version>
-			</dependency>
-
-			<dependency>
 				<groupId>org.jboss.jbossas</groupId>
 				<artifactId>jboss-as-component-matrix</artifactId>
 				<type>pom</type>
@@ -283,6 +277,12 @@
 			<dependency>
 				<groupId>org.richfaces.framework</groupId>
 				<artifactId>richfaces-api</artifactId>
+				<version>3.3.2.SR1</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.richfaces.ui</groupId>
+				<artifactId>richfaces-ui</artifactId>
 				<version>3.3.2.SR1</version>
 			</dependency>
 
