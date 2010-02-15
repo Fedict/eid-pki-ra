@@ -28,14 +28,7 @@
 				<exclusion>
 					<groupId>xpp3</groupId>
 					<artifactId>xpp3_min</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jboss.el</groupId>
-			<artifactId>jboss-el</artifactId>
-			<exclusions>
+				</exclusion>			
 				<exclusion>
 					<groupId>javax.el</groupId>
 					<artifactId>el-api</artifactId>
@@ -52,6 +45,11 @@
 					<artifactId>commons-collections</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.richfaces.ui</groupId>
+			<artifactId>richfaces-ui</artifactId>
 		</dependency>
 
 		<dependency>
@@ -126,6 +124,18 @@
 							<artifactId>richfaces-api</artifactId>
 							<bundleDir>lib</bundleDir>
 						</jarModule>
+						
+						<jarModule>
+							<groupId>org.richfaces.framework</groupId>
+							<artifactId>richfaces-impl</artifactId>
+							<bundleDir>lib</bundleDir>
+						</jarModule>
+						
+						<jarModule>
+							<groupId>org.richfaces.ui</groupId>
+							<artifactId>richfaces-ui</artifactId>
+							<bundleDir>lib</bundleDir>
+						</jarModule>
 
 						<jarModule>
 							<groupId>org.jboss.el</groupId>
@@ -143,7 +153,7 @@
 							<groupId>org.antlr</groupId>
 							<artifactId>antlr-runtime</artifactId>
 							<bundleDir>lib</bundleDir>
-						</jarModule>
+						</jarModule>						
 					</modules>
 
 					<jboss>
