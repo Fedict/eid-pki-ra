@@ -277,7 +277,7 @@
 				<artifactId>richfaces-api</artifactId>
 				<version>${richfaces.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.richfaces.ui</groupId>
 				<artifactId>richfaces-ui</artifactId>
@@ -299,9 +299,9 @@
 			<dependency>
 				<groupId>org.testng</groupId>
 				<artifactId>testng</artifactId>
-				<version>5.8</version>
-				<scope>test</scope>
+				<version>5.11</version>
 				<classifier>jdk15</classifier>
+				<scope>test</scope>
 			</dependency>
 
 			<dependency>
@@ -313,6 +313,11 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<!--
+		Can be used to generate reports about lines of code not covered by tests http://cobertura.sourceforge.net <reporting>
+		<plugins> <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>cobertura-maven-plugin</artifactId>
+		<version>2.2</version> </plugin> </plugins> </reporting>
+	-->
 	<reporting>
 		<plugins>
 			<plugin>
@@ -323,7 +328,6 @@
 					<includeTestSourceDirectory>true</includeTestSourceDirectory>
 				</configuration>
 			</plugin>
-
 			<!--
 				Can be used to generate reports about lines of code not covered by
 				tests http://cobertura.sourceforge.net <plugin>
