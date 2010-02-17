@@ -51,7 +51,7 @@
 
 	<properties>
 		<eid-applet.version>1.0.1-SNAPSHOT</eid-applet.version>
-<!--		<richfaces.version>3.2.2.SR1</richfaces.version>-->
+		<richfaces.version>3.2.2.SR1</richfaces.version>
 		<jboss.version>6.0.0.M1</jboss.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -303,6 +303,18 @@
 				<artifactId>mockito-all</artifactId>
 				<version>1.3</version>
 				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.richfaces.framework</groupId>
+				<artifactId>richfaces-impl</artifactId>
+				<version>${richfaces.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.richfaces.ui</groupId>
+				<artifactId>richfaces-ui</artifactId>
+				<version>${richfaces.version}</version>
+				<scope>provided</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

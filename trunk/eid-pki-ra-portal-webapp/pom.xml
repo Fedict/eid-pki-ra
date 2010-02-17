@@ -84,7 +84,7 @@
 
 		<dependency>
 			<groupId>org.richfaces.framework</groupId>
-			<artifactId>richfaces-impl-jsf2</artifactId>
+			<artifactId>richfaces-impl</artifactId>
 		</dependency>
 		
 		<dependency>
