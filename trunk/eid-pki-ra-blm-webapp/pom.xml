@@ -83,17 +83,7 @@
 
 		<dependency>
 			<groupId>org.richfaces.framework</groupId>
-			<artifactId>richfaces-impl</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.richfaces.framework</groupId>
-					<artifactId>richfaces-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>commons-beanutils</groupId>
-					<artifactId>commons-beanutils</artifactId>
-				</exclusion>
-			</exclusions>
+			<artifactId>richfaces-impl-jsf2</artifactId>
 		</dependency>
 		
 		<dependency>
