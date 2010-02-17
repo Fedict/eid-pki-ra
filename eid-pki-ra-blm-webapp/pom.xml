@@ -72,12 +72,6 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.jboss.seam</groupId>
-			<artifactId>jboss-seam-remoting</artifactId>
-			<type>jar</type>
-		</dependency>
-		
-		<dependency>
 			<groupId>com.sun.facelets</groupId>
 			<artifactId>jsf-facelets</artifactId>
 		</dependency>
