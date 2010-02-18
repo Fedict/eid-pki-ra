@@ -35,7 +35,7 @@
 						<configuration>
 							<schemaDirectory>src/main/resources/xsd</schemaDirectory>
 							<schemaIncludes>
-								<schemaInclude>contracts.xsd</schemaInclude>
+								<schemaInclude>eid-pki-ra.xsd</schemaInclude>
 							</schemaIncludes>
 							<verbose>true</verbose>
 							<catalog>src/main/resources/xsd/catalog.cat</catalog>

@@ -14,17 +14,17 @@
 	<!--  You should have received a copy of the GNU Lesser General Public -->
 	<!--  License along with this software; if not, see -->
 	<!--  http://www.gnu.org/licenses/. -->
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.fedict.be/eid/pki-ra" xmlns:tns="http://www.fedict.be/eid/pki-ra"
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.fedict.be/eid/pki-ra/contracts" xmlns:tns="http://www.fedict.be/eid/pki-ra/contracts"
 	elementFormDefault="qualified" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
 
-	<import id="xmldsig" namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd" />
+	<import id="xmldsig" namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="xmldsig-core-schema.xsd" />
 
 	<element name="CertificateRevocationRequest" type="tns:certificateRevocationRequestType" />
 	<element name="CertificateRevocationResponse" type="tns:certificateRevocationResponseType" />
-	<element name="CertificateSigningRequest" type="tns:certificateRequestType" />
-	<element name="CertificateResponse" type="tns:certificateResponseType" />
+	<element name="CertificateSigningRequest" type="tns:certificateSigningRequestType" />
+	<element name="CertificateSigningResponse" type="tns:certificateSigningResponseType" />
 
-	<complexType name="certificateRequestType">
+	<complexType name="certificateSigningRequestType">
 		<sequence>
 			<element name="RequestId" type="tns:idType" />
 			<element name="DistinguishedName" type="tns:distinguishedNameType" />
@@ -37,7 +37,7 @@
 		</sequence>
 	</complexType>
 
-	<complexType name="certificateResponseType">
+	<complexType name="certificateSigningResponseType">
 		<sequence>
 			<element name="RequestId" type="tns:idType" />
 			<element name="ResponseId" type="tns:idType" />
