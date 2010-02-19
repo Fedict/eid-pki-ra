@@ -33,7 +33,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
-import org.bouncycastle.util.encoders.Base64;
+import org.apache.commons.codec.binary.Base64;
 import org.xml.sax.SAXException;
 
 import be.fedict.eid.pkira.contracts.CertificateSigningRequestType;
@@ -93,7 +93,7 @@ public class ContractParserBean implements ContractParser {
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 			marshaller.marshal(response, outputStream);
 
-			return new String(Base64.encode(outputStream.toByteArray()));
+			return new String(Base64.encodeBase64(outputStream.toByteArray()));
 		} catch (JAXBException e) {
 			LOGGER.log(Level.SEVERE, "Error marshalling response.", e);
 			return null;
@@ -115,7 +115,7 @@ public class ContractParserBean implements ContractParser {
 		}
 		ByteArrayInputStream inputStream;
 		try {
-			byte[] msgBytes = Base64.decode(requestMsg);
+			byte[] msgBytes = Base64.decodeBase64(requestMsg);
 			inputStream = new ByteArrayInputStream(msgBytes);
 		} catch (Exception e) {
 			throw new ContractHandlerBeanException(ResultType.INVALID_MESSAGE, "Invalid base64 encoded data.");
