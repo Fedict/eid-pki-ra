@@ -22,6 +22,7 @@ import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -29,9 +30,10 @@ import java.net.URL;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
-import org.jboss.seam.util.Base64;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.xml.sax.SAXException;
@@ -55,7 +57,7 @@ public class ContractParserTest {
 	private static final String REQUEST_ID = "TEST-REQUEST-1";
 	private static final String RESPONSE_ID = "TEST-RESPONSE-1";
 	private static final String TEST_MESSAGE = "Test message";
-	
+
 	private ContractParserBean contractParser;
 
 	@BeforeTest
@@ -97,7 +99,7 @@ public class ContractParserTest {
 	@Test
 	public void testUnmarshalInvalidData() {
 		try {
-			contractParser.unmarshalRequestMessage("(°°)", CertificateRevocationRequestType.class);
+			contractParser.unmarshalRequestMessage("(xx)", CertificateRevocationRequestType.class);
 			fail("Expected exception.");
 		} catch (ContractHandlerBeanException e) {
 			assertEquals(e.getResultType(), ResultType.INVALID_MESSAGE);
@@ -130,7 +132,7 @@ public class ContractParserTest {
 			ParserConfigurationException {
 		InputStream resource = getClass().getClassLoader().getResourceAsStream(getResourceNameForXml(controlFileName));
 		InputStreamReader control = new InputStreamReader(resource);
-		InputStreamReader test = new InputStreamReader(new ByteArrayInputStream(Base64.decode(base64data)));
+		InputStreamReader test = new InputStreamReader(new ByteArrayInputStream(Base64.decodeBase64(base64data)));
 
 		Diff diff = XMLUnit.compareXML(control, test);
 		assertTrue(diff.identical(), diff.toString());
@@ -142,9 +144,14 @@ public class ContractParserTest {
 
 	private <T extends RequestType> T testParseFile(String resourceName, Class<T> requestClass)
 			throws ContractHandlerBeanException {
-		URL resource = getClass().getClassLoader().getResource(getResourceNameForXml(resourceName));
-		String fileName = resource.getFile();
-		String base64data = Base64.encodeFromFile(fileName);
-		return contractParser.unmarshalRequestMessage(base64data, requestClass);
+		try {
+			URL resource = getClass().getClassLoader().getResource(getResourceNameForXml(resourceName));
+			byte[] data = FileUtils.readFileToByteArray(new File(resource.getFile()));
+			String  base64data = Base64.encodeBase64String(data);
+			return contractParser.unmarshalRequestMessage(base64data, requestClass);
+		} catch (IOException e) {
+			fail("Could not read control XML", e);
+			return null;
+		}
 	}
 }
