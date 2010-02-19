@@ -14,8 +14,8 @@
 	<!--  You should have received a copy of the GNU Lesser General Public -->
 	<!--  License along with this software; if not, see -->
 	<!--  http://www.gnu.org/licenses/. -->
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.fedict.be/eid/pki-ra/contracts" xmlns:tns="http://www.fedict.be/eid/pki-ra/contracts"
-	elementFormDefault="qualified" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.fedict.be/eid/pki-ra/contracts"
+	xmlns:tns="http://www.fedict.be/eid/pki-ra/contracts" elementFormDefault="qualified" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
 
 	<import id="xmldsig" namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="xmldsig-core-schema.xsd" />
 
@@ -24,50 +24,62 @@
 	<element name="CertificateSigningRequest" type="tns:certificateSigningRequestType" />
 	<element name="CertificateSigningResponse" type="tns:certificateSigningResponseType" />
 
-	<complexType name="certificateSigningRequestType">
+	<complexType name="requestType" abstract="true">
 		<sequence>
 			<element name="RequestId" type="tns:idType" />
-			<element name="DistinguishedName" type="tns:distinguishedNameType" />
-			<element name="CertificateType" type="tns:certificateTypeType" />
-			<element name="ValidityPeriodMonths" type="tns:validityPeriodMonthsType" />
-			<element name="CSR" type="tns:pemEncodedType" />
 			<element name="Description" type="tns:descriptionType" />
 			<element name="Operator" type="tns:entityType" />
 			<element ref="dsig:Signature" minOccurs="0" />
 		</sequence>
+	</complexType>
+
+	<complexType name="responseType" abstract="true">
+		<sequence>
+			<element name="RequestId" type="tns:idType" minOccurs="0" />
+			<element name="ResponseId" type="tns:idType" />
+			<element name="Result" type="tns:resultType" />
+			<element name="ResultMessage" type="tns:resultMessageType" minOccurs="0" />
+		</sequence>
+	</complexType>
+
+	<complexType name="certificateSigningRequestType">
+		<complexContent>
+			<extension base="tns:requestType">
+				<sequence>
+					<element name="DistinguishedName" type="tns:distinguishedNameType" />
+					<element name="CertificateType" type="tns:certificateTypeType" />
+					<element name="ValidityPeriodMonths" type="tns:validityPeriodMonthsType" />
+					<element name="CSR" type="tns:pemEncodedType" />
+				</sequence>
+			</extension>
+		</complexContent>
 	</complexType>
 
 	<complexType name="certificateSigningResponseType">
-		<sequence>
-			<element name="RequestId" type="tns:idType" />
-			<element name="ResponseId" type="tns:idType" />
-			<element name="Result" type="tns:resultType" />
-			<element name="ResultMessage" type="tns:resultMessageType" minOccurs="0" />
-		</sequence>
+		<complexContent>
+			<extension base="tns:responseType" />
+		</complexContent>
 	</complexType>
 
 	<complexType name="certificateRevocationRequestType">
-		<sequence>
-			<element name="RequestId" type="tns:idType" />
-			<element name="DistinguishedName" type="tns:distinguishedNameType" />
-			<element name="StartDate" type="date" />
-			<element name="EndDate" type="date" />
-			<element name="Certificate" type="tns:pemEncodedType" />
-			<element name="Description" type="tns:descriptionType" />
-			<element name="Operator" type="tns:entityType" />
-			<element ref="dsig:Signature" minOccurs="0" />
-		</sequence>
+		<complexContent>
+			<extension base="tns:requestType">
+				<sequence>
+					<element name="DistinguishedName" type="tns:distinguishedNameType" />
+					<element name="StartDate" type="date" />
+					<element name="EndDate" type="date" />
+					<element name="Certificate" type="tns:pemEncodedType" />
+				</sequence>
+			</extension>
+		</complexContent>
 	</complexType>
 
 	<complexType name="certificateRevocationResponseType">
-		<sequence>
-			<element name="RequestId" type="tns:idType" />
-			<element name="ResponseId" type="tns:idType" />
-			<element name="Result" type="tns:resultType" />
-			<element name="ResultMessage" type="tns:resultMessageType" minOccurs="0" />
-		</sequence>
+		<complexContent>
+			<extension base="tns:responseType" />
+		</complexContent>
 	</complexType>
-	
+
 	<complexType name="entityType">
 		<sequence>
 			<element name="Name" type="tns:nameType" />
@@ -102,7 +114,7 @@
 			<maxLength value="128" />
 		</restriction>
 	</simpleType>
-	
+
 	<simpleType name="functionType">
 		<restriction base="string">
 			<maxLength value="64" />
@@ -114,13 +126,13 @@
 			<maxLength value="64" />
 		</restriction>
 	</simpleType>
-	
+
 	<simpleType name="nameType">
 		<restriction base="string">
 			<maxLength value="64" />
 		</restriction>
 	</simpleType>
-	
+
 	<simpleType name="pemEncodedType">
 		<restriction base="string">
 			<maxLength value="2048" />
