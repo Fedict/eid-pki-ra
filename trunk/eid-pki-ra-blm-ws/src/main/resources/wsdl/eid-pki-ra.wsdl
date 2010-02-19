@@ -16,10 +16,10 @@
 	<!--  http://www.gnu.org/licenses/. -->
 <wsdl:definitions xmlns:tns="http://www.fedict.be/eid/pki-ra/blm/ws" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="eid-pki-ra" targetNamespace="http://www.fedict.be/eid/pki-ra/blm/ws"
-	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:types="http://www.fedict.be/eid/pki-ra/blm/blm/ws">
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:types="http://www.fedict.be/eid/pki-ra/blm/types">
 
 	<wsdl:types>
-		<xsd:schema targetNamespace="http://www.fedict.be/eid/pki-ra/blm/blm/ws">
+		<xsd:schema targetNamespace="http://www.fedict.be/eid/pki-ra/blm/types">
 			<xsd:element name="CertificateSigningRequest" type="xsd:string" />
 			<xsd:element name="CertificateSigningResult" type="xsd:string" />
 			<xsd:element name="CertificateRevocationRequest" type="xsd:string" />
