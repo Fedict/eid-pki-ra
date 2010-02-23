@@ -17,33 +17,24 @@
  */
 package be.fedict.eid.blm.mail;
 
-import javax.ejb.Stateless;
 
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Logger;
-import org.jboss.seam.faces.Renderer;
-import org.jboss.seam.log.Log;
+/**
+ * @author hans
+ *
+ */
+public class MailException extends Exception {
 
-@Stateless
-public class MailAction {
-	
-	@Logger
-	private Log log;
-	
-	@In(create=true)
-	private Renderer renderer;	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7988714337544884043L;
 	
 	/**
-	 * Send Mail
-	 * @throws MailException the exception
+	 * 
+	 * @param message the message
 	 */
-	public void send() throws MailException{
-		try{
- 			renderer.render("/view/template/mail-template.xhtml");
- 			log.info("Success sending an email!");
-		}catch(Exception e){
-			log.info("Sending an email Failed!" + e.getMessage());
-			throw new MailException("Sending an email Failed: " + e.getMessage());
-		}
-	}	
+	public MailException(String message){
+		super(message);
+	} 
+
 }
