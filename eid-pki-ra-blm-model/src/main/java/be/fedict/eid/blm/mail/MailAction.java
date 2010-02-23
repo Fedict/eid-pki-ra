@@ -16,6 +16,9 @@ public class MailAction {
 	@In(create=true)
 	private Renderer renderer;	
 	
+	/**
+	 * Send Mail
+	 */
 	public void send(){
 		try{
  			renderer.render("/view/template/mail-template.xhtml");

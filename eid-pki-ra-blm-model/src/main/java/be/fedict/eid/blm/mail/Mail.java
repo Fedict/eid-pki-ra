@@ -14,7 +14,7 @@ public class Mail implements Serializable {
 	private static final long serialVersionUID = 5630695549821167339L;
 
 	private String sender;
-	private List<String> reciepients;
+	private List<String> recipients;
 	private String subject;
 	private String body;
 	private List<Attachment> attachments;
@@ -64,18 +64,34 @@ public class Mail implements Serializable {
 		this.body = body;
 	}
 
-	public List<String> getReciepients() {
-		return reciepients;
+	/**
+	 * 
+	 * @return the recipients
+	 */
+	public List<String> getRecipients() {
+		return recipients;
 	}
 
-	public void setReciepients(List<String> reciepients) {
-		this.reciepients = reciepients;
+	/**
+	 * 
+	 * @param recipients the recipients
+	 */
+	public void setRecipients(List<String> recipients) {
+		this.recipients = recipients;
 	}
-
+	
+	/**
+	 * 
+	 * @return the attachemnts
+	 */
 	public List<Attachment> getAttachments() {
 		return attachments;
 	}
 
+	/**
+	 * 
+	 * @param attachments the attachments
+	 */
 	public void setAttachments(List<Attachment> attachments) {
 		this.attachments = attachments;
 	}
