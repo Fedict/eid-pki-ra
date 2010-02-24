@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -28,31 +29,31 @@
 				<exclusion>
 					<groupId>xpp3</groupId>
 					<artifactId>xpp3_min</artifactId>
-				</exclusion>			
+				</exclusion>
 				<exclusion>
 					<groupId>javax.el</groupId>
 					<artifactId>el-api</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>		
-		
+		</dependency>
+
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk16</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 		</dependency>
-		
+
 		<!--  Application modules -->
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-blm-webapp</artifactId>
 			<type>war</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-blm-ws</artifactId>
@@ -63,6 +64,11 @@
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-blm-model</artifactId>
 			<type>ejb</type>
+		</dependency>
+
+		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-generated-publicws</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -80,12 +86,12 @@
 							<contextRoot>eid-pki-ra/admin</contextRoot>
 							<unpack>${exploded.war.file}</unpack>
 						</webModule>
-						
+
 						<ejbModule>
 							<groupId>be.fedict</groupId>
 							<artifactId>eid-pki-ra-blm-model</artifactId>
 						</ejbModule>
-						
+
 						<webModule>
 							<groupId>be.fedict</groupId>
 							<artifactId>eid-pki-ra-blm-ws</artifactId>
@@ -96,7 +102,7 @@
 						<ejbModule>
 							<groupId>org.jboss.seam</groupId>
 							<artifactId>jboss-seam</artifactId>
-						</ejbModule>							
+						</ejbModule>
 					</modules>
 
 					<jboss>
@@ -104,18 +110,18 @@
 					</jboss>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<configuration>
 					<outputDirectory>${basedir}/target</outputDirectory>
 				</configuration>
 			</plugin>
-        </plugins>
-        
-        <resources>
-        	<resource>
-        		<filtering>true</filtering>
+		</plugins>
+
+		<resources>
+			<resource>
+				<filtering>true</filtering>
 				<directory>src/main/resources</directory>
 			</resource>
 		</resources>

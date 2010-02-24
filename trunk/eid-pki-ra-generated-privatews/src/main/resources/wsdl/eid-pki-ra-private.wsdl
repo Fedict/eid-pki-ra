@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+	<!--  eID PKI RA Project. -->
+	<!--  Copyright (C) 2010 FedICT. -->
+	<!-- -->
+	<!--  This is free software; you can redistribute it and/or modify it -->
+	<!--  under the terms of the GNU Lesser General Public License version -->
+	<!--  3.0 as published by the Free Software Foundation. -->
+	<!-- -->
+	<!--  This software is distributed in the hope that it will be useful, -->
+	<!--  but WITHOUT ANY WARRANTY; without even the implied warranty of -->
+	<!--  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU -->
+	<!--  Lesser General Public License for more details. -->
+	<!-- -->
+	<!--  You should have received a copy of the GNU Lesser General Public -->
+	<!--  License along with this software; if not, see -->
+	<!--  http://www.gnu.org/licenses/. -->
+<wsdl:definitions xmlns:tns="http://www.fedict.be/eid/pki-ra/private-ws" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="eid-pki-ra-private" targetNamespace="http://www.fedict.be/eid/pki-ra/private-ws"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:types="http://www.fedict.be/eid/pki-ra/private-ws/types">
+
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://www.fedict.be/eid/pki-ra/private-ws/types">
+			<xsd:element name="ListCertificatesRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="userRRN" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+		<xsd:schema targetNamespace="http://www.fedict.be/eid/pki-ra/private-ws/types">
+			<xsd:element name="ListCertificatesResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="certificate" type="xsd:string" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="ListCertificatesRequest">
+		<wsdl:part name="request" element="types:ListCertificatesRequest" />
+	</wsdl:message>
+	
+	<wsdl:message name="ListCertificatesResult">
+		<wsdl:part name="response" element="types:ListCertificatesResponse" />
+	</wsdl:message>
+
+	<wsdl:portType name="EIDPKIRAPrivatePortType">
+		<wsdl:operation name="ListCertificates">
+			<wsdl:input message="tns:ListCertificatesRequest" />
+			<wsdl:output message="tns:ListCertificatesResult" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="SOAPBinding" type="tns:EIDPKIRAPrivatePortType">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+		<wsdl:operation name="ListCertificates">
+			<soap:operation />
+			<wsdl:input message="tns:ListCertificatesRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output message="tns:ListCertificatesResult">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>		
+	</wsdl:binding>
+
+	<wsdl:service name="EIDPKIRAPrivateService">
+		<wsdl:port name="EIDPKIRAPrivatePort" binding="tns:SOAPBinding">
+			<soap:address location="http://localhost:8080/eid-pki-ra/webservice/eid-pki-ra-private-service" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

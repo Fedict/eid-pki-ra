@@ -38,12 +38,12 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.xml.sax.SAXException;
 
-import be.fedict.eid.pkira.contracts.CertificateRevocationRequestType;
-import be.fedict.eid.pkira.contracts.CertificateRevocationResponseType;
-import be.fedict.eid.pkira.contracts.CertificateSigningRequestType;
-import be.fedict.eid.pkira.contracts.ObjectFactory;
-import be.fedict.eid.pkira.contracts.RequestType;
-import be.fedict.eid.pkira.contracts.ResultType;
+import be.fedict.eid.pkira.generated.contracts.CertificateRevocationRequestType;
+import be.fedict.eid.pkira.generated.contracts.CertificateRevocationResponseType;
+import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
+import be.fedict.eid.pkira.generated.contracts.ObjectFactory;
+import be.fedict.eid.pkira.generated.contracts.RequestType;
+import be.fedict.eid.pkira.generated.contracts.ResultType;
 
 /**
  * Test for the Contract Parser.

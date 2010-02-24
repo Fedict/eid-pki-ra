@@ -16,7 +16,7 @@
  */
 package be.fedict.eid.blm.model;
 
-import be.fedict.eid.pkira.contracts.ResultType;
+import be.fedict.eid.pkira.generated.contracts.ResultType;
 
 /**
  * Exception thrown when an error occurred while handling the contract.

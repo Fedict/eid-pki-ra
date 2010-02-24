@@ -31,12 +31,12 @@ import javax.xml.bind.JAXBElement;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import be.fedict.eid.pkira.contracts.CertificateSigningRequestType;
-import be.fedict.eid.pkira.contracts.CertificateSigningResponseType;
-import be.fedict.eid.pkira.contracts.ObjectFactory;
-import be.fedict.eid.pkira.contracts.RequestType;
-import be.fedict.eid.pkira.contracts.ResponseType;
-import be.fedict.eid.pkira.contracts.ResultType;
+import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
+import be.fedict.eid.pkira.generated.contracts.CertificateSigningResponseType;
+import be.fedict.eid.pkira.generated.contracts.ObjectFactory;
+import be.fedict.eid.pkira.generated.contracts.RequestType;
+import be.fedict.eid.pkira.generated.contracts.ResponseType;
+import be.fedict.eid.pkira.generated.contracts.ResultType;
 
 /**
  * Test for the Contract Parser.
