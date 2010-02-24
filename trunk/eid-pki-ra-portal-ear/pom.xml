@@ -11,8 +11,7 @@
 	</parent>
 
 	<groupId>be.fedict</groupId>
-	<artifactId>eid-pki-ra-portal-ear</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>eid-pki-ra-portal-ear</artifactId>	
 	<packaging>ear</packaging>
 	<name>eid-pki-ra-portal - ear</name>
 
