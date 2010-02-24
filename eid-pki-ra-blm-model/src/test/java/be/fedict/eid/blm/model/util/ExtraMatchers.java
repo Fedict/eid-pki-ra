@@ -28,8 +28,8 @@ import org.mockito.internal.progress.HandyReturnValues;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 
-import be.fedict.eid.pkira.contracts.ResponseType;
-import be.fedict.eid.pkira.contracts.ResultType;
+import be.fedict.eid.pkira.generated.contracts.ResponseType;
+import be.fedict.eid.pkira.generated.contracts.ResultType;
 
 /**
  * Additional matchers used in the tests.

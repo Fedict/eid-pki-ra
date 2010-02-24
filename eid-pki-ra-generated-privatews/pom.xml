@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<artifactId>eid-pki-ra</artifactId>
+		<groupId>be.fedict</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>	
+	
+	<groupId>be.fedict</groupId>
+	<artifactId>eid-pki-ra-generated-privatews</artifactId>
+	<name>eid-pki-ra-generated - privatews</name>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxws-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>wsimport</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<packageName>be.fedict.eid.pkira.generated.publicws</packageName>
+					<wsdlDirectory>src/main/resources/wsdl</wsdlDirectory>
+					<verbose>true</verbose>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

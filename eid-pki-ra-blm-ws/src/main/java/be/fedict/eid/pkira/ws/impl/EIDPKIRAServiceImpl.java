@@ -20,7 +20,7 @@ import javax.ejb.EJB;
 import javax.jws.WebService;
 
 import be.fedict.eid.blm.model.ContractHandler;
-import be.fedict.eid.pkira.blm.ws.EIDPKIRAPortType;
+import be.fedict.eid.pkira.generated.publicws.EIDPKIRAPortType;
 
 /**
  * Implementation of the public web service. This class delegates all

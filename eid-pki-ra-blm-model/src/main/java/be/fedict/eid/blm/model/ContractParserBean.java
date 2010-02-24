@@ -36,10 +36,10 @@ import javax.xml.validation.SchemaFactory;
 import org.apache.commons.codec.binary.Base64;
 import org.xml.sax.SAXException;
 
-import be.fedict.eid.pkira.contracts.CertificateSigningRequestType;
-import be.fedict.eid.pkira.contracts.RequestType;
-import be.fedict.eid.pkira.contracts.ResponseType;
-import be.fedict.eid.pkira.contracts.ResultType;
+import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
+import be.fedict.eid.pkira.generated.contracts.RequestType;
+import be.fedict.eid.pkira.generated.contracts.ResponseType;
+import be.fedict.eid.pkira.generated.contracts.ResultType;
 
 /**
  * This class contains the code to marshal and unmarshal contract documents.

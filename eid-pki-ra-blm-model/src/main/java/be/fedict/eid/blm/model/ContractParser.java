@@ -19,8 +19,8 @@ package be.fedict.eid.blm.model;
 import javax.ejb.Local;
 import javax.xml.bind.JAXBElement;
 
-import be.fedict.eid.pkira.contracts.RequestType;
-import be.fedict.eid.pkira.contracts.ResponseType;
+import be.fedict.eid.pkira.generated.contracts.RequestType;
+import be.fedict.eid.pkira.generated.contracts.ResponseType;
 
 /**
  * Interface of the bean used to marshal and unmarshal incoming Base64 XML

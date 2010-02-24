@@ -23,14 +23,14 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
-import be.fedict.eid.pkira.contracts.CertificateRevocationRequestType;
-import be.fedict.eid.pkira.contracts.CertificateRevocationResponseType;
-import be.fedict.eid.pkira.contracts.CertificateSigningRequestType;
-import be.fedict.eid.pkira.contracts.CertificateSigningResponseType;
-import be.fedict.eid.pkira.contracts.ObjectFactory;
-import be.fedict.eid.pkira.contracts.RequestType;
-import be.fedict.eid.pkira.contracts.ResponseType;
-import be.fedict.eid.pkira.contracts.ResultType;
+import be.fedict.eid.pkira.generated.contracts.CertificateRevocationRequestType;
+import be.fedict.eid.pkira.generated.contracts.CertificateRevocationResponseType;
+import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
+import be.fedict.eid.pkira.generated.contracts.CertificateSigningResponseType;
+import be.fedict.eid.pkira.generated.contracts.ObjectFactory;
+import be.fedict.eid.pkira.generated.contracts.RequestType;
+import be.fedict.eid.pkira.generated.contracts.ResponseType;
+import be.fedict.eid.pkira.generated.contracts.ResultType;
 
 /**
  * Contract handler bean which is used to handle incoming contracts and send a
