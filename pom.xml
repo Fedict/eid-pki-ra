@@ -51,6 +51,7 @@
 		<module>eid-pki-ra-portal-model</module>
 		<module>eid-pki-ra-portal-webapp</module>
 		<module>eid-pki-ra-portal-ear</module>		
+		<module>eid-pki-ra-blm-sar</module>
 	</modules>
 
 	<properties>
@@ -309,6 +310,13 @@
 				<artifactId>jboss-seam</artifactId>
 				<version>${seam.version}</version>
 				<type>ejb</type>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.mail</groupId>
+				<artifactId>mail</artifactId>
+				<version>1.4.3</version>
+				<type>jar</type>
 				<scope>provided</scope>
 			</dependency>
 		</dependencies>
