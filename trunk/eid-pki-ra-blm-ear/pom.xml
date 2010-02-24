@@ -69,6 +69,11 @@
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-generated-publicws</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-blm-sar</artifactId>
+			<type>jboss-sar</type>
+		</dependency>
 	</dependencies>
 
 	<build>
