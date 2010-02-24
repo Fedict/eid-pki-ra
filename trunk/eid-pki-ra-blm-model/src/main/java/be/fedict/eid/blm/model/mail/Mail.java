@@ -17,7 +17,6 @@
  */
 package be.fedict.eid.blm.model.mail;
 
-import java.io.InputStream;
 import java.io.Serializable;
 
 /**
@@ -97,10 +96,18 @@ public class Mail implements Serializable{
 		this.body = body;
 	}
 
+	/**
+	 * 
+	 * @param attachment the attachment
+	 */
 	public void setAttachment(byte[] attachment) {
 		this.attachment = attachment;
 	}
 
+	/**
+	 * 
+	 * @return the attachement
+	 */
 	public byte[] getAttachment() {
 		return attachment;
 	}

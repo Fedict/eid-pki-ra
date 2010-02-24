@@ -17,11 +17,7 @@
  */
 package be.fedict.eid.blm.model.mail;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -86,7 +82,7 @@ public class MailSenderBean implements MailSender {
 	
 	/**
 	 * 
-	 * @return
+	 * @return a queueConnectionFactory
 	 */
 	public QueueConnectionFactory getQueueConnectionFactory() {
 		return queueConnectionFactory;
@@ -94,7 +90,7 @@ public class MailSenderBean implements MailSender {
 
 	/**
 	 * 
-	 * @param queueConnectionFactory
+	 * @param queueConnectionFactory a QueueConnection
 	 */
 	public void setQueueConnectionFactory(QueueConnectionFactory queueConnectionFactory) {
 		this.queueConnectionFactory = queueConnectionFactory;
@@ -102,7 +98,7 @@ public class MailSenderBean implements MailSender {
 	
 	/**
 	 * 
-	 * @return
+	 * @return a queue
 	 */
 	public Queue getQueue() {
 		return queue;
@@ -110,7 +106,7 @@ public class MailSenderBean implements MailSender {
 	
 	/**
 	 * 
-	 * @param queue
+	 * @param queue a queue
 	 */
 	public void setQueue(Queue queue) {
 		this.queue = queue;
