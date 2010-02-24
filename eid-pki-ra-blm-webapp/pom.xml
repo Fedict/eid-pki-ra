@@ -10,7 +10,6 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>eid-pki-ra-blm-webapp</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>eid-pki-ra-blm - webapp</name>
 
