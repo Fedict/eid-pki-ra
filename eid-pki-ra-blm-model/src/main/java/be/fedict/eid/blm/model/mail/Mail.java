@@ -17,15 +17,25 @@
  */
 package be.fedict.eid.blm.model.mail;
 
+import java.io.InputStream;
+import java.io.Serializable;
+
 /**
  * @author hans
  */
-public class Mail {
+public class Mail implements Serializable{
 
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2035797575503987602L;
+	
 	private String sender;
 	private String recipient;
 	private String subject;
 	private String body;
+	private byte[] attachment;
 
 	/**
 	 * @return the sender
@@ -85,6 +95,14 @@ public class Mail {
 	 */
 	public void setBody(String body) {
 		this.body = body;
+	}
+
+	public void setAttachment(byte[] attachment) {
+		this.attachment = attachment;
+	}
+
+	public byte[] getAttachment() {
+		return attachment;
 	}
 
 }
