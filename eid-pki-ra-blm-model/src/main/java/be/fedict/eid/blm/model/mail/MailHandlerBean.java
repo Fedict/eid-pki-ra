@@ -66,13 +66,12 @@ public class MailHandlerBean implements MessageListener {
 	@Override
 	public void onMessage(Message arg0) {
 		ObjectMessage objectMessage = (ObjectMessage) arg0;
-		Mail mail;
-
-		Properties props = new Properties();
-		props.put("mail.smtp.host", getSmtpServer());
-		props.put("mail.smtp.port", getPort());
 		try {
-			mail = (Mail) objectMessage.getObject();
+			Mail mail = (Mail) objectMessage.getObject();
+
+			Properties props = new Properties();
+			props.put("mail.smtp.host", getSmtpServer());
+			props.put("mail.smtp.port", getPort());
 
 			props.put("mail.from", mail.getSender());
 
