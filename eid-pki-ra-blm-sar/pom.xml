@@ -9,7 +9,6 @@
   </parent>
   <groupId>be.fedict</groupId>
   <artifactId>eid-pki-ra-blm-sar</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
   <packaging>jboss-sar</packaging>
   <name>eid-pki-ra-blm - sar</name>
   <url>http://maven.apache.org</url>
