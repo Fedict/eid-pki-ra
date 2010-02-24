@@ -14,12 +14,12 @@
 	<!--  You should have received a copy of the GNU Lesser General Public -->
 	<!--  License along with this software; if not, see -->
 	<!--  http://www.gnu.org/licenses/. -->
-<wsdl:definitions xmlns:tns="http://www.fedict.be/eid/pki-ra/ws" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="eid-pki-ra" targetNamespace="http://www.fedict.be/eid/pki-ra/ws"
-	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:types="http://www.fedict.be/eid/pki-ra/ws/types">
+<wsdl:definitions xmlns:tns="urn:be:fedict:eid:pkira:publicws" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="eid-pki-ra" targetNamespace="urn:be:fedict:eid:pkira:publicws"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:types="urn:be:fedict:eid:pkira:publicws:types">
 
 	<wsdl:types>
-		<xsd:schema targetNamespace="http://www.fedict.be/eid/pki-ra/ws/types">
+		<xsd:schema targetNamespace="urn:be:fedict:eid:pkira:publicws:types">
 			<xsd:element name="CertificateSigningRequest" type="xsd:string" />
 			<xsd:element name="CertificateSigningResult" type="xsd:string" />
 			<xsd:element name="CertificateRevocationRequest" type="xsd:string" />
