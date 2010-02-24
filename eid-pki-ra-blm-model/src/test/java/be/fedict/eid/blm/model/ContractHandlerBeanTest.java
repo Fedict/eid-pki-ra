@@ -16,9 +16,8 @@
  */
 package be.fedict.eid.blm.model;
 
-import static be.fedict.eid.blm.model.util.ExtraMatchers.isJAXBResponseType;
+import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -26,11 +25,10 @@ import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
-import javax.xml.bind.JAXBElement;
-
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import be.fedict.eid.blm.model.util.ResponseTypeMatcher;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningResponseType;
 import be.fedict.eid.pkira.generated.contracts.ObjectFactory;
@@ -44,7 +42,6 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
  * @author Jan Van den Bergh
  */
 public class ContractHandlerBeanTest {
-
 
 	/**
 	 * 
@@ -81,39 +78,44 @@ public class ContractHandlerBeanTest {
 		assertNotNull(response.getResponseId());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testSignCertificateUnmarshalError() throws ContractHandlerBeanException {
 		// Setup test
+		ResponseTypeMatcher<CertificateSigningResponseType> matcher = new ResponseTypeMatcher<CertificateSigningResponseType>(
+				CertificateSigningResponseType.class, null, ResultType.INVALID_SIGNATURE, MSG_INVALID_SIGNATURE);
+
 		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateSigningRequestType.class)))
 				.thenThrow(new ContractHandlerBeanException(ResultType.INVALID_SIGNATURE, MSG_INVALID_SIGNATURE));
-		when(contractParser.marshalResponseMessage((JAXBElement) isNotNull())).thenReturn(RESPONSE_MESSAGE);
+		when(contractParser.marshalResponseMessage(argThat(matcher))).thenReturn(RESPONSE_MESSAGE);
 
 		// Run it
 		String result = contractHandler.signCertificate(REQUEST_MESSAGE);
 
 		// Validate it
 		verify(contractParser).unmarshalRequestMessage(REQUEST_MESSAGE, CertificateSigningRequestType.class);
-		verify(contractParser).marshalResponseMessage(isJAXBResponseType(CertificateSigningResponseType.class, null, ResultType.INVALID_SIGNATURE, MSG_INVALID_SIGNATURE));
+		verify(contractParser).marshalResponseMessage(argThat(matcher));
 		verifyNoMoreInteractions(contractParser);
 		assertEquals(result, RESPONSE_MESSAGE);
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	@Test
 	public void testSignCertificateHappyFlow() throws ContractHandlerBeanException {
+		ResponseTypeMatcher<CertificateSigningResponseType> matcher = new ResponseTypeMatcher<CertificateSigningResponseType>(
+				CertificateSigningResponseType.class, REQUEST_ID, ResultType.GENERAL_FAILURE, "Not implemented");
+
 		// Setup test
 		CertificateSigningRequestType request = createValidSigningRequest();
 		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateSigningRequestType.class)))
 				.thenReturn(request);
-		when(contractParser.marshalResponseMessage((JAXBElement) isNotNull())).thenReturn(RESPONSE_MESSAGE);
+		when(contractParser.marshalResponseMessage(argThat(matcher))).thenReturn(RESPONSE_MESSAGE);
 
 		// Run it
 		String result = contractHandler.signCertificate(REQUEST_MESSAGE);
 
 		// Validate it
 		verify(contractParser).unmarshalRequestMessage(REQUEST_MESSAGE, CertificateSigningRequestType.class);
-		verify(contractParser).marshalResponseMessage(isJAXBResponseType(CertificateSigningResponseType.class, REQUEST_ID, ResultType.GENERAL_FAILURE, "Not implemented"));
+
+		verify(contractParser).marshalResponseMessage(argThat(matcher));
 		verifyNoMoreInteractions(contractParser);
 		assertEquals(result, RESPONSE_MESSAGE);
 	}
