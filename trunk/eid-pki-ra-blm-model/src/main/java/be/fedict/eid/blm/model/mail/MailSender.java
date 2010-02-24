@@ -17,6 +17,8 @@
  */
 package be.fedict.eid.blm.model.mail;
 
+import java.io.IOException;
+
 import javax.ejb.Local;
 
 
@@ -30,6 +32,7 @@ public interface MailSender {
 	 * Send an email to a queue
 	 * 
 	 * @param mail
+	 * @throws IOException 
 	 */
-	public void sendMail(Mail mail);
+	public void sendMail(Mail mail) throws IOException;
 }
