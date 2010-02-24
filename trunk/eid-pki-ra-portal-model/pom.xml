@@ -25,6 +25,10 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-client-privatews</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>javax.ejb</groupId>
 			<artifactId>ejb-api</artifactId>
 			<scope>provided</scope>
