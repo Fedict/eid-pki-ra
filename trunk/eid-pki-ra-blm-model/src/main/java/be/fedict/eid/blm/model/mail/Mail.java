@@ -15,26 +15,17 @@
  * License along with this software; if not, see 
  * http://www.gnu.org/licenses/. 
  */
-package be.fedict.eid.blm.mail;
+package be.fedict.eid.blm.model.mail;
 
-import java.io.Serializable;
-import java.util.List;
-
-import javax.persistence.Entity;
-
-@Entity
-public class Mail implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5630695549821167339L;
+/**
+ * @author hans
+ */
+public class Mail {
 
 	private String sender;
-	private List<String> recipients;
+	private String recipient;
 	private String subject;
 	private String body;
-	private List<Attachment> attachments;
 
 	/**
 	 * @return the sender
@@ -45,10 +36,25 @@ public class Mail implements Serializable {
 
 	/**
 	 * @param sender
-	 *            the sender
+	 *            the sender to set
 	 */
 	public void setSender(String sender) {
 		this.sender = sender;
+	}
+
+	/**
+	 * @return the recipient
+	 */
+	public String getRecipient() {
+		return recipient;
+	}
+
+	/**
+	 * @param recipient
+	 *            the recipient to set
+	 */
+	public void setRecipient(String recipient) {
+		this.recipient = recipient;
 	}
 
 	/**
@@ -60,7 +66,7 @@ public class Mail implements Serializable {
 
 	/**
 	 * @param subject
-	 *            the subject
+	 *            the subject to set
 	 */
 	public void setSubject(String subject) {
 		this.subject = subject;
@@ -75,42 +81,10 @@ public class Mail implements Serializable {
 
 	/**
 	 * @param body
-	 *            the body
+	 *            the body to set
 	 */
 	public void setBody(String body) {
 		this.body = body;
-	}
-
-	/**
-	 * 
-	 * @return the recipients
-	 */
-	public List<String> getRecipients() {
-		return recipients;
-	}
-
-	/**
-	 * 
-	 * @param recipients the recipients
-	 */
-	public void setRecipients(List<String> recipients) {
-		this.recipients = recipients;
-	}
-	
-	/**
-	 * 
-	 * @return the attachemnts
-	 */
-	public List<Attachment> getAttachments() {
-		return attachments;
-	}
-
-	/**
-	 * 
-	 * @param attachments the attachments
-	 */
-	public void setAttachments(List<Attachment> attachments) {
-		this.attachments = attachments;
 	}
 
 }
