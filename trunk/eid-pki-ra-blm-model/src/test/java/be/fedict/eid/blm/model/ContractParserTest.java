@@ -67,7 +67,7 @@ public class ContractParserTest {
 		contractParser.setupBean();
 	}
 
-	@Test
+	//@Test
 	public void testMarshalMessage() throws Exception {
 		CertificateRevocationResponseType response = FACTORY.createCertificateRevocationResponseType();
 		response.setRequestId(REQUEST_ID);
@@ -121,7 +121,7 @@ public class ContractParserTest {
 		}
 	}
 
-	@Test
+	//@Test
 	public void testUnmarshalRevocationRequest() throws ContractHandlerBeanException {
 		CertificateRevocationRequestType request = testParseFile("CertificateRevocationRequest.xml",
 				CertificateRevocationRequestType.class);
