@@ -72,7 +72,7 @@
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-blm-sar</artifactId>
-			<type>jboss-sar</type>
+			<type>sar</type>
 		</dependency>
 	</dependencies>
 
@@ -107,12 +107,25 @@
 							<groupId>org.jboss.seam</groupId>
 							<artifactId>jboss-seam</artifactId>
 						</ejbModule>
+
+						<SarModule>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>eid-pki-ra-blm-sar</artifactId>
+						</SarModule>
 					</modules>
 
 					<jboss>
 						<loader-repository>eid-pki-ra:app=ejb3</loader-repository>
 					</jboss>
 				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>ear</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 
 			<plugin>

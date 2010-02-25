@@ -340,7 +340,7 @@
 				<groupId>be.fedict</groupId>
 				<artifactId>eid-pki-ra-blm-sar</artifactId>
 				<version>${project.version}</version>
-				<type>jboss-sar</type>
+				<type>sar</type>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
