@@ -14,8 +14,8 @@
 	<!--  You should have received a copy of the GNU Lesser General Public -->
 	<!--  License along with this software; if not, see -->
 	<!--  http://www.gnu.org/licenses/. -->
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.fedict.be/eid/pki-ra/contracts"
-	xmlns:tns="http://www.fedict.be/eid/pki-ra/contracts" elementFormDefault="qualified" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:be:fedict:eid:pkira:contracts"
+	xmlns:tns="urn:be:fedict:eid:pkira:contracts" elementFormDefault="qualified" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
 
 	<import id="xmldsig" namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="xmldsig-core-schema.xsd" />
 
@@ -24,23 +24,32 @@
 	<element name="CertificateSigningRequest" type="tns:certificateSigningRequestType" />
 	<element name="CertificateSigningResponse" type="tns:certificateSigningResponseType" />
 
+	<complexType name="eIDPKIRAContractType" abstract="true" />
+
 	<complexType name="requestType" abstract="true">
-		<sequence>
-			<element name="RequestId" type="tns:idType" />
-			<element name="Description" type="tns:descriptionType" />
-			<element name="Operator" type="tns:entityType" />
-			<element name="LegalNotice" type="tns:legalNoticeType" />
-			<element ref="dsig:Signature" minOccurs="0" />
-		</sequence>
+		<complexContent>
+			<extension base="tns:eIDPKIRAContractType">
+				<sequence>
+					<element name="RequestId" type="tns:idType" />
+					<element name="Description" type="tns:descriptionType" />
+					<element name="Operator" type="tns:entityType" />
+					<element name="LegalNotice" type="tns:legalNoticeType" />
+				</sequence>
+			</extension>
+		</complexContent>
 	</complexType>
 
 	<complexType name="responseType" abstract="true">
-		<sequence>
-			<element name="RequestId" type="tns:idType" minOccurs="0" />
-			<element name="ResponseId" type="tns:idType" />
-			<element name="Result" type="tns:resultType" />			
-			<element name="ResultMessage" type="tns:resultMessageType" minOccurs="0" />
-		</sequence>
+		<complexContent>
+			<extension base="tns:eIDPKIRAContractType">
+				<sequence>
+					<element name="RequestId" type="tns:idType" minOccurs="0" />
+					<element name="ResponseId" type="tns:idType" />
+					<element name="Result" type="tns:resultType" />
+					<element name="ResultMessage" type="tns:resultMessageType" minOccurs="0" />
+				</sequence>
+			</extension>
+		</complexContent>
 	</complexType>
 
 	<complexType name="certificateSigningRequestType">
@@ -51,6 +60,7 @@
 					<element name="CertificateType" type="tns:certificateTypeType" />
 					<element name="ValidityPeriodMonths" type="tns:validityPeriodMonthsType" />
 					<element name="CSR" type="tns:pemEncodedType" />
+					<element ref="dsig:Signature" minOccurs="0" />
 				</sequence>
 			</extension>
 		</complexContent>
@@ -70,6 +80,7 @@
 					<element name="StartDate" type="date" />
 					<element name="EndDate" type="date" />
 					<element name="Certificate" type="tns:pemEncodedType" />
+					<element ref="dsig:Signature" minOccurs="0" />
 				</sequence>
 			</extension>
 		</complexContent>

@@ -46,6 +46,7 @@
 		<module>eid-pki-ra-generated-privatews</module>
 		<module>eid-pki-ra-client-privatews</module>
 		<module>eid-pki-ra-client-publicws</module>
+		<module>eid-pki-ra-client-contracts</module>
 		<module>eid-pki-ra-blm-model</module>
 		<module>eid-pki-ra-blm-webapp</module>
 		<module>eid-pki-ra-blm-ws</module>
@@ -269,6 +270,12 @@
 			<dependency>
 				<groupId>be.fedict</groupId>
 				<artifactId>eid-pki-ra-client-privatews</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>be.fedict</groupId>
+				<artifactId>eid-pki-ra-client-contracts</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 

@@ -1,0 +1,136 @@
+/*
+ * eID PKI RA Project.
+ * Copyright (C) 2010 FedICT.
+ * 
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version
+ * 3.0 as published by the Free Software Foundation.
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, see
+ * http://www.gnu.org/licenses/.
+ */
+package be.fedict.eid.pkira.contracts;
+
+import static be.fedict.eid.pkira.contracts.util.JAXBUtil.getMarshaller;
+import static be.fedict.eid.pkira.contracts.util.JAXBUtil.getUnmarshaller;
+
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
+
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.namespace.QName;
+
+import be.fedict.eid.pkira.generated.contracts.EIDPKIRAContractType;
+
+/**
+ * Client library to easily manipulate the XML contract documents.
+ * 
+ * @author Jan Van den Bergh
+ */
+public class EIDPKIRAContractsClient {
+
+	public static final String NAMESPACE = "urn:be:fedict:eid:pkira:contracts";
+
+	/**
+	 * Marshals the document to XML.
+	 * 
+	 * @param contractDocument
+	 *            document to marshal.
+	 * @return the text in the XML.
+	 * @throws XmlMarshallingException
+	 *             when this fails.
+	 */
+	public <T extends EIDPKIRAContractType> String marshal(T contractDocument, Class<T> clazz)
+			throws XmlMarshallingException {
+		StringWriter writer = new StringWriter();
+		marshal(contractDocument, clazz, writer);
+		return writer.toString();
+	}
+
+	/**
+	 * Marshals the document to XML.
+	 * 
+	 * @param contractDocument
+	 *            document to marshal.
+	 * @return the text in the XML.
+	 * @throws XmlMarshallingException
+	 *             when this fails.
+	 */
+	public <T extends EIDPKIRAContractType> void marshal(T contractDocument, Class<T> clazz, Writer writer)
+			throws XmlMarshallingException {
+		QName qname = new QName(NAMESPACE, getElementNameForType(clazz));
+		JAXBElement<T> jaxbElement = new JAXBElement<T>(qname, clazz, contractDocument);
+
+		try {
+			getMarshaller().marshal(jaxbElement, writer);
+		} catch (JAXBException e) {
+			throw new XmlMarshallingException("Cannot marshal XML object.", e);
+		}
+	}
+
+	/**
+	 * Unmarshals an XML from a reader.
+	 * 
+	 * @param <T>
+	 *            the type of document that is expected.
+	 * @param reader
+	 *            the reader to get the document from.
+	 * @param clazz
+	 *            the type of object.
+	 * @return the unmarshalled object.
+	 * @throws XmlMarshallingException
+	 *             when this fails.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends EIDPKIRAContractType> T unmarshal(Reader reader, Class<T> clazz) throws XmlMarshallingException {
+		Object unmarshalled;
+		try {
+			unmarshalled = getUnmarshaller().unmarshal(reader);
+		} catch (JAXBException e) {
+			throw new XmlMarshallingException("Cannot unmarshal XML data.", e);
+		}
+
+		if (unmarshalled != null && unmarshalled instanceof JAXBElement<?>) {
+			JAXBElement<?> jaxbElement = (JAXBElement<?>) unmarshalled;
+			if (jaxbElement.getDeclaredType() == clazz) {
+				return (T) jaxbElement.getValue();
+			} else {
+				throw new XmlMarshallingException("XML contains an invalid element: "
+						+ jaxbElement.getDeclaredType().getName() + ". Expected " + clazz.getName());
+			}
+		}
+
+		throw new XmlMarshallingException("XML did not contain a valid element.");
+	}
+
+	/**
+	 * Unmarshals an XML in a string.
+	 * 
+	 * @param <T>
+	 *            the type of document that is expected.
+	 * @param xml
+	 *            the xml to parse.
+	 * @param clazz
+	 *            the type of object.
+	 * @return the unmarshalled object.
+	 * @throws XmlMarshallingException
+	 *             when this fails.
+	 */
+	public <T extends EIDPKIRAContractType> T unmarshal(String xml, Class<T> clazz) throws XmlMarshallingException {
+		StringReader reader = new StringReader(xml);
+		return unmarshal(reader, clazz);
+	}
+
+	private <T> String getElementNameForType(Class<T> clazz) {
+		String name = clazz.getSimpleName();
+		return name.substring(0, name.length()-4);
+	}
+}
