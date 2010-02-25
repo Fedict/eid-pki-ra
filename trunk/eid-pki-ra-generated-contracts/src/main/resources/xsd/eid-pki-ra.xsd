@@ -29,6 +29,7 @@
 			<element name="RequestId" type="tns:idType" />
 			<element name="Description" type="tns:descriptionType" />
 			<element name="Operator" type="tns:entityType" />
+			<element name="LegalNotice" type="tns:legalNoticeType" />
 			<element ref="dsig:Signature" minOccurs="0" />
 		</sequence>
 	</complexType>
@@ -37,7 +38,7 @@
 		<sequence>
 			<element name="RequestId" type="tns:idType" minOccurs="0" />
 			<element name="ResponseId" type="tns:idType" />
-			<element name="Result" type="tns:resultType" />
+			<element name="Result" type="tns:resultType" />			
 			<element name="ResultMessage" type="tns:resultMessageType" minOccurs="0" />
 		</sequence>
 	</complexType>
@@ -125,6 +126,10 @@
 		<restriction base="string">
 			<maxLength value="64" />
 		</restriction>
+	</simpleType>
+
+	<simpleType name="legalNoticeType">
+		<restriction base="string" />
 	</simpleType>
 
 	<simpleType name="nameType">

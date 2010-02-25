@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tns:CertificateRevocationRequest xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
 	xmlns:tns="http://www.fedict.be/eid/pki-ra/contracts" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.fedict.be/eid/pki-ra/contracts ../../main/resources/xsd/eid-pki-ra.xsd ">
+	xsi:schemaLocation="http://www.fedict.be/eid/pki-ra/contracts">
 	<tns:RequestId>REQUEST-123</tns:RequestId>
 	<tns:Description>Sample</tns:Description>
 	<tns:Operator>
@@ -10,8 +10,9 @@
 		<tns:Email>pietje.puk@mail.com</tns:Email>
 		<tns:Phone>12346789</tns:Phone>
 	</tns:Operator>
+	<tns:LegalNotice>LegalNotice</tns:LegalNotice>
 	<tns:DistinguishedName>testDN</tns:DistinguishedName>
 	<tns:StartDate>2010-01-01</tns:StartDate>
 	<tns:EndDate>2011-12-31</tns:EndDate>
-	<tns:Certificate>CERTIFICATE_DATA</tns:Certificate>
+	<tns:Certificate>CERTIFICATE_DATA</tns:Certificate>	
 </tns:CertificateRevocationRequest>
