@@ -22,11 +22,14 @@ import static be.fedict.eid.pkira.contracts.util.JAXBUtil.getUnmarshaller;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
+
+import org.apache.commons.codec.binary.Base64;
 
 import be.fedict.eid.pkira.generated.contracts.EIDPKIRAContractType;
 
@@ -37,7 +40,28 @@ import be.fedict.eid.pkira.generated.contracts.EIDPKIRAContractType;
  */
 public class EIDPKIRAContractsClient {
 
-	public static final String NAMESPACE = "urn:be:fedict:eid:pkira:contracts";
+	private static final String ENCODING = "UTF8";
+	private static final String NAMESPACE = "urn:be:fedict:eid:pkira:contracts";
+
+	/**
+	 * Marshals the document to a base64 string containing XML.
+	 * 
+	 * @param contractDocument
+	 *            document to marshal.
+	 * @return the base64 data.
+	 * @throws XmlMarshallingException
+	 *             when this fails.
+	 */
+	public <T extends EIDPKIRAContractType> String marshalToBase64(T contractDocument, Class<T> clazz)
+			throws XmlMarshallingException {
+		try {
+			String xml = marshal(contractDocument, clazz);
+			byte[] bytes = xml.getBytes(ENCODING);
+			return Base64.encodeBase64String(bytes);
+		} catch (UnsupportedEncodingException e) {
+			throw new XmlMarshallingException("Error encoding base64 data.", e);
+		}
+	}
 
 	/**
 	 * Marshals the document to XML.
@@ -129,8 +153,33 @@ public class EIDPKIRAContractsClient {
 		return unmarshal(reader, clazz);
 	}
 
+	/**
+	 * Unmarshals an XML in a string.
+	 * 
+	 * @param <T>
+	 *            the type of document that is expected.
+	 * @param base64
+	 *            the base64 encoded xml.
+	 * @param clazz
+	 *            the type of object.
+	 * @return the unmarshalled object.
+	 * @throws XmlMarshallingException
+	 *             when this fails.
+	 */
+	public <T extends EIDPKIRAContractType> T unmarshalFromBase64(String base64, Class<T> clazz)
+			throws XmlMarshallingException {
+		String xml;
+		try {
+			xml = new String(Base64.decodeBase64(base64), "UTF8");
+		} catch (UnsupportedEncodingException e) {
+			throw new XmlMarshallingException("Error decoding base64 data.", e);
+		}
+		StringReader reader = new StringReader(xml);
+		return unmarshal(reader, clazz);
+	}
+
 	private <T> String getElementNameForType(Class<T> clazz) {
 		String name = clazz.getSimpleName();
-		return name.substring(0, name.length()-4);
+		return name.substring(0, name.length() - 4);
 	}
 }
