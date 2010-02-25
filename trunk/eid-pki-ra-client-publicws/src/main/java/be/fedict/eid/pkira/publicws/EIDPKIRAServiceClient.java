@@ -33,12 +33,12 @@ import be.fedict.eid.pkira.generated.publicws.EIDPKIRAService;
  */
 public class EIDPKIRAServiceClient {
 
-private static final String WSDL_LOCATION = "/wsdl/eid-pki-ra.wsdl";
-	
+	private static final String WSDL_LOCATION = "/wsdl/eid-pki-ra.wsdl";
+
 	private String serviceUrl;
 
 	private EIDPKIRAPortType port;
-	
+
 	/**
 	 * Creates a service client using the default URL in the WSDL.
 	 */
@@ -48,36 +48,42 @@ private static final String WSDL_LOCATION = "/wsdl/eid-pki-ra.wsdl";
 
 	/**
 	 * Creates a service client using the specified URL.
-	 * @param serviceUrl URL to access the web service.
+	 * 
+	 * @param serviceUrl
+	 *            URL to access the web service.
 	 */
 	public EIDPKIRAServiceClient(String serviceUrl) {
 		this.serviceUrl = serviceUrl;
 	}
-	
+
 	/**
 	 * Sends a certificate request contract to the back-end web service.
-	 * @param contract the contract (base64 encoded XML).
+	 * 
+	 * @param contract
+	 *            the contract (base64 encoded XML).
 	 * @return the result value (base64 encoded XML).
 	 */
 	public String signCertificate(String contract) {
-		return getServicePort().signCertificate(contract);
+		return getWebservicePort().signCertificate(contract);
 	}
-	
+
 	/**
 	 * Sends a certificate revocation contract to the back-end web service.
-	 * @param contract the contract (base64 encoded XML).
+	 * 
+	 * @param contract
+	 *            the contract (base64 encoded XML).
 	 * @return the result value (base64 encoded XML).
 	 */
-	public String revokeContract(String contract) {
-		return getServicePort().revokeCertificate(contract);
+	public String revokeCertificate(String contract) {
+		return getWebservicePort().revokeCertificate(contract);
 	}
-	
-	private synchronized EIDPKIRAPortType getServicePort() {
+
+	private synchronized EIDPKIRAPortType getWebservicePort() {
 		// Use the cache port if it is available
 		if (port != null) {
 			return port;
 		}
-		
+
 		// Get the WSDL
 		URL wsdlLocation = getClass().getResource(WSDL_LOCATION);
 		if (wsdlLocation == null) {
@@ -97,7 +103,12 @@ private static final String WSDL_LOCATION = "/wsdl/eid-pki-ra.wsdl";
 		}
 
 		return port;
-		
-		
+	}
+
+	/**
+	 * Injects the port (used in unit tests)
+	 */
+	void setWebservicePort(EIDPKIRAPortType port) {
+		this.port = port;
 	}
 }

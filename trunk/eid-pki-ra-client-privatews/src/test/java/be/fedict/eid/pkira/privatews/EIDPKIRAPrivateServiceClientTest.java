@@ -18,6 +18,8 @@ package be.fedict.eid.pkira.privatews;
 
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -52,6 +54,7 @@ public class EIDPKIRAPrivateServiceClientTest {
 	
 	@Test
 	public void testGetCertificates() {
+		// Prepare
 		ListCertificatesResponse response = new ListCertificatesResponse();
 		String testCertificate = "testCertificate";
 		response.getCertificates().add(testCertificate);
@@ -59,7 +62,13 @@ public class EIDPKIRAPrivateServiceClientTest {
 		
 		when(port.listCertificates(isA(ListCertificatesRequest.class))).thenReturn(response);
 		
+		// Call
 		List<String> result = serviceClient.listCertificates(userRRN);
+		
+		// Verify
+		verify(port).listCertificates(isA(ListCertificatesRequest.class));
+		verifyNoMoreInteractions(port);
+		
 		assertNotNull(result);
 		assertEquals(result.size(), 1);
 		assertSame(result.get(0), testCertificate);
