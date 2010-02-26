@@ -14,7 +14,7 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.blm.model;
+package be.fedict.eid.blm.model.contracthandler;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
