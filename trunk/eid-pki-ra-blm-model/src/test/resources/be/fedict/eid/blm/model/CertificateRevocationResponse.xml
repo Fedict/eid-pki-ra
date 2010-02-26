@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<CertificateRevocationResponse xmlns="http://www.fedict.be/eid/pki-ra/contracts"
-	xmlns:ns2="http://www.w3.org/2000/09/xmldsig#">
+<CertificateRevocationResponse xmlns="urn:be:fedict:eid:pkira:contracts" xmlns:ns2="http://www.w3.org/2000/09/xmldsig#">
 	<RequestId>TEST-REQUEST-1</RequestId>
 	<ResponseId>TEST-RESPONSE-1</ResponseId>
 	<Result>Success</Result>

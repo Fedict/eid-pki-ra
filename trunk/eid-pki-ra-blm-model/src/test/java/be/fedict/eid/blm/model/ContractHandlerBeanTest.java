@@ -29,11 +29,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.blm.model.util.ResponseTypeMatcher;
+import be.fedict.eid.pkira.contracts.CertificateSigningRequestBuilder;
+import be.fedict.eid.pkira.contracts.CertificateSigningResponseBuilder;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningResponseType;
-import be.fedict.eid.pkira.generated.contracts.ObjectFactory;
 import be.fedict.eid.pkira.generated.contracts.RequestType;
-import be.fedict.eid.pkira.generated.contracts.ResponseType;
 import be.fedict.eid.pkira.generated.contracts.ResultType;
 
 /**
@@ -43,12 +43,7 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
  */
 public class ContractHandlerBeanTest {
 
-	/**
-	 * 
-	 */
 	private static final String MSG_INVALID_SIGNATURE = "Invalid signature";
-
-	private static final ObjectFactory FACTORY = new ObjectFactory();
 
 	private static final String REQUEST_ID = "TEST-REQUEST-1";
 	private static final String REQUEST_MESSAGE = "Test message";
@@ -67,10 +62,11 @@ public class ContractHandlerBeanTest {
 
 	@Test
 	public void testFillResponseFromRequest() {
-		RequestType request = createValidSigningRequest();
+		RequestType request = createEmptySigningRequest();
 
-		ResponseType response = FACTORY.createCertificateSigningResponseType();
-		contractHandler.fillResponseFromRequest(response, request, ResultType.BACKEND_ERROR, RESPONSE_MESSAGE);
+		CertificateSigningResponseBuilder responseBuilder = new CertificateSigningResponseBuilder();
+		contractHandler.fillResponseFromRequest(responseBuilder, request, ResultType.BACKEND_ERROR, RESPONSE_MESSAGE);
+		CertificateSigningResponseType response = responseBuilder.toResponseType();
 
 		assertEquals(response.getRequestId(), REQUEST_ID);
 		assertEquals(response.getResult(), ResultType.BACKEND_ERROR);
@@ -86,14 +82,15 @@ public class ContractHandlerBeanTest {
 
 		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateSigningRequestType.class)))
 				.thenThrow(new ContractHandlerBeanException(ResultType.INVALID_SIGNATURE, MSG_INVALID_SIGNATURE));
-		when(contractParser.marshalResponseMessage(argThat(matcher))).thenReturn(RESPONSE_MESSAGE);
+		when(contractParser.marshalResponseMessage(argThat(matcher), eq(CertificateSigningResponseType.class))).thenReturn(
+				RESPONSE_MESSAGE);
 
 		// Run it
 		String result = contractHandler.signCertificate(REQUEST_MESSAGE);
 
 		// Validate it
 		verify(contractParser).unmarshalRequestMessage(REQUEST_MESSAGE, CertificateSigningRequestType.class);
-		verify(contractParser).marshalResponseMessage(argThat(matcher));
+		verify(contractParser).marshalResponseMessage(argThat(matcher), eq(CertificateSigningResponseType.class));
 		verifyNoMoreInteractions(contractParser);
 		assertEquals(result, RESPONSE_MESSAGE);
 	}
@@ -104,25 +101,24 @@ public class ContractHandlerBeanTest {
 				CertificateSigningResponseType.class, REQUEST_ID, ResultType.GENERAL_FAILURE, "Not implemented");
 
 		// Setup test
-		CertificateSigningRequestType request = createValidSigningRequest();
+		CertificateSigningRequestType request = createEmptySigningRequest();
 		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateSigningRequestType.class)))
 				.thenReturn(request);
-		when(contractParser.marshalResponseMessage(argThat(matcher))).thenReturn(RESPONSE_MESSAGE);
+		when(contractParser.marshalResponseMessage(argThat(matcher), eq(CertificateSigningResponseType.class))).thenReturn(
+				RESPONSE_MESSAGE);
 
 		// Run it
 		String result = contractHandler.signCertificate(REQUEST_MESSAGE);
 
 		// Validate it
 		verify(contractParser).unmarshalRequestMessage(REQUEST_MESSAGE, CertificateSigningRequestType.class);
-
-		verify(contractParser).marshalResponseMessage(argThat(matcher));
+		verify(contractParser).marshalResponseMessage(argThat(matcher), eq(CertificateSigningResponseType.class));
 		verifyNoMoreInteractions(contractParser);
+		
 		assertEquals(result, RESPONSE_MESSAGE);
 	}
 
-	private CertificateSigningRequestType createValidSigningRequest() {
-		CertificateSigningRequestType request = new ObjectFactory().createCertificateSigningRequestType();
-		request.setRequestId(REQUEST_ID);
-		return request;
+	private CertificateSigningRequestType createEmptySigningRequest() {
+		return new CertificateSigningRequestBuilder(REQUEST_ID).toRequestType();
 	}
 }

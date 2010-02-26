@@ -16,8 +16,6 @@
  */
 package be.fedict.eid.blm.model.util;
 
-import javax.xml.bind.JAXBElement;
-
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hamcrest.Description;
@@ -31,7 +29,7 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
  * 
  * @author Jan Van den Bergh
  */
-public class ResponseTypeMatcher<T extends ResponseType> extends ArgumentMatcher<JAXBElement<T>> {
+public class ResponseTypeMatcher<T extends ResponseType> extends ArgumentMatcher<T> {
 
 	private final Class<? extends ResponseType> responseClass;
 	private final String requestId;
@@ -46,14 +44,8 @@ public class ResponseTypeMatcher<T extends ResponseType> extends ArgumentMatcher
 	}
 
 	public boolean matches(Object actual) {
-		if (actual != null && actual instanceof JAXBElement<?>) {
-			JAXBElement<?> element = (JAXBElement<?>) actual;
-
-			if (element.getDeclaredType() != responseClass) {
-				return false;
-			}
-
-			ResponseType response = (ResponseType) element.getValue();
+		if (actual != null && actual instanceof ResponseType) {
+			ResponseType response = (ResponseType) actual;			
 
 			return (response != null) && StringUtils.equals(requestId, response.getRequestId())
 					&& response.getResponseId() != null && ObjectUtils.equals(resultType, response.getResult())

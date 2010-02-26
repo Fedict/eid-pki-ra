@@ -23,13 +23,14 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
+import be.fedict.eid.pkira.contracts.AbstractResponseBuilder;
+import be.fedict.eid.pkira.contracts.CertificateRevocationResponseBuilder;
+import be.fedict.eid.pkira.contracts.CertificateSigningResponseBuilder;
 import be.fedict.eid.pkira.generated.contracts.CertificateRevocationRequestType;
 import be.fedict.eid.pkira.generated.contracts.CertificateRevocationResponseType;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningResponseType;
-import be.fedict.eid.pkira.generated.contracts.ObjectFactory;
 import be.fedict.eid.pkira.generated.contracts.RequestType;
-import be.fedict.eid.pkira.generated.contracts.ResponseType;
 import be.fedict.eid.pkira.generated.contracts.ResultType;
 
 /**
@@ -41,11 +42,6 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
 @Stateless
 public class ContractHandlerBean implements ContractHandler {
 
-	/**
-	 * Object factory for JAXB objects.
-	 */
-	private static final ObjectFactory FACTORY = new ObjectFactory(); 
-
 	@EJB
 	protected ContractParser contractParser;
 	
@@ -56,8 +52,8 @@ public class ContractHandlerBean implements ContractHandler {
 	 * )
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public String revokeCertificate(String requestMsg) {		
-		CertificateRevocationResponseType response = FACTORY.createCertificateRevocationResponseType();
+	public String revokeCertificate(String requestMsg) {				
+		CertificateRevocationResponseBuilder responseBuilder = new CertificateRevocationResponseBuilder();
 		CertificateRevocationRequestType request = null;
 		try {
 			// Parse the request
@@ -65,12 +61,12 @@ public class ContractHandlerBean implements ContractHandler {
 
 			// TODO business logic
 			// Return not implemented message
-			fillResponseFromRequest(response, request, ResultType.GENERAL_FAILURE, "Not implemented");
+			fillResponseFromRequest(responseBuilder, request, ResultType.GENERAL_FAILURE, "Not implemented");
 		} catch (ContractHandlerBeanException e) {
-			fillResponseFromRequest(response, request, e.getResultType(), e.getMessage());
+			fillResponseFromRequest(responseBuilder, request, e.getResultType(), e.getMessage());
 		}
 
-		return contractParser.marshalResponseMessage(FACTORY.createCertificateRevocationResponse(response));
+		return contractParser.marshalResponseMessage(responseBuilder.toResponseType(), CertificateRevocationResponseType.class);
 	}
 
 	/*
@@ -80,7 +76,7 @@ public class ContractHandlerBean implements ContractHandler {
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public String signCertificate(String requestMsg) {		
-		CertificateSigningResponseType response = FACTORY.createCertificateSigningResponseType();
+		CertificateSigningResponseBuilder responseBuilder = new CertificateSigningResponseBuilder();
 		CertificateSigningRequestType request = null;
 		try {
 			// Parse the request
@@ -88,26 +84,25 @@ public class ContractHandlerBean implements ContractHandler {
 
 			// TODO business logic
 			// Return not implemented message
-			fillResponseFromRequest(response, request, ResultType.GENERAL_FAILURE, "Not implemented");
+			fillResponseFromRequest(responseBuilder, request, ResultType.GENERAL_FAILURE, "Not implemented");
 		} catch (ContractHandlerBeanException e) {
-			fillResponseFromRequest(response, request, e.getResultType(), e.getMessage());
+			fillResponseFromRequest(responseBuilder, request, e.getResultType(), e.getMessage());
 		}
 
-		return contractParser.marshalResponseMessage(FACTORY.createCertificateSigningResponse(response));
+		return contractParser.marshalResponseMessage(responseBuilder.toResponseType(), CertificateSigningResponseType.class);
 	}
 
 	/**
 	 * Fills the values in the response, including the request id (when
 	 * available).
 	 */
-	protected void fillResponseFromRequest(ResponseType response, RequestType request, ResultType resultType,
+	protected void fillResponseFromRequest(AbstractResponseBuilder<?> responseBuilder, RequestType request, ResultType resultType,
 			String resultMessage) {
 		if (request != null) {
-			response.setRequestId(request.getRequestId());
-		}
-		response.setResponseId(generateResponseId());
-		response.setResult(resultType);
-		response.setResultMessage(resultMessage);
+			responseBuilder.setRequestId(request.getRequestId());
+		}		
+		responseBuilder.setResult(resultType);
+		responseBuilder.setResultMessage(resultMessage);
 	}
 
 	/**
