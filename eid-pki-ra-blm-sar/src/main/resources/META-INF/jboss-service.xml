@@ -3,7 +3,7 @@
     PUBLIC "-//JBoss//DTD MBean Service 5.0//EN"
     "http://www.jboss.org/j2ee/dtd/jboss-service_5_0.dtd">
     <server>
-        <mbean code="org.jboss.mq.server.jmx.Queue" name="eid-pki-ra:service=Queue,name=mail-queue">
+        <mbean code="org.jboss.mq.server.jmx.Queue" name="jboss.mq.destination:service=Queue,name=mail-queue">
                 <attribute name="JNDIName">mail-queue</attribute>
                 <depends optional-attribute-name="DestinationManager">
                         jboss.mq:service=DestinationManager</depends>
