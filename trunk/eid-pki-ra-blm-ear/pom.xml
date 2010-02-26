@@ -20,6 +20,7 @@
 			<groupId>org.jboss.seam</groupId>
 			<artifactId>jboss-seam</artifactId>
 			<type>ejb</type>
+			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
 					<groupId>xstream</groupId>
@@ -39,6 +40,7 @@
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk16</artifactId>
+			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
@@ -57,6 +59,7 @@
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-blm-ws</artifactId>
 			<type>war</type>
+			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
@@ -68,11 +71,14 @@
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-generated-publicws</artifactId>
+			<type>jar</type>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-blm-sar</artifactId>
 			<type>sar</type>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 
@@ -107,11 +113,17 @@
 							<groupId>org.jboss.seam</groupId>
 							<artifactId>jboss-seam</artifactId>
 						</ejbModule>
-
+						
 						<SarModule>
 							<groupId>${project.groupId}</groupId>
 							<artifactId>eid-pki-ra-blm-sar</artifactId>
 						</SarModule>
+						
+						<jarModule>
+							<groupId>be.fedict</groupId>
+							<artifactId>eid-pki-ra-generated-publicws</artifactId>
+							<bundleDir>lib</bundleDir>
+						</jarModule>
 					</modules>
 
 					<jboss>

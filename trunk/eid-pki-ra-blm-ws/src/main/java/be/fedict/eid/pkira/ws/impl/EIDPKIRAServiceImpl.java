@@ -28,7 +28,7 @@ import be.fedict.eid.pkira.generated.publicws.EIDPKIRAPortType;
  * 
  * @author Jan Van den Bergh
  */
-@WebService(endpointInterface = "be.fedict.eid.pkira.blm.ws.EIDPKIRAPortType")
+@WebService(endpointInterface = "be.fedict.eid.pkira.generated.publicws.EIDPKIRAPortType")
 public class EIDPKIRAServiceImpl implements EIDPKIRAPortType {
 
 	@EJB
