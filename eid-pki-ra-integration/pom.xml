@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>eid-pki-ra</artifactId>
+		<groupId>be.fedict</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<groupId>be.fedict</groupId>
+	<artifactId>eid-pki-ra-integration</artifactId>
+	<version>${parent.version}</version>
+	<name>eid-pki-ra - integration</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<eid.pki.ra.jboss.deploy.url>
+			<![CDATA[/jmx-console/HtmlAdaptor?action=invokeOpByName&name=jboss.system:service%3DMainDeployer&methodName=deploy&argType=java.net.URL&arg0=]]>
+		</eid.pki.ra.jboss.deploy.url>
+		<eid.pki.ra.jboss.undeploy.url>
+			<![CDATA[/jmx-console/HtmlAdaptor?action=invokeOpByName&name=jboss.system:service%3DMainDeployer&methodName=undeploy&argType=java.net.URL&arg0=]]>
+		</eid.pki.ra.jboss.undeploy.url>
+	</properties>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jboss-maven-plugin</artifactId>
+				<version>1.4</version>
+				<configuration>
+
+					<jbossHome>${eid.pki.ra.jboss.home}</jbossHome>
+					<jboss.server.name>${eid.pki.ra.jboss.server.name}
+					</jboss.server.name>
+					<hostName>${eid.pki.ra.jboss.host.name}</hostName>
+					<port>${eid.pki.ra.jboss.port}</port>
+					<deployUrlPath>${eid.pki.ra.jboss.deploy.url}</deployUrlPath>
+					<undeployUrlPath>${eid.pki.ra.jboss.undeploy.url}</undeployUrlPath>
+					<fileNames>
+						<fileName>${eid.pki.ra.home}/eid-pki-ra/eid-pki-ra-blm-ear/target/eid-pki-ra-blm-ear-${parent.version}.ear</fileName>
+					</fileNames>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
