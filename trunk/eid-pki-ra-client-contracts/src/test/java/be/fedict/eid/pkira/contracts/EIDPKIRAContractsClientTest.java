@@ -115,7 +115,7 @@ public class EIDPKIRAContractsClientTest {
 	
 	@Test(expectedExceptions=XmlMarshallingException.class)
 	public void testUnmarshalFromBase64Invalid() throws Exception {
-		new EIDPKIRAContractsClient().unmarshalFromBase64("9àçàsdf", CertificateSigningRequestType.class);		
+		new EIDPKIRAContractsClient().unmarshalFromBase64("9{!}df", CertificateSigningRequestType.class);		
 	}
 
 	private void compareXmlData(String xml, String controlFileName) throws SAXException, IOException,
