@@ -14,7 +14,7 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.blm.model;
+package be.fedict.eid.blm.model.contracthandler;
 
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
@@ -37,6 +37,8 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.xml.sax.SAXException;
 
+import be.fedict.eid.blm.model.contracthandler.ContractHandlerBeanException;
+import be.fedict.eid.blm.model.contracthandler.ContractParserBean;
 import be.fedict.eid.pkira.contracts.CertificateRevocationResponseBuilder;
 import be.fedict.eid.pkira.generated.contracts.CertificateRevocationRequestType;
 import be.fedict.eid.pkira.generated.contracts.CertificateRevocationResponseType;
@@ -85,16 +87,12 @@ public class ContractParserTest {
 
 	private void compareXmlData(String base64data, String controlFileName) throws SAXException, IOException,
 			ParserConfigurationException {
-		InputStream resource = getClass().getClassLoader().getResourceAsStream(getResourceNameForXml(controlFileName));
+		InputStream resource = getClass().getResourceAsStream(controlFileName);
 		InputStreamReader control = new InputStreamReader(resource);
 		InputStreamReader test = new InputStreamReader(new ByteArrayInputStream(Base64.decodeBase64(base64data)));
 
 		Diff diff = XMLUnit.compareXML(control, test);
 		assertTrue(diff.identical(), diff.toString());
-	}
-
-	private String getResourceNameForXml(String resourceName) {
-		return "be/fedict/eid/blm/model/" + resourceName;
 	}
 
 	private <T extends RequestType> T testParseFile(String resourceName, Class<T> requestClass)

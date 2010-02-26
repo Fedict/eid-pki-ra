@@ -14,7 +14,7 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.blm.model;
+package be.fedict.eid.blm.model.contracthandler;
 
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
@@ -28,7 +28,10 @@ import static org.testng.Assert.assertNotNull;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import be.fedict.eid.blm.model.util.ResponseTypeMatcher;
+import be.fedict.eid.blm.model.contracthandler.ContractHandlerBean;
+import be.fedict.eid.blm.model.contracthandler.ContractHandlerBeanException;
+import be.fedict.eid.blm.model.contracthandler.ContractParser;
+import be.fedict.eid.blm.model.contracthandler.util.ResponseTypeMatcher;
 import be.fedict.eid.pkira.contracts.CertificateSigningRequestBuilder;
 import be.fedict.eid.pkira.contracts.CertificateSigningResponseBuilder;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;

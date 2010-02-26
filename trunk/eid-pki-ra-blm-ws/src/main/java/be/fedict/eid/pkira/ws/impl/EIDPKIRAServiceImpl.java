@@ -19,7 +19,7 @@ package be.fedict.eid.pkira.ws.impl;
 import javax.ejb.EJB;
 import javax.jws.WebService;
 
-import be.fedict.eid.blm.model.ContractHandler;
+import be.fedict.eid.blm.model.contracthandler.ContractHandler;
 import be.fedict.eid.pkira.generated.publicws.EIDPKIRAPortType;
 
 /**
