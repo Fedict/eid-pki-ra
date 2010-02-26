@@ -17,7 +17,6 @@
 package be.fedict.eid.blm.model;
 
 import javax.ejb.Local;
-import javax.xml.bind.JAXBElement;
 
 import be.fedict.eid.pkira.generated.contracts.RequestType;
 import be.fedict.eid.pkira.generated.contracts.ResponseType;
@@ -37,9 +36,11 @@ public interface ContractParser {
 	 * 
 	 * @param response
 	 *            the response message to marshal.
+	 * @param responseClazz
+	 *            the class of the response.>
 	 * @return the Base64 encoded version of the message.
 	 */
-	String marshalResponseMessage(JAXBElement<? extends ResponseType> response);
+	public <T extends ResponseType> String marshalResponseMessage(T response, Class<T> responseClazz);
 
 	/**
 	 * Unmarshals the base64 encoding XML message.

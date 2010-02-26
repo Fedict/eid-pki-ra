@@ -16,7 +16,6 @@
  */
 package be.fedict.eid.blm.model;
 
-import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
@@ -38,10 +37,9 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.xml.sax.SAXException;
 
+import be.fedict.eid.pkira.contracts.CertificateRevocationResponseBuilder;
 import be.fedict.eid.pkira.generated.contracts.CertificateRevocationRequestType;
 import be.fedict.eid.pkira.generated.contracts.CertificateRevocationResponseType;
-import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
-import be.fedict.eid.pkira.generated.contracts.ObjectFactory;
 import be.fedict.eid.pkira.generated.contracts.RequestType;
 import be.fedict.eid.pkira.generated.contracts.ResultType;
 
@@ -51,8 +49,6 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
  * @author Jan Van den Bergh
  */
 public class ContractParserTest {
-
-	private static final ObjectFactory FACTORY = new ObjectFactory();
 
 	private static final String REQUEST_ID = "TEST-REQUEST-1";
 	private static final String RESPONSE_ID = "TEST-RESPONSE-1";
@@ -64,64 +60,23 @@ public class ContractParserTest {
 	public void setup() {
 		XMLUnit.setIgnoreWhitespace(true);
 		contractParser = new ContractParserBean();
-		contractParser.setupBean();
 	}
 
-	//@Test
+	@Test
 	public void testMarshalMessage() throws Exception {
-		CertificateRevocationResponseType response = FACTORY.createCertificateRevocationResponseType();
-		response.setRequestId(REQUEST_ID);
-		response.setResponseId(RESPONSE_ID);
-		response.setResult(ResultType.SUCCESS);
-		response.setResultMessage(TEST_MESSAGE);
+		CertificateRevocationResponseType response = new CertificateRevocationResponseBuilder(RESPONSE_ID)
+			.setRequestId(REQUEST_ID)
+			.setResult(ResultType.SUCCESS)
+			.setResultMessage(TEST_MESSAGE)
+			.toResponseType();
 
-		String result = contractParser.marshalResponseMessage(FACTORY.createCertificateRevocationResponse(response));
+		String result = contractParser.marshalResponseMessage(response, CertificateRevocationResponseType.class);
 		assertNotNull(result);
 
 		compareXmlData(result, "CertificateRevocationResponse.xml");
 	}
 
 	@Test
-	public void testUnmarshalEmptyData() {
-		try {
-			contractParser.unmarshalRequestMessage("", CertificateRevocationRequestType.class);
-			fail("Expected exception.");
-		} catch (ContractHandlerBeanException e) {
-			assertEquals(e.getResultType(), ResultType.INVALID_MESSAGE);
-		}
-	}
-
-	@Test(expectedExceptions = ContractHandlerBeanException.class)
-	public void testUnmarshalIncompleteXml() throws ContractHandlerBeanException {
-		testParseFile("IncompleteCertificateRevocationRequest.xml", CertificateRevocationRequestType.class);
-	}
-
-	@Test
-	public void testUnmarshalInvalidData() {
-		try {
-			contractParser.unmarshalRequestMessage("(xx)", CertificateRevocationRequestType.class);
-			fail("Expected exception.");
-		} catch (ContractHandlerBeanException e) {
-			assertEquals(e.getResultType(), ResultType.INVALID_MESSAGE);
-		}
-	}
-
-	@Test(expectedExceptions = ContractHandlerBeanException.class)
-	public void testUnmarshalInvalidXml() throws ContractHandlerBeanException {
-		testParseFile("InvalidCertificateRevocationRequest.xml", CertificateRevocationRequestType.class);
-	}
-
-	@Test
-	public void testUnmarshalNull() {
-		try {
-			contractParser.unmarshalRequestMessage(null, CertificateSigningRequestType.class);
-			fail("Expected ContractHandlerBeanException.");
-		} catch (ContractHandlerBeanException e) {
-			assertEquals(e.getResultType(), ResultType.INVALID_MESSAGE);
-		}
-	}
-
-	//@Test
 	public void testUnmarshalRevocationRequest() throws ContractHandlerBeanException {
 		CertificateRevocationRequestType request = testParseFile("CertificateRevocationRequest.xml",
 				CertificateRevocationRequestType.class);
@@ -145,7 +100,7 @@ public class ContractParserTest {
 	private <T extends RequestType> T testParseFile(String resourceName, Class<T> requestClass)
 			throws ContractHandlerBeanException {
 		try {
-			URL resource = getClass().getClassLoader().getResource(getResourceNameForXml(resourceName));
+			URL resource = getClass().getResource(resourceName);
 			byte[] data = FileUtils.readFileToByteArray(new File(resource.getFile()));
 			String  base64data = Base64.encodeBase64String(data);
 			return contractParser.unmarshalRequestMessage(base64data, requestClass);
