@@ -38,7 +38,8 @@
 		</developer>
 	</developers>
 	<scm>
-		<developerConnection>scm:svn:https://eid-pki-ra.googlecode.com/svn/trunk</developerConnection>
+		<developerConnection>scm:svn:https://eid-pki-ra.googlecode.com/svn/trunk
+		</developerConnection>
 	</scm>
 	<modules>
 		<module>eid-pki-ra-generated-contracts</module>
@@ -68,8 +69,11 @@
 		<mockito.version>1.8.2</mockito.version>
 		<testng.version>5.11</testng.version>
 		<selenium-client-driver.version>1.0.2</selenium-client-driver.version>
+		<surefire.version>2.5</surefire.version>
+		<selenium-server.version>1.0.3</selenium-server.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<project.reporting.outputEncoding>UTF-8
+		</project.reporting.outputEncoding>
 	</properties>
 
 	<repositories>
@@ -439,21 +443,27 @@
 				<exclude.bootstrap>false</exclude.bootstrap>
 
 				<!-- persistence.xml configuration -->
-				<hibernate.dialect>org.hibernate.dialect.HSQLDialect</hibernate.dialect>
+				<hibernate.dialect>org.hibernate.dialect.HSQLDialect
+				</hibernate.dialect>
 				<hibernate.hbm2ddl.auto>create-drop</hibernate.hbm2ddl.auto>
-				<hibernate.connection.driver_class>org.hsqldb.jdbcDriver</hibernate.connection.driver_class>
+				<hibernate.connection.driver_class>org.hsqldb.jdbcDriver
+				</hibernate.connection.driver_class>
 				<hibernate.connection.username>sa</hibernate.connection.username>
 				<hibernate.connection.password></hibernate.connection.password>
-				<hibernate.connection.url>jdbc:hsqldb:eid-pki-ra-db</hibernate.connection.url>
-				<hibernate.current_session_context_class>thread</hibernate.current_session_context_class>
-				<hibernate.cache.provider_class>org.hibernate.cache.NoCacheProvider</hibernate.cache.provider_class>
+				<hibernate.connection.url>jdbc:hsqldb:eid-pki-ra-db
+				</hibernate.connection.url>
+				<hibernate.current_session_context_class>thread
+				</hibernate.current_session_context_class>
+				<hibernate.cache.provider_class>org.hibernate.cache.NoCacheProvider
+				</hibernate.cache.provider_class>
 				<hibernate.show_sql>true</hibernate.show_sql>
 				<hibernate.format_sql>true</hibernate.format_sql>
 				<hibernate.use_query_cache>false</hibernate.use_query_cache>
-				<hibernate.use_second_level_cache>false</hibernate.use_second_level_cache>
+				<hibernate.use_second_level_cache>false
+				</hibernate.use_second_level_cache>
+
 			</properties>
 		</profile>
-
 		<profile>
 			<id>test</id>
 
