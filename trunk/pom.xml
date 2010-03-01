@@ -55,7 +55,7 @@
 		<module>eid-pki-ra-portal-webapp</module>
 		<module>eid-pki-ra-portal-ear</module>			
 		<module>eid-pki-ra-blm-sar</module>
-		<module>eid-pki-ra-integration</module>
+		<!-- <module>eid-pki-ra-integration</module>  -->
 	</modules>
 
 	<properties>
