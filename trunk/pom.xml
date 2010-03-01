@@ -47,6 +47,7 @@
 		<module>eid-pki-ra-client-privatews</module>
 		<module>eid-pki-ra-client-publicws</module>
 		<module>eid-pki-ra-client-contracts</module>
+		<module>eid-pki-ra-util-crypto</module>
 		<module>eid-pki-ra-blm-model</module>
 		<module>eid-pki-ra-blm-webapp</module>
 		<module>eid-pki-ra-blm-ws</module>
