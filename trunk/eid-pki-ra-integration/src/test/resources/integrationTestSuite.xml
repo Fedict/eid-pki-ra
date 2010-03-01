@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="AdminTests" verbose="1">
+<suite name="integrationTestSuite" verbose="1">
 	<parameter name="context" value="admin" />
 	<test name="TestClass test">
 		<classes>
