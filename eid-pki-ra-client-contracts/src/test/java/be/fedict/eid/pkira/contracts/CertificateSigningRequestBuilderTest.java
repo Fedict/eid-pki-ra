@@ -69,14 +69,16 @@ public class CertificateSigningRequestBuilderTest {
 	private static void setOtherFields(CertificateSigningRequestBuilder builder) {
 		builder.setDescription(DESCRIPTION)
 			.setDistinguishedName(DN)
-			.setLegalNotice(LEGAL_NOTICE)
-			.setOperatorEmail(OPERATOR_MAIL)
-			.setOperatorFunction(OPERATOR_FUNCTION)
-			.setOperatorName(OPERATOR_NAME)
-			.setOperatorPhone(OPERATOR_PHONE)
+			.setLegalNotice(LEGAL_NOTICE)		
 			.setCertificateType(CERTIFICATE_TYPE)
 			.setCsr(CSR)
-			.setValidityPeriodMonths(VALIDITY);
+			.setValidityPeriodMonths(VALIDITY)
+			.setOperator(new EntityBuilder()
+				.setEmail(OPERATOR_MAIL)
+				.setFunction(OPERATOR_FUNCTION)
+				.setName(OPERATOR_NAME)
+				.setPhone(OPERATOR_PHONE)
+				.toEntityType());
 	}
 
 	private void validateOtherFields(CertificateSigningRequestType request) {

@@ -16,6 +16,8 @@
  */
 package be.fedict.eid.blm.model.contracthandler;
 
+import java.util.List;
+
 import be.fedict.eid.pkira.generated.contracts.ResultType;
 
 /**
@@ -27,18 +29,43 @@ public class ContractHandlerBeanException extends Exception {
 	private static final long serialVersionUID = -6773414424819266033L;
 
 	private final ResultType resultType;
+
+	private final List<String> messages;
 	
 	public ContractHandlerBeanException(ResultType resultType, String message) {
 		super(message);
 		this.resultType =resultType; 
+		this.messages = null;
 	}
 	
+	public ContractHandlerBeanException(ResultType resultType, List<String> messages) {
+		super(joinMessages(messages));
+		this.resultType =resultType; 
+		this.messages = messages;
+	}
+
 	public ContractHandlerBeanException(ResultType resultType, String message, Throwable t) {
 		super(message, t);
 		this.resultType = resultType;
+		this.messages = null;
 	}
 
 	public ResultType getResultType() {
 		return resultType;
 	}
+	
+	public List<String> getMessages() {
+		return messages;
+	}
+	
+	private static String joinMessages(List<String> messages) {
+        StringBuffer buffer = new StringBuffer();
+        for(String message: messages) {
+        	if (buffer.length()!=0) {
+        		buffer.append(", ");        		
+        	}
+        	buffer.append(message);
+        }        
+        return buffer.toString();
+    }
 }

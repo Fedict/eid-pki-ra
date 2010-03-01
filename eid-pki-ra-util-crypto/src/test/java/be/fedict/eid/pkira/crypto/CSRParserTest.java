@@ -19,20 +19,12 @@ package be.fedict.eid.pkira.crypto;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
-import java.security.Security;
-
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
  * @author Jan Van den Bergh
  */
 public class CSRParserTest {
-
-	@BeforeClass
-	public void setup() {
-		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-	}
 
 	@Test
 	public void testParseCSR() throws CryptoException {
