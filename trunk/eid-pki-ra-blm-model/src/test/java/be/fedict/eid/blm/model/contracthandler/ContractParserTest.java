@@ -67,10 +67,7 @@ public class ContractParserTest {
 	@Test
 	public void testMarshalMessage() throws Exception {
 		CertificateRevocationResponseType response = new CertificateRevocationResponseBuilder(RESPONSE_ID)
-			.setRequestId(REQUEST_ID)
-			.setResult(ResultType.SUCCESS)
-			.setResultMessage(TEST_MESSAGE)
-			.toResponseType();
+				.setRequestId(REQUEST_ID).setResult(ResultType.SUCCESS).setResultMessage(TEST_MESSAGE).toResponseType();
 
 		String result = contractParser.marshalResponseMessage(response, CertificateRevocationResponseType.class);
 		assertNotNull(result);
@@ -87,10 +84,9 @@ public class ContractParserTest {
 
 	private void compareXmlData(String base64data, String controlFileName) throws SAXException, IOException,
 			ParserConfigurationException {
-		InputStream resource = getClass().getResourceAsStream(controlFileName);
-		InputStreamReader control = new InputStreamReader(resource);
-		InputStreamReader test = new InputStreamReader(new ByteArrayInputStream(Base64.decodeBase64(base64data)));
-
+		String control = FileUtils.readFileToString(new File(getClass().getResource(controlFileName).getFile()));
+		String test = new String(Base64.decodeBase64(base64data), "UTF-8");
+		
 		Diff diff = XMLUnit.compareXML(control, test);
 		assertTrue(diff.identical(), diff.toString());
 	}
@@ -100,7 +96,7 @@ public class ContractParserTest {
 		try {
 			URL resource = getClass().getResource(resourceName);
 			byte[] data = FileUtils.readFileToByteArray(new File(resource.getFile()));
-			String  base64data = Base64.encodeBase64String(data);
+			String base64data = Base64.encodeBase64String(data);
 			return contractParser.unmarshalRequestMessage(base64data, requestClass);
 		} catch (IOException e) {
 			fail("Could not read control XML", e);

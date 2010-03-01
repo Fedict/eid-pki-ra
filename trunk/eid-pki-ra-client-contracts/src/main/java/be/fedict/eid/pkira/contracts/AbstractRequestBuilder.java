@@ -16,8 +16,6 @@
  */
 package be.fedict.eid.pkira.contracts;
 
-import static be.fedict.eid.pkira.contracts.util.JAXBUtil.getObjectFactory;
-
 import java.util.UUID;
 
 import be.fedict.eid.pkira.generated.contracts.EntityType;
@@ -33,11 +31,8 @@ public abstract class AbstractRequestBuilder<T extends AbstractRequestBuilder<T>
 
 	private String description;
 	private String legalNotice;
-	private String operatorEmail;
-	private String operatorFunction;
-	private String operatorName;
-	private String operatorPhone;
 	private final String requestId;
+	private EntityType operator;
 
 	protected AbstractRequestBuilder() {
 		this.requestId = UUID.randomUUID().toString();
@@ -60,26 +55,8 @@ public abstract class AbstractRequestBuilder<T extends AbstractRequestBuilder<T>
 	}
 
 	@SuppressWarnings("unchecked")
-	public T setOperatorEmail(String operatorEmail) {
-		this.operatorEmail = operatorEmail;
-		return (T) this;
-	}
-
-	@SuppressWarnings("unchecked")
-	public T setOperatorFunction(String operatorFunction) {
-		this.operatorFunction = operatorFunction;
-		return (T) this;
-	}
-
-	@SuppressWarnings("unchecked")
-	public T setOperatorName(String operatorName) {
-		this.operatorName = operatorName;
-		return (T) this;
-	}
-
-	@SuppressWarnings("unchecked")
-	public T setOperatorPhone(String operatorPhone) {
-		this.operatorPhone = operatorPhone;
+	public T setOperator(EntityType operator) {
+		this.operator = operator;
 		return (T) this;
 	}
 
@@ -87,12 +64,6 @@ public abstract class AbstractRequestBuilder<T extends AbstractRequestBuilder<T>
 		requestType.setDescription(description);
 		requestType.setLegalNotice(legalNotice);
 		requestType.setRequestId(requestId);
-
-		EntityType operator = getObjectFactory().createEntityType();
-		operator.setEmail(operatorEmail);
-		operator.setFunction(operatorFunction);
-		operator.setName(operatorName);
-		operator.setPhone(operatorPhone);
 		requestType.setOperator(operator);
 	}
 }

@@ -23,6 +23,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
+import be.fedict.eid.blm.model.validation.FieldValidator;
 import be.fedict.eid.pkira.contracts.AbstractResponseBuilder;
 import be.fedict.eid.pkira.contracts.CertificateRevocationResponseBuilder;
 import be.fedict.eid.pkira.contracts.CertificateSigningResponseBuilder;
@@ -45,6 +46,9 @@ public class ContractHandlerBean implements ContractHandler {
 	@EJB
 	protected ContractParser contractParser;
 	
+	@EJB
+	protected FieldValidator fieldValidator;
+	
 	/*
 	 * (non-Javadoc)
 	 * @see
@@ -59,6 +63,9 @@ public class ContractHandlerBean implements ContractHandler {
 			// Parse the request
 			request = contractParser.unmarshalRequestMessage(requestMsg, CertificateRevocationRequestType.class);
 
+			// Validate the fields
+			fieldValidator.validateContract(request);
+			
 			// TODO business logic
 			// Return not implemented message
 			fillResponseFromRequest(responseBuilder, request, ResultType.GENERAL_FAILURE, "Not implemented");
@@ -82,6 +89,9 @@ public class ContractHandlerBean implements ContractHandler {
 			// Parse the request
 			request = contractParser.unmarshalRequestMessage(requestMsg, CertificateSigningRequestType.class);
 
+			// Validate the fields
+			fieldValidator.validateContract(request);
+			
 			// TODO business logic
 			// Return not implemented message
 			fillResponseFromRequest(responseBuilder, request, ResultType.GENERAL_FAILURE, "Not implemented");

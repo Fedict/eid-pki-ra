@@ -18,6 +18,7 @@ package be.fedict.eid.pkira.crypto;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.security.Security;
 
 import org.bouncycastle.asn1.pkcs.CertificationRequest;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
@@ -29,6 +30,11 @@ import org.bouncycastle.openssl.PEMReader;
  * @author Jan Van den Bergh
  */
 public class CSRParser {
+	
+	static {
+		// Make sure BC provider is known.
+		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+	}
 	
 	public static CSRInfo parseCSR(String csr) throws CryptoException {
 		PEMReader reader = new PEMReader(new StringReader(csr));

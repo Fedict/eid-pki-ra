@@ -69,12 +69,15 @@ public class CertificateRevocationRequestBuilderTest {
 			.setDescription(DESCRIPTION)
 			.setDistinguishedName(DN)
 			.setEndDate(END_DATE)
-			.setLegalNotice(LEGAL_NOTICE)
-			.setOperatorEmail(OPERATOR_MAIL)
-			.setOperatorFunction(OPERATOR_FUNCTION)
-			.setOperatorName(OPERATOR_NAME)
-			.setOperatorPhone(OPERATOR_PHONE)
-			.setStartDate(START_DATE);
+			.setLegalNotice(LEGAL_NOTICE)				
+			.setStartDate(START_DATE)
+			.setOperator(new EntityBuilder()
+				.setEmail(OPERATOR_MAIL)
+				.setFunction(OPERATOR_FUNCTION)
+				.setName(OPERATOR_NAME)
+				.setPhone(OPERATOR_PHONE)
+				.toEntityType()
+			);
 	}
 
 	private void validateOtherFields(CertificateRevocationRequestType request) {

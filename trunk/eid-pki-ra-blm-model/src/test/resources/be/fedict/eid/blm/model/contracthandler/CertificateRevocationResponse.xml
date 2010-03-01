@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<CertificateRevocationResponse xmlns="urn:be:fedict:eid:pkira:contracts" xmlns:ns2="http://www.w3.org/2000/09/xmldsig#">
-	<RequestId>TEST-REQUEST-1</RequestId>
-	<ResponseId>TEST-RESPONSE-1</ResponseId>
-	<Result>Success</Result>
-	<ResultMessage>Test message</ResultMessage>
-</CertificateRevocationResponse>
+<ns2:CertificateRevocationResponse xmlns:ns2="urn:be:fedict:eid:pkira:contracts"
+	xmlns="http://www.w3.org/2000/09/xmldsig#">
+	<ns2:RequestId>TEST-REQUEST-1</ns2:RequestId>
+	<ns2:ResponseId>TEST-RESPONSE-1</ns2:ResponseId>
+	<ns2:Result>Success</ns2:Result>
+	<ns2:ResultMessage>Test message</ns2:ResultMessage>
+</ns2:CertificateRevocationResponse>
