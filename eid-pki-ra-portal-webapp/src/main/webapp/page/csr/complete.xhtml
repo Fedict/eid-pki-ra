@@ -1,0 +1,55 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib"
+		xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich"
+		xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:form id="csrForm">
+			<rich:panel id="csrPanel">
+				<f:facet name="header">
+					<h:panelGroup>
+						<h:outputText value="#{messages['csr.title']}" />
+					</h:panelGroup>	
+				</f:facet>
+				
+				<s:decorate id="distinguishedNameDecoration" template="/layout/edit.xhtml">
+                	<ui:define name="label">#{messages['csr.distinguishedName']}:</ui:define>
+                	<h:inputText id="distinguishedName" value="#{certificateSigningRequest.distinguishedName.subject}" readonly="true"/>
+            	</s:decorate>
+            	
+            	<s:decorate id="certificateTypeDecoration" template="/layout/edit.xhtml">
+                	<ui:define name="label">#{messages['csr.certificateType']}:</ui:define>                	
+            	</s:decorate>
+				
+				<s:decorate id="validityPeriodDecoration" template="/layout/edit.xhtml">
+                	<ui:define name="label">#{messages['csr.validityPeriod']}:</ui:define>
+            	</s:decorate>
+				
+				<s:decorate id="operatorNameDecoration" template="/layout/edit.xhtml">
+                	<ui:define name="label">#{messages['csr.operatorName']}:</ui:define>
+                	<h:outputText id="operatorName" value="#{certificateSigningRequest.operatorName}" />
+            	</s:decorate>
+				
+				<s:decorate id="operatorFunctionDecoration" template="/layout/edit.xhtml">
+                	<ui:define name="label">#{messages['csr.operatorFunction']}:</ui:define>
+                	<h:inputText required="true" id="operatorFunction" value="#{certificateSigningRequest.operatorFunction}" />
+            	</s:decorate>
+				
+				<s:decorate id="operatorPhoneDecoration" template="/layout/edit.xhtml">
+                	<ui:define name="label">#{messages['csr.operatorPhone']}:</ui:define>
+                	<h:inputText required="true" id="operatorPhone" value="#{certificateSigningRequest.operatorPhone}" />
+            	</s:decorate>
+				
+				<s:decorate id="operatorEmailDecoration" template="/layout/edit.xhtml">
+                	<ui:define name="label">#{messages['csr.operatorEmail']}:</ui:define>
+                	<h:inputText required="true" id="operatorEmail" value="#{certificateSigningRequest.operatorEmail}" />
+            	</s:decorate>
+            	
+				<s:decorate template="/layout/buttonbox.xhtml" id="csrButtonBox">
+					<h:commandButton action="#{certificateHandler.requestCertificateSigningRequest}" value="#{messages['general.send']}" id="send"/>
+					<s:button value="#{messages['general.cancel']}" view="/page/csr/upload.xhtml" id="cancel"/>
+				</s:decorate>       
+			</rich:panel>
+		</h:form>	
+	</ui:define>	
+</ui:composition>		

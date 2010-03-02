@@ -20,24 +20,31 @@
 
 	<component name="org.jboss.seam.core.init">
 		<property name="debug">${seam.debug}</property>
-		<property name="jndi-pattern">ejb/#{ejbName}/local
-		</property>
+<!--		<property name="jndi-pattern">eid-poc-ear-${version}/#{ejbName}/local-->
+<!--		</property>-->
+	</component>
+	
+	<component class="org.jboss.seam.web.MultipartFilter">
+		<property name="createTempFiles">false</property>
+		<property name="maxRequestSize">1000000</property>
 	</component>
 
-	<core:manager concurrent-request-timeout="500" conversation-id-parameter="cid" conversation-timeout="120000" />
+	<core:manager concurrent-request-timeout="500"
+		conversation-id-parameter="cid" conversation-timeout="120000" />
 
-	<transaction:ejb-transaction />
+<!--	<transaction:ejb-transaction />-->
 
-	<persistence:managed-persistence-context
-		auto-create="true" name="entityManager" persistence-unit-jndi-name="java:/eid-pki-ra-blm-persistenceUnit" />
+<!--	<persistence:managed-persistence-context-->
+<!--		auto-create="true" name="entityManager" persistence-unit-jndi-name="java:/eid-poc-EntityManagerFactory" />-->
 
 	<!--
 		<drools:rule-base name="securityRules"> <drools:rule-files>
 		<value>/security.drl</value> </drools:rule-files> </drools:rule-base>
 	-->
-	<security:identity authenticate-method="#{authenticator.authenticate}" />
+<!--	<security:identity authenticate-method="#{authenticator.authenticate}" />-->
 
-	<mail:mail-session host="localhost" password="test" port="2525" username="test" />
+<!--	<mail:mail-session host="localhost" password="test"-->
+<!--		port="2525" username="test" />-->
 	<!--
     Configure JBoss Messaging queues for Seam 
   -->

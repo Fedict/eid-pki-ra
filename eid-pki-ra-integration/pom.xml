@@ -56,8 +56,8 @@
 					<hostName>${eid.pki.ra.jboss.host.name}</hostName>
 					<port>${eid.pki.ra.jboss.port}</port>
 					<fileNames>
-						<fileName>${eid.pki.ra.home}/eid-pki-ra/eid-pki-ra-blm-ear/target/eid-pki-ra-blm-ear-${parent.version}.ear
-						</fileName>
+						<fileName>${eid.pki.ra.home}/eid-pki-ra/eid-pki-ra-blm-ear/target/eid-pki-ra-blm-ear-${parent.version}.ear</fileName>
+						<fileName>${eid.pki.ra.home}/eid-pki-ra/eid-pki-ra-portal-ear/target/eid-pki-ra-portal-ear-${parent.version}.ear</fileName>
 					</fileNames>
 				</configuration>
 				<executions>

@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib"
+		xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich"
+		xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<rich:panel id="panel">
+			<f:facet name="header">#{messages['upload.title']}</f:facet>
+			<s:decorate id="csrDecoration" template="/layout/edit.xhtml">
+               	<ui:define name="label">#{messages['upload.upload']}:</ui:define>
+               	<s:fileUpload id="csr" accept="text/plain"
+               		data="#{certificateSigningRequest.csr}"
+               		contentType="#{certificateSigningRequest.contentType}" />
+           	</s:decorate>
+<!--           	<s:decorate id="csrDecoration" template="/layout/edit.xhtml">-->
+<!--               	<ui:define name="label">#{messages['upload.upload']}:</ui:define>-->
+<!--               	<h:inputTextarea id="csr" value="#{certificateSigningRequest.csr}" />-->
+<!--           	</s:decorate>-->
+           	
+          	<s:decorate template="/layout/buttonbox.xhtml" id="uploadButtonBox">
+				<h:commandButton action="#{certificateHandler.uploadCertificateSigningRequest}" value="#{messages['general.upload']}" id="upload"/>
+				<s:button value="#{messages['general.cancel']}" view="/page/csr/upload.xhtml" id="cancel"/>
+			</s:decorate> 
+		</rich:panel>
+	</ui:define>
+</ui:composition>
