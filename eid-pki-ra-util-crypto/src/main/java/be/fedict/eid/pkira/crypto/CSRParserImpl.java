@@ -24,8 +24,10 @@ import org.bouncycastle.asn1.pkcs.CertificationRequest;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.openssl.PEMReader;
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.log.Log;
 
 
 /**
@@ -36,6 +38,9 @@ import org.jboss.seam.annotations.Scope;
 @Scope(ScopeType.APPLICATION)
 public class CSRParserImpl implements CSRParser {
 	
+	@Logger
+	private Log log;
+	
 	static {
 		// Make sure BC provider is known.
 		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
@@ -45,11 +50,13 @@ public class CSRParserImpl implements CSRParser {
 	 * @see be.fedict.eid.pkira.crypto.CSRParser#parseCSR(java.lang.String)
 	 */
 	public CSRInfo parseCSR(String csr) throws CryptoException {
+		log.debug(">>> parseCSR(csr[{0}])", csr);
 		PEMReader reader = new PEMReader(new StringReader(csr));
 		Object pemObject;
 		try {
 			pemObject = reader.readObject();
 		} catch (IOException e) {
+			log.info("<<< parseCSR: Could not read CSR from string: ", e);
 			throw new CryptoException("Could not read CSR from string: " + e.getMessage(), e);
 		}		
 		
@@ -57,16 +64,24 @@ public class CSRParserImpl implements CSRParser {
 			PKCS10CertificationRequest certificationRequest = (PKCS10CertificationRequest) pemObject;
 			try {
 				if (!certificationRequest.verify()) {
+					log.info("<<< parseCSR: CSR signature is not correct.");
 					throw new CryptoException("CSR signature is not correct.");
 				}
 			} catch (Exception e) {
+				log.info("<<< parseCSR: Cannot verify CSR signature: ", e);
 				throw new CryptoException("Cannot verify CSR signature: " + e.getMessage(), e);
 			}
 			
 			String dn = certificationRequest.getCertificationRequestInfo().getSubject().toString();			
+			CSRInfo csrInfo = new CSRInfo(dn);
+			log.debug("<<< parseCSR: {0}", csrInfo);
 			return new CSRInfo(dn);
 		}				
-		
+		log.info("<<< parseCSR: No CSR found.");
 		throw new CryptoException("No CSR found.");
-	}	
+	}
+	
+	protected void setlog(Log log) {
+		this.log = log;
+	}
 }

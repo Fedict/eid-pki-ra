@@ -45,7 +45,7 @@ public class CertificateHandlerBeanTest {
 		
 		CSRParser csrParser = mock(CSRParser.class);
 		when(csrParser.parseCSR(isA(String.class))).thenReturn(new CSRInfo("testDN"));
-		HANDLER.setCSRParser(csrParser);
+		HANDLER.setCsrParser(csrParser);
 		
 		CertificateSigningRequest certificateSigningRequest = new CertificateSigningRequest();
 		certificateSigningRequest.setCsr(new byte[] {'a', 'b', 'c'});

@@ -18,8 +18,6 @@
 
 package be.fedict.eid.pkira.portal.csr;
 
-import org.apache.commons.codec.binary.Base64;
-import org.jboss.seam.annotations.Conversational;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
@@ -48,13 +46,13 @@ public class CertificateHandlerBean implements CertificateHandler {
 		this.log = log;
 	}
 	
-	@In
+	@In(create=true)
 	protected void setCertificateSigningRequest(CertificateSigningRequest certificateSigningRequest) {
 		this.certificateSigningRequest = certificateSigningRequest;
 	}
 	
-	@In
-	protected void setCSRParser(CSRParser csrParser) {
+	@In(create=true)
+	protected void setCsrParser(CSRParser csrParser) {
 		this.csrParser = csrParser;
 	}
 
@@ -66,14 +64,15 @@ public class CertificateHandlerBean implements CertificateHandler {
 	 */
 	@Override
 	public String uploadCertificateSigningRequest() {
-		log.info(">>> uploadCertificateSigningRequest(certificateSigningRequest=[{}])", certificateSigningRequest);
-		try {
-			CSRInfo csrInfo = csrParser.parseCSR(Base64.encodeBase64String(certificateSigningRequest.getCsr()));
-			certificateSigningRequest.setDistinguishedName(csrInfo);
-		} catch (CryptoException e) {
-			throw new RuntimeException("Invalid csr", e);
-		}
-		log.info("<<< uploadCertificateSigningRequest");
+		log.info(">>> uploadCertificateSigningRequest(certificateSigningRequest=[{0}])", certificateSigningRequest);
+//		try {
+			//TODO: get this to work
+			//CSRInfo csrInfo = csrParser.parseCSR(certificateSigningRequest.getBase64Csr());
+			certificateSigningRequest.setDistinguishedName(new CSRInfo("testDN"));
+//		} catch (CryptoException e) {
+//			throw new RuntimeException("Invalid csr", e);
+//		}
+		log.info("<<< uploadCertificateSigningRequest: {0}", certificateSigningRequest);
 		return "/page/csr/complete.xhtml";
 	}
 
@@ -85,7 +84,7 @@ public class CertificateHandlerBean implements CertificateHandler {
 	 */
 	@Override
 	public String requestCertificateSigningRequest() {
-		log.info(">>> requestCertificateSigningRequest(certificateSigningRequest=[{}])", certificateSigningRequest);
+		log.info(">>> requestCertificateSigningRequest(certificateSigningRequest=[{0}])", certificateSigningRequest);
 //		CertificateSigningRequestBuilder builder = new CertificateSigningRequestBuilder();
 //		
 		log.info("<<< requestCertificateSigningRequest");

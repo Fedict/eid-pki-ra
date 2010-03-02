@@ -35,5 +35,12 @@ public class CSRInfo {
 	 */
 	public String getSubject() {
 		return subject;
-	}	
+	}
+	
+	@Override
+	public String toString() {
+		return new StringBuilder("CSRInfo[")
+			.append("subject=").append(subject)
+			.append(']').toString();
+	}
 }
