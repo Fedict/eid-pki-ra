@@ -30,6 +30,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.blm.model.contracthandler.util.ResponseTypeMatcher;
+import be.fedict.eid.blm.model.eiddss.SignatureVerification;
 import be.fedict.eid.blm.model.validation.FieldValidator;
 import be.fedict.eid.pkira.contracts.CertificateSigningRequestBuilder;
 import be.fedict.eid.pkira.contracts.CertificateSigningResponseBuilder;
@@ -47,20 +48,24 @@ public class ContractHandlerBeanTest {
 	/**
 	 * 
 	 */
+	private static final String MSG_INVALID_SIGNATURE = "Invalid signature";
 	private static final String MSG_NOT_IMPLEMENTED = "Not implemented";
 	private static final String MSG_VALIDATION_FAILURE = "Validation failure";
 	private static final String MSG_INVALID_MESSAGE = "Invalid message";
 	private static final String REQUEST_ID = "TEST-REQUEST-1";
 	private static final String REQUEST_MESSAGE = "Test message";
 	private static final String RESPONSE_MESSAGE = "Test message 2";
+	private static final String SIGNER = "69123110110";
 
 	private ContractHandlerBean contractHandler;
 	private ContractParser contractParser;
 	private FieldValidator fieldValidator;
+	private SignatureVerification signatureVerification;
 
 	private ResponseTypeMatcher<CertificateSigningResponseType> notImplementedMatcher;
 	private ResponseTypeMatcher<CertificateSigningResponseType> validationFailureMatcher;
 	private ResponseTypeMatcher<CertificateSigningResponseType> invalidMessageMatcher;
+	private ResponseTypeMatcher<CertificateSigningResponseType> invalidSignatureMatcher;
 
 	private CertificateSigningRequestType request;
 
@@ -69,19 +74,23 @@ public class ContractHandlerBeanTest {
 		// Setup beans
 		contractParser = mock(ContractParser.class);
 		fieldValidator = mock(FieldValidator.class);
+		signatureVerification = mock(SignatureVerification.class);
 
 		contractHandler = new ContractHandlerBean();
 		contractHandler.contractParser = contractParser;
 		contractHandler.fieldValidator = fieldValidator;
+		contractHandler.signatureVerification = signatureVerification;
 
 		// Setup other objects
 		request = createEmptySigningRequest();
-		notImplementedMatcher = new ResponseTypeMatcher<CertificateSigningResponseType>(CertificateSigningResponseType.class,
-				REQUEST_ID, ResultType.GENERAL_FAILURE, MSG_NOT_IMPLEMENTED);
-		validationFailureMatcher = new ResponseTypeMatcher<CertificateSigningResponseType>(CertificateSigningResponseType.class,
-				REQUEST_ID, ResultType.INVALID_MESSAGE, MSG_VALIDATION_FAILURE);
-		invalidMessageMatcher = new ResponseTypeMatcher<CertificateSigningResponseType>(CertificateSigningResponseType.class,
-				null, ResultType.INVALID_SIGNATURE, MSG_INVALID_MESSAGE);
+		notImplementedMatcher = new ResponseTypeMatcher<CertificateSigningResponseType>(
+				CertificateSigningResponseType.class, REQUEST_ID, ResultType.GENERAL_FAILURE, MSG_NOT_IMPLEMENTED);
+		validationFailureMatcher = new ResponseTypeMatcher<CertificateSigningResponseType>(
+				CertificateSigningResponseType.class, REQUEST_ID, ResultType.INVALID_MESSAGE, MSG_VALIDATION_FAILURE);
+		invalidMessageMatcher = new ResponseTypeMatcher<CertificateSigningResponseType>(
+				CertificateSigningResponseType.class, null, ResultType.INVALID_MESSAGE, MSG_INVALID_MESSAGE);
+		invalidSignatureMatcher = new ResponseTypeMatcher<CertificateSigningResponseType>(
+				CertificateSigningResponseType.class, REQUEST_ID, ResultType.INVALID_SIGNATURE, MSG_INVALID_SIGNATURE);
 	}
 
 	@Test
@@ -100,36 +109,65 @@ public class ContractHandlerBeanTest {
 	public void testSignCertificateUnmarshalError() throws ContractHandlerBeanException {
 		// Setup test
 		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateSigningRequestType.class)))
-				.thenThrow(new ContractHandlerBeanException(ResultType.INVALID_SIGNATURE, MSG_INVALID_MESSAGE));
-		when(contractParser.marshalResponseMessage(argThat(invalidMessageMatcher), eq(CertificateSigningResponseType.class)))
-				.thenReturn(RESPONSE_MESSAGE);
+				.thenThrow(new ContractHandlerBeanException(ResultType.INVALID_MESSAGE, MSG_INVALID_MESSAGE));
+		when(
+				contractParser.marshalResponseMessage(argThat(invalidMessageMatcher),
+						eq(CertificateSigningResponseType.class))).thenReturn(RESPONSE_MESSAGE);
 
 		// Run it
 		String result = contractHandler.signCertificate(REQUEST_MESSAGE);
 
 		// Validate it
 		verify(contractParser).unmarshalRequestMessage(REQUEST_MESSAGE, CertificateSigningRequestType.class);
-		verify(contractParser).marshalResponseMessage(argThat(invalidMessageMatcher), eq(CertificateSigningResponseType.class));
+		verify(contractParser).marshalResponseMessage(argThat(invalidMessageMatcher),
+				eq(CertificateSigningResponseType.class));
 		verifyNoMoreInteractions();
 		assertEquals(result, RESPONSE_MESSAGE);
 	}
 
 	@Test
 	public void testSignCertificateValidationFailure() throws ContractHandlerBeanException {
-		// Setup test		
+		// Setup test
 		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateSigningRequestType.class)))
 				.thenReturn(request);
-		when(contractParser.marshalResponseMessage(argThat(validationFailureMatcher), eq(CertificateSigningResponseType.class)))
-				.thenReturn(RESPONSE_MESSAGE);
-		doThrow(new ContractHandlerBeanException(ResultType.INVALID_MESSAGE, MSG_VALIDATION_FAILURE)).when(fieldValidator).validateContract(eq(request));
+		when(
+				contractParser.marshalResponseMessage(argThat(validationFailureMatcher),
+						eq(CertificateSigningResponseType.class))).thenReturn(RESPONSE_MESSAGE);
+		doThrow(new ContractHandlerBeanException(ResultType.INVALID_MESSAGE, MSG_VALIDATION_FAILURE)).when(
+				fieldValidator).validateContract(eq(request));
 
 		// Run it
 		String result = contractHandler.signCertificate(REQUEST_MESSAGE);
 
 		// Validate it
 		verify(contractParser).unmarshalRequestMessage(REQUEST_MESSAGE, CertificateSigningRequestType.class);
-		verify(contractParser).marshalResponseMessage(argThat(validationFailureMatcher), eq(CertificateSigningResponseType.class));
+		verify(contractParser).marshalResponseMessage(argThat(validationFailureMatcher),
+				eq(CertificateSigningResponseType.class));
 		verify(fieldValidator).validateContract(eq(request));
+		verifyNoMoreInteractions();
+
+		assertEquals(result, RESPONSE_MESSAGE);
+	}
+	
+	@Test
+	public void testSignCertificateInvalidSignature() throws ContractHandlerBeanException {
+		// Setup test
+		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateSigningRequestType.class)))
+				.thenReturn(request);
+		when(
+				contractParser.marshalResponseMessage(argThat(invalidSignatureMatcher),
+						eq(CertificateSigningResponseType.class))).thenReturn(RESPONSE_MESSAGE);
+		when(signatureVerification.verifySignature(eq(REQUEST_MESSAGE))).thenThrow(new ContractHandlerBeanException(ResultType.INVALID_SIGNATURE, MSG_INVALID_SIGNATURE));
+
+		// Run it
+		String result = contractHandler.signCertificate(REQUEST_MESSAGE);
+
+		// Validate it
+		verify(contractParser).unmarshalRequestMessage(REQUEST_MESSAGE, CertificateSigningRequestType.class);
+		verify(contractParser).marshalResponseMessage(argThat(invalidSignatureMatcher),
+				eq(CertificateSigningResponseType.class));
+		verify(fieldValidator).validateContract(eq(request));
+		verify(signatureVerification).verifySignature(eq(REQUEST_MESSAGE));
 		verifyNoMoreInteractions();
 
 		assertEquals(result, RESPONSE_MESSAGE);
@@ -140,23 +178,27 @@ public class ContractHandlerBeanTest {
 		// Setup test
 		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateSigningRequestType.class)))
 				.thenReturn(request);
-		when(contractParser.marshalResponseMessage(argThat(notImplementedMatcher), eq(CertificateSigningResponseType.class)))
-				.thenReturn(RESPONSE_MESSAGE);
+		when(
+				contractParser.marshalResponseMessage(argThat(notImplementedMatcher),
+						eq(CertificateSigningResponseType.class))).thenReturn(RESPONSE_MESSAGE);
+		when(signatureVerification.verifySignature(eq(REQUEST_MESSAGE))).thenReturn(SIGNER);
 
 		// Run it
 		String result = contractHandler.signCertificate(REQUEST_MESSAGE);
 
 		// Validate it
 		verify(contractParser).unmarshalRequestMessage(REQUEST_MESSAGE, CertificateSigningRequestType.class);
-		verify(contractParser).marshalResponseMessage(argThat(notImplementedMatcher), eq(CertificateSigningResponseType.class));
+		verify(contractParser).marshalResponseMessage(argThat(notImplementedMatcher),
+				eq(CertificateSigningResponseType.class));
 		verify(fieldValidator).validateContract(eq(request));
+		verify(signatureVerification).verifySignature(eq(REQUEST_MESSAGE));
 		verifyNoMoreInteractions();
 
 		assertEquals(result, RESPONSE_MESSAGE);
 	}
 
 	private void verifyNoMoreInteractions() {
-		Mockito.verifyNoMoreInteractions(contractParser, fieldValidator);
+		Mockito.verifyNoMoreInteractions(contractParser, fieldValidator, signatureVerification);
 	}
 
 	private CertificateSigningRequestType createEmptySigningRequest() {
