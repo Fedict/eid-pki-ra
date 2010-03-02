@@ -32,7 +32,7 @@ import org.jboss.seam.annotations.Scope;
  * Class used to parse a CSR and extract the required fields.
  * @author Jan Van den Bergh
  */
-@Name("CSRParser")
+@Name(CSRParser.NAME)
 @Scope(ScopeType.APPLICATION)
 public class CSRParserImpl implements CSRParser {
 	
