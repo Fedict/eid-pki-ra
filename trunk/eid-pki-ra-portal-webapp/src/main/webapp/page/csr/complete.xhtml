@@ -14,20 +14,33 @@
 				
 				<s:decorate id="distinguishedNameDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['csr.distinguishedName']}:</ui:define>
-                	<h:inputText id="distinguishedName" value="#{certificateSigningRequest.distinguishedName.subject}" readonly="true"/>
+                	<h:outputText id="distinguishedName" value="#{certificateSigningRequest.distinguishedName.subject}" />
             	</s:decorate>
             	
             	<s:decorate id="certificateTypeDecoration" template="/layout/edit.xhtml">
-                	<ui:define name="label">#{messages['csr.certificateType']}:</ui:define>                	
+                	<ui:define name="label">#{messages['csr.certificateType']}:</ui:define> 
+                	<h:selectOneRadio id="certificateTypeRadioList" layout="lineDirection"
+                  			value="#{certificateSigningRequest.certificateType}" required="true">
+  						<s:convertEnum />
+						<s:enumItem enumValue="SERVER" label="#{messages['certificateType.server']}" />
+						<s:enumItem enumValue="CLIENT" label="#{messages['certificateType.client']}" />
+						<s:enumItem enumValue="CODE" label="#{messages['certificateType.code']}" />
+					</h:selectOneRadio>               	
             	</s:decorate>
 				
 				<s:decorate id="validityPeriodDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['csr.validityPeriod']}:</ui:define>
+                	<h:selectOneMenu value="#{certificateSigningRequest.validityPeriod}">                	
+                		<s:selectItems value="#{certificateSigningRequest.validityPeriods}" var="period" 
+                			label="#{period.monthsInPeriod}" noSelectionLabel="#{no.selection.label}"
+                			required="true"/>
+                		<s:convertEnum />
+                	</h:selectOneMenu>
             	</s:decorate>
 				
 				<s:decorate id="operatorNameDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['csr.operatorName']}:</ui:define>
-                	<h:outputText id="operatorName" value="#{certificateSigningRequest.operatorName}" />
+                	<h:outputText id="operatorName" value="#{certificateSigningRequest.operatorName}" required="true"  />
             	</s:decorate>
 				
 				<s:decorate id="operatorFunctionDecoration" template="/layout/edit.xhtml">
@@ -43,6 +56,16 @@
 				<s:decorate id="operatorEmailDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['csr.operatorEmail']}:</ui:define>
                 	<h:inputText required="true" id="operatorEmail" value="#{certificateSigningRequest.operatorEmail}" />
+            	</s:decorate>
+				
+				<s:decorate id="csrDecoration" template="/layout/edit.xhtml">
+                	<ui:define name="label">#{messages['csr.csr']}:</ui:define>
+                	<h:outputText id="csr" value="#{certificateSigningRequest.base64Csr}" />
+            	</s:decorate>
+				
+				<s:decorate id="descriptionDecoration" template="/layout/edit.xhtml">
+                	<ui:define name="label">#{messages['csr.description']}:</ui:define>
+                	<h:inputTextarea id="operatorEmail" value="#{certificateSigningRequest.description}" cols="80" rows="12" />
             	</s:decorate>
             	
 				<s:decorate template="/layout/buttonbox.xhtml" id="csrButtonBox">

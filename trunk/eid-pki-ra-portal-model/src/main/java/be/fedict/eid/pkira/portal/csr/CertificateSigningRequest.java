@@ -18,11 +18,13 @@
 package be.fedict.eid.pkira.portal.csr;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
+import org.apache.commons.codec.binary.Base64;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.util.Base64;
 
 import be.fedict.eid.pkira.crypto.CSRInfo;
 
@@ -37,7 +39,7 @@ public class CertificateSigningRequest implements Serializable {
 	
 	private CSRInfo distinguishedName;
 	private CertificateType certificateType;
-	private ValidityPeriod validityPeriod;
+	private ValidityPeriod validityPeriod = ValidityPeriod.YEAR_AND_A_HALF;
 	private String operatorName;
 	private String operatorFunction;
 	private String operatorPhone;
@@ -45,7 +47,8 @@ public class CertificateSigningRequest implements Serializable {
 	private byte[] csr;
 	private String contentType;
 	private String description;
-	
+	private String csrAsString;
+
 	public CSRInfo getDistinguishedName() {
 		return distinguishedName;
 	}
@@ -124,5 +127,45 @@ public class CertificateSigningRequest implements Serializable {
 	
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
+	}
+	
+	public String getCsrAsString() {
+		return csrAsString;
+	}
+
+	public void setCsrAsString(String csrAsString) {
+		this.csrAsString = csrAsString;
+	}
+	
+	public List<ValidityPeriod> getValidityPeriods() {
+		return Arrays.asList(ValidityPeriod.values());
+	}
+	
+	public String getBase64Csr() {
+		if (csr.length > 0) {
+			return Base64.encodeBase64String(csr);
+		} else {
+			return csrAsString;
+		}
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return new StringBuilder("CertificateSigningRequest[")
+			.append("distinguishedName=").append(distinguishedName)
+			.append(", certificateType=").append(certificateType)
+			.append(", validityPeriod=").append(validityPeriod)
+			.append(", operatorName=").append(operatorName)
+			.append(", operatorFunction=").append(operatorFunction)
+			.append(", operatorPhone=").append(operatorPhone)
+			.append(", operatorEmail=").append(operatorEmail)
+			.append(", csr=").append(Base64.encodeBase64String(csr))
+			.append(", contentType=").append(contentType)
+			.append(", description=").append(description)
+			.append(", csrAsString=").append(csrAsString)
+			.append(']').toString();
 	}
 }
