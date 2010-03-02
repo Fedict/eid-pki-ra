@@ -16,38 +16,6 @@
 	<name>eid-pki-ra-blm - ear</name>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.jboss.seam</groupId>
-			<artifactId>jboss-seam</artifactId>
-			<type>ejb</type>
-			<scope>compile</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>xstream</groupId>
-					<artifactId>xstream</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>xpp3</groupId>
-					<artifactId>xpp3_min</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>javax.el</groupId>
-					<artifactId>el-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcprov-jdk16</artifactId>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-		</dependency>
-
 		<!--  Application modules -->
 		<dependency>
 			<groupId>be.fedict</groupId>
@@ -66,19 +34,66 @@
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-blm-model</artifactId>
 			<type>ejb</type>
+			<exclusions>
+				<exclusion>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-validator</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
 			<groupId>be.fedict</groupId>
-			<artifactId>eid-pki-ra-generated-publicws</artifactId>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-blm-sar</artifactId>
 			<type>sar</type>
-			<scope>compile</scope>
+		</dependency>
+
+		<!-- Application libraries -->
+		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-generated-publicws</artifactId>
+			<type>jar</type>
+		</dependency>
+
+		<!-- Other dependencies -->
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam</artifactId>
+			<type>ejb</type>
+			<exclusions>
+				<exclusion>
+					<groupId>xstream</groupId>
+					<artifactId>xstream</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>xpp3</groupId>
+					<artifactId>xpp3_min</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.el</groupId>
+					<artifactId>el-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-digester</groupId>
+			<artifactId>commons-digester</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -113,12 +128,12 @@
 							<groupId>org.jboss.seam</groupId>
 							<artifactId>jboss-seam</artifactId>
 						</ejbModule>
-						
+
 						<SarModule>
 							<groupId>${project.groupId}</groupId>
 							<artifactId>eid-pki-ra-blm-sar</artifactId>
 						</SarModule>
-						
+
 						<jarModule>
 							<groupId>be.fedict</groupId>
 							<artifactId>eid-pki-ra-generated-publicws</artifactId>
