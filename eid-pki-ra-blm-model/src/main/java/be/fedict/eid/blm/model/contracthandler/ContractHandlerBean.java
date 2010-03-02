@@ -23,6 +23,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
+import be.fedict.eid.blm.model.eiddss.SignatureVerification;
 import be.fedict.eid.blm.model.validation.FieldValidator;
 import be.fedict.eid.pkira.contracts.AbstractResponseBuilder;
 import be.fedict.eid.pkira.contracts.CertificateRevocationResponseBuilder;
@@ -49,6 +50,9 @@ public class ContractHandlerBean implements ContractHandler {
 	@EJB
 	protected FieldValidator fieldValidator;
 	
+	@EJB
+	protected SignatureVerification signatureVerification;
+	
 	/*
 	 * (non-Javadoc)
 	 * @see
@@ -65,6 +69,9 @@ public class ContractHandlerBean implements ContractHandler {
 
 			// Validate the fields
 			fieldValidator.validateContract(request);
+			
+			// Validate the signature
+			String signer = signatureVerification.verifySignature(requestMsg);
 			
 			// TODO business logic
 			// Return not implemented message
@@ -91,6 +98,9 @@ public class ContractHandlerBean implements ContractHandler {
 
 			// Validate the fields
 			fieldValidator.validateContract(request);
+			
+			// Validate the signature
+			String signer = signatureVerification.verifySignature(requestMsg);
 			
 			// TODO business logic
 			// Return not implemented message

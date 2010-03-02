@@ -48,7 +48,7 @@ public class FieldValidatorBean implements FieldValidator {
 
 	private static final String PHONE_PATTERN = "(\\+|0)[-0-9 \\./]+";
 
-	@In
+	@In(value=CSRParser.NAME)
 	private CSRParser csrParser;
 
 	/*
@@ -150,5 +150,9 @@ public class FieldValidatorBean implements FieldValidator {
 		if (!new NotEmptyValidator().isValid(value)) {
 			messages.add(name + " cannot be empty");
 		}
+	}
+
+	protected void setCSRParser(CSRParser csrParser) {
+		this.csrParser=csrParser;		
 	}
 }

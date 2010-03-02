@@ -128,7 +128,7 @@ public class EIDPKIRAContractsClient {
 				return (T) jaxbElement.getValue();
 			} else {
 				throw new XmlMarshallingException("XML contains an invalid element: "
-						+ jaxbElement.getDeclaredType().getName() + ". Expected " + clazz.getName());
+						+ jaxbElement.getDeclaredType().getSimpleName() + ". Expected " + clazz.getSimpleName());
 			}
 		}
 

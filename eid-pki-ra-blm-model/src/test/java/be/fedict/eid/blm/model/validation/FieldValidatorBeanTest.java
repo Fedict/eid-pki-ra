@@ -16,6 +16,8 @@
  */
 package be.fedict.eid.blm.model.validation;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 
 import java.util.ArrayList;
@@ -28,17 +30,19 @@ import be.fedict.eid.blm.model.contracthandler.ContractHandlerBeanException;
 import be.fedict.eid.pkira.contracts.CertificateSigningRequestBuilder;
 import be.fedict.eid.pkira.contracts.EntityBuilder;
 import be.fedict.eid.pkira.contracts.util.JAXBUtil;
+import be.fedict.eid.pkira.crypto.CSRInfo;
+import be.fedict.eid.pkira.crypto.CSRParser;
+import be.fedict.eid.pkira.crypto.CryptoException;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
 import be.fedict.eid.pkira.generated.contracts.CertificateTypeType;
 import be.fedict.eid.pkira.generated.contracts.EntityType;
 
 public class FieldValidatorBeanTest {
 
-	// TODO test for validation of signing requests
 	// TODO test for validation of revocation requests
 
 	private static final CertificateTypeType INVALID_CERTIFICATE_TYPE = null;
-	private static final String INVALID_CSR = "";
+	private static final String INVALID_CSR="Invalid CSR";
 	private static final String INVALID_DESCRIPTION = "";
 	private static final String INVALID_DN = "";
 	private static final String INVALID_EMAIL = "j.vandenbergh@aca-it@be";
@@ -48,19 +52,7 @@ public class FieldValidatorBeanTest {
 	private static final String INVALID_PHONE = "abcde";
 	private static final int INVALID_VALIDITY_PERIOD = 23;
 	private static final CertificateTypeType VALID_CERTIFICATE_TYPE = CertificateTypeType.SERVER;
-	private static final String VALID_CSR = "-----BEGIN NEW CERTIFICATE REQUEST-----\r\n"
-			+ "MIICbzCCAi0CAQAwajELMAkGA1UEBhMCQkUxEDAOBgNVBAgTB0xpbWJ1cmcxEDAOBgNVBAcTB0hh\r\n"
-			+ "c3NlbHQxDDAKBgNVBAoTA0FDQTENMAsGA1UECxMEdGVzdDEaMBgGA1UEAxMRSmFuIFZhbiBkZW4g\r\n"
-			+ "QmVyZ2gwggG4MIIBLAYHKoZIzjgEATCCAR8CgYEA/X9TgR11EilS30qcLuzk5/YRt1I870QAwx4/\r\n"
-			+ "gLZRJmlFXUAiUftZPY1Y+r/F9bow9subVWzXgTuAHTRv8mZgt2uZUKWkn5/oBHsQIsJPu6nX/rfG\r\n"
-			+ "G/g7V+fGqKYVDwT7g/bTxR7DAjVUE1oWkTL2dfOuK2HXKu/yIgMZndFIAccCFQCXYFCPFSMLzLKS\r\n"
-			+ "uYKi64QL8Fgc9QKBgQD34aCF1ps93su8q1w2uFe5eZSvu/o66oL5V0wLPQeCZ1FZV4661FlP5nEH\r\n"
-			+ "EIGAtEkWcSPoTCgWE7fPCTKMyKbhPBZ6i1R8jSjgo64eK7OmdZFuo38L+iE1YvH7YnoBJDvMpPG+\r\n"
-			+ "qFGQiaiD3+Fa5Z8GkotmXoB7VSVkAUw7/s9JKgOBhQACgYEA+86jKc18tmTaU44RdbeQIkBi5R4q\r\n"
-			+ "KGvWiuoIcoKaQswraNkLzlGLlJbsfIGA+aZbqaZkvNKpRU+7OVwW1FBuPCaXuhDL315XvLQ/kz4/\r\n"
-			+ "Ft5x70OccrJqzTxecvUyjwTrhehyxURBZ4e+oCrYp9py3zMmy2qDDWIN1IYTdF+VzxSgADALBgcq\r\n"
-			+ "hkjOOAQDBQADLwAwLAIUcQtBbLV6WliL6xr6yFg5IMYMjfsCFB4D9BUGyFYRNvHFms7ySKKdg+Md\r\n"
-			+ "-----END NEW CERTIFICATE REQUEST-----";
+	private static final String VALID_CSR="Valid CSR";
 	private static final String VALID_DESCRIPTION = "New certificate";
 	private static final String VALID_DN = "C=BE,ST=Limburg,L=Hasselt,O=ACA,OU=test,CN=Jan Van den Bergh";
 	private static final String VALID_EMAIL = "j.vandenbergh@aca-it.be";
@@ -72,16 +64,23 @@ public class FieldValidatorBeanTest {
 	private static final int VALID_VALIDITY_PERIOD = 15;
 
 	private FieldValidatorBean bean;
+	private CSRParser csrParser;
 	private List<String> messages;
 
 	@BeforeMethod
-	public void setup() {
-		bean = new FieldValidatorBean();
+	public void setup() throws CryptoException {
+		csrParser = mock(CSRParser.class);
+		when(csrParser.parseCSR(VALID_CSR)).thenReturn(new CSRInfo(VALID_DN));
+		when(csrParser.parseCSR(INVALID_CSR)).thenThrow(new CryptoException());
+		
+		bean = new FieldValidatorBean();		
+		bean.setCSRParser(csrParser);
+		
 		messages = new ArrayList<String>();
 	}
 
 	@Test
-	public void testValidateCertificateSigningRequest() throws ContractHandlerBeanException {
+	public void testValidateCertificateSigningRequest() throws ContractHandlerBeanException {		
 		CertificateSigningRequestType contract = createValidCertificateSigningRequest();
 		bean.validateContract(contract);
 	}
