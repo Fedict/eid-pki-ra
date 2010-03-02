@@ -7,14 +7,14 @@
         
 	<h:panelGrid columns="2" columnClasses="name, value">
 		<h:column>
-			<s:label styleClass="#{invalid ? 'error-label' : ''}">
+			<s:label styleClass="#{invalid?'error-label':''}">
 				<ui:insert name="label"/>
 				<s:span styleClass="required" rendered="#{required}">*</s:span>
 			</s:label>
 		</h:column>
 	    	
 		<h:column>
-			<span class="#{invalid ? 'errors' : ''} #{readonly ? 'readonly' : ''}">
+			<span class="#{invalid?'errors':''} #{readonly?'readonly':''}">
 				<s:validateAll>
 					<ui:insert/>
 					<s:message styleClass="error errors" showSummary="true" showDetail="false" style="clear:both;" />

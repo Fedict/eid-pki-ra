@@ -24,7 +24,9 @@
 		<param-value>.xhtml</param-value>
 	</context-param>
 
-	<!-- Ajax4jsf very important: http://jira.jboss.com/jira/browse/RF-1767 -->
+	<!--
+		Ajax4jsf very important: http://jira.jboss.com/jira/browse/RF-1767
+	-->
 	<filter>
 		<display-name>Ajax4jsf Filter</display-name>
 		<filter-name>ajax4jsf</filter-name>
@@ -73,6 +75,10 @@
 	</servlet-mapping>
 
 	<session-config>
+		<!--
+			Value is in minutes, must be less than SFSB time out which is 30
+			minutes by default
+		-->
 		<session-timeout>20</session-timeout>
 	</session-config>
 

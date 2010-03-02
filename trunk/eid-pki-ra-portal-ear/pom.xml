@@ -11,14 +11,16 @@
 	</parent>
 
 	<groupId>be.fedict</groupId>
-	<artifactId>eid-pki-ra-portal-ear</artifactId>	
+	<artifactId>eid-pki-ra-portal-ear</artifactId>
 	<packaging>ear</packaging>
 	<name>eid-pki-ra-portal - ear</name>
 
 	<dependencies>
+
 		<dependency>
 			<groupId>org.jboss.seam</groupId>
 			<artifactId>jboss-seam</artifactId>
+			<version>${seam.version}</version>
 			<type>ejb</type>
 			<exclusions>
 				<exclusion>
@@ -29,12 +31,47 @@
 					<groupId>xpp3</groupId>
 					<artifactId>xpp3_min</artifactId>
 				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.el</groupId>
+			<artifactId>jboss-el</artifactId>
+			<exclusions>
 				<exclusion>
 					<groupId>javax.el</groupId>
 					<artifactId>el-api</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		<dependency>
+			<groupId>org.richfaces.framework</groupId>
+			<artifactId>richfaces-api</artifactId>
+			<version>${version.richfaces}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-collections</groupId>
+					<artifactId>commons-collections</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!--		<dependency>-->
+		<!--			<groupId>org.bouncycastle</groupId>-->
+		<!--			<artifactId>bcprov-jdk16</artifactId>-->
+		<!--		</dependency>-->
 
 		<!--  Application modules -->
 		<dependency>
@@ -62,7 +99,6 @@
 							<groupId>be.fedict</groupId>
 							<artifactId>eid-pki-ra-portal-webapp</artifactId>
 							<contextRoot>eid-pki-ra/portal</contextRoot>
-							<unpack>${exploded.war.file}</unpack>
 						</webModule>
 
 						<ejbModule>
@@ -74,6 +110,24 @@
 							<groupId>org.jboss.seam</groupId>
 							<artifactId>jboss-seam</artifactId>
 						</ejbModule>
+
+						<jarModule>
+							<groupId>org.richfaces.framework</groupId>
+							<artifactId>richfaces-api</artifactId>
+							<bundleDir>lib</bundleDir>
+						</jarModule>
+
+						<jarModule>
+							<groupId>org.jboss.el</groupId>
+							<artifactId>jboss-el</artifactId>
+							<bundleDir>lib</bundleDir>
+						</jarModule>
+
+						<jarModule>
+							<groupId>commons-beanutils</groupId>
+							<artifactId>commons-beanutils</artifactId>
+							<bundleDir>lib</bundleDir>
+						</jarModule>
 					</modules>
 
 					<jboss>
