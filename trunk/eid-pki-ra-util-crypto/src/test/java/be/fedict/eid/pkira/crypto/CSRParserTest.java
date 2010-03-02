@@ -26,9 +26,11 @@ import org.testng.annotations.Test;
  */
 public class CSRParserTest {
 
+	private CSRParserImpl csrParser = new CSRParserImpl();
+	
 	@Test
 	public void testParseCSR() throws CryptoException {
-		CSRInfo csrInfo = CSRParser.parseCSR(TestConstants.VALID_CSR);
+		CSRInfo csrInfo = csrParser.parseCSR(TestConstants.VALID_CSR);
 
 		assertNotNull(csrInfo);
 		assertEquals(csrInfo.getSubject(), TestConstants.CSR_SUBJECT);
@@ -36,22 +38,22 @@ public class CSRParserTest {
 	
 	@Test(expectedExceptions = CryptoException.class)
 	public void testParseCSRInvalidSignature() throws CryptoException {
-		CSRParser.parseCSR(TestConstants.INVALID_CSR);
+		csrParser.parseCSR(TestConstants.INVALID_CSR);
 	}
 
 	@Test(expectedExceptions = CryptoException.class)
 	public void testParseIncompleteCSR() throws CryptoException {
-		CSRParser.parseCSR(TestConstants.VALID_CSR.substring(0, TestConstants.VALID_CSR.length() - 10));
+		csrParser.parseCSR(TestConstants.VALID_CSR.substring(0, TestConstants.VALID_CSR.length() - 10));
 	}
 
 	@Test(expectedExceptions = CryptoException.class)
 	public void testParseEmptyCSR() throws CryptoException {
-		CSRParser.parseCSR("");
+		csrParser.parseCSR("");
 	}
 
 	@Test(expectedExceptions = CryptoException.class)
 	public void testParseCertificateAsCSR() throws CryptoException {
-		CSRParser.parseCSR(TestConstants.VALID_CERTIFICATE);
+		csrParser.parseCSR(TestConstants.VALID_CERTIFICATE);
 	}
 	
 	
