@@ -33,12 +33,7 @@
 		</dependency>
 	</dependencies>
 	<properties>
-		<eid.pki.ra.jboss.deploy.url>
-			<![CDATA[/jmx-console/HtmlAdaptor?action=invokeOpByName&name=jboss.system:service%3DMainDeployer&methodName=deploy&argType=java.net.URL&arg0=]]>
-		</eid.pki.ra.jboss.deploy.url>
-		<eid.pki.ra.jboss.undeploy.url>
-			<![CDATA[/jmx-console/HtmlAdaptor?action=invokeOpByName&name=jboss.system:service%3DMainDeployer&methodName=undeploy&argType=java.net.URL&arg0=]]>
-		</eid.pki.ra.jboss.undeploy.url>
+		
 	</properties>
 
 	<build>
@@ -60,8 +55,6 @@
 					</jboss.server.name>
 					<hostName>${eid.pki.ra.jboss.host.name}</hostName>
 					<port>${eid.pki.ra.jboss.port}</port>
-					<deployUrlPath>${eid.pki.ra.jboss.deploy.url}</deployUrlPath>
-					<undeployUrlPath>${eid.pki.ra.jboss.undeploy.url}</undeployUrlPath>
 					<fileNames>
 						<fileName>${eid.pki.ra.home}/eid-pki-ra/eid-pki-ra-blm-ear/target/eid-pki-ra-blm-ear-${parent.version}.ear
 						</fileName>
