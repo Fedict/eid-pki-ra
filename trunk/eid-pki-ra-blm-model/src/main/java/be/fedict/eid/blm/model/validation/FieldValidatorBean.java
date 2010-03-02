@@ -27,6 +27,7 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.EmailValidator;
 import org.hibernate.validator.NotEmptyValidator;
 import org.hibernate.validator.NotNullValidator;
+import org.jboss.seam.annotations.In;
 
 import be.fedict.eid.blm.model.contracthandler.ContractHandlerBeanException;
 import be.fedict.eid.pkira.crypto.CSRInfo;
@@ -46,6 +47,9 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
 public class FieldValidatorBean implements FieldValidator {
 
 	private static final String PHONE_PATTERN = "(\\+|0)[-0-9 \\./]+";
+
+	@In
+	private CSRParser csrParser;
 
 	/*
 	 * (non-Javadoc)
@@ -93,7 +97,7 @@ public class FieldValidatorBean implements FieldValidator {
 		validateNotEmpty("CSR", csr, messages);
 		if (StringUtils.isNotEmpty(csr)) {
 			try {
-				CSRInfo csrInfo = CSRParser.parseCSR(csr);
+				CSRInfo csrInfo = csrParser.parseCSR(csr);
 				if (!StringUtils.equals(distinguishedName, csrInfo.getSubject())) {
 					messages.add("csr does not match distinguished name");
 				}
