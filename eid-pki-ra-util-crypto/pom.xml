@@ -15,6 +15,12 @@
 			<artifactId>bcprov-jdk16</artifactId>
 			<type>jar</type>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam</artifactId>
+			<type>ejb</type>
+		</dependency>
 
 		<dependency>
 			<groupId>org.testng</groupId>

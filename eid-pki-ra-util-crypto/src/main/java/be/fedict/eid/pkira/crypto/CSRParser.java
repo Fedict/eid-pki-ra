@@ -16,49 +16,22 @@
  */
 package be.fedict.eid.pkira.crypto;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.security.Security;
-
-import org.bouncycastle.asn1.pkcs.CertificationRequest;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.bouncycastle.openssl.PEMReader;
-
-
 /**
- * Class used to parse a CSR and extract the required fields.
+ * CSR Parser to parse and validate CSRs.
+ * 
  * @author Jan Van den Bergh
  */
-public class CSRParser {
-	
-	static {
-		// Make sure BC provider is known.
-		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-	}
-	
-	public static CSRInfo parseCSR(String csr) throws CryptoException {
-		PEMReader reader = new PEMReader(new StringReader(csr));
-		Object pemObject;
-		try {
-			pemObject = reader.readObject();
-		} catch (IOException e) {
-			throw new CryptoException("Could not read CSR from string: " + e.getMessage(), e);
-		}		
-		
-		if (pemObject instanceof CertificationRequest) {
-			PKCS10CertificationRequest certificationRequest = (PKCS10CertificationRequest) pemObject;
-			try {
-				if (!certificationRequest.verify()) {
-					throw new CryptoException("CSR signature is not correct.");
-				}
-			} catch (Exception e) {
-				throw new CryptoException("Cannot verify CSR signature: " + e.getMessage(), e);
-			}
-			
-			String dn = certificationRequest.getCertificationRequestInfo().getSubject().toString();			
-			return new CSRInfo(dn);
-		}				
-		
-		throw new CryptoException("No CSR found.");
-	}	
+public interface CSRParser {
+
+	/**
+	 * Parse and verify a CSR and return information extracted from it.
+	 * 
+	 * @param csr
+	 *            the CSR to parse.
+	 * @return the information.
+	 * @throws CryptoException
+	 *             if the CSR is invalid.
+	 */
+	CSRInfo parseCSR(String csr) throws CryptoException;
+
 }
