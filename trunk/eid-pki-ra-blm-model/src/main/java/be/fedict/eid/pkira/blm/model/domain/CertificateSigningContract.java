@@ -30,6 +30,8 @@ import org.jboss.seam.annotations.Name;
 @Name(CertificateSigningContract.NAME)
 public class CertificateSigningContract extends AbstractContract {
 	
+	private static final long serialVersionUID = 582083322769739724L;
+
 	public static final String NAME="certificateSigningContract";
 
 	private Integer validityPeriodMonths;

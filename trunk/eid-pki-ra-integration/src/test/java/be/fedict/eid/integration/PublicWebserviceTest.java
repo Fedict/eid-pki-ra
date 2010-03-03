@@ -73,7 +73,7 @@ public class PublicWebserviceTest {
 		// Parse the result
 		CertificateSigningResponseType response;
 		try {
-			response = new EIDPKIRAContractsClient().unmarshalFromBase64(responseMsg,
+			response = new EIDPKIRAContractsClient().unmarshal(responseMsg,
 					CertificateSigningResponseType.class);
 		} catch (XmlMarshallingException e) {
 			fail("Error unmarshalling response", e);

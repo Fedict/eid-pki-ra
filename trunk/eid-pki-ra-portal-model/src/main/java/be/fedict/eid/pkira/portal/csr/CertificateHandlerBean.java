@@ -18,6 +18,8 @@
 
 package be.fedict.eid.pkira.portal.csr;
 
+import java.io.Serializable;
+
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Begin;
 import org.jboss.seam.annotations.In;
@@ -43,7 +45,9 @@ import be.fedict.eid.pkira.generated.contracts.CertificateTypeType;
  */
 @Name(CertificateHandler.NAME)
 @Scope(ScopeType.CONVERSATION)
-public class CertificateHandlerBean implements CertificateHandler {
+public class CertificateHandlerBean implements CertificateHandler, Serializable {
+
+	private static final long serialVersionUID = -3944656911997801484L;
 
 	@Logger
 	private Log log;

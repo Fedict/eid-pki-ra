@@ -149,6 +149,9 @@ public class EIDPKIRAContractsClient {
 	 *             when this fails.
 	 */
 	public <T extends EIDPKIRAContractType> T unmarshal(String xml, Class<T> clazz) throws XmlMarshallingException {
+		if (xml==null) {
+			throw new XmlMarshallingException("Xml is null.");
+		}
 		StringReader reader = new StringReader(xml);
 		return unmarshal(reader, clazz);
 	}
