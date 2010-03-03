@@ -15,7 +15,6 @@
 	<page view-id="/page/csr/complete.xhtml">	
 		<navigation from-action="#{certificateHandler.requestCertificateSigningRequest}">
 			<rule if-outcome="success">
-				<end-conversation/>
 				<redirect view-id="/page/csr/detail.xhtml"/>
 			</rule>
 		</navigation>
@@ -28,7 +27,7 @@
 		</navigation>
 		
 		<navigation from-action="csr">
-			<begin-conversation/>
+			<end-conversation before-redirect="true"/>
 			<redirect view-id="/page/csr/upload.xhtml"/>			
 		</navigation>	
 	</page>

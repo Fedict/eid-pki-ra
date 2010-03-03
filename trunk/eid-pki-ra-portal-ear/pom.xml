@@ -84,6 +84,12 @@
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-portal-model</artifactId>
 			<type>ejb</type>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.faces</groupId>
+					<artifactId>jsf-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 

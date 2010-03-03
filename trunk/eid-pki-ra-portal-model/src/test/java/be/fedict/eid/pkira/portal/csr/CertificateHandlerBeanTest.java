@@ -21,13 +21,16 @@ package be.fedict.eid.pkira.portal.csr;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
+import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.log.Log;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.crypto.CSRInfo;
 import be.fedict.eid.pkira.crypto.CSRParser;
+import be.fedict.eid.pkira.crypto.CryptoException;
 
 
 /**
@@ -54,5 +57,27 @@ public class CertificateHandlerBeanTest {
 		String result = HANDLER.uploadCertificateSigningRequest();
 		Assert.assertEquals("success", result);
 		Assert.assertEquals("testDN", certificateSigningRequest.getDistinguishedName().getSubject());		
+	}
+	
+	@Test
+	public void uploadCertificateSigningRequestInvalid() throws Exception {
+		Log log = mock(Log.class);
+		HANDLER.setLog(log);
+		
+		CSRParser csrParser = mock(CSRParser.class);
+		when(csrParser.parseCSR(isA(String.class))).thenThrow(new CryptoException("Invalid CSR"));
+		HANDLER.setCsrParser(csrParser);
+		
+		FacesMessages facesMessages = mock(FacesMessages.class);
+		HANDLER.setFacesMessages(facesMessages);
+		
+		CertificateSigningRequest certificateSigningRequest = new CertificateSigningRequest();
+		certificateSigningRequest.setCsr(new byte[] {'a', 'b', 'c'});
+		
+		HANDLER.setCertificateSigningRequest(certificateSigningRequest);
+		String result = HANDLER.uploadCertificateSigningRequest();
+		Assert.assertNull(result);
+		verify(facesMessages).addFromResourceBundle("validator.csr.invalid");
+
 	}
 }

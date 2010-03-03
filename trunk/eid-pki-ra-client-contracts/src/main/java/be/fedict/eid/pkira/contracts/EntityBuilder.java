@@ -26,15 +26,9 @@ import be.fedict.eid.pkira.generated.contracts.EntityType;
  */
 public class EntityBuilder {
 
-	private String operatorEmail;
 	private String operatorFunction;
 	private String operatorName;
 	private String operatorPhone;
-
-	public EntityBuilder setEmail(String operatorEmail) {
-		this.operatorEmail = operatorEmail;
-		return this;
-	}
 
 	public EntityBuilder setFunction(String operatorFunction) {
 		this.operatorFunction = operatorFunction;
@@ -53,7 +47,6 @@ public class EntityBuilder {
 
 	public EntityType toEntityType() {
 		EntityType entity =  JAXBUtil.getObjectFactory().createEntityType();
-		entity.setEmail(operatorEmail);
 		entity.setFunction(operatorFunction);
 		entity.setName(operatorName);
 		entity.setPhone(operatorPhone);
