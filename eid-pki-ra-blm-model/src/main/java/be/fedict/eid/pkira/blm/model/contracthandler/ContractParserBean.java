@@ -38,12 +38,13 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
  */
 @Stateless
 @Name(ContractParser.NAME)
+@Scope(ScopeType.STATELESS)
 public class ContractParserBean implements ContractParser {
 
 	@Logger
 	private Log log;
 
-	@In
+	@In(value="contractsClient", create=true)
 	private EIDPKIRAContractsClient contractsClient;
 	
 	/*

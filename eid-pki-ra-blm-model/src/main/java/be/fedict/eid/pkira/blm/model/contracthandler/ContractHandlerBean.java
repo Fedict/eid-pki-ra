@@ -18,15 +18,14 @@ package be.fedict.eid.pkira.blm.model.contracthandler;
 
 import java.util.UUID;
 
-import javax.annotation.Resource;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.persistence.EntityManager;
 
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 
 import be.fedict.eid.pkira.blm.model.domain.Certificate;
 import be.fedict.eid.pkira.blm.model.domain.CertificateSigningContract;
@@ -59,22 +58,22 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
 @Name(ContractHandler.NAME)
 public class ContractHandlerBean implements ContractHandler {
 
-	@In(value=ContractParser.NAME)
+	@In(value=ContractParser.NAME, create=true)
 	private ContractParser contractParser;
 
-	@In(value=FieldValidator.NAME)
+	@In(value=FieldValidator.NAME, create=true)
 	private FieldValidator fieldValidator;
 
-	@In(value=SignatureVerifier.NAME)
+	@In(value=SignatureVerifier.NAME, create=true)
 	private SignatureVerifier signatureVerifier;
 
-	@In(value=XKMSService.NAME)
+	@In(value=XKMSService.NAME, create=true)
 	private XKMSService xkmsService;
 
-	@In(value = CertificateParser.NAME)
+	@In(value = CertificateParser.NAME, create=true)
 	private CertificateParser certificateParser;
 	
-	@In(value=DomainRepository.NAME)
+	@In(value=DomainRepository.NAME, create=true)
 	private DomainRepository repository;
 
 	/*

@@ -75,22 +75,22 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-digester</groupId>
 			<artifactId>commons-digester</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
@@ -109,6 +109,11 @@
 					<version>5</version>
 					<defaultLibBundleDir>lib</defaultLibBundleDir>
 					<modules>
+						<SarModule>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>eid-pki-ra-blm-sar</artifactId>
+						</SarModule>
+						
 						<webModule>
 							<groupId>be.fedict</groupId>
 							<artifactId>eid-pki-ra-blm-webapp</artifactId>
@@ -132,11 +137,6 @@
 							<groupId>org.jboss.seam</groupId>
 							<artifactId>jboss-seam</artifactId>
 						</ejbModule>
-
-						<SarModule>
-							<groupId>${project.groupId}</groupId>
-							<artifactId>eid-pki-ra-blm-sar</artifactId>
-						</SarModule>
 
 						<jarModule>
 							<groupId>be.fedict</groupId>

@@ -26,10 +26,8 @@ import javax.ejb.Stateless;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.NotEmptyValidator;
 import org.hibernate.validator.NotNullValidator;
-import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
 
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
 import be.fedict.eid.pkira.crypto.CSRInfo;
@@ -51,7 +49,7 @@ public class FieldValidatorBean implements FieldValidator {
 
 	private static final String PHONE_PATTERN = "(\\+|0)[-0-9 \\./]+";
 
-	@In(value=CSRParser.NAME)
+	@In(value=CSRParser.NAME, create=true)
 	private CSRParser csrParser;
 
 	/*

@@ -16,6 +16,8 @@
  */
 package be.fedict.eid.pkira.blm.model.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.Basic;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -36,7 +38,9 @@ import javax.persistence.Table;
 @Table(name = "CONTRACT")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "TYPE", discriminatorType = DiscriminatorType.STRING, length = 16)
-public abstract class AbstractContract {
+public abstract class AbstractContract implements Serializable {
+
+	private static final long serialVersionUID = -5082287440865809644L;
 
 	@Id
 	private int id;
