@@ -19,7 +19,7 @@ public class CertificateHandlerBean implements CertificateHandler{
     @In private EntityManager entityManager;
 	
 	@Override
-	public List<Certificate> findAllCertificates() {
+	public List<Certificate> findAllCertificates(String userRRN) {
 		Query query = entityManager.createNamedQuery("SELECT distinct c from CERTIFICATE c");
 		return query.getResultList();
 	}

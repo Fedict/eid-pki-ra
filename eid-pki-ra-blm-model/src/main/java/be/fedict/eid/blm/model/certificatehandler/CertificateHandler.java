@@ -13,7 +13,7 @@ public interface CertificateHandler {
 	 * 
 	 * @return
 	 */
-	public List<Certificate> findAllCertificates();
+	public List<Certificate> findAllCertificates(String userRRN);
 	
 	/**
 	 * 
