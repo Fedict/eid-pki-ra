@@ -31,6 +31,7 @@ import org.jboss.seam.annotations.Name;
 import be.fedict.eid.pkira.blm.model.domain.Certificate;
 import be.fedict.eid.pkira.blm.model.domain.CertificateSigningContract;
 import be.fedict.eid.pkira.blm.model.domain.CertificateType;
+import be.fedict.eid.pkira.blm.model.domain.DomainRepository;
 import be.fedict.eid.pkira.blm.model.eiddss.SignatureVerifier;
 import be.fedict.eid.pkira.blm.model.validation.FieldValidator;
 import be.fedict.eid.pkira.blm.model.xkms.XKMSService;
@@ -58,23 +59,23 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
 @Name(ContractHandler.NAME)
 public class ContractHandlerBean implements ContractHandler {
 
-	@EJB
+	@In(value=ContractParser.NAME)
 	private ContractParser contractParser;
 
-	@EJB
+	@In(value=FieldValidator.NAME)
 	private FieldValidator fieldValidator;
 
-	@EJB
+	@In(value=SignatureVerifier.NAME)
 	private SignatureVerifier signatureVerifier;
-	
-	@EJB
+
+	@In(value=XKMSService.NAME)
 	private XKMSService xkmsService;
+
+	@In(value = CertificateParser.NAME)
+	private CertificateParser certificateParser;
 	
-	@In(value=CertificateParser.NAME)
-	private CertificateParser certificateParser;	
-	
-	@Resource
-	private EntityManager entityManager;
+	@In(value=DomainRepository.NAME)
+	private DomainRepository repository;
 
 	/*
 	 * (non-Javadoc)
@@ -133,27 +134,29 @@ public class ContractHandlerBean implements ContractHandler {
 			contract.setContractDocument(requestMsg);
 			contract.setSubject(request.getDistinguishedName());
 			contract.setValidityPeriodMonths(request.getValidityPeriodMonths().intValue());
-			entityManager.persist(contract);
-			
+			repository.persistContract(contract);
+
 			// Call XKMS
 			String certificateAsPem = xkmsService.sign(request.getCSR());
-			if (certificateAsPem==null) {
-				throw new ContractHandlerBeanException(ResultType.BACKEND_ERROR, "Error contacting the backend service.");
+			if (certificateAsPem == null) {
+				throw new ContractHandlerBeanException(ResultType.BACKEND_ERROR,
+						"Error contacting the backend service.");
 			}
-			
+
 			// Persist the certificate
 			CertificateInfo certificateInfo;
 			try {
 				certificateInfo = certificateParser.parseCertificate(certificateAsPem);
 			} catch (CryptoException e) {
 				// TODO log problem with certificate received from CA
-				throw new ContractHandlerBeanException(ResultType.GENERAL_FAILURE, "Error processing received certificate.");
+				throw new ContractHandlerBeanException(ResultType.GENERAL_FAILURE,
+						"Error processing received certificate.");
 			}
 			Certificate certificate = new Certificate(certificateAsPem, certificateInfo, signer);
-			entityManager.persist(certificate);
+			repository.persistCertificate(certificate);
 
 			// TODO send mail containing the certificate
-			
+
 			// All ok
 			fillResponseFromRequest(responseBuilder, request, ResultType.SUCCESS, "Not implemented");
 		} catch (ContractHandlerBeanException e) {
@@ -200,23 +203,28 @@ public class ContractHandlerBean implements ContractHandler {
 		return UUID.randomUUID().toString();
 	}
 
-	
 	protected void setContractParser(ContractParser contractParser) {
 		this.contractParser = contractParser;
 	}
 
-	
 	protected void setFieldValidator(FieldValidator fieldValidator) {
 		this.fieldValidator = fieldValidator;
 	}
 
-	
 	protected void setSignatureVerifier(SignatureVerifier signatureVerifier) {
 		this.signatureVerifier = signatureVerifier;
 	}
 
+	protected void setDomainRepository(DomainRepository repository) {
+		this.repository = repository;
+	}
+
+	protected void setXkmsService(XKMSService xkmsService) {
+		this.xkmsService = xkmsService;
+	}
+
 	
-	protected void setEntityManager(EntityManager entityManager) {
-		this.entityManager = entityManager;
+	protected void setCertificateParser(CertificateParser certificateParser) {
+		this.certificateParser = certificateParser;
 	}
 }

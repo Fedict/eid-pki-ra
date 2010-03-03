@@ -5,7 +5,6 @@
 	<Operator>
 		<Name>name</Name>
 		<Function>function</Function>
-		<Email>email</Email>
 		<Phone>phone</Phone>
 	</Operator>
 	<LegalNotice>legalNotice</LegalNotice>

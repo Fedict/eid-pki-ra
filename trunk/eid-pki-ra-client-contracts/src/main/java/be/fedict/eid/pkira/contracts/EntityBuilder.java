@@ -28,7 +28,7 @@ public class EntityBuilder {
 
 	private String operatorFunction;
 	private String operatorName;
-	private String operatorPhone;
+	private String operatorPhone;	
 
 	public EntityBuilder setFunction(String operatorFunction) {
 		this.operatorFunction = operatorFunction;

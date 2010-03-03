@@ -16,30 +16,23 @@
  */
 package be.fedict.eid.pkira.blm.model.contracthandler;
 
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.fail;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.FileUtils;
-import org.custommonkey.xmlunit.Diff;
-import org.custommonkey.xmlunit.XMLUnit;
+import org.jboss.seam.log.Log;
 import org.testng.annotations.BeforeTest;
-import org.xml.sax.SAXException;
+import org.testng.annotations.Test;
 
-import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
-import be.fedict.eid.pkira.blm.model.contracthandler.ContractParserBean;
-import be.fedict.eid.pkira.contracts.CertificateRevocationResponseBuilder;
-import be.fedict.eid.pkira.generated.contracts.CertificateRevocationRequestType;
-import be.fedict.eid.pkira.generated.contracts.CertificateRevocationResponseType;
-import be.fedict.eid.pkira.generated.contracts.RequestType;
-import be.fedict.eid.pkira.generated.contracts.ResultType;
+import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
+import be.fedict.eid.pkira.contracts.XmlMarshallingException;
+import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
+import be.fedict.eid.pkira.generated.contracts.CertificateSigningResponseType;
 
 /**
  * Test for the Contract Parser.
@@ -48,55 +41,56 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
  */
 public class ContractParserTest {
 
-	private static final String REQUEST_ID = "TEST-REQUEST-1";
-	private static final String RESPONSE_ID = "TEST-RESPONSE-1";
-	private static final String TEST_MESSAGE = "Test message";
-
-	private ContractParserBean contractParser;
+	private ContractParserBean bean;
+	private Log log;
+	private EIDPKIRAContractsClient contractsClient;
 
 	@BeforeTest
 	public void setup() {
-		XMLUnit.setIgnoreWhitespace(true);
-		contractParser = new ContractParserBean();
-	}
-
-	//TODO Fix test @Test
-	public void testMarshalMessage() throws Exception {
-		CertificateRevocationResponseType response = new CertificateRevocationResponseBuilder(RESPONSE_ID)
-				.setRequestId(REQUEST_ID).setResult(ResultType.SUCCESS).setResultMessage(TEST_MESSAGE).toResponseType();
-
-		String result = contractParser.marshalResponseMessage(response, CertificateRevocationResponseType.class);
-		assertNotNull(result);
-
-		compareXmlData(result, "CertificateRevocationResponse.xml");
-	}
-
-	//TODO Fix test @Test
-	public void testUnmarshalRevocationRequest() throws ContractHandlerBeanException {
-		CertificateRevocationRequestType request = testParseFile("CertificateRevocationRequest.xml",
-				CertificateRevocationRequestType.class);
-		assertNotNull(request);
-	}
-
-	private void compareXmlData(String base64data, String controlFileName) throws SAXException, IOException,
-			ParserConfigurationException {
-		String control = FileUtils.readFileToString(new File(getClass().getResource(controlFileName).getFile()));
-		String test = new String(Base64.decodeBase64(base64data), "UTF-8");
+		log = mock(Log.class);
+		contractsClient = mock(EIDPKIRAContractsClient.class);
 		
-		Diff diff = XMLUnit.compareXML(control, test);
-		assertTrue(diff.identical(), diff.toString());
+		bean = new ContractParserBean();				
+		bean.setLog(log);
+		bean.setContractsClient(contractsClient);
 	}
 
-	private <T extends RequestType> T testParseFile(String resourceName, Class<T> requestClass)
-			throws ContractHandlerBeanException {
-		try {
-			URL resource = getClass().getResource(resourceName);
-			byte[] data = FileUtils.readFileToByteArray(new File(resource.getFile()));
-			String base64data = Base64.encodeBase64String(data);
-			return contractParser.unmarshalRequestMessage(base64data, requestClass);
-		} catch (IOException e) {
-			fail("Could not read control XML", e);
-			return null;
-		}
+	@Test
+	public void testMarshalMessage() throws Exception {
+		CertificateSigningResponseType responseType = new CertificateSigningResponseType();
+		when(contractsClient.marshal(eq(responseType), eq(CertificateSigningResponseType.class))).thenThrow(new XmlMarshallingException());		
+		
+		String response = bean.marshalResponseMessage(responseType, CertificateSigningResponseType.class);
+		assertNull(response);
+		verify(log).error(anyObject(), isA(XmlMarshallingException.class));
+	}
+	
+	@Test
+	public void testMarshalMessageError() throws Exception {
+		CertificateSigningResponseType responseType = new CertificateSigningResponseType();
+		String expectedResponse = "RESPONSE";		
+		when(contractsClient.marshal(eq(responseType), eq(CertificateSigningResponseType.class))).thenReturn(expectedResponse );		
+		
+		String response = bean.marshalResponseMessage(responseType, CertificateSigningResponseType.class);
+		
+		assertEquals(response, expectedResponse);
+	}
+
+	@Test
+	public void testUnmarshalSigningRequest() throws ContractHandlerBeanException, XmlMarshallingException {
+		String requestMsg = "REQUEST";
+		CertificateSigningRequestType expectedRequestType=new CertificateSigningRequestType();
+		when(contractsClient.unmarshal(eq(requestMsg), eq(CertificateSigningRequestType.class))).thenReturn(expectedRequestType);		
+		
+		CertificateSigningRequestType requestType = bean.unmarshalRequestMessage(requestMsg , CertificateSigningRequestType.class);
+		assertEquals(requestType, expectedRequestType);
+	}
+	
+	@Test(expectedExceptions=ContractHandlerBeanException.class)
+	public void testUnmarshalSigningRequestError() throws ContractHandlerBeanException, XmlMarshallingException {
+		String requestMsg = "REQUEST";
+		when(contractsClient.unmarshal(eq(requestMsg), eq(CertificateSigningRequestType.class))).thenThrow(new XmlMarshallingException());		
+		
+		bean.unmarshalRequestMessage(requestMsg , CertificateSigningRequestType.class);		
 	}
 }

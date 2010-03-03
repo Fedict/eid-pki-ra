@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
@@ -16,24 +15,42 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-client-publicws</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-client-privatews</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-client-contracts</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>org.seleniumhq.selenium.client-drivers</groupId>
 			<artifactId>selenium-java-client-driver</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<classifier>jdk15</classifier>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium.server</groupId>
 			<artifactId>selenium-server</artifactId>
-			<version>1.0.3</version>
-			<scope>test</scope>
+			<version>${selenium-server.version}</version>
 			<classifier>standalone</classifier>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<properties>
-		
+
 	</properties>
 
 	<build>

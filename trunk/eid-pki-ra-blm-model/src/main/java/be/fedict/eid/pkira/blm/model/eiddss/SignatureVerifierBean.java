@@ -20,7 +20,10 @@ package be.fedict.eid.pkira.blm.model.eiddss;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Logger;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.log.Log;
 
 import be.fedict.eid.dss.client.DigitalSignatureServiceClient;
@@ -33,6 +36,7 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
  * @author Jan Van den Bergh
  */
 @Stateless
+@Name(SignatureVerifier.NAME)
 public class SignatureVerifierBean implements SignatureVerifier {
 
 	@Logger
