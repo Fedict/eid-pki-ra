@@ -16,6 +16,7 @@
  */
 package be.fedict.eid.pkira.crypto;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 
@@ -92,5 +93,7 @@ public class TestConstants {
 	public static final Date CERTIFICATE_START_DATE = new Date(1260912858000L);
 	
 	public static final Date CERTIFICATE_END_DATE = new Date(1418679256000L);
+
+	public static final BigInteger SERIAL_NUMBER =  new BigInteger("1208925819615890090461432");
 
 }

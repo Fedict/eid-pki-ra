@@ -18,6 +18,7 @@ package be.fedict.eid.pkira.crypto;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.math.BigInteger;
 import java.security.Security;
 import java.security.cert.X509Certificate;
 import java.util.Date;
@@ -69,7 +70,8 @@ public class CertificateParserImpl implements CertificateParser {
 			String subject = certificate.getSubjectDN().getName();
 			Date notBefore = certificate.getNotBefore();
 			Date notAfter = certificate.getNotAfter();
-			CertificateInfo certificateInfo = new CertificateInfo(issuer, subject, notBefore, notAfter);
+			BigInteger serialNumber = certificate.getSerialNumber();
+			CertificateInfo certificateInfo = new CertificateInfo(issuer, subject, notBefore, notAfter, serialNumber);
 			log.debug("<<< parseCertificate: {0}", certificateInfo);
 			return certificateInfo;
 		}

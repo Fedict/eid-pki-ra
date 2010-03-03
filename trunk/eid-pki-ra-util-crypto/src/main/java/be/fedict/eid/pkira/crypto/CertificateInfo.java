@@ -16,6 +16,7 @@
  */
 package be.fedict.eid.pkira.crypto;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 /**
@@ -27,13 +28,18 @@ public class CertificateInfo {
 
 	private final String subject, issuer;
 	private final Date validityStart, validityEnd;
+	private final BigInteger serialNumber;
 
-	public CertificateInfo(String issuer, String subject, Date validityStart, Date validityEnd) {
-		super();
+	public CertificateInfo(String issuer, String subject, Date validityStart, Date validityEnd, BigInteger serialNumber) {
 		this.issuer = issuer;
 		this.subject = subject;
 		this.validityStart = validityStart;
 		this.validityEnd = validityEnd;
+		this.serialNumber = serialNumber;
+	}
+	
+	public BigInteger getSerialNumber() {
+		return serialNumber;
 	}
 
 	public String getSubject() {
