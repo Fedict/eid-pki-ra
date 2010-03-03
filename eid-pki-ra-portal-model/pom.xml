@@ -70,5 +70,16 @@
 			<artifactId>mockito-all</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>javax.faces</groupId>
+			<artifactId>jsf-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>3.1.0.GA</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>

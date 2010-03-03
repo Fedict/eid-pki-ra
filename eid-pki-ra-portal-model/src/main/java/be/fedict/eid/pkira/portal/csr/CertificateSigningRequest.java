@@ -18,8 +18,10 @@
 package be.fedict.eid.pkira.portal.csr;
 
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.faces.model.SelectItem;
 
 import org.apache.commons.codec.binary.Base64;
 import org.jboss.seam.ScopeType;
@@ -39,8 +41,9 @@ public class CertificateSigningRequest implements Serializable {
 	
 	private CSRInfo distinguishedName;
 	private CertificateType certificateType;
-	private ValidityPeriod validityPeriod = ValidityPeriod.YEAR_AND_A_HALF;
-	private String operatorName;
+	private int validityPeriod = 15;
+	// TODO (03032010): get this from context
+	private String operatorName = "testOperatorName";
 	private String operatorFunction;
 	private String operatorPhone;
 	private String operatorEmail; 
@@ -48,6 +51,9 @@ public class CertificateSigningRequest implements Serializable {
 	private String contentType;
 	private String description;
 	private String csrAsString;
+	// TODO (03032010): get this from backend
+	private String legalNotice = "testLegalNotice";
+	private String csrBase64Xml;
 
 	public CSRInfo getDistinguishedName() {
 		return distinguishedName;
@@ -65,11 +71,11 @@ public class CertificateSigningRequest implements Serializable {
 		this.certificateType = certificateType;
 	}
 
-	public ValidityPeriod getValidityPeriod() {
+	public int getValidityPeriod() {
 		return validityPeriod;
 	}
 
-	public void setValidityPeriod(ValidityPeriod validityPeriod) {
+	public void setValidityPeriod(int validityPeriod) {
 		this.validityPeriod = validityPeriod;
 	}
 
@@ -137,13 +143,32 @@ public class CertificateSigningRequest implements Serializable {
 		this.csrAsString = csrAsString;
 	}
 	
-	public List<ValidityPeriod> getValidityPeriods() {
-		return Arrays.asList(ValidityPeriod.values());
+	public String getLegalNotice() {
+		return legalNotice;
+	}
+
+	public void setLegalNotice(String legalNotice) {
+		this.legalNotice = legalNotice;
+	}
+
+	public String getCsrBase64Xml() {
+		return csrBase64Xml;
+	}
+
+	public void setCsrBase64Xml(String csrBase64Xml) {
+		this.csrBase64Xml = csrBase64Xml;
+	}
+	
+	// TODO (03032010): get these from configuration table
+	public List<SelectItem> getValidityPeriods() {
+		List<SelectItem> validityPeriods = new ArrayList<SelectItem>();
+		validityPeriods.add(new SelectItem(15, "15"));
+		return validityPeriods;
 	}
 	
 	public String getBase64Csr() {
-		if (csr.length > 0) {
-			return Base64.encodeBase64String(csr);
+		if (csr != null && csr.length > 0) {
+			return new String(csr);
 		} else {
 			return csrAsString;
 		}

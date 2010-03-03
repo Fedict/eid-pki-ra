@@ -30,11 +30,8 @@
 				
 				<s:decorate id="validityPeriodDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['csr.validityPeriod']}:</ui:define>
-                	<h:selectOneMenu value="#{certificateSigningRequest.validityPeriod}">                	
-                		<s:selectItems value="#{certificateSigningRequest.validityPeriods}" var="period" 
-                			label="#{period.monthsInPeriod}" noSelectionLabel="#{no.selection.label}"
-                			required="true"/>
-                		<s:convertEnum />
+                	<h:selectOneMenu value="#{certificateSigningRequest.validityPeriod}" required="true"> 
+                		<f:selectItems value="#{certificateSigningRequest.validityPeriods}" />                		
                 	</h:selectOneMenu>
             	</s:decorate>
 				
@@ -53,24 +50,19 @@
                 	<h:inputText required="true" id="operatorPhone" value="#{certificateSigningRequest.operatorPhone}" />
             	</s:decorate>
 				
-				<s:decorate id="operatorEmailDecoration" template="/layout/edit.xhtml">
-                	<ui:define name="label">#{messages['csr.operatorEmail']}:</ui:define>
-                	<h:inputText required="true" id="operatorEmail" value="#{certificateSigningRequest.operatorEmail}" />
-            	</s:decorate>
-				
 				<s:decorate id="csrDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['csr.csr']}:</ui:define>
-                	<h:outputText id="csr" value="#{certificateSigningRequest.base64Csr}" />
+                	<h:inputTextarea id="csr" value="#{certificateSigningRequest.base64Csr}" disabled="true" cols="90" rows="14" />
             	</s:decorate>
 				
 				<s:decorate id="descriptionDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['csr.description']}:</ui:define>
-                	<h:inputTextarea id="operatorEmail" value="#{certificateSigningRequest.description}" cols="80" rows="12" />
+                	<h:inputTextarea id="operatorEmail" value="#{certificateSigningRequest.description}" cols="90" rows="14" />
             	</s:decorate>
             	
 				<s:decorate template="/layout/buttonbox.xhtml" id="csrButtonBox">
 					<h:commandButton action="#{certificateHandler.requestCertificateSigningRequest}" value="#{messages['general.send']}" id="send"/>
-					<s:button value="#{messages['general.cancel']}" view="/page/csr/upload.xhtml" id="cancel"/>
+					<s:button value="#{messages['general.cancel']}" action="csr" id="cancel" />
 				</s:decorate>       
 			</rich:panel>
 		</h:form>	

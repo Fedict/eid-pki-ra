@@ -35,7 +35,6 @@ public class CertificateSigningRequestBuilderTest {
 	private static final String DN = "dn";
 	private static final String LEGAL_NOTICE = "legalNotice";
 	private static final String OPERATOR_FUNCTION = "function";
-	private static final String OPERATOR_MAIL = "email";
 	private static final String OPERATOR_NAME = "name";
 	private static final String OPERATOR_PHONE = "phone";
 	private static final String REQUEST_ID = "requestId";
@@ -74,7 +73,6 @@ public class CertificateSigningRequestBuilderTest {
 			.setCsr(CSR)
 			.setValidityPeriodMonths(VALIDITY)
 			.setOperator(new EntityBuilder()
-				.setEmail(OPERATOR_MAIL)
 				.setFunction(OPERATOR_FUNCTION)
 				.setName(OPERATOR_NAME)
 				.setPhone(OPERATOR_PHONE)
@@ -85,7 +83,6 @@ public class CertificateSigningRequestBuilderTest {
 		assertEquals(request.getDescription(), DESCRIPTION);
 		assertEquals(request.getDistinguishedName(), DN);
 		assertEquals(request.getLegalNotice(), LEGAL_NOTICE);
-		assertEquals(request.getOperator().getEmail(), OPERATOR_MAIL);
 		assertEquals(request.getOperator().getFunction(), OPERATOR_FUNCTION);
 		assertEquals(request.getOperator().getName(), OPERATOR_NAME);
 		assertEquals(request.getOperator().getPhone(), OPERATOR_PHONE);		

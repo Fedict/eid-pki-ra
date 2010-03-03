@@ -38,7 +38,6 @@ public class CertificateRevocationRequestBuilderTest {
 	private static final String DN = "dn";
 	private static final Date END_DATE = new GregorianCalendar(2010, Calendar.DECEMBER, 31).getTime();
 	private static final String LEGAL_NOTICE = "legalNotice";
-	private static final String OPERATOR_MAIL = "email";
 	private static final String OPERATOR_FUNCTION = "function";
 	private static final String OPERATOR_NAME = "name";
 	private static final String OPERATOR_PHONE = "phone";
@@ -72,7 +71,6 @@ public class CertificateRevocationRequestBuilderTest {
 			.setLegalNotice(LEGAL_NOTICE)				
 			.setStartDate(START_DATE)
 			.setOperator(new EntityBuilder()
-				.setEmail(OPERATOR_MAIL)
 				.setFunction(OPERATOR_FUNCTION)
 				.setName(OPERATOR_NAME)
 				.setPhone(OPERATOR_PHONE)
@@ -86,7 +84,6 @@ public class CertificateRevocationRequestBuilderTest {
 		assertEquals(request.getDistinguishedName(), DN);
 		assertEquals(request.getEndDate(), createXmlGregorianCalendar(END_DATE));
 		assertEquals(request.getLegalNotice(), LEGAL_NOTICE);
-		assertEquals(request.getOperator().getEmail(), OPERATOR_MAIL);
 		assertEquals(request.getOperator().getFunction(), OPERATOR_FUNCTION);
 		assertEquals(request.getOperator().getName(), OPERATOR_NAME);
 		assertEquals(request.getOperator().getPhone(), OPERATOR_PHONE);

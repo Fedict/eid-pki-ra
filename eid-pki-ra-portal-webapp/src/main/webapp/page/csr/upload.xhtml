@@ -9,18 +9,18 @@
 				<f:facet name="header">#{messages['upload.title']}</f:facet>
 				<s:decorate id="csrDecoration" template="/layout/edit.xhtml">
 	               	<ui:define name="label">#{messages['upload.upload']}:</ui:define>
-	               	<s:fileUpload id="csr" accept="application/base64"
+	               	<s:fileUpload id="csr"
 	               		data="#{certificateSigningRequest.csr}"
 	               		contentType="#{certificateSigningRequest.contentType}"  />
 	           	</s:decorate>
 	           	<s:decorate id="csrAsStringDecoration" template="/layout/edit.xhtml">
 	               	<ui:define name="label">#{messages['upload.paste']}:</ui:define>
-	               	<h:inputTextarea id="csrAsString" value="#{certificateSigningRequest.csrAsString}" cols="80" rows="12" />
+	               	<h:inputTextarea id="csrAsString" value="#{certificateSigningRequest.csrAsString}" cols="90" rows="14" />
 	           	</s:decorate>
 	           	
 	          	<s:decorate template="/layout/buttonbox.xhtml" id="uploadButtonBox">
 					<h:commandButton action="#{certificateHandler.uploadCertificateSigningRequest}" value="#{messages['general.upload']}" id="upload"/>
-					<s:button value="#{messages['general.cancel']}" view="/page/csr/upload.xhtml" id="cancel"/>
+					<s:button value="#{messages['general.cancel']}" action="csr" id="cancel"/>
 				</s:decorate> 
 			</rich:panel>
 		</h:form>

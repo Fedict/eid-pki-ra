@@ -96,7 +96,6 @@
 		<sequence>
 			<element name="Name" type="tns:nameType" />
 			<element name="Function" type="tns:functionType" />
-			<element name="Email" type="tns:emailAddressType" />
 			<element name="Phone" type="tns:phoneNumberType" />
 		</sequence>
 	</complexType>

@@ -18,29 +18,40 @@
 
 package be.fedict.eid.pkira.portal.csr;
 
+import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.Begin;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Out;
+import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.log.Log;
 
+import be.fedict.eid.pkira.contracts.CertificateSigningRequestBuilder;
+import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
+import be.fedict.eid.pkira.contracts.EntityBuilder;
+import be.fedict.eid.pkira.contracts.XmlMarshallingException;
 import be.fedict.eid.pkira.crypto.CSRInfo;
 import be.fedict.eid.pkira.crypto.CSRParser;
 import be.fedict.eid.pkira.crypto.CryptoException;
+import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
+import be.fedict.eid.pkira.generated.contracts.CertificateTypeType;
 
 /**
  * @author Bram Baeyens
  * 
  */
 @Name(CertificateHandler.NAME)
+@Scope(ScopeType.CONVERSATION)
 public class CertificateHandlerBean implements CertificateHandler {
 
 	@Logger
 	private Log log;
 	
-	@Out
 	private CertificateSigningRequest certificateSigningRequest;
 	private CSRParser csrParser;
+	private FacesMessages facesMessages;
+	private EIDPKIRAContractsClient contractsClient;
 	
 	protected void setLog(Log log) {
 		this.log = log;
@@ -56,6 +67,16 @@ public class CertificateHandlerBean implements CertificateHandler {
 		this.csrParser = csrParser;
 	}
 
+	@In(create=true)
+	public void setFacesMessages(FacesMessages facesMessages) {
+		this.facesMessages = facesMessages;
+	}
+
+	@In(create=true)
+	public void setContractsClient(EIDPKIRAContractsClient contractsClient) {
+		this.contractsClient = contractsClient;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -63,17 +84,19 @@ public class CertificateHandlerBean implements CertificateHandler {
 	 * uploadCertificateSigningRequest()
 	 */
 	@Override
+	@Begin
 	public String uploadCertificateSigningRequest() {
-		log.info(">>> uploadCertificateSigningRequest(certificateSigningRequest=[{0}])", certificateSigningRequest);
-//		try {
-			//TODO: get this to work
-			//CSRInfo csrInfo = csrParser.parseCSR(certificateSigningRequest.getBase64Csr());
-			certificateSigningRequest.setDistinguishedName(new CSRInfo("testDN"));
-//		} catch (CryptoException e) {
-//			throw new RuntimeException("Invalid csr", e);
-//		}
-		log.info("<<< uploadCertificateSigningRequest: {0}", certificateSigningRequest);
-		return "/page/csr/complete.xhtml";
+		log.debug(">>> uploadCertificateSigningRequest(certificateSigningRequest=[{0}])", certificateSigningRequest);
+		try {
+			CSRInfo csrInfo = csrParser.parseCSR(certificateSigningRequest.getBase64Csr());
+			certificateSigningRequest.setDistinguishedName(csrInfo);
+		} catch (CryptoException e) {
+			log.info("<<< uploadCertificateSigningRequest: invalid CSR", e);
+			facesMessages.addFromResourceBundle("validator.csr.invalid");
+			return null;
+		}
+		log.debug("<<< uploadCertificateSigningRequest: {0}", certificateSigningRequest);
+		return "success";
 	}
 
 	/*
@@ -85,9 +108,34 @@ public class CertificateHandlerBean implements CertificateHandler {
 	@Override
 	public String requestCertificateSigningRequest() {
 		log.info(">>> requestCertificateSigningRequest(certificateSigningRequest=[{0}])", certificateSigningRequest);
-//		CertificateSigningRequestBuilder builder = new CertificateSigningRequestBuilder();
-//		
-		log.info("<<< requestCertificateSigningRequest");
+		CertificateSigningRequestBuilder builder = initBuilder(certificateSigningRequest);
+		try {
+			String base64Xml = contractsClient.marshalToBase64(builder.toRequestType(), 
+					CertificateSigningRequestType.class);
+			certificateSigningRequest.setCsrBase64Xml(base64Xml);
+		} catch (XmlMarshallingException e) {
+			log.info("<<< requestCertificateSigningRequest: marshalling failed", e);
+			throw new RuntimeException(e);
+		}
+		log.info("<<< requestCertificateSigningRequest: {0}", certificateSigningRequest);
 		return "success";
+	}
+
+	/**
+	 * @return
+	 */
+	private CertificateSigningRequestBuilder initBuilder(CertificateSigningRequest csr) {
+		return new CertificateSigningRequestBuilder()
+				.setOperator(new EntityBuilder()
+						.setName(csr.getOperatorName())
+						.setFunction(csr.getOperatorFunction())
+						.setPhone(csr.getOperatorPhone())
+						.toEntityType())
+				.setLegalNotice(csr.getLegalNotice())
+				.setDistinguishedName(csr.getDistinguishedName().getSubject())
+				.setCsr(csr.getBase64Csr())
+				.setCertificateType(Enum.valueOf(CertificateTypeType.class, csr.getCertificateType().name()))
+				.setValidityPeriodMonths(csr.getValidityPeriod())
+				.setDescription(csr.getDescription());
 	}
 }
