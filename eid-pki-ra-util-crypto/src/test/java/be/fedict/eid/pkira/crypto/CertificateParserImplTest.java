@@ -44,11 +44,9 @@ public class CertificateParserImplTest {
 		assertNotNull(certificateInfo);
 		assertEquals(certificateInfo.getSubject(), TestConstants.CERTIFICATE_SUBJECT);
 		assertEquals(certificateInfo.getIssuer(), TestConstants.CERTIFICATE_ISSUER);
-		
-		System.out.println(certificateInfo.getValidityStart().getTime());
-		System.out.println(certificateInfo.getValidityEnd().getTime());
 		assertEquals(certificateInfo.getValidityStart(), TestConstants.CERTIFICATE_START_DATE);
 		assertEquals(certificateInfo.getValidityEnd(), TestConstants.CERTIFICATE_END_DATE);
+		assertEquals(certificateInfo.getSerialNumber(), TestConstants.SERIAL_NUMBER);
 	}
 
 	@Test(expectedExceptions = CryptoException.class)
