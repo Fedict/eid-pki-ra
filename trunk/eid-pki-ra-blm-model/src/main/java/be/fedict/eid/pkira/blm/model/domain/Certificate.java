@@ -23,6 +23,7 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Id;
 import javax.persistence.Lob;
 
 import org.jboss.seam.annotations.Name;
@@ -33,10 +34,13 @@ import be.fedict.eid.pkira.crypto.CertificateInfo;
 @Name(Certificate.NAME)
 public class Certificate implements Serializable {
 
-	public static final String NAME = "certificate";
+	public static final String NAME = "blmcertificate";
 
 	private static final long serialVersionUID = -6539022465744360747L;
-
+	
+	@Id
+	private int id;
+	
 	private BigInteger serialNumber;
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
@@ -170,6 +174,14 @@ public class Certificate implements Serializable {
 	 */
 	public void setRequesterName(String requesterName) {
 		this.requesterName = requesterName;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getId() {
+		return id;
 	}
 
 	// public void setCertificateDomain(CertificateDomain certificateDomain) {

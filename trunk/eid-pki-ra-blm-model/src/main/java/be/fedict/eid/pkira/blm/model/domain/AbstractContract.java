@@ -21,6 +21,7 @@ import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Lob;
@@ -37,6 +38,8 @@ import javax.persistence.Table;
 @DiscriminatorColumn(name = "TYPE", discriminatorType = DiscriminatorType.STRING, length = 16)
 public abstract class AbstractContract {
 
+	@Id
+	private int id;
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
 	private String contractDocument;
@@ -65,5 +68,13 @@ public abstract class AbstractContract {
 
 	public void setRequester(String requester) {
 		this.requester = requester;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getId() {
+		return id;
 	}
 }
