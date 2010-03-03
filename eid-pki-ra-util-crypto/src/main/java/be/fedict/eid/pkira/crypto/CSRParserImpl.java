@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.security.Security;
 
-import org.bouncycastle.asn1.pkcs.CertificationRequest;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.openssl.PEMReader;
 import org.jboss.seam.ScopeType;
@@ -29,28 +28,30 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.log.Log;
 
-
 /**
  * Class used to parse a CSR and extract the required fields.
+ * 
  * @author Jan Van den Bergh
  */
 @Name(CSRParser.NAME)
 @Scope(ScopeType.APPLICATION)
 public class CSRParserImpl implements CSRParser {
-	
+
 	@Logger
 	private Log log;
-	
+
 	static {
 		// Make sure BC provider is known.
 		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
 	 * @see be.fedict.eid.pkira.crypto.CSRParser#parseCSR(java.lang.String)
 	 */
 	public CSRInfo parseCSR(String csr) throws CryptoException {
 		log.debug(">>> parseCSR(csr[{0}])", csr);
+
 		PEMReader reader = new PEMReader(new StringReader(csr));
 		Object pemObject;
 		try {
@@ -58,9 +59,9 @@ public class CSRParserImpl implements CSRParser {
 		} catch (IOException e) {
 			log.info("<<< parseCSR: Could not read CSR from string: ", e);
 			throw new CryptoException("Could not read CSR from string: " + e.getMessage(), e);
-		}		
-		
-		if (pemObject instanceof CertificationRequest) {
+		}
+
+		if (pemObject instanceof PKCS10CertificationRequest) {
 			PKCS10CertificationRequest certificationRequest = (PKCS10CertificationRequest) pemObject;
 			try {
 				if (!certificationRequest.verify()) {
@@ -71,17 +72,19 @@ public class CSRParserImpl implements CSRParser {
 				log.info("<<< parseCSR: Cannot verify CSR signature: ", e);
 				throw new CryptoException("Cannot verify CSR signature: " + e.getMessage(), e);
 			}
-			
-			String dn = certificationRequest.getCertificationRequestInfo().getSubject().toString();			
+
+			String dn = certificationRequest.getCertificationRequestInfo().getSubject().toString();
 			CSRInfo csrInfo = new CSRInfo(dn);
+
 			log.debug("<<< parseCSR: {0}", csrInfo);
-			return new CSRInfo(dn);
-		}				
+			return csrInfo;
+		}
+
 		log.info("<<< parseCSR: No CSR found.");
 		throw new CryptoException("No CSR found.");
 	}
-	
-	protected void setlog(Log log) {
+
+	protected void setLog(Log log) {
 		this.log = log;
 	}
 }

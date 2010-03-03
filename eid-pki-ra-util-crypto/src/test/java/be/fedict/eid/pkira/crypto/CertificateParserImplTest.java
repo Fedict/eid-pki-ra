@@ -27,42 +27,43 @@ import org.testng.annotations.Test;
 /**
  * @author Jan Van den Bergh
  */
-public class CSRParserTest {
+public class CertificateParserImplTest {
 
-	private CSRParserImpl csrParser;
+	private CertificateParserImpl certificateParser;
 	
 	@BeforeMethod
 	public void setup() {
-		csrParser = new CSRParserImpl();
-		csrParser.setlog(mock(Log.class));
+		certificateParser = new CertificateParserImpl();
+		certificateParser.setLog(mock(Log.class));
 	}
 	
 	@Test
-	public void testParseCSR() throws CryptoException {
-		CSRInfo csrInfo = csrParser.parseCSR(TestConstants.VALID_CSR);
+	public void testParseCertificate() throws CryptoException {
+		CertificateInfo certificateInfo = certificateParser.parseCertificate(TestConstants.VALID_CERTIFICATE);
 
-		assertNotNull(csrInfo);
-		assertEquals(csrInfo.getSubject(), TestConstants.CSR_SUBJECT);
-	}
-	
-	@Test(expectedExceptions = CryptoException.class)
-	public void testParseCSRInvalidSignature() throws CryptoException {
-		csrParser.parseCSR(TestConstants.INVALID_CSR);
+		assertNotNull(certificateInfo);
+		assertEquals(certificateInfo.getSubject(), TestConstants.CERTIFICATE_SUBJECT);
+		assertEquals(certificateInfo.getIssuer(), TestConstants.CERTIFICATE_ISSUER);
+		
+		System.out.println(certificateInfo.getValidityStart().getTime());
+		System.out.println(certificateInfo.getValidityEnd().getTime());
+		assertEquals(certificateInfo.getValidityStart(), TestConstants.CERTIFICATE_START_DATE);
+		assertEquals(certificateInfo.getValidityEnd(), TestConstants.CERTIFICATE_END_DATE);
 	}
 
 	@Test(expectedExceptions = CryptoException.class)
-	public void testParseIncompleteCSR() throws CryptoException {
-		csrParser.parseCSR(TestConstants.VALID_CSR.substring(0, TestConstants.VALID_CSR.length() - 10));
+	public void testParseIncompleteCertificate() throws CryptoException {
+		certificateParser.parseCertificate(TestConstants.VALID_CERTIFICATE.substring(0, TestConstants.VALID_CERTIFICATE.length() - 10));
 	}
 
 	@Test(expectedExceptions = CryptoException.class)
 	public void testParseEmptyCSR() throws CryptoException {
-		csrParser.parseCSR("");
+		certificateParser.parseCertificate("");
 	}
 
 	@Test(expectedExceptions = CryptoException.class)
-	public void testParseCertificateAsCSR() throws CryptoException {
-		csrParser.parseCSR(TestConstants.VALID_CERTIFICATE);
+	public void testParseCSRAsCertificate() throws CryptoException {
+		certificateParser.parseCertificate(TestConstants.VALID_CSR);
 	}
 	
 	
