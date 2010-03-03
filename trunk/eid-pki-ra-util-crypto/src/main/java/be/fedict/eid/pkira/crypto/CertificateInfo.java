@@ -36,19 +36,19 @@ public class CertificateInfo {
 		this.validityEnd = validityEnd;
 	}
 
-	protected String getSubject() {
+	public String getSubject() {
 		return subject;
 	}
 
-	protected String getIssuer() {
+	public String getIssuer() {
 		return issuer;
 	}
 
-	protected Date getValidityStart() {
+	public Date getValidityStart() {
 		return validityStart;
 	}
 
-	protected Date getValidityEnd() {
+	public Date getValidityEnd() {
 		return validityEnd;
 	}
 }
