@@ -34,22 +34,24 @@ public class ResponseTypeMatcher<T extends ResponseType> extends ArgumentMatcher
 	private final Class<? extends ResponseType> responseClass;
 	private final String requestId;
 	private final ResultType resultType;
-	private final String resultMessage;
 
-	public ResponseTypeMatcher(Class<T> responseClass, String requestId, ResultType resultType, String resultMessage) {
+	public static <T extends ResponseType> ResponseTypeMatcher<T> responseType(Class<T> responseClass,
+			String requestId, ResultType resultType) {
+		return new ResponseTypeMatcher<T>(responseClass, requestId, resultType);
+	}
+
+	public ResponseTypeMatcher(Class<T> responseClass, String requestId, ResultType resultType) {
 		this.responseClass = responseClass;
 		this.requestId = requestId;
 		this.resultType = resultType;
-		this.resultMessage = resultMessage;
 	}
 
 	public boolean matches(Object actual) {
 		if (actual != null && actual instanceof ResponseType) {
-			ResponseType response = (ResponseType) actual;			
+			ResponseType response = (ResponseType) actual;
 
 			return (response != null) && StringUtils.equals(requestId, response.getRequestId())
-					&& response.getResponseId() != null && ObjectUtils.equals(resultType, response.getResult())
-					&& StringUtils.equals(resultMessage, response.getResultMessage());
+					&& response.getResponseId() != null && ObjectUtils.equals(resultType, response.getResult());
 		}
 
 		return false;
@@ -57,6 +59,6 @@ public class ResponseTypeMatcher<T extends ResponseType> extends ArgumentMatcher
 
 	public void describeTo(Description description) {
 		description.appendText("responseType(" + responseClass.getName() + ", " + requestId + ", " + resultType + ", "
-				+ resultMessage + ")");
+				+ ")");
 	}
 }

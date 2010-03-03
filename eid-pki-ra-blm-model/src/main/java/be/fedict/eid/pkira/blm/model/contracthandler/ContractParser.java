@@ -30,6 +30,8 @@ import be.fedict.eid.pkira.generated.contracts.ResponseType;
 @Local
 public interface ContractParser {
 
+	String NAME = "contractParser";
+
 	/**
 	 * Marshals a response message to a base64 encoded string. If this fails,
 	 * null is returned and an error is logged with log level SEVERE.

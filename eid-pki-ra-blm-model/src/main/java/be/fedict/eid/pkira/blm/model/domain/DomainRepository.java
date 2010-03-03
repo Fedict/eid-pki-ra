@@ -20,27 +20,32 @@ import java.util.List;
 
 import javax.ejb.Local;
 
-
-
 /**
  * Interface to the repository used to store and retrieve domain objects.
+ * 
  * @author Jan Van den Bergh
  */
 @Local
 public interface DomainRepository {
 
+	public static final String NAME = "domainRepository";
+
 	/**
 	 * Persists a contract.
-	 * @param contract contract to persist.
+	 * 
+	 * @param contract
+	 *            contract to persist.
 	 */
 	public void persistContract(AbstractContract contract);
-	
+
 	/**
 	 * Persists a certificate.
-	 * @param certificate certificate to persist.
+	 * 
+	 * @param certificate
+	 *            certificate to persist.
 	 */
 	public void persistCertificate(Certificate certificate);
-	
+
 	/**
 	 * Retrieves a list of all certificates.
 	 */

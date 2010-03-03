@@ -33,6 +33,8 @@ import be.fedict.eid.pkira.generated.publicws.EIDPKIRAService;
  */
 public class EIDPKIRAServiceClient {
 
+	private static final String SERVICE_NAME = "EIDPKIRAService";
+	private static final String NAMESPACE = "urn:be:fedict:eid:pkira:publicws";
 	private static final String WSDL_LOCATION = "/wsdl/eid-pki-ra.wsdl";
 
 	private String serviceUrl;
@@ -91,7 +93,7 @@ public class EIDPKIRAServiceClient {
 		}
 
 		// Create web service port
-		QName serviceName = new QName("urn:be:fedict:eid:dss:ws", "EIDPKIRAPrivateService");
+		QName serviceName = new QName(NAMESPACE, SERVICE_NAME);
 		EIDPKIRAService service = new EIDPKIRAService(wsdlLocation, serviceName);
 		port = service.getEIDPKIRAPort();
 

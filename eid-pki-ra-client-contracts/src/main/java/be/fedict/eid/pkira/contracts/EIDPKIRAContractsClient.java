@@ -168,6 +168,10 @@ public class EIDPKIRAContractsClient {
 	 */
 	public <T extends EIDPKIRAContractType> T unmarshalFromBase64(String base64, Class<T> clazz)
 			throws XmlMarshallingException {
+		if (base64==null) {
+			throw new XmlMarshallingException("Data is null.");
+		}
+		
 		String xml;
 		try {
 			xml = new String(Base64.decodeBase64(base64), "UTF8");

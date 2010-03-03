@@ -21,18 +21,21 @@ import javax.ejb.Local;
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
 
 /**
+ * Bean that uses DSS to verify a signature and certificate chain.
  * @author Jan Van den Bergh
  *
  */
 @Local
 public interface SignatureVerifier {
 
+	String NAME = "signatureVerifier";
+
 	/**
 	 * Verifies the signature of the message. If this signature is correct, the
 	 * identity of the sender is returned.
 	 * 
 	 * @param requestMessage
-	 *            the message that is signed (base64 encoded).
+	 *            the message that is signed.
 	 * @return the identity (RRN) of the signer of the document when the
 	 *         signature is valid.
 	 * @throws ContractHandlerBeanException

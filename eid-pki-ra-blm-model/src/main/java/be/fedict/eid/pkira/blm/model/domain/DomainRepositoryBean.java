@@ -25,6 +25,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Name;
 
 
 
@@ -33,6 +34,7 @@ import org.jboss.seam.annotations.In;
  * @author Jan Van den Bergh
  */
 @Stateless
+@Name(DomainRepository.NAME)
 public class DomainRepositoryBean implements DomainRepository {
 
 	@In
@@ -62,8 +64,15 @@ public class DomainRepositoryBean implements DomainRepository {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Certificate> findAllCertificates(String userRRN) {
-		Query query = entityManager.createNamedQuery("SELECT distinct c from CERTIFICATE c");
+		Query query = entityManager.createQuery("SELECT distinct c from CERTIFICATE c");
 		return query.getResultList();
+	}
+
+	/**
+	 * @param entityManager2
+	 */
+	protected void setEntityManager(EntityManager entityManager) {
+		this.entityManager = entityManager;		
 	}
 
 }

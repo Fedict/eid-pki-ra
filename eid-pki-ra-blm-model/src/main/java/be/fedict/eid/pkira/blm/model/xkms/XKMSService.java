@@ -7,6 +7,8 @@ import javax.ejb.Local;
 @Local
 public interface XKMSService {
 	
+	String NAME = "xkmsService";
+
 	/**
 	 * Let the CA sign the CSR. If this fails, the error will be logged here.
 	 * @param csr The CSR to sign in PEM format.

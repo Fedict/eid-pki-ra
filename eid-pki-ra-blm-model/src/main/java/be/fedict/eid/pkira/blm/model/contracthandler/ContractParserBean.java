@@ -16,10 +16,14 @@
  */
 package be.fedict.eid.pkira.blm.model.contracthandler;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.ejb.Stateless;
+
+import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Logger;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
 import be.fedict.eid.pkira.contracts.XmlMarshallingException;
@@ -33,10 +37,15 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
  * @author Jan Van den Bergh
  */
 @Stateless
+@Name(ContractParser.NAME)
 public class ContractParserBean implements ContractParser {
 
-	private static Logger LOGGER = Logger.getLogger(ContractParserBean.class.getName());
+	@Logger
+	private Log log;
 
+	@In
+	private EIDPKIRAContractsClient contractsClient;
+	
 	/*
 	 * (non-Javadoc)
 	 * @see
@@ -45,9 +54,9 @@ public class ContractParserBean implements ContractParser {
 	 */
 	public <T extends ResponseType> String marshalResponseMessage(T response, Class<T> responseClazz) {
 		try {
-			return new EIDPKIRAContractsClient().marshal(response, responseClazz);
+			return contractsClient.marshal(response, responseClazz);
 		} catch (XmlMarshallingException e) {
-			LOGGER.log(Level.SEVERE, "Error marshalling response back to client.", e);
+			log.error("Error marshalling response back to client.", e);
 			return null;
 		}
 	}
@@ -61,10 +70,24 @@ public class ContractParserBean implements ContractParser {
 	public <T extends RequestType> T unmarshalRequestMessage(String requestMsg, Class<T> requestClass)
 			throws ContractHandlerBeanException {
 		try {
-			return new EIDPKIRAContractsClient().unmarshal(requestMsg, requestClass);
+			return contractsClient.unmarshal(requestMsg, requestClass);
 		} catch (XmlMarshallingException e) {
 			throw new ContractHandlerBeanException(ResultType.INVALID_MESSAGE, e.getMessage());
 		}
+	}
+
+	/**
+	 * Inject the log.
+	 */
+	protected void setLog(Log log) {
+		this.log = log;
+	}
+
+	/**
+	 * Inject the contracts client.
+	 */
+	protected void setContractsClient(EIDPKIRAContractsClient contractsClient) {
+		this.contractsClient = contractsClient;
 	}
 
 }

@@ -28,19 +28,27 @@
 	</wsdl:types>
 
 	<wsdl:message name="CertificateSigningRequest">
-		<wsdl:part name="request" element="types:CertificateSigningRequest" />
+		<wsdl:part name="request" element="types:CertificateSigningRequest">
+			<wsdl:documentation>The contract containing the CSR to be signed (unencoded - plain XML).</wsdl:documentation>
+		</wsdl:part>
 	</wsdl:message>
 
 	<wsdl:message name="CertificateSigningResult">
-		<wsdl:part name="response" element="types:CertificateSigningResult" />
+		<wsdl:part name="response" element="types:CertificateSigningResult">
+			<wsdl:documentation>Response to a certificate signing request (unencoded - plain XML).</wsdl:documentation>
+		</wsdl:part>
 	</wsdl:message>
 
 	<wsdl:message name="CertificateRevocationRequest">
-		<wsdl:part name="request" element="types:CertificateRevocationRequest" />
+		<wsdl:part name="request" element="types:CertificateRevocationRequest">
+			<wsdl:documentation>The contract containing the certificate to be revoked (unencoded - plain XML).</wsdl:documentation>
+		</wsdl:part>
 	</wsdl:message>
 
 	<wsdl:message name="CertificateRevocationResult">
-		<wsdl:part name="response" element="types:CertificateRevocationResult" />
+		<wsdl:part name="response" element="types:CertificateRevocationResult">
+			<wsdl:documentation>Response to a certificate revocation request (unencoded - plain XML).</wsdl:documentation>
+		</wsdl:part>
 	</wsdl:message>
 
 	<wsdl:portType name="EIDPKIRAPortType">

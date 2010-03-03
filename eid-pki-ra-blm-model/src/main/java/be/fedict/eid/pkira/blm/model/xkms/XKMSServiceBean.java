@@ -8,6 +8,7 @@ import java.security.cert.X509Certificate;
 import javax.ejb.Stateless;
 
 import org.apache.commons.io.FileUtils;
+import org.jboss.seam.annotations.Name;
 
 /**
  * XKMS Service implementation.
@@ -15,6 +16,7 @@ import org.apache.commons.io.FileUtils;
  * @author Jan Van den Bergh
  */
 @Stateless
+@Name(XKMSService.NAME)
 public class XKMSServiceBean implements XKMSService {
 
 	/**
