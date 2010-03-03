@@ -16,6 +16,8 @@
  */
 package be.fedict.eid.pkira.crypto;
 
+import java.util.Date;
+
 
 /**
  * @author Jan Van den Bergh
@@ -82,5 +84,13 @@ public class TestConstants {
 	+ "-----END CERTIFICATE-----";
 	
 	public static final String CSR_SUBJECT = "C=BE,ST=Limburg,L=Hasselt,O=ACA,OU=test,CN=Jan Van den Bergh";
+	
+	public static final String CERTIFICATE_SUBJECT = "C=BE,OU=Domain Control Validated,O=*.aca-it.be,CN=*.aca-it.be";
+
+	public static final String CERTIFICATE_ISSUER = "C=BE,OU=Domain Validation CA,O=GlobalSign nv-sa,CN=GlobalSign Domain Validation CA";
+
+	public static final Date CERTIFICATE_START_DATE = new Date(1260912858000L);
+	
+	public static final Date CERTIFICATE_END_DATE = new Date(1418679256000L);
 
 }
