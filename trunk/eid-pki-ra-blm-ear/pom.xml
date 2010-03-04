@@ -99,6 +99,11 @@
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-util-crypto</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-generated-privatews</artifactId>
+			<type>jar</type>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -149,6 +154,7 @@
 						<loader-repository>eid-pki-ra:app=ejb3</loader-repository>
 					</jboss>
 				</configuration>
+				<version>2.4.1</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
