@@ -28,6 +28,9 @@ import javax.ejb.Local;
  */
 @Local
 public interface MailSender {
+	
+	String NAME = "mailSender";
+
 	/**
 	 * Send an email to a queue
 	 * 

@@ -17,16 +17,14 @@
  */
 package be.fedict.eid.pkira.blm.model.mail;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.activation.DataHandler;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -36,77 +34,70 @@ import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.Message.RecipientType;
+import javax.mail.internet.InternetHeaders;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import javax.mail.internet.MimePartDataSource;
 
 /**
  * @author hans
- * 
  */
-@MessageDriven(activationConfig = {
-		@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.queue"),
-		@ActivationConfigProperty(propertyName = "destination", propertyValue = "mail-queue") })
+@MessageDriven(activationConfig =
+	{ @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.queue"),
+			@ActivationConfigProperty(propertyName = "destination", propertyValue = "mail-queue") })
 public class MailHandlerBean implements MessageListener {
 
-	private static Logger LOGGER = Logger.getLogger(MailHandlerBean.class
-			.getName());
+	private static Logger LOGGER = Logger.getLogger(MailHandlerBean.class.getName());
 
 	// TODO: retrieve from admin config
-	private String smtpServer;
+	private String smtpServer = "mail.aca-it.be";
 	// TODO: retrieve from admin config
-	private String port;
+	private String port = "25";
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.jms.MessageListener#onMessage(javax.jms.Message)
 	 */
 	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void onMessage(Message arg0) {
 		ObjectMessage objectMessage = (ObjectMessage) arg0;
 		try {
 			Mail mail = (Mail) objectMessage.getObject();
 
+			// Initialize a mail session
 			Properties props = new Properties();
 			props.put("mail.smtp.host", getSmtpServer());
 			props.put("mail.smtp.port", getPort());
-
 			props.put("mail.from", mail.getSender());
-
 			Session session = Session.getInstance(props, null);
 
+			// Create the message
 			MimeMessage msg = new MimeMessage(session);
 			msg.setFrom();
 			msg.setRecipients(RecipientType.TO, mail.getRecipient());
 			msg.setSubject(mail.getSubject());
-			msg.setSentDate(new Date());
+			
+			Multipart multipart = new MimeMultipart();
+			msg.setContent(multipart);
 
 			// Set the email message text and attachment
 			MimeBodyPart messagePart = new MimeBodyPart();
-			messagePart.setText(mail.getBody());
-
-			InputStream inputStream = new ByteArrayInputStream(mail
-					.getAttachment());
-			MimeBodyPart attachmentPart = new MimeBodyPart(inputStream);
-
-			MimePartDataSource mimePartDataSource = new MimePartDataSource(
-					attachmentPart);
-
-			attachmentPart.setDataHandler(new DataHandler(mimePartDataSource));
-
-			Multipart multipart = new MimeMultipart();
+			messagePart.setText(mail.getBody(), "ISO8859-1", "html");
 			multipart.addBodyPart(messagePart);
-			multipart.addBodyPart(attachmentPart);
 
-			msg.setContent(multipart);
+			if (mail.getAttachmentData()!=null) {
+				InternetHeaders headers = new InternetHeaders();
+				headers.setHeader("Content-type", mail.getAttachmentContentType());
+				headers.setHeader("Content-Disposition", "attachment; filename=\"" + mail.getAttachmentFileName() + "\"");
+				
+				MimeBodyPart attachmentPart = new MimeBodyPart(headers, mail.getAttachmentData());				
+				multipart.addBodyPart(attachmentPart);				
+			}
 
 			Transport.send(msg);
-
 		} catch (JMSException e) {
-			LOGGER.log(Level.SEVERE,
-					"Cannot handle the Object message from the queue", e);
+			LOGGER.log(Level.SEVERE, "Cannot handle the Object message from the queue", e);
 			throw new RuntimeException(e);
 		} catch (MessagingException e) {
 			LOGGER.log(Level.SEVERE, "Cannot send a mail message", e);
@@ -115,7 +106,6 @@ public class MailHandlerBean implements MessageListener {
 	}
 
 	/**
-	 * 
 	 * @param smtpServer
 	 */
 	public void setSmtpServer(String smtpServer) {
@@ -123,7 +113,6 @@ public class MailHandlerBean implements MessageListener {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public String getSmtpServer() {
@@ -131,7 +120,6 @@ public class MailHandlerBean implements MessageListener {
 	}
 
 	/**
-	 * 
 	 * @param port
 	 */
 	public void setPort(String port) {
@@ -139,7 +127,6 @@ public class MailHandlerBean implements MessageListener {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public String getPort() {

@@ -18,8 +18,6 @@
 package be.fedict.eid.pkira.blm.model.mail;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
@@ -32,13 +30,19 @@ import javax.jms.QueueSender;
 import javax.jms.QueueSession;
 import javax.jms.Session;
 
+import org.jboss.seam.annotations.Logger;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.log.Log;
+
 /**
  * @author hans
  */
 @Stateless
+@Name(MailSender.NAME)
 public class MailSenderBean implements MailSender {
 
-	private static Logger LOGGER = Logger.getLogger(MailSenderBean.class.getName());
+	@Logger
+	private Log log;
 	
 	@Resource(mappedName = "java:JmsXA")
 	private QueueConnectionFactory queueConnectionFactory;
@@ -74,9 +78,9 @@ public class MailSenderBean implements MailSender {
 			} finally {
 				queueConnection.close();
 			}
-		} catch (JMSException exception) {
-			LOGGER.log(Level.SEVERE, "Cannot send message to the queue", exception);
-			throw new RuntimeException(exception);
+		} catch (JMSException e) {
+			log.error("Cannot send message to the queue", e);
+			throw new RuntimeException(e);
 		}
 	}
 	

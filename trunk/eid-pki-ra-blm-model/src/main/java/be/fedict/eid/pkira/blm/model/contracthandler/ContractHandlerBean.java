@@ -16,6 +16,7 @@
  */
 package be.fedict.eid.pkira.blm.model.contracthandler;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import javax.ejb.Stateless;
@@ -29,9 +30,10 @@ import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.blm.model.domain.Certificate;
 import be.fedict.eid.pkira.blm.model.domain.CertificateSigningContract;
-import be.fedict.eid.pkira.blm.model.domain.CertificateType;
 import be.fedict.eid.pkira.blm.model.domain.DomainRepository;
 import be.fedict.eid.pkira.blm.model.eiddss.SignatureVerifier;
+import be.fedict.eid.pkira.blm.model.mail.Mail;
+import be.fedict.eid.pkira.blm.model.mail.MailSender;
 import be.fedict.eid.pkira.blm.model.validation.FieldValidator;
 import be.fedict.eid.pkira.blm.model.xkms.XKMSService;
 import be.fedict.eid.pkira.contracts.AbstractResponseBuilder;
@@ -39,6 +41,7 @@ import be.fedict.eid.pkira.contracts.CertificateRevocationResponseBuilder;
 import be.fedict.eid.pkira.contracts.CertificateSigningResponseBuilder;
 import be.fedict.eid.pkira.crypto.CertificateInfo;
 import be.fedict.eid.pkira.crypto.CertificateParser;
+import be.fedict.eid.pkira.crypto.CertificateType;
 import be.fedict.eid.pkira.crypto.CryptoException;
 import be.fedict.eid.pkira.generated.contracts.CertificateRevocationRequestType;
 import be.fedict.eid.pkira.generated.contracts.CertificateRevocationResponseType;
@@ -75,6 +78,9 @@ public class ContractHandlerBean implements ContractHandler {
 	
 	@In(value=DomainRepository.NAME, create=true)
 	private DomainRepository repository;
+	
+	@In(value=MailSender.NAME, create=true)
+	private MailSender mailSender;
 	
 	@Logger
 	private Log log;
@@ -131,6 +137,8 @@ public class ContractHandlerBean implements ContractHandler {
 
 			// Validate the signature
 			String signer = signatureVerifier.verifySignature(requestMsg);
+			
+			// TODO: check authorization
 
 			// Persist the contract
 			CertificateSigningContract contract = new CertificateSigningContract();
@@ -160,7 +168,8 @@ public class ContractHandlerBean implements ContractHandler {
 			Certificate certificate = new Certificate(certificateAsPem, certificateInfo, signer, contract);
 			repository.persistCertificate(certificate);
 
-			// TODO send mail containing the certificate
+			// Send the mail
+			sendCertificateByMail(certificateAsPem);
 
 			// All ok
 			fillResponseFromRequest(responseBuilder, request, ResultType.SUCCESS, "Success");
@@ -175,10 +184,21 @@ public class ContractHandlerBean implements ContractHandler {
 				CertificateSigningResponseType.class);
 	}
 
-	/**
-	 * @param certificateType
-	 * @return
-	 */
+	private void sendCertificateByMail(String certificate) {	
+		Mail mail = new Mail();
+		mail.setSender("test@fedict.be");    // TODO set this value
+		mail.setRecipient("test@fedict.be"); // TODO set this value
+		mail.setBody("Dear, this is your certificate.");
+		mail.setAttachment("application/pkix-cert", "certificate.crt", certificate.getBytes());
+		mail.setSubject("Your certificate");
+				
+		try {
+			mailSender.sendMail(mail);
+		} catch (IOException e) {
+			log.error("Error sending mail with certificate", e);
+		}		
+	}
+
 	private CertificateType mapCertificateType(CertificateTypeType certificateType) {
 		switch (certificateType) {
 		case CLIENT:
@@ -223,8 +243,8 @@ public class ContractHandlerBean implements ContractHandler {
 		this.signatureVerifier = signatureVerifier;
 	}
 
-	protected void setDomainRepository(DomainRepository repository) {
-		this.repository = repository;
+	protected void setDomainRepository(DomainRepository domainRepository) {
+		this.repository = domainRepository;
 	}
 
 	protected void setXkmsService(XKMSService xkmsService) {
@@ -234,5 +254,14 @@ public class ContractHandlerBean implements ContractHandler {
 	
 	protected void setCertificateParser(CertificateParser certificateParser) {
 		this.certificateParser = certificateParser;
+	}
+
+	
+	protected void setMailSender(MailSender mailSender) {
+		this.mailSender = mailSender;
+	}
+
+	protected void setLog(Log log) {
+		this.log = log;
 	}
 }
