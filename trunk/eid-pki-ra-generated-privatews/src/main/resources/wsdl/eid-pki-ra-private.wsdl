@@ -30,10 +30,20 @@
 			<xsd:element name="ListCertificatesResponse">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="certificates" type="xsd:string" maxOccurs="unbounded" />
+						<xsd:element name="certificates" type="types:certificatews" maxOccurs="unbounded" />
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:complexType name="certificatews">
+				<xsd:sequence>
+					<xsd:element name="serialNumber" type="xsd:string"/>
+					<xsd:element name="subject" type="xsd:string"/>
+					<xsd:element name="validityStart" type="xsd:date"/>
+					<xsd:element name="validityEnd" type="xsd:date"/>
+					<xsd:element name="requesterName" type="xsd:string"/>
+					<xsd:element name="issuer" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
 		</xsd:schema>
 	</wsdl:types>
 

@@ -12,6 +12,16 @@
 		<url-pattern>/EIDPKIRAService</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>EIDPKIRAPrivateService</servlet-name>
+		 <servlet-class>be.fedict.eid.pkira.ws.impl.EIDPKIRAPrivateServiceImpl</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EIDPKIRAPrivateService</servlet-name>
+		<url-pattern>/EIDPKIRAPrivateService</url-pattern>
+	</servlet-mapping>
+
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
