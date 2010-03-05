@@ -22,10 +22,10 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
-import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.blm.model.domain.Certificate;
 import be.fedict.eid.pkira.blm.model.domain.CertificateSigningContract;
@@ -75,6 +75,9 @@ public class ContractHandlerBean implements ContractHandler {
 	
 	@In(value=DomainRepository.NAME, create=true)
 	private DomainRepository repository;
+	
+	@Logger
+	private Log log;
 
 	/*
 	 * (non-Javadoc)
@@ -101,6 +104,9 @@ public class ContractHandlerBean implements ContractHandler {
 			fillResponseFromRequest(responseBuilder, request, ResultType.GENERAL_FAILURE, "Not implemented");
 		} catch (ContractHandlerBeanException e) {
 			fillResponseFromRequest(responseBuilder, request, e.getResultType(), e.getMessage());
+		} catch (RuntimeException e) {
+			log.error("Error while processing the contract", e);
+			fillResponseFromRequest(responseBuilder, request, ResultType.GENERAL_FAILURE, "An error occurred while processing the contract.");
 		}
 
 		return contractParser.marshalResponseMessage(responseBuilder.toResponseType(),
@@ -151,15 +157,18 @@ public class ContractHandlerBean implements ContractHandler {
 				throw new ContractHandlerBeanException(ResultType.GENERAL_FAILURE,
 						"Error processing received certificate.");
 			}
-			Certificate certificate = new Certificate(certificateAsPem, certificateInfo, signer);
+			Certificate certificate = new Certificate(certificateAsPem, certificateInfo, signer, contract);
 			repository.persistCertificate(certificate);
 
 			// TODO send mail containing the certificate
 
 			// All ok
-			fillResponseFromRequest(responseBuilder, request, ResultType.SUCCESS, "Not implemented");
+			fillResponseFromRequest(responseBuilder, request, ResultType.SUCCESS, "Success");
 		} catch (ContractHandlerBeanException e) {
 			fillResponseFromRequest(responseBuilder, request, e.getResultType(), e.getMessage());
+		} catch (RuntimeException e) {
+			log.error("Error while processing the contract", e);
+			fillResponseFromRequest(responseBuilder, request, ResultType.GENERAL_FAILURE, "An error occurred while processing the contract.");
 		}
 
 		return contractParser.marshalResponseMessage(responseBuilder.toResponseType(),

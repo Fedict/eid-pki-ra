@@ -13,6 +13,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.dss.client.DigitalSignatureServiceClient;
+import be.fedict.eid.dss.client.NotParseableXMLDocumentException;
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
 import be.fedict.eid.pkira.blm.model.eiddss.SignatureVerifierBean;
 
@@ -20,7 +21,7 @@ import be.fedict.eid.pkira.blm.model.eiddss.SignatureVerifierBean;
 public class SignatureVerificationBeanTest {
 
 	private static final String DOCUMENT = "DOCUMENT";
-	private static final String IDENTITY = "123";
+	private static final String IDENTITY = "90010110021";
 	private Log log;
 	private SignatureVerifierBean bean;
 	private DigitalSignatureServiceClient dssClient;
@@ -36,23 +37,23 @@ public class SignatureVerificationBeanTest {
 	}
 	
 	@Test
-	public void testVerifySignature() throws ContractHandlerBeanException {
-		when(dssClient.verifyWithSignerIdentity(eq(DOCUMENT))).thenReturn(IDENTITY);
+	public void testVerifySignature() throws ContractHandlerBeanException, NotParseableXMLDocumentException {
+		when(dssClient.verify(eq(DOCUMENT))).thenReturn(true);
 		
 		String identity = bean.verifySignature(DOCUMENT);
 		assertEquals(identity, IDENTITY);
 	}
 	
 	@Test(expectedExceptions=ContractHandlerBeanException.class)
-	public void testVerifySignatureInvalid() throws ContractHandlerBeanException {
-		when(dssClient.verifyWithSignerIdentity(eq(DOCUMENT))).thenReturn(null);
+	public void testVerifySignatureInvalid() throws ContractHandlerBeanException, NotParseableXMLDocumentException {
+		when(dssClient.verify(eq(DOCUMENT))).thenReturn(false);
 		
 		bean.verifySignature(DOCUMENT);
 	}
 	
 	@Test(expectedExceptions=RuntimeException.class)
-	public void testVerifySignatureError() throws ContractHandlerBeanException {
-		when(dssClient.verifyWithSignerIdentity(eq(DOCUMENT))).thenThrow(new RuntimeException());
+	public void testVerifySignatureError() throws ContractHandlerBeanException, NotParseableXMLDocumentException {
+		when(dssClient.verify(eq(DOCUMENT))).thenThrow(new RuntimeException());
 		
 		try {
 			bean.verifySignature(DOCUMENT);

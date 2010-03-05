@@ -28,7 +28,7 @@
 	<transaction:ejb-transaction />
 
 	<persistence:managed-persistence-context
-		auto-create="true" name="entityManager" persistence-unit-jndi-name="java:/eid-pki-ra-blm-persistenceUnit" />
+		auto-create="true" name="entityManager" persistence-unit-jndi-name="java:/seam-poc-EntityManagerFactory" />
 
 	<!--
 		<drools:rule-base name="securityRules"> <drools:rule-files>
