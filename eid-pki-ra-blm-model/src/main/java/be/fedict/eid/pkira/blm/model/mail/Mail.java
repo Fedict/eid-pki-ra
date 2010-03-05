@@ -22,94 +22,69 @@ import java.io.Serializable;
 /**
  * @author hans
  */
-public class Mail implements Serializable{
+public class Mail implements Serializable {
 
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2035797575503987602L;
-	
+
 	private String sender;
 	private String recipient;
 	private String subject;
 	private String body;
-	private byte[] attachment;
+	private String attachmentContentType, attachmentFileName;
+	private byte[] attachmentData;
 
-	/**
-	 * @return the sender
-	 */
 	public String getSender() {
 		return sender;
 	}
 
-	/**
-	 * @param sender
-	 *            the sender to set
-	 */
 	public void setSender(String sender) {
 		this.sender = sender;
 	}
 
-	/**
-	 * @return the recipient
-	 */
 	public String getRecipient() {
 		return recipient;
 	}
 
-	/**
-	 * @param recipient
-	 *            the recipient to set
-	 */
 	public void setRecipient(String recipient) {
 		this.recipient = recipient;
 	}
 
-	/**
-	 * @return the subject
-	 */
 	public String getSubject() {
 		return subject;
 	}
 
-	/**
-	 * @param subject
-	 *            the subject to set
-	 */
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
 
-	/**
-	 * @return the body
-	 */
 	public String getBody() {
 		return body;
 	}
 
-	/**
-	 * @param body
-	 *            the body to set
-	 */
 	public void setBody(String body) {
 		this.body = body;
 	}
 
-	/**
-	 * 
-	 * @param attachment the attachment
-	 */
-	public void setAttachment(byte[] attachment) {
-		this.attachment = attachment;
+	protected String getAttachmentFileName() {
+		return attachmentFileName;
 	}
 
-	/**
-	 * 
-	 * @return the attachement
-	 */
-	public byte[] getAttachment() {
-		return attachment;
+	public void setAttachment(String contentType, String fileName, byte[] data) {
+		this.attachmentContentType = contentType;
+		this.attachmentFileName = fileName;
+		this.attachmentData = data;
+	}
+
+	public byte[] getAttachmentData() {
+		return attachmentData;
+	}
+
+	protected static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	protected String getAttachmentContentType() {
+		return attachmentContentType;
 	}
 
 }

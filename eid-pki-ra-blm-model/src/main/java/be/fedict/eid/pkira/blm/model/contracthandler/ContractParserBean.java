@@ -18,11 +18,9 @@ package be.fedict.eid.pkira.blm.model.contracthandler;
 
 import javax.ejb.Stateless;
 
-import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
@@ -38,7 +36,6 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
  */
 @Stateless
 @Name(ContractParser.NAME)
-@Scope(ScopeType.STATELESS)
 public class ContractParserBean implements ContractParser {
 
 	@Logger

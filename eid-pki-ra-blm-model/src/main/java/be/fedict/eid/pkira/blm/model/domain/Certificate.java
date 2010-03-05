@@ -31,6 +31,7 @@ import javax.persistence.OneToOne;
 import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.crypto.CertificateInfo;
+import be.fedict.eid.pkira.crypto.CertificateType;
 
 @Entity
 @Name(Certificate.NAME)
@@ -40,7 +41,8 @@ public class Certificate implements Serializable {
 
 	private static final long serialVersionUID = -6539022465744360747L;
 
-	@Id @GeneratedValue
+	@Id
+	@GeneratedValue
 	private int id;
 
 	private BigInteger serialNumber;
@@ -52,6 +54,7 @@ public class Certificate implements Serializable {
 	private Date validityEnd;
 	private String requesterName;
 	private String issuer;
+	private CertificateType certificateType;
 
 	@OneToOne(optional = true, fetch = FetchType.LAZY)
 	private CertificateSigningContract contract;
@@ -70,6 +73,7 @@ public class Certificate implements Serializable {
 		this.validityStart = certificateInfo.getValidityStart();
 		this.validityEnd = certificateInfo.getValidityEnd();
 		this.issuer = certificateInfo.getIssuer();
+		this.certificateType = contract.getCertificateType();
 		this.requesterName = requesterName;
 		this.contract = contract;
 	}
@@ -186,6 +190,14 @@ public class Certificate implements Serializable {
 
 	protected void setContract(CertificateSigningContract contract) {
 		this.contract = contract;
+	}
+
+	protected CertificateType getCertificateType() {
+		return certificateType;
+	}
+
+	protected void setCertificateType(CertificateType certificateType) {
+		this.certificateType = certificateType;
 	}
 
 	// public void setCertificateDomain(CertificateDomain certificateDomain) {
