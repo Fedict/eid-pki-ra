@@ -78,6 +78,12 @@
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-portal-webapp</artifactId>
 			<type>war</type>
+			<exclusions>				
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>

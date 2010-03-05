@@ -70,6 +70,12 @@ public class PublicWebserviceTest {
 		trySignCertificate(contract, "18882bc2-686f-41cb-b0d4-7e78d984ad0a", ResultType.SUCCESS);
 	}
 	
+//	@Test
+//	public void signCertificateValid2() throws IOException {
+//		String contract = FileUtils.readFileToString(new File(getClass().getResource("/xml/CertificateSigningContractValid2.xml").getFile()));
+//		trySignCertificate(contract, "3c1888ae-0b20-44eb-adac-7d083dd4752c", ResultType.SUCCESS);
+//	}
+	
 	@Test
 	public void signEmptyRequest() throws Exception {		
 		String requestMessage = "<tns:CertificateRevocationRequest xmlns:tns='urn:be:fedict:eid:pkira:contracts'/>";		

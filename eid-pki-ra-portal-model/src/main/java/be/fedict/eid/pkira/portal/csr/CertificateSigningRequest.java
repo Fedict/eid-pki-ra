@@ -21,9 +21,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.codec.binary.Base64;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
@@ -54,6 +55,7 @@ public class CertificateSigningRequest implements Serializable {
 	// TODO (03032010): get this from backend
 	private String legalNotice = "testLegalNotice";
 	private String csrBase64Xml;
+	private String decodedSignatureResponse;
 
 	public CSRInfo getDistinguishedName() {
 		return distinguishedName;
@@ -158,6 +160,14 @@ public class CertificateSigningRequest implements Serializable {
 	public void setCsrBase64Xml(String csrBase64Xml) {
 		this.csrBase64Xml = csrBase64Xml;
 	}
+
+	public String getDecodedSignatureResponse() {
+		return decodedSignatureResponse;
+	}
+
+	public void setDecodedSignatureResponse(String decodedSignatureResponse) {
+		this.decodedSignatureResponse = decodedSignatureResponse;
+	}
 	
 	// TODO (03032010): get these from configuration table
 	public List<SelectItem> getValidityPeriods() {
@@ -174,6 +184,13 @@ public class CertificateSigningRequest implements Serializable {
 		}
 	}
 	
+	public String getDssResponseContextUrl() {
+		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();		
+		String url = request.getRequestURL().toString();
+		String contextPath = request.getContextPath();
+		return url.substring(0, url.indexOf(contextPath)).concat(contextPath);		
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -187,10 +204,7 @@ public class CertificateSigningRequest implements Serializable {
 			.append(", operatorFunction=").append(operatorFunction)
 			.append(", operatorPhone=").append(operatorPhone)
 			.append(", operatorEmail=").append(operatorEmail)
-			.append(", csr=").append(Base64.encodeBase64String(csr))
-			.append(", contentType=").append(contentType)
-			.append(", description=").append(description)
-			.append(", csrAsString=").append(csrAsString)
+			.append(", csr=").append(getBase64Csr())
 			.append(']').toString();
 	}
 }
