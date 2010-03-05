@@ -137,7 +137,7 @@
 					</modules>
 
 					<jboss>
-						<loader-repository>eid-pki-ra:app=ejb3</loader-repository>
+						<loader-repository>eid-pki-ra:app=ejb3-portal</loader-repository>
 					</jboss>
 				</configuration>
 			</plugin>
