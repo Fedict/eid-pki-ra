@@ -31,7 +31,6 @@ import javax.persistence.OneToOne;
 import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.crypto.CertificateInfo;
-import be.fedict.eid.pkira.crypto.CertificateType;
 
 @Entity
 @Name(Certificate.NAME)

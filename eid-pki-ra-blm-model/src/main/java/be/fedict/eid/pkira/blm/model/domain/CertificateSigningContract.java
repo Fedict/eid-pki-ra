@@ -21,8 +21,6 @@ import javax.persistence.Entity;
 
 import org.jboss.seam.annotations.Name;
 
-import be.fedict.eid.pkira.crypto.CertificateType;
-
 /**
  * A contract used to request the signing of a certificate. 
  * @author Jan Van den Bergh
