@@ -13,9 +13,9 @@
 	</page>	
 	
 	<page view-id="/page/csr/complete.xhtml">	
-		<navigation from-action="#{certificateHandler.requestCertificateSigningRequest}">
+		<navigation from-action="#{certificateHandler.signCertificateSigningRequest}">
 			<rule if-outcome="success">
-				<redirect view-id="/page/csr/detail.xhtml"/>
+				<redirect view-id="/page/csr/signatureRequest.xhtml"/>
 			</rule>
 		</navigation>
 	</page>

@@ -32,6 +32,9 @@
 	
 	<component name="contractsClientPortal" 
 			class="be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient" scope="stateless"/>
+			
+	<component name="serviceClientPortal" 
+			class="be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient" scope="stateless" /> 
 
 	<core:manager concurrent-request-timeout="500"
 		conversation-id-parameter="cid" conversation-timeout="120000" />

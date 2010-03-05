@@ -64,6 +64,20 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
+	<servlet>
+		<servlet-name>DSS Signing Response Processor</servlet-name>
+		<servlet-class>be.fedict.eid.pkira.portal.servlet.DssSigningResponseProcessor</servlet-class>
+		<init-param>
+			<param-name>nextPage</param-name>
+			<param-value>/page/csr/dssSignSucces.seam</param-value>
+		</init-param>
+		<init-param>
+			<param-name>errorPage</param-name>
+			<param-value>/page/csr/dssSignError.seam</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+
 	<servlet-mapping>
 		<servlet-name>Seam Resource Servlet</servlet-name>
 		<url-pattern>/seam/resource/*</url-pattern>
@@ -72,6 +86,11 @@
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.seam</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>DSS Signing Response Processor</servlet-name>
+		<url-pattern>/dss-signature-response</url-pattern>
 	</servlet-mapping>
 
 	<session-config>

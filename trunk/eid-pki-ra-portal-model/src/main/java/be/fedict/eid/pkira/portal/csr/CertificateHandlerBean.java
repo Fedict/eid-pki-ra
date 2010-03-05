@@ -37,7 +37,10 @@ import be.fedict.eid.pkira.crypto.CSRInfo;
 import be.fedict.eid.pkira.crypto.CSRParser;
 import be.fedict.eid.pkira.crypto.CryptoException;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
+import be.fedict.eid.pkira.generated.contracts.CertificateSigningResponseType;
 import be.fedict.eid.pkira.generated.contracts.CertificateTypeType;
+import be.fedict.eid.pkira.generated.contracts.ResultType;
+import be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient;
 
 /**
  * @author Bram Baeyens
@@ -55,7 +58,8 @@ public class CertificateHandlerBean implements CertificateHandler, Serializable 
 	private CertificateSigningRequest certificateSigningRequest;
 	private CSRParser csrParser;
 	private FacesMessages facesMessages;
-	private EIDPKIRAContractsClient contractsClient;
+	private EIDPKIRAContractsClient contractsClientPortal;
+	private EIDPKIRAServiceClient serviceClientPortal;
 	
 	protected void setLog(Log log) {
 		this.log = log;
@@ -77,8 +81,13 @@ public class CertificateHandlerBean implements CertificateHandler, Serializable 
 	}
 
 	@In(create=true)
-	public void setContractsClient(EIDPKIRAContractsClient contractsClient) {
-		this.contractsClient = contractsClient;
+	public void setContractsClientPortal(EIDPKIRAContractsClient contractsClientPortal) {
+		this.contractsClientPortal = contractsClientPortal;
+	}
+
+	@In(create=true)
+	public void setServiceClientPortal(EIDPKIRAServiceClient serviceClientPortal) {
+		this.serviceClientPortal = serviceClientPortal;
 	}
 
 	/*
@@ -110,19 +119,37 @@ public class CertificateHandlerBean implements CertificateHandler, Serializable 
 	 * requestCertificateSigningRequest()
 	 */
 	@Override
-	public String requestCertificateSigningRequest() {
-		log.info(">>> requestCertificateSigningRequest(certificateSigningRequest=[{0}])", certificateSigningRequest);
+	public String signCertificateSigningRequest() {
+		log.info(">>> preSignCertificateSigningRequest(certificateSigningRequest=[{0}])", certificateSigningRequest);
 		CertificateSigningRequestBuilder builder = initBuilder(certificateSigningRequest);
 		try {
-			String base64Xml = contractsClient.marshalToBase64(builder.toRequestType(), 
+			String base64Xml = contractsClientPortal.marshalToBase64(builder.toRequestType(), 
 					CertificateSigningRequestType.class);
 			certificateSigningRequest.setCsrBase64Xml(base64Xml);
 		} catch (XmlMarshallingException e) {
 			log.info("<<< requestCertificateSigningRequest: marshalling failed", e);
 			throw new RuntimeException(e);
 		}
-		log.info("<<< requestCertificateSigningRequest: {0}", certificateSigningRequest);
+		log.info("<<< preSignCertificateSigningRequest: {0}", certificateSigningRequest);
 		return "success";
+	}
+	
+	public String requestCertificateSigningRequest(String request) {
+		log.info(">>> requestCertificateSigningRequest(request[])", request);
+		String result = serviceClientPortal.signCertificate(request);		
+		try {
+			CertificateSigningResponseType response = contractsClientPortal.unmarshal(result, CertificateSigningResponseType.class);
+			if (ResultType.SUCCESS.equals(response.getResult())) {
+				log.info("<<< requestCertificateSigningRequest: success");
+				return "success";
+			} else {
+				log.info("<<< requestCertificateSigningRequest: failure");
+				return "failure";
+			}
+		} catch (XmlMarshallingException e) {
+			log.info("<<< requestCertificateSigningRequest: ", e);
+			return "failure";
+		}
 	}
 
 	/**

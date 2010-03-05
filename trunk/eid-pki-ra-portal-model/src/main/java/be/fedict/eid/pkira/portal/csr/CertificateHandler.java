@@ -26,7 +26,9 @@ public interface CertificateHandler {
 	
 	String NAME = "certificateHandler";
 	
-	public String uploadCertificateSigningRequest();
+	String uploadCertificateSigningRequest();
 	
-	public String requestCertificateSigningRequest();
+	String signCertificateSigningRequest();
+	
+	String requestCertificateSigningRequest(String request);
 }

@@ -61,7 +61,7 @@
             	</s:decorate>
             	
 				<s:decorate template="/layout/buttonbox.xhtml" id="csrButtonBox">
-					<h:commandButton action="#{certificateHandler.requestCertificateSigningRequest}" value="#{messages['general.send']}" id="send"/>
+					<h:commandButton action="#{certificateHandler.signCertificateSigningRequest}" value="#{messages['general.send']}" id="send"/>
 					<s:button value="#{messages['general.cancel']}" action="csr" id="cancel" />
 				</s:decorate>       
 			</rich:panel>

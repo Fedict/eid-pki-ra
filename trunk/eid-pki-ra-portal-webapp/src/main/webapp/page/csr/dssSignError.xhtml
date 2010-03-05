@@ -1,0 +1,17 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib"
+		xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich"
+		xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:form id="dssSignErrorForm">
+			<rich:panel id="panel">
+				<f:facet name="header">#{messages['dssSignError.title']}</f:facet>
+	           	
+	          	<s:decorate template="/layout/buttonbox.xhtml" id="dssSignErrorButtonBox">
+					<s:button value="#{messages['general.cancel']}" action="csr" id="cancel"/>
+				</s:decorate> 
+			</rich:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
