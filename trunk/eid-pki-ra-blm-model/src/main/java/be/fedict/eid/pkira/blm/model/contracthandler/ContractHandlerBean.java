@@ -16,7 +16,8 @@
  */
 package be.fedict.eid.pkira.blm.model.contracthandler;
 
-import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.ejb.Stateless;
@@ -33,8 +34,7 @@ import be.fedict.eid.pkira.blm.model.domain.CertificateSigningContract;
 import be.fedict.eid.pkira.blm.model.domain.CertificateType;
 import be.fedict.eid.pkira.blm.model.domain.DomainRepository;
 import be.fedict.eid.pkira.blm.model.eiddss.SignatureVerifier;
-import be.fedict.eid.pkira.blm.model.mail.Mail;
-import be.fedict.eid.pkira.blm.model.mail.MailSender;
+import be.fedict.eid.pkira.blm.model.mail.MailTemplate;
 import be.fedict.eid.pkira.blm.model.validation.FieldValidator;
 import be.fedict.eid.pkira.blm.model.xkms.XKMSService;
 import be.fedict.eid.pkira.contracts.AbstractResponseBuilder;
@@ -61,27 +61,27 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
 @Name(ContractHandler.NAME)
 public class ContractHandlerBean implements ContractHandler {
 
-	@In(value=ContractParser.NAME, create=true)
+	@In(value = ContractParser.NAME, create = true)
 	private ContractParser contractParser;
 
-	@In(value=FieldValidator.NAME, create=true)
+	@In(value = FieldValidator.NAME, create = true)
 	private FieldValidator fieldValidator;
 
-	@In(value=SignatureVerifier.NAME, create=true)
+	@In(value = SignatureVerifier.NAME, create = true)
 	private SignatureVerifier signatureVerifier;
 
-	@In(value=XKMSService.NAME, create=true)
+	@In(value = XKMSService.NAME, create = true)
 	private XKMSService xkmsService;
 
-	@In(value = CertificateParser.NAME, create=true)
+	@In(value = CertificateParser.NAME, create = true)
 	private CertificateParser certificateParser;
-	
-	@In(value=DomainRepository.NAME, create=true)
+
+	@In(value = DomainRepository.NAME, create = true)
 	private DomainRepository repository;
-	
-	@In(value=MailSender.NAME, create=true)
-	private MailSender mailSender;
-	
+
+	@In(value = MailTemplate.NAME, create = true)
+	private MailTemplate mailTemplate;
+
 	@Logger
 	private Log log;
 
@@ -112,7 +112,8 @@ public class ContractHandlerBean implements ContractHandler {
 			fillResponseFromRequest(responseBuilder, request, e.getResultType(), e.getMessage());
 		} catch (RuntimeException e) {
 			log.error("Error while processing the contract", e);
-			fillResponseFromRequest(responseBuilder, request, ResultType.GENERAL_FAILURE, "An error occurred while processing the contract.");
+			fillResponseFromRequest(responseBuilder, request, ResultType.GENERAL_FAILURE,
+					"An error occurred while processing the contract.");
 		}
 
 		return contractParser.marshalResponseMessage(responseBuilder.toResponseType(),
@@ -137,7 +138,7 @@ public class ContractHandlerBean implements ContractHandler {
 
 			// Validate the signature
 			String signer = signatureVerifier.verifySignature(requestMsg);
-			
+
 			// TODO: check authorization
 
 			// Persist the contract
@@ -169,7 +170,7 @@ public class ContractHandlerBean implements ContractHandler {
 			repository.persistCertificate(certificate);
 
 			// Send the mail
-			sendCertificateByMail(certificateAsPem);
+			sendCertificateByMail(certificate);
 
 			// All ok
 			fillResponseFromRequest(responseBuilder, request, ResultType.SUCCESS, "Success");
@@ -177,26 +178,25 @@ public class ContractHandlerBean implements ContractHandler {
 			fillResponseFromRequest(responseBuilder, request, e.getResultType(), e.getMessage());
 		} catch (RuntimeException e) {
 			log.error("Error while processing the contract", e);
-			fillResponseFromRequest(responseBuilder, request, ResultType.GENERAL_FAILURE, "An error occurred while processing the contract.");
+			fillResponseFromRequest(responseBuilder, request, ResultType.GENERAL_FAILURE,
+					"An error occurred while processing the contract.");
 		}
 
 		return contractParser.marshalResponseMessage(responseBuilder.toResponseType(),
 				CertificateSigningResponseType.class);
 	}
 
-	private void sendCertificateByMail(String certificate) {	
-		Mail mail = new Mail();
-		mail.setSender("test@fedict.be");    // TODO set this value
-		mail.setRecipient("test@fedict.be"); // TODO set this value
-		mail.setBody("Dear, this is your certificate.");
-		mail.setAttachment("application/pkix-cert", "certificate.crt", certificate.getBytes());
-		mail.setSubject("Your certificate");
-				
-		try {
-			mailSender.sendMail(mail);
-		} catch (IOException e) {
-			log.error("Error sending mail with certificate", e);
-		}		
+	private void sendCertificateByMail(Certificate certificate) {
+		String templateName = "sendCertificateMail.ftl";
+		Map<String, Object> parameters = Collections.singletonMap("certificate", (Object) certificate);
+		String[] recipients = new String[]
+			{ "j.vandenbergh@aca-it.be" };
+		byte[] attachmentData = certificate.getX509().getBytes();
+		String attachmentContentType = "application/x-pem-file";
+		String attachmentFileName = "certificate.crt";
+
+		mailTemplate.sendTemplatedMail(templateName, parameters, recipients, attachmentData, attachmentContentType,
+				attachmentFileName);
 	}
 
 	private CertificateType mapCertificateType(CertificateTypeType certificateType) {
@@ -251,14 +251,12 @@ public class ContractHandlerBean implements ContractHandler {
 		this.xkmsService = xkmsService;
 	}
 
-	
 	protected void setCertificateParser(CertificateParser certificateParser) {
 		this.certificateParser = certificateParser;
 	}
 
-	
-	protected void setMailSender(MailSender mailSender) {
-		this.mailSender = mailSender;
+	protected void setMailTemplate(MailTemplate mailTemplate) {
+		this.mailTemplate = mailTemplate;
 	}
 
 	protected void setLog(Log log) {

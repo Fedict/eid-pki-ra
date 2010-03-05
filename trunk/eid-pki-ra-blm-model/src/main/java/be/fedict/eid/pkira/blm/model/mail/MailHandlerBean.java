@@ -34,6 +34,7 @@ import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.Message.RecipientType;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.InternetHeaders;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -75,7 +76,9 @@ public class MailHandlerBean implements MessageListener {
 			// Create the message
 			MimeMessage msg = new MimeMessage(session);
 			msg.setFrom();
-			msg.setRecipients(RecipientType.TO, mail.getRecipient());
+			for(String recipient: mail.getRecipients()) {
+				msg.addRecipient(RecipientType.TO, new InternetAddress(recipient));
+			}
 			msg.setSubject(mail.getSubject());
 			
 			Multipart multipart = new MimeMultipart();
@@ -83,7 +86,7 @@ public class MailHandlerBean implements MessageListener {
 
 			// Set the email message text and attachment
 			MimeBodyPart messagePart = new MimeBodyPart();
-			messagePart.setText(mail.getBody(), "ISO8859-1", "html");
+			messagePart.setText(mail.getBody());
 			multipart.addBodyPart(messagePart);
 
 			if (mail.getAttachmentData()!=null) {

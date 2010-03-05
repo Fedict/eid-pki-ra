@@ -27,7 +27,7 @@ public class Mail implements Serializable {
 	private static final long serialVersionUID = -2035797575503987602L;
 
 	private String sender;
-	private String recipient;
+	private String[] recipients;
 	private String subject;
 	private String body;
 	private String attachmentContentType, attachmentFileName;
@@ -41,12 +41,12 @@ public class Mail implements Serializable {
 		this.sender = sender;
 	}
 
-	public String getRecipient() {
-		return recipient;
+	public String[] getRecipients() {
+		return recipients;
 	}
 
-	public void setRecipient(String recipient) {
-		this.recipient = recipient;
+	public void setRecipients(String[] recipients) {
+		this.recipients = recipients;
 	}
 
 	public String getSubject() {

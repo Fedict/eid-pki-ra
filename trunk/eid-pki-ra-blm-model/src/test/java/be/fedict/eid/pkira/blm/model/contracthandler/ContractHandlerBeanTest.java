@@ -18,6 +18,8 @@ package be.fedict.eid.pkira.blm.model.contracthandler;
 
 import static be.fedict.eid.pkira.blm.model.contracthandler.util.ResponseTypeMatcher.responseType;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyMap;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.isA;
@@ -32,7 +34,7 @@ import java.math.BigInteger;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import org.jboss.seam.log.Log;
+import org.jboss.seam.log.Logging;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
@@ -43,8 +45,7 @@ import be.fedict.eid.pkira.blm.model.domain.Certificate;
 import be.fedict.eid.pkira.blm.model.domain.CertificateSigningContract;
 import be.fedict.eid.pkira.blm.model.domain.DomainRepository;
 import be.fedict.eid.pkira.blm.model.eiddss.SignatureVerifier;
-import be.fedict.eid.pkira.blm.model.mail.Mail;
-import be.fedict.eid.pkira.blm.model.mail.MailSender;
+import be.fedict.eid.pkira.blm.model.mail.MailTemplate;
 import be.fedict.eid.pkira.blm.model.validation.FieldValidator;
 import be.fedict.eid.pkira.blm.model.xkms.XKMSService;
 import be.fedict.eid.pkira.contracts.CertificateSigningRequestBuilder;
@@ -107,9 +108,7 @@ public class ContractHandlerBeanTest {
 	@Mock
 	private DomainRepository domainRepository;
 	@Mock
-	private Log log;
-	@Mock
-	private MailSender mailSender;
+	private MailTemplate mailTemplate;
 
 	@BeforeMethod
 	public void setup() {
@@ -122,8 +121,9 @@ public class ContractHandlerBeanTest {
 		bean.setDomainRepository(domainRepository);
 		bean.setXkmsService(xkmsService);
 		bean.setCertificateParser(certificateParser);
-		bean.setMailSender(mailSender);
-		bean.setLog(log);
+		bean.setMailTemplate(mailTemplate);
+		
+		bean.setLog(Logging.getLog(ContractHandlerBean.class));		
 	}
 
 	@Test
@@ -139,6 +139,7 @@ public class ContractHandlerBeanTest {
 		assertNotNull(response.getResponseId());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testSignCertificateHappyFlow() throws Exception {
 		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateSigningRequestType.class)))
@@ -158,7 +159,7 @@ public class ContractHandlerBeanTest {
 		assertEquals(result, RESPONSE_MESSAGE);
 		verify(domainRepository).persistContract(isA(CertificateSigningContract.class));
 		verify(domainRepository).persistCertificate(isA(Certificate.class));
-		verify(mailSender).sendMail(isA(Mail.class));
+		verify(mailTemplate).sendTemplatedMail(anyString(), anyMap(), any(String[].class), any(byte[].class), anyString(), anyString());
 	}
 
 	@Test
