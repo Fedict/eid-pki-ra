@@ -3,11 +3,8 @@ package be.fedict.eid.pkira.portal.certificate;
 import java.math.BigInteger;
 import java.util.Date;
 
-import javax.persistence.Basic;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
