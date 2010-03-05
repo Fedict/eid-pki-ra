@@ -63,7 +63,7 @@ public class DomainRepositoryBean implements DomainRepository {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Certificate> findAllCertificates(String userRRN) {
-		Query query = entityManager.createQuery("SELECT distinct c from CERTIFICATE c");
+		Query query = entityManager.createQuery("SELECT distinct c from Certificate c");
 		return query.getResultList();
 	}
 
