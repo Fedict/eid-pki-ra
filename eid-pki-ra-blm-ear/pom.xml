@@ -151,7 +151,7 @@
 					</modules>
 
 					<jboss>
-						<loader-repository>eid-pki-ra:app=ejb3</loader-repository>
+						<loader-repository>eid-pki-ra:app=ejb3-blm</loader-repository>
 					</jboss>
 				</configuration>
 				<version>2.4.1</version>
