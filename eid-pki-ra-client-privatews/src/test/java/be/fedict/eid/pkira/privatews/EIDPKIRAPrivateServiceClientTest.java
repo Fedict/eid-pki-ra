@@ -30,6 +30,7 @@ import java.util.List;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import be.fedict.eid.pkira.generated.privatews.Certificatews;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesRequest;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesResponse;
@@ -56,14 +57,14 @@ public class EIDPKIRAPrivateServiceClientTest {
 	public void testGetCertificates() {
 		// Prepare
 		ListCertificatesResponse response = new ListCertificatesResponse();
-		String testCertificate = "testCertificate";
+		Certificatews testCertificate = new Certificatews();
 		response.getCertificates().add(testCertificate);
 		String userRRN = "testRRN";
 		
 		when(port.listCertificates(isA(ListCertificatesRequest.class))).thenReturn(response);
 		
 		// Call
-		List<String> result = serviceClient.listCertificates(userRRN);
+		List<Certificatews> result = serviceClient.listCertificates(userRRN);
 		
 		// Verify
 		verify(port).listCertificates(isA(ListCertificatesRequest.class));

@@ -16,6 +16,9 @@
  */
 package be.fedict.eid.pkira.blm.model.domain;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;

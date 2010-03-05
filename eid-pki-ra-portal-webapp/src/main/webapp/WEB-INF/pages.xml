@@ -20,6 +20,7 @@
 		</navigation>
 	</page>
 	
+
 	<page view-id="/*">
 		<navigation from-action="home">
 			<end-conversation before-redirect="true"/>
@@ -29,6 +30,11 @@
 		<navigation from-action="csr">
 			<end-conversation before-redirect="true"/>
 			<redirect view-id="/page/csr/upload.xhtml"/>			
+		</navigation>
+		
+		<navigation from-action="list">
+			<begin-conversation/>
+			<redirect view-id="/page/listcertificates/listcertificates.xhtml"/>			
 		</navigation>	
 	</page>
 	

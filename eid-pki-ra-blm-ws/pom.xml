@@ -20,6 +20,11 @@
 			<artifactId>eid-pki-ra-generated-publicws</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-generated-privatews</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	
 		<dependency>
 			<groupId>be.fedict</groupId>
@@ -39,6 +44,12 @@
 			<artifactId>testng</artifactId>
 			<scope>test</scope>
 			<classifier>jdk15</classifier>
+		</dependency>
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>persistence-api</artifactId>
+			<type>jar</type>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>
