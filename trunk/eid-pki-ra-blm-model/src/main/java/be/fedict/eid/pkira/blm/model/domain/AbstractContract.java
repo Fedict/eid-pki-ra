@@ -23,6 +23,7 @@ import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -42,7 +43,7 @@ public abstract class AbstractContract implements Serializable {
 
 	private static final long serialVersionUID = -5082287440865809644L;
 
-	@Id
+	@Id	@GeneratedValue
 	private int id;
 	@Lob
 	@Basic(fetch = FetchType.LAZY)

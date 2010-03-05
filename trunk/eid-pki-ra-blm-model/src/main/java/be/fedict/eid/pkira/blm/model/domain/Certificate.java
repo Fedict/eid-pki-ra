@@ -23,6 +23,7 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
@@ -39,7 +40,7 @@ public class Certificate implements Serializable {
 
 	private static final long serialVersionUID = -6539022465744360747L;
 
-	@Id
+	@Id @GeneratedValue
 	private int id;
 
 	private BigInteger serialNumber;
