@@ -30,6 +30,7 @@ import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.blm.model.domain.Certificate;
 import be.fedict.eid.pkira.blm.model.domain.CertificateSigningContract;
+import be.fedict.eid.pkira.blm.model.domain.CertificateType;
 import be.fedict.eid.pkira.blm.model.domain.DomainRepository;
 import be.fedict.eid.pkira.blm.model.eiddss.SignatureVerifier;
 import be.fedict.eid.pkira.blm.model.mail.Mail;
@@ -41,7 +42,6 @@ import be.fedict.eid.pkira.contracts.CertificateRevocationResponseBuilder;
 import be.fedict.eid.pkira.contracts.CertificateSigningResponseBuilder;
 import be.fedict.eid.pkira.crypto.CertificateInfo;
 import be.fedict.eid.pkira.crypto.CertificateParser;
-import be.fedict.eid.pkira.crypto.CertificateType;
 import be.fedict.eid.pkira.crypto.CryptoException;
 import be.fedict.eid.pkira.generated.contracts.CertificateRevocationRequestType;
 import be.fedict.eid.pkira.generated.contracts.CertificateRevocationResponseType;
