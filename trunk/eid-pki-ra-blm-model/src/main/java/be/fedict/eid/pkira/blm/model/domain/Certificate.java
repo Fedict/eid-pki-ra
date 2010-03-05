@@ -25,6 +25,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 
 import org.jboss.seam.annotations.Name;
 
@@ -37,10 +38,10 @@ public class Certificate implements Serializable {
 	public static final String NAME = "blmcertificate";
 
 	private static final long serialVersionUID = -6539022465744360747L;
-	
+
 	@Id
 	private int id;
-	
+
 	private BigInteger serialNumber;
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
@@ -51,24 +52,17 @@ public class Certificate implements Serializable {
 	private String requesterName;
 	private String issuer;
 
+	@OneToOne(optional = true, fetch = FetchType.LAZY)
+	private CertificateSigningContract contract;
+
 	// @ManyToOne(optional = true)
 	// private CertificateDomain certificateDomain;
 
 	public Certificate() {
 	}
 
-	public Certificate(BigInteger serialNumber, String x509, String subject, Date validityStart, Date validityEnd,
-			String requesterName, String issuer) {
-		this.serialNumber = serialNumber;
-		this.x509 = x509;
-		this.subject = subject;
-		this.validityStart = validityStart;
-		this.validityEnd = validityEnd;
-		this.requesterName = requesterName;
-		this.issuer = issuer;
-	}
-
-	public Certificate(String x509, CertificateInfo certificateInfo, String requesterName) {
+	public Certificate(String x509, CertificateInfo certificateInfo, String requesterName,
+			CertificateSigningContract contract) {
 		this.x509 = x509;
 		this.serialNumber = certificateInfo.getSerialNumber();
 		this.subject = certificateInfo.getSubject();
@@ -76,6 +70,7 @@ public class Certificate implements Serializable {
 		this.validityEnd = certificateInfo.getValidityEnd();
 		this.issuer = certificateInfo.getIssuer();
 		this.requesterName = requesterName;
+		this.contract = contract;
 	}
 
 	public BigInteger getSerialNumber() {
@@ -182,6 +177,14 @@ public class Certificate implements Serializable {
 
 	public int getId() {
 		return id;
+	}
+
+	protected CertificateSigningContract getContract() {
+		return contract;
+	}
+
+	protected void setContract(CertificateSigningContract contract) {
+		this.contract = contract;
 	}
 
 	// public void setCertificateDomain(CertificateDomain certificateDomain) {

@@ -20,13 +20,15 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.fail;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import be.fedict.eid.pkira.contracts.CertificateSigningRequestBuilder;
 import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
 import be.fedict.eid.pkira.contracts.XmlMarshallingException;
-import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningResponseType;
 import be.fedict.eid.pkira.generated.contracts.ResultType;
 import be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient;
@@ -39,14 +41,11 @@ import be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient;
 public class PublicWebserviceTest {
 
 	private static final String SERVICE_URL = "http://localhost:8080/eid-pki-ra/webservice/EIDPKIRAService";
-	private static final String REQUEST_ID = null;
 	private  EIDPKIRAServiceClient webserviceClient;
-	private  EIDPKIRAContractsClient contractsClient;
-
+	
 	@BeforeMethod
 	public void setup() {
 		webserviceClient = new EIDPKIRAServiceClient(SERVICE_URL);
-		contractsClient = new EIDPKIRAContractsClient();
 	}
 	
 	@Test
@@ -57,6 +56,18 @@ public class PublicWebserviceTest {
 	@Test
 	public void signCertificateNull() {
 		trySignCertificate(null, null, ResultType.INVALID_MESSAGE);
+	}
+	
+	@Test
+	public void signCertificateInvalidDN() throws IOException {
+		String contract = FileUtils.readFileToString(new File(getClass().getResource("/xml/CertificateSigningContractInvalidDN.xml").getFile()));
+		trySignCertificate(contract, "869b81cb-805b-4286-9c44-5350831abf82", ResultType.INVALID_MESSAGE);
+	}
+	
+	@Test
+	public void signCertificateValid() throws IOException {
+		String contract = FileUtils.readFileToString(new File(getClass().getResource("/xml/CertificateSigningContractValid.xml").getFile()));
+		trySignCertificate(contract, "18882bc2-686f-41cb-b0d4-7e78d984ad0a", ResultType.SUCCESS);
 	}
 	
 	@Test

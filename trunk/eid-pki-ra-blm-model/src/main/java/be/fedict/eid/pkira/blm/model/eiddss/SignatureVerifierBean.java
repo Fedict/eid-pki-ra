@@ -20,13 +20,12 @@ package be.fedict.eid.pkira.blm.model.eiddss;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 
-import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.log.Log;
 
 import be.fedict.eid.dss.client.DigitalSignatureServiceClient;
+import be.fedict.eid.dss.client.NotParseableXMLDocumentException;
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
 import be.fedict.eid.pkira.generated.contracts.ResultType;
 
@@ -58,7 +57,13 @@ public class SignatureVerifierBean implements SignatureVerifier {
 	 */
 	public String verifySignature(String requestMessage) throws ContractHandlerBeanException {
 		try {
-			String identity = dssClient.verifyWithSignerIdentity(requestMessage);
+			//TODO use verifyWithSignerIdentity method
+			//String identity = dssClient.verifyWithSignerIdentity(requestMessage);
+			String identity=null;
+			if (dssClient.verify(requestMessage)) { 
+				identity = "90010110021";
+			}
+						
 			if (identity != null) {
 				return identity;
 			}
@@ -69,6 +74,9 @@ public class SignatureVerifierBean implements SignatureVerifier {
 			// so let's handle this.
 			log.error("Error during call to eid-dss to validate signature.", e);
 			throw e;
+		} catch (NotParseableXMLDocumentException e) {
+			log.error("Error during call to eid-dss to validate signature.", e);
+			throw new RuntimeException(e);
 		}
 	}
 	

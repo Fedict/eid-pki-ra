@@ -1,13 +1,11 @@
 package be.fedict.eid.pkira.blm.model.xkms;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.security.cert.X509Certificate;
 
 import javax.ejb.Stateless;
 
-import org.apache.commons.io.FileUtils;
 import org.jboss.seam.annotations.Name;
 
 /**
@@ -32,10 +30,17 @@ public class XKMSServiceBean implements XKMSService {
 	 */
 	@Override
 	public String sign(String csr) {
-		URL resource = getClass().getResource("/aca-it.be.crt");
-		File resourceFile = new File(resource.getFile());
 		try {
-			return FileUtils.readFileToString(resourceFile);
+			InputStream stream = getClass().getResourceAsStream("/aca-it.be.crt");
+			
+			byte[] bytes = new  byte[512];
+			int bytesRead;
+			StringBuffer result = new StringBuffer();
+			while (-1 != (bytesRead=stream.read(bytes))) {
+				result.append(new String(bytes, 0, bytesRead));
+			}
+			
+			return result.toString();
 		} catch (IOException e) {
 			throw new RuntimeException("Cannot read certificate from file", e);
 		}
