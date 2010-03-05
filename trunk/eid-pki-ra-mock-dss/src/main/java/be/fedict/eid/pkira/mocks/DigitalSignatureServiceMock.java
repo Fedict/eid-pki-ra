@@ -16,8 +16,8 @@
  */
 package be.fedict.eid.pkira.mocks;
 
+import javax.jws.HandlerChain;
 import javax.jws.WebService;
-import javax.xml.bind.JAXBElement;
 
 import oasis.names.tc.dss._1_0.core.schema.AnyType;
 import oasis.names.tc.dss._1_0.core.schema.ResponseBaseType;
@@ -31,6 +31,7 @@ import be.fedict.eid.dss.ws.DigitalSignatureServicePortType;
  * @author Jan Van den Bergh
  */
 @WebService(endpointInterface = "be.fedict.eid.dss.ws.DigitalSignatureServicePortType")
+@HandlerChain(file="HandlerChain.xml")
 public class DigitalSignatureServiceMock implements DigitalSignatureServicePortType {
 
 	/*
@@ -54,10 +55,8 @@ public class DigitalSignatureServiceMock implements DigitalSignatureServicePortT
 
 		NameIdentifierType nameIdentifier = samlObjectFactory.createNameIdentifierType();
 		nameIdentifier.setValue("90010110021");		
-		JAXBElement<NameIdentifierType> nameIdentifierEl = samlObjectFactory.createNameIdentifier(nameIdentifier);
-		
 		AnyType any = dssObjectFactory.createAnyType();
-		any.getAny().add(nameIdentifierEl);
+		any.getAny().add(samlObjectFactory.createNameIdentifier(nameIdentifier));
 		response.setOptionalOutputs(any);
 
 		return response;
