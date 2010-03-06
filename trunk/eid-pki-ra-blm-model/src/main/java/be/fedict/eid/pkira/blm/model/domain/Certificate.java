@@ -191,11 +191,11 @@ public class Certificate implements Serializable {
 		this.contract = contract;
 	}
 
-	protected CertificateType getCertificateType() {
+	public CertificateType getCertificateType() {
 		return certificateType;
 	}
 
-	protected void setCertificateType(CertificateType certificateType) {
+	public void setCertificateType(CertificateType certificateType) {
 		this.certificateType = certificateType;
 	}
 

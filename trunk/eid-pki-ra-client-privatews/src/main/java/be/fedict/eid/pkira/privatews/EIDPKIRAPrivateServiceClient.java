@@ -23,7 +23,7 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 
-import be.fedict.eid.pkira.generated.privatews.Certificatews;
+import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivateService;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesRequest;
@@ -64,7 +64,7 @@ public class EIDPKIRAPrivateServiceClient {
 	 * @param userRRN the "rijksregisternummer" (national number) of the user.
 	 * @return the list of certificates available to him.
 	 */
-	public List<Certificatews> listCertificates(String userRRN) {		
+	public List<CertificateWS> listCertificates(String userRRN) {		
 		ListCertificatesRequest request = new ObjectFactory().createListCertificatesRequest();
 		request.setUserRRN(userRRN);
 		ListCertificatesResponse response = getWebservicePort().listCertificates(request);

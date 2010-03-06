@@ -16,6 +16,7 @@
  */
 package be.fedict.eid.pkira.blm.model.domain;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -62,6 +63,7 @@ public class DomainRepositoryBean implements DomainRepository {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
+	//TODO: Select aanpassen met userRRN
 	public List<Certificate> findAllCertificates(String userRRN) {
 		Query query = entityManager.createQuery("SELECT distinct c from Certificate c");
 		return query.getResultList();
