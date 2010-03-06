@@ -1,6 +1,6 @@
 package be.fedict.eid.pkira.portal.certificate;
 
-import java.math.BigInteger;
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -10,33 +10,44 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
-import be.fedict.eid.pkira.generated.privatews.Certificatews;
+import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 
 @Entity
 @Name("certificate")
-@Scope(ScopeType.EVENT)
-public class Certificate {
+@Scope(ScopeType.CONVERSATION)
+public class Certificate implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7345021688719488185L;
 	@Id
 	private int id;
-	private BigInteger serialNumber;
+	private String serialNumber;
 	private String subject;
 	private Date validityStart;
 	private Date validityEnd;
 	private String requesterName;
 	private String issuer;
+	private String certificateType;
 
 	public Certificate(){
 	}
 	
-	public Certificate(Certificatews certificatews){
-		BigInteger bigInteger = new BigInteger(certificatews.getSerialNumber());
-		setSerialNumber(bigInteger);
+	public Certificate(CertificateWS certificatews){
+		 
+		setSerialNumber(certificatews.getSerialNumber());
 		setSubject(certificatews.getSubject());
-		setValidityStart(certificatews.getValidityStart().toGregorianCalendar().getTime());
-		setValidityEnd(certificatews.getValidityEnd().toGregorianCalendar().getTime());
+
+		if(certificatews.getValidityStart() != null){
+			setValidityStart(certificatews.getValidityStart().toGregorianCalendar().getTime());
+		}
+		if(certificatews.getValidityEnd() != null){
+			setValidityEnd(certificatews.getValidityEnd().toGregorianCalendar().getTime());
+		}
 		setRequesterName(certificatews.getRequesterName());
 		setIssuer(certificatews.getIssuer());
+		setCertificateType(certificatews.getCertificateType());
 	}
 
 	public void setId(int id) {
@@ -120,14 +131,22 @@ public class Certificate {
 	/**
 	 * @param serialNumber the serialNumber to set
 	 */
-	public void setSerialNumber(BigInteger serialNumber) {
+	public void setSerialNumber(String serialNumber) {
 		this.serialNumber = serialNumber;
 	}
 
 	/**
 	 * @return the serialNumber
 	 */
-	public BigInteger getSerialNumber() {
+	public String getSerialNumber() {
 		return serialNumber;
+	}
+
+	public void setCertificateType(String certificateType) {
+		this.certificateType = certificateType;
+	}
+
+	public String getCertificateType() {
+		return certificateType;
 	}
 }
