@@ -37,10 +37,7 @@ import be.fedict.eid.pkira.crypto.CSRInfo;
 import be.fedict.eid.pkira.crypto.CSRParser;
 import be.fedict.eid.pkira.crypto.CryptoException;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
-import be.fedict.eid.pkira.generated.contracts.CertificateSigningResponseType;
 import be.fedict.eid.pkira.generated.contracts.CertificateTypeType;
-import be.fedict.eid.pkira.generated.contracts.ResultType;
-import be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient;
 
 /**
  * @author Bram Baeyens
@@ -59,7 +56,6 @@ public class CertificateHandlerBean implements CertificateHandler, Serializable 
 	private CSRParser csrParser;
 	private FacesMessages facesMessages;
 	private EIDPKIRAContractsClient contractsClientPortal;
-	private EIDPKIRAServiceClient serviceClientPortal;
 	
 	protected void setLog(Log log) {
 		this.log = log;
@@ -83,11 +79,6 @@ public class CertificateHandlerBean implements CertificateHandler, Serializable 
 	@In(create=true)
 	public void setContractsClientPortal(EIDPKIRAContractsClient contractsClientPortal) {
 		this.contractsClientPortal = contractsClientPortal;
-	}
-
-	@In(create=true)
-	public void setServiceClientPortal(EIDPKIRAServiceClient serviceClientPortal) {
-		this.serviceClientPortal = serviceClientPortal;
 	}
 
 	/*
@@ -133,28 +124,7 @@ public class CertificateHandlerBean implements CertificateHandler, Serializable 
 		log.info("<<< preSignCertificateSigningRequest: {0}", certificateSigningRequest);
 		return "success";
 	}
-	
-	public String requestCertificateSigningRequest(String request) {
-		log.info(">>> requestCertificateSigningRequest(request[])", request);
-		String result = serviceClientPortal.signCertificate(request);		
-		try {
-			CertificateSigningResponseType response = contractsClientPortal.unmarshal(result, CertificateSigningResponseType.class);
-			if (ResultType.SUCCESS.equals(response.getResult())) {
-				log.info("<<< requestCertificateSigningRequest: success");
-				return "success";
-			} else {
-				log.info("<<< requestCertificateSigningRequest: failure");
-				return "failure";
-			}
-		} catch (XmlMarshallingException e) {
-			log.info("<<< requestCertificateSigningRequest: ", e);
-			return "failure";
-		}
-	}
 
-	/**
-	 * @return
-	 */
 	private CertificateSigningRequestBuilder initBuilder(CertificateSigningRequest csr) {
 		return new CertificateSigningRequestBuilder()
 				.setOperator(new EntityBuilder()
