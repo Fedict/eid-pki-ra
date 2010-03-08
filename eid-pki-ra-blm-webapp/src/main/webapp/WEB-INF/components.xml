@@ -20,7 +20,7 @@
 
 	<component name="org.jboss.seam.core.init">
 		<property name="debug">${seam.debug}</property>
-		<property name="jndi-pattern">eid-pki-ra-blm-ear-0.0.1-SNAPSHOT/#{ejbName}/local</property>
+		<property name="jndi-pattern">eid-pki-ra-blm-ear-${version}/#{ejbName}/local</property>
 	</component>
 
 	<core:manager concurrent-request-timeout="500" conversation-id-parameter="cid" conversation-timeout="120000" />

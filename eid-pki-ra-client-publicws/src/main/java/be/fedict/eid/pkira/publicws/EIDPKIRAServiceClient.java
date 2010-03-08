@@ -45,7 +45,7 @@ public class EIDPKIRAServiceClient {
 	 * Creates a service client using the default URL in the WSDL.
 	 */
 	public EIDPKIRAServiceClient() {
-		serviceUrl = null;
+		serviceUrl = "http://localhost:8080/eid-pki-ra/webservice/EIDPKIRAService";
 	}
 
 	/**
