@@ -37,7 +37,7 @@ public class EIDPKIRAServiceClient {
 	private static final String NAMESPACE = "urn:be:fedict:eid:pkira:publicws";
 	private static final String WSDL_LOCATION = "/wsdl/eid-pki-ra.wsdl";
 
-	private String serviceUrl;
+	private String serviceUrl = "http://localhost:8080/eid-pki-ra/webservice/EIDPKIRAService";
 
 	private EIDPKIRAPortType port;
 
