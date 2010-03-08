@@ -12,7 +12,7 @@
 				<f:facet name="header">#{messages['signatureRequest.title']}</f:facet>
 				<p>Please wait while transmitting the CSR form signature request to the eID Digital Signature Service...</p>
 				<input type="hidden" name="SignatureRequest" value="#{certificateSigningRequest.csrBase64Xml}" />
-				<input type="hidden" name="target" value="#{certificateSigningRequest.dssResponseContextUrl}/dss-signature-response" />
+				<input type="hidden" name="target" value="#{certificateSigningRequest.dssResponseContextUrl}/seam/resource/requestCertificateResource" />
 				<input type="submit" value="Submit" />
 				<script type="text/javascript">
 					document.getElementById('dss-request-form').submit();

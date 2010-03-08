@@ -19,7 +19,7 @@
 package be.fedict.eid.pkira.portal.csr;
 
 /**
- * @author Bram.Baeyens
+ * @author Bram Baeyens
  *
  */
 public interface CertificateHandler {
@@ -29,6 +29,4 @@ public interface CertificateHandler {
 	String uploadCertificateSigningRequest();
 	
 	String signCertificateSigningRequest();
-	
-	String requestCertificateSigningRequest(String request);
 }
