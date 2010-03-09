@@ -11,7 +11,8 @@ import be.fedict.eid.pkira.generated.contracts.CertificateSigningResponseType;
 @Scope(ScopeType.APPLICATION)
 @Name("requestCertificateResource")
 @BypassInterceptors
-public class RequestCertificateDssSignatureHttpRequestHandler extends AbstractDssSignatureHttpRequestHandler<CertificateSigningResponseType> {
+public class RequestCertificateDssSignatureHttpRequestHandler 
+		extends AbstractDssSignatureHttpRequestHandler<CertificateSigningResponseType> {
 
 	@Override
 	protected String getErrorPage() {

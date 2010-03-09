@@ -16,17 +16,32 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.portal.csr;
+package be.fedict.eid.pkira.portal.util;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.model.SelectItem;
+
+import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 
 /**
  * @author Bram Baeyens
  *
  */
-public interface CertificateHandler {
+@Name("listContainer")
+@Scope(ScopeType.APPLICATION)
+public class ListContainer implements Serializable {
 	
-	String NAME = "certificateHandler";
-	
-	String uploadCertificateSigningRequest();
-	
-	String signCertificateSigningRequest();
+	private static final long serialVersionUID = 2931481314588085666L;
+
+	// TODO (03032010): get these from configuration table
+	public List<SelectItem> getValidityPeriods() {
+		List<SelectItem> validityPeriods = new ArrayList<SelectItem>();
+		validityPeriods.add(new SelectItem(15, "15"));
+		return validityPeriods;
+	}
 }
