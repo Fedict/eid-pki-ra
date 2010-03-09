@@ -101,13 +101,13 @@ public abstract class AbstractDssSignatureHttpRequestHandler<T extends ResponseT
 	 * Make sure to call this method in a Seam contextual context.
 	 */
 	protected EIDPKIRAServiceClient getServiceClient() {
-		return (EIDPKIRAServiceClient) Component.getInstance("serviceClientPortal");
+		return (EIDPKIRAServiceClient) Component.getInstance(EIDPKIRAServiceClient.NAME);
 	}
 
 	/**
 	 * Make sure to call this method in a Seam contextual context.
 	 */
 	protected EIDPKIRAContractsClient getContractsClient() {
-		return (EIDPKIRAContractsClient) Component.getInstance("contractsClientPortal");
+		return (EIDPKIRAContractsClient) Component.getInstance(EIDPKIRAContractsClient.NAME);
 	}
 }

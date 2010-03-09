@@ -79,7 +79,7 @@ public class RequestCertificateHandlerBean implements RequestCertificateHandler,
 		this.facesMessages = facesMessages;
 	}
 
-	@In(create=true)
+	@In(value=EIDPKIRAContractsClient.NAME, create=true)
 	public void setContractsClientPortal(EIDPKIRAContractsClient contractsClientPortal) {
 		this.contractsClientPortal = contractsClientPortal;
 	}

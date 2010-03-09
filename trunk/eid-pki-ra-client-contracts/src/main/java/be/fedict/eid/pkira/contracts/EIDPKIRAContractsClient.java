@@ -40,6 +40,8 @@ import be.fedict.eid.pkira.generated.contracts.EIDPKIRAContractType;
  */
 public class EIDPKIRAContractsClient {
 
+	public static final String NAME = "eidPKIRAContractsClient";
+	
 	private static final String ENCODING = "UTF8";
 	private static final String NAMESPACE = "urn:be:fedict:eid:pkira:contracts";
 
