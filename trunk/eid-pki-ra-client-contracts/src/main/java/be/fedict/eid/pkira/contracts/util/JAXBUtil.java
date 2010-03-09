@@ -55,6 +55,9 @@ public class JAXBUtil {
 	 * Converts the data to an XMLGregorianCalendar in the GMT time zone.
 	 */
 	public static XMLGregorianCalendar createXmlGregorianCalendar(Date date) {
+		if (date==null) {
+			return null;
+		}
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTime(date);
 		calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
