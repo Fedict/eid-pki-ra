@@ -14,7 +14,7 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.pkira.blm.model.validation;
+package be.fedict.eid.pkira.blm.model.contracthandler.services;
 
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
@@ -31,6 +31,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
+import be.fedict.eid.pkira.blm.model.contracthandler.services.FieldValidatorBean;
 import be.fedict.eid.pkira.contracts.CertificateRevocationRequestBuilder;
 import be.fedict.eid.pkira.contracts.CertificateSigningRequestBuilder;
 import be.fedict.eid.pkira.contracts.EntityBuilder;

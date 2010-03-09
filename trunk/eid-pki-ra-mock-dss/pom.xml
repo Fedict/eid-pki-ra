@@ -67,32 +67,4 @@
 			<artifactId>jaxb-impl</artifactId> </exclusion> </exclusions> </dependency>
 		-->
 	</dependencies>
-
-	<build>
-		<plugins>
-			<!--
-				<plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>jaxws-maven-plugin</artifactId> <executions> <execution>
-				<goals> <goal>wsimport</goal> </goals> </execution> </executions> <configuration>
-				<wsdlDirectory>src/main/resources/wsdl</wsdlDirectory> <verbose>true</verbose> <packageName>jan.test</packageName>
-				</configuration> </plugin>
-			-->
-			<plugin>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy-war</id>
-						<phase>package</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<tasks>
-								<copy tofile="target/eid-dss-ws.war" file="target/${artifactId}-${version}.war" />
-							</tasks>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
 </project>

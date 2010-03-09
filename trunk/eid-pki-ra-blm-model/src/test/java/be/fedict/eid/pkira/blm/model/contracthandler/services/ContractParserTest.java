@@ -14,7 +14,7 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.pkira.blm.model.contracthandler;
+package be.fedict.eid.pkira.blm.model.contracthandler.services;
 
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.eq;
@@ -29,6 +29,7 @@ import org.jboss.seam.log.Log;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
 import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
 import be.fedict.eid.pkira.contracts.XmlMarshallingException;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;

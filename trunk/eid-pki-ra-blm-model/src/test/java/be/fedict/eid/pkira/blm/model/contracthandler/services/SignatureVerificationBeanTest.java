@@ -1,4 +1,4 @@
-package be.fedict.eid.pkira.blm.model.eiddss;
+package be.fedict.eid.pkira.blm.model.contracthandler.services;
 
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.isA;
@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
 import be.fedict.eid.dss.client.DigitalSignatureServiceClient;
 import be.fedict.eid.dss.client.NotParseableXMLDocumentException;
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
-import be.fedict.eid.pkira.blm.model.eiddss.SignatureVerifierBean;
+import be.fedict.eid.pkira.blm.model.contracthandler.services.SignatureVerifierBean;
 
 
 public class SignatureVerificationBeanTest {

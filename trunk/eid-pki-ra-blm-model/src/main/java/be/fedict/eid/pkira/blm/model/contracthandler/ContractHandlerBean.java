@@ -29,15 +29,16 @@ import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.log.Log;
 
+import be.fedict.eid.pkira.blm.model.contracthandler.services.ContractParser;
+import be.fedict.eid.pkira.blm.model.contracthandler.services.FieldValidator;
+import be.fedict.eid.pkira.blm.model.contracthandler.services.SignatureVerifier;
+import be.fedict.eid.pkira.blm.model.contracthandler.services.XKMSService;
 import be.fedict.eid.pkira.blm.model.domain.Certificate;
 import be.fedict.eid.pkira.blm.model.domain.CertificateRevocationContract;
 import be.fedict.eid.pkira.blm.model.domain.CertificateSigningContract;
 import be.fedict.eid.pkira.blm.model.domain.CertificateType;
 import be.fedict.eid.pkira.blm.model.domain.DomainRepository;
-import be.fedict.eid.pkira.blm.model.eiddss.SignatureVerifier;
 import be.fedict.eid.pkira.blm.model.mail.MailTemplate;
-import be.fedict.eid.pkira.blm.model.validation.FieldValidator;
-import be.fedict.eid.pkira.blm.model.xkms.XKMSService;
 import be.fedict.eid.pkira.contracts.AbstractResponseBuilder;
 import be.fedict.eid.pkira.contracts.CertificateRevocationResponseBuilder;
 import be.fedict.eid.pkira.contracts.CertificateSigningResponseBuilder;
@@ -118,10 +119,7 @@ public class ContractHandlerBean implements ContractHandler {
 			repository.persistContract(contract);
 
 			// Call XKMS
-			boolean result = xkmsService.revoke(request.getCertificate());
-			if (!result) {
-				throw new ContractHandlerBeanException(ResultType.BACKEND_ERROR, "Error contacting the backend service");
-			}
+			xkmsService.revoke(request.getCertificate());			
 
 			// Delete the certificate
 			try {
