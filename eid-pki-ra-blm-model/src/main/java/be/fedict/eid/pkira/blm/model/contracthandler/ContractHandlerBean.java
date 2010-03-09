@@ -30,6 +30,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.blm.model.domain.Certificate;
+import be.fedict.eid.pkira.blm.model.domain.CertificateRevocationContract;
 import be.fedict.eid.pkira.blm.model.domain.CertificateSigningContract;
 import be.fedict.eid.pkira.blm.model.domain.CertificateType;
 import be.fedict.eid.pkira.blm.model.domain.DomainRepository;
@@ -105,9 +106,37 @@ public class ContractHandlerBean implements ContractHandler {
 			// Validate the signature
 			String signer = signatureVerifier.verifySignature(requestMsg);
 
-			// TODO business logic
-			// Return not implemented message
-			fillResponseFromRequest(responseBuilder, request, ResultType.GENERAL_FAILURE, "Not implemented");
+			// TODO: check authorization
+
+			// Persist the contract
+			CertificateRevocationContract contract = new CertificateRevocationContract();
+			contract.setRequester(signer);
+			contract.setContractDocument(requestMsg);
+			contract.setSubject(request.getDistinguishedName());
+			contract.setStartDate(request.getStartDate().toGregorianCalendar().getTime());
+			contract.setEndDate(request.getEndDate().toGregorianCalendar().getTime());
+			repository.persistContract(contract);
+
+			// Call XKMS
+			boolean result = xkmsService.revoke(request.getCertificate());
+			if (!result) {
+				throw new ContractHandlerBeanException(ResultType.BACKEND_ERROR, "Error contacting the backend service");
+			}
+
+			// Delete the certificate
+			try {
+				CertificateInfo certificateInfo = certificateParser.parseCertificate(request.getCertificate());
+				Certificate certificate = repository.findCertificate(certificateInfo.getIssuer(), certificateInfo
+						.getSerialNumber());
+				repository.removeCertificate(certificate);
+			} catch (CryptoException e) {
+				// this should not occur, as the certificate was already parsed
+				// successfully before!
+				throw new RuntimeException("Error while reparsing the certificate", e);
+			}
+			
+			// Return result message
+			fillResponseFromRequest(responseBuilder, request, ResultType.SUCCESS, "Success");
 		} catch (ContractHandlerBeanException e) {
 			fillResponseFromRequest(responseBuilder, request, e.getResultType(), e.getMessage());
 		} catch (RuntimeException e) {

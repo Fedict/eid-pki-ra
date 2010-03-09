@@ -1,7 +1,5 @@
 package be.fedict.eid.pkira.blm.model.xkms;
 
-import java.security.cert.X509Certificate;
-
 import javax.ejb.Local;
 
 @Local
@@ -17,7 +15,7 @@ public interface XKMSService {
 	public String sign(String csr);
 	
 	/**
-	 * revoke
+	 * Revoke a certificate, returning if this was succesful.
 	 */
-	public boolean revoke(X509Certificate certificate);
+	public boolean revoke(String certificate);
 }

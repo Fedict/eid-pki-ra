@@ -16,6 +16,7 @@
  */
 package be.fedict.eid.pkira.blm.model.domain;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -50,4 +51,18 @@ public interface DomainRepository {
 	 * Retrieves a list of all certificates.
 	 */
 	public List<Certificate> findAllCertificates(String userRRN);
+
+	/**
+	 * Finds a certificate using its issuer's DN and its serial number.
+	 * @param issuer DN of the issuer.
+	 * @param serialNumber serial number of the certificate.
+	 * @return the certificate (if it can be found).
+	 */
+	public Certificate findCertificate(String issuer, BigInteger serialNumber);
+
+	/**
+	 * Removes a certificate from the database.
+	 * @param certificate the certificate to remove.
+	 */
+	public void removeCertificate(Certificate certificate);
 }

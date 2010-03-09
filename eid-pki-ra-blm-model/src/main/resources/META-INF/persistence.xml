@@ -8,6 +8,9 @@
 		<jta-data-source>java:/DefaultDS</jta-data-source>
 
 		<class>be.fedict.eid.pkira.blm.model.domain.Certificate</class>
+		<class>be.fedict.eid.pkira.blm.model.domain.CertificateSigningContract</class>
+		<class>be.fedict.eid.pkira.blm.model.domain.CertificateRevocationContract</class>
+		
 		<properties>		
 			<property name="hibernate.dialect" value="${hibernate.dialect}" />
 			<property name="hibernate.hbm2ddl.auto"	value="${hibernate.hbm2ddl.auto}" />
