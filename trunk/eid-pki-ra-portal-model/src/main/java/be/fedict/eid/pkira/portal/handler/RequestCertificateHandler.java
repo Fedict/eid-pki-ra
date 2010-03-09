@@ -16,13 +16,19 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.portal.csr;
+package be.fedict.eid.pkira.portal.handler;
 
 /**
- * @author Bram.Baeyens
+ * @author Bram Baeyens
  *
  */
-public enum CertificateType {
+public interface RequestCertificateHandler {
 	
-	SERVER, CLIENT, CODE;
+	String NAME = "requestCertificateHandler";
+	
+	String uploadCertificateSigningRequest();
+	
+	String preDssSignCertificateSigningRequest();
+	
+	String preDssSignCertificateRevokationRequest();
 }

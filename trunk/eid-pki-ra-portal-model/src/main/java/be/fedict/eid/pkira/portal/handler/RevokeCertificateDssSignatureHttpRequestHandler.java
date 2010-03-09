@@ -11,7 +11,8 @@ import be.fedict.eid.pkira.generated.contracts.CertificateRevocationResponseType
 @Scope(ScopeType.APPLICATION)
 @Name("revokeCertificateResource")
 @BypassInterceptors
-public class RevokeCertificateDssSignatureHttpRequestHandler extends AbstractDssSignatureHttpRequestHandler<CertificateRevocationResponseType> {
+public class RevokeCertificateDssSignatureHttpRequestHandler 
+		extends AbstractDssSignatureHttpRequestHandler<CertificateRevocationResponseType> {
 
 	@Override
 	protected String getErrorPage() {

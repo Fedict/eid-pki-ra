@@ -5,7 +5,7 @@
 		no-conversation-view-id="/home.xhtml">
 	
 	<page view-id="/page/csr/upload.xhtml">		
-		<navigation from-action="#{certificateHandler.uploadCertificateSigningRequest}">
+		<navigation from-action="#{requestCertificateHandler.uploadCertificateSigningRequest}">
 			<rule if-outcome="success">
 				<redirect view-id="/page/csr/complete.xhtml"/>
 			</rule>
@@ -13,7 +13,7 @@
 	</page>	
 	
 	<page view-id="/page/csr/complete.xhtml">	
-		<navigation from-action="#{certificateHandler.signCertificateSigningRequest}">
+		<navigation from-action="#{requestCertificateHandler.preDssSignCertificateSigningRequest}">
 			<rule if-outcome="success">
 				<redirect view-id="/page/csr/signatureRequest.xhtml"/>
 			</rule>

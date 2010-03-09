@@ -14,13 +14,13 @@
 				
 				<s:decorate id="distinguishedNameDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['csr.distinguishedName']}:</ui:define>
-                	<h:outputText id="distinguishedName" value="#{certificateSigningRequest.distinguishedName.subject}" />
+                	<h:outputText id="distinguishedName" value="#{signableCertificate.distinguishedName.subject}" />
             	</s:decorate>
             	
             	<s:decorate id="certificateTypeDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['csr.certificateType']}:</ui:define> 
                 	<h:selectOneRadio id="certificateTypeRadioList" layout="lineDirection"
-                  			value="#{certificateSigningRequest.certificateType}" required="true">
+                  			value="#{signableCertificate.certificateType}" required="true">
   						<s:convertEnum />
 						<s:enumItem enumValue="SERVER" label="#{messages['certificateType.server']}" />
 						<s:enumItem enumValue="CLIENT" label="#{messages['certificateType.client']}" />
@@ -30,38 +30,38 @@
 				
 				<s:decorate id="validityPeriodDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['csr.validityPeriod']}:</ui:define>
-                	<h:selectOneMenu value="#{certificateSigningRequest.validityPeriod}" required="true"> 
-                		<f:selectItems value="#{certificateSigningRequest.validityPeriods}" />                		
+                	<h:selectOneMenu value="#{signableCertificate.validityPeriod}" required="true"> 
+                		<f:selectItems value="#{listContainer.validityPeriods}" />                		
                 	</h:selectOneMenu>
             	</s:decorate>
 				
 				<s:decorate id="operatorNameDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['csr.operatorName']}:</ui:define>
-                	<h:outputText id="operatorName" value="#{certificateSigningRequest.operatorName}" required="true"  />
+                	<h:outputText id="operatorName" value="#{signableCertificate.operator.name}" required="true"  />
             	</s:decorate>
 				
 				<s:decorate id="operatorFunctionDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['csr.operatorFunction']}:</ui:define>
-                	<h:inputText required="true" id="operatorFunction" value="#{certificateSigningRequest.operatorFunction}" />
+                	<h:inputText required="true" id="operatorFunction" value="#{signableCertificate.operator.function}" />
             	</s:decorate>
 				
 				<s:decorate id="operatorPhoneDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['csr.operatorPhone']}:</ui:define>
-                	<h:inputText required="true" id="operatorPhone" value="#{certificateSigningRequest.operatorPhone}" />
+                	<h:inputText required="true" id="operatorPhone" value="#{signableCertificate.operator.phone}" />
             	</s:decorate>
 				
 				<s:decorate id="csrDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['csr.csr']}:</ui:define>
-                	<h:inputTextarea id="csr" value="#{certificateSigningRequest.base64Csr}" disabled="true" cols="90" rows="14" />
+                	<h:inputTextarea id="csr" value="#{signableCertificate.base64Csr}" disabled="true" cols="90" rows="14" />
             	</s:decorate>
 				
 				<s:decorate id="descriptionDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['csr.description']}:</ui:define>
-                	<h:inputTextarea id="operatorEmail" value="#{certificateSigningRequest.description}" cols="90" rows="14" />
+                	<h:inputTextarea id="operatorEmail" value="#{signableCertificate.description}" cols="90" rows="14" />
             	</s:decorate>
             	
 				<s:decorate template="/layout/buttonbox.xhtml" id="csrButtonBox">
-					<h:commandButton action="#{certificateHandler.signCertificateSigningRequest}" value="#{messages['general.send']}" id="send"/>
+					<h:commandButton action="#{requestCertificateHandler.preDssSignCertificateSigningRequest}" value="#{messages['general.send']}" id="send"/>
 					<s:button value="#{messages['general.cancel']}" action="csr" id="cancel" />
 				</s:decorate>       
 			</rich:panel>
