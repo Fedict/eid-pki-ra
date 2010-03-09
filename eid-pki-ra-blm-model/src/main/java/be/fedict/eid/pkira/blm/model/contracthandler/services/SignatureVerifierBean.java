@@ -14,7 +14,7 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.pkira.blm.model.eiddss;
+package be.fedict.eid.pkira.blm.model.contracthandler.services;
 
 
 import javax.annotation.PostConstruct;

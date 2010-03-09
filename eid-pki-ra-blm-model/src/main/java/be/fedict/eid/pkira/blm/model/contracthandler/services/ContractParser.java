@@ -14,10 +14,11 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.pkira.blm.model.contracthandler;
+package be.fedict.eid.pkira.blm.model.contracthandler.services;
 
 import javax.ejb.Local;
 
+import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
 import be.fedict.eid.pkira.generated.contracts.RequestType;
 import be.fedict.eid.pkira.generated.contracts.ResponseType;
 
