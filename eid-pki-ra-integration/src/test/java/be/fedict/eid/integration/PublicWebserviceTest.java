@@ -45,7 +45,8 @@ public class PublicWebserviceTest {
 	
 	@BeforeMethod
 	public void setup() {
-		webserviceClient = new EIDPKIRAServiceClient(SERVICE_URL);
+		webserviceClient = new EIDPKIRAServiceClient();
+		webserviceClient.setServiceUrl(SERVICE_URL);
 	}
 	
 	@Test

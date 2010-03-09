@@ -34,7 +34,9 @@
 			class="be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient" scope="stateless"/>
 			
 	<component name="serviceClientPortal" 
-			class="be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient" scope="stateless" /> 
+			class="be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient" scope="application">
+		<property name="serviceUrl">http://localhost:8080/eid-pki-ra/webservice/EIDPKIRAService</property>
+	</component> 
 
 	<core:manager concurrent-request-timeout="500"
 		conversation-id-parameter="cid" conversation-timeout="120000" />

@@ -37,26 +37,9 @@ public class EIDPKIRAServiceClient {
 	private static final String NAMESPACE = "urn:be:fedict:eid:pkira:publicws";
 	private static final String WSDL_LOCATION = "/wsdl/eid-pki-ra.wsdl";
 
-	private String serviceUrl = "http://localhost:8080/eid-pki-ra/webservice/EIDPKIRAService";
+	private String serviceUrl;
 
 	private EIDPKIRAPortType port;
-
-	/**
-	 * Creates a service client using the default URL in the WSDL.
-	 */
-	public EIDPKIRAServiceClient() {
-		serviceUrl = "http://localhost:8080/eid-pki-ra/webservice/EIDPKIRAService";
-	}
-
-	/**
-	 * Creates a service client using the specified URL.
-	 * 
-	 * @param serviceUrl
-	 *            URL to access the web service.
-	 */
-	public EIDPKIRAServiceClient(String serviceUrl) {
-		this.serviceUrl = serviceUrl;
-	}
 
 	/**
 	 * Sends a certificate request contract to the back-end web service.
@@ -112,5 +95,12 @@ public class EIDPKIRAServiceClient {
 	 */
 	void setWebservicePort(EIDPKIRAPortType port) {
 		this.port = port;
+	}
+
+	/**
+	 * Sets the service URL.
+	 */
+	public void setServiceUrl(String serviceUrl) {
+		this.serviceUrl = serviceUrl;
 	}
 }
