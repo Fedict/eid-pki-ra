@@ -38,26 +38,12 @@ import be.fedict.eid.pkira.generated.privatews.ObjectFactory;
  */
 public class EIDPKIRAPrivateServiceClient {
 
+	public static final String NAME = "eidPKIRAPrivateServiceClient";
+	
 	private static final String WSDL_LOCATION = "/wsdl/eid-pki-ra-private.wsdl";
 	
 	private String serviceUrl;
-
 	private EIDPKIRAPrivatePortType port;
-
-	/**
-	 * Creates a service client using the default URL in the WSDL.
-	 */
-	public EIDPKIRAPrivateServiceClient() {
-		serviceUrl = null;
-	}
-
-	/**
-	 * Creates a service client using the specified URL.
-	 * @param serviceUrl URL to access the web service.
-	 */
-	public EIDPKIRAPrivateServiceClient(String serviceUrl) {
-		this.serviceUrl = serviceUrl;
-	}
 
 	/**
 	 * Lists all the certificates that are available to the user.
@@ -107,6 +93,14 @@ public class EIDPKIRAPrivateServiceClient {
 	 */
 	void setWebservicePort(EIDPKIRAPrivatePortType port) {
 		this.port = port;
+	}
+
+	
+	/**
+	 * Sets the URL of the web service.
+	 */
+	public void setServiceUrl(String serviceUrl) {
+		this.serviceUrl = serviceUrl;
 	}
 
 }

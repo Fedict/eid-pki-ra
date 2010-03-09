@@ -33,6 +33,8 @@ import be.fedict.eid.pkira.generated.publicws.EIDPKIRAService;
  */
 public class EIDPKIRAServiceClient {
 
+	public static final String NAME = "eidPKIRAServiceClient";
+	
 	private static final String SERVICE_NAME = "EIDPKIRAService";
 	private static final String NAMESPACE = "urn:be:fedict:eid:pkira:publicws";
 	private static final String WSDL_LOCATION = "/wsdl/eid-pki-ra.wsdl";

@@ -36,10 +36,9 @@ public class PrivateWebserviceTest {
 	private  EIDPKIRAPrivateServiceClient privateWebserviceClient;
 	
 	@BeforeMethod
-	public void setup() {
-		
-		
-		privateWebserviceClient = new EIDPKIRAPrivateServiceClient(SERVICE_URL);
+	public void setup() {		
+		privateWebserviceClient = new EIDPKIRAPrivateServiceClient();
+		privateWebserviceClient.setServiceUrl(SERVICE_URL);
 	}
 	
 	@Test

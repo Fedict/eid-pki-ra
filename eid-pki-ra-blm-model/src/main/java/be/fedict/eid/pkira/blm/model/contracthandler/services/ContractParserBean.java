@@ -42,7 +42,7 @@ public class ContractParserBean implements ContractParser {
 	@Logger
 	private Log log;
 
-	@In(value="contractsClientBlm", create=true)
+	@In(value=EIDPKIRAContractsClient.NAME, create=true)
 	private EIDPKIRAContractsClient contractsClient;
 	
 	/*

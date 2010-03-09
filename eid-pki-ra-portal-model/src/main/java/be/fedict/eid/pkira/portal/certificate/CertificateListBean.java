@@ -11,6 +11,7 @@ import org.jboss.seam.annotations.Begin;
 import org.jboss.seam.annotations.Destroy;
 import org.jboss.seam.annotations.End;
 import org.jboss.seam.annotations.Factory;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.datamodel.DataModel;
@@ -23,11 +24,11 @@ import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 @Name(CertificateList.NAME)
 public class CertificateListBean implements CertificateList, Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4024420123671643615L;
 
+	@In(value=EIDPKIRAPrivateServiceClient.NAME, create=true)
+	private EIDPKIRAPrivateServiceClient privateServiceClient;
+	
 	@DataModel
 	List<Certificate> certificatesList;
 
@@ -40,9 +41,7 @@ public class CertificateListBean implements CertificateList, Serializable {
 	public List<Certificate> findCertificateList() {		
 		List<Certificate> certificates = new ArrayList<Certificate>();
 		if(certificatesList == null){
-			EIDPKIRAPrivateServiceClient eidpkiraPrivateServiceClient = new EIDPKIRAPrivateServiceClient( "http://localhost:8080/eid-pki-ra/webservice/EIDPKIRAPrivateService");
-
-			List<CertificateWS> listCertificates = eidpkiraPrivateServiceClient.listCertificates("");
+			List<CertificateWS> listCertificates = privateServiceClient.listCertificates("");
 			for (CertificateWS certificatews : listCertificates) {
 				Certificate certificate = new Certificate(certificatews);
 				certificates.add(certificate);
