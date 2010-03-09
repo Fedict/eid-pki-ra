@@ -44,7 +44,7 @@ public abstract class AbstractContract implements Serializable {
 	private static final long serialVersionUID = -5082287440865809644L;
 
 	@Id	@GeneratedValue
-	private int id;
+	private Integer id;
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
 	private String contractDocument;
@@ -75,11 +75,7 @@ public abstract class AbstractContract implements Serializable {
 		this.requester = requester;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 }

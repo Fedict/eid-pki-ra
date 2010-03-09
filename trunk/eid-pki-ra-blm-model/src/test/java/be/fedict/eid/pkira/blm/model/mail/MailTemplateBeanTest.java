@@ -70,7 +70,6 @@ public class MailTemplateBeanTest {
 
 	private Certificate createCertificate() {
 		Certificate certificate = new Certificate();
-		certificate.setId(1);
 		certificate.setIssuer("issuer");
 		certificate.setRequesterName("requester");
 		certificate.setSerialNumber(BigInteger.TEN);

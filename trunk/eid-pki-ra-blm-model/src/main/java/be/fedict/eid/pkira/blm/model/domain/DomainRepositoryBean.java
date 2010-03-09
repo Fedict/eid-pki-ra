@@ -16,20 +16,24 @@
  */
 package be.fedict.eid.pkira.blm.model.domain;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 
-
 /**
  * Implementation of the domain repository.
+ * 
  * @author Jan Van den Bergh
  */
 @Stateless
@@ -38,13 +42,19 @@ public class DomainRepositoryBean implements DomainRepository {
 
 	@In
 	private EntityManager entityManager;
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public void persistCertificate(Certificate certificate) {
+		if (findCertificate(certificate.getIssuer(), certificate.getSerialNumber()) != null) {
+			// certificate already exists!
+			throw new RuntimeException("Duplicate certificate in database: " + certificate.getIssuer() + "/"
+					+ certificate.getSerialNumber());
+		}
+
 		entityManager.persist(certificate);
 	}
 
@@ -56,23 +66,53 @@ public class DomainRepositoryBean implements DomainRepository {
 	public void persistContract(AbstractContract contract) {
 		entityManager.persist(contract);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	//TODO: Select aanpassen met userRRN
+	// TODO: Select aanpassen met userRRN
 	public List<Certificate> findAllCertificates(String userRRN) {
 		Query query = entityManager.createQuery("SELECT distinct c from Certificate c");
 		return query.getResultList();
 	}
 
 	/**
-	 * @param entityManager2
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Certificate findCertificate(String issuer, BigInteger serialNumber) {
+		Query query = entityManager
+				.createQuery("SELECT distinct c from Certificate c WHERE issuer=? AND serialNumber=?");
+		query.setParameter(1, issuer);
+		query.setParameter(2, serialNumber);
+		try {
+			Certificate result = (Certificate) query.getSingleResult();
+			return result;
+		} catch (NoResultException e) {
+			return null;
+		} catch (EntityNotFoundException e) {
+			return null;
+		} catch (NonUniqueResultException e) {
+			throw new RuntimeException("Too many results for certificate search" + issuer + "/" + serialNumber);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public void removeCertificate(Certificate certificate) {
+		entityManager.remove(certificate);
+	}
+
+	/**
+	 * Injects the entity manager.
 	 */
 	protected void setEntityManager(EntityManager entityManager) {
-		this.entityManager = entityManager;		
+		this.entityManager = entityManager;
 	}
 
 }

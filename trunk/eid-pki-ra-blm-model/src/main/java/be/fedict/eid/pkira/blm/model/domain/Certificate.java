@@ -42,7 +42,7 @@ public class Certificate implements Serializable {
 
 	@Id
 	@GeneratedValue
-	private int id;
+	private Integer id;
 
 	private BigInteger serialNumber;
 	@Lob
@@ -154,13 +154,6 @@ public class Certificate implements Serializable {
 	}
 
 	/**
-	 * @return the serialversionuid
-	 */
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
-	/**
 	 * @return the requesterName
 	 */
 	public String getRequesterName() {
@@ -175,19 +168,15 @@ public class Certificate implements Serializable {
 		this.requesterName = requesterName;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	protected CertificateSigningContract getContract() {
+	public CertificateSigningContract getContract() {
 		return contract;
 	}
 
-	protected void setContract(CertificateSigningContract contract) {
+	public void setContract(CertificateSigningContract contract) {
 		this.contract = contract;
 	}
 

@@ -2,7 +2,6 @@ package be.fedict.eid.pkira.blm.model.xkms;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.cert.X509Certificate;
 
 import javax.ejb.Stateless;
 
@@ -21,7 +20,7 @@ public class XKMSServiceBean implements XKMSService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean revoke(X509Certificate certificate) {
+	public boolean revoke(String certificate) {
 		return true;
 	}
 
