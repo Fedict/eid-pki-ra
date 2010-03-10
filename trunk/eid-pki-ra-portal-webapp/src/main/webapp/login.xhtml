@@ -14,13 +14,13 @@
 			<rich:panel id="login-panel">
     			<f:facet name="header">#{messages['general.login']}</f:facet>
            	    <h:panelGrid columns="2" columnClasses="name,value">
-                   	<h:outputLabel for="username">#{messages['general.user']}:</h:outputLabel>
+                   	<h:outputLabel for="username">#{messages['login.user']}:</h:outputLabel>
                    	<h:inputText id="username" value="#{identity.username}"/>
-                   	<h:outputLabel for="password">#{messages['general.password']}:</h:outputLabel>
+                   	<h:outputLabel for="password">#{messages['login.password']}:</h:outputLabel>
                    	<h:inputSecret id="password" value="#{identity.password}"/>
                    	
                    	<s:fragment>&#160;</s:fragment>
-                   	<h:commandButton value="#{messages['general.login']}" action="#{identity.login}" id="login-button"/>
+                   	<h:commandButton value="#{messages['button.login']}" action="#{identity.login}" id="login-button"/>
                	</h:panelGrid>
 	        </rich:panel>
 	    </h:form>

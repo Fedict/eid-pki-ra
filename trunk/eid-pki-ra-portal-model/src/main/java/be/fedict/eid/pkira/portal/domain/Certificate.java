@@ -19,82 +19,63 @@
 package be.fedict.eid.pkira.portal.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 
-import org.jboss.seam.annotations.In;
-
-import be.fedict.eid.pkira.crypto.CSRInfo;
+import org.jboss.seam.annotations.Name;
 
 /**
  * @author Bram Baeyens
  *
  */
-public abstract class Certificate implements Serializable {
+@Name("certificate")
+public class Certificate implements Serializable {
+
+	private static final long serialVersionUID = 5429725347686453892L;
 	
-	private static final long serialVersionUID = -4191567270718469935L;
+	private Long number;
+	private Date expirationDate;
+	private String content;
+	private CertificateType type;
 	
-	private CSRInfo distinguishedName;
-	private CertificateType certificateType;
-	@In(create=true)
-	private Operator operator;
-	private String description;
-	private String legalNotice = "testLegalNotice";
-	private String base64Csr;
-	
-	public CSRInfo getDistinguishedName() {
-		return distinguishedName;
-	}
-
-	public void setDistinguishedName(CSRInfo distinguishedName) {
-		this.distinguishedName = distinguishedName;
-	}
-
-	public CertificateType getCertificateType() {
-		return certificateType;
-	}
-
-	public void setCertificateType(CertificateType certificateType) {
-		this.certificateType = certificateType;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
+	public Long getNumber() {
+		return number;
 	}
 	
-	public String getLegalNotice() {
-		return legalNotice;
-	}
-
-	public void setLegalNotice(String legalNotice) {
-		this.legalNotice = legalNotice;
+	public void setNumber(Long number) {
+		this.number = number;
 	}
 	
-	public Operator getOperator() {
-		return operator;
+	public Date getExpirationDate() {
+		return expirationDate;
+	}
+	
+	public void setExpirationDate(Date expirationDate) {
+		this.expirationDate = expirationDate;
+	}
+	
+	public String getContent() {
+		return content;
+	}
+	
+	public void setContent(String content) {
+		this.content = content;
 	}
 
-	public void setOperator(Operator operator) {
-		this.operator = operator;
+	public void setType(CertificateType type) {
+		this.type = type;
 	}
 
-	public String getBase64Csr() {
-		return base64Csr;
-	}
-
-	public void setBase64Csr(String base64Csr) {
-		this.base64Csr = base64Csr;
+	public CertificateType getType() {
+		return type;
 	}
 
 	@Override
 	public String toString() {
-		return new StringBuilder()
-			.append("distinguishedName=").append(distinguishedName)
-			.append(", certificateType=").append(certificateType)
-			.append(", operator=").append(operator)
-			.append(", legalNotice=").append(legalNotice)
-			.toString();
+		return new StringBuilder("Certificate[")
+				.append("number").append(number)
+				.append(", type").append(type)
+				.append(", expirationDate").append(expirationDate)
+				.append(", content").append(content)
+				.append(']').toString();
 	}
 }

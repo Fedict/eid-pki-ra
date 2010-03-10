@@ -1,0 +1,48 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib"
+		xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich"
+		xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml"
+		login-required="true">
+
+	<ui:define name="center">
+		<h:form id="revocationContractForm">
+			<rich:panel id="revocationContractPanel">
+				<f:facet name="header">
+					<h:panelGroup>
+						<h:outputText value="#{messages['contract.revocation.title']}" />
+					</h:panelGroup>	
+				</f:facet>
+				
+				<s:decorate id="operatorNameDecoration" template="/layout/edit.xhtml">
+                	<ui:define name="label">#{messages['operator.name']}:</ui:define>
+                	<h:outputText id="operatorName" value="#{revocationContract.operator.name}" readOnly="true"  />
+            	</s:decorate>
+				
+				<s:decorate id="operatorFunctionDecoration" template="/layout/edit.xhtml">
+                	<ui:define name="label">#{messages['operator.function']}:</ui:define>
+                	<h:inputText required="true" id="operatorFunction" value="#{revocationContract.operator.function}" />
+            	</s:decorate>
+				
+				<s:decorate id="operatorPhoneDecoration" template="/layout/edit.xhtml">
+                	<ui:define name="label">#{messages['operator.phone']}:</ui:define>
+                	<h:inputText required="true" id="operatorPhone" value="#{revocationContract.operator.phone}" />
+            	</s:decorate>
+				
+				<s:decorate id="csrDecoration" template="/layout/edit.xhtml">
+                	<ui:define name="label">#{messages['certificate.content']}:</ui:define>
+                	<h:inputTextarea id="csr" value="#{revocationContract.certificate.content}" disabled="true" cols="90" rows="14" />
+            	</s:decorate>
+				
+				<s:decorate id="descriptionDecoration" template="/layout/edit.xhtml">
+                	<ui:define name="label">#{messages['contract.description']}:</ui:define>
+                	<h:inputTextarea id="operatorEmail" value="#{revocationContract.description}" cols="90" rows="14" />
+            	</s:decorate>
+            	
+				<s:decorate template="/layout/buttonbox.xhtml" id="csrButtonBox">
+					<h:commandButton action="#{revocationContractPreSigningHandler.prepareSignment}" value="#{messages['button.revoke']}" id="send"/>
+					<s:button value="#{messages['button.cancel']}" action="csr" id="cancel" />
+				</s:decorate>       
+			</rich:panel>
+		</h:form>	
+	</ui:define>	
+</ui:composition>		

@@ -9,19 +9,19 @@ import be.fedict.eid.pkira.contracts.XmlMarshallingException;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningResponseType;
 
 @Scope(ScopeType.APPLICATION)
-@Name("requestCertificateResource")
+@Name("requestContractHandler")
 @BypassInterceptors
-public class RequestCertificateDssSignatureHttpRequestHandler 
+public class RequestContractDssSignatureHttpRequestHandler 
 		extends AbstractDssSignatureHttpRequestHandler<CertificateSigningResponseType> {
 
 	@Override
 	protected String getErrorPage() {
-		return "/page/csr/dssSignError.seam";
+		return "/page/contract/dssSignError.seam";
 	}
 
 	@Override
 	protected String getNextPage() {
-		return "/page/csr/dssSignSucces.seam";
+		return "/page/contract/dssSignSucces.seam";
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class RequestCertificateDssSignatureHttpRequestHandler
 
 	@Override
 	public String getResourcePath() {
-		return "/requestCertificateResource";
+		return "/requestContractHandler";
 	}
 
 	@Override

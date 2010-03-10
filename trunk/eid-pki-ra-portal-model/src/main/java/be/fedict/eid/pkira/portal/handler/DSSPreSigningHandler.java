@@ -22,13 +22,9 @@ package be.fedict.eid.pkira.portal.handler;
  * @author Bram Baeyens
  *
  */
-public interface RequestCertificateHandler {
+public interface DSSPreSigningHandler {
 	
-	String NAME = "requestCertificateHandler";
+	String NAME = "dssPreSigningHandler";
 	
-	String uploadCertificateSigningRequest();
-	
-	String preDssSignCertificateSigningRequest();
-	
-	String preDssSignCertificateRevokationRequest();
+	String prepareSignment();
 }

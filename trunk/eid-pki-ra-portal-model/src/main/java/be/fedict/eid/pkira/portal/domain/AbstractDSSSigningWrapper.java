@@ -18,6 +18,8 @@
 
 package be.fedict.eid.pkira.portal.domain;
 
+import java.io.Serializable;
+
 import org.jboss.seam.annotations.In;
 
 import be.fedict.eid.pkira.portal.util.FacesUtil;
@@ -26,9 +28,9 @@ import be.fedict.eid.pkira.portal.util.FacesUtil;
  * @author Bram Baeyens
  *
  */
-public abstract class SignableCertificate extends Certificate {
-
-	private static final long serialVersionUID = 3784599851308966681L;
+public abstract class AbstractDSSSigningWrapper<T extends AbstractContract> implements Serializable {
+	
+	private static final long serialVersionUID = -619211055116177667L;
 
 	private FacesUtil facesUtil;
 	
@@ -39,6 +41,10 @@ public abstract class SignableCertificate extends Certificate {
 	protected void setFacesUtil(FacesUtil facesUtil) {
 		this.facesUtil = facesUtil;
 	}	
+
+	public abstract void setContract(T contract);
+
+	public abstract T getContract();
 
 	public String getDecodedSignatureResponse() {
 		return decodedSignatureResponse;
@@ -61,4 +67,11 @@ public abstract class SignableCertificate extends Certificate {
 	}
 	
 	protected abstract String getDssSignatureHttpRequestHandlerPath();
+	
+	@Override
+	public String toString() {
+		return new StringBuilder("AbstractDSSSigningWrapper[")
+				.append("contract").append(getContract())
+				.append(']').toString();
+	}
 }

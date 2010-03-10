@@ -7,17 +7,17 @@ import static org.mockito.Mockito.when;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
-import be.fedict.eid.pkira.generated.contracts.CertificateSigningResponseType;
+import be.fedict.eid.pkira.generated.contracts.CertificateRevocationResponseType;
 import be.fedict.eid.pkira.generated.contracts.ResultType;
 import be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient;
 
-public class RequestCertificateDssSignatureHttpRequestHandlerTest
-		extends AbstractDssSignatureHttpRequestHandlerTest<RequestCertificateDssSignatureHttpRequestHandler, 
-				CertificateSigningResponseType> {
-
+public class RevocationContractDssSignatureHttpRequestHandlerTest 
+		extends AbstractDssSignatureHttpRequestHandlerTest<RevocationContractDssSignatureHttpRequestHandler, 
+				CertificateRevocationResponseType> {
+	
 	@Override
 	protected void initHandler() {
-		handler = new RequestCertificateDssSignatureHttpRequestHandler() {
+		handler =  new RevocationContractDssSignatureHttpRequestHandler() {
 
 			protected EIDPKIRAServiceClient getServiceClient() {
 				return serviceClient;
@@ -26,50 +26,46 @@ public class RequestCertificateDssSignatureHttpRequestHandlerTest
 			protected EIDPKIRAContractsClient getContractsClient() {
 				return contractsClient;
 			}
-
-			protected CertificateSigningResponseType unmarshall(String result) {
+			
+			protected CertificateRevocationResponseType unmarshall(String result) {
 				return certificateResponse;
 			}
-		};
+		};		
 	}
-
+	
 	protected void initMocks() throws Exception {
 		super.initMocks();
-		certificateResponse = mock(CertificateSigningResponseType.class);
+		certificateResponse = mock(CertificateRevocationResponseType.class);
 	}
-
+	
 	@Test
 	public void successfulRequest() throws Exception {
 		when(request.getParameter(SIGNATURE_STATUS_PARAMETER)).thenReturn("OK");
 		when(certificateResponse.getResult()).thenReturn(ResultType.SUCCESS);
 		handler.handleRequest(request, response);
-		verify(response).sendRedirect("/page/csr/dssSignSucces.seam");
+		verify(response).sendRedirect("/page/listcertificates/listcertificates.seam");
 	}
-
+	
 	@Test
 	public void signatureNotOk() throws Exception {
-		when(request.getParameter(SIGNATURE_STATUS_PARAMETER)).thenReturn(
-				"NOT_OK");
+		when(request.getParameter(SIGNATURE_STATUS_PARAMETER)).thenReturn("NOT_OK");
 		handler.handleRequest(request, response);
-		verify(response).sendRedirect("/page/csr/dssSignError.seam");
+		verify(response).sendRedirect("/page/contract/dssSignError.seam");
 	}
-
+	
 	@Test
 	public void backendError() throws Exception {
 		when(request.getParameter(SIGNATURE_STATUS_PARAMETER)).thenReturn("OK");
-		when(certificateResponse.getResult()).thenReturn(
-				ResultType.BACKEND_ERROR);
+		when(certificateResponse.getResult()).thenReturn(ResultType.BACKEND_ERROR);
 		handler.handleRequest(request, response);
-		verify(response).sendRedirect("/page/csr/dssSignError.seam");
+		verify(response).sendRedirect("/page/contract/dssSignError.seam");
 	}
-
+	
 	@Test
 	public void exception() throws Exception {
 		when(request.getParameter(SIGNATURE_STATUS_PARAMETER)).thenReturn("OK");
-		when(certificateResponse.getResult()).thenThrow(
-				new NullPointerException());
+		when(certificateResponse.getResult()).thenThrow(new NullPointerException());
 		handler.handleRequest(request, response);
-		verify(response).sendRedirect("/page/csr/dssSignError.seam");
+		verify(response).sendRedirect("/page/contract/dssSignError.seam");
 	}
-
 }

@@ -20,7 +20,9 @@ package be.fedict.eid.pkira.portal.domain;
 
 import java.io.Serializable;
 
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.security.Credentials;
 
 /**
  * @author Bram Baeyens
@@ -31,12 +33,18 @@ public class Operator implements Serializable {
 
 	private static final long serialVersionUID = -9069139272251459619L;
 
-	private String name = "testOperatorName";
+	@In 
+	Credentials credentials;
+	
+	private String name = "tester";
 	private String function;
 	private String phone;
 	private String email;
 	
 	public String getName() {
+		if (name == null) {
+			name = credentials.getUsername();
+		}
 		return name;
 	}
 	

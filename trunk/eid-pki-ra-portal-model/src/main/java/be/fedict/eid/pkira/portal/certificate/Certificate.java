@@ -13,7 +13,7 @@ import org.jboss.seam.annotations.Scope;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 
 @Entity
-@Name("certificate")
+@Name("tempcertificate")
 @Scope(ScopeType.CONVERSATION)
 public class Certificate implements Serializable{
 	
