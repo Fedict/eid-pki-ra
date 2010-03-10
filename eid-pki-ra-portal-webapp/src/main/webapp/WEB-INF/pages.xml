@@ -4,18 +4,26 @@
 		xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
 		no-conversation-view-id="/home.xhtml">
 	
-	<page view-id="/page/csr/upload.xhtml">		
-		<navigation from-action="#{requestCertificateHandler.uploadCertificateSigningRequest}">
+	<page view-id="/page/contract/uploadCsr.xhtml">		
+		<navigation from-action="#{csrUploadHandler.uploadCertificateSigningRequest}">
 			<rule if-outcome="success">
-				<redirect view-id="/page/csr/complete.xhtml"/>
+				<redirect view-id="/page/contract/requestContract.xhtml"/>
 			</rule>
 		</navigation>
 	</page>	
 	
-	<page view-id="/page/csr/complete.xhtml">	
-		<navigation from-action="#{requestCertificateHandler.preDssSignCertificateSigningRequest}">
+	<page view-id="/page/contract/requestContract.xhtml">	
+		<navigation from-action="#{requestContractPreSigningHandler.prepareSignment}">
 			<rule if-outcome="success">
-				<redirect view-id="/page/csr/signatureRequest.xhtml"/>
+				<redirect view-id="/page/contract/signRequestContract.xhtml"/>
+			</rule>
+		</navigation>
+	</page>
+	
+	<page view-id="/page/contract/revocationContract.xhtml">	
+		<navigation from-action="#{revocationContractPreSigningHandler.prepareSignment}">
+			<rule if-outcome="success">
+				<redirect view-id="/page/contract/signRevocationContract.xhtml"/>
 			</rule>
 		</navigation>
 	</page>
@@ -29,7 +37,7 @@
 		
 		<navigation from-action="csr">
 			<end-conversation before-redirect="true"/>
-			<redirect view-id="/page/csr/upload.xhtml"/>			
+			<redirect view-id="/page/contract/uploadCsr.xhtml"/>			
 		</navigation>
 		
 		<navigation from-action="list">
@@ -37,19 +45,6 @@
 			<redirect view-id="/page/listcertificates/listcertificates.xhtml"/>			
 		</navigation>	
 	</page>
-	
-	<!--
-		Hopefully this fixes the RF CSS Problem with Seam, see
-		http://jira.jboss.com/jira/browse/JBSEAM-1009
-	-->
-
-<!--	<page view-id="/home.*" login-required="true" />-->
-<!--	<page view-id="/index.*" login-required="true" />-->
-<!--	<page view-id="/login.*" login-required="false" />-->
-
-<!--	<page view-id="/layout/*" login-required="false" />-->
-<!--	<page view-id="/img/*" login-required="false" />-->
-<!--	<page view-id="/stylesheet/*" login-required="false" />-->
 	
 
 	<exception

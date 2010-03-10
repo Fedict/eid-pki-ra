@@ -20,7 +20,8 @@ package be.fedict.eid.pkira.portal.handler;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.log.Log;
@@ -32,29 +33,29 @@ import org.testng.annotations.Test;
 import be.fedict.eid.pkira.crypto.CSRInfo;
 import be.fedict.eid.pkira.crypto.CryptoException;
 import be.fedict.eid.pkira.portal.domain.CSRUpload;
-import be.fedict.eid.pkira.portal.domain.CertificateSigningRequest;
+import be.fedict.eid.pkira.portal.domain.RequestContract;
 
 
 /**
  * @author Bram Baeyens
  * 
  */
-public class CertificateHandlerBeanTest {
+public class CSRUploadHandlerBeanTest {
 
-	private static final RequestCertificateHandlerBean HANDLER = new RequestCertificateHandlerBean();
+	private static final CSRUploadHandlerBean HANDLER = new CSRUploadHandlerBean();
 	
 	@Mock private Log log;
 	@Mock private CSRUpload csrUpload;
 	@Mock private FacesMessages facesMessages;
-	private CertificateSigningRequest certificate;
+	private RequestContract contract;
 	
 	@BeforeMethod
 	protected void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		HANDLER.setLog(log);
 		HANDLER.setCsrUpload(csrUpload);
-		certificate = new CertificateSigningRequest();
-		HANDLER.setSignableCertificate(certificate);
+		contract = new RequestContract();
+		HANDLER.setRequestContract(contract);
 		HANDLER.setFacesMessages(facesMessages);
 	}	
 	
@@ -65,8 +66,8 @@ public class CertificateHandlerBeanTest {
 		
 		String result = HANDLER.uploadCertificateSigningRequest();
 		assertEquals("success", result);
-		assertEquals("testDN", certificate.getDistinguishedName().getSubject());	
-		assertEquals("testBase64CSR", certificate.getBase64Csr());
+		assertEquals("testDN", contract.getDistinguishedName().getSubject());	
+		assertEquals("testBase64CSR", contract.getBase64Csr());
 	}
 	
 	@Test
@@ -75,6 +76,6 @@ public class CertificateHandlerBeanTest {
 		
 		String result = HANDLER.uploadCertificateSigningRequest();
 		assertNull(result);
-		verify(facesMessages).addFromResourceBundle("validator.csr.invalid");
+		verify(facesMessages).addFromResourceBundle("validator.invalid.csr");
 	}
 }

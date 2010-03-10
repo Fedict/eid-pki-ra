@@ -34,7 +34,7 @@
 		conversation-id-parameter="cid" conversation-timeout="120000" />
 		
 	<web:multipart-filter create-temp-files="false" max-request-size="1000000" url-pattern="*.seam"/>
-
+	
 <!--	<transaction:ejb-transaction />-->
 
 <!--	<persistence:managed-persistence-context-->
@@ -44,7 +44,7 @@
 		<drools:rule-base name="securityRules"> <drools:rule-files>
 		<value>/security.drl</value> </drools:rule-files> </drools:rule-base>
 	-->
-<!--	<security:identity authenticate-method="#{authenticator.authenticate}" />-->
+<!--	<security:identity authenticate-method="#{authenticatorHandler.authenticate}" />-->
 
 <!--	<mail:mail-session host="localhost" password="test"-->
 <!--		port="2525" username="test" />-->

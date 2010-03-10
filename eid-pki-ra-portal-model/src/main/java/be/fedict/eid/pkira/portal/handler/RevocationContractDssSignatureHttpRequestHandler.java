@@ -9,19 +9,19 @@ import be.fedict.eid.pkira.contracts.XmlMarshallingException;
 import be.fedict.eid.pkira.generated.contracts.CertificateRevocationResponseType;
 
 @Scope(ScopeType.APPLICATION)
-@Name("revokeCertificateResource")
+@Name("revocationContractHandler")
 @BypassInterceptors
-public class RevokeCertificateDssSignatureHttpRequestHandler 
+public class RevocationContractDssSignatureHttpRequestHandler 
 		extends AbstractDssSignatureHttpRequestHandler<CertificateRevocationResponseType> {
 
 	@Override
 	protected String getErrorPage() {
-		return "/page/csr/dssSignError.seam";
+		return "/page/contract/dssSignError.seam";
 	}
 
 	@Override
 	protected String getNextPage() {
-		return "/page/csr/dssSignSucces.seam";
+		return "/page/listcertificates/listcertificates.seam";
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class RevokeCertificateDssSignatureHttpRequestHandler
 
 	@Override
 	public String getResourcePath() {
-		return "/revokeCertificateResource";
+		return "/revocationContractHandler";
 	}
 
 	@Override
