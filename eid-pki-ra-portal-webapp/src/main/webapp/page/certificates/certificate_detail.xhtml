@@ -1,0 +1,45 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:panelGrid columns="4" title="certificateDetail">
+			<f:facet name="header">
+				<h:outputText value="Certificate Detail overview." />
+			</f:facet>
+
+			<h:outputText value="Serial number" />
+			<h:outputText value="#{certificate.serialNumber}" />
+
+			<h:outputText value="Subject" />
+			<h:outputText value="#{certificate.subject}" />
+
+			<h:outputText value="Validity start" />
+			<h:outputText value="#{certificate.validityStart}" />
+
+			<h:outputText value="Validity end" />
+			<h:outputText value="#{certificate.validityEnd}" />
+
+			<h:outputText value="Requester name" />
+			<h:outputText value="#{certificate.requesterName}" />
+
+			<h:outputText value="Issuer" />
+			<h:outputText value="#{certificate.issuer}" />
+
+			<h:outputText value="Certificate type" />
+			<h:outputText value="#{certificate.certificateType}" />
+			
+			<h:outputText value="base64 Csr" />
+			<h:outputText value="#{certificate.base64Csr}" />
+		</h:panelGrid>
+		<s:decorate template="/layout/buttonbox.xhtml" id="downloadButtonBox">
+			<h:commandButton action="#{certificateHandlerBean.download}"
+				value="#{messages['certificate.download']}" id="download" />
+			<s:button value="#{messages['general.back']}" action="back" id="backButton" />
+		</s:decorate>
+	</ui:define>
+</ui:composition>

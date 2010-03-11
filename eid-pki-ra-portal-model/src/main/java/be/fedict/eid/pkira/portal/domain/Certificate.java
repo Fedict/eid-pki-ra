@@ -37,6 +37,15 @@ public class Certificate implements Serializable {
 	private String content;
 	private CertificateType type;
 	
+	private CSRInfo distinguishedName;
+	@Enumerated(EnumType.STRING)
+	private CertificateType certificateType;
+	@In(create=true)
+	private Operator operator;
+	private String description;
+	private String legalNotice = "testLegalNotice";
+	private String base64Csr;
+	
 	public Long getNumber() {
 		return number;
 	}

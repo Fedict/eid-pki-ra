@@ -1,10 +1,24 @@
+/**
+ * eID PKI RA Project. 
+ * Copyright (C) 2010 FedICT. 
+ * 
+ * This is free software; you can redistribute it and/or modify it 
+ * under the terms of the GNU Lesser General Public License version 
+ * 3.0 as published by the Free Software Foundation. 
+ * 
+ * This software is distributed in the hope that it will be useful, 
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * Lesser General Public License for more details. 
+ * 
+ * You should have received a copy of the GNU Lesser General Public 
+ * License along with this software; if not, see 
+ * http://www.gnu.org/licenses/. 
+ */
 package be.fedict.eid.pkira.portal.certificate;
 
 import java.io.Serializable;
 import java.util.Date;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
@@ -15,13 +29,11 @@ import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 @Entity
 @Name("tempcertificate")
 @Scope(ScopeType.CONVERSATION)
-public class Certificate implements Serializable{
-	
+public class Certificate extends be.fedict.eid.pkira.portal.domain.Certificate implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7345021688719488185L;
-	@Id
 	private int id;
 	private String serialNumber;
 	private String subject;
@@ -29,7 +41,7 @@ public class Certificate implements Serializable{
 	private Date validityEnd;
 	private String requesterName;
 	private String issuer;
-	private String certificateType;
+//	private String certificateType;
 
 	public Certificate(){
 	}
@@ -47,7 +59,7 @@ public class Certificate implements Serializable{
 		}
 		setRequesterName(certificatews.getRequesterName());
 		setIssuer(certificatews.getIssuer());
-		setCertificateType(certificatews.getCertificateType());
+//		setCertificateType(certificatews.getCertificateType());
 	}
 
 	public void setId(int id) {
@@ -142,11 +154,11 @@ public class Certificate implements Serializable{
 		return serialNumber;
 	}
 
-	public void setCertificateType(String certificateType) {
-		this.certificateType = certificateType;
-	}
+//	public void setCertificateType(String certificateType) {
+//		this.certificateType = certificateType;
+//	}
 
-	public String getCertificateType() {
-		return certificateType;
-	}
+//	public String getCertificateType() {
+//		return certificateType;
+//	}
 }
