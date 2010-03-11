@@ -8,7 +8,10 @@
 
 		<class>be.fedict.eid.pkira.blm.model.domain.Certificate</class>
 		<class>be.fedict.eid.pkira.blm.model.domain.CertificateSigningContract</class>
-		<class>be.fedict.eid.pkira.blm.model.domain.CertificateRevocationContract</class>
+		<class>be.fedict.eid.pkira.blm.model.domain.CertificateRevocationContract</class>		
+		<class>be.fedict.eid.pkira.blm.model.domain.Registration</class>
+		<class>be.fedict.eid.pkira.blm.model.domain.CertificateDomain</class>
+		<class>be.fedict.eid.pkira.blm.model.domain.User</class>
 		
 		<properties>		
 			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />
