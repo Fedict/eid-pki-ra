@@ -24,5 +24,14 @@ package be.fedict.eid.pkira.portal.domain;
  */
 public enum CertificateType {
 	
-	SERVER, CLIENT, CODE;
+	SERVER("server"), CLIENT("client"), CODE("code");
+	
+	private String type;
+	private CertificateType(String type){
+		this.type = type;
+	}
+	
+	public String toString(){
+		return type;
+	}
 }

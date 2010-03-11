@@ -15,27 +15,13 @@
  * License along with this software; if not, see 
  * http://www.gnu.org/licenses/. 
  */
-package be.fedict.eid.pkira.portal.certificate;
+package be.fedict.eid.pkira.portal.handler;
 
-import javax.ejb.Local;
+import java.util.List;
 
-@Local
-public interface CertificateList {
-	
-	String NAME = "certificatelist";
-	
-	/**
-	 * 
-	 */
-	public void certificateList();
-	
-	/**
-	 * 
-	 */
-	public void destroy();
-	
-	/**
-	 * 
-	 */
-	public String detailCertificate(Certificate certificate);
+import be.fedict.eid.pkira.portal.certificate.Certificate;
+
+public interface CertificateHandler {
+	public List<Certificate> findCertificateList(String userRRN);
+	public Certificate findCertificate(String serialNumber);
 }
