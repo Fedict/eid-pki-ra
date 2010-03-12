@@ -60,8 +60,11 @@ public class RevocationContractPreSigningHandlerBean extends AbstractDSSPreSigni
 
 	private CertificateRevocationRequestBuilder initBuilder(RevocationContract contract) {
 		return new CertificateRevocationRequestBuilder()
-				// TODOD (20100310) set id of contract
 				.setOperator(initBuilder(contract.getOperator()).toEntityType())
+				.setDistinguishedName(contract.getCertificate().getDistinguishedName().getSubject())
+				.setStartDate(contract.getCertificate().getValidityStart())
+				.setEndDate(contract.getCertificate().getValidityEnd())
+				.setCertificate(contract.getCertificate().getX509())
 				.setLegalNotice(contract.getLegalNotice())
 				.setDescription(contract.getDescription());
 	}	

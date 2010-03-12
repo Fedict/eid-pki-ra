@@ -36,13 +36,29 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 @Entity
 @NamedQueries({
 	@NamedQuery(
-			name="findByName",
-			query="SELECT cd FROM CertificateDomain cd WHERE cd.name = :name"
+			name = "findByName",
+			query = "SELECT cd " +
+					"FROM CertificateDomain cd " +
+					"WHERE cd.name = :name"
 	), 
 	@NamedQuery(
-			name="findByDnExpression",
-			query="SELECT cd FROM CertificateDomain cd WHERE cd.dnExpression = :dnExpression"
+			name = "findByDnExpression",
+			query = "SELECT cd " +
+					"FROM CertificateDomain cd " +
+					"WHERE cd.dnExpression = :dnExpression"
+	), 
+	@NamedQuery(
+			name = "findUnregistered",
+			query =	"SELECT cd " +
+					"FROM CertificateDomain cd " +
+					"WHERE cd NOT IN (" +
+						"SELECT r.certificateDomain " +
+						"FROM Registration r " +
+						"WHERE r.requester = :requester" +
+					") " +
+					"ORDER BY cd.name"
 	)
+	
 })
 public class CertificateDomain implements Serializable {
 

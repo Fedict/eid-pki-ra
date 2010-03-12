@@ -82,11 +82,11 @@ public class CertificateRevocationRequestBuilderTest {
 		assertEquals(request.getCertificate(), CERTIFICATE);
 		assertEquals(request.getDescription(), DESCRIPTION);
 		assertEquals(request.getDistinguishedName(), DN);
-		assertEquals(request.getEndDate(), createXmlGregorianCalendar(END_DATE));
+		assertEquals(request.getValidityEnd(), createXmlGregorianCalendar(END_DATE));
 		assertEquals(request.getLegalNotice(), LEGAL_NOTICE);
 		assertEquals(request.getOperator().getFunction(), OPERATOR_FUNCTION);
 		assertEquals(request.getOperator().getName(), OPERATOR_NAME);
 		assertEquals(request.getOperator().getPhone(), OPERATOR_PHONE);
-		assertEquals(request.getStartDate(), createXmlGregorianCalendar(START_DATE));		
+		assertEquals(request.getValidityStart(), createXmlGregorianCalendar(START_DATE));		
 	}
 }

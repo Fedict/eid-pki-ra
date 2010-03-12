@@ -73,7 +73,7 @@ public class MailTemplateBeanTest {
 		certificate.setIssuer("issuer");
 		certificate.setRequesterName("requester");
 		certificate.setSerialNumber(BigInteger.TEN);
-		certificate.setSubject("subject");
+		certificate.setDistinguishedName("distinguishedName");
 		certificate.setValidityEnd(new Date());
 		certificate.setValidityStart(new Date());
 		certificate.setX509("X509");

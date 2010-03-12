@@ -21,10 +21,6 @@ package be.fedict.eid.pkira.portal.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.crypto.CSRInfo;
@@ -38,59 +34,80 @@ public class Certificate implements Serializable {
 
 	private static final long serialVersionUID = 5429725347686453892L;
 	
-	private Long number;
-	private Date expirationDate;
-	private String content;
+	private String serialNumber;
 	private CertificateType type;
+	private Date validityStart;
+	private Date validityEnd;
+	private String x509;
+	private String issuer;
 	
 	private CSRInfo distinguishedName;
-	@Enumerated(EnumType.STRING)
-	private CertificateType certificateType;
-	@In(create=true)
-	private Operator operator;
-	private String description;
-	private String legalNotice = "testLegalNotice";
-	private String base64Csr;
-	
-	public Long getNumber() {
-		return number;
+
+	public String getSerialNumber() {
+		return serialNumber;
+	}
+
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
 	}
 	
-	public void setNumber(Long number) {
-		this.number = number;
-	}
-	
-	public Date getExpirationDate() {
-		return expirationDate;
-	}
-	
-	public void setExpirationDate(Date expirationDate) {
-		this.expirationDate = expirationDate;
-	}
-	
-	public String getContent() {
-		return content;
-	}
-	
-	public void setContent(String content) {
-		this.content = content;
+	public CertificateType getType() {
+		return type;
 	}
 
 	public void setType(CertificateType type) {
 		this.type = type;
 	}
 
-	public CertificateType getType() {
-		return type;
+	public Date getValidityStart() {
+		return validityStart;
+	}
+
+	public void setValidityStart(Date validityStart) {
+		this.validityStart = validityStart;
+	}
+
+	public Date getValidityEnd() {
+		return validityEnd;
+	}
+
+	public void setValidityEnd(Date validityEnd) {
+		this.validityEnd = validityEnd;
+	}
+
+	public String getX509() {
+		return x509;
+	}
+
+	public void setX509(String x509) {
+		this.x509 = x509;
+	}
+
+	public CSRInfo getDistinguishedName() {
+		return distinguishedName;
+	}
+
+	public void setDistinguishedName(CSRInfo distinguishedName) {
+		this.distinguishedName = distinguishedName;
+	}
+
+	public String getIssuer() {
+		return issuer;
+	}
+
+	public void setIssuer(String issuer) {
+		this.issuer = issuer;
 	}
 
 	@Override
 	public String toString() {
 		return new StringBuilder("Certificate[")
-				.append("number").append(number)
+				.append("number").append(serialNumber)
 				.append(", type").append(type)
-				.append(", expirationDate").append(expirationDate)
-				.append(", content").append(content)
+				.append(", validityStart").append(validityStart)
+				.append(", validityEnd").append(validityEnd)
+				.append(", issuer").append(issuer)
+				.append(", distinguishedName").append(distinguishedName)
 				.append(']').toString();
 	}
 }

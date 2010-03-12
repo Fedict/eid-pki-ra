@@ -83,6 +83,10 @@ public class User implements Serializable {
 		this.nationalRegisterNumber = nationalRegisterNumber;
 	}
 	
+	public String getName() {
+		return new StringBuilder(firstName).append(' ').append(lastName).toString();
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {

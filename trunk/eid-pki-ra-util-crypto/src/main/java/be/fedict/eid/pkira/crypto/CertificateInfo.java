@@ -26,13 +26,13 @@ import java.util.Date;
  */
 public class CertificateInfo {
 
-	private final String subject, issuer;
+	private final String distinguishedName, issuer;
 	private final Date validityStart, validityEnd;
 	private final BigInteger serialNumber;
 
-	public CertificateInfo(String issuer, String subject, Date validityStart, Date validityEnd, BigInteger serialNumber) {
+	public CertificateInfo(String issuer, String distinguishedName, Date validityStart, Date validityEnd, BigInteger serialNumber) {
 		this.issuer = issuer;
-		this.subject = subject;
+		this.distinguishedName = distinguishedName;
 		this.validityStart = validityStart;
 		this.validityEnd = validityEnd;
 		this.serialNumber = serialNumber;
@@ -42,8 +42,8 @@ public class CertificateInfo {
 		return serialNumber;
 	}
 
-	public String getSubject() {
-		return subject;
+	public String getDistinguishedName() {
+		return distinguishedName;
 	}
 
 	public String getIssuer() {

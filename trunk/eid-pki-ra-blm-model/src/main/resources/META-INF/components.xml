@@ -20,4 +20,13 @@
 	<component name="eidPKIRAContractsClient" 
 		class="be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient" 
 		scope="application" />
+		
+	<transaction:ejb-transaction />
+
+	<persistence:entity-manager-factory name="eidPkiRaEntityManagerFactory"
+		persistence-unit-name="eid-pki-ra-blm-PersistenceUnit" />
+		
+	<persistence:managed-persistence-context name="entityManager"
+		entity-manager-factory="#{eidPkiRaEntityManagerFactory}"
+		auto-create="true" />
 </components>

@@ -34,15 +34,31 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:element name="FindCertificateRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="userRRN" type="xsd:string" />
+						<xsd:element name="serialNumber" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="FindCertificateResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="certificate" type="types:certificateWS" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 			<xsd:complexType name="certificateWS">
 				<xsd:sequence>
 					<xsd:element name="serialNumber" type="xsd:string"/>
-					<xsd:element name="subject" type="xsd:string"/>
+					<xsd:element name="distinguishedName" type="xsd:string"/>
 					<xsd:element name="validityStart" type="xsd:date"/>
 					<xsd:element name="validityEnd" type="xsd:date"/>
 					<xsd:element name="requesterName" type="xsd:string"/>
 					<xsd:element name="issuer" type="xsd:string"/>
 					<xsd:element name="certificateType" type="xsd:string"/>
+					<xsd:element name="x509" type="xsd:string"/>					
 				</xsd:sequence>
 			</xsd:complexType>
 		</xsd:schema>
@@ -56,10 +72,22 @@
 		<wsdl:part name="response" element="types:ListCertificatesResponse" />
 	</wsdl:message>
 
+	<wsdl:message name="FindCertificateRequest">
+		<wsdl:part name="request" element="types:FindCertificateRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="FindCertificateResult">
+		<wsdl:part name="response" element="types:FindCertificateResponse" />
+	</wsdl:message>
+
 	<wsdl:portType name="EIDPKIRAPrivatePortType">
 		<wsdl:operation name="ListCertificates">
 			<wsdl:input message="tns:ListCertificatesRequest" />
 			<wsdl:output message="tns:ListCertificatesResult" />
+		</wsdl:operation>
+		<wsdl:operation name="FindCertificate">
+			<wsdl:input message="tns:FindCertificateRequest" />
+			<wsdl:output message="tns:FindCertificateResult" />
 		</wsdl:operation>
 	</wsdl:portType>
 
@@ -71,6 +99,15 @@
 				<soap:body use="literal" />
 			</wsdl:input>
 			<wsdl:output message="tns:ListCertificatesResult">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="FindCertificate">
+			<soap:operation />
+			<wsdl:input message="tns:FindCertificateRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output message="tns:FindCertificateResult">
 				<soap:body use="literal" />
 			</wsdl:output>
 		</wsdl:operation>

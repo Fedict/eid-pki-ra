@@ -48,7 +48,7 @@ public class Certificate implements Serializable {
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
 	private String x509;
-	private String subject;
+	private String distinguishedName;
 	private Date validityStart;
 	private Date validityEnd;
 	private String requesterName;
@@ -68,7 +68,7 @@ public class Certificate implements Serializable {
 			CertificateSigningContract contract) {
 		this.x509 = x509;
 		this.serialNumber = certificateInfo.getSerialNumber();
-		this.subject = certificateInfo.getSubject();
+		this.distinguishedName = certificateInfo.getDistinguishedName();
 		this.validityStart = certificateInfo.getValidityStart();
 		this.validityEnd = certificateInfo.getValidityEnd();
 		this.issuer = certificateInfo.getIssuer();
@@ -111,16 +111,16 @@ public class Certificate implements Serializable {
 	/**
 	 * @return the subject
 	 */
-	public String getSubject() {
-		return subject;
+	public String getDistinguishedName() {
+		return distinguishedName;
 	}
 
 	/**
-	 * @param subject
-	 *            the subject to set
+	 * @param distinguishedName
+	 *            the distinguishedName to set
 	 */
-	public void setSubject(String subject) {
-		this.subject = subject;
+	public void setDistinguishedName(String distinguishedName) {
+		this.distinguishedName = distinguishedName;
 	}
 
 	/**

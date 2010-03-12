@@ -43,7 +43,7 @@ import org.hibernate.validator.NotNull;
  */
 @Entity
 @Table(uniqueConstraints = {
-		@UniqueConstraint(columnNames={"REQUESTER_ID", "CERTIFICATE_DOMAIN_ID"})
+		@UniqueConstraint(columnNames={"FK_REQUESTER_ID", "FK_CERTIFICATE_DOMAIN_ID"})
 })
 @NamedQuery(
 		name = "findRegistrationsByStatus",
@@ -63,11 +63,11 @@ public class Registration implements Serializable {
 	@Column(name="EMAIL", nullable=false)
 	private String email;
 	@ManyToOne @NotNull
-	@JoinColumn(name="REQUESTER_ID",
+	@JoinColumn(name="FK_REQUESTER_ID",
 			referencedColumnName="USER_ID")
 	private User requester;
 	@ManyToOne @NotNull
-	@JoinColumn(name="CERTIFICATE_DOMAIN_ID",
+	@JoinColumn(name="FK_CERTIFICATE_DOMAIN_ID",
 			referencedColumnName="CERTIFICATE_DOMAIN_ID")
 	private CertificateDomain certificateDomain;
 	

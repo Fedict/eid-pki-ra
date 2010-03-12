@@ -15,7 +15,7 @@
 				
 				<s:decorate id="operatorNameDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['operator.name']}:</ui:define>
-                	<h:outputText id="operatorName" value="#{revocationContract.operator.name}" readOnly="true"  />
+                	<h:outputText id="operatorName" value="#{revocationContract.operator.name}" />
             	</s:decorate>
 				
 				<s:decorate id="operatorFunctionDecoration" template="/layout/edit.xhtml">
@@ -28,9 +28,34 @@
                 	<h:inputText required="true" id="operatorPhone" value="#{revocationContract.operator.phone}" />
             	</s:decorate>
 				
-				<s:decorate id="csrDecoration" template="/layout/edit.xhtml">
-                	<ui:define name="label">#{messages['certificate.content']}:</ui:define>
-                	<h:inputTextarea id="csr" value="#{revocationContract.certificate.content}" disabled="true" cols="90" rows="14" />
+				<s:decorate id="serialNumberDecoration" template="/layout/edit.xhtml">
+                	<ui:define name="label">#{messages['certificate.number']}:</ui:define>
+                	<h:outputText id="serialNumber" value="#{revocationContract.certificate.serialNumber}" />
+            	</s:decorate>
+				
+				<s:decorate id="distinguishedNameDecoration" template="/layout/edit.xhtml">
+                	<ui:define name="label">#{messages['certificate.dn']}:</ui:define>
+                	<h:outputText  id="distinguishedName" value="#{revocationContract.certificate.distinguishedName.subject}" />
+            	</s:decorate>
+				
+				<s:decorate id="validityStartDecoration" template="/layout/edit.xhtml">
+                	<ui:define name="label">#{messages['certificate.validity.start']}:</ui:define>
+                	<h:outputText id="validityStart" value="#{revocationContract.certificate.validityStart}" />
+            	</s:decorate>
+				
+				<s:decorate id="validityEndDecoration" template="/layout/edit.xhtml">
+                	<ui:define name="label">#{messages['certificate.validity.end']}:</ui:define>
+                	<h:outputText id="validityEnd" value="#{revocationContract.certificate.validityEnd}" />
+            	</s:decorate>
+				
+				<s:decorate id="issuerDecoration" template="/layout/edit.xhtml">
+                	<ui:define name="label">#{messages['certificate.issuer']}:</ui:define>
+                	<h:outputText id="issuer" value="#{revocationContract.certificate.issuer}" />
+            	</s:decorate>
+				
+				<s:decorate id="x509Decoration" template="/layout/edit.xhtml">
+                	<ui:define name="label">#{messages['certificate.x509']}:</ui:define>
+                	<h:inputTextarea id="csr" value="#{revocationContract.certificate.x509}" disabled="true" cols="90" rows="14" />
             	</s:decorate>
 				
 				<s:decorate id="descriptionDecoration" template="/layout/edit.xhtml">
@@ -38,9 +63,9 @@
                 	<h:inputTextarea id="operatorEmail" value="#{revocationContract.description}" cols="90" rows="14" />
             	</s:decorate>
             	
-				<s:decorate template="/layout/buttonbox.xhtml" id="csrButtonBox">
+				<s:decorate template="/layout/buttonbox.xhtml" id="revocationContractButtonBox">
 					<h:commandButton action="#{revocationContractPreSigningHandler.prepareSignment}" value="#{messages['button.revoke']}" id="send"/>
-					<s:button value="#{messages['button.cancel']}" action="csr" id="cancel" />
+					<s:button value="#{messages['button.cancel']}" action="list" id="cancel" />
 				</s:decorate>       
 			</rich:panel>
 		</h:form>	

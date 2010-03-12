@@ -72,13 +72,13 @@ public class FieldValidatorBean implements FieldValidator {
 		if (contract != null) {
 			validateNotEmpty("request id", contract.getRequestId(), messages);
 			validateNotEmpty("distinguished name", contract.getDistinguishedName(), messages);
-			validateNotNull("start date", contract.getStartDate(), messages);
-			validateNotNull("end date", contract.getEndDate(), messages);
+			validateNotNull("start date", contract.getValidityStart(), messages);
+			validateNotNull("end date", contract.getValidityEnd(), messages);
 			validateNotEmpty("description", contract.getDescription(), messages);
 			validateNotEmpty("legal notice", contract.getLegalNotice(), messages);			
 			validateNotNull("signature", contract.getSignature(), messages);
 			validateOperator(contract.getOperator(), messages);			
-			validateCertificate(contract.getCertificate(), contract.getDistinguishedName(), contract.getStartDate(), contract.getEndDate(), messages);						
+			validateCertificate(contract.getCertificate(), contract.getDistinguishedName(), contract.getValidityStart(), contract.getValidityEnd(), messages);						
 		}
 
 		if (messages.size() != 0) {
@@ -130,7 +130,7 @@ public class FieldValidatorBean implements FieldValidator {
 			try {
 				CertificateInfo certificateInfo = certificateParser.parseCertificate(certificate);
 				
-				if (!StringUtils.equals(distinguishedName, certificateInfo.getSubject())) {
+				if (!StringUtils.equals(distinguishedName, certificateInfo.getDistinguishedName())) {
 					messages.add("distinguished name does not match certificate");
 				}
 				

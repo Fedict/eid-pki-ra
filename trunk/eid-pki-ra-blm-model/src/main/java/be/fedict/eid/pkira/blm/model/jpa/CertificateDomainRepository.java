@@ -18,9 +18,12 @@
 
 package be.fedict.eid.pkira.blm.model.jpa;
 
+import java.util.List;
+
 import javax.ejb.Local;
 
 import be.fedict.eid.pkira.blm.model.domain.CertificateDomain;
+import be.fedict.eid.pkira.blm.model.domain.User;
 
 /**
  * @author Bram Baeyens
@@ -37,6 +40,8 @@ public interface CertificateDomainRepository {
 
 	CertificateDomain findByDnExpression(String string);
 
-	CertificateDomain findById(Integer id);	
+	CertificateDomain findById(Integer id);
+
+	List<CertificateDomain> getUnregistered(User user);	
 	
 }

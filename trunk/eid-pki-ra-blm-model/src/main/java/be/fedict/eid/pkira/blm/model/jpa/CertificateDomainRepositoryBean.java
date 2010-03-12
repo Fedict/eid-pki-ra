@@ -18,6 +18,8 @@
 
 package be.fedict.eid.pkira.blm.model.jpa;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -27,6 +29,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.blm.model.domain.CertificateDomain;
+import be.fedict.eid.pkira.blm.model.domain.User;
 
 /**
  * @author Bram Baeyens
@@ -66,5 +69,13 @@ public class CertificateDomainRepositoryBean implements CertificateDomainReposit
 	@Override
 	public CertificateDomain findById(Integer id) {
 		return entityManager.find(CertificateDomain.class, id);
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<CertificateDomain> getUnregistered(User requester) {
+		return entityManager.createNamedQuery("findUnregistered")
+				.setParameter("requester", requester)
+				.getResultList();
 	}
 }

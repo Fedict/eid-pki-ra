@@ -114,8 +114,8 @@ public class ContractHandlerBean implements ContractHandler {
 			contract.setRequester(signer);
 			contract.setContractDocument(requestMsg);
 			contract.setSubject(request.getDistinguishedName());
-			contract.setStartDate(request.getStartDate().toGregorianCalendar().getTime());
-			contract.setEndDate(request.getEndDate().toGregorianCalendar().getTime());
+			contract.setStartDate(request.getValidityStart().toGregorianCalendar().getTime());
+			contract.setEndDate(request.getValidityEnd().toGregorianCalendar().getTime());
 			repository.persistContract(contract);
 
 			// Call XKMS

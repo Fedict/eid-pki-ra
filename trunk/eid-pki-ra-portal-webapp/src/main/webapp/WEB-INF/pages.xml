@@ -26,13 +26,20 @@
 				<redirect view-id="/page/contract/signRevocationContract.xhtml"/>
 			</rule>
 		</navigation>
-	</page>
-	
+	</page>	
 
 	<page view-id="/page/certificates/certificates_list.xhtml">
 		<navigation from-action="#{certificatelist.detailCertificate(cer)}">
 			<rule if-outcome="showcertificate">
 				<redirect view-id="/page/certificates/certificate_detail.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/page/certificates/certificates_list.xhtml">
+		<navigation from-action="#{certificateHandler.prepareRevocation(cer.serialNumber)}">
+			<rule if-outcome="revokeCertificate">
+				<redirect view-id="/page/contract/revocationContract.xhtml" />
 			</rule>
 		</navigation>
 	</page>
