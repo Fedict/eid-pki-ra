@@ -14,9 +14,9 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.integration;
+package be.fedict.eid.integration.ws;
 
-import static be.fedict.eid.integration.util.WebServiceFactory.getPublicWebServiceClient;
+import static be.fedict.eid.integration.ws.WebServiceFactory.getPublicWebServiceClient;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.fail;
@@ -29,7 +29,7 @@ import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
 import be.fedict.eid.pkira.contracts.XmlMarshallingException;
-import be.fedict.eid.pkira.generated.contracts.CertificateSigningResponseType;
+import be.fedict.eid.pkira.generated.contracts.CertificateRevocationResponseType;
 import be.fedict.eid.pkira.generated.contracts.ResultType;
 
 /**
@@ -37,58 +37,53 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
  * 
  * @author Jan Van den Bergh
  */
-public class PublicWebserviceSigningTest {
+public class PublicWebserviceRevocationTest {
 	
 	@Test
-	public void signEmptyString() {
-		trySignCertificate("", null, ResultType.INVALID_MESSAGE);
+	public void revokeEmptyString() {
+		tryRevokeCertificate("", null, ResultType.INVALID_MESSAGE);
 	}
 	
 	@Test
-	public void signCertificateNull() {
-		trySignCertificate(null, null, ResultType.INVALID_MESSAGE);
+	public void revokeCertificateNull() {
+		tryRevokeCertificate(null, null, ResultType.INVALID_MESSAGE);
 	}
 	
 	@Test
-	public void signCertificateInvalidDN() throws IOException {
-		String contract = FileUtils.readFileToString(new File(getClass().getResource("/xml/CertificateSigningContractInvalidDN.xml").getFile()));
-		trySignCertificate(contract, "869b81cb-805b-4286-9c44-5350831abf82", ResultType.INVALID_MESSAGE);
+	public void revokeCertificateInvalidDN() throws IOException {
+		String contract = FileUtils.readFileToString(new File(getClass().getResource("/xml/CertificateRevocationContractInvalidDNStartDateEndDate.xml").getFile()));
+		tryRevokeCertificate(contract, "d8b6a3c9-6961-4113-a14a-e2ac00349068", ResultType.INVALID_MESSAGE);
 	}
 	
 	@Test
-	public void signCertificateValid() throws IOException {
-		String contract = FileUtils.readFileToString(new File(getClass().getResource("/xml/CertificateSigningContractValid.xml").getFile()));
-		trySignCertificate(contract, "18882bc2-686f-41cb-b0d4-7e78d984ad0a", ResultType.SUCCESS);
+	public void revokeCertificateValid() throws IOException {
+		String contract = FileUtils.readFileToString(new File(getClass().getResource("/xml/CertificateRevocationContractValid.xml").getFile()));
+		tryRevokeCertificate(contract, "d8b6a3c9-6961-4113-a14a-e2ac00349068", ResultType.UNKNOWN_CERTIFICATE);
 	}
 	
-//	@Test
-//	public void signCertificateValid2() throws IOException {
-//		String contract = FileUtils.readFileToString(new File(getClass().getResource("/xml/CertificateSigningContractValid2.xml").getFile()));
-//		trySignCertificate(contract, "3c1888ae-0b20-44eb-adac-7d083dd4752c", ResultType.SUCCESS);
-//	}
-	
 	@Test
-	public void signEmptyRequest() throws Exception {		
+	public void revokeEmptyRequest() throws Exception {		
 		String requestMessage = "<tns:CertificateRevocationRequest xmlns:tns='urn:be:fedict:eid:pkira:contracts'/>";		
-		trySignCertificate(requestMessage, null, ResultType.INVALID_MESSAGE);
+		tryRevokeCertificate(requestMessage, null, ResultType.INVALID_MESSAGE);
 	}
 
-	private void trySignCertificate(String requestMessage, String expectedRequestId,
+	private void tryRevokeCertificate(String requestMessage, String expectedRequestId,
 			ResultType expectedResult) {
 		// Sign the message
-		String responseMsg = getPublicWebServiceClient().signCertificate(requestMessage);
+		String responseMsg = getPublicWebServiceClient().revokeCertificate(requestMessage);
+		System.out.println(responseMsg);
 		
 		// Parse the result
-		CertificateSigningResponseType response;
+		CertificateRevocationResponseType response;
 		try {
 			response = new EIDPKIRAContractsClient().unmarshal(responseMsg,
-					CertificateSigningResponseType.class);
+					CertificateRevocationResponseType.class);
 		} catch (XmlMarshallingException e) {
 			fail("Error unmarshalling response", e);
 			return;
 		}	
 		
-		// Validate it
+		// Validate it		
 		assertNotNull(response);
 		assertEquals(response.getResult(), expectedResult);
 		assertEquals(response.getRequestId(), expectedRequestId);

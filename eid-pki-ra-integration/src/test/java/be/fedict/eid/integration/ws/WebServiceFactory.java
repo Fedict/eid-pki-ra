@@ -14,7 +14,7 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.integration.util;
+package be.fedict.eid.integration.ws;
 
 import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 import be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient;

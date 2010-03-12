@@ -32,8 +32,8 @@ public class CertificateRevocationRequestBuilder extends AbstractRequestBuilder<
 
 	private String certificate;	
 	private String distinguishedName;
-	private Date endDate;
-	private Date startDate;
+	private Date validityEnd;
+	private Date validityStart;
 
 	/**
 	 * Creates a certificate revocation request builder setting a random id.
@@ -59,13 +59,13 @@ public class CertificateRevocationRequestBuilder extends AbstractRequestBuilder<
 		return this;
 	}
 
-	public CertificateRevocationRequestBuilder setEndDate(Date endDate) {
-		this.endDate = endDate;
+	public CertificateRevocationRequestBuilder setValidityEnd(Date validityEnd) {
+		this.validityEnd = validityEnd;
 		return this;
 	}
 
-	public CertificateRevocationRequestBuilder setStartDate(Date startDate) {
-		this.startDate = startDate;
+	public CertificateRevocationRequestBuilder setValidityStart(Date validityStart) {
+		this.validityStart = validityStart;
 		return this;
 	}
 
@@ -75,8 +75,8 @@ public class CertificateRevocationRequestBuilder extends AbstractRequestBuilder<
 		
 		requestType.setCertificate(certificate);
 		requestType.setDistinguishedName(distinguishedName);
-		requestType.setValidityEnd(createXmlGregorianCalendar(endDate));
-		requestType.setValidityStart(createXmlGregorianCalendar(startDate));
+		requestType.setValidityEnd(createXmlGregorianCalendar(validityEnd));
+		requestType.setValidityStart(createXmlGregorianCalendar(validityStart));
 
 		return requestType;
 	}	

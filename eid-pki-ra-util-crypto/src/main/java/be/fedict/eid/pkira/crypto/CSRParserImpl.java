@@ -18,7 +18,6 @@ package be.fedict.eid.pkira.crypto;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.security.Security;
 
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.openssl.PEMReader;
@@ -35,15 +34,10 @@ import org.jboss.seam.log.Log;
  */
 @Name(CSRParser.NAME)
 @Scope(ScopeType.APPLICATION)
-public class CSRParserImpl implements CSRParser {
+public class CSRParserImpl extends BouncyCastleProviderUser implements CSRParser {
 
 	@Logger
 	private Log log;
-
-	static {
-		// Make sure BC provider is known.
-		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -84,7 +78,7 @@ public class CSRParserImpl implements CSRParser {
 		throw new CryptoException("No CSR found.");
 	}
 
-	protected void setLog(Log log) {
+	public void setLog(Log log) {
 		this.log = log;
 	}
 }

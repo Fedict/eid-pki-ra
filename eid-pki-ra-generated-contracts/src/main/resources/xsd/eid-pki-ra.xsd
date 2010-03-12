@@ -14,8 +14,8 @@
 	<!--  You should have received a copy of the GNU Lesser General Public -->
 	<!--  License along with this software; if not, see -->
 	<!--  http://www.gnu.org/licenses/. -->
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:be:fedict:eid:pkira:contracts"
-	xmlns:tns="urn:be:fedict:eid:pkira:contracts" elementFormDefault="qualified" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:be:fedict:eid:pkira:contracts" xmlns:tns="urn:be:fedict:eid:pkira:contracts"
+	elementFormDefault="qualified" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
 
 	<import id="xmldsig" namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="xmldsig-core-schema.xsd" />
 
@@ -171,8 +171,9 @@
 			<enumeration value="Success" />
 			<enumeration value="Invalid Message" />
 			<enumeration value="Invalid Signature" />
+			<enumeration value="Unknown Certificate" />
 			<enumeration value="Not Authorized" />
-			<enumeration value="Backend Error" />
+			<enumeration value="Backend Error" />			
 			<enumeration value="General Failure" />
 		</restriction>
 	</simpleType>

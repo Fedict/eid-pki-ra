@@ -108,6 +108,21 @@ public class ContractHandlerBean implements ContractHandler {
 			String signer = signatureVerifier.verifySignature(requestMsg);
 
 			// TODO: check authorization
+			
+			// Lookup the certificate
+			Certificate certificate;
+			try {
+				CertificateInfo certificateInfo = certificateParser.parseCertificate(request.getCertificate());
+				certificate = repository.findCertificate(certificateInfo.getIssuer(), certificateInfo
+						.getSerialNumber());
+				if (certificate==null) {
+					throw new ContractHandlerBeanException(ResultType.UNKNOWN_CERTIFICATE, "The certificate was not found in our database.");
+				}
+			} catch (CryptoException e) {
+				// this should not occur, as the certificate was already parsed
+				// successfully before!
+				throw new RuntimeException("Error while reparsing the certificate", e);
+			}
 
 			// Persist the contract
 			CertificateRevocationContract contract = new CertificateRevocationContract();
@@ -116,22 +131,13 @@ public class ContractHandlerBean implements ContractHandler {
 			contract.setSubject(request.getDistinguishedName());
 			contract.setStartDate(request.getValidityStart().toGregorianCalendar().getTime());
 			contract.setEndDate(request.getValidityEnd().toGregorianCalendar().getTime());
-			repository.persistContract(contract);
+			repository.persistContract(contract);			
 
 			// Call XKMS
 			xkmsService.revoke(request.getCertificate());			
 
 			// Delete the certificate
-			try {
-				CertificateInfo certificateInfo = certificateParser.parseCertificate(request.getCertificate());
-				Certificate certificate = repository.findCertificate(certificateInfo.getIssuer(), certificateInfo
-						.getSerialNumber());
-				repository.removeCertificate(certificate);
-			} catch (CryptoException e) {
-				// this should not occur, as the certificate was already parsed
-				// successfully before!
-				throw new RuntimeException("Error while reparsing the certificate", e);
-			}
+			repository.removeCertificate(certificate);
 			
 			// Return result message
 			fillResponseFromRequest(responseBuilder, request, ResultType.SUCCESS, "Success");
