@@ -211,8 +211,8 @@ public class FieldValidatorBeanTest {
 				.setCertificate(INVALID_CERTIFICATE)
 				.setDescription(INVALID_DESCRIPTION)
 				.setDistinguishedName(INVALID_DN)
-				.setEndDate(null)
-				.setStartDate(null)
+				.setValidityEnd(null)
+				.setValidityStart(null)
 				.setLegalNotice(INVALID_LEGAL_NOTICE)
 				.setOperator(createInvalidOperator())
 				.toRequestType();
@@ -239,8 +239,8 @@ public class FieldValidatorBeanTest {
 				.setCertificate(VALID_CERTIFICATE)
 				.setDescription(VALID_DESCRIPTION)
 				.setDistinguishedName(VALID_DN)
-				.setEndDate(VALID_ENDDATE)
-				.setStartDate(VALID_STARTDATE)
+				.setValidityEnd(VALID_ENDDATE)
+				.setValidityStart(VALID_STARTDATE)
 				.setLegalNotice(VALID_LEGAL_NOTICE)
 				.setOperator(createValidOperator())
 				.toRequestType();

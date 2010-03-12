@@ -14,34 +14,24 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.integration;
+package be.fedict.eid.pkira.crypto;
 
-import static be.fedict.eid.integration.util.WebServiceFactory.getPrivateWebServiceClient;
+import java.security.Security;
 
-import java.util.List;
-
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 
 /**
- * Test of the public web service.
- * 
  * @author Jan Van den Bergh
+ *
  */
-public class PrivateWebserviceTest {	
+public class BouncyCastleProviderUser {
+
+	static {
+		// Clean up old traces (in case of redeployment)
+		Security.removeProvider("BC"); 
+
+		// Make sure BC provider is known.
+		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider()); 
+	}
 	
-	@Test
-	public void getCertificateList() {
-		findCertificates("");
-	}
-
-	private void findCertificates(String userRRN) {
-		// Sign the message
-		List<CertificateWS> responseMsg = getPrivateWebServiceClient().listCertificates(userRRN);
-		
-		Assert.assertNotNull(responseMsg);
-	}
-
+	
 }

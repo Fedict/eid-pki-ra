@@ -62,8 +62,8 @@ public class RevocationContractPreSigningHandlerBean extends AbstractDSSPreSigni
 		return new CertificateRevocationRequestBuilder()
 				.setOperator(initBuilder(contract.getOperator()).toEntityType())
 				.setDistinguishedName(contract.getCertificate().getDistinguishedName().getSubject())
-				.setStartDate(contract.getCertificate().getValidityStart())
-				.setEndDate(contract.getCertificate().getValidityEnd())
+				.setValidityStart(contract.getCertificate().getValidityStart())
+				.setValidityEnd(contract.getCertificate().getValidityEnd())
 				.setCertificate(contract.getCertificate().getX509())
 				.setLegalNotice(contract.getLegalNotice())
 				.setDescription(contract.getDescription());

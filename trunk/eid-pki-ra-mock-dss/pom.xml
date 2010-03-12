@@ -20,6 +20,10 @@
 			<version>${eid-dss-version}</version>
 		</dependency>
 		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-client-contracts</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.sun.xml.ws</groupId>
 			<artifactId>jaxws-rt</artifactId>
 			<version>2.1.4</version>

@@ -209,6 +209,8 @@ public class ContractHandlerBeanTest {
 	public void testRevokeCertificateXKMSFailure() throws Exception {
 		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateRevocationRequestType.class)))
 				.thenReturn(VALID_REVOCATION_REQUEST);
+		when(domainRepository.findCertificate(eq(VALID_ISSUER), eq(VALID_SERIALNUMBER))).thenReturn(THE_CERTIFICATE);
+		when(certificateParser.parseCertificate(VALID_CERTIFICATE)).thenReturn(VALID_CERTIFICATE_INFO);
 		doThrow(new ContractHandlerBeanException(ResultType.BACKEND_ERROR, ERROR_MSG)).when(xkmsService).revoke(VALID_CERTIFICATE);
 		when(contractParser.marshalResponseMessage(
 				argThat(responseType(CertificateRevocationResponseType.class, VALID_REQUEST_ID, ResultType.BACKEND_ERROR)), 
@@ -220,6 +222,7 @@ public class ContractHandlerBeanTest {
 
 		// Validate it
 		assertEquals(result, RESPONSE_MESSAGE);
+		verify(domainRepository).findCertificate(VALID_ISSUER, VALID_SERIALNUMBER);
 		verify(domainRepository).persistContract(isA(CertificateRevocationContract.class));
 		verifyNoMoreInteractions(domainRepository);
 	}
@@ -350,8 +353,8 @@ public class ContractHandlerBeanTest {
 	private static CertificateRevocationRequestType createMinimalRevocationRequest() {
 		return new CertificateRevocationRequestBuilder(VALID_REQUEST_ID)
 			.setCertificate(VALID_CERTIFICATE)
-			.setStartDate(VALID_START)
-			.setEndDate(VALID_END)
+			.setValidityStart(VALID_START)
+			.setValidityEnd(VALID_END)
 			.toRequestType();
 	}
 
