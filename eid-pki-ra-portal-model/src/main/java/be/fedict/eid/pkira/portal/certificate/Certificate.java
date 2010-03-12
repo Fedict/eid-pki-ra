@@ -48,7 +48,7 @@ public class Certificate extends be.fedict.eid.pkira.portal.domain.Certificate i
 	public Certificate(CertificateWS certificatews){
 		 
 		setSerialNumber(certificatews.getSerialNumber());
-		setSubject(certificatews.getSubject());
+		setSubject(certificatews.getDistinguishedName());
 
 		if(certificatews.getValidityStart() != null){
 			setValidityStart(certificatews.getValidityStart().toGregorianCalendar().getTime());

@@ -42,7 +42,7 @@ public class CertificateParserImplTest {
 		CertificateInfo certificateInfo = certificateParser.parseCertificate(TestConstants.VALID_CERTIFICATE);
 
 		assertNotNull(certificateInfo);
-		assertEquals(certificateInfo.getSubject(), TestConstants.CERTIFICATE_SUBJECT);
+		assertEquals(certificateInfo.getDistinguishedName(), TestConstants.CERTIFICATE_DN);
 		assertEquals(certificateInfo.getIssuer(), TestConstants.CERTIFICATE_ISSUER);
 		assertEquals(certificateInfo.getValidityStart(), TestConstants.CERTIFICATE_START_DATE);
 		assertEquals(certificateInfo.getValidityEnd(), TestConstants.CERTIFICATE_END_DATE);

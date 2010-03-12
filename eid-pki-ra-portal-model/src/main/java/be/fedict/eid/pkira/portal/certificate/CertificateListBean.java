@@ -51,8 +51,7 @@ public class CertificateListBean implements CertificateList, Serializable{
 
 	@DataModelSelection
 	@Out(required = false)
-	private
-	Certificate certificate;
+	private Certificate certificate;
 
 	@Override
 	public List<Certificate> findCertificateList() {		

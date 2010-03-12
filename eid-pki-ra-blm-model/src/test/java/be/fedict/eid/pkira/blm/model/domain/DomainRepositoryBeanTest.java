@@ -42,7 +42,7 @@ public class DomainRepositoryBeanTest extends DatabaseTest {
 	private static final String VALID_REQUESTER = "REQUESTER";
 	private static final BigInteger VALID_SERIALNUMBER = BigInteger.TEN;
 	private static final Date VALID_STARTDATE = new Date();
-	private static final String VALID_SUBJECT = "SUBJECT";
+	private static final String VALID_DN = "DISTINGUISHED_NAME";
 	private static final String VALID_X509 = "X509";
 	private static final String VALID_CONTRACT = "CONTRACT";
 	private static final Integer VALID_VALIDITY = 15;
@@ -95,7 +95,7 @@ public class DomainRepositoryBeanTest extends DatabaseTest {
 		contract.setCertificateType(VALID_CERTIFICATE_TYPE);
 		contract.setContractDocument(VALID_CONTRACT);
 		contract.setRequester(VALID_REQUESTER);
-		contract.setSubject(VALID_SUBJECT);
+		contract.setSubject(VALID_DN);
 		contract.setValidityPeriodMonths(VALID_VALIDITY);
 		
 		return contract;
@@ -118,7 +118,7 @@ public class DomainRepositoryBeanTest extends DatabaseTest {
 		certificate.setCertificateType(VALID_CERTIFICATE_TYPE);
 		certificate.setRequesterName(VALID_REQUESTER);
 		certificate.setSerialNumber(VALID_SERIALNUMBER);
-		certificate.setSubject(VALID_SUBJECT);
+		certificate.setDistinguishedName(VALID_DN);
 		certificate.setValidityEnd(VALID_ENDDATE);
 		certificate.setValidityStart(VALID_STARTDATE);
 		certificate.setX509(VALID_X509);
@@ -130,7 +130,7 @@ public class DomainRepositoryBeanTest extends DatabaseTest {
 		assertEquals(certificate.getCertificateType() ,VALID_CERTIFICATE_TYPE);
 		assertEquals(certificate.getRequesterName() ,VALID_REQUESTER);
 		assertEquals(certificate.getSerialNumber() ,VALID_SERIALNUMBER);
-		assertEquals(certificate.getSubject() ,VALID_SUBJECT);
+		assertEquals(certificate.getDistinguishedName() ,VALID_DN);
 		assertEquals(certificate.getValidityEnd() ,VALID_ENDDATE);
 		assertEquals(certificate.getValidityStart() ,VALID_STARTDATE );
 		assertEquals(certificate.getX509() ,VALID_X509);

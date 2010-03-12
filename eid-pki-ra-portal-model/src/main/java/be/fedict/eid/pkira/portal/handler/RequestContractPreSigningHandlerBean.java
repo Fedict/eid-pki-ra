@@ -42,8 +42,8 @@ public class RequestContractPreSigningHandlerBean extends AbstractDSSPreSigningH
 
 	private RequestContractSigningWrapper signingWrapper;
 
-	@Override
 	@Out
+	@Override
 	protected RequestContractSigningWrapper getSigningWrapper() {
 		return signingWrapper;
 	}

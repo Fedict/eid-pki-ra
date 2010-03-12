@@ -108,8 +108,8 @@ public class FieldValidatorBeanTest {
 	public void testValidateCertificateRevocationRequestInvalidDNAndDates() {
 		CertificateRevocationRequestType contract = createValidCertificateRevocationRequest();
 		contract.setDistinguishedName(VALID_DN + ",test=test");
-		contract.setStartDate(contract.getEndDate());
-		contract.setEndDate(null);		
+		contract.setValidityStart(contract.getValidityEnd());
+		contract.setValidityEnd(null);		
 		try {
 			bean.validateContract(contract);
 			fail("Expected an exception");

@@ -77,8 +77,8 @@
 			<extension base="tns:requestType">
 				<sequence>
 					<element name="DistinguishedName" type="tns:distinguishedNameType" />
-					<element name="StartDate" type="date" />
-					<element name="EndDate" type="date" />
+					<element name="ValidityStart" type="dateTime" />
+					<element name="ValidityEnd" type="dateTime" />
 					<element name="Certificate" type="tns:pemEncodedType" />
 					<element ref="dsig:Signature" minOccurs="0" />
 				</sequence>

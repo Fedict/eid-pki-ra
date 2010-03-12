@@ -3,7 +3,7 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" 
              version="1.0">
-	<persistence-unit name="eid-pki-ra-blm-PersistenceUnit">
+	<persistence-unit name="eid-pki-ra-blm-PersistenceUnit" transaction-type="JTA">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<jta-data-source>java:/DefaultDS</jta-data-source>
 
@@ -26,12 +26,12 @@
 			<property name="hibernate.show_sql" value="${hibernate.show_sql}" />
 			<property name="hibernate.format_sql" value="${hibernate.format_sql}" />
 
-			<property name="jboss.entity.manager.factory.jndi.name" value="java:/seam-poc-EntityManagerFactory" />
-
 			<property name="cache.provider_class" value="${hibernate.cache.provider_class}" />
        		<property name="hibernate.jdbc.batch_size" value="20" />
 			<property name="hibernate.cache.use_query_cache" value="${hibernate.use_query_cache}" />
-			<property name="hibernate.cache.use_second_level_cache"	value="${hibernate.use_second_level_cache}" />    
+			<property name="hibernate.cache.use_second_level_cache"	value="${hibernate.use_second_level_cache}" /> 
+			<property name="hibernate.transaction.manager_lookup_class" 
+				value="org.hibernate.transaction.JBossTransactionManagerLookup"/>       
 		</properties>
 	</persistence-unit>
 </persistence>

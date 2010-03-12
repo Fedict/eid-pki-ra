@@ -26,6 +26,8 @@ import javax.xml.ws.BindingProvider;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivateService;
+import be.fedict.eid.pkira.generated.privatews.FindCertificateRequest;
+import be.fedict.eid.pkira.generated.privatews.FindCertificateResponse;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesRequest;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesResponse;
 import be.fedict.eid.pkira.generated.privatews.ObjectFactory;
@@ -42,8 +44,14 @@ public class EIDPKIRAPrivateServiceClient {
 	
 	private static final String WSDL_LOCATION = "/wsdl/eid-pki-ra-private.wsdl";
 	
+	private final ObjectFactory factory;
+	
 	private String serviceUrl;
 	private EIDPKIRAPrivatePortType port;
+	
+	public EIDPKIRAPrivateServiceClient() {
+		this.factory = new ObjectFactory();
+	}
 
 	/**
 	 * Lists all the certificates that are available to the user.
@@ -51,11 +59,19 @@ public class EIDPKIRAPrivateServiceClient {
 	 * @return the list of certificates available to him.
 	 */
 	public List<CertificateWS> listCertificates(String userRRN) {		
-		ListCertificatesRequest request = new ObjectFactory().createListCertificatesRequest();
+		ListCertificatesRequest request = factory.createListCertificatesRequest();
 		request.setUserRRN(userRRN);
 		ListCertificatesResponse response = getWebservicePort().listCertificates(request);
 
 		return response.getCertificates();
+	}
+	
+	public CertificateWS findCertificate(String userRRN, String serialNumber) {
+		FindCertificateRequest request = factory.createFindCertificateRequest();
+		request.setUserRRN(userRRN);
+		request.setSerialNumber(serialNumber);
+		FindCertificateResponse response = getWebservicePort().findCertificate(request);
+		return response.getCertificate();
 	}
 
 	/**

@@ -25,18 +25,18 @@
 
 	<core:manager concurrent-request-timeout="500" conversation-id-parameter="cid" conversation-timeout="120000" />
 
-	<transaction:ejb-transaction />
-
-	<persistence:managed-persistence-context
-		auto-create="true" name="entityManager" persistence-unit-jndi-name="java:/seam-poc-EntityManagerFactory" />
+<!--	<transaction:ejb-transaction />-->
+<!---->
+<!--	<persistence:managed-persistence-context-->
+<!--			auto-create="true" name="entityManager" persistence-unit-jndi-name="java:/eid-pki-ra-blm-PersistenceUnit" />-->
 
 	<!--
 		<drools:rule-base name="securityRules"> <drools:rule-files>
 		<value>/security.drl</value> </drools:rule-files> </drools:rule-base>
 	-->
-	<security:identity authenticate-method="#{authenticator.authenticate}" />
+<!--	<security:identity authenticate-method="#{authenticator.authenticate}" />-->
 
-	<mail:mail-session host="localhost" password="test" port="2525" username="test" />
+<!--	<mail:mail-session host="localhost" password="test" port="2525" username="test" />-->
 	<!--
     Configure JBoss Messaging queues for Seam 
   -->

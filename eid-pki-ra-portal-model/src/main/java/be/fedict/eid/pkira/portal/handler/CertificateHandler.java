@@ -19,9 +19,13 @@ package be.fedict.eid.pkira.portal.handler;
 
 import java.util.List;
 
-import be.fedict.eid.pkira.portal.certificate.Certificate;
+import be.fedict.eid.pkira.portal.domain.Certificate;
 
 public interface CertificateHandler {
-	public List<Certificate> findCertificateList(String userRRN);
-	public Certificate findCertificate(String serialNumber);
+	
+	List<Certificate> findCertificateList(String userRRN);
+	
+	String preprareRevocation(String serialNumber);
+
+	String getCertificate(String serialNumber);
 }

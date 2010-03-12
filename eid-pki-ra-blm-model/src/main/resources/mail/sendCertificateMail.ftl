@@ -7,7 +7,7 @@ Dear ${certificate.requesterName},
 Please find attached the certificate you requested earlier.
 
 Certificate details:
-Subject: ${certificate.subject}
+Subject: ${certificate.distinguishedName}
 Issuer: ${certificate.issuer}
 Valid from: ${certificate.validityStart?date}
 Valid until: ${certificate.validityEnd?date}

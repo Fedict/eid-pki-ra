@@ -75,8 +75,8 @@ public class CertificateRevocationRequestBuilder extends AbstractRequestBuilder<
 		
 		requestType.setCertificate(certificate);
 		requestType.setDistinguishedName(distinguishedName);
-		requestType.setEndDate(createXmlGregorianCalendar(endDate));
-		requestType.setStartDate(createXmlGregorianCalendar(startDate));
+		requestType.setValidityEnd(createXmlGregorianCalendar(endDate));
+		requestType.setValidityStart(createXmlGregorianCalendar(startDate));
 
 		return requestType;
 	}	
