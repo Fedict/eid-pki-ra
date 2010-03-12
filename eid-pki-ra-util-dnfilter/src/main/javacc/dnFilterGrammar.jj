@@ -1,0 +1,25 @@
+options{  STATIC = false;  JDK_VERSION = "1.6";}
+
+PARSER_BEGIN(DNFilterParser)
+package be.fedict.eid.pkira.dnfilter;
+
+import java.util.List;import java.util.Collections;
+import java.util.ArrayList;import be.fedict.eid.pkira.dnfilter.DNFilter.DNFilterPart;
+
+public class DNFilterParser {  class State {    int wildcardCount = 0;    List<DNFilterPart> parts = new ArrayList<DNFilterPart>();  }
+}
+
+PARSER_END(DNFilterParser)
+
+<DEFAULT> TOKEN: {  < #LETTER: ["a"-"z","A"-"Z"] >| < #DIGIT: ["0"-"9"] >| < #SPECIAL_CHAR: "-"|"_"|"." >}<DEFAULT> TOKEN:{  < KEY:	 (<LETTER>)+ >| < EQUALS: "=" > : VALUE| < COMMA: "," > }<VALUE> TOKEN:{  < LITERAL_VALUE: (<LETTER>|<DIGIT>|<SPECIAL_CHAR>)+ > : DEFAULT| < WILDCARD: "*" > : DEFAULT}
+
+<*> SKIP: {
+  <WS: " " >
+}
+
+private void filterPart(State state):{
+  Token key, value;}
+{
+  key = 	<KEY> <EQUALS> ( value=<LITERAL_VALUE> | value=<WILDCARD>  { state.wildcardCount++; } )
+  {		    state.parts.add(new DNFilterPart(key.image, value.image));
+  }}DNFilter filter() throws InvalidDNFilterException :{  State state = new State();}{  filterPart(state) ( <COMMA> filterPart(state) )* <EOF>  {    if (state.wildcardCount > 1) {      throw new InvalidDNFilterException("Only one wildcard allowed in a filter.");    }    Collections.sort(state.parts);	    return new DNFilter(state.parts);  }}
