@@ -21,7 +21,13 @@ package be.fedict.eid.pkira.portal.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+
+import be.fedict.eid.pkira.crypto.CSRInfo;
 
 /**
  * @author Bram Baeyens

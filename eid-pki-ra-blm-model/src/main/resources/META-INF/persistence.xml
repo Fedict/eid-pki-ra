@@ -13,6 +13,7 @@
 		<class>be.fedict.eid.pkira.blm.model.domain.Registration</class>
 		<class>be.fedict.eid.pkira.blm.model.domain.CertificateDomain</class>
 		<class>be.fedict.eid.pkira.blm.model.domain.User</class>
+		<class>be.fedict.eid.pkira.blm.model.config.ConfigurationEntry</class>
 		
 		<properties>		
 			<property name="hibernate.dialect" value="${hibernate.dialect}" />

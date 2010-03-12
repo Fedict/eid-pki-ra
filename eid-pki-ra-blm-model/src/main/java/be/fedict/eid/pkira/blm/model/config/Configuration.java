@@ -14,34 +14,31 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.integration;
+package be.fedict.eid.pkira.blm.model.config;
 
-import static be.fedict.eid.integration.util.WebServiceFactory.getPrivateWebServiceClient;
-
-import java.util.List;
-
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-import be.fedict.eid.pkira.generated.privatews.CertificateWS;
+import javax.ejb.Local;
 
 /**
- * Test of the public web service.
+ * Interface to the component to get the configuration.
  * 
  * @author Jan Van den Bergh
  */
-public class PrivateWebserviceTest {	
+@Local
+public interface Configuration {
+
+	static final String NAME = "configuration";
 	
-	@Test
-	public void getCertificateList() {
-		findCertificates("");
-	}
-
-	private void findCertificates(String userRRN) {
-		// Sign the message
-		List<CertificateWS> responseMsg = getPrivateWebServiceClient().listCertificates(userRRN);
-		
-		Assert.assertNotNull(responseMsg);
-	}
-
+	/**
+	 * Returns the value for a specific configuration key.
+	 * @param key the key to the configuration value.
+	 * @return the value.
+	 */
+	String getConfigurationValue(String key);
+	
+	/**
+	 * Changes a configuration value.
+	 * @param key key to change
+	 * @param value the new value.
+	 */
+	void setConfigurationValue(String key, String value);
 }

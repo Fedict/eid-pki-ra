@@ -26,7 +26,6 @@ import org.jboss.seam.annotations.Scope;
 
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 
-@Entity
 @Name("tempcertificate")
 @Scope(ScopeType.CONVERSATION)
 public class Certificate extends be.fedict.eid.pkira.portal.domain.Certificate implements Serializable{

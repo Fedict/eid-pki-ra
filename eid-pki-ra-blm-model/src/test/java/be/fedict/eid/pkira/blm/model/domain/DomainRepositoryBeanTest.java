@@ -28,6 +28,8 @@ import java.util.List;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import be.fedict.eid.pkira.blm.model.DatabaseTest;
+
 /**
  * @author Jan Van den Bergh
  *

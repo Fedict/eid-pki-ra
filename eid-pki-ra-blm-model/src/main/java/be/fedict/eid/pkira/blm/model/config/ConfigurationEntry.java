@@ -14,34 +14,46 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.integration;
+package be.fedict.eid.pkira.blm.model.config;
 
-import static be.fedict.eid.integration.util.WebServiceFactory.getPrivateWebServiceClient;
-
-import java.util.List;
-
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-import be.fedict.eid.pkira.generated.privatews.CertificateWS;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
- * Test of the public web service.
+ * An entry in the configuration.
  * 
  * @author Jan Van den Bergh
  */
-public class PrivateWebserviceTest {	
+@Entity
+@Table(name="CONFIGURATION")
+public class ConfigurationEntry {
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Integer id;
+	private String key;
+	private String value;
 	
-	@Test
-	public void getCertificateList() {
-		findCertificates("");
+	public String getKey() {
+		return key;
 	}
-
-	private void findCertificates(String userRRN) {
-		// Sign the message
-		List<CertificateWS> responseMsg = getPrivateWebServiceClient().listCertificates(userRRN);
-		
-		Assert.assertNotNull(responseMsg);
+	
+	public void setKey(String key) {
+		this.key = key;
 	}
-
+	
+	public String getValue() {
+		return value;
+	}
+	
+	public void setValue(String value) {
+		this.value = value;
+	}
+	
+	public Integer getId() {
+		return id;
+	}
 }

@@ -17,15 +17,14 @@
 package be.fedict.eid.pkira.blm.model.contracthandler.services;
 
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.log.Log;
 
 import be.fedict.eid.dss.client.DigitalSignatureServiceClient;
-import be.fedict.eid.dss.client.NotParseableXMLDocumentException;
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
 import be.fedict.eid.pkira.generated.contracts.ResultType;
 
@@ -41,13 +40,8 @@ public class SignatureVerifierBean implements SignatureVerifier {
 	@Logger
 	private Log log;
 	
+	@In(value="digitalSignatureServiceClient", create=true)
 	private DigitalSignatureServiceClient dssClient;
-	
-	@PostConstruct
-	public void initialize() {
-		// Create the eid-dss client
-		dssClient = new DigitalSignatureServiceClient();
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -57,13 +51,7 @@ public class SignatureVerifierBean implements SignatureVerifier {
 	 */
 	public String verifySignature(String requestMessage) throws ContractHandlerBeanException {
 		try {
-			//TODO use verifyWithSignerIdentity method
-			//String identity = dssClient.verifyWithSignerIdentity(requestMessage);
-			String identity=null;
-			if (dssClient.verify(requestMessage)) { 
-				identity = "90010110021";
-			}
-						
+			String identity = dssClient.verifyWithSignerIdentity(requestMessage);						
 			if (identity != null) {
 				return identity;
 			}
@@ -73,10 +61,7 @@ public class SignatureVerifierBean implements SignatureVerifier {
 			// eid-dss client throws runtime exception when something is wrong,
 			// so let's handle this.
 			log.error("Error during call to eid-dss to validate signature.", e);
-			throw e;
-		} catch (NotParseableXMLDocumentException e) {
-			log.error("Error during call to eid-dss to validate signature.", e);
-			throw new RuntimeException(e);
+			throw new ContractHandlerBeanException(ResultType.INVALID_SIGNATURE, "Error verifying signature", e);
 		}
 	}
 	

@@ -18,6 +18,7 @@
 package be.fedict.eid.pkira.portal.certificate;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Remove;
@@ -33,8 +34,8 @@ import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.datamodel.DataModel;
 import org.jboss.seam.annotations.datamodel.DataModelSelection;
 
-import be.fedict.eid.pkira.portal.handler.CertificateHandler;
-import be.fedict.eid.pkira.portal.handler.CertificateHandlerBean;
+import be.fedict.eid.pkira.generated.privatews.CertificateWS;
+import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 
 @Stateful
 @Name(CertificateList.NAME)

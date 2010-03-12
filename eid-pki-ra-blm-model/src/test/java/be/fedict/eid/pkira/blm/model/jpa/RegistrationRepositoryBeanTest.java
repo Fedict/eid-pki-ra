@@ -30,8 +30,8 @@ import javax.persistence.PersistenceException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import be.fedict.eid.pkira.blm.model.DatabaseTest;
 import be.fedict.eid.pkira.blm.model.domain.CertificateDomain;
-import be.fedict.eid.pkira.blm.model.domain.DatabaseTest;
 import be.fedict.eid.pkira.blm.model.domain.Registration;
 import be.fedict.eid.pkira.blm.model.domain.RegistrationStatus;
 import be.fedict.eid.pkira.blm.model.domain.User;

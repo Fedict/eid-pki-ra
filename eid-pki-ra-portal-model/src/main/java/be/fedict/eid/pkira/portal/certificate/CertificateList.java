@@ -17,6 +17,8 @@
  */
 package be.fedict.eid.pkira.portal.certificate;
 
+import java.util.List;
+
 import javax.ejb.Local;
 
 @Local
@@ -38,4 +40,6 @@ public interface CertificateList {
 	 * 
 	 */
 	public String detailCertificate(Certificate certificate);
+	
+	public List<Certificate> findCertificateList();
 }
