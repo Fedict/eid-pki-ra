@@ -20,20 +20,20 @@ package be.fedict.eid.pkira.portal.handler;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jboss.seam.annotations.In;
+
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 import be.fedict.eid.pkira.portal.certificate.Certificate;
 import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 
 public class CertificateHandlerBean implements CertificateHandler {
 
-	private final EIDPKIRAPrivateServiceClient eidpkiraPrivateServiceClient = new EIDPKIRAPrivateServiceClient(
-			"http://localhost:8080/eid-pki-ra/webservice/EIDPKIRAPrivateService");;
+	@In(value = EIDPKIRAPrivateServiceClient.NAME, create = true)
+	private EIDPKIRAPrivateServiceClient eidpkiraPrivateServiceClient;
 
 	@Override
 	public List<Certificate> findCertificateList(String userRRN) {
-
-		List<CertificateWS> listCertificates = eidpkiraPrivateServiceClient
-				.listCertificates(userRRN);
+		List<CertificateWS> listCertificates = eidpkiraPrivateServiceClient.listCertificates(userRRN);
 		List<Certificate> certificates = new ArrayList<Certificate>();
 		for (CertificateWS certificatews : listCertificates) {
 			Certificate certificate = new Certificate(certificatews);
@@ -45,7 +45,11 @@ public class CertificateHandlerBean implements CertificateHandler {
 
 	@Override
 	public Certificate findCertificate(String serialNumber) {
-		
 		return null;
+	}
+
+	
+	protected void setEidpkiraPrivateServiceClient(EIDPKIRAPrivateServiceClient eidpkiraPrivateServiceClient) {
+		this.eidpkiraPrivateServiceClient = eidpkiraPrivateServiceClient;
 	}
 }

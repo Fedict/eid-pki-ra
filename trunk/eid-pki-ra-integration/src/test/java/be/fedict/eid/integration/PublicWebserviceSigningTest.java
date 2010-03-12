@@ -16,6 +16,7 @@
  */
 package be.fedict.eid.integration;
 
+import static be.fedict.eid.integration.util.WebServiceFactory.getPublicWebServiceClient;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.fail;
@@ -24,30 +25,19 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
 import be.fedict.eid.pkira.contracts.XmlMarshallingException;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningResponseType;
 import be.fedict.eid.pkira.generated.contracts.ResultType;
-import be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient;
 
 /**
  * Test of the public web service.
  * 
  * @author Jan Van den Bergh
  */
-public class PublicWebserviceTest {
-
-	private static final String SERVICE_URL = "http://localhost:8080/eid-pki-ra/webservice/EIDPKIRAService";
-	private  EIDPKIRAServiceClient webserviceClient;
-	
-	@BeforeMethod
-	public void setup() {
-		webserviceClient = new EIDPKIRAServiceClient();
-		webserviceClient.setServiceUrl(SERVICE_URL);
-	}
+public class PublicWebserviceSigningTest {
 	
 	@Test
 	public void signEmptyString() {
@@ -86,7 +76,7 @@ public class PublicWebserviceTest {
 	private void trySignCertificate(String requestMessage, String expectedRequestId,
 			ResultType expectedResult) {
 		// Sign the message
-		String responseMsg = webserviceClient.signCertificate(requestMessage);
+		String responseMsg = getPublicWebServiceClient().signCertificate(requestMessage);
 		
 		// Parse the result
 		CertificateSigningResponseType response;

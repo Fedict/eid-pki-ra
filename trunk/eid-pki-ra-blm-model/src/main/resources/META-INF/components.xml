@@ -13,6 +13,10 @@
 			http://jboss.com/products/seam/components http://jboss.com/products/seam/components-2.2.xsd 
 			http://jboss.com/products/seam/jms http://jboss.com/products/seam/jms-2.2.xsd">
 
+	<component name="digitalSignatureServiceClient" 
+		class="be.fedict.eid.dss.client.DigitalSignatureServiceClient" 
+		scope="application" />
+
 	<component name="eidPKIRAContractsClient" 
 		class="be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient" 
 		scope="application" />

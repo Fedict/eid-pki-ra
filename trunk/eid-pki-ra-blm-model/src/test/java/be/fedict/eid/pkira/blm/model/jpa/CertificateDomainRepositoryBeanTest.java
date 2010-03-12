@@ -18,7 +18,10 @@
 
 package be.fedict.eid.pkira.blm.model.jpa;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.fail;
 
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
@@ -26,8 +29,8 @@ import javax.persistence.PersistenceException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import be.fedict.eid.pkira.blm.model.DatabaseTest;
 import be.fedict.eid.pkira.blm.model.domain.CertificateDomain;
-import be.fedict.eid.pkira.blm.model.domain.DatabaseTest;
 
 /**
  * @author Bram Baeyens
