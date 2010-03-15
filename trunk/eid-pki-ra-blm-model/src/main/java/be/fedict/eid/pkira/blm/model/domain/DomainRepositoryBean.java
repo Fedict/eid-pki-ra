@@ -26,9 +26,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 
 /**
@@ -38,9 +38,10 @@ import org.jboss.seam.annotations.Name;
  */
 @Stateless
 @Name(DomainRepository.NAME)
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class DomainRepositoryBean implements DomainRepository {
 
-	@In
+	@PersistenceContext
 	private EntityManager entityManager;
 
 	/**
