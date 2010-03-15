@@ -24,8 +24,8 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.blm.model.domain.Registration;
@@ -40,7 +40,7 @@ import be.fedict.eid.pkira.blm.model.domain.RegistrationStatus;
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class RegistrationRepositoryBean implements RegistrationRepository {
 
-	@In
+	@PersistenceContext
 	private EntityManager entityManager;
 	
 	protected void setEntityManager(EntityManager entityManager) {

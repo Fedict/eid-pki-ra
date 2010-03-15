@@ -17,12 +17,14 @@
 package be.fedict.eid.pkira.blm.model.config;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 
 /**
@@ -32,11 +34,12 @@ import org.jboss.seam.annotations.Name;
  */
 @Stateless
 @Name(Configuration.NAME)
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class ConfigurationBean implements Configuration {
 
-	@In
+	@PersistenceContext
 	private EntityManager entityManager;
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -45,18 +48,18 @@ public class ConfigurationBean implements Configuration {
 		ConfigurationEntry entry = findConfigurationEntry(key);
 		return entry != null ? entry.getValue() : null;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void setConfigurationValue(String key, String value) {
 		ConfigurationEntry entry = findConfigurationEntry(key);
-		if (entry==null) {
+		if (entry == null) {
 			entry = new ConfigurationEntry();
 			entry.setKey(key);
 		}
-		
+
 		entry.setValue(value);
 		entityManager.persist(entry);
 	}
@@ -64,7 +67,7 @@ public class ConfigurationBean implements Configuration {
 	private ConfigurationEntry findConfigurationEntry(String key) {
 		Query query = entityManager.createQuery("FROM ConfigurationEntry e WHERE e.key=?");
 		query.setParameter(1, key);
-		
+
 		try {
 			return (ConfigurationEntry) query.getSingleResult();
 		} catch (EntityNotFoundException e) {
@@ -78,5 +81,4 @@ public class ConfigurationBean implements Configuration {
 		this.entityManager = entityManager;
 	}
 
-	
 }
