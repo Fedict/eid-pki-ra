@@ -17,54 +17,49 @@
 package be.fedict.eid.pkira.dnfilter;
 
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * Interface to the bean handling the DN filter logic.
  * 
  * @author Jan Van den Bergh
  */
-public interface DNFilterManager {
+public interface DistinguishedNameManager {
 
 	static final String NAME = "dnFilterManager";
-	
+
 	/**
-	 * Parses a filter expression and converts it to a DNFilter.
+	 * Parses an expression and converts it to a DistinguishedName.
 	 * 
-	 * @param filterExpression
+	 * @param expression
 	 *            expression to parse.
-	 * @return the filter.
-	 * @throws InvalidDNFilterException
-	 *             if the filter string in invalid.
+	 * @return the distinguished name.
+	 * @throws InvalidDistinguishedNameException
+	 *             if the expression in invalid.
 	 */
-	DNFilter createDNFilter(String filterExpression) throws InvalidDNFilterException;
+	DistinguishedName createDistinguishedName(String expression) throws InvalidDistinguishedNameException;
 
 	/**
-	 * Checks if the given filter overlaps with any of the other filters.
+	 * Checks if the given distinguished name overlaps with any of the other
+	 * distinguished names.
 	 * 
-	 * @param newFilter
+	 * @param newDN
 	 *            the filter to check.
-	 * @param otherFilters
+	 * @param otherDNs
 	 *            filters to check with.
-	 * @return if there is an overlap.
+	 * @return the distinguished names this name overlaps with.
 	 */
-	boolean overlaps(DNFilter newFilter, Collection<DNFilter> otherFilters);
+	Set<DistinguishedName> overlapsWith(DistinguishedName newDN, Collection<DistinguishedName> otherDNs);
 
 	/**
-	 * Checks if a DN matches a filter.
+	 * Normalizes a distinguished name expression. This puts all its parts in
+	 * the correct order.
 	 * 
-	 * @param filter
-	 *            filter to check matches with.
 	 * @param dnExpression
-	 *            the expression to match.
-	 * @return if there is a match.
-	 */
-	boolean matches(DNFilter filter, String dnExpression);
-
-	/**
-	 * Normalizes a filter expressions. This puts all the expressions in the correct order.
-	 * @param filterExpression filter expression to normalize.
+	 *            expression to normalize.
 	 * @return normalized expression.
-	 * @throws InvalidDNFilterException if the filter expression could not be parsed.
+	 * @throws InvalidDistinguishedNameException
+	 *             if the expression could not be parsed.
 	 */
-	String normalize(String filterExpression) throws InvalidDNFilterException;
+	String normalize(String dnExpression) throws InvalidDistinguishedNameException;
 }
