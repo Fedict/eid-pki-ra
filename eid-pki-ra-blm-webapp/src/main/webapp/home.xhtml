@@ -1,0 +1,22 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib"
+		xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich"
+		xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml"
+		login-required="true">
+
+	<ui:define name="center">
+		<rich:panel id="panel">
+			<f:facet name="header">#{messages['home.title']}</f:facet>			
+            	
+			
+			<li>
+				<a href="https://www.e-contract.be/eid-idp/protocol/simple?Target=http://localhost:8080/eid-pki-ra/admin/seam/resource/simpleAuthenticationHandler">
+					Simple Identification Protocol
+				</a>
+			</li>
+<!--	<li><a-->
+<!--		href="https://www.e-contract.be/eid-idp/saml-request?IdPDestination=https://<%=request.getServerName()%>:<%=request.getServerPort()%>/eid-idp/protocol/saml2&SPDestination=https://<%=request.getServerName()%>:<%=request.getServerPort()%>/eid-idp-sp/saml2-landing">SAML2-->
+<!--	eID IdP Request</a></li>-->
+		</rich:panel>
+	</ui:define>
+</ui:composition>

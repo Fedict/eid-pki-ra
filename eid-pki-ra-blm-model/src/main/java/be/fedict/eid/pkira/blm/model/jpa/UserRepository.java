@@ -36,4 +36,6 @@ public interface UserRepository {
 	User findById(Integer id);
 	
 	User findByNationalRegisterNumber(String nationalRegisterNumber);
+
+	User getReference(Integer primaryKey);
 }

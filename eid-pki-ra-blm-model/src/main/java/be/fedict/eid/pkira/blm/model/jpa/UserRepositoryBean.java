@@ -61,4 +61,9 @@ public class UserRepositoryBean implements UserRepository {
 				.getSingleResult();
 	}
 
+	@Override
+	public User getReference(Integer primaryKey) {
+		return entityManager.getReference(User.class, primaryKey);
+	}
+
 }

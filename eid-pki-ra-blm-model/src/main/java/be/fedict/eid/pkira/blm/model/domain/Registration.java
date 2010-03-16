@@ -36,12 +36,14 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.validator.Email;
 import org.hibernate.validator.NotEmpty;
 import org.hibernate.validator.NotNull;
+import org.jboss.seam.annotations.Name;
 
 /**
  * @author Bram Baeyens
  *
  */
 @Entity
+@Name("registration")
 @Table(uniqueConstraints = {
 		@UniqueConstraint(columnNames={"FK_REQUESTER_ID", "FK_CERTIFICATE_DOMAIN_ID"})
 })
@@ -70,7 +72,7 @@ public class Registration implements Serializable {
 	@JoinColumn(name="FK_CERTIFICATE_DOMAIN_ID",
 			referencedColumnName="CERTIFICATE_DOMAIN_ID")
 	private CertificateDomain certificateDomain;
-	
+
 	public Integer getId() {
 		return id;
 	}

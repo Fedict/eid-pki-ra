@@ -6,18 +6,12 @@
 		xmlns:rich="http://richfaces.org/rich"
 		id="header-form">
 
-	<rich:toolBar id="tool-bar" style="height:25px;">
-		<rich:toolBarGroup location="left" id="tool-bar-group-left">
-			<rich:menuItem value="#{messages['general.home']}" action="home" id="home" />
-			<rich:menuItem value="#{messages['person.list']}" action="personList" id="personList" rendered="#{identity.loggedIn}"/>
-		
-		
-			<ui:include src="/layout/status.xhtml"/>
-		</rich:toolBarGroup>
-		
-		<rich:toolBarGroup location="right" id="tool-bar-group-right">
-			<h:outputText value="&#160;" />
-			<h:commandLink value="#{messages['general.logout']}" action="#{identity.logout}" id="logout-link" rendered="#{identity.loggedIn}"/>
-		</rich:toolBarGroup>
-	</rich:toolBar>
+	<div id="header">
+		<div id="fed">fed</div>
+		<div id="ictegov">
+			<div id="ict">ict</div>
+			<div id="egov">e-gov</div>
+		</div>
+		<h1>#{messages['general.title']}</h1>
+	</div>
 </h:form>
