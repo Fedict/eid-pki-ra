@@ -73,9 +73,14 @@ public class CertificateDomainRepositoryBean implements CertificateDomainReposit
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<CertificateDomain> getUnregistered(User requester) {
+	public List<CertificateDomain> findUnregistered(User requester) {
 		return entityManager.createNamedQuery("findUnregistered")
 				.setParameter("requester", requester)
 				.getResultList();
+	}
+
+	@Override
+	public CertificateDomain getReference(Integer primaryKey) {
+		return entityManager.getReference(CertificateDomain.class, primaryKey);
 	}
 }

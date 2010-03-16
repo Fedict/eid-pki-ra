@@ -19,7 +19,15 @@
 
 	<component name="eidPKIRAContractsClient" 
 		class="be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient" 
-		scope="application" />
+		scope="application" />		
+
+	<component name="currentUser" 
+		class="be.fedict.eid.pkira.blm.model.domain.User" 
+		scope="session" />		
+
+	<component name="newRegistration" 
+		class="be.fedict.eid.pkira.blm.model.domain.Registration" 
+		scope="conversation" />
 		
 	<transaction:ejb-transaction />
 

@@ -27,12 +27,14 @@ import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.jboss.seam.annotations.Name;
 
 /**
  * @author Bram Baeyens
  *
  */
 @Entity
+@Name("user")
 @NamedQuery(
 		name="findByNationalRegisterNumber",
 		query="SELECT u FROM User u WHERE u.nationalRegisterNumber = :nationalRegisterNumber"

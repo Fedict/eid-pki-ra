@@ -42,6 +42,8 @@ public interface CertificateDomainRepository {
 
 	CertificateDomain findById(Integer id);
 
-	List<CertificateDomain> getUnregistered(User user);	
+	List<CertificateDomain> findUnregistered(User user);
+
+	CertificateDomain getReference(Integer primaryKey);	
 	
 }
