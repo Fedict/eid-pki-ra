@@ -106,6 +106,7 @@ public class DomainRepositoryBean implements DomainRepository {
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public void removeCertificate(Certificate certificate) {
+		certificate = entityManager.getReference(Certificate.class, certificate.getId());
 		entityManager.remove(certificate);
 	}
 

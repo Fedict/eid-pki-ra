@@ -53,7 +53,7 @@ public class CertificateParserImpl extends BouncyCastleProviderUser implements C
 		try {
 			pemObject = reader.readObject();
 		} catch (IOException e) {
-			log.info("<<< parseCSR: Could not read certificate from string: ", e);
+			log.info("<<< parseCertificate: Could not read certificate from string: ", e);
 			throw new CryptoException("Could not read certificate from string: " + e.getMessage(), e);
 		}
 		

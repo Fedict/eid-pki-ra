@@ -20,8 +20,13 @@ package be.fedict.eid.pkira.portal.handler;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Logger;
+import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Out;
+import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.crypto.CSRInfo;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
@@ -29,13 +34,19 @@ import be.fedict.eid.pkira.portal.domain.Certificate;
 import be.fedict.eid.pkira.portal.domain.CertificateType;
 import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 
+@Name(CertificateHandler.NAME)
+@Scope(ScopeType.CONVERSATION)
 public class CertificateHandlerBean implements CertificateHandler {
+	
+	private static final long serialVersionUID = -5017092109045531172L;
 
+	@Logger
+	private Log log;
+	
 	@In(value = EIDPKIRAPrivateServiceClient.NAME, create = true)
 	private EIDPKIRAPrivateServiceClient eidpkiraPrivateServiceClient;
 	
-	@Out
-	@SuppressWarnings("unused")
+	@Out(scope=ScopeType.CONVERSATION)
 	private Certificate certificate;	
 	
 	@Override
@@ -80,8 +91,10 @@ public class CertificateHandlerBean implements CertificateHandler {
 	}
 
 	@Override
-	public String preprareRevocation(String serialNumber) {
-		certificate = findCertificate("#{currentUser.userRRN}", serialNumber);
+	public String prepareRevocation(String serialNumber, String issuer) {
+		log.info(">>> preprareRevocation(serialNumber[{0}])",serialNumber);
+		certificate = findCertificate(issuer, serialNumber);
+		log.info("<<< preprareRevocation: {0})",certificate);
 		return "revokeContract";
 	}
 }

@@ -36,7 +36,7 @@ import be.fedict.eid.pkira.blm.model.DatabaseTest;
  */
 public class DomainRepositoryBeanTest extends DatabaseTest {
 	
-	private static final CertificateType VALID_CERTIFICATE_TYPE = CertificateType.CodeSigningCertificate;
+	private static final CertificateType VALID_CERTIFICATE_TYPE = CertificateType.CODE;
 	private static final Date VALID_ENDDATE = new Date(System.currentTimeMillis()+1000*3600);
 	private static final String VALID_ISSUER = "ISSUER";
 	private static final String VALID_REQUESTER = "REQUESTER";

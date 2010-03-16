@@ -43,7 +43,7 @@ public class RevocationContractDssSignatureHttpRequestHandlerTest
 		when(request.getParameter(SIGNATURE_STATUS_PARAMETER)).thenReturn("OK");
 		when(certificateResponse.getResult()).thenReturn(ResultType.SUCCESS);
 		handler.handleRequest(request, response);
-		verify(response).sendRedirect("/page/listcertificates/listcertificates.seam");
+		verify(response).sendRedirect("/page/certificates/certificates_list.seam");
 	}
 	
 	@Test

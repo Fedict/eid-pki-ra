@@ -49,7 +49,6 @@ import be.fedict.eid.pkira.generated.contracts.CertificateRevocationRequestType;
 import be.fedict.eid.pkira.generated.contracts.CertificateRevocationResponseType;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningResponseType;
-import be.fedict.eid.pkira.generated.contracts.CertificateTypeType;
 import be.fedict.eid.pkira.generated.contracts.RequestType;
 import be.fedict.eid.pkira.generated.contracts.ResultType;
 
@@ -177,7 +176,7 @@ public class ContractHandlerBean implements ContractHandler {
 			// Persist the contract
 			CertificateSigningContract contract = new CertificateSigningContract();
 			contract.setRequester(signer);
-			contract.setCertificateType(mapCertificateType(request.getCertificateType()));
+			contract.setCertificateType(Enum.valueOf(CertificateType.class, request.getCertificateType().name()));
 			contract.setContractDocument(requestMsg);
 			contract.setSubject(request.getDistinguishedName());
 			contract.setValidityPeriodMonths(request.getValidityPeriodMonths().intValue());
@@ -230,18 +229,6 @@ public class ContractHandlerBean implements ContractHandler {
 
 		mailTemplate.sendTemplatedMail(templateName, parameters, recipients, attachmentData, attachmentContentType,
 				attachmentFileName);
-	}
-
-	private CertificateType mapCertificateType(CertificateTypeType certificateType) {
-		switch (certificateType) {
-		case CLIENT:
-			return CertificateType.ClientCertificate;
-		case SERVER:
-			return CertificateType.ServerCertificate;
-		case CODE:
-			return CertificateType.CodeSigningCertificate;
-		}
-		throw new RuntimeException("Unmapped certificate type: " + certificateType);
 	}
 
 	/**

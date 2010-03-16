@@ -10,10 +10,10 @@
 	<ui:define name="center">
 		<form id="dssRequestForm" method="post" action="https://www.e-contract.be/eid-dss/dss-post-entry">
 			<rich:panel id="panel">
-				<f:facet name="header">#{messages['contract.sign.title']}</f:facet>
-				<p>#{messages['contract.sign.subtitle']}</p>
+				<f:facet name="header">#{messages['revocation.sign.title']}</f:facet>
+				<p>#{messages['revocation.sign.subtitle']}</p>
 				<input type="hidden" name="SignatureRequest" value="#{revocationContractSigningWrapper.base64CsrXml}" />
-				<input type="hidden" name="target" value="#{revocationContractSigningWrapper.dssSignatureHttpRequestHandlerPath}" />
+				<input type="hidden" name="target" value="#{revocationContractSigningWrapper.dssRequestHandlerUrl}" />
 				<input type="submit" value="#{messages['button.send']}" />
 				<script type="text/javascript">
 					document.getElementById('dssRequestForm').submit();

@@ -18,11 +18,11 @@
 					<h:outputText value="#{cer.serialNumber}" />
 				</rich:column>
 
-				<rich:column sortBy="#{cer.subject}" filterBy="#{cer.subject}" filterEvent="onkeyup">
+				<rich:column sortBy="#{cer.distinguishedName.subject}" filterBy="#{cer.distinguishedName.subject}" filterEvent="onkeyup">
 					<f:facet name="header">
 						<h:outputText value="Distinguished name" />
 					</f:facet>
-					<h:outputText value="#{cer.distinguishedName.name}" />
+					<h:outputText value="#{cer.distinguishedName.subject}" />
 				</rich:column>
 
 				<rich:column sortBy="#{cer.validityStart}" filterBy="#{cer.validityStart}" filterEvent="onkeyup">
@@ -46,28 +46,28 @@
 					<h:outputText value="#{cer.issuer}" />
 				</rich:column>
 
-				<rich:column sortBy="#{cer.requesterName}" filterBy="#{cer.requesterName}" filterEvent="onkeyup">
-					<f:facet name="header">
-						<h:outputText value="Requester Name" />
-					</f:facet>
-					<h:outputText value="#{cer.requesterName}" />
-				</rich:column>
+<!--				<rich:column sortBy="#{cer.requesterName}" filterBy="#{cer.requesterName}" filterEvent="onkeyup">-->
+<!--					<f:facet name="header">-->
+<!--						<h:outputText value="Requester Name" />-->
+<!--					</f:facet>-->
+<!--					<h:outputText value="#{cer.requesterName}" />-->
+<!--				</rich:column>-->
 
-				<rich:column sortBy="#{cer.id}" filterBy="#{cer.certificateType}" filterEvent="onkeyup">
+				<rich:column sortBy="#{cer.type}" filterBy="#{cer.type}" filterEvent="onkeyup">
 					<f:facet name="header">
 						<h:outputText value="Certificate type" />
 					</f:facet>
-					<h:outputText value="#{cer.certificateType}" />
+					<h:outputText value="#{cer.type}" />
 				</rich:column>
 
 				<rich:column>
-					<s:link id="detailCertificate" value="#{messages['certificate.detail']}"
+					<s:link id="detailCertificate" value="#{messages['link.detail']}"
 						action="#{certificatelist.detailCertificate(cer)}" />
 				</rich:column>
 
 				<rich:column>
 					<s:link id="revokeCertificate" value="#{messages['link.revoke']}"
-						action="#{certificateHandler.prepareRevocation(cer.serialNumber)}" />
+						action="#{certificateHandler.prepareRevocation(cer.serialNumber, cer.issuer)}" />
 				</rich:column>
 
 				<f:facet name="footer">

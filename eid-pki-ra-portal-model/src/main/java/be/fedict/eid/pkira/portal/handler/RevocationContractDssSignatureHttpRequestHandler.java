@@ -21,7 +21,7 @@ public class RevocationContractDssSignatureHttpRequestHandler
 
 	@Override
 	protected String getNextPage() {
-		return "/page/listcertificates/listcertificates.seam";
+		return "/page/certificates/certificates_list.seam";
 	}
 
 	@Override

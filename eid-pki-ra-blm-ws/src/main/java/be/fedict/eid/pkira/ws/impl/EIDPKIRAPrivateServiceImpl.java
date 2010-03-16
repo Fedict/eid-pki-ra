@@ -45,7 +45,7 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 		Certificate certificate = domainRepository.findCertificate(request.getUserRRN(), new BigInteger(request.getSerialNumber()));
 		FindCertificateResponse response = new FindCertificateResponse();
 		response.setCertificate(parseCertificateToCertificateWS(certificate, true));
-		return null;
+		return response;
 	}
 
 	/**
@@ -71,7 +71,9 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 
 			certificateWS.setValidityEnd(df.newXMLGregorianCalendar(calendarEnd));
 			certificateWS.setValidityStart(df.newXMLGregorianCalendar(calendarStart));
-			certificateWS.setCertificateType(certificate.getCertificateType().toString());
+			certificateWS.setCertificateType(certificate.getCertificateType().name());
+			certificateWS.setSerialNumber(certificate.getSerialNumber().toString());
+			certificateWS.setDistinguishedName(certificate.getDistinguishedName());
 			
 			if (includeX509) {
 				certificateWS.setX509(certificate.getX509());

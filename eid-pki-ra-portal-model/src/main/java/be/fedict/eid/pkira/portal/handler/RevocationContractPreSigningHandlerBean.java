@@ -42,7 +42,7 @@ public class RevocationContractPreSigningHandlerBean extends AbstractDSSPreSigni
 	private RevocationContractSigningWrapper signingWrapper;
 	
 	@Override
-	@In(create=true, value="requestContractSigningWrapper")
+	@In(create=true, value="revocationContractSigningWrapper")
 	protected void setSigningWrapper(RevocationContractSigningWrapper signingWrapper) {
 		this.signingWrapper = signingWrapper;		
 	}

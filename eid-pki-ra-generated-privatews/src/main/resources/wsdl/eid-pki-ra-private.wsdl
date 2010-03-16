@@ -53,8 +53,8 @@
 				<xsd:sequence>
 					<xsd:element name="serialNumber" type="xsd:string"/>
 					<xsd:element name="distinguishedName" type="xsd:string"/>
-					<xsd:element name="validityStart" type="xsd:date"/>
-					<xsd:element name="validityEnd" type="xsd:date"/>
+					<xsd:element name="validityStart" type="xsd:dateTime"/>
+					<xsd:element name="validityEnd" type="xsd:dateTime"/>
 					<xsd:element name="requesterName" type="xsd:string"/>
 					<xsd:element name="issuer" type="xsd:string"/>
 					<xsd:element name="certificateType" type="xsd:string"/>

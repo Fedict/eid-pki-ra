@@ -26,14 +26,13 @@ import org.jboss.seam.annotations.In;
  * @author Bram Baeyens
  *
  */
-public class AbstractContract implements Serializable {
+public abstract class AbstractContract implements Serializable {
 	
 	private static final long serialVersionUID = -4191567270718469935L;
 	
 	@In(create=true)
 	private Operator operator;
-	@In(create=true)
-	private Certificate certificate;
+	Certificate certificate;
 	private String description;
 	private String legalNotice = "testLegalNotice";
 
@@ -65,9 +64,7 @@ public class AbstractContract implements Serializable {
 		return certificate;
 	}
 
-	public void setCertificate(Certificate certificate) {
-		this.certificate = certificate;
-	}
+	public abstract void setCertificate(Certificate certificate);
 
 	@Override
 	public String toString() {

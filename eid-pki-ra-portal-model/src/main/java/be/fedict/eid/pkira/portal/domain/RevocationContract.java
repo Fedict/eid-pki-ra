@@ -19,6 +19,7 @@
 package be.fedict.eid.pkira.portal.domain;
 
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
@@ -37,5 +38,11 @@ public class RevocationContract extends AbstractContract {
 		return new StringBuilder("RevocationContract[")
 				.append(super.toString())
 				.append(']').toString();				
+	}
+
+	@Override
+	@In(required=true, scope=ScopeType.CONVERSATION)
+	public void setCertificate(Certificate certificate) {
+		this.certificate = certificate;
 	}	
 }

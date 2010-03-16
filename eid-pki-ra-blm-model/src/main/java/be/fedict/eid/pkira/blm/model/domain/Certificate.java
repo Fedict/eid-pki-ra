@@ -22,11 +22,14 @@ import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.jboss.seam.annotations.Name;
 
@@ -49,10 +52,13 @@ public class Certificate implements Serializable {
 	@Basic(fetch = FetchType.LAZY)
 	private String x509;
 	private String distinguishedName;
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date validityStart;
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date validityEnd;
 	private String requesterName;
 	private String issuer;
+	@Enumerated
 	private CertificateType certificateType;
 
 	@OneToOne(optional = true, fetch = FetchType.LAZY)

@@ -37,8 +37,8 @@
 	</page>
 
 	<page view-id="/page/certificates/certificates_list.xhtml">
-		<navigation from-action="#{certificateHandler.prepareRevocation(cer.serialNumber)}">
-			<rule if-outcome="revokeCertificate">
+		<navigation from-action="#{certificateHandler.prepareRevocation(cer.serialNumber, cer.issuer)}">
+			<rule if-outcome="revokeContract">
 				<redirect view-id="/page/contract/revocationContract.xhtml" />
 			</rule>
 		</navigation>
