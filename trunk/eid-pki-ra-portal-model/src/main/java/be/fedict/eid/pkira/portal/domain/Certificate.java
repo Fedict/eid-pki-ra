@@ -21,7 +21,9 @@ package be.fedict.eid.pkira.portal.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 
 import be.fedict.eid.pkira.crypto.CSRInfo;
 
@@ -30,6 +32,7 @@ import be.fedict.eid.pkira.crypto.CSRInfo;
  *
  */
 @Name("certificate")
+@Scope(ScopeType.CONVERSATION)
 public class Certificate implements Serializable {
 
 	private static final long serialVersionUID = 5429725347686453892L;
@@ -102,12 +105,12 @@ public class Certificate implements Serializable {
 	@Override
 	public String toString() {
 		return new StringBuilder("Certificate[")
-				.append("number").append(serialNumber)
-				.append(", type").append(type)
-				.append(", validityStart").append(validityStart)
-				.append(", validityEnd").append(validityEnd)
-				.append(", issuer").append(issuer)
-				.append(", distinguishedName").append(distinguishedName)
+				.append("number=").append(serialNumber)
+				.append(", type=").append(type)
+				.append(", validityStart=").append(validityStart)
+				.append(", validityEnd=").append(validityEnd)
+				.append(", issuer=").append(issuer)
+				.append(", distinguishedName=").append(distinguishedName)
 				.append(']').toString();
 	}
 }

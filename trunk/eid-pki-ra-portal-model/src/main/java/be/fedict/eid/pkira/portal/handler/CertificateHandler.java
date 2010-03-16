@@ -17,15 +17,18 @@
  */
 package be.fedict.eid.pkira.portal.handler;
 
+import java.io.Serializable;
 import java.util.List;
 
 import be.fedict.eid.pkira.portal.domain.Certificate;
 
-public interface CertificateHandler {
+public interface CertificateHandler extends Serializable {
+	
+	String NAME = "certificateHandler";
 	
 	List<Certificate> findCertificateList(String userRRN);
 	
-	String preprareRevocation(String serialNumber);
+	String prepareRevocation(String serialNumber, String issuer);
 
 	String getCertificate(String serialNumber);
 }

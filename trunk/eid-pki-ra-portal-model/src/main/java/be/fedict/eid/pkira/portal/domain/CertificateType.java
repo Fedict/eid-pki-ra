@@ -19,12 +19,12 @@
 package be.fedict.eid.pkira.portal.domain;
 
 /**
- * @author Bram.Baeyens
+ * @author Bram Baeyens
  *
  */
 public enum CertificateType {
 	
-	SERVER("server"), CLIENT("client"), CODE("code");
+	SERVER("Server"), CLIENT("Client"), CODE("Code");
 	
 	private String type;
 	
@@ -35,4 +35,5 @@ public enum CertificateType {
 	public String toString(){
 		return type;
 	}
+	
 }

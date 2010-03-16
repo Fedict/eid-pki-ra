@@ -19,6 +19,7 @@
 package be.fedict.eid.pkira.portal.domain;
 
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
@@ -60,6 +61,12 @@ public class RequestContract extends AbstractContract {
 
 	public void setValidityPeriod(int validityPeriod) {
 		this.validityPeriod = validityPeriod;
+	}
+
+	@Override
+	@In(create=true)
+	public void setCertificate(Certificate certificate) {
+		this.certificate = certificate;		
 	}
 	
 	@Override

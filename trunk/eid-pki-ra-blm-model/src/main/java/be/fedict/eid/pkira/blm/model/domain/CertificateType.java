@@ -16,6 +16,7 @@
  */
 package be.fedict.eid.pkira.blm.model.domain;
 
+
 /**
  * The types of certificate.
  * 
@@ -23,5 +24,17 @@ package be.fedict.eid.pkira.blm.model.domain;
  */
 public enum CertificateType {
 
-	ServerCertificate, ClientCertificate, CodeSigningCertificate
+	SERVER("Server"),
+    CLIENT("Client"),
+    CODE("Code");
+    
+	private final String value;
+
+    private CertificateType(String value) {
+        this.value = value;
+    }
+
+    public String value() {
+        return value;
+    }
 }
