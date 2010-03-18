@@ -31,74 +31,66 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.blm.model.DatabaseTest;
-import be.fedict.eid.pkira.blm.model.domain.CertificateDomain;
+import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.domain.Registration;
 import be.fedict.eid.pkira.blm.model.domain.RegistrationStatus;
 import be.fedict.eid.pkira.blm.model.domain.User;
 
 /**
  * @author Bram Baeyens
- *
  */
 public class RegistrationRepositoryBeanTest extends DatabaseTest {
-	
+
 	private static final String NRN = "rTestNRN";
 	private static final String FIRST_NAME = "rTestFN";
 	private static final String LAST_NAME = "rTestLN";
 	private static final String DN_EXPRESSION = "rTestDnExpression";
 	private static final String NAME = "rTestName";
-	private static final String EMAIL = "rAbc@de.fg";	
-	private static final String EMAIL_2 = "rAbc@de.fg2";	
-	
+	private static final String EMAIL = "rAbc@de.fg";
+	private static final String EMAIL_2 = "rAbc@de.fg2";
+
 	private RegistrationRepositoryBean registrationRepository;
-	private UserRepositoryBean userRepository;
-	private CertificateDomainRepositoryBean certificateDomainRepository;
 	private Registration valid;
 	private User requester;
-	private CertificateDomain certificateDomain;
-	
-	@BeforeClass
+	public CertificateDomain certificateDomain;
+
+	@BeforeClass(dependsOnGroups = "CertificateDomainRepository")
 	public void setup() {
 		registrationRepository = new RegistrationRepositoryBean();
 		registrationRepository.setEntityManager(getEntityManager());
-		userRepository = new UserRepositoryBean();
-		userRepository.setEntityManager(getEntityManager());
-		certificateDomainRepository = new CertificateDomainRepositoryBean();
-		certificateDomainRepository.setEntityManager(getEntityManager());
-		requester = createUser(NRN, FIRST_NAME, LAST_NAME);
-		userRepository.persist(requester);
-		certificateDomain = createCertificateDomain(DN_EXPRESSION, NAME);
-		certificateDomainRepository.persist(certificateDomain);
+		
+		requester = createPersistedUser(NRN, FIRST_NAME, LAST_NAME);
+		certificateDomain = createPersistedCertificateDomain(DN_EXPRESSION, NAME);
 	}
 
 	@Test
-	public void persist() throws Exception {		
+	public void persist() throws Exception {
 		valid = createRegistration(EMAIL, certificateDomain, requester);
 		registrationRepository.persist(valid);
 		forceCommit();
 		assertNotNull(valid.getId());
 	}
 
-	@Test(dependsOnMethods="persist", expectedExceptions=PersistenceException.class)
-	public void userCertificateDomainConstraint() throws Exception {		
+	@Test(dependsOnMethods = "persist", expectedExceptions = PersistenceException.class)
+	public void userCertificateDomainConstraint() throws Exception {
 		Registration registration = createRegistration(EMAIL_2, certificateDomain, requester);
 		registrationRepository.persist(registration);
 		fail("PersistenceException expected.");
 	}
-	
-	@Test(dependsOnMethods="persist")
+
+	@Test(dependsOnMethods = "persist")
 	public void reject() throws Exception {
 		registrationRepository.reject(valid);
 		assertSame(RegistrationStatus.REJECTED, valid.getStatus());
 	}
-	
-	@Test(dependsOnMethods="persist")
+
+	@Test(dependsOnMethods = "persist")
 	public void confirm() throws Exception {
 		registrationRepository.confirm(valid);
 		assertSame(RegistrationStatus.CONFIRMED, valid.getStatus());
 	}
-	
-	@Test(dependsOnMethods="persist")
+
+	@Test(dependsOnMethods = "persist")
 	public void findAllNewRegistrations() throws Exception {
 		List<Registration> newRegistrations = registrationRepository.findAllNewRegistrations();
 		assertEquals(1, newRegistrations.size());
@@ -109,22 +101,25 @@ public class RegistrationRepositoryBeanTest extends DatabaseTest {
 		registration.setStatus(RegistrationStatus.NEW);
 		registration.setEmail(email);
 		registration.setCertificateDomain(certificateDomain);
-		registration.setRequester(requester);		
+		registration.setRequester(requester);
 		return registration;
 	}
-	
-	private User createUser(String nationalRegisterNumber, String firstName, String lastName) {
+
+	private User createPersistedUser(String nationalRegisterNumber, String firstName, String lastName) {
 		User user = new User();
 		user.setNationalRegisterNumber(nationalRegisterNumber);
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
+		persistObject(user);
 		return user;
 	}
 
-	private CertificateDomain createCertificateDomain(String dnExpression, String name) {
-		CertificateDomain certificateDomain = new CertificateDomain();
+	private CertificateDomain createPersistedCertificateDomain(String dnExpression, String name) {
+		final CertificateDomain certificateDomain = new CertificateDomain();
 		certificateDomain.setDnExpression(dnExpression);
 		certificateDomain.setName(name);
+
+		persistObject(certificateDomain);
 		return certificateDomain;
 	}
 }

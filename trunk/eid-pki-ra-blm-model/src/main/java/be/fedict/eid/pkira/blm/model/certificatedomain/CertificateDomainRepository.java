@@ -16,13 +16,14 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.blm.model.jpa;
+package be.fedict.eid.pkira.blm.model.certificatedomain;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Local;
 
-import be.fedict.eid.pkira.blm.model.domain.CertificateDomain;
+import be.fedict.eid.pkira.blm.model.domain.CertificateType;
 import be.fedict.eid.pkira.blm.model.domain.User;
 
 /**
@@ -44,6 +45,8 @@ public interface CertificateDomainRepository {
 
 	List<CertificateDomain> findUnregistered(User user);
 
-	CertificateDomain getReference(Integer primaryKey);	
+	CertificateDomain getReference(Integer primaryKey);
+
+	List<CertificateDomain> findByCertificateTypes(Set<CertificateType> types);	
 	
 }

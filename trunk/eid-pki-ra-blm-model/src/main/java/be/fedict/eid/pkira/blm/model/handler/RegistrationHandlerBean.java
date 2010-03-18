@@ -14,11 +14,11 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
-import be.fedict.eid.pkira.blm.model.domain.CertificateDomain;
+import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
+import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainRepository;
 import be.fedict.eid.pkira.blm.model.domain.Registration;
 import be.fedict.eid.pkira.blm.model.domain.RegistrationStatus;
 import be.fedict.eid.pkira.blm.model.domain.User;
-import be.fedict.eid.pkira.blm.model.jpa.CertificateDomainRepository;
 import be.fedict.eid.pkira.blm.model.jpa.RegistrationRepository;
 import be.fedict.eid.pkira.blm.model.jpa.UserRepository;
 
