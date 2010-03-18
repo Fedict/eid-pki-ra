@@ -48,11 +48,15 @@ public class CertificateDomainManagerBean implements CertificateDomainManager {
 	 */
 	@Override
 	public void saveCertificateDomain(CertificateDomain domain) throws InvalidDistinguishedNameException, DistinguishedNameOverlapsException,
-			InvalidCertificateDomainNameException {
-		
+			InvalidCertificateDomainNameException, NoCertificateTypesSelectedException {		
 		// Validate the name
 		if (domain.getName()==null || domainRepository.findByName(domain.getName()) != null) {
 			throw new InvalidCertificateDomainNameException();
+		}
+		
+		// Validate the certificate types
+		if (domain.getCertificateTypes().size()==0) {
+			throw new NoCertificateTypesSelectedException();
 		}
 		
 		// Validate the DN expression
