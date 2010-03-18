@@ -34,6 +34,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+
 			<xsd:element name="FindCertificateRequest">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -49,18 +50,56 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+
+			<xsd:element name="CreateCertificateDomainRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="name" type="xsd:string" />
+						<xsd:element name="dnExpression" type="xsd:string" />
+						<xsd:element name="certificateTypes" type="types:certificateTypeWS" maxOccurs="unbounded" />
+						<xsd:element name="caId" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="CreateCertificateDomainResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="domainId" type="xsd:string" minOccurs="0" />
+						<xsd:element name="result" type="types:createCertificateDomainResult" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
 			<xsd:complexType name="certificateWS">
 				<xsd:sequence>
-					<xsd:element name="serialNumber" type="xsd:string"/>
-					<xsd:element name="distinguishedName" type="xsd:string"/>
-					<xsd:element name="validityStart" type="xsd:dateTime"/>
-					<xsd:element name="validityEnd" type="xsd:dateTime"/>
-					<xsd:element name="requesterName" type="xsd:string"/>
-					<xsd:element name="issuer" type="xsd:string"/>
-					<xsd:element name="certificateType" type="xsd:string"/>
-					<xsd:element name="x509" type="xsd:string"/>					
+					<xsd:element name="serialNumber" type="xsd:string" />
+					<xsd:element name="distinguishedName" type="xsd:string" />
+					<xsd:element name="validityStart" type="xsd:date" />
+					<xsd:element name="validityEnd" type="xsd:date" />
+					<xsd:element name="requesterName" type="xsd:string" />
+					<xsd:element name="issuer" type="xsd:string" />
+					<xsd:element name="certificateType" type="types:certificateTypeWS" />
+					<xsd:element name="x509" type="xsd:string" />
 				</xsd:sequence>
 			</xsd:complexType>
+
+			<xsd:simpleType name="certificateTypeWS">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="server" />
+					<xsd:enumeration value="client" />
+					<xsd:enumeration value="code" />
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:simpleType name="createCertificateDomainResult">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="SUCCESS" />
+					<xsd:enumeration value="DUPLICATE_NAME" />
+					<xsd:enumeration value="INVALID_DN" />
+					<xsd:enumeration value="OVERLAPPING_DN" />
+				</xsd:restriction>
+			</xsd:simpleType>
 		</xsd:schema>
 	</wsdl:types>
 
@@ -80,6 +119,14 @@
 		<wsdl:part name="response" element="types:FindCertificateResponse" />
 	</wsdl:message>
 
+	<wsdl:message name="CreateCertificateDomainRequest">
+		<wsdl:part name="request" element="types:CreateCertificateDomainRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="CreateCertificateDomainResult">
+		<wsdl:part name="response" element="types:CreateCertificateDomainResponse" />
+	</wsdl:message>
+
 	<wsdl:portType name="EIDPKIRAPrivatePortType">
 		<wsdl:operation name="ListCertificates">
 			<wsdl:input message="tns:ListCertificatesRequest" />
@@ -88,6 +135,10 @@
 		<wsdl:operation name="FindCertificate">
 			<wsdl:input message="tns:FindCertificateRequest" />
 			<wsdl:output message="tns:FindCertificateResult" />
+		</wsdl:operation>
+		<wsdl:operation name="CreateCertificateDomain">
+			<wsdl:input message="tns:CreateCertificateDomainRequest" />
+			<wsdl:output message="tns:CreateCertificateDomainResult" />
 		</wsdl:operation>
 	</wsdl:portType>
 
@@ -108,6 +159,15 @@
 				<soap:body use="literal" />
 			</wsdl:input>
 			<wsdl:output message="tns:FindCertificateResult">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CreateCertificateDomain">
+			<soap:operation />
+			<wsdl:input message="tns:CreateCertificateDomainRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output message="tns:CreateCertificateDomainResult">
 				<soap:body use="literal" />
 			</wsdl:output>
 		</wsdl:operation>

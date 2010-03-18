@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.ejb.Local;
 
-import be.fedict.eid.pkira.blm.model.domain.CertificateDomain;
+import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 
 @Local
 public interface RegistrationHandler {

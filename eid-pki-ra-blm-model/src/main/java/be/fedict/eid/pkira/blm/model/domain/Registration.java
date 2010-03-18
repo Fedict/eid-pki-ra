@@ -38,6 +38,8 @@ import org.hibernate.validator.NotEmpty;
 import org.hibernate.validator.NotNull;
 import org.jboss.seam.annotations.Name;
 
+import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
+
 /**
  * @author Bram Baeyens
  *

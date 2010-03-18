@@ -37,6 +37,13 @@ public class DatabaseTest {
 	private static EntityManager entityManager;
 
 	/**
+	 * Returns the created entity manager.
+	 */
+	public static EntityManager getEntityManager() {
+		return entityManager;
+	}
+
+	/**
 	 * Sets up hibernate.
 	 */
 	@BeforeSuite
@@ -49,18 +56,43 @@ public class DatabaseTest {
 	private boolean commit;
 
 	/**
-	 * Forces a rollback of the transaction after the test.
-	 * If this method is not called, the transaction will be committed.
+	 * Forces a rollback of the transaction after the test. If this method is
+	 * not called, the transaction will be committed.
 	 */
 	public final void forceCommit() {
 		this.commit = true;
 	}
 
 	/**
-	 * Returns the created entity manager.
+	 * Persists an object using the entity manager.
 	 */
-	public static EntityManager getEntityManager() {
-		return entityManager;
+	public final void persistObject(final Object object) {
+		runInTransaction(new Runnable() {
+			@Override
+			public void run() {
+				getEntityManager().persist(object);
+			}
+		});
+	}
+
+	/**
+	 * Runs an action in a transaction. If an exception occurs, the transaction
+	 * is rolled back, otherwise committed.
+	 */
+	public final void runInTransaction(Runnable action) {
+		EntityTransaction transaction = getEntityManager().getTransaction();
+		transaction.begin();
+		boolean ok = false;
+		try {
+			action.run();
+			ok = true;
+		} finally {
+			if (ok) {
+				transaction.commit();
+			} else {
+				transaction.rollback();
+			}
+		}
 	}
 
 	/**

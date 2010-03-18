@@ -16,8 +16,10 @@
  */
 package be.fedict.eid.pkira.ws.impl;
 
-import javax.ejb.EJB;
+import javax.jws.HandlerChain;
 import javax.jws.WebService;
+
+import org.jboss.seam.Component;
 
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandler;
 import be.fedict.eid.pkira.generated.publicws.EIDPKIRAPortType;
@@ -29,25 +31,27 @@ import be.fedict.eid.pkira.generated.publicws.EIDPKIRAPortType;
  * @author Jan Van den Bergh
  */
 @WebService(endpointInterface = "be.fedict.eid.pkira.generated.publicws.EIDPKIRAPortType")
+@HandlerChain(file="/handlerChain.xml")
 public class EIDPKIRAServiceImpl implements EIDPKIRAPortType {
-
-	@EJB
-	private ContractHandler contractHandler;
 
 	/**
 	 * Revoke certificate implementation.
 	 */
 	@Override
 	public String revokeCertificate(String request) {
-		return contractHandler.revokeCertificate(request);
+		return getContractHandler().revokeCertificate(request);
 	}
-
 	/**
 	 * Sign certificate implementation.
 	 */
 	@Override
 	public String signCertificate(String request) {
-		return contractHandler.signCertificate(request);
+		return getContractHandler().signCertificate(request);
 	}
+	
+	private ContractHandler getContractHandler() {
+		return (ContractHandler) Component.getInstance(ContractHandler.NAME, true);
+	}
+
 
 }

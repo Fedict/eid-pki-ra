@@ -18,9 +18,11 @@
 package be.fedict.eid.pkira.portal.handler;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.jboss.seam.ScopeType;
+import javax.xml.datatype.XMLGregorianCalendar;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
@@ -29,6 +31,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.crypto.CSRInfo;
+import be.fedict.eid.pkira.generated.privatews.CertificateTypeWS;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 import be.fedict.eid.pkira.portal.domain.Certificate;
 import be.fedict.eid.pkira.portal.domain.CertificateType;
@@ -79,15 +82,23 @@ public class CertificateHandlerBean implements CertificateHandler {
 		certificate.setDistinguishedName(new CSRInfo(certificatews.getDistinguishedName()));
 		certificate.setIssuer(certificatews.getIssuer());
 		certificate.setSerialNumber(certificatews.getSerialNumber());
-		certificate.setType(Enum.valueOf(CertificateType.class, certificatews.getCertificateType()));
+		certificate.setType(map(certificatews.getCertificateType()));
 		if(certificatews.getValidityStart() != null){
-			certificate.setValidityStart(certificatews.getValidityStart().toGregorianCalendar().getTime());
+			certificate.setValidityStart(map(certificatews.getValidityStart()));
 		}
 		if(certificatews.getValidityEnd() != null){
-			certificate.setValidityEnd(certificatews.getValidityEnd().toGregorianCalendar().getTime());
+			certificate.setValidityEnd(map(certificatews.getValidityEnd()));
 		}
 		certificate.setX509(certificatews.getX509());
 		return certificate;
+	}
+
+	private Date map(XMLGregorianCalendar validityStart) {
+		return validityStart.toGregorianCalendar().getTime();
+	}
+
+	private CertificateType map(CertificateTypeWS certificateType) {
+		return Enum.valueOf(CertificateType.class, certificateType.toString());
 	}
 
 	@Override
