@@ -16,59 +16,9 @@
  */
 package be.fedict.eid.integration.ws;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-
-import org.testng.annotations.Test;
-
-import be.fedict.eid.pkira.generated.privatews.CreateCertificateDomainResponse;
-import be.fedict.eid.pkira.generated.privatews.CreateCertificateDomainResult;
-
 /**
  * @author Jan Van den Bergh
  */
 public class PrivateWebserviceCertificateDomainTest {
 
-	private static final String EXPRESSION = "c=be,ou=test,cn=*";
-	private static final String EXPRESSION_OVERLAPS = "c=be,ou=*,cn=*";
-	private static final String EXPRESSION_INVALID = "blablabla";
-	private static final String NAME = "testCertificateDomain";
-	private static final String NAME2 = "testCertificateDomain2";
-
-	@Test
-	public void testCreateCertificateDomain() {
-		CreateCertificateDomainResponse response = WebServiceFactory.getPrivateWebServiceClient()
-				.createCertificateDomain(NAME, EXPRESSION, true, true, true);
-
-		assertNotNull(response);
-		assertEquals(CreateCertificateDomainResult.SUCCESS, response.getResult());
-		assertNotNull(response.getDomainId());
-	}
-
-	@Test(dependsOnMethods = "testCreateCertificateDomain")
-	public void testCreateCertificateDomainAgain() {
-		CreateCertificateDomainResponse response = WebServiceFactory.getPrivateWebServiceClient()
-				.createCertificateDomain(NAME, EXPRESSION, true, true, true);
-
-		assertNotNull(response);
-		assertEquals(CreateCertificateDomainResult.DUPLICATE_NAME, response.getResult());
-	}
-
-	@Test(dependsOnMethods = "testCreateCertificateDomain")
-	public void testCreateCertificateOverlaps() {
-		CreateCertificateDomainResponse response = WebServiceFactory.getPrivateWebServiceClient()
-				.createCertificateDomain(NAME2, EXPRESSION_OVERLAPS, true, true, true);
-
-		assertNotNull(response);
-		assertEquals(CreateCertificateDomainResult.INVALID_DN, response.getResult());
-	}
-
-	@Test
-	public void testCreateCertificateInvalidDN() {
-		CreateCertificateDomainResponse response = WebServiceFactory.getPrivateWebServiceClient()
-				.createCertificateDomain(NAME2, EXPRESSION_INVALID, true, true, true);
-
-		assertNotNull(response);
-		assertEquals(CreateCertificateDomainResult.INVALID_DN, response.getResult());
-	}
 }

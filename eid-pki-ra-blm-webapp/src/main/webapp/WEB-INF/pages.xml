@@ -6,6 +6,15 @@
 		no-conversation-view-id="/home.xhtml" 
 		login-view-id="/login.xhtml"
 		-->		
+		
+	<page view-id="/page/certificatedomain/certificatedomain_edit.xhtml">
+		<navigation from-action="#{certificateDomainHandler.saveCertificateDomain}">
+			<rule if-outcome="success">
+				<redirect view-id="home" />
+			</rule>
+		</navigation>
+	</page>
+		
 	<!--
 	<page view-id="/*">
 		<navigation from-action="home">

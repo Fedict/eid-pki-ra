@@ -19,23 +19,23 @@ package be.fedict.eid.pkira.blm.model.certificatedomain;
 /**
  * @author Jan Van den Bergh
  */
-public class DuplicateCertificateDomainNameException extends Exception {
+public class InvalidCertificateDomainNameException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	public DuplicateCertificateDomainNameException() {
+	public InvalidCertificateDomainNameException() {
 		super();
 	}
 
-	public DuplicateCertificateDomainNameException(String message, Throwable cause) {
+	public InvalidCertificateDomainNameException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public DuplicateCertificateDomainNameException(String message) {
+	public InvalidCertificateDomainNameException(String message) {
 		super(message);
 	}
 
-	public DuplicateCertificateDomainNameException(Throwable cause) {
+	public InvalidCertificateDomainNameException(Throwable cause) {
 		super(cause);
 	}
 

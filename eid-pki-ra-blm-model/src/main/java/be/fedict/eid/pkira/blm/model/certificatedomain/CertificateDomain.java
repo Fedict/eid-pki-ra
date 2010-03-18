@@ -19,6 +19,8 @@
 package be.fedict.eid.pkira.blm.model.certificatedomain;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,6 +32,8 @@ import javax.persistence.NamedQuery;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jboss.seam.annotations.Name;
 
+import be.fedict.eid.pkira.blm.model.domain.CertificateType;
+
 /**
  * @author Bram Baeyens
  */
@@ -37,13 +41,10 @@ import org.jboss.seam.annotations.Name;
 @Name("certificateDomain")
 @NamedQueries(
 	{
-			@NamedQuery(name = "findCertificateDomainByName", query = "SELECT cd " + "FROM CertificateDomain cd "
-					+ "WHERE cd.name = :name"),
-			@NamedQuery(name = "findCertificateDomainByDnExpression", query = "SELECT cd " + "FROM CertificateDomain cd "
-					+ "WHERE cd.dnExpression = :dnExpression"),
-			@NamedQuery(name = "findCertificateDomainUnregistered", query = "SELECT cd " + "FROM CertificateDomain cd "
-					+ "WHERE cd NOT IN (" + "SELECT r.certificateDomain " + "FROM Registration r "
-					+ "WHERE r.requester = :requester" + ") " + "ORDER BY cd.name")
+			@NamedQuery(name = "findCertificateDomainByName", query = "FROM CertificateDomain WHERE name = :name"),
+			@NamedQuery(name = "findCertificateDomainByDnExpression", query = "FROM CertificateDomain WHERE dnExpression = :dnExpression"),
+			@NamedQuery(name = "findCertificateDomainUnregistered", query = "FROM CertificateDomain cd WHERE cd NOT IN (SELECT r.certificateDomain FROM Registration r WHERE r.requester = :requester) ORDER BY cd.name"),
+			@NamedQuery(name = "findCertificateDomainByCertificateTypes", query = "FROM CertificateDomain WHERE (clientCertificate=:forClient OR :forClient=FALSE) AND (serverCertificate=:forServer OR :forServer=FALSE) AND (codeSigningCertificate=:forCode OR :forCode=FALSE)")
 
 	})
 public class CertificateDomain implements Serializable {
@@ -59,11 +60,11 @@ public class CertificateDomain implements Serializable {
 	@Column(name = "DN_EXPRESSION", nullable = false, unique = true)
 	private String dnExpression;
 	@Column(name = "SERVERCERT", nullable = false)
-	private boolean forServerCertificate;
+	private boolean serverCertificate;
 	@Column(name = "CLIENTCERT", nullable = false)
-	private boolean forClientCertificate;
+	private boolean clientCertificate;
 	@Column(name = "CODECERT", nullable = false)
-	private boolean forCodeSigningCertificate;
+	private boolean codeSigningCertificate;
 
 	public Integer getId() {
 		return id;
@@ -108,28 +109,42 @@ public class CertificateDomain implements Serializable {
 				dnExpression).append(']').toString();
 	}
 
-	public boolean isForServerCertificate() {
-		return forServerCertificate;
+	public boolean isServerCertificate() {
+		return serverCertificate;
 	}
 
-	public void setForServerCertificate(boolean forServerCertificate) {
-		this.forServerCertificate = forServerCertificate;
+	public void setServerCertificate(boolean serverCertificate) {
+		this.serverCertificate = serverCertificate;
 	}
 
-	public boolean isForClientCertificate() {
-		return forClientCertificate;
+	public boolean isClientCertificate() {
+		return clientCertificate;
 	}
 
-	public void setForClientCertificate(boolean forClientCertificate) {
-		this.forClientCertificate = forClientCertificate;
+	public void setClientCertificate(boolean clientCertificate) {
+		this.clientCertificate = clientCertificate;
 	}
 
-	public boolean isForCodeSigningCertificate() {
-		return forCodeSigningCertificate;
+	public boolean isCodeSigningCertificate() {
+		return codeSigningCertificate;
 	}
 
-	public void setForCodeSigningCertificate(boolean forCodeSigningCertificate) {
-		this.forCodeSigningCertificate = forCodeSigningCertificate;
+	public void setCodeSigningCertificate(boolean codeSigningCertificate) {
+		this.codeSigningCertificate = codeSigningCertificate;
+	}
+
+	public Set<CertificateType> getCertificateTypes() {
+		Set<CertificateType> result = new HashSet<CertificateType>();
+		if (clientCertificate) {
+			result.add(CertificateType.CLIENT);
+		}
+		if (serverCertificate) {
+			result.add(CertificateType.SERVER);
+		}
+		if (codeSigningCertificate) {
+			result.add(CertificateType.CODE);
+		}
+		return result;
 	}
 
 }

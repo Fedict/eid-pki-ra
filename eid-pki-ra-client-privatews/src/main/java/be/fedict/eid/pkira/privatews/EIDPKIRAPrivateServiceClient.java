@@ -23,10 +23,7 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 
-import be.fedict.eid.pkira.generated.privatews.CertificateTypeWS;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
-import be.fedict.eid.pkira.generated.privatews.CreateCertificateDomainRequest;
-import be.fedict.eid.pkira.generated.privatews.CreateCertificateDomainResponse;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivateService;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateRequest;
@@ -77,41 +74,6 @@ public class EIDPKIRAPrivateServiceClient {
 		request.setSerialNumber(serialNumber);
 		FindCertificateResponse response = getWebservicePort().findCertificate(request);
 		return response.getCertificate();
-	}
-
-	/**
-	 * Creates a certificate domain.
-	 * 
-	 * @param name
-	 *            name of the domain.
-	 * @param dnExpression
-	 *            dn filter expression.
-	 * @param clientCertificate
-	 *            used for client certicates?
-	 * @param serverCertificate
-	 *            used for server certificates?
-	 * @param codeCertificate
-	 *            used for code signing certificates?
-	 * @return the response, indicating the result and on success the id of the
-	 *         newly created domain.
-	 */
-	public CreateCertificateDomainResponse createCertificateDomain(String name, String dnExpression,
-			boolean clientCertificate, boolean serverCertificate, boolean codeCertificate) {
-		CreateCertificateDomainRequest request = factory.createCreateCertificateDomainRequest();
-		request.setCaId(null); // TODO Add CA ID
-		request.setName(name);
-		request.setDnExpression(dnExpression);
-		if (clientCertificate) {
-			request.getCertificateTypes().add(CertificateTypeWS.CLIENT);
-		}
-		if (serverCertificate) {
-			request.getCertificateTypes().add(CertificateTypeWS.SERVER);
-		}
-		if (codeCertificate) {
-			request.getCertificateTypes().add(CertificateTypeWS.CODE);
-		}
-
-		return getWebservicePort().createCertificateDomain(request);
 	}
 
 	/**

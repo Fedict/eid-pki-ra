@@ -127,7 +127,7 @@ public class CertificateDomainRepositoryBeanTest extends DatabaseTest {
 		CertificateDomain certificateDomain = new CertificateDomain();
 		certificateDomain.setDnExpression(dnExpression);
 		certificateDomain.setName(name);
-		certificateDomain.setForClientCertificate(true);
+		certificateDomain.setClientCertificate(true);
 		return certificateDomain;
 	}
 }
