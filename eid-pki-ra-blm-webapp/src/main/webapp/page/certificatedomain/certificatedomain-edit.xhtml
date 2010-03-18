@@ -1,0 +1,44 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib"
+		xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich"
+		xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml"
+		login-required="true">
+
+	<ui:define name="center">
+		<h:form id="certificateDetailForm">
+			<rich:panel id="panel">
+				<f:facet name="header">#{messages['certificatedomain.edit.title']}</f:facet>
+				
+				<s:decorate id="nameDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['certificatedomain.edit.name']}:</ui:define>
+	               	<h:inputText id="name" value="#{certificateDomain.name}" />
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="dnPatternDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['certificatedomain.edit.dnExpression']}:</ui:define>
+	               	<h:inputText id="name" value="#{certificateDomain.dnExpression}" />
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="dnClientCertDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['certificatedomain.edit.clientCertificates']}:</ui:define>
+	               	<h:selectBooleanCheckbox value="#{certificateDomain.clientCertificate}" />	           
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="dnServerCertDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['certificatedomain.edit.serverCertificates']}:</ui:define>
+	               	<h:selectBooleanCheckbox value="#{certificateDomain.serverCertificate}" />	           
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="dnCodeCertDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['certificatedomain.edit.codeSigningCertificates']}:</ui:define>
+	               	<h:selectBooleanCheckbox value="#{certificateDomain.codeSigningCertificate}" />	           
+	           	</s:decorate>
+	           	
+	          	<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
+					<h:commandButton action="#{certificateDomainHandler.saveCertificateDomain}" value="#{messages['button.save']}" id="submit"/>
+					<s:button value="#{messages['button.cancel']}" action="cancel" id="cancel"/>
+				</s:decorate> 
+			</rich:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -27,14 +27,15 @@ import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;
 @Local
 public interface CertificateDomainManager {
 
-	static final String NAME = "certificateDomainHandler";
+	static final String NAME = "certificateDomainManager";
 
 	/**
 	 * @param domain the domain to register.
 	 * @throws DistinguishedNameOverlapsException
 	 *             if the DN overlaps with an already existing one.
 	 * @throws InvalidCertificateDomainNameException if the name already exists.
+	 * @throws NoCertificateTypesSelectedException if no certificate types have been checked in the domain.
 	 */
-	void saveCertificateDomain(CertificateDomain domain) throws InvalidDistinguishedNameException, DistinguishedNameOverlapsException, InvalidCertificateDomainNameException;
+	void saveCertificateDomain(CertificateDomain domain) throws InvalidDistinguishedNameException, DistinguishedNameOverlapsException, InvalidCertificateDomainNameException, NoCertificateTypesSelectedException;
 
 }

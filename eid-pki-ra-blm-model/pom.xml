@@ -33,7 +33,7 @@
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-util-crypto</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-util-dnfilter</artifactId>
@@ -77,7 +77,7 @@
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
@@ -93,7 +93,13 @@
 			<artifactId>jboss-seam</artifactId>
 			<type>ejb</type>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>javax.faces</groupId>
+			<artifactId>jsf-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
