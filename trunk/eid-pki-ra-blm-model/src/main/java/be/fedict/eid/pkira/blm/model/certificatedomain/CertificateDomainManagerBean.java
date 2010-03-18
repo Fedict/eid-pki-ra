@@ -17,7 +17,6 @@
 package be.fedict.eid.pkira.blm.model.certificatedomain;
 
 import java.util.List;
-import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -26,7 +25,6 @@ import javax.ejb.TransactionAttributeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 
-import be.fedict.eid.pkira.blm.model.domain.CertificateType;
 import be.fedict.eid.pkira.dnfilter.DistinguishedName;
 import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
 import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;
@@ -49,49 +47,41 @@ public class CertificateDomainManagerBean implements CertificateDomainManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public CertificateDomain registerCertificateDomain(String name, String caId, String dnExpression,
-			Set<CertificateType> types) throws InvalidDistinguishedNameException, DistinguishedNameOverlapsException,
-			DuplicateCertificateDomainNameException {
+	public void saveCertificateDomain(CertificateDomain domain) throws InvalidDistinguishedNameException, DistinguishedNameOverlapsException,
+			InvalidCertificateDomainNameException {
+		
 		// Validate the name
-		if (domainRepository.findByName(name) != null) {
-			throw new DuplicateCertificateDomainNameException();
+		if (domain.getName()==null || domainRepository.findByName(domain.getName()) != null) {
+			throw new InvalidCertificateDomainNameException();
 		}
 		
 		// Validate the DN expression
-		DistinguishedName dn = distinguishedNameManager.createDistinguishedName(dnExpression);
-		checkForOverlaps(dn, types);
+		validateDNExpression(domain);
 		
-
-		// Create the domain
-		CertificateDomain domain = new CertificateDomain();
-		domain.setName(name);
-		domain.setDnExpression(dnExpression);
-		domain.setForClientCertificate(types.contains(CertificateType.CLIENT));
-		domain.setForCodeSigningCertificate(types.contains(CertificateType.CODE));
-		domain.setForServerCertificate(types.contains(CertificateType.SERVER));
+		// Store the domain
 		domainRepository.persist(domain);
-		// TODO fill in CA
-
-		return domain;
 	}
 
 	/**
 	 * Checks if the DN overlaps with the already registered ones.
 	 */
-	private void checkForOverlaps(DistinguishedName dn, Set<CertificateType> types)
-			throws DistinguishedNameOverlapsException {
+	private void validateDNExpression(CertificateDomain domain)
+			throws DistinguishedNameOverlapsException, InvalidDistinguishedNameException {
+		// Create the DN
+		DistinguishedName dn = distinguishedNameManager.createDistinguishedName(domain.getDnExpression());
+		
 		// Look up the matching certificate domains
-		List<CertificateDomain> domains = domainRepository.findByCertificateTypes(types);
+		List<CertificateDomain> allDomains = domainRepository.findByCertificateTypes(domain.getCertificateTypes());
 
 		// Look for overlaps
-		for (CertificateDomain domain : domains) {
+		for (CertificateDomain otherDomain : allDomains) {
 			try {
-				DistinguishedName otherDN = distinguishedNameManager.createDistinguishedName(domain.getDnExpression());
+				DistinguishedName otherDN = distinguishedNameManager.createDistinguishedName(otherDomain.getDnExpression());
 				if (otherDN.matches(dn)) {
 					throw new DistinguishedNameOverlapsException(domain.getDnExpression());
 				}
 			} catch (InvalidDistinguishedNameException e) {
-				throw new RuntimeException("Invalid DN expression found in database: " + domain.getDnExpression());
+				throw new RuntimeException("Invalid DN expression found in database: " + otherDomain.getDnExpression());
 			}
 		}
 	}

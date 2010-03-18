@@ -17,11 +17,8 @@
 package be.fedict.eid.pkira.blm.model.certificatedomain;
 
 
-import java.util.Set;
-
 import javax.ejb.Local;
 
-import be.fedict.eid.pkira.blm.model.domain.CertificateType;
 import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;
 
 /**
@@ -33,22 +30,11 @@ public interface CertificateDomainManager {
 	static final String NAME = "certificateDomainHandler";
 
 	/**
-	 * @param name
-	 *            name of the certificate domain.
-	 * @param caId
-	 *            id of the CA for the certificate domain.
-	 * @param dnExpression
-	 *            expression describing the allowed DNs.
-	 * @param types
-	 *            certificate type for the domain
-	 * @return the created domain.
-	 * @throws InvalidDistinguishedNameException
-	 *             if the DN expressions if invalid.
+	 * @param domain the domain to register.
 	 * @throws DistinguishedNameOverlapsException
 	 *             if the DN overlaps with an already existing one.
-	 * @throws DuplicateCertificateDomainNameException if the name already exists.
+	 * @throws InvalidCertificateDomainNameException if the name already exists.
 	 */
-	CertificateDomain registerCertificateDomain(String name, String caId, String dnExpression,
-			Set<CertificateType> types) throws InvalidDistinguishedNameException, DistinguishedNameOverlapsException, DuplicateCertificateDomainNameException;
+	void saveCertificateDomain(CertificateDomain domain) throws InvalidDistinguishedNameException, DistinguishedNameOverlapsException, InvalidCertificateDomainNameException;
 
 }

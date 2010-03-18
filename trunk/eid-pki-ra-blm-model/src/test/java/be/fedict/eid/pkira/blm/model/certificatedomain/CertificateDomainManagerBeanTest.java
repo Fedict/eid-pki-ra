@@ -17,25 +17,20 @@
 package be.fedict.eid.pkira.blm.model.certificatedomain;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anySet;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
 import java.util.Collections;
-import java.util.Set;
 
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import be.fedict.eid.pkira.blm.model.domain.CertificateType;
 import be.fedict.eid.pkira.dnfilter.DistinguishedName;
 import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
 
@@ -44,17 +39,10 @@ import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
  */
 public class CertificateDomainManagerBeanTest {
 
-	/**
-	 * 
-	 */
-	private static final Set<CertificateType> TYPES = Collections.singleton(CertificateType.CLIENT);
-	/**
-	 * 
-	 */
-	private static final CertificateDomain DOMAIN = new CertificateDomain();
 	private static final String NAME = "name";
-	private static final String CA_ID = "ca-1";
 	private static final String DN_EXPRESSION = "dn";
+	
+	private static final CertificateDomain DOMAIN = createCertificateDomain();
 
 	@Mock
 	private CertificateDomainRepository domainRepository;
@@ -73,27 +61,30 @@ public class CertificateDomainManagerBeanTest {
 		bean.setDomainRepository(domainRepository);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testCreateCertificateDomainHappyFlow() throws Exception {
 		DOMAIN.setDnExpression(DN_EXPRESSION);
-		when(domainRepository.findByCertificateTypes(TYPES)).thenReturn(Collections.singletonList(DOMAIN));
+		when(domainRepository.findByCertificateTypes(anySet())).thenReturn(Collections.singletonList(DOMAIN));
 		DistinguishedName dn = mock(DistinguishedName.class);
 		when(dnManager.createDistinguishedName(DN_EXPRESSION)).thenReturn(dn);
 		when(dn.matches(any(DistinguishedName.class))).thenReturn(false);
 
 		// Execute it
-		CertificateDomain domain2 = bean.registerCertificateDomain(NAME, CA_ID, DN_EXPRESSION, TYPES);
+		bean.saveCertificateDomain(DOMAIN);
 
-		// Verify the results
-		assertNotNull(domain2);
-		assertEquals(domain2.getDnExpression(), DN_EXPRESSION);
-		assertEquals(domain2.getName(), NAME);
-		assertTrue(domain2.isForClientCertificate());
-		assertFalse(domain2.isForServerCertificate());
-		assertFalse(domain2.isForCodeSigningCertificate());
+		// Verify the results		
 		verify(domainRepository).findByName(NAME);
-		verify(domainRepository).findByCertificateTypes(TYPES);
-		verify(domainRepository).persist(domain2);
+		verify(domainRepository).findByCertificateTypes(DOMAIN.getCertificateTypes());
+		verify(domainRepository).persist(DOMAIN);
+	}
+
+	private static CertificateDomain createCertificateDomain() {
+		CertificateDomain result = new CertificateDomain();
+		result.setName(NAME);
+		result.setDnExpression(DN_EXPRESSION);
+		result.setClientCertificate(true);
+		return result;
 	}
 
 	@Test
@@ -103,9 +94,9 @@ public class CertificateDomainManagerBeanTest {
 
 		// Execute it
 		try {
-			bean.registerCertificateDomain(NAME, CA_ID, DN_EXPRESSION, TYPES);
+			bean.saveCertificateDomain(DOMAIN);
 			fail("Expected exception.");
-		} catch (DuplicateCertificateDomainNameException e) {
+		} catch (InvalidCertificateDomainNameException e) {
 			// ok
 		}
 
@@ -115,14 +106,14 @@ public class CertificateDomainManagerBeanTest {
 	@Test
 	public void testCreateCertificateDomainOverlap() throws Exception {
 		DOMAIN.setDnExpression(DN_EXPRESSION);
-		when(domainRepository.findByCertificateTypes(TYPES)).thenReturn(Collections.singletonList(DOMAIN));
+		when(domainRepository.findByCertificateTypes(DOMAIN.getCertificateTypes())).thenReturn(Collections.singletonList(DOMAIN));
 		DistinguishedName dn = mock(DistinguishedName.class);
 		when(dnManager.createDistinguishedName(DN_EXPRESSION)).thenReturn(dn);
 		when(dn.matches(any(DistinguishedName.class))).thenReturn(true);
 
 		// Execute it
 		try {
-			bean.registerCertificateDomain(NAME, CA_ID, DN_EXPRESSION, TYPES);
+			bean.saveCertificateDomain(DOMAIN);
 			fail("Expected exception");
 		} catch (DistinguishedNameOverlapsException e) {
 			// ok
