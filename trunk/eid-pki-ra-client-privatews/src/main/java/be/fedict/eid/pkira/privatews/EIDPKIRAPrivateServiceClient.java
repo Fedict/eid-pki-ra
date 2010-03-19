@@ -28,9 +28,12 @@ import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivateService;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateRequest;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateResponse;
+import be.fedict.eid.pkira.generated.privatews.FindUserRequest;
+import be.fedict.eid.pkira.generated.privatews.FindUserResponse;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesRequest;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesResponse;
 import be.fedict.eid.pkira.generated.privatews.ObjectFactory;
+import be.fedict.eid.pkira.generated.privatews.UserWS;
 
 /**
  * Client to access the private eID PKI RA web service. This hides the
@@ -74,6 +77,13 @@ public class EIDPKIRAPrivateServiceClient {
 		request.setSerialNumber(serialNumber);
 		FindCertificateResponse response = getWebservicePort().findCertificate(request);
 		return response.getCertificate();
+	}
+	
+	public UserWS findUser(String userRRN) {
+		FindUserRequest request = factory.createFindUserRequest();
+		request.setUserRRN(userRRN);
+		FindUserResponse response = getWebservicePort().findUser(request);
+		return response.getUser();
 	}
 
 	/**

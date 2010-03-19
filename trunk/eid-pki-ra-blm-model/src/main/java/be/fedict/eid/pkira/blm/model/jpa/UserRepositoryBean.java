@@ -22,6 +22,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import org.jboss.seam.annotations.Name;
@@ -30,7 +31,6 @@ import be.fedict.eid.pkira.blm.model.domain.User;
 
 /**
  * @author Bram Baeyens
- *
  */
 @Stateless
 @Name(UserRepository.NAME)
@@ -39,7 +39,7 @@ public class UserRepositoryBean implements UserRepository {
 
 	@PersistenceContext
 	private EntityManager entityManager;
-	
+
 	protected void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
@@ -51,14 +51,21 @@ public class UserRepositoryBean implements UserRepository {
 
 	@Override
 	public User findById(Integer id) {
-		return entityManager.find(User.class, id);
+		try {
+			return entityManager.find(User.class, id);
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 
 	@Override
 	public User findByNationalRegisterNumber(String nationalRegisterNumber) {
-		return (User) entityManager.createNamedQuery("findByNationalRegisterNumber")
-				.setParameter("nationalRegisterNumber", nationalRegisterNumber)
-				.getSingleResult();
+		try {
+			return (User) entityManager.createNamedQuery("findByNationalRegisterNumber").setParameter(
+					"nationalRegisterNumber", nationalRegisterNumber).getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 
 	@Override

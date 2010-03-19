@@ -13,6 +13,8 @@
 	<test name="Private Web Service Test">
 		<classes>
 			<class name="be.fedict.eid.integration.privatews.PrivateWebserviceTest" />
+			<class name="be.fedict.eid.integration.privatews.PrivateWebserviceCertificateDomainTest" />
+			<class name="be.fedict.eid.integration.privatews.PrivateWebserviceRegistrationTest" />
 		</classes>
 	</test>
 </suite>

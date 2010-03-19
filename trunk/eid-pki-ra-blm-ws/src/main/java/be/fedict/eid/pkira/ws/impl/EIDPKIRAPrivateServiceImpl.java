@@ -15,13 +15,19 @@ import org.jboss.seam.Component;
 import be.fedict.eid.pkira.blm.model.domain.Certificate;
 import be.fedict.eid.pkira.blm.model.domain.CertificateType;
 import be.fedict.eid.pkira.blm.model.domain.DomainRepository;
+import be.fedict.eid.pkira.blm.model.domain.User;
+import be.fedict.eid.pkira.blm.model.jpa.UserRepository;
 import be.fedict.eid.pkira.generated.privatews.CertificateTypeWS;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateRequest;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateResponse;
+import be.fedict.eid.pkira.generated.privatews.FindUserRequest;
+import be.fedict.eid.pkira.generated.privatews.FindUserResponse;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesRequest;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesResponse;
+import be.fedict.eid.pkira.generated.privatews.ObjectFactory;
+import be.fedict.eid.pkira.generated.privatews.UserWS;
 
 @Stateless
 @WebService(endpointInterface = "be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType")
@@ -45,6 +51,9 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 		return certificatesResponse;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public FindCertificateResponse findCertificate(FindCertificateRequest request) {
 		Certificate certificate = getDomainRepository().findCertificate(request.getUserRRN(), new BigInteger(request.getSerialNumber()));
@@ -54,9 +63,31 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	}
 	
 	/**
-	 * @param certificateType
-	 * @return
+	 * {@inheritDoc}
 	 */
+	@Override
+	public FindUserResponse findUser(FindUserRequest request) {
+		User user = getUserRepository().findByNationalRegisterNumber(request.getUserRRN());
+		
+		FindUserResponse response = new FindUserResponse();
+		response.setUser(mapUser(user));
+		return response;
+	}
+	
+	private UserWS mapUser(User user) {
+		if (user==null) {
+			return null;
+		}
+		
+		UserWS result = new ObjectFactory().createUserWS();
+		result.setId(user.getId().toString());
+		result.setFirstName(user.getFirstName());
+		result.setLastName(user.getLastName());
+		result.setNationalRegisterNumber(user.getNationalRegisterNumber());
+		
+		return result;
+	}
+
 	private CertificateTypeWS mapCertificateType(CertificateType certificateType) {
 		switch (certificateType) {
 		case CLIENT:
@@ -77,7 +108,7 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	 * @return certificatews
 	 */
 	private CertificateWS parseCertificateToCertificateWS(Certificate certificate, boolean includeX509) {
-		CertificateWS certificateWS = new CertificateWS();
+		CertificateWS certificateWS = new ObjectFactory().createCertificateWS();
 		try {
 			certificateWS.setIssuer(certificate.getIssuer());
 			certificateWS.setRequesterName(certificate.getRequesterName());
@@ -108,5 +139,9 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	
 	private DomainRepository getDomainRepository() {
 		return (DomainRepository) Component.getInstance(DomainRepository.NAME, true);
+	}
+	
+	private UserRepository getUserRepository() {
+		return (UserRepository) Component.getInstance(UserRepository.NAME, true);
 	}
 }
