@@ -18,8 +18,6 @@
 package be.fedict.eid.pkira.blm.model.mail;
 
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
@@ -40,6 +38,9 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.jboss.seam.log.Log;
+import org.jboss.seam.log.Logging;
+
 /**
  * @author hans
  */
@@ -48,7 +49,7 @@ import javax.mail.internet.MimeMultipart;
 			@ActivationConfigProperty(propertyName = "destination", propertyValue = "mail-queue") })
 public class MailHandlerBean implements MessageListener {
 
-	private static Logger LOGGER = Logger.getLogger(MailHandlerBean.class.getName());
+	private static Log errorLog = Logging.getLog("ErrorLog");
 
 	// TODO: retrieve from admin config
 	private String smtpServer = "mail.aca-it.be";
@@ -100,10 +101,10 @@ public class MailHandlerBean implements MessageListener {
 
 			Transport.send(msg);
 		} catch (JMSException e) {
-			LOGGER.log(Level.SEVERE, "Cannot handle the Object message from the queue", e);
+			errorLog.error("Cannot handle the object message from the queue", e);
 			throw new RuntimeException(e);
 		} catch (MessagingException e) {
-			LOGGER.log(Level.SEVERE, "Cannot send a mail message", e);
+			errorLog.error("Cannot send a mail message", e);
 			throw new RuntimeException(e);
 		}
 	}

@@ -41,8 +41,8 @@ import org.jboss.seam.log.Log;
 @Name(MailSender.NAME)
 public class MailSenderBean implements MailSender {
 
-	@Logger
-	private Log log;
+	@Logger(value="ErrorLog")
+	private Log errorLog;
 	
 	@Resource(mappedName = "java:JmsXA")
 	private QueueConnectionFactory queueConnectionFactory;
@@ -79,7 +79,7 @@ public class MailSenderBean implements MailSender {
 				queueConnection.close();
 			}
 		} catch (JMSException e) {
-			log.error("Cannot send message to the queue", e);
+			errorLog.error("Mail sending problem: message cannot be added to the queue", e);
 			throw new RuntimeException(e);
 		}
 	}
