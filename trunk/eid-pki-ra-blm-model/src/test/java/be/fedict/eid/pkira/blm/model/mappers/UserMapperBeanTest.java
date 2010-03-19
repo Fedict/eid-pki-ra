@@ -14,7 +14,7 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.pkira.ws.impl.mapper;
+package be.fedict.eid.pkira.blm.model.mappers;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -23,6 +23,7 @@ import static org.testng.Assert.assertNull;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.blm.model.domain.User;
+import be.fedict.eid.pkira.blm.model.mappers.UserMapperBean;
 import be.fedict.eid.pkira.generated.privatews.UserWS;
 
 /**

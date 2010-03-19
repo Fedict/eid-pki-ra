@@ -14,7 +14,7 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.pkira.ws.impl.mapper;
+package be.fedict.eid.pkira.blm.model.mappers;
 
 import be.fedict.eid.pkira.blm.model.domain.Certificate;
 import be.fedict.eid.pkira.blm.model.domain.CertificateType;
