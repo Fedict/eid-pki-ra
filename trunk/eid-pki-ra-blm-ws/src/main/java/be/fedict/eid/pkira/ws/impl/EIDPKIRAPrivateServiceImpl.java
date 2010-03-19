@@ -8,7 +8,6 @@ import javax.jws.HandlerChain;
 import javax.jws.WebService;
 
 import org.jboss.seam.Component;
-import org.jboss.seam.annotations.In;
 
 import be.fedict.eid.pkira.blm.model.domain.Certificate;
 import be.fedict.eid.pkira.blm.model.domain.DomainRepository;
@@ -22,7 +21,9 @@ import be.fedict.eid.pkira.generated.privatews.FindUserResponse;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesRequest;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesResponse;
 import be.fedict.eid.pkira.ws.impl.mapper.CertificateMapper;
+import be.fedict.eid.pkira.ws.impl.mapper.CertificateMapperBean;
 import be.fedict.eid.pkira.ws.impl.mapper.UserMapper;
+import be.fedict.eid.pkira.ws.impl.mapper.UserMapperBean;
 
 @Stateless
 @WebService(endpointInterface = "be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType")
@@ -30,12 +31,6 @@ import be.fedict.eid.pkira.ws.impl.mapper.UserMapper;
 public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 
 	public static final String NAME = "eidPKIRAPrivateService";
-
-	@In(value = CertificateMapper.NAME, create = true)
-	private CertificateMapper certificateMapper;
-	
-	@In(value = UserMapper.NAME, create = true)
-	private UserMapper userMapper;
 
 	/**
 	 * {@inheritDoc}
@@ -46,7 +41,7 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 
 		ListCertificatesResponse certificatesResponse = new ListCertificatesResponse();
 		for (Certificate certificate : allCertificates) {
-			certificatesResponse.getCertificates().add(certificateMapper.map(certificate, false));
+			certificatesResponse.getCertificates().add(getCertificateMapper().map(certificate, false));
 		}
 		return certificatesResponse;
 	}
@@ -59,7 +54,7 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 		Certificate certificate = getDomainRepository().findCertificate(request.getUserRRN(),
 				new BigInteger(request.getSerialNumber()));
 		FindCertificateResponse response = new FindCertificateResponse();
-		response.setCertificate(certificateMapper.map(certificate, true));
+		response.setCertificate(getCertificateMapper().map(certificate, true));
 		return response;
 	}
 
@@ -71,7 +66,7 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 		User user = getUserRepository().findByNationalRegisterNumber(request.getUserRRN());
 
 		FindUserResponse response = new FindUserResponse();
-		response.setUser(userMapper.map(user));
+		response.setUser(getUserMapper().map(user));
 		return response;
 	}
 
@@ -81,5 +76,15 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 
 	private UserRepository getUserRepository() {
 		return (UserRepository) Component.getInstance(UserRepository.NAME, true);
+	}
+	
+	private UserMapper getUserMapper() {
+		return new UserMapperBean();
+		//return (UserMapper) Component.getInstance(UserMapper.NAME, true);
+	}
+	
+	private CertificateMapper getCertificateMapper() {
+		return new CertificateMapperBean();
+		//return (CertificateMapper) Component.getInstance(CertificateMapper.NAME, true);
 	}
 }
