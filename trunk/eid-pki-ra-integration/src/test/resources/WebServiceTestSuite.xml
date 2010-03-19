@@ -1,18 +1,18 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="webServiceTestSuite" verbose="1">
+<suite name="WebServiceTestSuite" verbose="1">
 	<test name="Public Web Service Signing Test">
 		<classes>
-			<class name="be.fedict.eid.integration.ws.PublicWebserviceSigningTest" />
+			<class name="be.fedict.eid.integration.publicws.PublicWebserviceSigningTest" />
 		</classes>
 	</test>	
 	<test name="Public Web Service Revocation Test">
 		<classes>
-			<class name="be.fedict.eid.integration.ws.PublicWebserviceRevocationTest" />
+			<class name="be.fedict.eid.integration.publicws.PublicWebserviceRevocationTest" />
 		</classes>
 	</test>	
 	<test name="Private Web Service Test">
 		<classes>
-			<class name="be.fedict.eid.integration.ws.PrivateWebserviceTest" />
+			<class name="be.fedict.eid.integration.privatews.PrivateWebserviceTest" />
 		</classes>
 	</test>
 </suite>

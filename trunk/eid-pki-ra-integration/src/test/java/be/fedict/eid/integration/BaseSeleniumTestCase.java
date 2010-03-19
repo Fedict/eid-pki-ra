@@ -99,6 +99,17 @@ public class BaseSeleniumTestCase {
 		getSelenium().click(locator);
 		waitForPageToLoad();
 	}
+	
+	/**
+	 * Click on a link and wait for the page to load.
+	 * 
+	 * @param link
+	 *            The link.
+	 */
+	protected void openAndWait(String url) {
+		getSelenium().open(url);
+		waitForPageToLoad();
+	}
     
     /**
 	 * Wait for a page to load.
@@ -108,13 +119,11 @@ public class BaseSeleniumTestCase {
     	if(pageLoadTime == null) {
     		pageLoadTime = DEFAULT_PAGE_LOADTIME;
     	}
-    	//workaround for http://jira.openqa.org/browse/SRC-302
+
+    	long time = System.currentTimeMillis();
         getSelenium().waitForPageToLoad(pageLoadTime);
-        try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+        long time2 = System.currentTimeMillis() - time;
+        System.out.println(time2);
     }
     
 	/**

@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="AdminPortalTestSuite" verbose="1">
+	<parameter name="context" value="admin" />
+	<test name="Certificate Domain tests">
+		<classes>
+			<class name="be.fedict.eid.integration.admin.CertificateDomainSeleniumTest" />
+		</classes>
+	</test>
+</suite>

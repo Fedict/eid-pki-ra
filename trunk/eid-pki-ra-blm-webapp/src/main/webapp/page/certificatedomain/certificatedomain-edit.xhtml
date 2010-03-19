@@ -16,22 +16,22 @@
 	           	
 	           	<s:decorate id="dnPatternDecoration" template="/layout/edit.xhtml">
 	               	<ui:define name="label">#{messages['certificatedomain.edit.dnExpression']}:</ui:define>
-	               	<h:inputText id="name" value="#{certificateDomain.dnExpression}" />
+	               	<h:inputText id="dnPattern" value="#{certificateDomain.dnExpression}" />
 	           	</s:decorate>
 	           	
-	           	<s:decorate id="dnClientCertDecoration" template="/layout/edit.xhtml">
+	           	<s:decorate id="clientCertDecoration" template="/layout/edit.xhtml">
 	               	<ui:define name="label">#{messages['certificatedomain.edit.clientCertificates']}:</ui:define>
-	               	<h:selectBooleanCheckbox value="#{certificateDomain.clientCertificate}" />	           
+	               	<h:selectBooleanCheckbox id="clientCert" value="#{certificateDomain.clientCertificate}" />	           
 	           	</s:decorate>
 	           	
-	           	<s:decorate id="dnServerCertDecoration" template="/layout/edit.xhtml">
+	           	<s:decorate id="serverCertDecoration" template="/layout/edit.xhtml">
 	               	<ui:define name="label">#{messages['certificatedomain.edit.serverCertificates']}:</ui:define>
-	               	<h:selectBooleanCheckbox value="#{certificateDomain.serverCertificate}" />	           
+	               	<h:selectBooleanCheckbox id="serverCert" value="#{certificateDomain.serverCertificate}" />	           
 	           	</s:decorate>
 	           	
-	           	<s:decorate id="dnCodeCertDecoration" template="/layout/edit.xhtml">
+	           	<s:decorate id="codeSigningCertDecoration" template="/layout/edit.xhtml">
 	               	<ui:define name="label">#{messages['certificatedomain.edit.codeSigningCertificates']}:</ui:define>
-	               	<h:selectBooleanCheckbox value="#{certificateDomain.codeSigningCertificate}" />	           
+	               	<h:selectBooleanCheckbox id="codeSigningCert" value="#{certificateDomain.codeSigningCertificate}" />	           
 	           	</s:decorate>
 	           	
 	          	<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
