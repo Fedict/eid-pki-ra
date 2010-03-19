@@ -76,6 +76,12 @@
 			<groupId>com.sun.facelets</groupId>
 			<artifactId>jsf-facelets</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>javax.faces</groupId>
+			<artifactId>jsf-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.richfaces.ui</groupId>
@@ -96,6 +102,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>

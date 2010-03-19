@@ -32,6 +32,7 @@ import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.crypto.CryptoException;
 import be.fedict.eid.pkira.portal.domain.CSRUpload;
+import be.fedict.eid.pkira.portal.domain.Operator;
 import be.fedict.eid.pkira.portal.domain.RequestContract;
 
 /**
@@ -51,6 +52,7 @@ public class CSRUploadHandlerBean implements CSRUploadHandler, Serializable {
 	private RequestContract requestContract;
 	private CSRUpload csrUpload;
 	private FacesMessages facesMessages;
+	private Operator currentOperator;
 	
 	protected void setLog(Log log) {
 		this.log = log;
@@ -71,10 +73,16 @@ public class CSRUploadHandlerBean implements CSRUploadHandler, Serializable {
 		this.facesMessages = facesMessages;
 	}
 
+	@In(value="currentOperator", scope=ScopeType.SESSION)
+	public void setCurrentoperator(Operator currentOperator) {
+		this.currentOperator = currentOperator;
+	}
+
 	@Override
 	@Begin
 	public String uploadCertificateSigningRequest() {
 		log.debug(">>> uploadCertificateSigningRequest(csrUpload=[{0}])", csrUpload);
+		requestContract.setOperator(currentOperator);
 		try {
 			requestContract.setDistinguishedName(csrUpload.extractCsrInfo());
 			requestContract.setBase64Csr(csrUpload.getBase64Csr());

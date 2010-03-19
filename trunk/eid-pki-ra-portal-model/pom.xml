@@ -32,6 +32,22 @@
 			<groupId>org.jboss.seam</groupId>
 			<artifactId>jboss-seam</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-util-crypto</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-client-contracts</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-client-publicws</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-authentication-client</artifactId>
+		</dependency>
 <!--		<dependency>-->
 <!--			<groupId>org.bouncycastle</groupId>-->
 <!--			<artifactId>bcprov-jdk16</artifactId>-->
@@ -56,14 +72,6 @@
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>be.fedict</groupId>
-			<artifactId>eid-pki-ra-util-crypto</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>be.fedict</groupId>
-			<artifactId>eid-pki-ra-client-contracts</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
@@ -95,10 +103,6 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>be.fedict</groupId>
-			<artifactId>eid-pki-ra-client-publicws</artifactId>
 		</dependency>
 	</dependencies>
 </project>

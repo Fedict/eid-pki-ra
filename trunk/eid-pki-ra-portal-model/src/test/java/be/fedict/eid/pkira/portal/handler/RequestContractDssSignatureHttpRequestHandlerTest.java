@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.jboss.seam.faces.FacesMessages;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
@@ -19,16 +20,24 @@ public class RequestContractDssSignatureHttpRequestHandlerTest
 	protected void initHandler() {
 		handler = new RequestContractDssSignatureHttpRequestHandler() {
 
+			@Override
 			protected EIDPKIRAServiceClient getServiceClient() {
 				return serviceClient;
 			}
 
+			@Override
 			protected EIDPKIRAContractsClient getContractsClient() {
 				return contractsClient;
 			}
 
+			@Override
 			protected CertificateSigningResponseType unmarshall(String result) {
 				return certificateResponse;
+			}
+			
+			@Override
+			protected FacesMessages getFacesMessages() {
+				return facesMessages;
 			}
 		};
 	}

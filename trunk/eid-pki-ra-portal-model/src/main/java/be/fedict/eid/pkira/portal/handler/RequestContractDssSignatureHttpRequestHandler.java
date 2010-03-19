@@ -38,5 +38,4 @@ public class RequestContractDssSignatureHttpRequestHandler
 	protected CertificateSigningResponseType unmarshall(String result) throws XmlMarshallingException {
 		return getContractsClient().unmarshal(result, CertificateSigningResponseType.class);
 	}
-
 }

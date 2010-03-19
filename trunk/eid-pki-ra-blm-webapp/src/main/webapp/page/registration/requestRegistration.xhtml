@@ -15,24 +15,19 @@
 					</h:panelGroup>
 				</f:facet>
 
-				<s:decorate id="requesterNameDecoration"
-					template="/layout/edit.xhtml">
+				<s:decorate id="requesterNameDecoration" template="/layout/edit.xhtml">
 					<ui:define name="label">#{messages['requester.name']}:</ui:define>
-					<h:outputText id="requesterName"
-						value="#{newRegistration.requester.name}" />
+					<h:outputText id="requesterName" value="#{newRegistration.requester.name}" />
 				</s:decorate>
 
 				<s:decorate id="emailDecoration" template="/layout/edit.xhtml">
 					<ui:define name="label">#{messages['registration.email']}:</ui:define>
-					<h:inputText required="true" id="email"
-						value="#{newRegistration.email}" />
+					<h:inputText required="true" id="email" value="#{newRegistration.email}" />
 				</s:decorate>
 
-				<s:decorate id="certificateDomainDecoration"
-					template="/layout/edit.xhtml">
+				<s:decorate id="certificateDomainDecoration" template="/layout/edit.xhtml">
 					<ui:define name="label">#{messages['registration.certificate.domain']}:</ui:define>
-					<h:selectManyCheckbox id="certificateDomainList" 
-				 			value="#{registrationHandler.selectedCertificateDomains}">
+					<h:selectManyCheckbox id="certificateDomainList" value="#{registrationHandler.selectedCertificateDomains}">
                     	<s:selectItems value="#{certificateDomainRepository.findUnregistered(newRegistration.requester)}"
                         		var="certificateDomain" label="#{certificateDomain.name}"/>
                        	<s:convertEntity />
@@ -40,11 +35,8 @@
 				</s:decorate>
 
 				<s:decorate template="/layout/buttonbox.xhtml" id="requestRegistrationButtonBox">
-					<h:commandButton
-						action="#{registrationHandler.createRegistrations}"
-						value="#{messages['button.register']}" id="register" />
-					<s:button value="#{messages['button.cancel']}"
-						action="registration" id="cancel" />
+					<h:commandButton action="#{registrationHandler.createRegistrations}" value="#{messages['button.register']}" id="register" />
+					<s:button value="#{messages['button.cancel']}" action="registration" id="cancel" />
 				</s:decorate>
 			</rich:panel>
 		</h:form>

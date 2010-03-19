@@ -17,7 +17,6 @@
 package be.fedict.eid.pkira.blm.model.handler;
 
 import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Begin;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;

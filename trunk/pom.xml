@@ -48,6 +48,7 @@
 		</developerConnection>
 	</scm>
 	<modules>
+		<module>eid-pki-ra-authentication-client</module>
 		<module>eid-pki-ra-generated-contracts</module>
 		<module>eid-pki-ra-generated-publicws</module>
 		<module>eid-pki-ra-generated-privatews</module>
@@ -72,6 +73,7 @@
 	<properties>
 		<eid-applet.version>1.0.0.GA</eid-applet.version>
 		<eid-dss-version>1.0.0-SNAPSHOT</eid-dss-version>
+		<eid-idp-version>1.0.0-SNAPSHOT</eid-idp-version>
 		<jboss.version>5.1.0</jboss.version>
 		<version.jboss.app>5</version.jboss.app>
 		<seam.version>2.2.0.GA</seam.version>
@@ -81,12 +83,12 @@
 		<testng.version>5.11</testng.version>
 		<javax.mail.version>1.4.2</javax.mail.version>
 		<bouncycastle.version>1.45</bouncycastle.version>
+		<opensaml.version>2.3.2</opensaml.version>
 		<selenium-client-driver.version>1.0.2</selenium-client-driver.version>
 		<surefire.version>2.5</surefire.version>
 		<selenium-server.version>1.0.3</selenium-server.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8
-		</project.reporting.outputEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
 	<repositories>
@@ -113,6 +115,16 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
+		
+		<repository>
+            <id>shibboleth-release</id>
+            <name>Internet2 Releases</name>
+            <layout>default</layout>
+            <url>http://shibboleth.internet2.edu/downloads/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
 
 		<repository>
 			<id>openqa-releases</id>
@@ -374,6 +386,12 @@
 				<version>${project.version}</version>
 				<type>jar</type>
 			</dependency>
+			
+			<dependency>
+				<groupId>be.fedict</groupId>
+				<artifactId>eid-pki-ra-authentication-client</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 
 			<!--  Libraries -->
 
@@ -439,6 +457,11 @@
 				<version>2.3.16</version>
 				<type>jar</type>
 				<scope>compile</scope>
+			</dependency>		
+			<dependency>
+				<groupId>org.opensaml</groupId>
+				<artifactId>opensaml</artifactId>
+				<version>${opensaml.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -489,7 +512,7 @@
 
 			<properties>
 				<!-- development mode (disable in production) -->
-				<seam.debug>true</seam.debug>
+				<seam.debug>false</seam.debug>
 
 				<!-- datasource configuration -->
 				<min.pool.size>1</min.pool.size>
