@@ -14,7 +14,7 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.pkira.ws.impl.mapper;
+package be.fedict.eid.pkira.blm.model.mappers;
 
 import static be.fedict.eid.pkira.contracts.util.JAXBUtil.createXmlGregorianCalendar;
 
@@ -34,7 +34,7 @@ import be.fedict.eid.pkira.generated.privatews.ObjectFactory;
  * @author Jan Van den Bergh
  */
 @Name(CertificateMapper.NAME)
-@Scope(ScopeType.APPLICATION)
+@Scope(ScopeType.STATELESS)
 public class CertificateMapperBean implements CertificateMapper {
 
 	/**

@@ -14,7 +14,7 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.pkira.ws.impl.mapper;
+package be.fedict.eid.pkira.blm.model.mappers;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -27,6 +27,7 @@ import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.blm.model.domain.Certificate;
 import be.fedict.eid.pkira.blm.model.domain.CertificateType;
+import be.fedict.eid.pkira.blm.model.mappers.CertificateMapperBean;
 import be.fedict.eid.pkira.generated.privatews.CertificateTypeWS;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 
@@ -48,7 +49,7 @@ public class CertificateMapperBeanTest {
 
 	/**
 	 * Test method for
-	 * {@link be.fedict.eid.pkira.ws.impl.mapper.CertificateMapperBean#map(be.fedict.eid.pkira.blm.model.domain.CertificateType)}
+	 * {@link be.fedict.eid.pkira.blm.model.mappers.CertificateMapperBean#map(be.fedict.eid.pkira.blm.model.domain.CertificateType)}
 	 * .
 	 */
 	@Test
@@ -64,7 +65,7 @@ public class CertificateMapperBeanTest {
 
 	/**
 	 * Test method for
-	 * {@link be.fedict.eid.pkira.ws.impl.mapper.CertificateMapperBean#map(be.fedict.eid.pkira.generated.privatews.CertificateTypeWS)}
+	 * {@link be.fedict.eid.pkira.blm.model.mappers.CertificateMapperBean#map(be.fedict.eid.pkira.generated.privatews.CertificateTypeWS)}
 	 * .
 	 */
 	@Test
@@ -80,7 +81,7 @@ public class CertificateMapperBeanTest {
 
 	/**
 	 * Test method for
-	 * {@link be.fedict.eid.pkira.ws.impl.mapper.CertificateMapperBean#map(be.fedict.eid.pkira.blm.model.domain.Certificate, boolean)}
+	 * {@link be.fedict.eid.pkira.blm.model.mappers.CertificateMapperBean#map(be.fedict.eid.pkira.blm.model.domain.Certificate, boolean)}
 	 * .
 	 */
 	@Test

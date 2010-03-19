@@ -14,41 +14,22 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.pkira.ws.impl.mapper;
-
-import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
+package be.fedict.eid.pkira.blm.model.mappers;
 
 import be.fedict.eid.pkira.blm.model.domain.User;
-import be.fedict.eid.pkira.generated.privatews.ObjectFactory;
 import be.fedict.eid.pkira.generated.privatews.UserWS;
 
+
 /**
- * Implementation of the user mapper.
- * 
+ * Mapper for users from and to the web service.
  * @author Jan Van den Bergh
  */
-@Name(UserMapper.NAME)
-@Scope(ScopeType.APPLICATION)
-public class UserMapperBean implements UserMapper {
+public interface UserMapper {
 
+	String NAME = "userMapper";
+	
 	/**
-	 * {@inheritDoc}
+	 * Maps a user to the web service data type.
 	 */
-	@Override
-	public UserWS map(User user) {
-		if (user == null) {
-			return null;
-		}
-
-		UserWS result = new ObjectFactory().createUserWS();
-		result.setId(user.getId().toString());
-		result.setFirstName(user.getFirstName());
-		result.setLastName(user.getLastName());
-		result.setNationalRegisterNumber(user.getNationalRegisterNumber());
-
-		return result;
-	}
-
+	public UserWS map(User user);
 }
