@@ -67,6 +67,7 @@
 			</resource>
 		</resources>
 		<plugins>
+		<!-- 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jboss-maven-plugin</artifactId>
@@ -92,6 +93,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -107,8 +109,7 @@
 						<configuration>
 							<skipTests>false</skipTests>
 							<suiteXmlFiles>
-								<suiteXmlFile>src/test/resources/integrationTestSuite.xml
-								</suiteXmlFile>
+								<suiteXmlFile>src/test/resources/AllIntegrationTestsTestSuite.xml</suiteXmlFile>
 							</suiteXmlFiles>
 						</configuration>
 					</execution>
@@ -120,7 +121,7 @@
 				<version>1.0.1</version>
 				<configuration>
 					<port>44444</port>
-				</configuration>
+				</configuration><!-- 
 				<executions>
 					<execution>
 						<id>start-selenium</id>
@@ -138,7 +139,7 @@
 						</goals>
 						<inherited>false</inherited>
 					</execution>
-				</executions>
+				</executions> -->
 			</plugin>
 		</plugins>
 	</build>

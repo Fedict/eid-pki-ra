@@ -48,7 +48,6 @@ public class CertificateDomainRepositoryBeanTest extends DatabaseTest {
 	private static final String DN_EXPRESSION_2 = "cdTestDnExpression2";
 	private static final String DN_EXPRESSION_UNKNOWN = "cdTestDnExpressionUnknown";
 	private static final String NAME = "cdTestName";
-	private static final String NAME_2 = "cdTestName2";
 	private static final String NAME_UNKNOWN = "cdTestNameUnknown";
 
 	@BeforeClass
@@ -63,12 +62,6 @@ public class CertificateDomainRepositoryBeanTest extends DatabaseTest {
 		repository.persist(valid);
 		forceCommit();
 		assertNotNull(valid.getId());
-	}
-
-	@Test(dependsOnMethods = "persist", expectedExceptions = PersistenceException.class)
-	public void dnExpressionConstraint() throws Exception {
-		repository.persist(createCertificateDomain(DN_EXPRESSION, NAME_2));
-		fail("PersistenceException expected");
 	}
 
 	@Test(dependsOnMethods = "persist", expectedExceptions = PersistenceException.class)

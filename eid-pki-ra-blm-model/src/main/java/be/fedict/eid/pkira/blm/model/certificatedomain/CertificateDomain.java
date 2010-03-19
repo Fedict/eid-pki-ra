@@ -57,7 +57,7 @@ public class CertificateDomain implements Serializable {
 	private Integer id;
 	@Column(name = "CERTIFICATE_DOMAIN_NAME", nullable = false, unique = true)
 	private String name;
-	@Column(name = "DN_EXPRESSION", nullable = false, unique = true)
+	@Column(name = "DN_EXPRESSION", nullable = false)
 	private String dnExpression;
 	@Column(name = "SERVERCERT", nullable = false)
 	private boolean serverCertificate;

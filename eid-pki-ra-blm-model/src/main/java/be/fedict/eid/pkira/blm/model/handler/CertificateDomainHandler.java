@@ -17,6 +17,7 @@
 package be.fedict.eid.pkira.blm.model.handler;
 
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.Begin;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
@@ -50,7 +51,7 @@ public class CertificateDomainHandler {
 	public String saveCertificateDomain() {
 		try {
 			certificateDomainManager.saveCertificateDomain(certificateDomain);
-			facesMessages.addFromResourceBundle("certificatedomain.saved']");			
+			facesMessages.addFromResourceBundle("certificatedomain.saved");			
 			return "success";
 		} catch (InvalidDistinguishedNameException e) {
 			facesMessages.addFromResourceBundle("certificatedomain.error.invaliddn");			
@@ -61,6 +62,7 @@ public class CertificateDomainHandler {
 		} catch (NoCertificateTypesSelectedException e) {
 			facesMessages.addFromResourceBundle("certificatedomain.error.nocertificatetypes");
 		}
+		
 		return "error";
 	}
 }

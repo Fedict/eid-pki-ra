@@ -100,9 +100,8 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 			if (includeX509) {
 				certificateWS.setX509(certificate.getX509());
 			}
-
 		} catch (DatatypeConfigurationException e) {
-			// TODO: Error handling
+			throw new RuntimeException(e);
 		}
 		return certificateWS;
 	}

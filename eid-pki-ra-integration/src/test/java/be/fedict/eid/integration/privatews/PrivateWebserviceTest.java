@@ -14,11 +14,34 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.integration.ws;
+package be.fedict.eid.integration.privatews;
+
+import static be.fedict.eid.integration.util.WebServiceFactory.getPrivateWebServiceClient;
+
+import java.util.List;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 
 /**
+ * Test of the public web service.
+ * 
  * @author Jan Van den Bergh
  */
-public class PrivateWebserviceCertificateDomainTest {
+public class PrivateWebserviceTest {	
+	
+	@Test
+	public void getCertificateList() {
+		findCertificates("");
+	}
+
+	private void findCertificates(String userRRN) {
+		// Sign the message
+		List<CertificateWS> responseMsg = getPrivateWebServiceClient().listCertificates(userRRN);
+		
+		Assert.assertNotNull(responseMsg);
+	}
 
 }
