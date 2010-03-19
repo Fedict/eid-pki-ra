@@ -16,4 +16,8 @@ public interface RegistrationHandler {
 	void setSelectedCertificateDomains(List<CertificateDomain> selectedCertificateDomains);
 	
 	void createRegistrations();
+	
+	String registerUser();
+	
+	void destroy();
 }

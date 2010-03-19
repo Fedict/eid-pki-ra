@@ -31,7 +31,7 @@ public class Operator implements Serializable {
 
 	private static final long serialVersionUID = -9069139272251459619L;
 
-	private String name = "John Doe";
+	private String name;
 	private String function;
 	private String phone;
 	private String email;

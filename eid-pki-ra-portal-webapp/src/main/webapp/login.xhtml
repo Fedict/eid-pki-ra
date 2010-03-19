@@ -9,20 +9,19 @@
 		template="/layout/template.xhtml">
 
 	<ui:define name="center">
-    
-		<h:form id="login">
-			<rich:panel id="login-panel">
-    			<f:facet name="header">#{messages['general.login']}</f:facet>
-           	    <h:panelGrid columns="2" columnClasses="name,value">
-                   	<h:outputLabel for="username">#{messages['login.user']}:</h:outputLabel>
-                   	<h:inputText id="username" value="#{identity.username}"/>
-                   	<h:outputLabel for="password">#{messages['login.password']}:</h:outputLabel>
-                   	<h:inputSecret id="password" value="#{identity.password}"/>
-                   	
-                   	<s:fragment>&#160;</s:fragment>
-                   	<h:commandButton value="#{messages['button.login']}" action="#{identity.login}" id="login-button"/>
-               	</h:panelGrid>
-	        </rich:panel>
-	    </h:form>
+		<rich:panel id="panel">
+			<f:facet name="header">#{messages['login.title']}</f:facet>	          	
+			
+			<li>
+				<a href="https://www.e-contract.be/eid-idp/protocol/simple?Target=http://localhost:8080/eid-pki-ra/portal/postLogin.seam%3FauthenticationType%3DSIMPLE">
+					<h:outputText value="#{messages['authenticate.simple']}" />		
+				</a>
+			</li>
+			<li>
+				<a href="https://www.e-contract.be/eid-idp-sp/saml-request?IdPDestination=https://www.e-contract.be/eid-idp/protocol/saml2&amp;SPDestination=http://localhost:8080/eid-pki-ra/portal/postLogin.seam%3Fcid%3D#{conversation.id}%26authenticationType%3DSAML2">
+					<h:outputText value="#{messages['authenticate.saml2']}" />		
+				</a>
+			</li>
+		</rich:panel>
 	</ui:define> 
 </ui:composition>

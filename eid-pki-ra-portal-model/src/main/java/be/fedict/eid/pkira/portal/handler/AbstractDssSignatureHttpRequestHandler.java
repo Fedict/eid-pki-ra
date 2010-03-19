@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
 import org.jboss.seam.Component;
+import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.servlet.ContextualHttpServletRequest;
 import org.jboss.seam.web.AbstractResource;
 
@@ -55,7 +56,7 @@ public abstract class AbstractDssSignatureHttpRequestHandler<T extends ResponseT
 				} 
 			}
 		} catch (Exception e) {
-			// TODO (20100308): add proper exception handling
+			getFacesMessages().addFromResourceBundle("validator.error.sign");
 			LOG.info("<<< handleRequest: exception");
 		}
 		handleRedirect(request, response, redirectStatus);
@@ -109,5 +110,12 @@ public abstract class AbstractDssSignatureHttpRequestHandler<T extends ResponseT
 	 */
 	protected EIDPKIRAContractsClient getContractsClient() {
 		return (EIDPKIRAContractsClient) Component.getInstance(EIDPKIRAContractsClient.NAME);
+	}
+
+	/**
+	 * Make sure to call this method in a Seam contextual context.
+	 */
+	protected FacesMessages getFacesMessages() {
+		return (FacesMessages) Component.getInstance(FacesMessages.class, true);
 	}
 }

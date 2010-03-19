@@ -18,18 +18,25 @@
 			http://jboss.com/products/seam/mail http://jboss.com/products/seam/mail-2.2.xsd                  
 			http://jboss.com/products/seam/components http://jboss.com/products/seam/components-2.2.xsd 
 			http://jboss.com/products/seam/jms http://jboss.com/products/seam/jms-2.2.xsd
-			http://jboss.com/products/seam/web http://jboss.com/products/seam/web-2.2.xsd" >
+			http://jboss.com/products/seam/web http://jboss.com/products/seam/web-2.2.xsd">		
+
+	<component name="currentOperator" scope="session" 
+			class="be.fedict.eid.pkira.portal.domain.Operator" />		
 	
-	<component name="eidPKIRAContractsClient" 
-			class="be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient" scope="application" />
+	<component name="eidPKIRAContractsClient" scope="application"
+			class="be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient" />
 			
 	<component name="eidPKIRAServiceClient" 
 			class="be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient" scope="application">
 		<property name="serviceUrl">http://localhost:8080/eid-pki-ra/webservice/EIDPKIRAService</property>
 	</component> 
 	
-	<component name="eidPKIRAPrivateServiceClient" 
-			class="be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient" scope="application">
+	<component name="eidPKIRAPrivateServiceClient" scope="application" 
+			class="be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient">
 		<property name="serviceUrl">http://localhost:8080/eid-pki-ra/webservice/EIDPKIRAPrivateService</property>
-	</component> 	
+	</component>		
+	
+	<component name="authenticationDecoderFactory" scope="application" auto-create="true"
+			class="be.fedict.eid.pkira.authentication.AuthenticationDecoderFactory" />
+	
 </components>

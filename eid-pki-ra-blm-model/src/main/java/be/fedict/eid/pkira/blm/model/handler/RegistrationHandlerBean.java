@@ -10,12 +10,18 @@ import javax.ejb.TransactionAttributeType;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Begin;
+import org.jboss.seam.annotations.End;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.faces.FacesMessages;
 
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainRepository;
+
+import be.fedict.eid.pkira.authentication.AuthenticationException;
+import be.fedict.eid.pkira.authentication.EIdUser;
 import be.fedict.eid.pkira.blm.model.domain.Registration;
 import be.fedict.eid.pkira.blm.model.domain.RegistrationStatus;
 import be.fedict.eid.pkira.blm.model.domain.User;
@@ -30,7 +36,8 @@ public class RegistrationHandlerBean implements RegistrationHandler, Serializabl
 
 	private static final long serialVersionUID = 1816007018506139983L;
 	
-	@In(value="newRegistration")
+	@In(required=false, value="newRegistration")
+	@Out(value="newRegistration")
 	private Registration registration;
 	private List<CertificateDomain> selectedCertificateDomains;
 	@In(create=true, value=RegistrationRepository.NAME)
@@ -39,9 +46,16 @@ public class RegistrationHandlerBean implements RegistrationHandler, Serializabl
 	private UserRepository userRepository;
 	@In(create=true, value=CertificateDomainRepository.NAME)
 	private CertificateDomainRepository certificateDomainRepository;
+	@In(create=true, value=AuthenticationHandler.NAME)
+	private AuthenticationHandler authenticationHandler;
+	@In
+	private FacesMessages facesMessages;
+	@In(required=false, scope=ScopeType.SESSION)
+	@Out(required=false, scope=ScopeType.SESSION)
+	private User currentUser;
 
 	@Override
-	@Remove
+	@End
 	public void createRegistrations() {
 		User requester = userRepository.getReference(registration.getRequester().getId());
 		for (CertificateDomain certificateDomain : selectedCertificateDomains) {
@@ -57,6 +71,38 @@ public class RegistrationHandlerBean implements RegistrationHandler, Serializabl
 
 	@Override
 	@Begin(join=true)
+	public String registerUser() {
+		if (currentUser == null) {
+			try {
+				EIdUser eiIdUser = authenticationHandler.getUserCredentials();	
+				if (eiIdUser == null) {
+					facesMessages.addFromResourceBundle("validation.invalid.user");
+					return null;
+				}
+				currentUser = userRepository.findByNationalRegisterNumber(eiIdUser.getIdentifier());
+				if (currentUser == null) {
+					currentUser = new User();
+					currentUser.setNationalRegisterNumber(eiIdUser.getIdentifier());
+					currentUser.setLastName(eiIdUser.getLastName());
+					currentUser.setFirstName(eiIdUser.getFirstName());
+					userRepository.persist(currentUser);
+				}
+			} catch (AuthenticationException e) {
+				facesMessages.addFromResourceBundle("validation.invalid.user");
+				return null;
+			}
+		}
+		registration = new Registration();
+		registration.setRequester(currentUser);
+		return "success";
+	}
+	
+	@Remove
+	public void destroy() {
+		
+	}
+
+	@Override
 	public List<CertificateDomain> getSelectedCertificateDomains() {
 		return selectedCertificateDomains;
 	}

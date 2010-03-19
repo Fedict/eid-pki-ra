@@ -13,21 +13,20 @@
 			http://jboss.com/products/seam/components http://jboss.com/products/seam/components-2.2.xsd 
 			http://jboss.com/products/seam/jms http://jboss.com/products/seam/jms-2.2.xsd">
 
-	<component name="digitalSignatureServiceClient" 
-		class="be.fedict.eid.dss.client.DigitalSignatureServiceClient" 
-		scope="application" />
+	<component name="digitalSignatureServiceClient" scope="application"
+		class="be.fedict.eid.dss.client.DigitalSignatureServiceClient" />
 
-	<component name="eidPKIRAContractsClient" 
-		class="be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient" 
-		scope="application" />		
+	<component name="eidPKIRAContractsClient" scope="application" 
+		class="be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient" />		
 
-	<component name="currentUser" 
-		class="be.fedict.eid.pkira.blm.model.domain.User" 
-		scope="session" />		
+	<component name="currentUser" scope="session"
+		class="be.fedict.eid.pkira.blm.model.domain.User" />		
 
-	<component name="newRegistration" 
-		class="be.fedict.eid.pkira.blm.model.domain.Registration" 
-		scope="conversation" />
+	<component name="newRegistration" scope="conversation"
+		class="be.fedict.eid.pkira.blm.model.domain.Registration" />		
+	
+	<component name="authenticationDecoderFactory" scope="application" auto-create="true"
+			class="be.fedict.eid.pkira.authentication.AuthenticationDecoderFactory" />
 		
 	<transaction:ejb-transaction />
 

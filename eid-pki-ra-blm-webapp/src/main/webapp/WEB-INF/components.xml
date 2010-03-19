@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <components xmlns="http://jboss.com/products/seam/components"
-	xmlns:bpm="http://jboss.com/products/seam/bpm" 
-	xmlns:core="http://jboss.com/products/seam/core"
-	xmlns:jms="http://jboss.com/products/seam/jms" 
-	xmlns:mail="http://jboss.com/products/seam/mail"
+	xmlns:bpm="http://jboss.com/products/seam/bpm" xmlns:core="http://jboss.com/products/seam/core"
+	xmlns:jms="http://jboss.com/products/seam/jms" xmlns:mail="http://jboss.com/products/seam/mail"
 	xmlns:persistence="http://jboss.com/products/seam/persistence"
 	xmlns:security="http://jboss.com/products/seam/security"
 	xmlns:transaction="http://jboss.com/products/seam/transaction"
@@ -19,40 +17,23 @@
 			http://jboss.com/products/seam/jms http://jboss.com/products/seam/jms-2.2.xsd">
 
 	<component name="org.jboss.seam.core.init">
-		<property name="debug">${seam.debug}</property>
+		<property name="debug">false</property>
 		<property name="jndi-pattern">eid-pki-ra-blm-ear-${version}/#{ejbName}/local</property>
 	</component>
 
-	<core:manager concurrent-request-timeout="500" conversation-id-parameter="cid" conversation-timeout="120000" />
+	<core:manager concurrent-request-timeout="500"
+		conversation-id-parameter="cid" conversation-timeout="120000" />
 
-<!--	<transaction:ejb-transaction />-->
-<!---->
-<!--	<persistence:managed-persistence-context-->
-<!--			auto-create="true" name="entityManager" persistence-unit-jndi-name="java:/eid-pki-ra-blm-PersistenceUnit" />-->
+	<security:identity authenticate-method="#{authenticationHandler.authenticate}" />
 
-	<!--
-		<drools:rule-base name="securityRules"> <drools:rule-files>
-		<value>/security.drl</value> </drools:rule-files> </drools:rule-base>
-	-->
-<!--	<security:identity authenticate-method="#{authenticator.authenticate}" />-->
-
-<!--	<mail:mail-session host="localhost" password="test" port="2525" username="test" />-->
-	<!--
-    Configure JBoss Messaging queues for Seam 
-  -->
-	<!--	
-		<jms:queue-connection
-		queue-connection-factory-jndi-name="java:/ConnectionFactory" />
-		<jms:managed-queue-sender auto-create="true" name="myQueue"
-		queue-jndi-name="queue/myQueueName" />
-	-->
-
-	<!-- 
-    For use with jBPM pageflow or process management 
-  -->
-	<!--
-		<bpm:jbpm> <bpm:process-definitions>
-		<value>xyz/.../processdefinition.xml</value>
-		</bpm:process-definitions> </bpm:jbpm>
-	-->
+	<event type="org.jboss.seam.security.notLoggedIn">
+		<action execute="#{redirect.captureCurrentView}" />
+	</event>
+<!--	<event type="org.jboss.seam.security.quietLogin">-->
+<!--		<action execute="#{identity.login}" />-->
+<!--	</event>-->
+	<event type="org.jboss.seam.security.loginSuccessful">
+		<action execute="#{redirect.returnToCapturedView}" />
+	</event>
+	
 </components>

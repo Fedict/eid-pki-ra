@@ -6,17 +6,18 @@
 
 	<ui:define name="center">
 		<rich:panel id="panel">
-			<f:facet name="header">#{messages['home.title']}</f:facet>			
-            	
+			<f:facet name="header">#{messages['home.title']}</f:facet>	          	
 			
 			<li>
-				<a href="https://www.e-contract.be/eid-idp/protocol/simple?Target=http://localhost:8080/eid-pki-ra/admin/seam/resource/simpleAuthenticationHandler">
-					Simple Identification Protocol
+				<a href="https://www.e-contract.be/eid-idp/protocol/simple?Target=http://localhost:8080/eid-pki-ra/admin/postUserAuthentication.seam?authenticationType=SIMPLE">
+					#{messages['authenticate.simple']}
 				</a>
 			</li>
-<!--	<li><a-->
-<!--		href="https://www.e-contract.be/eid-idp/saml-request?IdPDestination=https://<%=request.getServerName()%>:<%=request.getServerPort()%>/eid-idp/protocol/saml2&SPDestination=https://<%=request.getServerName()%>:<%=request.getServerPort()%>/eid-idp-sp/saml2-landing">SAML2-->
-<!--	eID IdP Request</a></li>-->
+			<li>
+				<a href="https://www.e-contract.be/eid-idp-sp/saml-request?IdPDestination=https://www.e-contract.be/eid-idp/protocol/saml2&amp;SPDestination=http://localhost:8080/eid-pki-ra/admin/postUserAuthentication.seam%3FauthenticationType=SAML2%26cid=#{conversation.id}">
+					#{messages['authenticate.saml2']}	
+				</a>
+			</li>
 		</rich:panel>
 	</ui:define>
 </ui:composition>
