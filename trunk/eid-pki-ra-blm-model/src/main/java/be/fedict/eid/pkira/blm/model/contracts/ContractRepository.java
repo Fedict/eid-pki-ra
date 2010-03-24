@@ -27,7 +27,7 @@ import javax.ejb.Local;
  * @author Jan Van den Bergh
  */
 @Local
-public interface DomainRepository {
+public interface ContractRepository {
 
 	public static final String NAME = "domainRepository";
 

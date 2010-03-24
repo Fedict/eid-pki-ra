@@ -37,7 +37,7 @@ import be.fedict.eid.pkira.blm.model.contracts.Certificate;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateRevocationContract;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
-import be.fedict.eid.pkira.blm.model.contracts.DomainRepository;
+import be.fedict.eid.pkira.blm.model.contracts.ContractRepository;
 import be.fedict.eid.pkira.blm.model.mail.MailTemplate;
 import be.fedict.eid.pkira.contracts.AbstractResponseBuilder;
 import be.fedict.eid.pkira.contracts.CertificateRevocationResponseBuilder;
@@ -77,8 +77,8 @@ public class ContractHandlerBean implements ContractHandler {
 	@In(value = CertificateParser.NAME, create = true)
 	private CertificateParser certificateParser;
 
-	@In(value = DomainRepository.NAME, create = true)
-	private DomainRepository repository;
+	@In(value = ContractRepository.NAME, create = true)
+	private ContractRepository repository;
 
 	@In(value = MailTemplate.NAME, create = true)
 	private MailTemplate mailTemplate;
@@ -263,8 +263,8 @@ public class ContractHandlerBean implements ContractHandler {
 		this.signatureVerifier = signatureVerifier;
 	}
 
-	protected void setDomainRepository(DomainRepository domainRepository) {
-		this.repository = domainRepository;
+	protected void setDomainRepository(ContractRepository contractRepository) {
+		this.repository = contractRepository;
 	}
 
 	protected void setXkmsService(XKMSService xkmsService) {
