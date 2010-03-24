@@ -26,7 +26,7 @@ import java.util.Set;
  */
 public interface DistinguishedNameManager {
 
-	static final String NAME = "be.fedict.eid.pkira.dn.dnFilterManager";
+	static final String NAME = "be.fedict.eid.pkira.dn.dnManager";
 
 	/**
 	 * Parses an expression and converts it to a DistinguishedName.

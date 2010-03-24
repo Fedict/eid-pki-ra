@@ -1,27 +1,16 @@
-<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-		xmlns:s="http://jboss.com/products/seam/taglib"
-		xmlns:ui="http://java.sun.com/jsf/facelets"
-		xmlns:f="http://java.sun.com/jsf/core"
-		xmlns:h="http://java.sun.com/jsf/html"
-		xmlns:rich="http://richfaces.org/rich"
-		template="/layout/template.xhtml">
+<rich:page xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" markupType="xhtml"
+	contentType="text/html">
+	<script type="text/javascript">
+			window.location="https://www.e-contract.be/eid-idp-sp/saml-request?IdPDestination=https://www.e-contract.be/eid-idp/protocol/saml2&amp;SPDestination=http://localhost:8080/eid-pki-ra/portal/postLogin.seam%3Fcid%3D#{conversation.id}%26authenticationType%3DSAML2";
+		</script>
 
-	<ui:define name="center">
-		<rich:panel id="panel">
-			<f:facet name="header">#{messages['login.title']}</f:facet>	          	
-			
-			<li>
-				<a href="https://www.e-contract.be/eid-idp/protocol/simple?Target=http://localhost:8080/eid-pki-ra/portal/postLogin.seam%3FauthenticationType%3DSIMPLE">
-					<h:outputText value="#{messages['authenticate.simple']}" />		
-				</a>
-			</li>
-			<li>
-				<a href="https://www.e-contract.be/eid-idp-sp/saml-request?IdPDestination=https://www.e-contract.be/eid-idp/protocol/saml2&amp;SPDestination=http://localhost:8080/eid-pki-ra/portal/postLogin.seam%3Fcid%3D#{conversation.id}%26authenticationType%3DSAML2">
-					<h:outputText value="#{messages['authenticate.saml2']}" />		
-				</a>
-			</li>
-		</rich:panel>
-	</ui:define> 
-</ui:composition>
+	<h:outputText value="#{messages['authenticate.saml2']}">
+		<f:param
+			value="https://www.e-contract.be/eid-idp-sp/saml-request?IdPDestination=https://www.e-contract.be/eid-idp/protocol/saml2&amp;SPDestination=http://localhost:8080/eid-pki-ra/portal/postLogin.seam%3Fcid%3D#{conversation.id}" />
+	</h:outputText>
+</rich:page>

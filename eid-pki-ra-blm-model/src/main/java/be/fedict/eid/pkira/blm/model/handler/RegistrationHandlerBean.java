@@ -79,10 +79,10 @@ public class RegistrationHandlerBean implements RegistrationHandler, Serializabl
 					facesMessages.addFromResourceBundle("validation.invalid.user");
 					return null;
 				}
-				currentUser = userRepository.findByNationalRegisterNumber(eiIdUser.getIdentifier());
+				currentUser = userRepository.findByNationalRegisterNumber(eiIdUser.getRRN());
 				if (currentUser == null) {
 					currentUser = new User();
-					currentUser.setNationalRegisterNumber(eiIdUser.getIdentifier());
+					currentUser.setNationalRegisterNumber(eiIdUser.getRRN());
 					currentUser.setLastName(eiIdUser.getLastName());
 					currentUser.setFirstName(eiIdUser.getFirstName());
 					userRepository.persist(currentUser);

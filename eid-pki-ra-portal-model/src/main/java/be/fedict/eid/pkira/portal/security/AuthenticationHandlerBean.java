@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.portal.handler;
+package be.fedict.eid.pkira.portal.security;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
@@ -26,8 +26,9 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Out;
-import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.log.Log;
+import org.jboss.seam.security.Credentials;
+import org.jboss.seam.security.Identity;
 
 import be.fedict.eid.pkira.authentication.AuthenticationDecoderFactory;
 import be.fedict.eid.pkira.authentication.AuthenticationException;
@@ -40,47 +41,75 @@ import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 
 /**
  * @author Bram Baeyens
- *
  */
 @Name(AuthenticationHandler.NAME)
 public class AuthenticationHandlerBean implements AuthenticationHandler {
 
 	@Logger
 	private Log log;
-	
-	@Out(required=false, scope=ScopeType.SESSION) 
+
+	@Out(required = false, scope = ScopeType.SESSION)
 	private Operator currentOperator;
-	@In(value="be.fedict.eid.pkira.auth.authenticationDecoderFactory")
+
+	@In(value = "be.fedict.eid.pkira.auth.authenticationDecoderFactory")
 	private AuthenticationDecoderFactory authenticationDecoderFactory;
-	@In(create=true, value="eidPKIRAPrivateServiceClient") 
+
+	@In(create = true, value = EIDPKIRAPrivateServiceClient.NAME)
 	private EIDPKIRAPrivateServiceClient eidPKIRAPrivateServiceClient;
-	@In FacesMessages facesMessages;
-	
+
+	@In
+	private Identity identity;
+
+	@In
+	private Credentials credentials;
+
 	public boolean authenticate() {
 		log.info(">>> authenticate()");
-		HttpServletRequest request = 
-			(HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-		AuthenticationType authenticationType = Enum.valueOf(AuthenticationType.class, request.getParameter("authenticationType"));
-		try {
-			AuthenticationRequestDecoder decoder = authenticationDecoderFactory.getAuthenticationRequestDecoder(authenticationType);	
-			EIdUser eidUser = decoder.decode(request);
-			UserWS user = validateUser(eidUser);	
-			currentOperator = new Operator();
-			currentOperator.setName(user.getFirstName().concat(" ").concat(user.getLastName()));
-		} catch (AuthenticationException e) {
-			facesMessages.addFromResourceBundle("validator.invalid.authentication");
-			log.info("<<< authenticate: failure");
+
+		// Check for SAML2 authentication
+		EIdUser eidUser = determineLoggedInUser();
+		if (eidUser == null) {
 			return false;
 		}
-		log.info("<<< authenticate: success");
+
+		// Enrich the identity using this user object
+		enrichIdentity(eidUser);
+
 		return true;
 	}
 
-	private UserWS validateUser(EIdUser eidUser) throws AuthenticationException {
-		UserWS user = eidPKIRAPrivateServiceClient.findUser(eidUser.getIdentifier());	
-		if (user == null) {
-			throw new AuthenticationException("Unknown user");
+	/**
+	 * @param eidUser
+	 */
+	private void enrichIdentity(EIdUser eidUser) {
+		// Fill in some fields
+		credentials.setUsername(eidUser.getRRN());
+		credentials.setPassword("***");
+		credentials.setInitialized(true);
+
+		identity.addRole(PKIRARole.AUTHENTICATED_USER.name());
+
+		currentOperator = new Operator();
+		currentOperator.setName(eidUser.getFirstName() + " " + eidUser.getLastName());
+
+		// Look up user in back-end
+		UserWS backendUser = eidPKIRAPrivateServiceClient.findUser(eidUser.getRRN());
+		if (backendUser != null) {
+			identity.addRole(PKIRARole.REGISTERED_USER.name());
+		} else {
+			identity.addRole(PKIRARole.UNREGISTERED_USER.name());
 		}
-		return user;
+	}
+
+	private EIdUser determineLoggedInUser() {
+		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
+				.getRequest();
+		try {
+			AuthenticationRequestDecoder decoder = authenticationDecoderFactory
+					.getAuthenticationRequestDecoder(AuthenticationType.SAML2);
+			return decoder.decode(request);
+		} catch (AuthenticationException e) {
+			return null;
+		}
 	}
 }

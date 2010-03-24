@@ -7,7 +7,11 @@
 	
 	<page view-id="/page/*" login-required="true" />
 	
-	<page view-id="/postLogin.xhtml" action="#{identity.login}" />
+	<page view-id="/postLogin.xhtml" action="#{identity.login}">
+		<navigation>
+			<redirect view-id="/home.xhtml" />
+		</navigation>
+	</page>
 	
 	<page view-id="/page/contract/uploadCsr.xhtml">		
 		<navigation from-action="#{csrUploadHandler.uploadCertificateSigningRequest}">
@@ -53,6 +57,10 @@
 		<navigation from-action="home">
 			<end-conversation before-redirect="true"/>
 			<redirect view-id="/home.xhtml"></redirect>
+		</navigation>
+		
+		<navigation from-action="login">
+			<redirect view-id="/login.xhtml" />
 		</navigation>
 		
 		<navigation from-action="csr">

@@ -18,9 +18,14 @@
 
 package be.fedict.eid.pkira.authentication;
 
+import java.io.StringWriter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.common.SAMLObject;
@@ -43,19 +48,18 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author Bram Baeyens
- *
  */
-public class Saml2RequestDecoder implements AuthenticationRequestDecoder {	
-	
+public class Saml2RequestDecoder implements AuthenticationRequestDecoder {
+
 	private static final Logger LOG = LoggerFactory.getLogger(Saml2RequestDecoder.class);
-	
+
 	public Saml2RequestDecoder() {
 		bootstrapSaml2();
 	}
-	
+
 	public EIdUser decode(HttpServletRequest saml2Request) throws AuthenticationException {
 		LOG.debug(">>> decode(saml2Request[{0}])", saml2Request);
-		
+
 		SAMLObject samlObject = getDecodedSamlObject(saml2Request);
 		Response samlResponse;
 		try {
@@ -64,7 +68,18 @@ public class Saml2RequestDecoder implements AuthenticationRequestDecoder {
 			LOG.debug("<<< decode: Expected a SAML2 Response document");
 			throw new AuthenticationException("Expected a SAML2 Response document");
 		}
-		
+
+		if (LOG.isDebugEnabled() || true /* TODO Remove true */) {
+			try {
+				StringWriter writer = new StringWriter();
+				Transformer transformer = TransformerFactory.newInstance().newTransformer();
+				transformer.transform(new DOMSource(samlResponse.getDOM()), new StreamResult(writer));
+				LOG.debug("SAML Response: " + writer.toString());
+			} catch (Exception e) {
+				// ignore this
+			}
+		}
+
 		validateSamlResponse(samlResponse);
 
 		List<Assertion> assertions = samlResponse.getAssertions();
@@ -82,9 +97,9 @@ public class Saml2RequestDecoder implements AuthenticationRequestDecoder {
 
 		Subject subject = assertion.getSubject();
 		NameID nameId = subject.getNameID();
-		
+
 		EIdUser samlUser = new EIdUser();
-		samlUser.setIdentifier(nameId.getValue());
+		samlUser.setRRN(nameId.getValue());
 		// TODO Bram get this from Saml object
 		samlUser.setFirstName("John");
 		samlUser.setLastName("Doe");
@@ -105,8 +120,7 @@ public class Saml2RequestDecoder implements AuthenticationRequestDecoder {
 
 	private SAMLObject getDecodedSamlObject(HttpServletRequest saml2Request) throws AuthenticationException {
 		LOG.debug(">>> getDecodedSamlObject(saml2Request[{0}])", saml2Request);
-		BasicSAMLMessageContext<SAMLObject, SAMLObject, SAMLObject> messageContext = 
-			new BasicSAMLMessageContext<SAMLObject, SAMLObject, SAMLObject>();
+		BasicSAMLMessageContext<SAMLObject, SAMLObject, SAMLObject> messageContext = new BasicSAMLMessageContext<SAMLObject, SAMLObject, SAMLObject>();
 		messageContext.setInboundMessageTransport(new HttpServletRequestAdapter(saml2Request));
 
 		SAMLMessageDecoder decoder = new HTTPPostDecoder();
@@ -117,14 +131,14 @@ public class Saml2RequestDecoder implements AuthenticationRequestDecoder {
 		} catch (SecurityException e) {
 			LOG.debug("<<< getDecodedSamlObject: OpenSAML security error");
 			throw new AuthenticationException("OpenSAML security error", e);
-		}
+		} 
+		
 		SAMLObject samlObject = messageContext.getInboundSAMLMessage();
 		LOG.debug("<<< getDecodedSamlObject: {0}", samlObject);
 		return samlObject;
 	}
 
-	private void validateSamlResponse(Response samlResponse)
-			throws AuthenticationException {
+	private void validateSamlResponse(Response samlResponse) throws AuthenticationException {
 		Status status = samlResponse.getStatus();
 		StatusCode statusCode = status.getStatusCode();
 		String statusValue = statusCode.getValue();
