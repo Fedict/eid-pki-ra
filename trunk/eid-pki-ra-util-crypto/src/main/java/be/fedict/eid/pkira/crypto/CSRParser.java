@@ -23,7 +23,7 @@ package be.fedict.eid.pkira.crypto;
  */
 public interface CSRParser {
 
-	String NAME = "csrParser";
+	String NAME = "be.fedict.eid.pkira.crypto.csrParser";
 
 	/**
 	 * Parse and verify a CSR and return information extracted from it.

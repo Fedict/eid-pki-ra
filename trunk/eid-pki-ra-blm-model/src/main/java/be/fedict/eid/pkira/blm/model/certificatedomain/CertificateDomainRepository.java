@@ -33,7 +33,7 @@ import be.fedict.eid.pkira.blm.model.usermgmt.User;
 @Local
 public interface CertificateDomainRepository {
 
-	String NAME = "certificateDomainRepository";
+	String NAME = "be.fedict.eid.pkira.blm.certificateDomainRepository";
 	
 	void persist(CertificateDomain certificateDomain);
 

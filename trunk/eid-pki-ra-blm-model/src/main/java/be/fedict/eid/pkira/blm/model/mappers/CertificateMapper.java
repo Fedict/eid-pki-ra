@@ -28,7 +28,7 @@ import be.fedict.eid.pkira.generated.privatews.CertificateWS;
  */
 public interface CertificateMapper {
 
-	public static final String NAME = "certificateMapper";
+	public static final String NAME = "be.fedict.eid.pkira.blm.certificateMapper";
 	
 	/**
 	 * Maps a certificate type to the WS version.

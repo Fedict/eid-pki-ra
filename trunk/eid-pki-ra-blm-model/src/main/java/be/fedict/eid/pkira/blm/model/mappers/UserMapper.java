@@ -26,7 +26,7 @@ import be.fedict.eid.pkira.generated.privatews.UserWS;
  */
 public interface UserMapper {
 
-	String NAME = "userMapper";
+	String NAME = "be.fedict.eid.pkira.blm.userMapper";
 	
 	/**
 	 * Maps a user to the web service data type.

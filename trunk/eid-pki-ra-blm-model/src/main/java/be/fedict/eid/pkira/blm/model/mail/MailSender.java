@@ -29,7 +29,7 @@ import javax.ejb.Local;
 @Local
 public interface MailSender {
 	
-	String NAME = "mailSender";
+	String NAME = "be.fedict.eid.pkira.blm.mailSender";
 
 	/**
 	 * Send an email to a queue

@@ -31,7 +31,7 @@ import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
 @Local
 public interface FieldValidator {
 
-	String NAME = "fieldValidator";
+	String NAME = "be.fedict.eid.pkira.blm.fieldValidator";
 
 	/**
 	 * Validates the fields on a certificate signing request.

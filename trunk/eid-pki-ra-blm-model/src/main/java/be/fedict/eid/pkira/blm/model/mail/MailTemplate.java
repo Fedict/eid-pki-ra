@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public interface MailTemplate {
 
-	static String NAME = "mailTemplate";
+	static String NAME = "be.fedict.eid.pkira.blm.mailTemplate";
 
 	/**
 	 * Creates a mail message from a template.

@@ -16,6 +16,8 @@
 			http://jboss.com/products/seam/components http://jboss.com/products/seam/components-2.2.xsd 
 			http://jboss.com/products/seam/jms http://jboss.com/products/seam/jms-2.2.xsd">
 
+	<import>be.fedict.eid.pkira.blm</import>
+
 	<component name="org.jboss.seam.core.init">
 		<property name="debug">false</property>
 		<property name="jndi-pattern">eid-pki-ra-blm-ear-${version}/#{ejbName}/local</property>

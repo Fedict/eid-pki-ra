@@ -35,7 +35,7 @@ public class CertificateRevocationContract extends AbstractContract {
 
 	private static final long serialVersionUID = -4583829107256983511L;
 
-	public static final String NAME = "certificateRevocationContract";
+	public static final String NAME = "be.fedict.eid.pkira.blm.certificateRevocationContract";
 
 	private Date startDate;    
     private Date endDate;

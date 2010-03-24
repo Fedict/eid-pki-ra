@@ -28,7 +28,7 @@ import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanExceptio
 @Local
 public interface SignatureVerifier {
 
-	String NAME = "signatureVerifier";
+	String NAME = "be.fedict.eid.pkira.blm.signatureVerifier";
 
 	/**
 	 * Verifies the signature of the message. If this signature is correct, the

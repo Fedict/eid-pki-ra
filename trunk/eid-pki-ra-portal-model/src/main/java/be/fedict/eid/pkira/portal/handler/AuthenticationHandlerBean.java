@@ -50,7 +50,7 @@ public class AuthenticationHandlerBean implements AuthenticationHandler {
 	
 	@Out(required=false, scope=ScopeType.SESSION) 
 	private Operator currentOperator;
-	@In(value="authenticationDecoderFactory")
+	@In(value="be.fedict.eid.pkira.auth.authenticationDecoderFactory")
 	private AuthenticationDecoderFactory authenticationDecoderFactory;
 	@In(create=true, value="eidPKIRAPrivateServiceClient") 
 	private EIDPKIRAPrivateServiceClient eidPKIRAPrivateServiceClient;

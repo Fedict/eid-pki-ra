@@ -24,7 +24,7 @@ package be.fedict.eid.pkira.portal.handler;
  */
 public interface CSRUploadHandler {
 	
-	String NAME = "csrUploadHandler";
+	String NAME = "be.fedict.eid.pkira.portal.csrUploadHandler";
 	
 	String uploadCertificateSigningRequest();
 }

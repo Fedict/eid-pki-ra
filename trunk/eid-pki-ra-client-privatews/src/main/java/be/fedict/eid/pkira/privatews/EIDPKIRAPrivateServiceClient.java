@@ -43,7 +43,7 @@ import be.fedict.eid.pkira.generated.privatews.UserWS;
  */
 public class EIDPKIRAPrivateServiceClient {
 
-	public static final String NAME = "eidPKIRAPrivateServiceClient";
+	public static final String NAME = "be.fedict.eid.pkira.wsclient.eidPKIRAPrivateServiceClient";
 
 	private static final String WSDL_LOCATION = "/wsdl/eid-pki-ra-private.wsdl";
 

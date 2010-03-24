@@ -39,7 +39,7 @@ import be.fedict.eid.pkira.crypto.CertificateInfo;
 @Name(Certificate.NAME)
 public class Certificate implements Serializable {
 
-	public static final String NAME = "blmcertificate";
+	public static final String NAME = "be.fedict.eid.pkira.blm.certificate";
 
 	private static final long serialVersionUID = -6539022465744360747L;
 

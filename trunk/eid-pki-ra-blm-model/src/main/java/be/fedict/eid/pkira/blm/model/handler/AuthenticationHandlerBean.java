@@ -48,7 +48,7 @@ public class AuthenticationHandlerBean implements AuthenticationHandler {
 	private UserRepository userRepository;
 	@Out(required=false, scope=ScopeType.SESSION) 
 	private User currentUser;
-	@In(value="authenticationDecoderFactory")
+	@In(value="be.fedict.eid.pkira.auth.authenticationDecoderFactory")
 	private AuthenticationDecoderFactory authenticationDecoderFactory;
 	
 	@Override

@@ -30,7 +30,7 @@ import javax.ejb.Local;
 @Local
 public interface RegistrationRepository {
 	
-	String NAME = "registrationRepository";
+	String NAME = "be.fedict.eid.pkira.blm.registrationRepository";
 	
 	void persist(Registration registration);
 	

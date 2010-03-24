@@ -27,7 +27,7 @@ import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;
 @Local
 public interface CertificateDomainManager {
 
-	static final String NAME = "certificateDomainManager";
+	static final String NAME = "be.fedict.eid.pkira.blm.certificateDomainManager";
 
 	/**
 	 * @param domain the domain to register.

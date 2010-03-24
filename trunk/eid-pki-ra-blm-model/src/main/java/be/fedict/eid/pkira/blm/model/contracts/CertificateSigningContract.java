@@ -32,7 +32,7 @@ public class CertificateSigningContract extends AbstractContract {
 	
 	private static final long serialVersionUID = 582083322769739724L;
 
-	public static final String NAME="certificateSigningContract";
+	public static final String NAME="be.fedict.eid.pkira.blm.certificateSigningContract";
 
 	private Integer validityPeriodMonths;
 	private CertificateType certificateType;

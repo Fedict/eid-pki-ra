@@ -7,7 +7,7 @@ import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanExceptio
 @Local
 public interface XKMSService {
 	
-	String NAME = "xkmsService";
+	String NAME = "be.fedict.eid.pkira.blm.xkmsService";
 
 	/**
 	 * Let the CA sign the CSR. If this fails, the error will be logged here.

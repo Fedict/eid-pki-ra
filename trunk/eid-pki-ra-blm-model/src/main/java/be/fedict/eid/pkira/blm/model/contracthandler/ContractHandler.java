@@ -27,7 +27,7 @@ import javax.ejb.Local;
 @Local
 public interface ContractHandler {
 
-	public static final String NAME = "contractHandler";
+	public static final String NAME = "be.fedict.eid.pkira.blm.contractHandler";
 	
 	/**
 	 * Handles a certificate signing request.

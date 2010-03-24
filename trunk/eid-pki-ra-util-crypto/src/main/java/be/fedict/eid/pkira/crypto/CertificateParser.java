@@ -23,7 +23,7 @@ package be.fedict.eid.pkira.crypto;
  */
 public interface CertificateParser {
 
-	public final static String NAME = "certificateParser";
+	public final static String NAME = "be.fedict.eid.pkira.crypto.certificateParser";
 	
 	/**
 	 * Parses the certificate and returns a list of fields in it.

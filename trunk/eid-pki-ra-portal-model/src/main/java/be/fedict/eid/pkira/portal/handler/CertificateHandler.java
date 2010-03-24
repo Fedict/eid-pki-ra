@@ -24,7 +24,7 @@ import be.fedict.eid.pkira.portal.domain.Certificate;
 
 public interface CertificateHandler extends Serializable {
 	
-	String NAME = "certificateHandler";
+	String NAME = "be.fedict.eid.pkira.portal.certificateHandler";
 	
 	List<Certificate> findCertificateList(String userRRN);
 	
