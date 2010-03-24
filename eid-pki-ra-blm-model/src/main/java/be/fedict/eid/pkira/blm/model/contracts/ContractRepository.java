@@ -29,7 +29,7 @@ import javax.ejb.Local;
 @Local
 public interface ContractRepository {
 
-	public static final String NAME = "domainRepository";
+	public static final String NAME = "be.fedict.eid.pkira.blm.contractRepository";
 
 	/**
 	 * Persists a contract.

@@ -30,7 +30,7 @@ import be.fedict.eid.pkira.generated.privatews.ListCertificatesResponse;
 @Name(EIDPKIRAPrivateServiceImpl.NAME)
 public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 
-	public static final String NAME = "eidPKIRAPrivateService";
+	public static final String NAME = "be.fedict.eid.pkira.wsclient.eidPKIRAPrivateService";
 	
 	/**
 	 * {@inheritDoc}

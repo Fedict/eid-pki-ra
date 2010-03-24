@@ -25,7 +25,7 @@ package be.fedict.eid.pkira.portal.handler;
  */
 public interface AuthenticationHandler {
 	
-	String NAME = "authenticationHandler";
+	String NAME = "be.fedict.eid.pkira.portal.authenticationHandler";
 	
 	boolean authenticate();
 }

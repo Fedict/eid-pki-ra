@@ -26,7 +26,7 @@ import javax.ejb.Local;
 @Local
 public interface Configuration {
 
-	static final String NAME = "configuration";
+	static final String NAME = "be.fedict.eid.pkira.blm.configuration";
 	
 	/**
 	 * Returns the value for a specific configuration key.

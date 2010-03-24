@@ -24,7 +24,7 @@ import javax.ejb.Local;
 @Local
 public interface CertificateList {
 	
-	String NAME = "certificatelist";
+	String NAME = "be.fedict.eid.pkira.portal.certificatelist";
 	
 	/**
 	 * 

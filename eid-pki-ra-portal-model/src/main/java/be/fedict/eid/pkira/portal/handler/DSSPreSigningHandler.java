@@ -24,7 +24,7 @@ package be.fedict.eid.pkira.portal.handler;
  */
 public interface DSSPreSigningHandler {
 	
-	String NAME = "dssPreSigningHandler";
+	String NAME = "be.fedict.eid.pkira.portal.dssPreSigningHandler";
 	
 	String prepareSignment();
 }

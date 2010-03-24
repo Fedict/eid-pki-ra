@@ -9,7 +9,7 @@ import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 @Local
 public interface RegistrationHandler {
 	
-	String NAME = "registrationHandler";
+	String NAME = "be.fedict.eid.pkira.blm.registrationHandler";
 	
 	List<CertificateDomain> getSelectedCertificateDomains();
 	

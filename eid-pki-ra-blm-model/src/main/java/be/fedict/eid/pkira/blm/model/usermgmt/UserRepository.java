@@ -28,7 +28,7 @@ import javax.ejb.Local;
 @Local
 public interface UserRepository {
 	
-	String NAME = "userRepository";
+	String NAME = "be.fedict.eid.pkira.blm.userRepository";
 	
 	void persist(User user);
 	

@@ -27,7 +27,7 @@ import be.fedict.eid.pkira.authentication.EIdUser;
  */
 public interface AuthenticationHandler {
 
-	String NAME = "authenticationHandler";
+	String NAME = "be.fedict.eid.pkira.blm.authenticationHandler";
 	
 	boolean authenticate();
 

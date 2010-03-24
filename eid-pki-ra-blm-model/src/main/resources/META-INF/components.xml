@@ -3,6 +3,7 @@
 	xmlns:core="http://jboss.com/products/seam/core" xmlns:jms="http://jboss.com/products/seam/jms" xmlns:mail="http://jboss.com/products/seam/mail"
 	xmlns:persistence="http://jboss.com/products/seam/persistence" xmlns:security="http://jboss.com/products/seam/security"
 	xmlns:transaction="http://jboss.com/products/seam/transaction" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ui="http://jboss.com/products/seam/ui"	
 	xsi:schemaLocation="http://jboss.com/products/seam/transaction http://jboss.com/products/seam/transaction-2.2.xsd 
 			http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.2.xsd                   
 			http://jboss.com/products/seam/persistence http://jboss.com/products/seam/persistence-2.2.xsd                   
@@ -11,29 +12,32 @@
 			http://jboss.com/products/seam/security http://jboss.com/products/seam/security-2.2.xsd                  
 			http://jboss.com/products/seam/mail http://jboss.com/products/seam/mail-2.2.xsd                  
 			http://jboss.com/products/seam/components http://jboss.com/products/seam/components-2.2.xsd 
-			http://jboss.com/products/seam/jms http://jboss.com/products/seam/jms-2.2.xsd">
+			http://jboss.com/products/seam/jms http://jboss.com/products/seam/jms-2.2.xsd
+			http://jboss.com/products/seam/ui http://jboss.com/products/seam/ui-2.1.xsd">
 
-	<component name="digitalSignatureServiceClient" scope="application"
+	<import>be.fedict.eid.pkira.blm</import>
+
+	<component name="be.fedict.eid.pkira.blm.digitalSignatureServiceClient" scope="application"
 		class="be.fedict.eid.dss.client.DigitalSignatureServiceClient" />
 
-	<component name="eidPKIRAContractsClient" scope="application" 
+	<component name="be.fedict.eid.pkira.wsclient.eidPKIRAContractsClient" scope="application" 
 		class="be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient" />		
 
-	<component name="currentUser" scope="session"
+	<component name="be.fedict.eid.pkira.blm.currentUser" scope="session"
 		class="be.fedict.eid.pkira.blm.model.usermgmt.User" />		
 
-	<component name="newRegistration" scope="conversation"
+	<component name="be.fedict.eid.pkira.blm.newRegistration" scope="conversation"
 		class="be.fedict.eid.pkira.blm.model.usermgmt.Registration" />		
 	
-	<component name="authenticationDecoderFactory" scope="application" auto-create="true"
+	<component name="be.fedict.eid.pkira.auth.authenticationDecoderFactory" scope="application" auto-create="true"
 			class="be.fedict.eid.pkira.authentication.AuthenticationDecoderFactory" />
 		
 	<transaction:ejb-transaction />
 
-	<persistence:entity-manager-factory name="eidPkiRaEntityManagerFactory"
+	<persistence:entity-manager-factory name="be.fedict.eid.pkira.blm.eidPkiRaEntityManagerFactory"
 		persistence-unit-name="eid-pki-ra-blm-PersistenceUnit" />
 		
 	<persistence:managed-persistence-context name="entityManager"
-		entity-manager-factory="#{eidPkiRaEntityManagerFactory}"
+		entity-manager-factory="#{be.fedict.eid.pkira.blm.eidPkiRaEntityManagerFactory}"
 		auto-create="true" />
 </components>
