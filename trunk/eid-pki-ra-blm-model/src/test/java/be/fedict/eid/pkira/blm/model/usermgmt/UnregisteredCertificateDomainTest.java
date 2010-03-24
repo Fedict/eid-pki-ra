@@ -16,28 +16,30 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.blm.model.jpa;
+package be.fedict.eid.pkira.blm.model.usermgmt;
 
-import java.util.List;
-
-import javax.ejb.Local;
-
-import be.fedict.eid.pkira.blm.model.domain.Registration;
 
 /**
  * @author Bram Baeyens
- *
+ * 
  */
-@Local
-public interface RegistrationRepository {
-	
-	String NAME = "registrationRepository";
-	
-	void persist(Registration registration);
-	
-	void reject(Registration registration);
-	
-	void confirm(Registration registration);
-	
-	List<Registration> findAllNewRegistrations();
+public class UnregisteredCertificateDomainTest {//extends DBUnitSeamTest {
+
+//	@Override
+//	protected void prepareDBUnitOperations() {
+//		beforeTestOperations.add(new DataSetOperation(
+//				"be/fedict/eid/blm/model/jpa/UserTestData.dbunit.xml"));
+//	}
+//	
+//	@Test
+//	public void findAll() throws Exception {
+//		
+//		new ComponentTest() {
+//
+//			@Override
+//			protected void testComponents() throws Exception {
+//								
+//			}			
+//		} .run();
+//	}
 }

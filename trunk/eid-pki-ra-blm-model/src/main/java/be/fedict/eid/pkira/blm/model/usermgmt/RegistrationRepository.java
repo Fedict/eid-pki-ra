@@ -16,13 +16,27 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.blm.model.domain;
+package be.fedict.eid.pkira.blm.model.usermgmt;
+
+import java.util.List;
+
+import javax.ejb.Local;
+
 
 /**
  * @author Bram Baeyens
  *
  */
-public enum RegistrationStatus {
+@Local
+public interface RegistrationRepository {
 	
-	NEW, CONFIRMED, REJECTED;
+	String NAME = "registrationRepository";
+	
+	void persist(Registration registration);
+	
+	void reject(Registration registration);
+	
+	void confirm(Registration registration);
+	
+	List<Registration> findAllNewRegistrations();
 }

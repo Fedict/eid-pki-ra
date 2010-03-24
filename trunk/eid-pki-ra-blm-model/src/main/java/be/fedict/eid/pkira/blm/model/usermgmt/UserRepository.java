@@ -16,11 +16,10 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.blm.model.jpa;
+package be.fedict.eid.pkira.blm.model.usermgmt;
 
 import javax.ejb.Local;
 
-import be.fedict.eid.pkira.blm.model.domain.User;
 
 /**
  * @author Bram Baeyens

@@ -16,30 +16,13 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.blm.model.jpa;
-
+package be.fedict.eid.pkira.blm.model.usermgmt;
 
 /**
  * @author Bram Baeyens
- * 
+ *
  */
-public class UnregisteredCertificateDomainTest {//extends DBUnitSeamTest {
-
-//	@Override
-//	protected void prepareDBUnitOperations() {
-//		beforeTestOperations.add(new DataSetOperation(
-//				"be/fedict/eid/blm/model/jpa/UserTestData.dbunit.xml"));
-//	}
-//	
-//	@Test
-//	public void findAll() throws Exception {
-//		
-//		new ComponentTest() {
-//
-//			@Override
-//			protected void testComponents() throws Exception {
-//								
-//			}			
-//		} .run();
-//	}
+public enum RegistrationStatus {
+	
+	NEW, CONFIRMED, REJECTED;
 }

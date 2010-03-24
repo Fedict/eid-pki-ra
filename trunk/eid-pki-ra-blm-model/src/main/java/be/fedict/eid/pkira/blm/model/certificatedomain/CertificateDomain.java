@@ -32,7 +32,7 @@ import javax.persistence.NamedQuery;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jboss.seam.annotations.Name;
 
-import be.fedict.eid.pkira.blm.model.domain.CertificateType;
+import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 
 /**
  * @author Bram Baeyens

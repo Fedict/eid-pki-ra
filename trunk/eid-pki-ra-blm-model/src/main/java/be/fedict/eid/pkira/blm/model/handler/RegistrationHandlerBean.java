@@ -22,11 +22,11 @@ import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainReposito
 
 import be.fedict.eid.pkira.authentication.AuthenticationException;
 import be.fedict.eid.pkira.authentication.EIdUser;
-import be.fedict.eid.pkira.blm.model.domain.Registration;
-import be.fedict.eid.pkira.blm.model.domain.RegistrationStatus;
-import be.fedict.eid.pkira.blm.model.domain.User;
-import be.fedict.eid.pkira.blm.model.jpa.RegistrationRepository;
-import be.fedict.eid.pkira.blm.model.jpa.UserRepository;
+import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
+import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationRepository;
+import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationStatus;
+import be.fedict.eid.pkira.blm.model.usermgmt.User;
+import be.fedict.eid.pkira.blm.model.usermgmt.UserRepository;
 
 @Stateful
 @Name(RegistrationHandler.NAME)

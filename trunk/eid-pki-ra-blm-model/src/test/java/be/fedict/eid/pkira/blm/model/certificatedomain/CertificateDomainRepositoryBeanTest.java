@@ -34,7 +34,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.blm.model.DatabaseTest;
-import be.fedict.eid.pkira.blm.model.domain.CertificateType;
+import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 
 /**
  * @author Bram Baeyens

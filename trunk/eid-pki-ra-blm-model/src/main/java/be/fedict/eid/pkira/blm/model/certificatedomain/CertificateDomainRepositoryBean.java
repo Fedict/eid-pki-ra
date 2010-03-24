@@ -31,8 +31,8 @@ import javax.persistence.PersistenceContext;
 
 import org.jboss.seam.annotations.Name;
 
-import be.fedict.eid.pkira.blm.model.domain.CertificateType;
-import be.fedict.eid.pkira.blm.model.domain.User;
+import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
+import be.fedict.eid.pkira.blm.model.usermgmt.User;
 
 /**
  * @author Bram Baeyens

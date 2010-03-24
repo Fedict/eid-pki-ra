@@ -16,67 +16,60 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.blm.model.jpa;
-
-import java.util.List;
+package be.fedict.eid.pkira.blm.model.usermgmt;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import org.jboss.seam.annotations.Name;
 
-import be.fedict.eid.pkira.blm.model.domain.Registration;
-import be.fedict.eid.pkira.blm.model.domain.RegistrationStatus;
 
 /**
  * @author Bram Baeyens
- *
  */
 @Stateless
-@Name(RegistrationRepository.NAME)
+@Name(UserRepository.NAME)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
-public class RegistrationRepositoryBean implements RegistrationRepository {
+public class UserRepositoryBean implements UserRepository {
 
 	@PersistenceContext
 	private EntityManager entityManager;
-	
+
 	protected void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
 
 	@Override
-	public List<Registration> findAllNewRegistrations() {
-		return findRegistrationsByStatus(RegistrationStatus.NEW);
+	public void persist(User user) {
+		entityManager.persist(user);
 	}
 
 	@Override
-	public void persist(Registration registration) {
-		entityManager.persist(registration);
-	}
-	
-	@SuppressWarnings("unchecked")
-	private List<Registration> findRegistrationsByStatus(RegistrationStatus status) {
-		return entityManager.createNamedQuery("findRegistrationsByStatus")
-				.setParameter("status", status)
-				.getResultList();
+	public User findById(Integer id) {
+		try {
+			return entityManager.find(User.class, id);
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 
 	@Override
-	public void reject(Registration registration) {
-		updateStatus(registration, RegistrationStatus.REJECTED);
+	public User findByNationalRegisterNumber(String nationalRegisterNumber) {
+		try {
+			return (User) entityManager.createNamedQuery("findByNationalRegisterNumber").setParameter(
+					"nationalRegisterNumber", nationalRegisterNumber).getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
-	
+
 	@Override
-	public void confirm(Registration registration) {
-		updateStatus(registration, RegistrationStatus.CONFIRMED);
-	}
-	
-	private void updateStatus(Registration registration, RegistrationStatus status) {
-		entityManager.getReference(Registration.class, registration.getId());
-		registration.setStatus(status);
+	public User getReference(Integer primaryKey) {
+		return entityManager.getReference(User.class, primaryKey);
 	}
 
 }

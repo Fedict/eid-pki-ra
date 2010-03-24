@@ -16,8 +16,8 @@
  */
 package be.fedict.eid.pkira.blm.model.mappers;
 
-import be.fedict.eid.pkira.blm.model.domain.Certificate;
-import be.fedict.eid.pkira.blm.model.domain.CertificateType;
+import be.fedict.eid.pkira.blm.model.contracts.Certificate;
+import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 import be.fedict.eid.pkira.generated.privatews.CertificateTypeWS;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 
