@@ -48,7 +48,7 @@ import be.fedict.eid.pkira.blm.model.contracts.AbstractContract;
 import be.fedict.eid.pkira.blm.model.contracts.Certificate;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateRevocationContract;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
-import be.fedict.eid.pkira.blm.model.contracts.DomainRepository;
+import be.fedict.eid.pkira.blm.model.contracts.ContractRepository;
 import be.fedict.eid.pkira.blm.model.mail.MailTemplate;
 import be.fedict.eid.pkira.contracts.CertificateRevocationRequestBuilder;
 import be.fedict.eid.pkira.contracts.CertificateSigningRequestBuilder;
@@ -106,7 +106,7 @@ public class ContractHandlerBeanTest {
 	@Mock
 	private CertificateParser certificateParser;
 	@Mock
-	private DomainRepository domainRepository;
+	private ContractRepository contractRepository;
 	@Mock
 	private MailTemplate mailTemplate;
 
@@ -118,7 +118,7 @@ public class ContractHandlerBeanTest {
 		bean.setContractParser(contractParser);
 		bean.setFieldValidator(fieldValidator);
 		bean.setSignatureVerifier(signatureVerifier);
-		bean.setDomainRepository(domainRepository);
+		bean.setDomainRepository(contractRepository);
 		bean.setXkmsService(xkmsService);
 		bean.setCertificateParser(certificateParser);
 		bean.setMailTemplate(mailTemplate);
@@ -132,7 +132,7 @@ public class ContractHandlerBeanTest {
 				.thenReturn(VALID_REVOCATION_REQUEST);
 		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE))).thenReturn(SIGNER);
 		when(certificateParser.parseCertificate(VALID_CERTIFICATE)).thenReturn(VALID_CERTIFICATE_INFO);
-		when(domainRepository.findCertificate(VALID_ISSUER, VALID_SERIALNUMBER)).thenReturn(THE_CERTIFICATE);
+		when(contractRepository.findCertificate(VALID_ISSUER, VALID_SERIALNUMBER)).thenReturn(THE_CERTIFICATE);
 		when(contractParser.marshalResponseMessage(
 				argThat(responseType(CertificateRevocationResponseType.class,
 						VALID_REQUEST_ID, 
@@ -146,10 +146,10 @@ public class ContractHandlerBeanTest {
 		// Validate it
 		assertEquals(result, RESPONSE_MESSAGE);
 		verify(xkmsService).revoke(VALID_CERTIFICATE);
-		verify(domainRepository).findCertificate(VALID_ISSUER, VALID_SERIALNUMBER);
-		verify(domainRepository).persistContract(isA(CertificateRevocationContract.class));
-		verify(domainRepository).removeCertificate(THE_CERTIFICATE);
-		verifyNoMoreInteractions(domainRepository);
+		verify(contractRepository).findCertificate(VALID_ISSUER, VALID_SERIALNUMBER);
+		verify(contractRepository).persistContract(isA(CertificateRevocationContract.class));
+		verify(contractRepository).removeCertificate(THE_CERTIFICATE);
+		verifyNoMoreInteractions(contractRepository);
 	}
 	
 	@Test
@@ -166,7 +166,7 @@ public class ContractHandlerBeanTest {
 
 		// Validate it
 		assertEquals(result, RESPONSE_MESSAGE);
-		verifyNoMoreInteractions(xkmsService, domainRepository);
+		verifyNoMoreInteractions(xkmsService, contractRepository);
 	}
 	
 	@Test
@@ -184,7 +184,7 @@ public class ContractHandlerBeanTest {
 
 		// Validate it
 		assertEquals(result, RESPONSE_MESSAGE);
-		verifyNoMoreInteractions(xkmsService, domainRepository);
+		verifyNoMoreInteractions(xkmsService, contractRepository);
 	}
 	
 	@Test
@@ -202,14 +202,14 @@ public class ContractHandlerBeanTest {
 
 		// Validate it
 		assertEquals(result, RESPONSE_MESSAGE);
-		verifyNoMoreInteractions(xkmsService, domainRepository);
+		verifyNoMoreInteractions(xkmsService, contractRepository);
 	}
 	
 	@Test
 	public void testRevokeCertificateXKMSFailure() throws Exception {
 		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateRevocationRequestType.class)))
 				.thenReturn(VALID_REVOCATION_REQUEST);
-		when(domainRepository.findCertificate(eq(VALID_ISSUER), eq(VALID_SERIALNUMBER))).thenReturn(THE_CERTIFICATE);
+		when(contractRepository.findCertificate(eq(VALID_ISSUER), eq(VALID_SERIALNUMBER))).thenReturn(THE_CERTIFICATE);
 		when(certificateParser.parseCertificate(VALID_CERTIFICATE)).thenReturn(VALID_CERTIFICATE_INFO);
 		doThrow(new ContractHandlerBeanException(ResultType.BACKEND_ERROR, ERROR_MSG)).when(xkmsService).revoke(VALID_CERTIFICATE);
 		when(contractParser.marshalResponseMessage(
@@ -222,9 +222,9 @@ public class ContractHandlerBeanTest {
 
 		// Validate it
 		assertEquals(result, RESPONSE_MESSAGE);
-		verify(domainRepository).findCertificate(VALID_ISSUER, VALID_SERIALNUMBER);
-		verify(domainRepository).persistContract(isA(CertificateRevocationContract.class));
-		verifyNoMoreInteractions(domainRepository);
+		verify(contractRepository).findCertificate(VALID_ISSUER, VALID_SERIALNUMBER);
+		verify(contractRepository).persistContract(isA(CertificateRevocationContract.class));
+		verifyNoMoreInteractions(contractRepository);
 	}
 
 	@Test
@@ -258,8 +258,8 @@ public class ContractHandlerBeanTest {
 
 		// Validate it
 		assertEquals(result, RESPONSE_MESSAGE);
-		verify(domainRepository).persistContract(isA(CertificateSigningContract.class));
-		verify(domainRepository).persistCertificate(isA(Certificate.class));
+		verify(contractRepository).persistContract(isA(CertificateSigningContract.class));
+		verify(contractRepository).persistCertificate(isA(Certificate.class));
 		verify(mailTemplate).sendTemplatedMail(anyString(), anyMap(), any(String[].class), any(byte[].class),
 				anyString(), anyString());
 	}
@@ -280,7 +280,7 @@ public class ContractHandlerBeanTest {
 		String result = bean.signCertificate(REQUEST_MESSAGE);
 
 		// Validate it
-		verifyNoMoreInteractions(domainRepository, xkmsService);
+		verifyNoMoreInteractions(contractRepository, xkmsService);
 		assertEquals(result, RESPONSE_MESSAGE);
 	}
 
@@ -298,7 +298,7 @@ public class ContractHandlerBeanTest {
 		String result = bean.signCertificate(REQUEST_MESSAGE);
 
 		// Validate it
-		verifyNoMoreInteractions(domainRepository, xkmsService);
+		verifyNoMoreInteractions(contractRepository, xkmsService);
 		assertEquals(result, RESPONSE_MESSAGE);
 	}
 
@@ -318,7 +318,7 @@ public class ContractHandlerBeanTest {
 		String result = bean.signCertificate(REQUEST_MESSAGE);
 
 		// Validate it
-		verifyNoMoreInteractions(domainRepository, xkmsService);
+		verifyNoMoreInteractions(contractRepository, xkmsService);
 		assertEquals(result, RESPONSE_MESSAGE);
 	}
 
@@ -337,8 +337,8 @@ public class ContractHandlerBeanTest {
 		String result = bean.signCertificate(REQUEST_MESSAGE);
 
 		// Validate it
-		verify(domainRepository).persistContract(any(AbstractContract.class));
-		verifyNoMoreInteractions(domainRepository);
+		verify(contractRepository).persistContract(any(AbstractContract.class));
+		verifyNoMoreInteractions(contractRepository);
 		assertEquals(result, RESPONSE_MESSAGE);
 	}
 

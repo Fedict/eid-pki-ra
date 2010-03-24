@@ -37,9 +37,9 @@ import org.jboss.seam.annotations.Name;
  * @author Jan Van den Bergh
  */
 @Stateless
-@Name(DomainRepository.NAME)
+@Name(ContractRepository.NAME)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
-public class DomainRepositoryBean implements DomainRepository {
+public class ContractRepositoryBean implements ContractRepository {
 
 	@PersistenceContext
 	private EntityManager entityManager;

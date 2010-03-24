@@ -32,13 +32,13 @@ import be.fedict.eid.pkira.blm.model.DatabaseTest;
 import be.fedict.eid.pkira.blm.model.contracts.Certificate;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
-import be.fedict.eid.pkira.blm.model.contracts.DomainRepositoryBean;
+import be.fedict.eid.pkira.blm.model.contracts.ContractRepositoryBean;
 
 /**
  * @author Jan Van den Bergh
  *
  */
-public class DomainRepositoryBeanTest extends DatabaseTest {
+public class ContractRepositoryBeanTest extends DatabaseTest {
 	
 	private static final CertificateType VALID_CERTIFICATE_TYPE = CertificateType.CODE;
 	private static final Date VALID_ENDDATE = new Date(System.currentTimeMillis()+1000*3600);
@@ -51,11 +51,11 @@ public class DomainRepositoryBeanTest extends DatabaseTest {
 	private static final String VALID_CONTRACT = "CONTRACT";
 	private static final Integer VALID_VALIDITY = 15;
 
-	private DomainRepositoryBean bean;
+	private ContractRepositoryBean bean;
 	
 	@BeforeMethod
 	public void setup() {
-		bean = new DomainRepositoryBean();
+		bean = new ContractRepositoryBean();
 		bean.setEntityManager(getEntityManager());		
 	}
 	

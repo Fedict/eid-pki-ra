@@ -11,7 +11,7 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.blm.model.contracts.Certificate;
-import be.fedict.eid.pkira.blm.model.contracts.DomainRepository;
+import be.fedict.eid.pkira.blm.model.contracts.ContractRepository;
 import be.fedict.eid.pkira.blm.model.mappers.CertificateMapper;
 import be.fedict.eid.pkira.blm.model.mappers.UserMapper;
 import be.fedict.eid.pkira.blm.model.usermgmt.User;
@@ -70,8 +70,8 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 		return response;
 	}
 
-	private DomainRepository getDomainRepository() {
-		return (DomainRepository) Component.getInstance(DomainRepository.NAME, true);
+	private ContractRepository getDomainRepository() {
+		return (ContractRepository) Component.getInstance(ContractRepository.NAME, true);
 	}
 
 	private UserRepository getUserRepository() {
