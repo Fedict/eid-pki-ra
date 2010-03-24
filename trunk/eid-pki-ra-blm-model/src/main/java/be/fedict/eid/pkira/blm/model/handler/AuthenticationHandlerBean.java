@@ -60,7 +60,7 @@ public class AuthenticationHandlerBean implements AuthenticationHandler {
 				log.info("<<< authenticate: failure, no user on request");
 				return false;
 			}
-			currentUser = userRepository.findByNationalRegisterNumber(eidUser.getIdentifier());
+			currentUser = userRepository.findByNationalRegisterNumber(eidUser.getRRN());
 			if (currentUser == null) {
 				log.info("<<< authenticate: failure, user doesn't exist");
 				return false;

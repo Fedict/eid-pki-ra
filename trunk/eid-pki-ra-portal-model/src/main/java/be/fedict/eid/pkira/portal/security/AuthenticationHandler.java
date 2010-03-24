@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.portal.handler;
+package be.fedict.eid.pkira.portal.security;
 
 
 /**

@@ -28,16 +28,16 @@ public class EIdUser implements Serializable {
 	
 	private static final long serialVersionUID = -8678403161691396234L;
 	
-	private String identifier;
+	private String rrn;
 	private String firstName;
 	private String lastName;
 	
-	public String getIdentifier() {
-		return identifier;
+	public String getRRN() {
+		return rrn;
 	}
 	
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
+	public void setRRN(String rrn) {
+		this.rrn = rrn;
 	}
 	
 	public String getFirstName() {
@@ -64,8 +64,8 @@ public class EIdUser implements Serializable {
 	
 	@Override
 	public String toString() {
-		return new StringBuilder("SamlUser[")
-				.append("identifier=").append(identifier)
+		return new StringBuilder("EIdUser[")
+				.append("rrn=").append(rrn)
 				.append(", firstName=").append(firstName)
 				.append(", lastName=").append(lastName)
 				.append(']').toString();				
