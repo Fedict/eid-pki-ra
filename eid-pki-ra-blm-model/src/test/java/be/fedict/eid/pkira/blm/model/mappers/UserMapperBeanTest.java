@@ -22,8 +22,8 @@ import static org.testng.Assert.assertNull;
 
 import org.testng.annotations.Test;
 
-import be.fedict.eid.pkira.blm.model.domain.User;
 import be.fedict.eid.pkira.blm.model.mappers.UserMapperBean;
+import be.fedict.eid.pkira.blm.model.usermgmt.User;
 import be.fedict.eid.pkira.generated.privatews.UserWS;
 
 /**

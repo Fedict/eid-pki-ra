@@ -16,7 +16,7 @@
  */
 package be.fedict.eid.pkira.blm.model.mappers;
 
-import be.fedict.eid.pkira.blm.model.domain.User;
+import be.fedict.eid.pkira.blm.model.usermgmt.User;
 import be.fedict.eid.pkira.generated.privatews.UserWS;
 
 

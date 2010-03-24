@@ -14,7 +14,9 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.pkira.blm.model.domain;
+package be.fedict.eid.pkira.blm.model.contracts;
+
+import java.util.Date;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -22,34 +24,35 @@ import javax.persistence.Entity;
 import org.jboss.seam.annotations.Name;
 
 /**
- * A contract used to request the signing of a certificate. 
+ * A contract used to request the signing of a certificate.
+ * 
  * @author Jan Van den Bergh
  */
 @Entity
-@DiscriminatorValue("Sign")
-@Name(CertificateSigningContract.NAME)
-public class CertificateSigningContract extends AbstractContract {
+@DiscriminatorValue("Revoke")
+@Name(CertificateRevocationContract.NAME)
+public class CertificateRevocationContract extends AbstractContract {
+
+	private static final long serialVersionUID = -4583829107256983511L;
+
+	public static final String NAME = "certificateRevocationContract";
+
+	private Date startDate;    
+    private Date endDate;
 	
-	private static final long serialVersionUID = 582083322769739724L;
-
-	public static final String NAME="certificateSigningContract";
-
-	private Integer validityPeriodMonths;
-	private CertificateType certificateType;
-
-	public Integer getValidityPeriodMonths() {
-		return validityPeriodMonths;
+	public Date getStartDate() {
+		return startDate;
 	}
-
-	public void setValidityPeriodMonths(Integer validityPeriodMonths) {
-		this.validityPeriodMonths = validityPeriodMonths;
+	
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
-
-	public CertificateType getCertificateType() {
-		return certificateType;
+	
+	public Date getEndDate() {
+		return endDate;
 	}
-
-	public void setCertificateType(CertificateType certificateType) {
-		this.certificateType = certificateType;
+	
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 }

@@ -23,8 +23,8 @@ import java.util.Set;
 
 import javax.ejb.Local;
 
-import be.fedict.eid.pkira.blm.model.domain.CertificateType;
-import be.fedict.eid.pkira.blm.model.domain.User;
+import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
+import be.fedict.eid.pkira.blm.model.usermgmt.User;
 
 /**
  * @author Bram Baeyens

@@ -32,8 +32,8 @@ import be.fedict.eid.pkira.authentication.AuthenticationDecoderFactory;
 import be.fedict.eid.pkira.authentication.AuthenticationException;
 import be.fedict.eid.pkira.authentication.AuthenticationType;
 import be.fedict.eid.pkira.authentication.EIdUser;
-import be.fedict.eid.pkira.blm.model.domain.User;
-import be.fedict.eid.pkira.blm.model.jpa.UserRepository;
+import be.fedict.eid.pkira.blm.model.usermgmt.User;
+import be.fedict.eid.pkira.blm.model.usermgmt.UserRepository;
 
 /**
  * @author Bram Baeyens

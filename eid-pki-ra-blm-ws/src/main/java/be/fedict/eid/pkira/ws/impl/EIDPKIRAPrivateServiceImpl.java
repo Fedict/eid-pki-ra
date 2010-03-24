@@ -10,12 +10,12 @@ import javax.jws.WebService;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 
-import be.fedict.eid.pkira.blm.model.domain.Certificate;
-import be.fedict.eid.pkira.blm.model.domain.DomainRepository;
-import be.fedict.eid.pkira.blm.model.domain.User;
-import be.fedict.eid.pkira.blm.model.jpa.UserRepository;
+import be.fedict.eid.pkira.blm.model.contracts.Certificate;
+import be.fedict.eid.pkira.blm.model.contracts.DomainRepository;
 import be.fedict.eid.pkira.blm.model.mappers.CertificateMapper;
 import be.fedict.eid.pkira.blm.model.mappers.UserMapper;
+import be.fedict.eid.pkira.blm.model.usermgmt.User;
+import be.fedict.eid.pkira.blm.model.usermgmt.UserRepository;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateRequest;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateResponse;

@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.blm.model.jpa;
+package be.fedict.eid.pkira.blm.model.usermgmt;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -28,7 +28,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.blm.model.DatabaseTest;
-import be.fedict.eid.pkira.blm.model.domain.User;
+import be.fedict.eid.pkira.blm.model.usermgmt.User;
+import be.fedict.eid.pkira.blm.model.usermgmt.UserRepositoryBean;
 
 /**
  * @author Bram Baeyens

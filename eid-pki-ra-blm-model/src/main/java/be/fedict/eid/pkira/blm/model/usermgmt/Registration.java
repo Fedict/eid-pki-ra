@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.blm.model.domain;
+package be.fedict.eid.pkira.blm.model.usermgmt;
 
 import java.io.Serializable;
 

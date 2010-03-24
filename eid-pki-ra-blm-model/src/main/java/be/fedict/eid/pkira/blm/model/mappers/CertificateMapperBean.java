@@ -22,8 +22,8 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
-import be.fedict.eid.pkira.blm.model.domain.Certificate;
-import be.fedict.eid.pkira.blm.model.domain.CertificateType;
+import be.fedict.eid.pkira.blm.model.contracts.Certificate;
+import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 import be.fedict.eid.pkira.generated.privatews.CertificateTypeWS;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 import be.fedict.eid.pkira.generated.privatews.ObjectFactory;

@@ -14,7 +14,7 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.pkira.blm.model.domain;
+package be.fedict.eid.pkira.blm.model.contracts;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -29,6 +29,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.blm.model.DatabaseTest;
+import be.fedict.eid.pkira.blm.model.contracts.Certificate;
+import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
+import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
+import be.fedict.eid.pkira.blm.model.contracts.DomainRepositoryBean;
 
 /**
  * @author Jan Van den Bergh

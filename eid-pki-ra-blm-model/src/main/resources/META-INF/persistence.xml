@@ -7,12 +7,12 @@
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<jta-data-source>java:/DefaultDS</jta-data-source>
 
-		<class>be.fedict.eid.pkira.blm.model.domain.Certificate</class>
-		<class>be.fedict.eid.pkira.blm.model.domain.CertificateSigningContract</class>
-		<class>be.fedict.eid.pkira.blm.model.domain.CertificateRevocationContract</class>		
-		<class>be.fedict.eid.pkira.blm.model.domain.Registration</class>
+		<class>be.fedict.eid.pkira.blm.model.contracts.Certificate</class>
+		<class>be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract</class>
+		<class>be.fedict.eid.pkira.blm.model.contracts.CertificateRevocationContract</class>		
+		<class>be.fedict.eid.pkira.blm.model.usermgmt.Registration</class>
 		<class>be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain</class>
-		<class>be.fedict.eid.pkira.blm.model.domain.User</class>
+		<class>be.fedict.eid.pkira.blm.model.usermgmt.User</class>
 		<class>be.fedict.eid.pkira.blm.model.config.ConfigurationEntry</class>
 		
 		<properties>		

@@ -32,7 +32,7 @@ import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import be.fedict.eid.pkira.blm.model.domain.Certificate;
+import be.fedict.eid.pkira.blm.model.contracts.Certificate;
 
 
 /**

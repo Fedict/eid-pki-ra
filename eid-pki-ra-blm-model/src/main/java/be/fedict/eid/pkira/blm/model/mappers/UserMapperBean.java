@@ -20,7 +20,7 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
-import be.fedict.eid.pkira.blm.model.domain.User;
+import be.fedict.eid.pkira.blm.model.usermgmt.User;
 import be.fedict.eid.pkira.generated.privatews.ObjectFactory;
 import be.fedict.eid.pkira.generated.privatews.UserWS;
 
