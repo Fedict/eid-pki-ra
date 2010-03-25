@@ -18,14 +18,9 @@
 
 package be.fedict.eid.pkira.authentication;
 
-import java.io.StringWriter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.common.SAMLObject;
@@ -33,6 +28,8 @@ import org.opensaml.common.binding.BasicSAMLMessageContext;
 import org.opensaml.common.binding.decoding.SAMLMessageDecoder;
 import org.opensaml.saml2.binding.decoding.HTTPPostDecoder;
 import org.opensaml.saml2.core.Assertion;
+import org.opensaml.saml2.core.Attribute;
+import org.opensaml.saml2.core.AttributeStatement;
 import org.opensaml.saml2.core.AuthnStatement;
 import org.opensaml.saml2.core.NameID;
 import org.opensaml.saml2.core.Response;
@@ -42,6 +39,7 @@ import org.opensaml.saml2.core.Subject;
 import org.opensaml.ws.message.decoder.MessageDecodingException;
 import org.opensaml.ws.transport.http.HttpServletRequestAdapter;
 import org.opensaml.xml.ConfigurationException;
+import org.opensaml.xml.schema.XSString;
 import org.opensaml.xml.security.SecurityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +49,14 @@ import org.slf4j.LoggerFactory;
  */
 public class Saml2RequestDecoder implements AuthenticationRequestDecoder {
 
+	/**
+	 * 
+	 */
+	private static final String URN_BE_FEDICT_EID_IDP_FIRST_NAME = "urn:be:fedict:eid:idp:firstName";
+	/**
+	 * 
+	 */
+	private static final String URN_BE_FEDICT_EID_IDP_NAME = "urn:be:fedict:eid:idp:name";
 	private static final Logger LOG = LoggerFactory.getLogger(Saml2RequestDecoder.class);
 
 	public Saml2RequestDecoder() {
@@ -69,17 +75,6 @@ public class Saml2RequestDecoder implements AuthenticationRequestDecoder {
 			throw new AuthenticationException("Expected a SAML2 Response document");
 		}
 
-		if (LOG.isDebugEnabled() || true /* TODO Remove true */) {
-			try {
-				StringWriter writer = new StringWriter();
-				Transformer transformer = TransformerFactory.newInstance().newTransformer();
-				transformer.transform(new DOMSource(samlResponse.getDOM()), new StreamResult(writer));
-				LOG.debug("SAML Response: " + writer.toString());
-			} catch (Exception e) {
-				// ignore this
-			}
-		}
-
 		validateSamlResponse(samlResponse);
 
 		List<Assertion> assertions = samlResponse.getAssertions();
@@ -95,16 +90,37 @@ public class Saml2RequestDecoder implements AuthenticationRequestDecoder {
 			throw new AuthenticationException("Missing SAML authn statement");
 		}
 
+		EIdUser eidUser = extractEidUserFromSamlResponse(assertion);
+		LOG.debug(">>> decode: {0}", eidUser);
+		return eidUser;
+	}
+
+	private EIdUser extractEidUserFromSamlResponse(Assertion assertion) {
+		// Get the subject and its name.
 		Subject subject = assertion.getSubject();
 		NameID nameId = subject.getNameID();
+		EIdUser eidUser = new EIdUser();
+		eidUser.setRRN(nameId.getValue());
 
-		EIdUser samlUser = new EIdUser();
-		samlUser.setRRN(nameId.getValue());
-		// TODO Bram get this from Saml object
-		samlUser.setFirstName("John");
-		samlUser.setLastName("Doe");
-		LOG.debug(">>> decode: {0}", samlUser);
-		return samlUser;
+		// Go through the attribute statements and get first name and last name
+		List<AttributeStatement> attributeStatements = assertion.getAttributeStatements();
+		if (false == attributeStatements.isEmpty()) {
+			AttributeStatement attributeStatement = attributeStatements.get(0);
+			List<Attribute> attributes = attributeStatement.getAttributes();
+			for (Attribute attribute : attributes) {
+				String attributeName = attribute.getName();
+				XSString attributeValue = (XSString) attribute.getAttributeValues().get(0);
+				String value = attributeValue==null ? null : attributeValue.getValue();
+				
+				if (URN_BE_FEDICT_EID_IDP_NAME.equals(attributeName)) {
+					eidUser.setLastName(value);
+				}
+				if (URN_BE_FEDICT_EID_IDP_FIRST_NAME.equals(attributeName)) {
+					eidUser.setFirstName(value);
+				}
+			}
+		}
+		return eidUser;
 	}
 
 	private void bootstrapSaml2() {
@@ -131,8 +147,8 @@ public class Saml2RequestDecoder implements AuthenticationRequestDecoder {
 		} catch (SecurityException e) {
 			LOG.debug("<<< getDecodedSamlObject: OpenSAML security error");
 			throw new AuthenticationException("OpenSAML security error", e);
-		} 
-		
+		}
+
 		SAMLObject samlObject = messageContext.getInboundSAMLMessage();
 		LOG.debug("<<< getDecodedSamlObject: {0}", samlObject);
 		return samlObject;
