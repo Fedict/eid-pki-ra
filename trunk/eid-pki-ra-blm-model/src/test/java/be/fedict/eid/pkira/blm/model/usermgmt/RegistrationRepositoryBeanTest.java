@@ -96,6 +96,12 @@ public class RegistrationRepositoryBeanTest extends DatabaseTest {
 		List<Registration> newRegistrations = registrationRepository.findAllNewRegistrations();
 		assertEquals(1, newRegistrations.size());
 	}
+	
+	@Test(dependsOnMethods="persist") 
+	public void findRegistration() throws Exception {
+		Registration registration = registrationRepository.findRegistration(certificateDomain, requester);
+		assertNotNull(registration);
+	}
 
 	private Registration createRegistration(String email, CertificateDomain certificateDomain, User requester) {
 		Registration registration = new Registration();

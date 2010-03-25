@@ -22,6 +22,8 @@ import java.util.List;
 
 import javax.ejb.Local;
 
+import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
+
 
 /**
  * @author Bram Baeyens
@@ -39,4 +41,6 @@ public interface RegistrationRepository {
 	void confirm(Registration registration);
 	
 	List<Registration> findAllNewRegistrations();
+
+	Registration findRegistration(CertificateDomain domain, User user);
 }

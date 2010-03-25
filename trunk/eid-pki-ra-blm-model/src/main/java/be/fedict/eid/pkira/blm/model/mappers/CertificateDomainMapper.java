@@ -16,32 +16,28 @@
  */
 package be.fedict.eid.pkira.blm.model.mappers;
 
-import be.fedict.eid.pkira.blm.model.contracts.Certificate;
-import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
-import be.fedict.eid.pkira.generated.privatews.CertificateTypeWS;
-import be.fedict.eid.pkira.generated.privatews.CertificateWS;
+import java.util.Collection;
+import java.util.List;
+
+import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
+import be.fedict.eid.pkira.generated.privatews.CertificateDomainWS;
 
 /**
- * Mapper for certificates from WS to model and back.
+ * Mapper for certificate domains.
  * 
  * @author Jan Van den Bergh
  */
-public interface CertificateMapper {
+public interface CertificateDomainMapper {
 
-	public static final String NAME = "be.fedict.eid.pkira.blm.certificateMapper";
+	String NAME = "be.fedict.eid.pkira.blm.certificateDomainMapper";
+
+	/**
+	 * Maps a certificate domain on its web service counterpart.
+	 */
+	CertificateDomainWS map(CertificateDomain domain);
 	
 	/**
-	 * Maps a certificate type to the WS version.
+	 * Maps a collection of certificate domain on its web service counterpart.
 	 */
-	CertificateTypeWS map(CertificateType certificateType);
-	
-	/**
-	 * Maps a certificate type from the WS version.
-	 */
-	CertificateType map(CertificateTypeWS certificateTypeWS);
-	
-	/**
-	 * Maps a certificate to the WS version.
-	 */
-	CertificateWS map(Certificate certificate, boolean includeX509);
+	List<CertificateDomainWS> map(Collection<CertificateDomain> domains);
 }

@@ -58,11 +58,47 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			
+
 			<xsd:element name="FindUserResponse">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="user" type="types:userWS" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="FindRemainingCertificateDomainsForUserRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="userRRN" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="FindRemainingCertificateDomainsForUserResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="certificateDomains" type="types:certificateDomainWS" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="CreateRegistrationForUserRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="userRRN" type="xsd:string" />
+						<xsd:element name="userLastName" type="xsd:string" />
+						<xsd:element name="userFirstName" type="xsd:string" />
+						<xsd:element name="certificateDomainId" type="xsd:string" />
+						<xsd:element name="userEmail" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			
+			<xsd:element name="CreateRegistrationForUserResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="success" type="xsd:boolean" />
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
@@ -96,6 +132,14 @@
 					<xsd:element name="nationalRegisterNumber" type="xsd:string" />
 				</xsd:sequence>
 			</xsd:complexType>
+
+			<xsd:complexType name="certificateDomainWS">
+				<xsd:sequence>
+					<xsd:element name="id" type="xsd:string" />
+					<xsd:element name="name" type="xsd:string" />
+					<xsd:element name="certificateTypes" type="types:certificateTypeWS" maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:complexType>
 		</xsd:schema>
 	</wsdl:types>
 
@@ -114,13 +158,29 @@
 	<wsdl:message name="FindCertificateResult">
 		<wsdl:part name="response" element="types:FindCertificateResponse" />
 	</wsdl:message>
-	
+
 	<wsdl:message name="FindUserRequest">
 		<wsdl:part name="request" element="types:FindUserRequest" />
 	</wsdl:message>
 
 	<wsdl:message name="FindUserResult">
 		<wsdl:part name="response" element="types:FindUserResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="FindRemainingCertificateDomainsForUserRequest">
+		<wsdl:part name="request" element="types:FindRemainingCertificateDomainsForUserRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="FindRemainingCertificateDomainsForUserResult">
+		<wsdl:part name="response" element="types:FindRemainingCertificateDomainsForUserResponse" />
+	</wsdl:message>
+	
+	<wsdl:message name="CreateRegistrationForUserRequest">
+		<wsdl:part name="request" element="types:CreateRegistrationForUserRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="CreateRegistrationForUserResult">
+		<wsdl:part name="response" element="types:CreateRegistrationForUserResponse" />
 	</wsdl:message>
 
 	<wsdl:portType name="EIDPKIRAPrivatePortType">
@@ -135,6 +195,14 @@
 		<wsdl:operation name="FindUser">
 			<wsdl:input message="tns:FindUserRequest" />
 			<wsdl:output message="tns:FindUserResult" />
+		</wsdl:operation>
+		<wsdl:operation name="FindRemainingCertificateDomainsForUser">
+			<wsdl:input message="tns:FindRemainingCertificateDomainsForUserRequest" />
+			<wsdl:output message="tns:FindRemainingCertificateDomainsForUserResult" />
+		</wsdl:operation>
+		<wsdl:operation name="CreateRegistrationForUser">
+			<wsdl:input message="tns:CreateRegistrationForUserRequest" />
+			<wsdl:output message="tns:CreateRegistrationForUserResult" />
 		</wsdl:operation>
 	</wsdl:portType>
 
@@ -164,6 +232,24 @@
 				<soap:body use="literal" />
 			</wsdl:input>
 			<wsdl:output message="tns:FindUserResult">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="FindRemainingCertificateDomainsForUser">
+			<soap:operation />
+			<wsdl:input message="tns:FindRemainingCertificateDomainsForUserRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output message="tns:FindRemainingCertificateDomainsForUserResult">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CreateRegistrationForUser">
+			<soap:operation />
+			<wsdl:input message="tns:CreateRegistrationForUserRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output message="tns:CreateRegistrationForUserResult">
 				<soap:body use="literal" />
 			</wsdl:output>
 		</wsdl:operation>

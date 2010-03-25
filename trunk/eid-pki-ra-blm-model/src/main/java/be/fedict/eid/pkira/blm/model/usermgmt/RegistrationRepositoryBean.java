@@ -24,9 +24,12 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import org.jboss.seam.annotations.Name;
+
+import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 
 
 /**
@@ -70,6 +73,18 @@ public class RegistrationRepositoryBean implements RegistrationRepository {
 	@Override
 	public void confirm(Registration registration) {
 		updateStatus(registration, RegistrationStatus.CONFIRMED);
+	}
+	
+	@Override
+	public Registration findRegistration(CertificateDomain domain, User user) {
+		try {
+			return (Registration) entityManager.createNamedQuery("findRegistrationByCertificateDomainAndRequester")
+				.setParameter("certificateDomain", domain)
+				.setParameter("requester", user)
+				.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 	
 	private void updateStatus(Registration registration, RegistrationStatus status) {

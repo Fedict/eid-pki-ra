@@ -28,6 +28,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -49,9 +50,17 @@ import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 @Table(uniqueConstraints = {
 		@UniqueConstraint(columnNames={"FK_REQUESTER_ID", "FK_CERTIFICATE_DOMAIN_ID"})
 })
-@NamedQuery(
-		name = "findRegistrationsByStatus",
-		query = "SELECT r FROM Registration r WHERE r.status = :status"
+@NamedQueries(
+	{
+		@NamedQuery(
+				name = "findRegistrationsByStatus",	
+				query = "SELECT r FROM Registration r WHERE r.status = :status"
+		),
+		@NamedQuery(
+				name = "findRegistrationByCertificateDomainAndRequester",	
+				query = "SELECT r FROM Registration r WHERE r.certificateDomain = :certificateDomain AND r.requester=:requester"
+		)
+	}
 )
 public class Registration implements Serializable {
 	
