@@ -28,8 +28,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.blm.model.DatabaseTest;
-import be.fedict.eid.pkira.blm.model.usermgmt.User;
-import be.fedict.eid.pkira.blm.model.usermgmt.UserRepositoryBean;
 
 /**
  * @author Bram Baeyens

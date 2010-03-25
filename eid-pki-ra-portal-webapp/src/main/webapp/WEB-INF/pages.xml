@@ -1,41 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pages xmlns="http://jboss.com/products/seam/pages"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
-		no-conversation-view-id="/home.xhtml"
-		login-view-id="/login.xhtml">
-	
+<pages xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+	no-conversation-view-id="/home.xhtml" login-view-id="/login.xhtml">
+
 	<page view-id="/page/*" login-required="true" />
-	
+
 	<page view-id="/postLogin.xhtml" action="#{identity.login}">
 		<navigation>
 			<redirect view-id="/home.xhtml" />
 		</navigation>
 	</page>
-	
-	<page view-id="/page/contract/uploadCsr.xhtml">		
-		<navigation from-action="#{csrUploadHandler.uploadCertificateSigningRequest}">
+
+	<page view-id="/page/registration/requestRegistration.xhtml">
+		<navigation>
 			<rule if-outcome="success">
-				<redirect view-id="/page/contract/requestContract.xhtml"/>
+				<redirect view-id="/home.xhtml" />
 			</rule>
-		</navigation>
-	</page>	
-	
-	<page view-id="/page/contract/requestContract.xhtml">	
-		<navigation from-action="#{requestContractPreSigningHandler.prepareSignment}">
-			<rule if-outcome="success">
-				<redirect view-id="/page/contract/signRequestContract.xhtml"/>
+			<rule if-outcome="cancel">
+				<end-conversation before-redirect="true" />
+				<redirect view-id="/home.xhtml" />
 			</rule>
 		</navigation>
 	</page>
-	
-	<page view-id="/page/contract/revocationContract.xhtml">	
-		<navigation from-action="#{revocationContractPreSigningHandler.prepareSignment}">
+
+	<page view-id="/page/contract/uploadCsr.xhtml">
+		<navigation from-action="#{csrUploadHandler.uploadCertificateSigningRequest}">
 			<rule if-outcome="success">
-				<redirect view-id="/page/contract/signRevocationContract.xhtml"/>
+				<redirect view-id="/page/contract/requestContract.xhtml" />
 			</rule>
 		</navigation>
-	</page>	
+	</page>
+
+	<page view-id="/page/contract/requestContract.xhtml">
+		<navigation from-action="#{requestContractPreSigningHandler.prepareSignment}">
+			<rule if-outcome="success">
+				<redirect view-id="/page/contract/signRequestContract.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/page/contract/revocationContract.xhtml">
+		<navigation from-action="#{revocationContractPreSigningHandler.prepareSignment}">
+			<rule if-outcome="success">
+				<redirect view-id="/page/contract/signRevocationContract.xhtml" />
+			</rule>
+		</navigation>
+	</page>
 
 	<page view-id="/page/certificates/certificates_list.xhtml">
 		<navigation from-action="#{certificatelist.detailCertificate(cer)}">
@@ -55,39 +65,43 @@
 
 	<page view-id="/*">
 		<navigation from-action="home">
-			<end-conversation before-redirect="true"/>
-			<redirect view-id="/home.xhtml"></redirect>
+			<end-conversation before-redirect="true" />
+			<redirect view-id="/home.xhtml" />
 		</navigation>
-		
+
 		<navigation from-action="login">
 			<redirect view-id="/login.xhtml" />
 		</navigation>
-		
+
 		<navigation from-action="csr">
-			<end-conversation before-redirect="true"/>
-			<redirect view-id="/page/contract/uploadCsr.xhtml"/>			
+			<end-conversation before-redirect="true" />
+			<redirect view-id="/page/contract/uploadCsr.xhtml" />
 		</navigation>
-		
+
 		<navigation from-action="list">
-			<begin-conversation join="true"/>
-			<redirect view-id="/page/certificates/certificates_list.xhtml"/>			
-		</navigation>	
-	</page>	
-	
+			<begin-conversation join="true" />
+			<redirect view-id="/page/certificates/certificates_list.xhtml" />
+		</navigation>
+
+		<navigation from-action="register">
+			<begin-conversation join="true" />
+			<redirect view-id="/page/registration/requestRegistration.xhtml" />
+		</navigation>
+	</page>
+
 	<exception class="be.fedict.eid.pkira.authentication.AuthenticationException">
 		<redirect view-id="/login.xhtml">
 			<message>#{messages['validator.invalid.authentication']}</message>
-		</redirect>		
-	</exception>	
-	
+		</redirect>
+	</exception>
+
 	<exception class="javax.security.auth.login.LoginException">
 		<redirect view-id="/login.xhtml">
 			<message>#{messages['validator.invalid.authentication']}</message>
-		</redirect>		
+		</redirect>
 	</exception>
 
-	<exception
-		class="org.jboss.seam.framework.EntityNotFoundException">
+	<exception class="org.jboss.seam.framework.EntityNotFoundException">
 		<redirect view-id="/error.xhtml">
 			<message>Not found</message>
 		</redirect>

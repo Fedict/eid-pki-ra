@@ -30,7 +30,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 
@@ -38,7 +37,6 @@ import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
  * @author Bram Baeyens
  */
 @Entity
-@Name("certificateDomain")
 @NamedQueries(
 	{
 			@NamedQuery(name = "findCertificateDomainByName", query = "FROM CertificateDomain WHERE name = :name"),

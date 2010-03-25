@@ -27,7 +27,6 @@ import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Out;
 import org.jboss.seam.log.Log;
-import org.jboss.seam.security.Credentials;
 import org.jboss.seam.security.Identity;
 
 import be.fedict.eid.pkira.authentication.AuthenticationDecoderFactory;
@@ -61,7 +60,7 @@ public class AuthenticationHandlerBean implements AuthenticationHandler {
 	private Identity identity;
 
 	@In
-	private Credentials credentials;
+	private EIdUserCredentials credentials;
 
 	public boolean authenticate() {
 		log.info(">>> authenticate()");
@@ -78,21 +77,18 @@ public class AuthenticationHandlerBean implements AuthenticationHandler {
 		return true;
 	}
 
-	/**
-	 * @param eidUser
-	 */
 	private void enrichIdentity(EIdUser eidUser) {
-		// Fill in some fields
-		credentials.setUsername(eidUser.getRRN());
-		credentials.setPassword("***");
-		credentials.setInitialized(true);
+		// Create the user
+		credentials.setUser(eidUser);
 
+		// Mark as authenticated
 		identity.addRole(PKIRARole.AUTHENTICATED_USER.name());
 
+		// Create the operator
 		currentOperator = new Operator();
 		currentOperator.setName(eidUser.getFirstName() + " " + eidUser.getLastName());
 
-		// Look up user in back-end
+		// Look up user in back-end and set roles if appropriate
 		UserWS backendUser = eidPKIRAPrivateServiceClient.findUser(eidUser.getRRN());
 		if (backendUser != null) {
 			identity.addRole(PKIRARole.REGISTERED_USER.name());

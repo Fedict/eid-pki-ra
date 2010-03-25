@@ -23,11 +23,16 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 
+import be.fedict.eid.pkira.generated.privatews.CertificateDomainWS;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
+import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserRequest;
+import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivateService;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateRequest;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateResponse;
+import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsForUserRequest;
+import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.FindUserRequest;
 import be.fedict.eid.pkira.generated.privatews.FindUserResponse;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesRequest;
@@ -84,6 +89,26 @@ public class EIDPKIRAPrivateServiceClient {
 		request.setUserRRN(userRRN);
 		FindUserResponse response = getWebservicePort().findUser(request);
 		return response.getUser();
+	}
+	
+	public List<CertificateDomainWS> findRemainingCertificateDomainsForUser(String userRRN) {
+		FindRemainingCertificateDomainsForUserRequest request = factory.createFindRemainingCertificateDomainsForUserRequest();
+		request.setUserRRN(userRRN);
+		
+		FindRemainingCertificateDomainsForUserResponse response = getWebservicePort().findRemainingCertificateDomainsForUser(request);
+		return response.getCertificateDomains();
+	}
+	
+	public boolean createRegistrationForUser(String userRRN, String userLastName, String userFirstName, String domainId, String userEmail) {
+		CreateRegistrationForUserRequest request = factory.createCreateRegistrationForUserRequest();
+		request.setCertificateDomainId(domainId);
+		request.setUserRRN(userRRN);
+		request.setUserLastName(userLastName);
+		request.setUserFirstName(userFirstName);
+		request.setUserEmail(userEmail);
+		
+		CreateRegistrationForUserResponse response = getWebservicePort().createRegistrationForUser(request);
+		return response.isSuccess();
 	}
 
 	/**
