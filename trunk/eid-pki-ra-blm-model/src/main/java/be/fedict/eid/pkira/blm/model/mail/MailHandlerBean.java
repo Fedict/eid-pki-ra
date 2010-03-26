@@ -38,8 +38,10 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import org.jboss.seam.log.Log;
-import org.jboss.seam.log.Logging;
+import org.jboss.seam.annotations.In;
+
+import be.fedict.eid.pkira.blm.errorhandling.Component;
+import be.fedict.eid.pkira.blm.errorhandling.ErrorLogger;
 
 /**
  * @author hans
@@ -49,7 +51,8 @@ import org.jboss.seam.log.Logging;
 			@ActivationConfigProperty(propertyName = "destination", propertyValue = "mail-queue") })
 public class MailHandlerBean implements MessageListener {
 
-	private static Log errorLog = Logging.getLog("ErrorLog");
+	@In(value = ErrorLogger.NAME, create = true)
+	private ErrorLogger errorLogger;
 
 	// TODO: retrieve from admin config
 	private String smtpServer = "mail.aca-it.be";
@@ -77,34 +80,35 @@ public class MailHandlerBean implements MessageListener {
 			// Create the message
 			MimeMessage msg = new MimeMessage(session);
 			msg.setFrom();
-			for(String recipient: mail.getRecipients()) {
+			for (String recipient : mail.getRecipients()) {
 				msg.addRecipient(RecipientType.TO, new InternetAddress(recipient));
 			}
 			msg.setSubject(mail.getSubject());
-			
+
 			Multipart multipart = new MimeMultipart();
 			msg.setContent(multipart);
 
 			// Set the email message text and attachment
 			MimeBodyPart messagePart = new MimeBodyPart();
-			messagePart.setText(mail.getBody());
+			messagePart.setContent(mail.getBody(), mail.getContentType());
 			multipart.addBodyPart(messagePart);
 
-			if (mail.getAttachmentData()!=null) {
+			if (mail.getAttachmentData() != null) {
 				InternetHeaders headers = new InternetHeaders();
 				headers.setHeader("Content-type", mail.getAttachmentContentType());
-				headers.setHeader("Content-Disposition", "attachment; filename=\"" + mail.getAttachmentFileName() + "\"");
-				
-				MimeBodyPart attachmentPart = new MimeBodyPart(headers, mail.getAttachmentData());				
-				multipart.addBodyPart(attachmentPart);				
+				headers.setHeader("Content-Disposition", "attachment; filename=\"" + mail.getAttachmentFileName()
+						+ "\"");
+
+				MimeBodyPart attachmentPart = new MimeBodyPart(headers, mail.getAttachmentData());
+				multipart.addBodyPart(attachmentPart);
 			}
 
 			Transport.send(msg);
 		} catch (JMSException e) {
-			errorLog.error("Cannot handle the object message from the queue", e);
+			errorLogger.logError(Component.MAIL, "Cannot handle the object message from the queue", e);
 			throw new RuntimeException(e);
 		} catch (MessagingException e) {
-			errorLog.error("Cannot send a mail message", e);
+			errorLogger.logError(Component.MAIL, "Cannot send a mail message", e);
 			throw new RuntimeException(e);
 		}
 	}

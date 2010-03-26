@@ -72,46 +72,6 @@
 		<url-pattern>*.seam</url-pattern>
 	</servlet-mapping>
 
-	<servlet>
-		<servlet-name>SimpleProtocolLandingServlet</servlet-name>
-		<servlet-class>be.fedict.eid.idp.sp.protocol.simple.SimpleProtocolLandingServlet</servlet-class>
-		<init-param>
-			<param-name>RedirectPage</param-name>
-			<param-value>/seam/resource/simpleAuthenticationHandler</param-value>
-		</init-param>
-		<init-param>
-			<param-name>NameSessionAttribute</param-name>
-			<param-value>lastName</param-value>
-		</init-param>
-		<init-param>
-			<param-name>FirstNameSessionAttribute</param-name>
-			<param-value>firstName</param-value>
-		</init-param>
-	</servlet>
-	
-	<servlet-mapping>
-		<servlet-name>SimpleProtocolLandingServlet</servlet-name>
-		<url-pattern>/simple-landing</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>AuthenticationResponseServlet</servlet-name>
-		<servlet-class>be.fedict.eid.idp.sp.protocol.saml2.AuthenticationResponseServlet</servlet-class>
-		<init-param>
-			<param-name>RedirectPage</param-name>
-			<param-value>/seam/resource/saml2AuthenticationHandler</param-value>
-		</init-param>
-		<init-param>
-			<param-name>IdentifierSessionAttribute</param-name>
-			<param-value>identifier</param-value>
-		</init-param>
-	</servlet>
-	
-	<servlet-mapping>
-		<servlet-name>AuthenticationResponseServlet</servlet-name>
-		<url-pattern>/saml2-landing</url-pattern>
-	</servlet-mapping>
-
 	<session-config>
 		<session-timeout>20</session-timeout>
 	</session-config>

@@ -30,7 +30,9 @@ public class Mail implements Serializable {
 	private String[] recipients;
 	private String subject;
 	private String body;
-	private String attachmentContentType, attachmentFileName;
+	private String contentType = "text/html";
+	private String attachmentContentType;
+	private String attachmentFileName;
 	private byte[] attachmentData;
 
 	public String getSender() {
@@ -85,6 +87,16 @@ public class Mail implements Serializable {
 
 	protected String getAttachmentContentType() {
 		return attachmentContentType;
+	}
+
+	
+	public String getContentType() {
+		return contentType;
+	}
+
+	
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 
 }

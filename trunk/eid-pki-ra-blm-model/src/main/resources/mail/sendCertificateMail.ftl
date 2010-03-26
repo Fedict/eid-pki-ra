@@ -1,8 +1,10 @@
+text/html
+===
 pki-ra@fedict.be
 ===
 Your certificate
 ===
-Dear ${certificate.requesterName},
+<p>Dear ${certificate.requesterName}</p>,
 
 Please find attached the certificate you requested earlier.
 

@@ -14,7 +14,7 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.pkira.blm.model.handler;
+package be.fedict.eid.pkira.blm.model.certificatedomain.handler;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
@@ -22,7 +22,6 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
 
-import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainManager;
 import be.fedict.eid.pkira.blm.model.certificatedomain.DistinguishedNameOverlapsException;
 import be.fedict.eid.pkira.blm.model.certificatedomain.InvalidCertificateDomainNameException;
@@ -38,8 +37,8 @@ import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;
 @Scope(ScopeType.EVENT)
 public class CertificateDomainHandler {
 
-	@In(value="certificateDomain")
-	private CertificateDomain certificateDomain;
+	@In(value=CertificateDomainItem.NAME)
+	private CertificateDomainItem certificateDomainItem;
 	
 	@In(value=CertificateDomainManager.NAME, create=true)
 	private CertificateDomainManager certificateDomainManager;
@@ -49,7 +48,7 @@ public class CertificateDomainHandler {
 	
 	public String saveCertificateDomain() {
 		try {
-			certificateDomainManager.saveCertificateDomain(certificateDomain);
+			certificateDomainManager.saveCertificateDomain(certificateDomainItem.toCertificateDomain());
 			facesMessages.addFromResourceBundle("certificatedomain.saved");			
 			return "success";
 		} catch (InvalidDistinguishedNameException e) {

@@ -91,9 +91,10 @@ public class MailTemplateBean implements MailTemplate {
 
 			// Create the mail
 			Mail mail = new Mail();
-			mail.setSender(parts[0]);
-			mail.setSubject(parts[1]);
-			mail.setBody(parts[2]);
+			mail.setContentType(parts[0]);
+			mail.setSender(parts[1]);
+			mail.setSubject(parts[2]);
+			mail.setBody(parts[3]);
 			mail.setRecipients(recipients);
 
 			if (attachmentData != null) {

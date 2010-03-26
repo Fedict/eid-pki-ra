@@ -32,5 +32,19 @@ public interface RegistrationManager {
 	 */
 	void registerUser(String userRRN, String userLastName, String userFirstName, int domainId, String emailAddress)
 			throws RegistrationException;
+	
+	/**
+	 * Approve the registration.
+	 * @param integer the ID of the registration.
+	 * @param reasonText reason to approve the registration.
+	 */
+	void approveRegistration(Integer integer, String reasonText);
+	
+	/**
+	 * Disapprove the registration.
+	 * @param integer the ID of the registration.
+	 * @param reasonText reason to disapprove the registration.
+	 */
+	void disapproveRegistration(Integer integer, String reasonText);
 
 }

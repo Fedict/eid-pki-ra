@@ -21,6 +21,8 @@ import java.io.IOException;
 
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.jms.JMSException;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
@@ -30,9 +32,11 @@ import javax.jms.QueueSender;
 import javax.jms.QueueSession;
 import javax.jms.Session;
 
-import org.jboss.seam.annotations.Logger;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.log.Log;
+
+import be.fedict.eid.pkira.blm.errorhandling.Component;
+import be.fedict.eid.pkira.blm.errorhandling.ErrorLogger;
 
 /**
  * @author hans
@@ -40,15 +44,15 @@ import org.jboss.seam.log.Log;
 @Stateless
 @Name(MailSender.NAME)
 public class MailSenderBean implements MailSender {
-
-	@Logger(value="ErrorLog")
-	private Log errorLog;
 	
 	@Resource(mappedName = "java:JmsXA")
 	private QueueConnectionFactory queueConnectionFactory;
 
 	@Resource(mappedName = "mail-queue")
 	private Queue queue;
+	
+	@In(value=ErrorLogger.NAME, create=true)
+	private ErrorLogger errorLogger;
 
 	/*
 	 * (non-Javadoc)
@@ -56,6 +60,7 @@ public class MailSenderBean implements MailSender {
 	 * be.fedict.eid.blm.mail.MailSender#sendMail(be.fedict.eid.blm.mail.Mail)
 	 */
 	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public void sendMail(Mail mail) throws IOException {
 		try {
 			QueueConnection queueConnection = this.queueConnectionFactory.createQueueConnection();
@@ -79,7 +84,7 @@ public class MailSenderBean implements MailSender {
 				queueConnection.close();
 			}
 		} catch (JMSException e) {
-			errorLog.error("Mail sending problem: message cannot be added to the queue", e);
+			errorLogger.logError(Component.MAIL, "Mail sending problem: message cannot be added to the queue", e);
 			throw new RuntimeException(e);
 		}
 	}

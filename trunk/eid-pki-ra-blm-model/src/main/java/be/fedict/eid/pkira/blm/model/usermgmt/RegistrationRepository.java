@@ -36,11 +36,13 @@ public interface RegistrationRepository {
 	
 	void persist(Registration registration);
 	
-	void reject(Registration registration);
+	void setDisapproved(Registration registration);
 	
-	void confirm(Registration registration);
+	void setApproved(Registration registration);
 	
 	List<Registration> findAllNewRegistrations();
 
 	Registration findRegistration(CertificateDomain domain, User user);
+
+	Registration getReference(Integer registrationId);
 }

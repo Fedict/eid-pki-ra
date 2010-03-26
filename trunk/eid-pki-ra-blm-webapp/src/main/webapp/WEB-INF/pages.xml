@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pages xmlns="http://jboss.com/products/seam/pages"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
-		no-conversation-view-id="/home.xhtml" 
-		login-view-id="/login.xhtml">
-	
+<pages xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+	no-conversation-view-id="/home.xhtml" login-view-id="/login.xhtml">
+
 	<page view-id="/home.xhtml">
-		<end-conversation/>
+		<end-conversation />
 	</page>
 
 	<page view-id="/postUserAuthentication.xhtml" action="#{registrationHandler.registerUser}">
@@ -16,7 +14,7 @@
 			</rule>
 		</navigation>
 	</page>
-	
+
 	<page view-id="/page/certificatedomain/certificatedomain-edit.xhtml">
 		<navigation from-action="#{certificateDomainHandler.saveCertificateDomain}">
 			<rule if-outcome="success">
@@ -28,6 +26,9 @@
 		</navigation>
 	</page>
 
+	<page view-id="/page/registration/bulkapproval.xhtml">
+	</page>
+
 	<page view-id="/*">
 		<navigation from-action="home">
 			<end-conversation before-redirect="true" />
@@ -37,6 +38,11 @@
 		<navigation from-action="certificatedomains">
 			<end-conversation before-redirect="true" />
 			<redirect view-id="/page/certificatedomain/certificatedomain-edit.xhtml" />
+		</navigation>
+		
+		<navigation from-action="registrations">
+			<end-conversation before-redirect="true" />
+			<redirect view-id="/page/registration/bulkapproval.xhtml" />
 		</navigation>
 	</page>
 </pages>
