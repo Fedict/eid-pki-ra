@@ -24,5 +24,5 @@ package be.fedict.eid.pkira.blm.model.usermgmt;
  */
 public enum RegistrationStatus {
 	
-	NEW, APPROVED, DISAPPROVED;
+	NEW, APPROVED;
 }

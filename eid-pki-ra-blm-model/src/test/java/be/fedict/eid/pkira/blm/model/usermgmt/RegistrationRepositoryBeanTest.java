@@ -21,6 +21,7 @@ package be.fedict.eid.pkira.blm.model.usermgmt;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 import java.util.List;
@@ -78,7 +79,7 @@ public class RegistrationRepositoryBeanTest extends DatabaseTest {
 	@Test(dependsOnMethods = "persist")
 	public void reject() throws Exception {
 		registrationRepository.setDisapproved(valid);
-		assertSame(RegistrationStatus.DISAPPROVED, valid.getStatus());
+		assertFalse(getEntityManager().contains(valid));
 	}
 
 	@Test(dependsOnMethods = "persist")
@@ -90,7 +91,7 @@ public class RegistrationRepositoryBeanTest extends DatabaseTest {
 	@Test(dependsOnMethods = "persist")
 	public void findAllNewRegistrations() throws Exception {
 		List<Registration> newRegistrations = registrationRepository.findAllNewRegistrations();
-		assertTrue(newRegistrations.size()>=1);
+		assertTrue(newRegistrations.size()>=1);		
 	}
 	
 	@Test(dependsOnMethods="persist") 

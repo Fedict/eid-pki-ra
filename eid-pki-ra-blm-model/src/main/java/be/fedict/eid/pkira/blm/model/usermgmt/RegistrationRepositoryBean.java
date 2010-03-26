@@ -72,12 +72,18 @@ public class RegistrationRepositoryBean implements RegistrationRepository {
 
 	@Override
 	public void setDisapproved(Registration registration) {
-		updateStatus(registration, RegistrationStatus.DISAPPROVED);
+		if (!entityManager.contains(registration)) {
+			registration = entityManager.merge(registration);
+		}
+		entityManager.remove(registration);
 	}
 	
 	@Override
 	public void setApproved(Registration registration) {
-		updateStatus(registration, RegistrationStatus.APPROVED);
+		if (!entityManager.contains(registration)) {
+			entityManager.merge(registration);
+		}
+		registration.setStatus(RegistrationStatus.APPROVED);
 	}
 	
 	@Override
@@ -90,13 +96,6 @@ public class RegistrationRepositoryBean implements RegistrationRepository {
 		} catch (NoResultException e) {
 			return null;
 		}
-	}
-	
-	private void updateStatus(Registration registration, RegistrationStatus status) {
-		if (!entityManager.contains(registration)) {
-			entityManager.merge(registration);
-		}
-		registration.setStatus(status);
 	}
 
 }
