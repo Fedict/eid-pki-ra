@@ -16,6 +16,9 @@
  */
 package be.fedict.eid.pkira.blm.model.usermgmt;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -27,6 +30,7 @@ import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainRepository;
+import be.fedict.eid.pkira.blm.model.mail.MailTemplate;
 
 /**
  * Registration manager implementation.
@@ -35,7 +39,6 @@ import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainReposito
  */
 @Stateless
 @Name(RegistrationManager.NAME)
-@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class RegistrationManagerBean implements RegistrationManager {
 
 	@In(value = RegistrationRepository.NAME, create = true)
@@ -47,10 +50,14 @@ public class RegistrationManagerBean implements RegistrationManager {
 	@In(value = UserRepository.NAME, create = true)
 	private UserRepository userRepository;
 
+	@In(value = MailTemplate.NAME, create = true)
+	private MailTemplate mailTemplate;
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void registerUser(String userRRN, String userLastName, String userFirstName, int domainId,
 			String emailAddress) throws RegistrationException {
 		// Lookup the domain
@@ -90,6 +97,47 @@ public class RegistrationManagerBean implements RegistrationManager {
 		registration.setStatus(RegistrationStatus.NEW);
 
 		registrationRepository.persist(registration);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public void approveRegistration(Integer registrationId, String reasonText) {
+		// Mark as approved
+		Registration registration = registrationRepository.getReference(registrationId);
+		registrationRepository.setApproved(registration);
+
+		// Send the mail
+		String[] recipients = new String[] { registration.getEmail() };
+		Map<String, Object> parameters = createMapForRegistrationMail(registration, reasonText);
+		mailTemplate.sendTemplatedMail("registrationApproved.ftl", parameters, recipients);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public void disapproveRegistration(Integer registrationId, String reasonText) {
+		// Mark as disapproved
+		Registration registration = registrationRepository.getReference(registrationId);
+		registrationRepository.setDisapproved(registration);
+
+		// Send the mail
+		String[] recipients = new String[] { registration.getEmail() };
+		Map<String, Object> parameters = createMapForRegistrationMail(registration, reasonText);
+		mailTemplate.sendTemplatedMail("registrationDisapproved.ftl", parameters, recipients);
+	}
+	
+	private Map<String, Object> createMapForRegistrationMail(Registration registration, String reasonText) {		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("user", registration.getRequester());
+		result.put("certificateDomain", registration.getCertificateDomain());
+		result.put("reason", reasonText);
+		
+		return result;
 	}
 
 	private EmailValidator createEmailValidator() {

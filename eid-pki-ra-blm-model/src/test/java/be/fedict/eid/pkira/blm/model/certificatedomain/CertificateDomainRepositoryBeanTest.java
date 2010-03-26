@@ -112,7 +112,7 @@ public class CertificateDomainRepositoryBeanTest extends DatabaseTest {
 		}
 		List<CertificateDomain> domains = repository.findByCertificateTypes(certificateTypes);
 		assertNotNull(domains);
-		assertEquals(domains.size(), 1);
+		assertTrue(domains.size()>=1);
 		assertTrue(domains.contains(valid));
 	}
 

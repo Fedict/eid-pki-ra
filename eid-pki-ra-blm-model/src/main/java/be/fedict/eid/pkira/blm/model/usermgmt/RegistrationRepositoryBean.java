@@ -52,6 +52,11 @@ public class RegistrationRepositoryBean implements RegistrationRepository {
 	public List<Registration> findAllNewRegistrations() {
 		return findRegistrationsByStatus(RegistrationStatus.NEW);
 	}
+	
+	@Override
+	public Registration getReference(Integer registrationId) {
+		return entityManager.getReference(Registration.class, registrationId);
+	}
 
 	@Override
 	public void persist(Registration registration) {
@@ -66,13 +71,13 @@ public class RegistrationRepositoryBean implements RegistrationRepository {
 	}
 
 	@Override
-	public void reject(Registration registration) {
-		updateStatus(registration, RegistrationStatus.REJECTED);
+	public void setDisapproved(Registration registration) {
+		updateStatus(registration, RegistrationStatus.DISAPPROVED);
 	}
 	
 	@Override
-	public void confirm(Registration registration) {
-		updateStatus(registration, RegistrationStatus.CONFIRMED);
+	public void setApproved(Registration registration) {
+		updateStatus(registration, RegistrationStatus.APPROVED);
 	}
 	
 	@Override
@@ -88,7 +93,9 @@ public class RegistrationRepositoryBean implements RegistrationRepository {
 	}
 	
 	private void updateStatus(Registration registration, RegistrationStatus status) {
-		entityManager.getReference(Registration.class, registration.getId());
+		if (!entityManager.contains(registration)) {
+			entityManager.merge(registration);
+		}
 		registration.setStatus(status);
 	}
 

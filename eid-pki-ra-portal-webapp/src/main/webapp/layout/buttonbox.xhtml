@@ -6,7 +6,7 @@
 		xmlns:rich="http://richfaces.org/rich">
         
 	<h:panelGrid styleClass="buttonBox" columns="2" columnClasses="name, value">
-		<rich:column>
+		<rich:column rendered="#{not empty label}">
 			<ui:insert name="label"/>
 		</rich:column>
 	    	
