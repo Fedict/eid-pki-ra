@@ -21,6 +21,8 @@ import be.fedict.eid.pkira.blm.model.mappers.CertificateMapper;
 import be.fedict.eid.pkira.blm.model.mappers.UserMapper;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationException;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationManager;
+import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationRepository;
+import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationStatus;
 import be.fedict.eid.pkira.blm.model.usermgmt.User;
 import be.fedict.eid.pkira.blm.model.usermgmt.UserRepository;
 import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserRequest;
@@ -78,9 +80,10 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	@Override
 	public FindUserResponse findUser(FindUserRequest request) {
 		User user = getUserRepository().findByNationalRegisterNumber(request.getUserRRN());
+		int numberOfApprovedRegistrations = getRegistrationRepository().getNumberOfRegistrationsForForUserInStatus(user, RegistrationStatus.APPROVED);
 
 		FindUserResponse response = new ObjectFactory().createFindUserResponse();
-		response.setUser(getUserMapper().map(user));
+		response.setUser(getUserMapper().map(user, numberOfApprovedRegistrations>0));
 		return response;
 	}
 
@@ -137,6 +140,10 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 
 	private RegistrationManager getRegistrationManager() {
 		return (RegistrationManager) Component.getInstance(RegistrationManager.NAME, true);
+	}
+	
+	private RegistrationRepository getRegistrationRepository() {
+		return (RegistrationRepository) Component.getInstance(RegistrationRepository.NAME, true);
 	}
 
 	private UserMapper getUserMapper() {

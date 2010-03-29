@@ -19,22 +19,27 @@
 package be.fedict.eid.pkira.blm.model.usermgmt;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.jboss.seam.annotations.Name;
 
 /**
  * @author Bram Baeyens
  */
 @Entity
-@Name("user")
-@NamedQuery(name = "findByNationalRegisterNumber", query = "SELECT u FROM User u WHERE u.nationalRegisterNumber = :nationalRegisterNumber")
+@NamedQueries(value={
+		@NamedQuery(
+				name = "findByNationalRegisterNumber", 
+				query = "SELECT u FROM User u WHERE u.nationalRegisterNumber = :nationalRegisterNumber")		
+})
 public class User implements Serializable {
 
 	private static final long serialVersionUID = -567680538869751475L;
@@ -49,6 +54,11 @@ public class User implements Serializable {
 	private String firstName;
 	@Column(name = "NATIONAL_REGISTER_NUMBER", unique = true, nullable = false)
 	private String nationalRegisterNumber;
+	@Column(name = "IS_ADMIN", nullable=false)
+	private boolean admin;
+	
+	@OneToMany(mappedBy="requester")
+	private List<Registration> registrations;
 
 	public void setId(Integer id) {
 		this.id = id;
@@ -85,6 +95,18 @@ public class User implements Serializable {
 	public String getName() {
 		return new StringBuilder(firstName).append(' ').append(lastName).toString();
 	}
+	
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
+
+	public boolean isAdmin() {
+		return admin;
+	}
+
+	public List<Registration> getRegistrations() {
+		return registrations;
+	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -108,5 +130,6 @@ public class User implements Serializable {
 		return new StringBuilder("User[").append("nationalRegisterNumber=").append(nationalRegisterNumber).append(
 				", lastName=").append(lastName).append(", firstName=").append(firstName).append(']').toString();
 	}
+
 
 }

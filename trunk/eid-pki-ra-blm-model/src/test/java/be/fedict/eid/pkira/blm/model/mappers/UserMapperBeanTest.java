@@ -19,6 +19,7 @@ package be.fedict.eid.pkira.blm.model.mappers;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.Test;
 
@@ -40,7 +41,7 @@ public class UserMapperBeanTest {
 
 	@Test
 	public void testMapUser() {
-		UserWS userWS = bean.map(createUser());
+		UserWS userWS = bean.map(createUser(), true);
 
 		assertNotNull(userWS);
 		validateUserWS(userWS);
@@ -48,7 +49,7 @@ public class UserMapperBeanTest {
 
 	@Test
 	public void testMapUserNull() {
-		assertNull(bean.map(null));
+		assertNull(bean.map(null, true));
 	}
 
 	private void validateUserWS(UserWS userWS) {
@@ -56,6 +57,7 @@ public class UserMapperBeanTest {
 		assertEquals(userWS.getFirstName(), TEST_FIRSTNAME);
 		assertEquals(userWS.getLastName(), TEST_LASTNAME);
 		assertEquals(userWS.getNationalRegisterNumber(), TEST_NRN);
+		assertTrue(userWS.isWithRegistrations());
 	}
 
 	private User createUser() {

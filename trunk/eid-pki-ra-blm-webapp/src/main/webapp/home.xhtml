@@ -1,23 +1,11 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib"
 		xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
 		xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich"
-		xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml"
-		login-required="true">
+		xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
 
 	<ui:define name="center">
 		<rich:panel id="panel">
-			<f:facet name="header">#{messages['home.title']}</f:facet>	          	
-			
-			<li>
-				<a href="https://www.e-contract.be/eid-idp/protocol/simple?Target=http://localhost:8080/eid-pki-ra/admin/postUserAuthentication.seam?authenticationType=SIMPLE">
-					#{messages['authenticate.simple']}
-				</a>
-			</li>
-			<li>
-				<a href="https://www.e-contract.be/eid-idp-sp/saml-request?IdPDestination=https://www.e-contract.be/eid-idp/protocol/saml2&amp;SPDestination=http://localhost:8080/eid-pki-ra/admin/postUserAuthentication.seam%3FauthenticationType=SAML2%26cid=#{conversation.id}">
-					#{messages['authenticate.saml2']}	
-				</a>
-			</li>
+			<f:facet name="header">#{messages['home.title']}</f:facet>
 		</rich:panel>
 	</ui:define>
 </ui:composition>

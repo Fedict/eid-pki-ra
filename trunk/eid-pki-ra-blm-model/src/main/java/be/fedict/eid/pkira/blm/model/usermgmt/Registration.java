@@ -37,7 +37,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.validator.Email;
 import org.hibernate.validator.NotEmpty;
 import org.hibernate.validator.NotNull;
-import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 
@@ -46,7 +45,6 @@ import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
  *
  */
 @Entity
-@Name("registration")
 @Table(uniqueConstraints = {
 		@UniqueConstraint(columnNames={"FK_REQUESTER_ID", "FK_CERTIFICATE_DOMAIN_ID"})
 })
@@ -59,6 +57,10 @@ import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 		@NamedQuery(
 				name = "findRegistrationByCertificateDomainAndRequester",	
 				query = "SELECT r FROM Registration r WHERE r.certificateDomain = :certificateDomain AND r.requester=:requester"
+		),
+		@NamedQuery(
+				name="getNumberOfRegistrationsByUserAndStatus",
+				query="SELECT count(*) FROM Registration r WHERE r.requester=:user AND r.status=:status"
 		)
 	}
 )

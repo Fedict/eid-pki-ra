@@ -33,10 +33,12 @@ import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;
  * @author Jan Van den Bergh
  *
  */
-@Name("certificateDomainHandler")
+@Name(CertificateDomainHandler.NAME)
 @Scope(ScopeType.EVENT)
 public class CertificateDomainHandler {
 
+	public static final String NAME = "be.fedict.eid.pkira.blm.CertificateDomainHandler";
+	
 	@In(value=CertificateDomainItem.NAME)
 	private CertificateDomainItem certificateDomainItem;
 	

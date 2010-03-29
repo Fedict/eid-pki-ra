@@ -49,14 +49,19 @@
 	</scm>
 	<modules>
 		<module>eid-pki-ra-authentication-client</module>
+		
 		<module>eid-pki-ra-generated-contracts</module>
 		<module>eid-pki-ra-generated-publicws</module>
 		<module>eid-pki-ra-generated-privatews</module>
 		<module>eid-pki-ra-client-privatews</module>
 		<module>eid-pki-ra-client-publicws</module>
 		<module>eid-pki-ra-client-contracts</module>
+		
 		<module>eid-pki-ra-util-crypto</module>
 		<module>eid-pki-ra-util-dnfilter</module>
+		
+		<module>eid-pki-ra-common-model</module>
+		
 		<module>eid-pki-ra-blm-model</module>
 		<module>eid-pki-ra-blm-webapp</module>
 		<module>eid-pki-ra-blm-ws</module>
@@ -65,7 +70,7 @@
 		<module>eid-pki-ra-portal-webapp</module>
 		<module>eid-pki-ra-portal-ear</module>
 		<module>eid-pki-ra-blm-sar</module>
-		<module>eid-pki-ra-mock-dss</module>
+		<module>eid-pki-ra-mock-dss</module>		
 		
 		<!-- <module>eid-pki-ra-integration</module>  -->
 	</modules>
@@ -317,6 +322,12 @@
 			<dependency>
 				<groupId>be.fedict</groupId>
 				<artifactId>eid-pki-ra-client-privatews</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>be.fedict</groupId>
+				<artifactId>eid-pki-ra-common-model</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 

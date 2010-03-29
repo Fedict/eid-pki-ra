@@ -17,8 +17,9 @@
 	<rich:toolBar id="tool-bar" style="height:25px;">
 		<rich:toolBarGroup location="left" id="tool-bar-group-left">
 			<rich:menuItem value="#{messages['menu.home']}" action="home" id="home" />
-			<rich:menuItem value="#{messages['menu.certificatedomains']}" action="certificatedomains" id="certificatedomains"/>
-			<rich:menuItem value="#{messages['menu.registrations']}" action="registrations" id="registrations"/>
+			<rich:menuItem value="#{messages['menu.login']}" action="login" id="login" rendered="#{!s:hasRole('AUTHENTICATED_USER')}" />
+			<rich:menuItem value="#{messages['menu.certificatedomains']}" action="certificatedomains" id="certificatedomains" rendered="#{s:hasRole('ADMIN_USER')}" />
+			<rich:menuItem value="#{messages['menu.registrations']}" action="registrations" id="registrations" rendered="#{s:hasRole('ADMIN_USER')}" />
 		</rich:toolBarGroup>
 	</rich:toolBar>
 </h:form>

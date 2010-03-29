@@ -94,6 +94,15 @@ public class DatabaseTest {
 			}
 		}
 	}
+	
+	/**
+	 * Merges the given objects back to the context.
+	 */
+	public final void merge(Object... entities) {
+		for(Object entity: entities) {
+			getEntityManager().merge(entity);
+		}
+	}
 
 	/**
 	 * Sets up transactions.

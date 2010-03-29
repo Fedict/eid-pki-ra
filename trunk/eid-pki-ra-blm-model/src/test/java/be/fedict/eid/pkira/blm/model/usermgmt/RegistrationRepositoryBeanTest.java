@@ -18,12 +18,14 @@
 
 package be.fedict.eid.pkira.blm.model.usermgmt;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.PersistenceException;
@@ -56,17 +58,25 @@ public class RegistrationRepositoryBeanTest extends DatabaseTest {
 	public void setup() {
 		registrationRepository = new RegistrationRepositoryBean();
 		registrationRepository.setEntityManager(getEntityManager());
-		
+
 		requester = createPersistedUser(NRN, FIRST_NAME, LAST_NAME);
 		certificateDomain = createPersistedCertificateDomain(DN_EXPRESSION, NAME);
-	}
+	}	
 
 	@Test
 	public void persist() throws Exception {
 		valid = createRegistration(EMAIL, certificateDomain, requester);
 		registrationRepository.persist(valid);
 		forceCommit();
-		assertNotNull(valid.getId());
+		assertNotNull(valid.getId());		
+	}
+	
+	@Test(dependsOnMethods="persist")
+	public void testGetRegistrations() {
+		User requester2 = getEntityManager().getReference(User.class, requester.getId());
+		Collection<Registration> registrations = requester2.getRegistrations();
+		assertNotNull(registrations);
+		assertEquals(registrations.size(), 1);
 	}
 
 	@Test(dependsOnMethods = "persist", expectedExceptions = PersistenceException.class)
@@ -91,13 +101,18 @@ public class RegistrationRepositoryBeanTest extends DatabaseTest {
 	@Test(dependsOnMethods = "persist")
 	public void findAllNewRegistrations() throws Exception {
 		List<Registration> newRegistrations = registrationRepository.findAllNewRegistrations();
-		assertTrue(newRegistrations.size()>=1);		
+		assertTrue(newRegistrations.size() >= 1);
 	}
-	
-	@Test(dependsOnMethods="persist") 
+
+	@Test(dependsOnMethods = "persist")
 	public void findRegistration() throws Exception {
 		Registration registration = registrationRepository.findRegistration(certificateDomain, requester);
 		assertNotNull(registration);
+	}
+	
+	@Test(dependsOnMethods="persist")
+	public void getNumberOfRegistrationsForForUserInStatus() {
+		assertTrue(registrationRepository.getNumberOfRegistrationsForForUserInStatus(requester, RegistrationStatus.NEW)>0);
 	}
 
 	private Registration createRegistration(String email, CertificateDomain certificateDomain, User requester) {

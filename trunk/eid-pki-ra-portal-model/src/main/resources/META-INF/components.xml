@@ -21,7 +21,7 @@
 			http://jboss.com/products/seam/web http://jboss.com/products/seam/web-2.2.xsd">		
 
 	<component name="be.fedict.eid.pkira.portal.currentOperator" scope="session" 
-			class="be.fedict.eid.pkira.portal.domain.Operator" />		
+			class="be.fedict.eid.pkira.portal.ra.Operator" />		
 	
 	<component name="be.fedict.eid.pkira.wsclient.eidPKIRAContractsClient" scope="application"
 			class="be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient" />
@@ -34,9 +34,6 @@
 	<component name="be.fedict.eid.pkira.wsclient.eidPKIRAPrivateServiceClient" scope="application" 
 			class="be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient">
 		<property name="serviceUrl">http://localhost:8080/eid-pki-ra/webservice/EIDPKIRAPrivateService</property>
-	</component>		
-	
-	<component name="be.fedict.eid.pkira.auth.authenticationDecoderFactory" scope="application" auto-create="true"
-			class="be.fedict.eid.pkira.authentication.AuthenticationDecoderFactory" />
+	</component>			
 	
 </components>

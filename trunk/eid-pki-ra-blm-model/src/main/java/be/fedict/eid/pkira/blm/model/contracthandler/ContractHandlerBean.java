@@ -225,7 +225,7 @@ public class ContractHandlerBean implements ContractHandler {
 			{ "j.vandenbergh@aca-it.be" };
 		byte[] attachmentData = certificate.getX509().getBytes();
 		String attachmentContentType = "application/x-pem-file";
-		String attachmentFileName = "certificate.crt";
+		String attachmentFileName = certificate.getSerialNumber() + ".crt";
 
 		mailTemplate.sendTemplatedMail(templateName, parameters, recipients, attachmentData, attachmentContentType,
 				attachmentFileName);

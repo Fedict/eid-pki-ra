@@ -31,5 +31,5 @@ public interface UserMapper {
 	/**
 	 * Maps a user to the web service data type.
 	 */
-	public UserWS map(User user);
+	public UserWS map(User user, boolean hasApprovedRegistrations);
 }

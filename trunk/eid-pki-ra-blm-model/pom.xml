@@ -43,6 +43,11 @@
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-generated-privatews</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-common-model</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>be.fedict</groupId>
@@ -144,6 +149,7 @@
 			<artifactId>mockito-all</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
