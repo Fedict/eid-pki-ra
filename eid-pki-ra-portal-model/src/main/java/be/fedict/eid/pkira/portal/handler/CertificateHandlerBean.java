@@ -17,24 +17,34 @@
  */
 package be.fedict.eid.pkira.portal.handler;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.jboss.seam.ScopeType;
+import javax.faces.context.ExternalContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.datamodel.DataModel;
+import org.jboss.seam.annotations.datamodel.DataModelSelection;
 import org.jboss.seam.log.Log;
+import org.jboss.seam.security.Identity;
 
 import be.fedict.eid.pkira.crypto.CSRInfo;
 import be.fedict.eid.pkira.generated.privatews.CertificateTypeWS;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 import be.fedict.eid.pkira.portal.domain.Certificate;
 import be.fedict.eid.pkira.portal.domain.CertificateType;
+import be.fedict.eid.pkira.portal.security.EIdUserCredentials;
 import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 
 @Name(CertificateHandler.NAME)
@@ -45,17 +55,35 @@ public class CertificateHandlerBean implements CertificateHandler {
 
 	@Logger
 	private Log log;
+
+	@In
+	private EIdUserCredentials credentials;
 	
 	@In(value = EIDPKIRAPrivateServiceClient.NAME, create = true)
 	private EIDPKIRAPrivateServiceClient eidpkiraPrivateServiceClient;
+
+	@In(value="#{facesContext.externalContext}")
+	private ExternalContext extCtx;
 	
-	@Out(scope=ScopeType.CONVERSATION)
+	@In(value="#{facesContext}")
+	javax.faces.context.FacesContext facesContext;
+	
+	@DataModel
+	List<Certificate> certificates;
+	
+	@Out(scope=ScopeType.CONVERSATION, required=false)
 	private Certificate certificate;	
 	
-	@Override
+	@Factory("certificates")
+	public void initCertificateList(){
+		//TODO: change Identity method
+		findCertificateList("");//identity.getPrincipal().getName());
+	}
+	
+	@Override 
 	public List<Certificate> findCertificateList(String userRRN) {
 		List<CertificateWS> listCertificates = eidpkiraPrivateServiceClient.listCertificates(userRRN);
-		List<Certificate> certificates = new ArrayList<Certificate>();
+		certificates = new ArrayList<Certificate>();
 		for (CertificateWS certificatews : listCertificates) {
 			certificates.add(parse(certificatews));
 		}
@@ -64,7 +92,7 @@ public class CertificateHandlerBean implements CertificateHandler {
 
 	@Override
 	public String getCertificate(String serialNumber) {
-		certificate = findCertificate("#{currentUser.userRRN}", serialNumber);
+		certificate = findCertificate(credentials.getUser().getRRN(), serialNumber);
 		return "success";
 	}
 	 
@@ -90,6 +118,8 @@ public class CertificateHandlerBean implements CertificateHandler {
 			certificate.setValidityEnd(map(certificatews.getValidityEnd()));
 		}
 		certificate.setX509(certificatews.getX509());
+		certificate.setRequesterName(certificatews.getRequesterName());
+		
 		return certificate;
 	}
 
@@ -107,5 +137,35 @@ public class CertificateHandlerBean implements CertificateHandler {
 		certificate = findCertificate(issuer, serialNumber);
 		log.info("<<< preprareRevocation: {0})",certificate);
 		return "revokeContract";
+	}
+	
+	@Override
+	public String showDetail(Certificate certificate) {
+		log.info(">>> showDetail(certificaat:{0})",certificate.toString());
+		this.certificate = findCertificate(credentials.getUser().getRRN(), certificate.getSerialNumber());
+		log.info("<<< showDetail: {0})",certificate);
+		return "certificateDetail";
+	}
+	
+	@Override
+	public String download(){
+		HttpServletResponse response = (HttpServletResponse) extCtx.getResponse();
+
+		response.setContentType("cer");
+
+		String fileName = certificate.getSerialNumber() + ".cer";
+		
+		response.addHeader("Content-disposition", "attachment; filename=\"" + fileName +"\"");
+		
+		try{
+			ServletOutputStream servletOutputStream = response.getOutputStream();
+			servletOutputStream.write(certificate.getX509().getBytes());
+			servletOutputStream.flush();
+			servletOutputStream.close();
+			facesContext.responseComplete();
+		}catch(Exception e){
+			log.error("Failure: " + e.toString());
+		}
+		return null;
 	}
 }

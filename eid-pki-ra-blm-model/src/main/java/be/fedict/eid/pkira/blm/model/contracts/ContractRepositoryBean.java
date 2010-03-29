@@ -74,7 +74,7 @@ public class ContractRepositoryBean implements ContractRepository {
 	@SuppressWarnings("unchecked")
 	@Override
 	// TODO: Select aanpassen met userRRN
-	public List<Certificate> findAllCertificates(String userRRN) {
+	public List<Certificate> findAllCertificates(String issuer) {
 		Query query = entityManager.createQuery("SELECT distinct c from Certificate c");
 		return query.getResultList();
 	}
@@ -85,9 +85,10 @@ public class ContractRepositoryBean implements ContractRepository {
 	@Override
 	public Certificate findCertificate(String issuer, BigInteger serialNumber) {
 		Query query = entityManager
-				.createQuery("SELECT distinct c from Certificate c WHERE issuer=? AND serialNumber=?");
-		query.setParameter(1, issuer);
-		query.setParameter(2, serialNumber);
+		//TODO: add issuer
+				.createQuery("SELECT distinct c from Certificate c WHERE serialNumber=?");
+		//query.setParameter(1, issuer);
+		query.setParameter(1, serialNumber);
 		try {
 			Certificate result = (Certificate) query.getSingleResult();
 			return result;

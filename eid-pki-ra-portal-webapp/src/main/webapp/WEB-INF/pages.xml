@@ -48,18 +48,24 @@
 	</page>
 
 	<page view-id="/page/certificates/certificates_list.xhtml">
-		<navigation from-action="#{certificatelist.detailCertificate(cer)}">
-			<rule if-outcome="showcertificate">
+		<navigation from-action="#{certificateHandler.showDetail(cer)}">
+			<rule if-outcome="certificateDetail">
 				<redirect view-id="/page/certificates/certificate_detail.xhtml" />
+			</rule>
+		</navigation>
+		<navigation
+			from-action="#{certificateHandler.prepareRevocation(cer.serialNumber, cer.issuer)}">
+			<rule if-outcome="revokeContract">
+				<redirect view-id="/page/contract/revocationContract.xhtml" />
 			</rule>
 		</navigation>
 	</page>
 
-	<page view-id="/page/certificates/certificates_list.xhtml">
-		<navigation from-action="#{certificateHandler.prepareRevocation(cer.serialNumber, cer.issuer)}">
-			<rule if-outcome="revokeContract">
-				<redirect view-id="/page/contract/revocationContract.xhtml" />
-			</rule>
+	<page view-id="/page/certificates/certificates_detail.xhtml">
+		<navigation>
+				<rule if-outcome="revokeContract">
+					<redirect view-id="/page/contract/revocationContract.xhtml" />
+				</rule>
 		</navigation>
 	</page>
 
@@ -68,7 +74,7 @@
 			<end-conversation before-redirect="true" />
 			<redirect view-id="/home.xhtml" />
 		</navigation>
-
+		
 		<navigation from-action="login">
 			<redirect view-id="/login.xhtml" />
 		</navigation>
@@ -83,6 +89,11 @@
 			<redirect view-id="/page/certificates/certificates_list.xhtml" />
 		</navigation>
 
+		<navigation from-action="revokeContract">
+			<begin-conversation join="true" />
+			<redirect view-id="/page/contract/revocationContract.xhtml" />
+		</navigation>
+		
 		<navigation from-action="register">
 			<begin-conversation join="true" />
 			<redirect view-id="/page/registration/requestRegistration.xhtml" />

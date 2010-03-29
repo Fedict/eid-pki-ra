@@ -7,39 +7,65 @@
 	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
 
 	<ui:define name="center">
-		<h:panelGrid columns="4" title="certificateDetail">
+		<h:messages />
+		<h:panelGrid columns="2" title="certificateDetail">
 			<f:facet name="header">
 				<h:outputText value="Certificate Detail overview." />
 			</f:facet>
 
-			<h:outputText value="Serial number" />
-			<h:outputText value="#{certificate.serialNumber}" />
+			<s:decorate id="serialNumberDecoration" template="/layout/edit.xhtml">
+				<ui:define name="label">Serial number</ui:define>
+				<h:outputText value="#{certificate.serialNumber}" />
+			</s:decorate>
+			<s:decorate id="distinguishedNameDecoration"
+				template="/layout/edit.xhtml">
+				<ui:define name="label">Subject</ui:define>
+				<h:outputText value="#{certificate.subject}" />
+			</s:decorate>
 
-			<h:outputText value="Subject" />
-			<h:outputText value="#{certificate.subject}" />
+			<s:decorate id="validityStartDecoration"
+				template="/layout/edit.xhtml">
+				<ui:define name="label">Validity start</ui:define>
+				<h:outputText value="#{certificate.validityStart}" />
+			</s:decorate>
 
-			<h:outputText value="Validity start" />
-			<h:outputText value="#{certificate.validityStart}" />
+			<s:decorate id="validityEndDecoration" template="/layout/edit.xhtml">
+				<ui:define name="label">Validity end</ui:define>
+				<h:outputText value="#{certificate.validityEnd}" />
+			</s:decorate>
 
-			<h:outputText value="Validity end" />
-			<h:outputText value="#{certificate.validityEnd}" />
+			<s:decorate id="requesterNameDecoration"
+				template="/layout/edit.xhtml">
+				<ui:define name="label">Requester name</ui:define>
+				<h:outputText value="#{certificate.requesterName}" />
+			</s:decorate>
 
-			<h:outputText value="Requester name" />
-			<h:outputText value="#{certificate.requesterName}" />
+			<s:decorate id="issuerDecoration" template="/layout/edit.xhtml">
+				<ui:define name="label">Issuer</ui:define>
+				<h:outputText value="#{certificate.issuer}" />
+			</s:decorate>
 
-			<h:outputText value="Issuer" />
-			<h:outputText value="#{certificate.issuer}" />
+			<s:decorate id="typeDecoration" template="/layout/edit.xhtml">
+				<ui:define name="label">Certificate type</ui:define>
+				<h:outputText value="#{certificate.type}" />
+			</s:decorate>
 
-			<h:outputText value="Certificate type" />
-			<h:outputText value="#{certificate.certificateType}" />
-			
-			<h:outputText value="base64 Csr" />
-			<h:outputText value="#{certificate.base64Csr}" />
+			<s:decorate id="x509Decoration" template="/layout/edit.xhtml">
+				<ui:define name="label">x509</ui:define>
+				<h:inputTextarea id="csr" value="#{certificate.x509}"
+					disabled="true" cols="90" rows="14" />
+			</s:decorate>
+
 		</h:panelGrid>
+		
 		<s:decorate template="/layout/buttonbox.xhtml" id="downloadButtonBox">
-			<h:commandButton action="#{certificateHandlerBean.download}"
-				value="#{messages['certificate.download']}" id="download" />
-			<s:button value="#{messages['general.back']}" action="back" id="backButton" />
+			<s:button action="#{certificateHandler.download}"
+				value="#{messages['certificate.download']}" id="downloadCertificate" />
+			<s:button id="revokeCertificate" value="#{messages['link.revoke']}"
+				action="revokeContract" />
+			<s:button value="#{messages['general.back']}" action="list"
+				id="backButton" />
 		</s:decorate>
+		
 	</ui:define>
 </ui:composition>

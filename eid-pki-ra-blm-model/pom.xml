@@ -172,10 +172,5 @@
 			<artifactId>commons-collections</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>javax.faces</groupId>
-			<artifactId>jsf-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
 	</dependencies>
 </project>
