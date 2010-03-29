@@ -19,11 +19,11 @@
 					<h:outputText value="#{cer.serialNumber}" />
 				</rich:column>
 
-				<rich:column sortBy="#{cer.distinguishedName.subject}" filterBy="#{cer.distinguishedName.subject}" filterEvent="onkeyup">
+				<rich:column sortBy="#{cer.distinguishedName}" filterBy="#{cer.distinguishedName}" filterEvent="onkeyup">
 					<f:facet name="header">
 						<h:outputText value="Distinguished name" />
 					</f:facet>
-					<h:outputText value="#{cer.distinguishedName.subject}" />
+					<h:outputText value="#{cer.distinguishedName}" />
 				</rich:column>
 
 				<rich:column sortBy="#{cer.validityStart}" filterBy="#{cer.validityStart}" filterEvent="onkeyup">

@@ -32,11 +32,13 @@ import org.jboss.seam.annotations.Scope;
  * @author Bram Baeyens
  *
  */
-@Name("listContainer")
+@Name(ListContainer.NAME)
 @Scope(ScopeType.APPLICATION)
 public class ListContainer implements Serializable {
 	
 	private static final long serialVersionUID = 2931481314588085666L;
+	
+	public static final String NAME = "be.fedict.eid.pkira.portal.listContainer";
 
 	// TODO (03032010): get these from configuration table
 	public List<SelectItem> getValidityPeriods() {

@@ -35,7 +35,7 @@
 				
 				<s:decorate id="distinguishedNameDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['certificate.dn']}:</ui:define>
-                	<h:outputText  id="distinguishedName" value="#{revocationContract.certificate.distinguishedName.subject}" />
+                	<h:outputText  id="distinguishedName" value="#{revocationContract.certificate.distinguishedName}" />
             	</s:decorate>
 				
 				<s:decorate id="validityStartDecoration" template="/layout/edit.xhtml">

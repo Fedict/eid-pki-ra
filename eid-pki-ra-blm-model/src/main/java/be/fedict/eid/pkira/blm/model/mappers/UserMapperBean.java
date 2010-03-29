@@ -37,7 +37,7 @@ public class UserMapperBean implements UserMapper {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public UserWS map(User user) {
+	public UserWS map(User user, boolean hasApprovedRegistrations) {
 		if (user == null) {
 			return null;
 		}
@@ -47,6 +47,7 @@ public class UserMapperBean implements UserMapper {
 		result.setFirstName(user.getFirstName());
 		result.setLastName(user.getLastName());
 		result.setNationalRegisterNumber(user.getNationalRegisterNumber());
+		result.setWithRegistrations(hasApprovedRegistrations);
 
 		return result;
 	}

@@ -17,6 +17,7 @@
 			http://jboss.com/products/seam/jms http://jboss.com/products/seam/jms-2.2.xsd">
 
 	<import>be.fedict.eid.pkira.blm</import>
+	<import>be.fedict.eid.pkira.common</import>
 
 	<component name="org.jboss.seam.core.init">
 		<property name="debug">false</property>

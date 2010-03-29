@@ -45,4 +45,6 @@ public interface RegistrationRepository {
 	Registration findRegistration(CertificateDomain domain, User user);
 
 	Registration getReference(Integer registrationId);
+	
+	int getNumberOfRegistrationsForForUserInStatus(User user, RegistrationStatus approved);
 }

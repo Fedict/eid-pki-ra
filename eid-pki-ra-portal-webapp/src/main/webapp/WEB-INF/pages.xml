@@ -12,6 +12,7 @@
 	</page>
 
 	<page view-id="/page/registration/requestRegistration.xhtml">
+		<restrict>#{s:hasRole('AUTHENTICATED_USER')}</restrict>
 		<navigation>
 			<rule if-outcome="success">
 				<redirect view-id="/home.xhtml" />
@@ -24,6 +25,7 @@
 	</page>
 
 	<page view-id="/page/contract/uploadCsr.xhtml">
+		<restrict>#{s:hasRole('REGISTERED_USER')}</restrict>
 		<navigation from-action="#{csrUploadHandler.uploadCertificateSigningRequest}">
 			<rule if-outcome="success">
 				<redirect view-id="/page/contract/requestContract.xhtml" />
@@ -32,6 +34,7 @@
 	</page>
 
 	<page view-id="/page/contract/requestContract.xhtml">
+		<restrict>#{s:hasRole('REGISTERED_USER')}</restrict>
 		<navigation from-action="#{requestContractPreSigningHandler.prepareSignment}">
 			<rule if-outcome="success">
 				<redirect view-id="/page/contract/signRequestContract.xhtml" />
@@ -40,6 +43,7 @@
 	</page>
 
 	<page view-id="/page/contract/revocationContract.xhtml">
+		<restrict>#{s:hasRole('REGISTERED_USER')}</restrict>
 		<navigation from-action="#{revocationContractPreSigningHandler.prepareSignment}">
 			<rule if-outcome="success">
 				<redirect view-id="/page/contract/signRevocationContract.xhtml" />
@@ -47,7 +51,8 @@
 		</navigation>
 	</page>
 
-	<page view-id="/page/certificates/certificates_list.xhtml">
+	<page view-id="/page/certificates/certificates_list.xhtml" >
+		<restrict>#{s:hasRole('REGISTERED_USER')}</restrict>
 		<navigation from-action="#{certificateHandler.showDetail(cer)}">
 			<rule if-outcome="certificateDetail">
 				<redirect view-id="/page/certificates/certificate_detail.xhtml" />
@@ -62,6 +67,7 @@
 	</page>
 
 	<page view-id="/page/certificates/certificates_detail.xhtml">
+		<restrict>#{s:hasRole('REGISTERED_USER')}</restrict>
 		<navigation>
 				<rule if-outcome="revokeContract">
 					<redirect view-id="/page/contract/revocationContract.xhtml" />

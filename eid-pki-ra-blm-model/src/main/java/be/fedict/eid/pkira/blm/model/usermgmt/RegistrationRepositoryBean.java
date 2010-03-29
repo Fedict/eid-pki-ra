@@ -97,5 +97,14 @@ public class RegistrationRepositoryBean implements RegistrationRepository {
 			return null;
 		}
 	}
+	
+	@Override
+	public int getNumberOfRegistrationsForForUserInStatus(User user, RegistrationStatus status) {
+		long result = (Long) entityManager.createNamedQuery("getNumberOfRegistrationsByUserAndStatus")
+			.setParameter("user", user)
+			.setParameter("status", status)
+			.getSingleResult();
+		return (int) result;		
+	}
 
 }

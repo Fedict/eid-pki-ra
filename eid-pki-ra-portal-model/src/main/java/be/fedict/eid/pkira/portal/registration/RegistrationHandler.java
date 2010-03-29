@@ -29,8 +29,8 @@ import org.jboss.seam.core.Conversation;
 import org.jboss.seam.faces.FacesMessages;
 
 import be.fedict.eid.pkira.authentication.EIdUser;
+import be.fedict.eid.pkira.common.security.EIdUserCredentials;
 import be.fedict.eid.pkira.generated.privatews.CertificateDomainWS;
-import be.fedict.eid.pkira.portal.security.EIdUserCredentials;
 import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 
 /**
@@ -60,7 +60,6 @@ public class RegistrationHandler {
 	 * {@inheritDoc}
 	 */
 	@Begin(join = true)
-	@Restrict("#{s:hasRole('AUTHENTICATED_USER')}")
 	@Factory(value = RegistrationHandler.REMAINING_CERTIFICATE_DOMAINS, scope = ScopeType.CONVERSATION)
 	public List<CertificateDomainWS> getCertificateDomains() {
 		String userRRN = credentials.getUsername();
@@ -70,7 +69,6 @@ public class RegistrationHandler {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Restrict("#{s:hasRole('AUTHENTICATED_USER')}")
 	public String submitRegistration() {
 		EIdUser user = credentials.getUser();
 		boolean result = serviceClient.createRegistrationForUser(user.getRRN(), user.getLastName(),

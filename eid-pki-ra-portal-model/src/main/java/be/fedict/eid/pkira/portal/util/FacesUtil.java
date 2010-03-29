@@ -31,9 +31,11 @@ import org.jboss.seam.annotations.Scope;
  * @author Bram Baeyens
  *
  */
-@Name("facesUtil")
+@Name(FacesUtil.NAME)
 @Scope(ScopeType.APPLICATION)
 public class FacesUtil implements Serializable {
+	
+	public static final String NAME = "be.fedict.eid.pkira.portal.facesUtil";
 	
 	private static final long serialVersionUID = 6653792472398286398L;
 

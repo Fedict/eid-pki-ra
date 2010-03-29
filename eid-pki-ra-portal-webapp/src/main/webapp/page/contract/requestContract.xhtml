@@ -15,13 +15,13 @@
 				
 				<s:decorate id="distinguishedNameDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['contract.request.dn']}:</ui:define>
-                	<h:outputText id="distinguishedName" value="#{requestContract.distinguishedName.subject}" />
+                	<h:outputText id="distinguishedName" value="#{requestContract.distinguishedName}" />
             	</s:decorate>
             	
             	<s:decorate id="certificateTypeDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['certificate.type']}:</ui:define> 
                 	<h:selectOneRadio id="certificateTypeRadioList" layout="lineDirection"
-                  			value="#{requestContract.certificate.type}" required="true">
+                  			value="#{requestContract.certificateType}" required="true">
   						<s:convertEnum />
 						<s:enumItem enumValue="SERVER" label="#{messages['certificate.type.server']}" />
 						<s:enumItem enumValue="CLIENT" label="#{messages['certificate.type.client']}" />
