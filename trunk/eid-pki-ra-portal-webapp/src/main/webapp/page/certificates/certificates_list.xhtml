@@ -9,8 +9,9 @@
 	<ui:define name="center">
 		<h:form id="certificatesListForm">
 			<h:outputText value="No messages to display" rendered="#{empty certificatesList}" />
-			<h:outputText value="messages to display" rendered="#{not empty certificatesList}" />
-			<rich:dataTable id="cerList" var="cer" value="#{certificatesList}" rendered="#{not empty certificatesList}" width="75%">
+			<h:outputText value="messages to display is: " rendered="#{not empty certificatesList}" />
+			<h:messages />
+			<rich:dataTable id="cerList" var="cer" value="#{certificates}" rendered="#{not empty certificates}" width="75%">
 				<rich:column sortBy="#{cer.serialNumber}" filterBy="#{cer.serialNumber}" filterEvent="onkeyup">
 					<f:facet name="header">
 						<h:outputText value="SerialNumber" />
@@ -62,7 +63,7 @@
 
 				<rich:column>
 					<s:link id="detailCertificate" value="#{messages['link.detail']}"
-						action="#{certificatelist.detailCertificate(cer)}" />
+						action="#{certificateHandler.showDetail(cer)}" />
 				</rich:column>
 
 				<rich:column>

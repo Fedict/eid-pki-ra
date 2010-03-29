@@ -30,5 +30,9 @@ public interface CertificateHandler extends Serializable {
 	
 	String prepareRevocation(String serialNumber, String issuer);
 
+	String showDetail(Certificate certificate);
+	
 	String getCertificate(String serialNumber);
+	
+	String download();
 }

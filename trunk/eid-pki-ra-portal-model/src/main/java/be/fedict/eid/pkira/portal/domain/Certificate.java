@@ -43,9 +43,11 @@ public class Certificate implements Serializable {
 	private Date validityEnd;
 	private String x509;
 	private String issuer;
+	private String requesterName;
+	private String subject;
 	
 	private CSRInfo distinguishedName;
-
+		
 	public String getSerialNumber() {
 		return serialNumber;
 	}
@@ -102,6 +104,34 @@ public class Certificate implements Serializable {
 		this.issuer = issuer;
 	}
 
+	/**
+	 * @return the requesterName
+	 */
+	public String getRequesterName() {
+		return requesterName;
+	}
+	
+	/**
+	 * @param requesterName the requesterName to set
+	 */
+	public void setRequesterName(String requesterName) {
+		this.requesterName = requesterName;
+	}
+	
+	/**
+	 * @return the subject
+	 */
+	public String getSubject() {
+		return subject;
+	}
+	
+	/**
+	 * @param subject the subject to set
+	 */
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
 	@Override
 	public String toString() {
 		return new StringBuilder("Certificate[")
@@ -111,6 +141,8 @@ public class Certificate implements Serializable {
 				.append(", validityEnd=").append(validityEnd)
 				.append(", issuer=").append(issuer)
 				.append(", distinguishedName=").append(distinguishedName)
+				.append(", requestName=").append(requesterName)
+				.append(", subject=").append(subject)
 				.append(']').toString();
 	}
 }
