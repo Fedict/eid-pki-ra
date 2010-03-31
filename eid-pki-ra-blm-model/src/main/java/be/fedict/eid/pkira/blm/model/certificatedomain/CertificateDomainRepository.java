@@ -49,4 +49,6 @@ public interface CertificateDomainRepository {
 
 	List<CertificateDomain> findByCertificateTypes(Set<CertificateType> types);	
 	
+	List<CertificateDomain> findAll();
+	
 }

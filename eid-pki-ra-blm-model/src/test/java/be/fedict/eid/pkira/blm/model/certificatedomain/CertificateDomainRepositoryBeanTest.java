@@ -116,6 +116,14 @@ public class CertificateDomainRepositoryBeanTest extends DatabaseTest {
 		assertTrue(domains.contains(valid));
 	}
 
+	@Test(dependsOnMethods = "persist")
+	public void findAll() throws Exception {
+		List<CertificateDomain> result = repository.findAll();
+		assertNotNull(result);
+		assertTrue(result.size() == 1);
+		assertTrue(result.contains(valid));
+	}
+
 	private CertificateDomain createCertificateDomain(String dnExpression, String name) {
 		CertificateDomain certificateDomain = new CertificateDomain();
 		certificateDomain.setDnExpression(dnExpression);

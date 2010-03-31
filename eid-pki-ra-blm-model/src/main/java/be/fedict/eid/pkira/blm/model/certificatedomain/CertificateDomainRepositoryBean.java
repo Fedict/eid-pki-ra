@@ -112,4 +112,10 @@ public class CertificateDomainRepositoryBean implements CertificateDomainReposit
 	public CertificateDomain getReference(Integer primaryKey) {
 		return entityManager.getReference(CertificateDomain.class, primaryKey);
 	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<CertificateDomain> findAll() {
+		return entityManager.createNamedQuery("findCertificateDomainAll").getResultList();
+	}
 }

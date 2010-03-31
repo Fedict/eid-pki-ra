@@ -42,7 +42,8 @@ import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 			@NamedQuery(name = "findCertificateDomainByName", query = "FROM CertificateDomain WHERE name = :name"),
 			@NamedQuery(name = "findCertificateDomainByDnExpression", query = "FROM CertificateDomain WHERE dnExpression = :dnExpression"),
 			@NamedQuery(name = "findCertificateDomainUnregistered", query = "FROM CertificateDomain cd WHERE cd NOT IN (SELECT r.certificateDomain FROM Registration r WHERE r.requester = :requester) ORDER BY cd.name"),
-			@NamedQuery(name = "findCertificateDomainByCertificateTypes", query = "FROM CertificateDomain WHERE (clientCertificate=:forClient OR :forClient=FALSE) AND (serverCertificate=:forServer OR :forServer=FALSE) AND (codeSigningCertificate=:forCode OR :forCode=FALSE)")
+			@NamedQuery(name = "findCertificateDomainByCertificateTypes", query = "FROM CertificateDomain WHERE (clientCertificate=:forClient OR :forClient=FALSE) AND (serverCertificate=:forServer OR :forServer=FALSE) AND (codeSigningCertificate=:forCode OR :forCode=FALSE)"),
+			@NamedQuery(name = "findCertificateDomainAll", query = "FROM CertificateDomain cd ORDER BY cd.name")
 
 	})
 public class CertificateDomain implements Serializable {
