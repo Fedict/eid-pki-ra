@@ -1,0 +1,22 @@
+options{  STATIC = false;  JDK_VERSION = "1.6";}
+
+PARSER_BEGIN(DistinguishedNameParser)
+package be.fedict.eid.pkira.dnfilter;
+
+import java.util.ArrayList;import java.util.List;import java.util.SortedMap;import java.util.TreeMap;
+public class DistinguishedNameParser {  class State {    // Parts in the expression: map of keys onto its set of values.    SortedMap<String, List<String>>  parts = new TreeMap<String, List<String>>();  }
+}
+
+PARSER_END(DistinguishedNameParser)
+
+<DEFAULT> TOKEN: {  < #LETTER: ["a"-"z","A"-"Z"] >| < #DIGIT: ["0"-"9"] >| < #SPECIAL_CHAR: "-"|"_"|"." >}<DEFAULT> TOKEN:{  < KEY:	 (<LETTER>)+ >| < EQUALS: "=" > : VALUE| < COMMA: "," > }<VALUE> TOKEN:{  < LITERAL_VALUE: (<LETTER>|<DIGIT>|<SPECIAL_CHAR>)+ > : DEFAULT| < WILDCARD: "*" > : DEFAULT}
+
+<*> SKIP: {
+  <WS: " " >
+}
+
+private void dnPart(State state):{
+  Token key, value;}
+{
+  key = 	<KEY> <EQUALS> ( value=<LITERAL_VALUE> | value=<WILDCARD> )  
+  {    String k = key.image.toLowerCase();    if (!state.parts.containsKey(k))    {      state.parts.put(k, new ArrayList<String>());    }    state.parts.get(k).add(value.image);  }}SortedMap<String, List<String>> distinguishedName():{  State state = new State();}{  dnPart(state) ( <COMMA> dnPart(state) )* <EOF>    {        return state.parts;  }}

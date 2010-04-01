@@ -1,0 +1,180 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: small;
+	background-color: white;
+}
+
+h1 {
+	color: gray;
+}
+
+h2 {
+	color: #FF9000;
+	font-size: large;
+	font-family: Arial;
+}
+
+h3 {
+	color: #FF9000;
+	font-size: medium;
+	font-family: Arial;
+	font-style: italic;
+}
+
+#fed {
+	font-size: 25px;
+	font-weight: bold;
+	float: left;
+	color: black;
+}
+
+#ictegov {
+	font-size: 25px;
+	font-weight: bold;
+	float: left;
+	background-color: #d9d9d9;
+	color: #FF9000;
+	margin-right: 30px;
+}
+
+#ict {
+	float: left;
+}
+
+#egov {
+	float: left;
+	background-color: #d9d9d9;
+	color: gray;
+	padding-left: 5px;
+	padding-right: 10px;
+	padding-bottom: 17px;
+	font-size: 10px;
+	padding-right: 10px;
+}
+
+#header {
+	width: 700px;
+	margin: 0 auto;
+}
+
+#menu {
+	width: 700px;
+	height: 44px;
+	background-color: #e0e0e0;
+	margin: 0 auto;
+}
+
+#menu ul {
+	padding: 13px 0 0 20px;
+	list-style: none;
+}
+
+#menu li {
+	float: left;
+}
+
+#menu a {
+	display: block;
+	margin-right: 3px;
+	margin-left: 3px;
+	padding: 5px 20px 7px 20px;
+	text-decoration: none;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	color: #000000;
+}
+
+#menu a:hover {
+	background: #FF9000;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.selected {
+	background: #FF9000;
+}
+
+#content {
+	width: 700px;
+	margin: 0 auto;
+	color: #303030;
+}
+
+html{
+	background-color: #DBD4C6;
+}
+
+input, textarea, select{
+	border: 1px solid #C3BBB6;
+	margin-right: 5px;
+}
+
+/* Layout
+----------------------------------------------- */
+
+#footer {
+	padding: 5px;
+	border-top: 1px solid #C3BBB6 ;
+	text-align: center;	
+}
+
+/* common */
+
+.message {
+	border: 1px solid #FF9933;
+	padding: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	width:100%;
+	font-size: 12px;
+}
+
+.name {
+	vertical-align: top;
+	font-weight: bold;
+	width: 150px;
+	margin-top: 3px;
+}
+.value {
+}
+
+/*.buttonBox {
+	border-top: 1px solid #C3BBB6;
+	padding-right:10px;
+	margin-top:10px;
+	width:100%;
+}*/
+
+.error {
+	padding: 5px;
+}
+.errors {
+	color: #CC0000;
+	vertical-align: middle;
+}
+
+img.errors {
+	padding-right: 5px;
+}
+
+.errors input, .errors textarea{ 
+	border: 1px solid #CC0000; 
+}
+
+.required {
+	color: #CC0000;
+	padding-left: 2px;
+}
+
+/* customize richfaces */
+
+.rich-panel{
+	padding-top:0;
+	border-right:0;
+	border-bottom:0;
+	border-top:0;
+}
+
+.rich-table{
+	width:100%;
+}

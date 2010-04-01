@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:messages />
+		<h:panelGrid columns="2" title="certificateDetail">
+			<f:facet name="header">
+				<h:outputText value="Certificate Detail overview." />
+			</f:facet>
+
+			<s:decorate id="serialNumberDecoration" template="/layout/edit.xhtml">
+				<ui:define name="label">Serial number</ui:define>
+				<h:outputText value="#{certificate.serialNumber}" />
+			</s:decorate>
+			<s:decorate id="distinguishedNameDecoration"
+				template="/layout/edit.xhtml">
+				<ui:define name="label">Subject</ui:define>
+				<h:outputText value="#{certificate.subject}" />
+			</s:decorate>
+
+			<s:decorate id="validityStartDecoration"
+				template="/layout/edit.xhtml">
+				<ui:define name="label">Validity start</ui:define>
+				<h:outputText value="#{certificate.validityStart}" />
+			</s:decorate>
+
+			<s:decorate id="validityEndDecoration" template="/layout/edit.xhtml">
+				<ui:define name="label">Validity end</ui:define>
+				<h:outputText value="#{certificate.validityEnd}" />
+			</s:decorate>
+
+			<s:decorate id="requesterNameDecoration"
+				template="/layout/edit.xhtml">
+				<ui:define name="label">Requester name</ui:define>
+				<h:outputText value="#{certificate.requesterName}" />
+			</s:decorate>
+
+			<s:decorate id="issuerDecoration" template="/layout/edit.xhtml">
+				<ui:define name="label">Issuer</ui:define>
+				<h:outputText value="#{certificate.issuer}" />
+			</s:decorate>
+
+			<s:decorate id="typeDecoration" template="/layout/edit.xhtml">
+				<ui:define name="label">Certificate type</ui:define>
+				<h:outputText value="#{certificate.type}" />
+			</s:decorate>
+
+			<s:decorate id="x509Decoration" template="/layout/edit.xhtml">
+				<ui:define name="label">x509</ui:define>
+				<h:inputTextarea id="csr" value="#{certificate.x509}"
+					disabled="true" cols="90" rows="14" />
+			</s:decorate>
+
+		</h:panelGrid>
+		
+		<s:decorate template="/layout/buttonbox.xhtml" id="downloadButtonBox">
+			<s:button action="#{certificateHandler.download}"
+				value="#{messages['certificate.download']}" id="downloadCertificate" />
+			<s:button id="revokeCertificate" value="#{messages['link.revoke']}"
+				action="revokeContract" />
+			<s:button value="#{messages['general.back']}" action="list"
+				id="backButton" />
+		</s:decorate>
+		
+	</ui:define>
+</ui:composition>
