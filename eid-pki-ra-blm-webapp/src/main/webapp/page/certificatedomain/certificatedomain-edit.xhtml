@@ -35,7 +35,7 @@
 	           	</s:decorate>
 	           	
 	          	<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
-					<h:commandButton action="#{be.fedict.eid.pkira.blm.CertificateDomainHandler.saveCertificateDomain}" value="#{messages['button.save']}" id="submit"/>
+					<h:commandButton action="#{certificateDomainHandler.saveCertificateDomain}" value="#{messages['button.save']}" id="submit"/>
 					<s:button value="#{messages['button.cancel']}" action="cancel" id="cancel"/>
 				</s:decorate> 
 			</rich:panel>

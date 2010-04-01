@@ -18,22 +18,9 @@
 	<!--  Certificate domain management -->
 	<page view-id="/page/certificatedomain/certificatedomain-edit.xhtml">
 		<restrict>#{s:hasRole('ADMIN_USER')}</restrict>
-		<navigation from-action="#{be.fedict.eid.pkira.blm.CertificateDomainHandler.saveCertificateDomain}">
+		<navigation from-action="#{certificateDomainHandler.saveCertificateDomain}">
 			<rule if-outcome="success">
-				<redirect view-id="/page/certificatedomain/certificatedomain-list.xhtml" />
-			</rule>
-		</navigation>
-		<navigation from-action="cancel">
-			<redirect view-id="/page/certificatedomain/certificatedomain-list.xhtml" />
-		</navigation>
-	</page>
-
-	<!--  Certificate domain management -->
-	<page view-id="/page/certificatedomain/certificatedomain-list.xhtml">
-		<restrict>#{s:hasRole('ADMIN_USER')}</restrict>
-		<navigation>
-			<rule if-outcome="success">
-				<redirect view-id="/page/certificatedomain/certificatedomain-edit.xhtml" />
+				<redirect view-id="/home.xhtml" />
 			</rule>
 		</navigation>
 		<navigation from-action="cancel">
@@ -59,7 +46,7 @@
 
 		<navigation from-action="certificatedomains">
 			<end-conversation before-redirect="true" />
-			<redirect view-id="/page/certificatedomain/certificatedomain-list.xhtml" />
+			<redirect view-id="/page/certificatedomain/certificatedomain-edit.xhtml" />
 		</navigation>
 		
 		<navigation from-action="registrations">
