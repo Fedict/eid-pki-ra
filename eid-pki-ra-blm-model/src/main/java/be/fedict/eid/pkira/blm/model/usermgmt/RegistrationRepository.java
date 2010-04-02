@@ -41,10 +41,14 @@ public interface RegistrationRepository {
 	void setApproved(Registration registration);
 	
 	List<Registration> findAllNewRegistrations();
+	
+	List<Registration> findApprovedRegistrationsByUser(User user);
 
 	Registration findRegistration(CertificateDomain domain, User user);
 
 	Registration getReference(Integer registrationId);
 	
 	int getNumberOfRegistrationsForForUserInStatus(User user, RegistrationStatus approved);
+
+	
 }

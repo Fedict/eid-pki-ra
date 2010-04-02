@@ -21,18 +21,22 @@ import java.math.BigInteger;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.jboss.seam.annotations.Name;
 
+import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.crypto.CertificateInfo;
 
 @Entity
@@ -45,27 +49,45 @@ public class Certificate implements Serializable {
 
 	@Id
 	@GeneratedValue
+	@Column(name = "CERTIFICATE_ID", nullable = false, unique = true)
 	private Integer id;
 
+	@Column(name = "SERIAL_NUMBER", nullable = false)
 	private BigInteger serialNumber;
+
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
+	@Column(name = "X509", nullable = false)
 	private String x509;
+
+	@Column(name = "DISTINGUISHED_NAME", nullable = false)
 	private String distinguishedName;
+
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "VALIDITY_START", nullable = false)
 	private Date validityStart;
+
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "VALIDITY_END", nullable = false)
 	private Date validityEnd;
+
+	@Column(name = "REQUESTER", nullable = false)
 	private String requesterName;
+
+	@Column(name = "ISSUER", nullable = false)
 	private String issuer;
+
 	@Enumerated
+	@Column(name = "CERTIFICATE_TYPE", nullable = false)
 	private CertificateType certificateType;
 
 	@OneToOne(optional = true, fetch = FetchType.LAZY)
+	@JoinColumn(name = "CONTRACT")
 	private CertificateSigningContract contract;
 
-	// @ManyToOne(optional = true)
-	// private CertificateDomain certificateDomain;
+	@ManyToOne(optional = false)
+	@JoinColumn(name="CERTIFICATE_DOMAIN_ID", nullable=false)
+	private CertificateDomain certificateDomain;
 
 	public Certificate() {
 	}
@@ -81,6 +103,7 @@ public class Certificate implements Serializable {
 		this.certificateType = contract.getCertificateType();
 		this.requesterName = requesterName;
 		this.contract = contract;
+		this.certificateDomain = contract.getCertificateDomain();
 	}
 
 	public BigInteger getSerialNumber() {
@@ -192,6 +215,16 @@ public class Certificate implements Serializable {
 
 	public void setCertificateType(CertificateType certificateType) {
 		this.certificateType = certificateType;
+	}
+
+	
+	public CertificateDomain getCertificateDomain() {
+		return certificateDomain;
+	}
+
+	
+	public void setCertificateDomain(CertificateDomain certificateDomain) {
+		this.certificateDomain = certificateDomain;
 	}
 
 	// public void setCertificateDomain(CertificateDomain certificateDomain) {

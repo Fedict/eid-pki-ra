@@ -29,6 +29,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.blm.model.DatabaseTest;
+import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.contracts.Certificate;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
@@ -53,10 +54,14 @@ public class ContractRepositoryBeanTest extends DatabaseTest {
 
 	private ContractRepositoryBean bean;
 	
+	private CertificateDomain certificateDomain;
+	
 	@BeforeMethod
 	public void setup() {
 		bean = new ContractRepositoryBean();
-		bean.setEntityManager(getEntityManager());		
+		bean.setEntityManager(getEntityManager());
+		
+		certificateDomain = loadObject(CertificateDomain.class, TEST_CERTIFICATE_DOMAIN_ID);
 	}
 	
 	@Test(dependsOnMethods="testPersistCertificate")
@@ -101,6 +106,7 @@ public class ContractRepositoryBeanTest extends DatabaseTest {
 		contract.setRequester(VALID_REQUESTER);
 		contract.setSubject(VALID_DN);
 		contract.setValidityPeriodMonths(VALID_VALIDITY);
+		contract.setCertificateDomain(certificateDomain);
 		
 		return contract;
 	}
@@ -126,6 +132,8 @@ public class ContractRepositoryBeanTest extends DatabaseTest {
 		certificate.setValidityEnd(VALID_ENDDATE);
 		certificate.setValidityStart(VALID_STARTDATE);
 		certificate.setX509(VALID_X509);
+		certificate.setCertificateDomain(certificateDomain);
+		
 		return certificate;
 	}
 

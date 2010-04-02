@@ -19,6 +19,7 @@ package be.fedict.eid.pkira.blm.model.contracts;
 import java.io.Serializable;
 
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
@@ -27,8 +28,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 
 /**
  * A received contract document.
@@ -44,12 +49,23 @@ public abstract class AbstractContract implements Serializable {
 	private static final long serialVersionUID = -5082287440865809644L;
 
 	@Id	@GeneratedValue
+	@Column(name = "CONTRACT_ID", nullable=false)
 	private Integer id;
+	
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
+	@Column(name = "CONTRACT_DOCUMENT", nullable=false)
 	private String contractDocument;
+	
+	@Column(name = "SUBJECT", nullable=false)
 	private String subject;
+	
+	@Column(name = "REQUESTER", nullable=false)
 	private String requester;
+	
+	@ManyToOne(optional=false)
+	@JoinColumn(name="CERTIFICATE_DOMAIN_ID", nullable=false)
+	private CertificateDomain certificateDomain;
 
 	public String getContractDocument() {
 		return contractDocument;
@@ -77,5 +93,15 @@ public abstract class AbstractContract implements Serializable {
 
 	public Integer getId() {
 		return id;
+	}
+
+	
+	public CertificateDomain getCertificateDomain() {
+		return certificateDomain;
+	}
+
+	
+	public void setCertificateDomain(CertificateDomain certificateDomain) {
+		this.certificateDomain = certificateDomain;
 	}
 }

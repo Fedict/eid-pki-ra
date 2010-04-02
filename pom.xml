@@ -111,7 +111,7 @@
 
 		<repository>
 			<id>fedict</id>
-			<name>FedICT repository</name>
+			<name>Fedict repository</name>
 			<url>https://www.e-contract.be/maven2/</url>
 			<releases>
 				<enabled>true</enabled>

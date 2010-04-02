@@ -16,6 +16,8 @@
  */
 package be.fedict.eid.pkira.blm.model.usermgmt;
 
+import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
+
 /**
  * Manager for registrations.
  * 
@@ -27,24 +29,44 @@ public interface RegistrationManager {
 
 	/**
 	 * Registers a user for a domain.
+	 * 
 	 * @throws RegistrationException
 	 *             if this fails.
 	 */
 	void registerUser(String userRRN, String userLastName, String userFirstName, int domainId, String emailAddress)
 			throws RegistrationException;
-	
+
 	/**
 	 * Approve the registration.
-	 * @param integer the ID of the registration.
-	 * @param reasonText reason to approve the registration.
+	 * 
+	 * @param integer
+	 *            the ID of the registration.
+	 * @param reasonText
+	 *            reason to approve the registration.
 	 */
 	void approveRegistration(Integer integer, String reasonText);
-	
+
 	/**
 	 * Disapprove the registration.
-	 * @param integer the ID of the registration.
-	 * @param reasonText reason to disapprove the registration.
+	 * 
+	 * @param integer
+	 *            the ID of the registration.
+	 * @param reasonText
+	 *            reason to disapprove the registration.
 	 */
 	void disapproveRegistration(Integer integer, String reasonText);
+
+	/**
+	 * Checks if a user is allowed to register or revoke certificates with the
+	 * given DN.
+	 * 
+	 * @param userRRN
+	 *            the RRN of the user to check.
+	 * @param distinguishedName
+	 *            the DN to check.
+	 * @return the registration for this user and certificate domain (null if
+	 *         the user is not authorized).
+	 */
+	Registration findRegistrationForUserDNAndCertificateType(String userRRN, String distinguishedName, CertificateType type);
 
 }

@@ -41,14 +41,9 @@ import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
  */
 public class RegistrationRepositoryBeanTest extends DatabaseTest {
 
-	private static final String NRN = "rTestNRN";
-	private static final String FIRST_NAME = "rTestFN";
-	private static final String LAST_NAME = "rTestLN";
-	private static final String DN_EXPRESSION = "rTestDnExpression";
-	private static final String NAME = "rTestName";
 	private static final String EMAIL = "rAbc@de.fg";
 	private static final String EMAIL_2 = "rAbc@de.fg2";
-
+	
 	private RegistrationRepositoryBean registrationRepository;
 	private Registration valid;
 	private User requester;
@@ -59,8 +54,8 @@ public class RegistrationRepositoryBeanTest extends DatabaseTest {
 		registrationRepository = new RegistrationRepositoryBean();
 		registrationRepository.setEntityManager(getEntityManager());
 
-		requester = createPersistedUser(NRN, FIRST_NAME, LAST_NAME);
-		certificateDomain = createPersistedCertificateDomain(DN_EXPRESSION, NAME);
+		requester = loadObject(User.class, TEST_USER_ID);
+		certificateDomain = loadObject(CertificateDomain.class, TEST_CERTIFICATE_DOMAIN_ID);
 	}	
 
 	@Test
@@ -76,7 +71,7 @@ public class RegistrationRepositoryBeanTest extends DatabaseTest {
 		User requester2 = getEntityManager().getReference(User.class, requester.getId());
 		Collection<Registration> registrations = requester2.getRegistrations();
 		assertNotNull(registrations);
-		assertEquals(registrations.size(), 1);
+		assertEquals(3, registrations.size());
 	}
 
 	@Test(dependsOnMethods = "persist", expectedExceptions = PersistenceException.class)
@@ -114,6 +109,15 @@ public class RegistrationRepositoryBeanTest extends DatabaseTest {
 	public void getNumberOfRegistrationsForForUserInStatus() {
 		assertTrue(registrationRepository.getNumberOfRegistrationsForForUserInStatus(requester, RegistrationStatus.NEW)>0);
 	}
+	
+	@Test
+	public void findApprovedRegistrationsByUser() {
+		List<Registration> registrations  = registrationRepository.findApprovedRegistrationsByUser(requester);
+		
+		assertNotNull(registrations);
+		assertTrue(registrations.size()==1);
+		
+	}
 
 	private Registration createRegistration(String email, CertificateDomain certificateDomain, User requester) {
 		Registration registration = new Registration();
@@ -122,23 +126,5 @@ public class RegistrationRepositoryBeanTest extends DatabaseTest {
 		registration.setCertificateDomain(certificateDomain);
 		registration.setRequester(requester);
 		return registration;
-	}
-
-	private User createPersistedUser(String nationalRegisterNumber, String firstName, String lastName) {
-		User user = new User();
-		user.setNationalRegisterNumber(nationalRegisterNumber);
-		user.setFirstName(firstName);
-		user.setLastName(lastName);
-		persistObject(user);
-		return user;
-	}
-
-	private CertificateDomain createPersistedCertificateDomain(String dnExpression, String name) {
-		final CertificateDomain certificateDomain = new CertificateDomain();
-		certificateDomain.setDnExpression(dnExpression);
-		certificateDomain.setName(name);
-
-		persistObject(certificateDomain);
-		return certificateDomain;
 	}
 }
