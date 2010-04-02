@@ -42,119 +42,110 @@ import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 
 /**
  * @author Bram Baeyens
- *
  */
 @Entity
-@Table(uniqueConstraints = {
-		@UniqueConstraint(columnNames={"FK_REQUESTER_ID", "FK_CERTIFICATE_DOMAIN_ID"})
-})
+@Table(uniqueConstraints =
+	{ @UniqueConstraint(columnNames =
+		{ "FK_REQUESTER_ID", "FK_CERTIFICATE_DOMAIN_ID" }) })
 @NamedQueries(
 	{
-		@NamedQuery(
-				name = "findRegistrationsByStatus",	
-				query = "SELECT r FROM Registration r WHERE r.status = :status"
-		),
-		@NamedQuery(
-				name = "findRegistrationByCertificateDomainAndRequester",	
-				query = "SELECT r FROM Registration r WHERE r.certificateDomain = :certificateDomain AND r.requester=:requester"
-		),
-		@NamedQuery(
-				name="getNumberOfRegistrationsByUserAndStatus",
-				query="SELECT count(*) FROM Registration r WHERE r.requester=:user AND r.status=:status"
-		)
-	}
-)
+			@NamedQuery(
+					name = "findRegistrationsByStatus", 
+					query = "FROM Registration r WHERE r.status = :status"),
+			@NamedQuery(
+					name = "findRegistrationByCertificateDomainAndRequester", 
+					query = "FROM Registration r WHERE r.certificateDomain = :certificateDomain AND r.requester=:requester"),
+			@NamedQuery(
+					name = "getNumberOfRegistrationsByUserAndStatus", 
+					query = "SELECT count(*) FROM Registration r WHERE r.requester=:user AND r.status=:status"),
+			@NamedQuery(
+					name = "getRegistrationsByUserAndStatus", 
+					query = "FROM Registration r WHERE r.requester=:user AND r.status=:status") })
 public class Registration implements Serializable {
-	
+
 	private static final long serialVersionUID = -703013819235326427L;
-	
-	@Id @GeneratedValue
-	@Column(name="REGISTRATION_ID")
+
+	@Id
+	@GeneratedValue
+	@Column(name = "REGISTRATION_ID")
 	private Integer id;
 	@Enumerated(EnumType.STRING)
-	@Column(name="REGISTRATION_STATUS")
+	@Column(name = "REGISTRATION_STATUS")
 	private RegistrationStatus status;
-	@Email @NotEmpty
-	@Column(name="EMAIL", nullable=false)
+	@Email
+	@NotEmpty
+	@Column(name = "EMAIL", nullable = false)
 	private String email;
-	@ManyToOne @NotNull
-	@JoinColumn(name="FK_REQUESTER_ID",
-			referencedColumnName="USER_ID")
+	@ManyToOne
+	@NotNull
+	@JoinColumn(name = "FK_REQUESTER_ID", referencedColumnName = "USER_ID")
 	private User requester;
-	@ManyToOne @NotNull
-	@JoinColumn(name="FK_CERTIFICATE_DOMAIN_ID",
-			referencedColumnName="CERTIFICATE_DOMAIN_ID")
+	@ManyToOne
+	@NotNull
+	@JoinColumn(name = "FK_CERTIFICATE_DOMAIN_ID", referencedColumnName = "CERTIFICATE_DOMAIN_ID")
 	private CertificateDomain certificateDomain;
 
 	public Integer getId() {
 		return id;
 	}
-	
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
+
 	public RegistrationStatus getStatus() {
 		return status;
 	}
-	
+
 	public void setStatus(RegistrationStatus status) {
 		this.status = status;
 	}
-	
+
 	public String getEmail() {
 		return email;
 	}
-	
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
 	public User getRequester() {
 		return requester;
 	}
-	
+
 	public void setRequester(User requester) {
 		this.requester = requester;
 	}
-	
+
 	public CertificateDomain getCertificateDomain() {
 		return certificateDomain;
 	}
-	
+
 	public void setCertificateDomain(CertificateDomain certificateDomain) {
 		this.certificateDomain = certificateDomain;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
-		} 
+		}
 		if (!(obj instanceof Registration)) {
 			return false;
 		}
 		Registration that = (Registration) obj;
-		return this.certificateDomain.equals(that.certificateDomain)
-				&& this.requester.equals(that.requester);
+		return this.certificateDomain.equals(that.certificateDomain) && this.requester.equals(that.requester);
 	}
-	
+
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(17, 43)
-				.append(certificateDomain)
-				.append(requester)
-				.toHashCode();
+		return new HashCodeBuilder(17, 43).append(certificateDomain).append(requester).toHashCode();
 	}
-	
+
 	@Override
 	public String toString() {
-		return new StringBuilder("Registration[")
-				.append("id=").append(id)
-				.append(", email=").append(email)
-				.append(", status=").append(status)
-				.append(", requester=").append(requester)
-				.append(", certificateDomain=").append(certificateDomain)
-				.append(']').toString();				
+		return new StringBuilder("Registration[").append("id=").append(id).append(", email=").append(email).append(
+				", status=").append(status).append(", requester=").append(requester).append(", certificateDomain=")
+				.append(certificateDomain).append(']').toString();
 	}
 }

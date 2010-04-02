@@ -63,9 +63,22 @@ public class RegistrationRepositoryBean implements RegistrationRepository {
 		entityManager.persist(registration);
 	}
 	
+	@Override
+	public List<Registration> findApprovedRegistrationsByUser(User user) {
+		return findRegistrationsByUserAndStatus(user, RegistrationStatus.APPROVED);
+	}
+	
 	@SuppressWarnings("unchecked")
 	private List<Registration> findRegistrationsByStatus(RegistrationStatus status) {
 		return entityManager.createNamedQuery("findRegistrationsByStatus")
+				.setParameter("status", status)
+				.getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	private List<Registration> findRegistrationsByUserAndStatus(User user, RegistrationStatus status) {
+		return entityManager.createNamedQuery("getRegistrationsByUserAndStatus")
+				.setParameter("user", user)
 				.setParameter("status", status)
 				.getResultList();
 	}

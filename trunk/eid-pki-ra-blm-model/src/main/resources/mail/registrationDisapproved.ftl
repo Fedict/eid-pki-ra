@@ -4,7 +4,7 @@ pki-ra@fedict.be
 ===
 Your registration for ${certificateDomain.name} has been disapproved
 ===
-<p>Dear ${user.firstName} ${user.lastName},</p>
+<p>Dear ${user.name},</p>
 
 <p>
 You recently registered yourself to use the certificate domain ${certificateDomain.name}. 

@@ -50,6 +50,9 @@ public abstract class AbstractSignatureHttpRequestHandler<T extends ResponseType
 				byte[] contract = Base64.decodeBase64(signatureResponse);
 				String result = invokeServiceClient(new String(contract));
 				T serviceClientResponse = unmarshall(result);
+				
+				getFacesMessages().addFromResourceBundle("contract.status." + serviceClientResponse.getResult().name(), serviceClientResponse.getResultMessage());
+				
 				if (ResultType.SUCCESS.equals(serviceClientResponse.getResult())) {
 					// TODO (20100308): put necessary data on the context
 					redirectStatus = SUCCESSFUL_REDIRECT;

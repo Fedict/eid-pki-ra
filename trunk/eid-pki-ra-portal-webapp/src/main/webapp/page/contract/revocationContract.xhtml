@@ -60,7 +60,7 @@
 				
 				<s:decorate id="descriptionDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['contract.description']}:</ui:define>
-                	<h:inputTextarea id="operatorEmail" value="#{revocationContract.description}" cols="90" rows="14" />
+                	<h:inputTextarea id="operatorEmail" value="#{revocationContract.description}" cols="90" rows="14" required="true" />
             	</s:decorate>
             	
 				<s:decorate template="/layout/buttonbox.xhtml" id="revocationContractButtonBox">

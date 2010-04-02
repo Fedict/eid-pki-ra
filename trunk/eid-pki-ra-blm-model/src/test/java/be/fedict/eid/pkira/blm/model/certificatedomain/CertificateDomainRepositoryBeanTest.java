@@ -120,7 +120,7 @@ public class CertificateDomainRepositoryBeanTest extends DatabaseTest {
 	public void findAll() throws Exception {
 		List<CertificateDomain> result = repository.findAll();
 		assertNotNull(result);
-		assertTrue(result.size() == 1);
+		assertTrue(result.size() >= 1);
 		assertTrue(result.contains(valid));
 	}
 

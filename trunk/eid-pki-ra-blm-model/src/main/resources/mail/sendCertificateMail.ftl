@@ -4,16 +4,21 @@ pki-ra@fedict.be
 ===
 Your certificate
 ===
-<p>Dear ${certificate.requesterName}</p>,
+<p>Dear ${user.name},</p>
 
+<p>
 Please find attached the certificate you requested earlier.
+</p>
 
-Certificate details:
-Subject: ${certificate.distinguishedName}
-Issuer: ${certificate.issuer}
-Valid from: ${certificate.validityStart?date}
-Valid until: ${certificate.validityEnd?date}
+<p>
+Certificate details:<br/>
+Subject: ${certificate.distinguishedName}<br/>
+Issuer: ${certificate.issuer}<br/>
+Valid from: ${certificate.validityStart?date}<br/>
+Valid until: ${certificate.validityEnd?date}<br/>
+</p>
 
-Best regards,
-
+<p>
+Best regards,<br/>
 Fedict
+</p>

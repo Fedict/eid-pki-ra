@@ -36,12 +36,12 @@ public class DistinguishedNameParserTest {
 
 	@Test
 	public void testDN1() throws InvalidDistinguishedNameException {
-		testDNParser("a=*, ou=test, c=be", "a=*,c=be,ou=test", 3);
+		testDNParser("a=*, mail=test@test.be, c=be", "a=*,c=be,mail=test@test.be", 3);
 	}
 	
 	@Test
 	public void testDN2() throws InvalidDistinguishedNameException {
-		testDNParser("CN=*, a=test1, ou=test2", "a=test1,cn=*,ou=test2", 3);
+		testDNParser("CN=*, a=test 1, ou=test2", "a=test 1,cn=*,ou=test2", 3);
 	}
 
 	@Test

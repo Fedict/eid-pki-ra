@@ -21,8 +21,8 @@ import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.jboss.seam.log.Log;
@@ -33,6 +33,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.blm.model.contracts.Certificate;
+import be.fedict.eid.pkira.blm.model.usermgmt.User;
 
 
 /**
@@ -61,11 +62,26 @@ public class MailTemplateBeanTest {
 
 	@Test
 	public void testSendTemplatedMail() throws IOException {		
-		Map<String, Object> parameters = Collections.singletonMap("certificate", (Object) createCertificate());
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("certificate", createCertificate());
+		parameters.put("user", createUser());
+		
 		String[] recipients = new String[]{"test@example.com"};
 		bean.sendTemplatedMail("sendCertificateMail.ftl", parameters, recipients, new byte[0], "test", "test");
 		
 		verify(mailSender).sendMail(isA(Mail.class));
+	}
+
+	/**
+	 * @return
+	 */
+	private User createUser() {
+		User user = new User();
+		user.setFirstName("First");
+		user.setLastName("Last");
+		user.setNationalRegisterNumber("123");
+		
+		return user;
 	}
 
 	private Certificate createCertificate() {

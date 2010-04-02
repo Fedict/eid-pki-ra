@@ -37,7 +37,7 @@ import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;
 @Scope(ScopeType.EVENT)
 public class CertificateDomainHandler {
 
-	public static final String NAME = "be.fedict.eid.pkira.blm.CertificateDomainHandler";
+	public static final String NAME = "be.fedict.eid.pkira.blm.certificateDomainHandler";
 	
 	@In(value=CertificateDomainItem.NAME)
 	private CertificateDomainItem certificateDomainItem;

@@ -35,6 +35,9 @@ import org.testng.annotations.BeforeSuite;
 public class DatabaseTest {
 
 	private static EntityManager entityManager;
+	
+	public static final Integer TEST_USER_ID = 2001;
+	public static final Integer TEST_CERTIFICATE_DOMAIN_ID = 1003;
 
 	/**
 	 * Returns the created entity manager.
@@ -73,6 +76,10 @@ public class DatabaseTest {
 				getEntityManager().persist(object);
 			}
 		});
+	}
+	
+	public final <T> T loadObject(Class<T> clazz, Integer id) {
+		return getEntityManager().find(clazz, id);
 	}
 
 	/**
