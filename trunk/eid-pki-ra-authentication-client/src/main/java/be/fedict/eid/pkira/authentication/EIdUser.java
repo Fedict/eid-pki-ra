@@ -22,53 +22,41 @@ import java.io.Serializable;
 
 /**
  * @author Bram Baeyens
- *
  */
 public class EIdUser implements Serializable {
-	
+
 	private static final long serialVersionUID = -8678403161691396234L;
-	
-	private String rrn;
-	private String firstName;
-	private String lastName;
-	
+
+	private final String rrn;
+	private final String firstName;
+	private final String lastName;
+
+	public EIdUser(String rrn, String firstName, String lastName) {
+		super();
+		this.rrn = rrn;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+
 	public String getRRN() {
 		return rrn;
 	}
-	
-	public void setRRN(String rrn) {
-		this.rrn = rrn;
-	}
-	
+
 	public String getFirstName() {
 		return firstName;
 	}
-	
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-	
+
 	public String getLastName() {
 		return lastName;
 	}
-	
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-	
+
 	public String getName() {
-		return new StringBuilder(firstName)
-				.append(' ').append(lastName)
-				.toString();
+		return new StringBuilder(firstName).append(' ').append(lastName).toString();
 	}
-	
+
 	@Override
 	public String toString() {
-		return new StringBuilder("EIdUser[")
-				.append("rrn=").append(rrn)
-				.append(", firstName=").append(firstName)
-				.append(", lastName=").append(lastName)
-				.append(']').toString();				
+		return new StringBuilder("EIdUser[").append("rrn=").append(rrn).append(", firstName=").append(firstName)
+				.append(", lastName=").append(lastName).append(']').toString();
 	}
 }
-	

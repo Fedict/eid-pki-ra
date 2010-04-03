@@ -35,10 +35,10 @@ import be.fedict.eid.pkira.common.security.AuthenticationHandler;
 public class AuthenticationHandlerBean extends AbstractAuthenticationHandlerBean {
 
 	@In(value = UserRepository.NAME, create=true)
-	private UserRepository userRepository;
+	protected UserRepository userRepository;
 	
 	@In
-	private Identity identity;
+	protected Identity identity;
 
 	@Override
 	public void enrichIdentity(EIdUser eidUser) {		

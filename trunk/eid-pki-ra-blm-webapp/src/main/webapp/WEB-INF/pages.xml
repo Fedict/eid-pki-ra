@@ -7,7 +7,7 @@
 	<page view-id="/home.xhtml">
 		<end-conversation />
 	</page>
-	
+
 	<!-- Authentication -->
 	<page view-id="/postLogin.xhtml" action="#{identity.login}">
 		<navigation>
@@ -52,7 +52,7 @@
 			<end-conversation before-redirect="true" />
 			<redirect view-id="/home.xhtml"></redirect>
 		</navigation>
-		
+
 		<navigation from-action="login">
 			<redirect view-id="/login.xhtml" />
 		</navigation>
@@ -61,10 +61,15 @@
 			<end-conversation before-redirect="true" />
 			<redirect view-id="/page/certificatedomain/certificatedomain-list.xhtml" />
 		</navigation>
-		
+
 		<navigation from-action="registrations">
 			<end-conversation before-redirect="true" />
 			<redirect view-id="/page/registration/bulkapproval.xhtml" />
+		</navigation>
+
+		<navigation>
+			<end-conversation before-redirect="true" />
+			<redirect view-id="/login.xhtml" />
 		</navigation>
 	</page>
 </pages>

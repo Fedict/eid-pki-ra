@@ -66,7 +66,7 @@ public class AuthenticationHandlerBeanTest {
 
 	@Test
 	public void testAuthenticate() throws Exception {
-		EIdUser eidUser = new EIdUser();
+		EIdUser eidUser = new EIdUser("A", "B", "C");
 		HttpServletRequest request = mock(HttpServletRequest.class);
 		
 		doReturn(request).when(handler).getRequest();		
