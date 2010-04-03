@@ -38,13 +38,13 @@ import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 public class AuthenticationHandlerBean extends AbstractAuthenticationHandlerBean {
 
 	@Out(value = Operator.NAME, scope = ScopeType.SESSION, required = false)
-	private Operator currentOperator;
+	protected Operator currentOperator;
 
 	@In(value = EIDPKIRAPrivateServiceClient.NAME, create = true)
-	private EIDPKIRAPrivateServiceClient eidPKIRAPrivateServiceClient;
+	protected EIDPKIRAPrivateServiceClient eidPKIRAPrivateServiceClient;
 	
 	@In
-	private Identity identity;
+	protected Identity identity;
 
 	@Override
 	public void enrichIdentity(EIdUser eidUser) {

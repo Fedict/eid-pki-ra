@@ -20,6 +20,7 @@
 			<rich:menuItem value="#{messages['menu.login']}" action="login" id="login" rendered="#{!s:hasRole('AUTHENTICATED_USER')}" />
 			<rich:menuItem value="#{messages['menu.certificatedomains']}" action="certificatedomains" id="certificatedomains" rendered="#{s:hasRole('ADMIN_USER')}" />
 			<rich:menuItem value="#{messages['menu.registrations']}" action="registrations" id="registrations" rendered="#{s:hasRole('ADMIN_USER')}" />
+			<rich:menuItem value="#{messages['menu.logout']} #{credentials.fullName}" action="#{identity.logout}" rendered="#{s:hasRole('AUTHENTICATED_USER')}" />
 		</rich:toolBarGroup>
 	</rich:toolBar>
 </h:form>

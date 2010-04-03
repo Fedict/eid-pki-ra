@@ -28,7 +28,7 @@ public class SimpleRequestDecoder implements AuthenticationRequestDecoder {
 
 	@Override
 	public EIdUser decode(HttpServletRequest request) throws AuthenticationException {
-		EIdUser eiIdUser = new EIdUser();
+		EIdUser eiIdUser = new EIdUser("","","");
 		return eiIdUser;
 	}
 

@@ -99,28 +99,29 @@ public class Saml2RequestDecoder implements AuthenticationRequestDecoder {
 		// Get the subject and its name.
 		Subject subject = assertion.getSubject();
 		NameID nameId = subject.getNameID();
-		EIdUser eidUser = new EIdUser();
-		eidUser.setRRN(nameId.getValue());
+		String rrn = nameId.getValue();
 
 		// Go through the attribute statements and get first name and last name
 		List<AttributeStatement> attributeStatements = assertion.getAttributeStatements();
+		String firstName = null;
+		String lastName = null;
 		if (false == attributeStatements.isEmpty()) {
 			AttributeStatement attributeStatement = attributeStatements.get(0);
 			List<Attribute> attributes = attributeStatement.getAttributes();
 			for (Attribute attribute : attributes) {
 				String attributeName = attribute.getName();
 				XSString attributeValue = (XSString) attribute.getAttributeValues().get(0);
-				String value = attributeValue==null ? null : attributeValue.getValue();
-				
+				String value = attributeValue == null ? null : attributeValue.getValue();
+
 				if (URN_BE_FEDICT_EID_IDP_NAME.equals(attributeName)) {
-					eidUser.setLastName(value);
+					lastName = value;
 				}
 				if (URN_BE_FEDICT_EID_IDP_FIRST_NAME.equals(attributeName)) {
-					eidUser.setFirstName(value);
+					firstName = value;
 				}
 			}
 		}
-		return eidUser;
+		return new EIdUser(rrn, firstName, lastName);
 	}
 
 	private void bootstrapSaml2() {

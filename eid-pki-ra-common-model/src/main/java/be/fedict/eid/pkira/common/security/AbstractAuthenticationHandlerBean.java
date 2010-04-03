@@ -90,7 +90,7 @@ public abstract class AbstractAuthenticationHandlerBean implements Authenticatio
 
 	protected abstract void enrichIdentity(EIdUser eidUser);
 
-	private EIdUser determineLoggedInUser() {
+	protected EIdUser determineLoggedInUser() {
 		HttpServletRequest request = getRequest();
 		try {
 			AuthenticationRequestDecoder decoder = authenticationDecoderFactory
