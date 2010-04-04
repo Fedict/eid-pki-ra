@@ -37,7 +37,7 @@ import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
 /**
  * @author Jan Van den Bergh
  */
-public class CertificateDomainManagerBeanTest {
+public class CertificateDomainValidatorTest {
 
 	private static final String NAME = "name";
 	private static final String DN_EXPRESSION = "dn";
@@ -45,38 +45,37 @@ public class CertificateDomainManagerBeanTest {
 	private static final CertificateDomain DOMAIN = createCertificateDomain();
 
 	@Mock
-	private CertificateDomainRepository domainRepository;
+	private CertificateDomainHome domainHome;
 
 	@Mock
 	private DistinguishedNameManager dnManager;
 
-	private CertificateDomainManagerBean bean;
+	private CertificateDomainValidator validator;
 
 	@BeforeMethod
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 
-		bean = new CertificateDomainManagerBean();
-		bean.setDistinguishedNameManager(dnManager);
-		bean.setDomainRepository(domainRepository);
+		validator = new CertificateDomainValidator();
+		validator.setDistinguishedNameManager(dnManager);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testCreateCertificateDomainHappyFlow() throws Exception {
 		DOMAIN.setDnExpression(DN_EXPRESSION);
-		when(domainRepository.findByCertificateTypes(anySet())).thenReturn(Collections.singletonList(DOMAIN));
+		when(validator.findByCertificateTypes(anySet())).thenReturn(Collections.singletonList(DOMAIN));
 		DistinguishedName dn = mock(DistinguishedName.class);
 		when(dnManager.createDistinguishedName(DN_EXPRESSION)).thenReturn(dn);
 		when(dn.matches(any(DistinguishedName.class))).thenReturn(false);
 
 		// Execute it
-		bean.saveCertificateDomain(DOMAIN);
+		validator.validate(DOMAIN);
 
 		// Verify the results		
-		verify(domainRepository).findByName(NAME);
-		verify(domainRepository).findByCertificateTypes(DOMAIN.getCertificateTypes());
-		verify(domainRepository).persist(DOMAIN);
+		verify(validator).findByName(NAME);
+		verify(validator).findByCertificateTypes(DOMAIN.getCertificateTypes());
+		verify(domainHome).persist();
 	}
 
 	private static CertificateDomain createCertificateDomain() {
@@ -90,37 +89,38 @@ public class CertificateDomainManagerBeanTest {
 	@Test
 	public void testCreateCertificateDomainDuplicateName() throws Exception {
 		// Prepare the test
-		when(domainRepository.findByName(NAME)).thenReturn(DOMAIN);
+		when(validator.findByName(NAME)).thenReturn(DOMAIN);
 
 		// Execute it
 		try {
-			bean.saveCertificateDomain(DOMAIN);
+			validator.validate(DOMAIN);			
 			fail("Expected exception.");
 		} catch (InvalidCertificateDomainNameException e) {
 			// ok
 		}
-
-		verify(domainRepository, never()).persist(any(CertificateDomain.class));
+		verify(domainHome, never()).setInstance(any(CertificateDomain.class));
+		verify(domainHome, never()).persist();
 	}
 
 	@Test
 	public void testCreateCertificateDomainOverlap() throws Exception {
 		DOMAIN.setDnExpression(DN_EXPRESSION);
-		when(domainRepository.findByCertificateTypes(DOMAIN.getCertificateTypes())).thenReturn(Collections.singletonList(DOMAIN));
+		when(validator.findByCertificateTypes(DOMAIN.getCertificateTypes())).thenReturn(Collections.singletonList(DOMAIN));
 		DistinguishedName dn = mock(DistinguishedName.class);
 		when(dnManager.createDistinguishedName(DN_EXPRESSION)).thenReturn(dn);
 		when(dn.matches(any(DistinguishedName.class))).thenReturn(true);
 
 		// Execute it
 		try {
-			bean.saveCertificateDomain(DOMAIN);
+			validator.validate(DOMAIN);			
 			fail("Expected exception");
 		} catch (DistinguishedNameOverlapsException e) {
 			// ok
 		}
 
 		// Verify the results
-		verify(domainRepository, never()).persist(any(CertificateDomain.class));
+		verify(domainHome, never()).setInstance(any(CertificateDomain.class));
+		verify(domainHome, never()).persist();
 	
 	}
 }

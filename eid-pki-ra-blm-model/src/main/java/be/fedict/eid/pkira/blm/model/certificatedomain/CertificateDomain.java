@@ -30,6 +30,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 
@@ -42,14 +43,15 @@ import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 			@NamedQuery(name = "findCertificateDomainByName", query = "FROM CertificateDomain WHERE name = :name"),
 			@NamedQuery(name = "findCertificateDomainByDnExpression", query = "FROM CertificateDomain WHERE dnExpression = :dnExpression"),
 			@NamedQuery(name = "findCertificateDomainUnregistered", query = "FROM CertificateDomain cd WHERE cd NOT IN (SELECT r.certificateDomain FROM Registration r WHERE r.requester = :requester) ORDER BY cd.name"),
-			@NamedQuery(name = "findCertificateDomainByCertificateTypes", query = "FROM CertificateDomain WHERE (clientCertificate=:forClient OR :forClient=FALSE) AND (serverCertificate=:forServer OR :forServer=FALSE) AND (codeSigningCertificate=:forCode OR :forCode=FALSE)"),
-			@NamedQuery(name = "findCertificateDomainAll", query = "FROM CertificateDomain cd ORDER BY cd.name")
-
+			@NamedQuery(name = "findCertificateDomainByCertificateTypes", query = "FROM CertificateDomain WHERE (clientCertificate=:forClient OR :forClient=FALSE) AND (serverCertificate=:forServer OR :forServer=FALSE) AND (codeSigningCertificate=:forCode OR :forCode=FALSE)")
 	})
+@Name(CertificateDomain.NAME)
 public class CertificateDomain implements Serializable {
 
 	private static final long serialVersionUID = -4193917177011312256L;
-
+	
+	public static final String NAME = "be.fedict.eid.pkira.blm.CertificateDomain";
+	
 	@Id
 	@GeneratedValue
 	@Column(name = "CERTIFICATE_DOMAIN_ID")
@@ -94,12 +96,12 @@ public class CertificateDomain implements Serializable {
 			return false;
 		}
 		CertificateDomain that = (CertificateDomain) obj;
-		return this.dnExpression.equals(that.dnExpression);
+		return this.id == null ? false : this.id.equals(that.id);
 	}
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(17, 43).append(dnExpression).toHashCode();
+		return new HashCodeBuilder(17, 43).append(id).toHashCode();
 	}
 
 	@Override
@@ -145,5 +147,4 @@ public class CertificateDomain implements Serializable {
 		}
 		return result;
 	}
-
 }

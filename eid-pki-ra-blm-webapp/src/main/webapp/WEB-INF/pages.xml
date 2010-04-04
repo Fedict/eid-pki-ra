@@ -18,8 +18,14 @@
 	<!--  Certificate domain management -->
 	<page view-id="/page/certificatedomain/certificatedomain-edit.xhtml">
 		<restrict>#{s:hasRole('ADMIN_USER')}</restrict>
-		<navigation from-action="#{be.fedict.eid.pkira.blm.CertificateDomainHandler.saveCertificateDomain}">
-			<rule if-outcome="success">
+		<param name="certificateDomainId" value="#{certificateDomainHome.id}" converterId="javax.faces.Integer" />
+		<navigation from-action="#{certificateDomainHome.persist}">
+			<rule if-outcome="persisted">
+				<redirect view-id="/page/certificatedomain/certificatedomain-list.xhtml" />
+			</rule>
+		</navigation>
+		<navigation from-action="#{certificateDomainHome.update}">
+			<rule if-outcome="updated">
 				<redirect view-id="/page/certificatedomain/certificatedomain-list.xhtml" />
 			</rule>
 		</navigation>
@@ -35,9 +41,9 @@
 			<rule if-outcome="success">
 				<redirect view-id="/page/certificatedomain/certificatedomain-edit.xhtml" />
 			</rule>
-		</navigation>
-		<navigation from-action="cancel">
-			<redirect view-id="/home.xhtml" />
+			<rule if-outcome="cancel">
+				<redirect view-id="/home.xhtml" />
+			</rule>
 		</navigation>
 	</page>
 
