@@ -28,7 +28,7 @@
 		class="be.fedict.eid.pkira.blm.model.usermgmt.User" />		
 
 	<component name="be.fedict.eid.pkira.blm.newRegistration" scope="conversation"
-		class="be.fedict.eid.pkira.blm.model.usermgmt.Registration" />		
+		class="be.fedict.eid.pkira.blm.model.usermgmt.Registration" />	
 		
 	<transaction:ejb-transaction />
 

@@ -5,23 +5,12 @@ package be.fedict.eid.pkira.blm.model.certificatedomain;
  * 
  * @author Jan Van den Bergh
  */
-public class DistinguishedNameOverlapsException extends Exception {
+public class DistinguishedNameOverlapsException extends CertificateDomainException {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -889653983559501133L;
 
-	public DistinguishedNameOverlapsException() {		
-	}
-
-	public DistinguishedNameOverlapsException(String message) {
-		super(message);
-	}
-
-	public DistinguishedNameOverlapsException(Throwable cause) {
-		super(cause);
-	}
-
-	public DistinguishedNameOverlapsException(String message, Throwable cause) {
-		super(message, cause);
+	public DistinguishedNameOverlapsException() {
+		super("certificatedomain.error.dnoverlaps");
 	}
 
 }
