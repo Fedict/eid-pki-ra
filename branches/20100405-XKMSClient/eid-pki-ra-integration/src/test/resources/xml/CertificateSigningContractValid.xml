@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns2:CertificateSigningRequest xmlns:ns2="urn:be:fedict:eid:pkira:contracts" xmlns="http://www.w3.org/2000/09/xmldsig#">
+	<ns2:RequestId>18882bc2-686f-41cb-b0d4-7e78d984ad0a</ns2:RequestId>
+	<ns2:Description>My new certificate</ns2:Description>
+	<ns2:Operator>
+		<ns2:Name>Name</ns2:Name>
+		<ns2:Function>Function</ns2:Function>
+		<ns2:Phone>02123456</ns2:Phone>
+	</ns2:Operator>
+	<ns2:LegalNotice>LegalNotice</ns2:LegalNotice>
+	<ns2:DistinguishedName>O=Legal Name of Organisation,OU=Free Text Field,CN=www.domainname.com,L=City associated with Org,ST=State Associated with Org,C=Country Associated with Org,E=webmaster@organisation.com</ns2:DistinguishedName>
+	<ns2:CertificateType>Client</ns2:CertificateType>
+	<ns2:ValidityPeriodMonths>15</ns2:ValidityPeriodMonths>
+	<ns2:CSR>-----BEGIN CERTIFICATE REQUEST-----
+		MIICMTCCAZwCAQAwgfQxIzAhBgNVBAoMGkxlZ2FsIE5hbWUgb2YgT3JnYW5pc2F0aW9uMRgwFgYDVQQLDA9GcmVlIFRleHQgRmllbGQxGzAZBgNVBAMMEnd3dy5kb21haW5uYW1lLmNvbTEhMB8GA1UEBwwYQ2l0eSBhc3NvY2lhdGVkIHdpdGggT3JnMSIwIAYDVQQIDBlTdGF0ZSBBc3NvY2lhdGVkIHdpdGggT3JnMSQwIgYDVQQGExtDb3VudHJ5IEFzc29jaWF0ZWQgd2l0aCBPcmcxKTAnBgkqhkiG9w0BCQEWGndlYm1hc3RlckBvcmdhbmlzYXRpb24uY29tMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJB3xcylAI+qcOhQ/CHrIl5K99k20BeTcGo+KSbfboSfo+94pDk46ToutUP7SYwIMK1sd3v4jWnLL150w4oE6KVSDdbSDilpF3NtsfKP3N+JhDfgQkYs8ARtfE0uL9uL+/THjl43byycnelnvTvypWI43jO2X9Cv5UvQ+LARwetQIDAQABMAsGCSqGSIb3DQEBBQOBgQA0k+8SCxO7EZacrQRkZ2w39muj2ro2k+FBmIgqEm6+RkkJ799mTuLtD5R0zgA2/ti+eIG6uhzOGabrETZ4VZYWUD4SWnnN6HzXu3NgrEenexEuEF0w1XHsrcjx72wlz7g7ewCcZsy4LvRQOzwYG9GGtBm1Vk1av/HM+qRDecrzvQ==
+		-----END CERTIFICATE REQUEST-----</ns2:CSR>
+	<Signature Id="xmldsig-f5ce985e-7781-4890-81a1-897a43cf2868" xmlns="http://www.w3.org/2000/09/xmldsig#">
+		<SignedInfo>
+			<CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+			<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+			<Reference URI="">
+				<Transforms>
+					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+					<Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+				</Transforms>
+				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+				<DigestValue>t7UH6oJAMAi/FtJQAPAlHP+2oQg=</DigestValue>
+			</Reference>
+			<Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xmldsig-f5ce985e-7781-4890-81a1-897a43cf2868-xades">
+				<Transforms>
+					<Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+				</Transforms>
+				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+				<DigestValue>dELpEndqwHi49gpGstoDQNRv7x8=</DigestValue>
+			</Reference>
+		</SignedInfo>
+		<SignatureValue Id="xmldsig-f5ce985e-7781-4890-81a1-897a43cf2868-signature-value">Z8TFgprWXs5YYecwSH5GBzclXBIxT+GRv+ezNFh675SGS8HP38nQn2JvbvmmKg0eIVL1HrhUYWjt
+			VuX6y4XQDLehcysVaaYksI007yx+CLgO00X6j7/Ik48dcv9wSjxUyoDeTxuHU1Kx2nr5eXWfctzN
+			7Qo7MJYVOvipMbZBEko=</SignatureValue>
+		<KeyInfo>
+			<X509Data>
+				<X509Certificate>MIIEAzCCAuugAwIBAgIQEAAAAAAAhuWjs6RShDTclDANBgkqhkiG9w0BAQUFADAzMQswCQYDVQQG
+					EwJCRTETMBEGA1UEAxMKQ2l0aXplbiBDQTEPMA0GA1UEBRMGMjAwODE2MB4XDTA4MDgxODEwMTQ0
+					MloXDTEzMDgwNTIzNTk1OVowdjELMAkGA1UEBhMCQkUxJjAkBgNVBAMTHUphbiBWYW4gZGVuIEJl
+					cmdoIChTaWduYXR1cmUpMRYwFAYDVQQEEw1WYW4gZGVuIEJlcmdoMREwDwYDVQQqEwhKYW4gTHVk
+					bzEUMBIGA1UEBRMLNzQwODE0NDczMzgwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAIFOx3Y1
+					JcicoBEKbC7gJRTFqbSgOeba87uJZ22aKEJnpCVHsfRrO8z8vtHYvHpb41UYafKefOxEsdOyNJGq
+					hB2B9ihIEm2AOoRCrwKfixwTN8QglFx+pICUp4XrCswwhFR+7njJH9/aIb59Fig+5UK4Yye4TH6e
+					xY4/pS658eeFAgMBAAGjggFSMIIBTjAfBgNVHSMEGDAWgBQDqn/uzJmSHg26djkc9ayR6OiV5TBt
+					BggrBgEFBQcBAQRhMF8wNQYIKwYBBQUHMAKGKWh0dHA6Ly9jZXJ0cy5laWQuYmVsZ2l1bS5iZS9i
+					ZWxnaXVtcnMuY3J0MCYGCCsGAQUFBzABhhpodHRwOi8vb2NzcC5laWQuYmVsZ2l1bS5iZTBEBgNV
+					HSAEPTA7MDkGB2A4AQEBAgEwLjAsBggrBgEFBQcCARYgaHR0cDovL3JlcG9zaXRvcnkuZWlkLmJl
+					bGdpdW0uYmUwOQYDVR0fBDIwMDAuoCygKoYoaHR0cDovL2NybC5laWQuYmVsZ2l1bS5iZS9laWRj
+					MjAwODE2LmNybDAOBgNVHQ8BAf8EBAMCBkAwEQYJYIZIAYb4QgEBBAQDAgUgMBgGCCsGAQUFBwED
+					BAwwCjAIBgYEAI5GAQEwDQYJKoZIhvcNAQEFBQADggEBAJxgrWT6ZTDIEOzYqMlrY22E3faIZgSU
+					dwr1VDVcz9F9fASAXpY31a0NVcbGQEP2yDf3vSMYOEQdBqt6PplSR6hBhNL2K3OGyZ179E4PvuUp
+					q/dWbYHMJPlCwPWUjxEOFLT/JF4oLFdYnv4pS9pZ5rfaP86I8zrGeslisC6UytSjnLjI4vm6V4fC
+					2lA1IReKSmWwHguabvpIlby5nvLj0S9qG8vKGTzyyPX5E5hIxvLJJ6LG3Nfk7QdG1X12jYKVePck
+					HpNlrnKYX0SQuJEW2b7hcPQWnO6tmTJDTxHYBXyGWcVC8rUQkgGvTNtaaZ4CCpxqdXi/5GVGWU3L
+					mBOoldU=</X509Certificate>
+				<X509Certificate>MIID3DCCAsSgAwIBAgIQQ8GItHWbiVgI6NiQ3+SkDzANBgkqhkiG9w0BAQUFADAnMQswCQYDVQQG
+					EwJCRTEYMBYGA1UEAxMPQmVsZ2l1bSBSb290IENBMB4XDTA3MTAwNDEyMDAwMFoXDTE0MDEyNjIz
+					MDAwMFowMzELMAkGA1UEBhMCQkUxEzARBgNVBAMTCkNpdGl6ZW4gQ0ExDzANBgNVBAUTBjIwMDgx
+					NjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOAtsCjiOW+SwiR2J393PIFByT8ZkdIy
+					alRds4VYhrogIhFGnBb56hmuSV1ksY1YUK4OCdaBS517p41P18dParHnI+Vng838/82qoFSBrBym
+					nNcVPw7P/8k9CHk++CcxZqUDLVfBhQFqjKsXuYLYOU/qx5WUr92Jd417LBFun4zwjZ1zRkKFeOQk
+					2IxnhcdvMJV5nJpJ8JfiMfzNe5v6dHVNCxL00gSEtELFnQ702zfXMagbDt0uKafdiuSIeW7PPNGC
+					1zL40dZXE6FCBy9gCdy+bD3eElvwSys9l22Ln9PVt32nJBb69GrloeToh3fLyQcMoIRSXvx1U5r7
+					uK0R3MkCAwEAAaOB9zCB9DAOBgNVHQ8BAf8EBAMCAQYwEgYDVR0TAQH/BAgwBgEB/wIBADBDBgNV
+					HSAEPDA6MDgGBmA4AQEBAjAuMCwGCCsGAQUFBwIBFiBodHRwOi8vcmVwb3NpdG9yeS5laWQuYmVs
+					Z2l1bS5iZTAdBgNVHQ4EFgQUA6p/7syZkh4NunY5HPWskejoleUwNgYDVR0fBC8wLTAroCmgJ4Yl
+					aHR0cDovL2NybC5laWQuYmVsZ2l1bS5iZS9iZWxnaXVtLmNybDARBglghkgBhvhCAQEEBAMCAAcw
+					HwYDVR0jBBgwFoAUEPAMVpth6lc6tjWXbZ/duRSO2+YwDQYJKoZIhvcNAQEFBQADggEBAEbAPieB
+					Ha0e6iYahDk1GFn/xj9Rr3UXfrIz7Rw8T8GJOuJiLAq3ms09pXQOe1hi5xgsC21c7DEHtVdiSuCw
+					AnkGJQdFqNGFtevnqj04xaeooHslOTyby5io6j241uw4JcWCHBIP+h7lzCGvr9zkSpV2j2EAAriX
+					SvZAEU0h4pwLgrjHqvcr/Z0RmXFlIASordS7HOW7JcbtXK6/ybCnKvLAngiy3uZ0F/4gkzxh5Uhr
+					ByIQMx8MCNK4aWwM++kfrI9927FIeUosbO3kumN8YCd43zKF6+/pP59CvVb+R0WlYsu9mSgRZaZT
+					x13ly2szEzu5nQWssrX2kS/vI9r2woU=</X509Certificate>
+				<X509Certificate>MIIDlDCCAnygAwIBAgIQWAsFbFMk27JQVxhf+eWmUDANBgkqhkiG9w0BAQUFADAnMQswCQYDVQQG
+					EwJCRTEYMBYGA1UEAxMPQmVsZ2l1bSBSb290IENBMB4XDTAzMDEyNjIzMDAwMFoXDTE0MDEyNjIz
+					MDAwMFowJzELMAkGA1UEBhMCQkUxGDAWBgNVBAMTD0JlbGdpdW0gUm9vdCBDQTCCASIwDQYJKoZI
+					hvcNAQEBBQADggEPADCCAQoCggEBAMihcekcRkJ5eHFvna6pqKsot03HIOswkVp19eLSz8hMFJhC
+					WK3HEcVAQGpa+XQSJ4fpnOVxTiIs0RIYqjBeoiG52bv/9nTrMQHnO35YD5EWTXaJqAFPrSJmcPpL
+					HZXBMFjqvNll2Jq0iOtJRlLf0lMVdssUXRlJsW9q09P9vMIt7EU/CT9YvvzU7wCMgTVyv/cY6pZi
+					fSsofxVsY9LKyn0FrMhtB20yvmi4BUCuVJhWPmbxMOjvxKuTXgfeMo8SdKpbNCNUwOpszv42kqgJ
+					F+qhLc9s44Qd3ocuMws8dOIhUDiVLlzg5cYx+dtA+mqhpIqTm6chBocdJ9PEoclMsG8CAwEAAaOB
+					uzCBuDAOBgNVHQ8BAf8EBAMCAQYwDwYDVR0TAQH/BAUwAwEB/zBCBgNVHSAEOzA5MDcGBWA4AQEB
+					MC4wLAYIKwYBBQUHAgEWIGh0dHA6Ly9yZXBvc2l0b3J5LmVpZC5iZWxnaXVtLmJlMB0GA1UdDgQW
+					BBQQ8AxWm2HqVzq2NZdtn925FI7b5jARBglghkgBhvhCAQEEBAMCAAcwHwYDVR0jBBgwFoAUEPAM
+					Vpth6lc6tjWXbZ/duRSO2+YwDQYJKoZIhvcNAQEFBQADggEBAMhtIlGKYfgPlm7VILKB+MbcoxYA
+					2s1q52sq+llIp0xJN9dzoWoBZV4yveeX09AuPHPTjHuD79ZCwT+oqV0PN7p20kC9zC0/00RBSZz9
+					Wyn0AiMiW3Ebv1jZKE4tRfTa57VjRUQRDSp/M382SbTObqkCMa5c/ciJv0J71/Fg8teH9lcuen5q
+					E4Ad3OPQYx49cTGxYNSeCMqr8JTHSHVUgfMbrXec6LKP24OsjzRr6L/D2fVDw2RV6xq9NoY2uiGM
+					lxoh1OotO6y67Kcdq765Sps1LxxcHVGnH1TtEpf/8m6HfUbJdNbv6z195lluBpQE5KJVhzgoaiJe
+					4r50ErAEQyo=</X509Certificate>
+			</X509Data>
+		</KeyInfo>
+		<Object>
+			<QualifyingProperties xmlns="http://uri.etsi.org/01903/v1.3.2#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+				Target="#xmldsig-f5ce985e-7781-4890-81a1-897a43cf2868">
+				<SignedProperties Id="xmldsig-f5ce985e-7781-4890-81a1-897a43cf2868-xades">
+					<SignedSignatureProperties>
+						<SigningTime>2010-03-05T07:19:36.633Z</SigningTime>
+						<SigningCertificate>
+							<Cert>
+								<CertDigest>
+									<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+									<ds:DigestValue>SkG8jLNHljF2LK7tiQh+71GH9bk=</ds:DigestValue>
+								</CertDigest>
+								<IssuerSerial>
+									<ds:X509IssuerName>SERIALNUMBER=200816, CN=Citizen CA, C=BE</ds:X509IssuerName>
+									<ds:X509SerialNumber>21267647932559290999669962899757259924</ds:X509SerialNumber>
+								</IssuerSerial>
+							</Cert>
+						</SigningCertificate>
+					</SignedSignatureProperties>
+				</SignedProperties>
+			</QualifyingProperties>
+		</Object>
+	</Signature>
+</ns2:CertificateSigningRequest>

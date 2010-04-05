@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<parent>
+		<groupId>be.fedict</groupId>
+		<artifactId>eid-pki-ra</artifactId>
+		<version>0.0.3-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>eid-pki-ra-blm-ws</artifactId>
+	<packaging>war</packaging>
+	<name>eid-pki-ra-blm - ws</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-generated-publicws</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-generated-privatews</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	
+		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-blm-model</artifactId>
+			<type>ejb</type>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.ejb</groupId>
+			<artifactId>ejb-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<scope>test</scope>
+			<classifier>jdk15</classifier>
+		</dependency>
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>persistence-api</artifactId>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+</project>

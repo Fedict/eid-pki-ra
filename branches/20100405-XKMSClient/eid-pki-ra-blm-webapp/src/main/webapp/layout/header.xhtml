@@ -1,0 +1,26 @@
+<h:form xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:s="http://jboss.com/products/seam/taglib"
+		xmlns:rich="http://richfaces.org/rich"
+		id="header-form">
+
+	<div id="header">
+		<div id="fed">fed</div>
+		<div id="ictegov">
+			<div id="ict">ict</div>
+			<div id="egov">e-gov</div>
+		</div>
+		<h1>#{messages['general.title']}</h1>
+	</div>
+	<rich:toolBar id="tool-bar" style="height:25px;">
+		<rich:toolBarGroup location="left" id="tool-bar-group-left">
+			<rich:menuItem value="#{messages['menu.home']}" action="home" id="home" />
+			<rich:menuItem value="#{messages['menu.login']}" action="login" id="login" rendered="#{!s:hasRole('AUTHENTICATED_USER')}" />
+			<rich:menuItem value="#{messages['menu.certificatedomains']}" action="certificatedomains" id="certificatedomains" rendered="#{s:hasRole('ADMIN_USER')}" />
+			<rich:menuItem value="#{messages['menu.registrations']}" action="registrations" id="registrations" rendered="#{s:hasRole('ADMIN_USER')}" />
+			<rich:menuItem value="#{messages['menu.logout']} #{credentials.fullName}" action="#{identity.logout}" rendered="#{s:hasRole('AUTHENTICATED_USER')}" />
+		</rich:toolBarGroup>
+	</rich:toolBar>
+</h:form>
