@@ -19,12 +19,24 @@ package be.fedict.eid.pkira.blm.model.certificatedomain;
 /**
  * @author Jan Van den Bergh
  */
-public class InvalidCertificateDomainNameException extends CertificateDomainException {
+public class InvalidCertificateDomainNameException extends Exception {
 
-	private static final long serialVersionUID = 4541066130757539582L;
+	private static final long serialVersionUID = 1L;
 
 	public InvalidCertificateDomainNameException() {
-		super("certificatedomain.error.invalidname");
+		super();
+	}
+
+	public InvalidCertificateDomainNameException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public InvalidCertificateDomainNameException(String message) {
+		super(message);
+	}
+
+	public InvalidCertificateDomainNameException(Throwable cause) {
+		super(cause);
 	}
 
 }

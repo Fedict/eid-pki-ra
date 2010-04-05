@@ -7,41 +7,35 @@
 	<ui:define name="center">
 		<h:form id="certificateDetailForm">
 			<rich:panel id="panel">
-				<f:facet name="header">
-					<h:outputText rendered="#{!certificateDomainHome.managed}" value="#{messages['certificatedomain.create.title']}"/>
-					<h:outputText rendered="#{certificateDomainHome.managed}" value="#{messages['certificatedomain.edit.title']}"/>
-				</f:facet>
+				<f:facet name="header">#{messages['certificatedomain.edit.title']}</f:facet>
 				
 				<s:decorate id="nameDecoration" template="/layout/edit.xhtml">
 	               	<ui:define name="label">#{messages['certificatedomain.edit.name']}:</ui:define>
-	               	<h:inputText id="name" value="#{certificateDomainHome.instance.name}" required="true"/>
+	               	<h:inputText id="name" value="#{certificateDomainItem.name}" required="true"/>
 	           	</s:decorate>
 	           	
 	           	<s:decorate id="dnPatternDecoration" template="/layout/edit.xhtml">
 	               	<ui:define name="label">#{messages['certificatedomain.edit.dnExpression']}:</ui:define>
-	               	<h:inputText id="dnPattern" value="#{certificateDomainHome.instance.dnExpression}" required="true"/>
+	               	<h:inputText id="dnPattern" value="#{certificateDomainItem.dnExpression}" required="true"/>
 	           	</s:decorate>
 	           	
 	           	<s:decorate id="clientCertDecoration" template="/layout/edit.xhtml">
 	               	<ui:define name="label">#{messages['certificatedomain.edit.clientCertificates']}:</ui:define>
-	               	<h:selectBooleanCheckbox id="clientCert" value="#{certificateDomainHome.instance.clientCertificate}" />	           
+	               	<h:selectBooleanCheckbox id="clientCert" value="#{certificateDomainItem.clientCertificate}" />	           
 	           	</s:decorate>
 	           	
 	           	<s:decorate id="serverCertDecoration" template="/layout/edit.xhtml">
 	               	<ui:define name="label">#{messages['certificatedomain.edit.serverCertificates']}:</ui:define>
-	               	<h:selectBooleanCheckbox id="serverCert" value="#{certificateDomainHome.instance.serverCertificate}" />	           
+	               	<h:selectBooleanCheckbox id="serverCert" value="#{certificateDomainItem.serverCertificate}" />	           
 	           	</s:decorate>
 	           	
 	           	<s:decorate id="codeSigningCertDecoration" template="/layout/edit.xhtml">
 	               	<ui:define name="label">#{messages['certificatedomain.edit.codeSigningCertificates']}:</ui:define>
-	               	<h:selectBooleanCheckbox id="codeSigningCert" value="#{certificateDomainHome.instance.codeSigningCertificate}" />	           
+	               	<h:selectBooleanCheckbox id="codeSigningCert" value="#{certificateDomainItem.codeSigningCertificate}" />	           
 	           	</s:decorate>
 	           	
 	          	<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
-					<h:commandButton action="#{certificateDomainHome.persist}" value="#{messages['button.save']}" id="save"
-							rendered="#{!certificateDomainHome.managed}"/>
-					<h:commandButton action="#{certificateDomainHome.update}" value="#{messages['button.update']}" id="update"
-							rendered="#{certificateDomainHome.managed}"/>
+					<h:commandButton action="#{be.fedict.eid.pkira.blm.CertificateDomainHandler.saveCertificateDomain}" value="#{messages['button.save']}" id="submit"/>
 					<s:button value="#{messages['button.cancel']}" action="cancel" id="cancel"/>
 				</s:decorate> 
 			</rich:panel>

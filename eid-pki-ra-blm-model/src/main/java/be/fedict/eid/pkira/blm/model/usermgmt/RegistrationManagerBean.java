@@ -32,7 +32,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
-import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainHome;
+import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainRepository;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 import be.fedict.eid.pkira.blm.model.mail.MailTemplate;
 import be.fedict.eid.pkira.dnfilter.DistinguishedName;
@@ -54,8 +54,8 @@ public class RegistrationManagerBean implements RegistrationManager {
 	@In(value = RegistrationRepository.NAME, create = true)
 	private RegistrationRepository registrationRepository;
 
-	@In(value = CertificateDomainHome.NAME, create = true)
-	private CertificateDomainHome certificateDomainHome;
+	@In(value = CertificateDomainRepository.NAME, create = true)
+	private CertificateDomainRepository certificateDomainRepository;
 
 	@In(value = UserRepository.NAME, create = true)
 	private UserRepository userRepository;
@@ -74,8 +74,7 @@ public class RegistrationManagerBean implements RegistrationManager {
 	public void registerUser(String userRRN, String userLastName, String userFirstName, int domainId,
 			String emailAddress) throws RegistrationException {
 		// Lookup the domain
-		certificateDomainHome.setId(domainId);
-		CertificateDomain domain = certificateDomainHome.find();
+		CertificateDomain domain = certificateDomainRepository.findById(domainId);
 		if (domain == null) {
 			throw new RegistrationException("Unknown certificate domain.");
 		}
@@ -222,8 +221,8 @@ public class RegistrationManagerBean implements RegistrationManager {
 		this.registrationRepository = registrationRepository;
 	}
 
-	protected void setCertificateDomainHome(CertificateDomainHome certificateDomainHome) {
-		this.certificateDomainHome = certificateDomainHome;
+	protected void setCertificateDomainRepository(CertificateDomainRepository certificateDomainRepository) {
+		this.certificateDomainRepository = certificateDomainRepository;
 	}
 
 	protected void setUserRepository(UserRepository userRepository) {

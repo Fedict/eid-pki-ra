@@ -18,23 +18,37 @@
 
 package be.fedict.eid.pkira.blm.model.certificatedomain;
 
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.framework.EntityQuery;
+import java.util.List;
+import java.util.Set;
+
+import javax.ejb.Local;
+
+import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
+import be.fedict.eid.pkira.blm.model.usermgmt.User;
 
 /**
  * @author Bram Baeyens
  *
  */
-@Name(value=AllCertificateDomainQuery.NAME)
-public class AllCertificateDomainQuery extends EntityQuery<CertificateDomain> {
+@Local
+public interface CertificateDomainRepository {
 
-	private static final long serialVersionUID = 2047569824505992173L;
+	String NAME = "be.fedict.eid.pkira.blm.certificateDomainRepository";
 	
-	public static final String NAME = "be.fedict.eid.pkira.blm.allCertificateDomainQuery";
-	
-	@Override
-	public String getEjbql() {
-		return "select cd from CertificateDomain cd order by cd.name";
-	}
+	void persist(CertificateDomain certificateDomain);
 
+	CertificateDomain findByName(String name);
+
+	CertificateDomain findByDnExpression(String string);
+
+	CertificateDomain findById(Integer id);
+
+	List<CertificateDomain> findUnregistered(User user);
+
+	CertificateDomain getReference(Integer primaryKey);
+
+	List<CertificateDomain> findByCertificateTypes(Set<CertificateType> types);	
+	
+	List<CertificateDomain> findAll();
+	
 }

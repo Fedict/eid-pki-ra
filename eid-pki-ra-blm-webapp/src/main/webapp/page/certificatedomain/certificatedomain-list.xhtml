@@ -8,8 +8,7 @@
 
 	<ui:define name="center">
 		<h:form id="certificateDomainListForm">
-			<rich:dataTable id="allCertificateDomain" var="certificateDomain" 
-					value="#{allCertificateDomainQuery.resultList}" width="100%">
+			<rich:dataTable id="certificateDomainList" var="certificateDomain" value="#{certificateDomainList}" rendered="#{not empty certificateDomainList}" width="75%">
 				<rich:column sortBy="#{certificateDomain.name}" filterBy="#{certificateDomain.name}" filterEvent="onkeyup">
 					<f:facet name="header">
 						<h:outputText value="#{messages['certificatedomain.list.name']}" />
@@ -17,9 +16,9 @@
 					<h:outputText value="#{certificateDomain.name}" />
 				</rich:column>
 
-				<rich:column sortBy="#{certificateDomain.dnExpression}" filterBy="#{certificateDomain.dnExpression}" filterEvent="onkeyup">
+				<rich:column sortBy="#{certificateDomain.list.dnExpression}" filterBy="#{certificateDomain.dnExpression}" filterEvent="onkeyup">
 					<f:facet name="header">
-						<h:outputText value="#{messages['certificatedomain.list.dnexpression']}" />
+						<h:outputText value="#{messages['certificatedomain.dnexpression']}" />
 					</f:facet>
 					<h:outputText value="#{certificateDomain.dnExpression}" />
 				</rich:column>
@@ -28,40 +27,43 @@
 					<f:facet name="header">
 						<h:outputText value="#{messages['certificatedomain.list.servercertificates']}" />
 					</f:facet>
-					<h:outputText value="#{messages['general.yes']}" rendered="#{certificateDomain.serverCertificate}" />
-					<h:outputText value="#{messages['general.no']}" rendered="#{not certificateDomain.serverCertificate}" />
+					<h:outputText value="#{messages['global.yes']}" rendered="#{certificateDomain.serverCertificate}" />
+					<h:outputText value="#{messages['global.no']}" rendered="#{not certificateDomain.serverCertificate}" />
 				</rich:column>
 
 				<rich:column>
 					<f:facet name="header">
 						<h:outputText value="#{messages['certificatedomain.list.clientcertificates']}" />
 					</f:facet>
-					<h:outputText value="#{messages['general.yes']}" rendered="#{certificateDomain.clientCertificate}" />
-					<h:outputText value="#{messages['general.no']}" rendered="#{not certificateDomain.clientCertificate}" />
+					<h:outputText value="#{messages['global.yes']}" rendered="#{certificateDomain.clientCertificate}" />
+					<h:outputText value="#{messages['global.no']}" rendered="#{not certificateDomain.clientCertificate}" />
 				</rich:column>
 
 				<rich:column>
 					<f:facet name="header">
 						<h:outputText value="#{messages['certificatedomain.list.codesigningcertificates']}" />
 					</f:facet>
-					<h:outputText value="#{messages['general.yes']}" rendered="#{certificateDomain.codeSigningCertificate}" />
-					<h:outputText value="#{messages['general.no']}" rendered="#{not certificateDomain.codeSigningCertificate}" />
+					<h:outputText value="#{messages['global.yes']}" rendered="#{certificateDomain.codeSigningCertificate}" />
+					<h:outputText value="#{messages['global.no']}" rendered="#{not certificateDomain.codeSigningCertificate}" />
 				</rich:column>
 
 				<rich:column>
-					<s:link view="/page/certificatedomain/certificatedomain-edit.xhtml" value="#{messages['link.edit']}">
-						<f:param name="certificateDomainId" value="#{certificateDomain.id}"/>
-					</s:link>
+					<s:link id="editCertificateDomain" value="#{messages['link.edit']}"
+						action="#{certificateDomainHandler.editCertificateDomain(cerificateDomain)}" />
 				</rich:column>
 
 				<f:facet name="footer">
+					<f:facet name="header">
+						<h:outputText value="Action" />
+					</f:facet>
 					<rich:datascroller maxPages="10" rows="10" />
 				</f:facet>
 			</rich:dataTable>
+			<h:outputText value="#{messages['certificatedomain.list.noresult']}" rendered="#{empty certificateDomainList}" />
 				           	
           	<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
 				<h:commandButton action="/page/certificatedomain/certificatedomain-edit.xhtml" value="#{messages['button.new']}" id="newCertificateDomain"/>
-				<h:commandButton action="/home.xhtml" value="#{messages['button.cancel']}" id="cancel"/>
+				<s:button value="#{messages['button.cancel']}" action="cancel" id="cancel"/>
 			</s:decorate> 
 		</h:form>
 	</ui:define>

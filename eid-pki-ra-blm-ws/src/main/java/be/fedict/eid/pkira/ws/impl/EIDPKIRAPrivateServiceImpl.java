@@ -13,7 +13,7 @@ import org.jboss.seam.log.Log;
 import org.jboss.seam.log.Logging;
 
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
-import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainHome;
+import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainRepository;
 import be.fedict.eid.pkira.blm.model.contracts.Certificate;
 import be.fedict.eid.pkira.blm.model.contracts.ContractRepository;
 import be.fedict.eid.pkira.blm.model.mappers.CertificateDomainMapper;
@@ -94,7 +94,7 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	public FindRemainingCertificateDomainsForUserResponse findRemainingCertificateDomainsForUser(
 			FindRemainingCertificateDomainsForUserRequest request) {
 		User user = getUserRepository().findByNationalRegisterNumber(request.getUserRRN());
-		List<CertificateDomain> domains = getCertificateDomainHome().findUnregistered(user);
+		List<CertificateDomain> domains = getCertificateDomainRepository().findUnregistered(user);
 
 		FindRemainingCertificateDomainsForUserResponse response = new ObjectFactory()
 				.createFindRemainingCertificateDomainsForUserResponse();
@@ -134,8 +134,8 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 		return (UserRepository) Component.getInstance(UserRepository.NAME, true);
 	}
 
-	private CertificateDomainHome getCertificateDomainHome() {
-		return (CertificateDomainHome) Component.getInstance(CertificateDomainHome.NAME, true);
+	private CertificateDomainRepository getCertificateDomainRepository() {
+		return (CertificateDomainRepository) Component.getInstance(CertificateDomainRepository.NAME, true);
 	}
 
 	private RegistrationManager getRegistrationManager() {
