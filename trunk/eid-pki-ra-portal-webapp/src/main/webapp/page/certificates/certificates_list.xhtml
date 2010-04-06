@@ -14,35 +14,35 @@
 			<rich:dataTable id="cerList" var="cer" value="#{certificates}" rendered="#{not empty certificates}" width="75%">
 				<rich:column sortBy="#{cer.serialNumber}" filterBy="#{cer.serialNumber}" filterEvent="onkeyup">
 					<f:facet name="header">
-						<h:outputText value="SerialNumber" />
+						<h:outputText value="#{messages['certificate.serialNumber']}" />
 					</f:facet>
 					<h:outputText value="#{cer.serialNumber}" />
 				</rich:column>
 
 				<rich:column sortBy="#{cer.distinguishedName}" filterBy="#{cer.distinguishedName}" filterEvent="onkeyup">
 					<f:facet name="header">
-						<h:outputText value="Distinguished name" />
+						<h:outputText value="#{messages['certificate.subject']}" />
 					</f:facet>
 					<h:outputText value="#{cer.distinguishedName}" />
 				</rich:column>
 
 				<rich:column sortBy="#{cer.validityStart}" filterBy="#{cer.validityStart}" filterEvent="onkeyup">
 					<f:facet name="header">
-						<h:outputText value="Validity Start" />
+						<h:outputText value="#{messages['certificate.validityStart']}" />
 					</f:facet>
 					<h:outputText value="#{cer.validityStart}" />
 				</rich:column>
 
 				<rich:column sortBy="#{cer.validityEnd}" filterBy="#{cer.validityEnd}" filterEvent="onkeyup">
 					<f:facet name="header">
-						<h:outputText value="Validity End" />
+						<h:outputText value="#{messages['certificate.validityEnd']}" />
 					</f:facet>
 					<h:outputText value="#{cer.validityEnd}" />
 				</rich:column>
 
 				<rich:column sortBy="#{cer.issuer}" filterBy="#{cer.issuer}" filterEvent="onkeyup">
 					<f:facet name="header">
-						<h:outputText value="Issuer" />
+						<h:outputText value="#{messages['certificate.issuer']}" />
 					</f:facet>
 					<h:outputText value="#{cer.issuer}" />
 				</rich:column>
@@ -56,7 +56,7 @@
 
 				<rich:column sortBy="#{cer.type}" filterBy="#{cer.type}" filterEvent="onkeyup">
 					<f:facet name="header">
-						<h:outputText value="Certificate type" />
+						<h:outputText value="#{messages['certificate.type']}" />
 					</f:facet>
 					<h:outputText value="#{cer.type}" />
 				</rich:column>

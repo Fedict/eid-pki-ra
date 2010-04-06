@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml"
+	login-required="true">
+
+	<ui:define name="center">
+		<h:messages />
+		<h:form id="approvalDetailForm">
+			<h:panelGrid columns="1" title="Approval Detail">
+				<f:facet name="header">
+					<h:outputText value="Approval Detail overview." />
+				</f:facet>
+
+				<s:decorate id="requesterDecoration" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['registrations.requester']}:</ui:define>
+					<h:outputText value="#{registration.requester.nationalRegisterNumber}" />
+				</s:decorate>
+
+				<s:decorate id="emailDecorator" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['registrations.mail']}:</ui:define>
+					<h:outputText value="#{registration.email}" />
+				</s:decorate>
+
+				<s:decorate id="certificateDomainDecorator"
+					template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['registrations.certificateDomain']}:</ui:define>
+					<h:selectOneMenu 
+						value="#{registration.certificateDomain}">
+						<s:selectItems
+							value="#{registrationHome.certificateDomains}"
+							var="certificateDomain"
+							label="#{certificateDomain.name}"
+							/>
+							<s:convertEntity />
+					</h:selectOneMenu>
+				</s:decorate>
+
+				<s:decorate id="ReasonDecorator" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['registrations.reason']}:</ui:define>
+					<h:inputTextarea id="reasonTextArray" rows="5" cols="50"  value="#{registrationHome.reason}"/>
+				</s:decorate>
+
+				<s:decorate id="updateButtonDecorator" template="/layout/edit.xhtml">
+					<h:commandButton
+						action="#{registrationHome.update}"
+						value="#{messages['registrations.update']}" id="update" />
+				</s:decorate>
+				<s:decorate id="buttonDecorator" template="/layout/edit.xhtml">
+					<h:commandButton
+						action="#{registrationHome.approve}"
+						value="#{messages['registrations.approve']}" id="approve" />
+					<h:commandButton
+						action="#{registrationHome.disapprove}"
+						value="#{messages['registrations.disapprove']}" id="disapprove" />
+				</s:decorate>
+			</h:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>

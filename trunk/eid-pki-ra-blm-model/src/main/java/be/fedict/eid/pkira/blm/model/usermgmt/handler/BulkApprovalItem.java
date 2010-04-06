@@ -16,6 +16,14 @@
  */
 package be.fedict.eid.pkira.blm.model.usermgmt.handler;
 
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+import org.jboss.seam.annotations.Name;
+
 import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
 import be.fedict.eid.pkira.blm.model.usermgmt.User;
 
@@ -24,19 +32,35 @@ import be.fedict.eid.pkira.blm.model.usermgmt.User;
  * 
  * @author Jan Van den Bergh
  */
-public class BulkApprovalItem {
 
+@Entity
+@Name(BulkApprovalItem.NAME)
+public class BulkApprovalItem implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2894324903467525328L;
+
+	public static final String NAME = "be.fedict.eid.pkira.blm.bulkApprovalItem";
+	
+	@Id
+	@GeneratedValue
+	private String id;
+	
 	private String requester;
 	private String certificateDomain;
 	private String email;
 	private boolean selected;
 	private Integer registrationId;
 
+	public BulkApprovalItem(){}
+	
 	public BulkApprovalItem(Registration registration) {
 		this.registrationId = registration.getId();
 		User requester = registration.getRequester();
 		this.requester = requester.getFirstName() + " " + requester.getLastName();
-		this.certificateDomain = registration.getCertificateDomain().getName();
+		this.setCertificateDomain(registration.getCertificateDomain().getName());
 		this.email = registration.getEmail();
 	}
 
@@ -55,6 +79,10 @@ public class BulkApprovalItem {
 	public String getCertificateDomain() {
 		return certificateDomain;
 	}
+	
+	public void setCertificateDomain(String certificateDomain) {
+		this.certificateDomain = certificateDomain;
+	}
 
 	public String getEmail() {
 		return email;
@@ -64,4 +92,11 @@ public class BulkApprovalItem {
 		return registrationId;
 	}
 
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getId() {
+		return id;
+	}
 }

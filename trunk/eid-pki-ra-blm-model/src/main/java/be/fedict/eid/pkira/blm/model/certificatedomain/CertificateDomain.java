@@ -106,7 +106,7 @@ public class CertificateDomain implements Serializable {
 			return false;
 		}
 		CertificateDomain that = (CertificateDomain) obj;
-		return this.id == null ? false : this.id.equals(that.id);
+		return this.name == null ? false : this.name.equals(that.name);
 	}
 
 	@Override
