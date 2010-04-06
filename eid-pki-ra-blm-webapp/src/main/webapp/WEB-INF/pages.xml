@@ -87,7 +87,8 @@
 
 		<navigation from-action="certificatedomains">
 			<end-conversation before-redirect="true" />
-			<redirect view-id="/page/certificatedomain/certificatedomain-list.xhtml" />
+			<redirect view-id="/page/certificatedomain/certificatedomain-list.xhtml">
+			</redirect>
 		</navigation>
 
 		<navigation from-action="registrations">
@@ -100,4 +101,10 @@
 			<redirect view-id="/login.xhtml" />
 		</navigation>
 	</page>
+	
+	<exception class="org.hibernate.validator.InvalidStateException">
+		<redirect>
+			<message severity="ERROR">#{be.fedict.eid.pkira.blm.invalidStateExceptionHandler.handle(org.jboss.seam.handledException)}</message>
+		</redirect>
+	</exception>
 </pages>

@@ -34,7 +34,7 @@ import org.hibernate.validator.NotEmpty;
 import org.hibernate.validator.NotNull;
 import org.jboss.seam.annotations.Name;
 
-import be.fedict.eid.pkira.blm.model.certificatedomain.validation.UniqueCertificateDomainDnExpression;
+import be.fedict.eid.pkira.blm.model.certificatedomain.validation.UniqueCertificateDomain;
 import be.fedict.eid.pkira.blm.model.certificatedomain.validation.UniqueCertificateDomainName;
 import be.fedict.eid.pkira.blm.model.certificatedomain.validation.ValidCertificateDomainDnExpression;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
@@ -51,6 +51,7 @@ import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 			@NamedQuery(name = "findCertificateDomainByCertificateTypes", query = "FROM CertificateDomain WHERE (clientCertificate=:forClient OR :forClient=FALSE) AND (serverCertificate=:forServer OR :forServer=FALSE) AND (codeSigningCertificate=:forCode OR :forCode=FALSE)")
 	})
 @Name(CertificateDomain.NAME)
+@UniqueCertificateDomain
 public class CertificateDomain implements Serializable {
 
 	private static final long serialVersionUID = -4193917177011312256L;
@@ -68,7 +69,6 @@ public class CertificateDomain implements Serializable {
 	@Column(name = "DN_EXPRESSION", nullable = false)
 	@NotNull
 	@ValidCertificateDomainDnExpression
-	@UniqueCertificateDomainDnExpression
 	private String dnExpression;
 	@Column(name = "SERVERCERT", nullable = false)
 	private boolean serverCertificate;
@@ -106,7 +106,7 @@ public class CertificateDomain implements Serializable {
 			return false;
 		}
 		CertificateDomain that = (CertificateDomain) obj;
-		return this.name == null ? false : this.name.equals(that.name);
+		return this.id == null ? false : this.id.equals(that.id);
 	}
 
 	@Override
@@ -144,7 +144,7 @@ public class CertificateDomain implements Serializable {
 		this.codeSigningCertificate = codeSigningCertificate;
 	}
 
-	@NotEmpty(message="{validation.empty.certificatetypes}")
+	@NotEmpty(message="{validation.empty.certificateTypes}")
 	public Set<CertificateType> getCertificateTypes() {
 		Set<CertificateType> result = new HashSet<CertificateType>();
 		if (clientCertificate) {

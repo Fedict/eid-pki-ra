@@ -33,38 +33,33 @@ import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;
  * @author Bram Baeyens
  *
  */
-public class UniqueCertificateDomainDnExpressionValidator implements Validator<UniqueCertificateDomainDnExpression> {
+public class UniqueCertificateDomainValidator implements Validator<UniqueCertificateDomain> {
 
 	@Override
-	public void initialize(UniqueCertificateDomainDnExpression constraintAnnotation) {
+	public void initialize(UniqueCertificateDomain constraintAnnotation) {
 	}
 
 	@Override
-	public boolean isValid(Object value) {
-		DistinguishedNameManager distinguishedNameManager = 
-			(DistinguishedNameManager) Component.getInstance(DistinguishedNameManager.NAME);
-		CertificateDomainHome certificateDomainHome = 
-			(CertificateDomainHome) Component.getInstance(CertificateDomainHome.NAME);
-		
+	public boolean isValid(Object value) {		
 		// Create the DN
+		CertificateDomain certificateDomain = (CertificateDomain) value;
 		DistinguishedName distinguishedName;		
 		try {
-			distinguishedName = distinguishedNameManager.createDistinguishedName((String) value);
+			distinguishedName = getDistinguishedNameManager().createDistinguishedName(certificateDomain.getDnExpression());
 		} catch (InvalidDistinguishedNameException e) {
 			return false;
 		}
 		
 		// Look up the matching certificate domains
-		List<CertificateDomain> allDomains = 
-			certificateDomainHome.findByCertificateTypes(certificateDomainHome.getInstance().getCertificateTypes());
+		List<CertificateDomain> allDomains = getCertificateDomainHome().findByCertificateTypes(certificateDomain.getCertificateTypes());
 
 		// Look for overlaps
 		for (CertificateDomain otherDomain : allDomains) {
 			try {
 				DistinguishedName otherDistinguishedName = 
-					distinguishedNameManager.createDistinguishedName(otherDomain.getDnExpression());
+					getDistinguishedNameManager().createDistinguishedName(otherDomain.getDnExpression());
 				if (otherDistinguishedName.matches(distinguishedName) 
-						&& !otherDomain.equals(certificateDomainHome.getInstance())) {
+						&& !otherDomain.equals(certificateDomain)) {
 					return false;
 				}
 			} catch (InvalidDistinguishedNameException e) {
@@ -72,6 +67,14 @@ public class UniqueCertificateDomainDnExpressionValidator implements Validator<U
 			}
 		}
 		return true;
+	}
+	
+	protected DistinguishedNameManager getDistinguishedNameManager() {
+		return (DistinguishedNameManager) Component.getInstance(DistinguishedNameManager.NAME);
+	}
+	
+	protected CertificateDomainHome getCertificateDomainHome() {
+		return (CertificateDomainHome) Component.getInstance(CertificateDomainHome.NAME);
 	}
 
 }

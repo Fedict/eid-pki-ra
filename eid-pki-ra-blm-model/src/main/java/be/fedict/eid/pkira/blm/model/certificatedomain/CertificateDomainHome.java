@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.FlushModeType;
 import javax.persistence.NoResultException;
 
 import org.jboss.seam.annotations.Name;
@@ -42,6 +43,7 @@ public class CertificateDomainHome extends EntityHome<CertificateDomain> {
 	
 	public CertificateDomain findByDnExpression(String dnExpression) {
 		try {
+			getEntityManager().setFlushMode(FlushModeType.COMMIT);
 			return (CertificateDomain) getEntityManager().createNamedQuery("findCertificateDomainByDnExpression")
 					.setParameter("dnExpression", dnExpression)
 					.getSingleResult();
@@ -59,6 +61,7 @@ public class CertificateDomainHome extends EntityHome<CertificateDomain> {
 
 	public CertificateDomain findByName(String name) {
 		try {
+			getEntityManager().setFlushMode(FlushModeType.COMMIT);
 			return (CertificateDomain) getEntityManager().createNamedQuery("findCertificateDomainByName")
 					.setParameter("name", name)
 					.getSingleResult();
