@@ -22,26 +22,27 @@ import java.net.ServerSocket;
 
 import javax.jws.WebService;
 import javax.xml.ws.Endpoint;
-import javax.xml.ws.Holder;
 
 import org.junit.Test;
-import org.w3._2000._09.xmldsig_.SignatureType;
-import org.w3._2002._03.xkms_xbulk.BulkRegisterType.SignedPart;
+import org.w3._2002._03.xkms_xbulk.BulkRegisterResultType;
+import org.w3._2002._03.xkms_xbulk.BulkRegisterType;
 import org.w3._2002._03.xkms_xbulk_wsdl.XKMSPortType;
-
-import be.fedict.eid.pkira.xkmsws.XKMSClient;
 
 public class XKMSClientTest {
 
 	@WebService(endpointInterface = "org.w3._2002._03.xkms_xbulk_wsdl.XKMSPortType")
 	public static class XKMSTestPort implements XKMSPortType {
 
+		/**
+		 * {@inheritDoc}
+		 */
 		@Override
-		public void bulkRegister(
-				SignedPart signedPart,
-				Holder<SignatureType> signature,
-				Holder<org.w3._2002._03.xkms_xbulk.BulkRegisterResultType.SignedPart> signedPart0) {
+		public BulkRegisterResultType bulkRegister(BulkRegisterType bulkRegister) {
+			// TODO Auto-generated method stub
+			return null;
 		}
+
+		
 	}
 
 	private static int getFreePort() throws Exception {
