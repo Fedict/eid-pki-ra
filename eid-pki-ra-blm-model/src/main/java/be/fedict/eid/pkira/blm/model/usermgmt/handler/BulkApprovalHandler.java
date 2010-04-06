@@ -17,13 +17,18 @@
 package be.fedict.eid.pkira.blm.model.usermgmt.handler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Begin;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.datamodel.DataModel;
 import org.jboss.seam.contexts.Contexts;
 
 import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
@@ -37,9 +42,11 @@ import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationRepository;
  *
  */
 @Name(BulkApprovalHandler.NAME)
+@Scope(ScopeType.CONVERSATION)
 public class BulkApprovalHandler {
 
 	public static final String NAME = "be.fedict.eid.pkira.blm.bulkApprovalHandler";
+	public static final String NAMEITEMS = "registrations";
 	
 	@In(value=RegistrationRepository.NAME, create=true)
 	private RegistrationRepository registrationRepository;
@@ -47,55 +54,88 @@ public class BulkApprovalHandler {
 	@In(value=RegistrationManager.NAME, create=true)
 	private RegistrationManager registrationManager;
 	
-	@In(value=BulkApprovalDetails.NAME, required=false)
-	private BulkApprovalDetails bulkApprovalDetails;	
+	private String reason;
+
 	
+	private Map<Registration, Boolean> selectedRegistrations;
+	@DataModel
+	private List<Registration> registrations;
+
 	/**
 	 * Initializes the bean.
 	 * @return 
 	 */
-	@Begin(join=true)
-	@Factory(value=BulkApprovalDetails.NAME, scope=ScopeType.CONVERSATION)
-	public BulkApprovalDetails getBulkApprovalDetails() {		
-		List<BulkApprovalItem> items = new ArrayList<BulkApprovalItem>();
+	@Factory(value=NAMEITEMS)
+	public List<Registration> initRegistrations() {
+		List<Registration> items = new ArrayList<Registration>();
 		for(Registration registration: registrationRepository.findAllNewRegistrations()) {
-			items.add(new BulkApprovalItem(registration));
+			items.add(registration);
 		}
-		
-		BulkApprovalDetails result = new BulkApprovalDetails();
-		result.setItems(items);
-		result.setScrollerPage(1);
-		
-		return result;
+		setSelectedRegistrations(new HashMap<Registration, Boolean>());
+		registrations = items;
+		return items;		
 	}
 	
 	/**
 	 * Approve the selected registrations.
 	 */
-	public void approveRegistrations() {
-		for(BulkApprovalItem item: bulkApprovalDetails.getItems()) {
-			if (item.isSelected()) {
-				registrationManager.approveRegistration(item.getRegistrationId(), bulkApprovalDetails.getReason());
+	@SuppressWarnings("unchecked")
+	public String approveRegistrations() {
+		Iterator itr = getSelectedRegistrations().entrySet().iterator();
+		while(itr.hasNext()){
+			Map.Entry<Registration, Boolean> entry = (Entry<Registration, Boolean>) itr.next();
+			if (entry.getValue().booleanValue()) {
+				registrationManager.approveRegistration(entry.getKey().getId(), getReason());
+				registrations.remove(entry.getKey());
 			}
 		}
-		
 		removeApprovals();
+		return "approved";
 	}
-	
+
 	/**
 	 * Disapprove the selected registrations.
 	 */
-	public void disapproveRegistrations() {
-		for(BulkApprovalItem item: bulkApprovalDetails.getItems()) {
-			if (item.isSelected()) {
-				registrationManager.disapproveRegistration(item.getRegistrationId(), bulkApprovalDetails.getReason());
+	@SuppressWarnings("unchecked")
+	public String disapproveRegistrations() {
+		Iterator itr = getSelectedRegistrations().entrySet().iterator();
+		while(itr.hasNext()){
+			Map.Entry<Registration, Boolean> entry = (Entry<Registration, Boolean>) itr.next();
+			if (entry.getValue().booleanValue()) {
+				registrationManager.disapproveRegistration(entry.getKey().getId(), getReason());
+				registrations.remove(entry.getKey());
 			}
 		}
-		
 		removeApprovals();
+		return "disapproved";
+	}
+	
+	private void removeApprovals() {
+		Contexts.getConversationContext().remove(NAMEITEMS);
+	}
+	
+
+	public void setReason(String reason) {
+		this.reason = reason;
 	}
 
-	private void removeApprovals() {
-		Contexts.getConversationContext().remove(BulkApprovalDetails.NAME);
+	public String getReason() {
+		return reason;
+	}
+
+	public void setRegistrations(List<Registration> registrations) {
+		this.registrations = registrations;
+	}
+
+	public List<Registration> getRegistrations() {
+		return registrations;
+	}
+
+	public void setSelectedRegistrations(Map<Registration, Boolean> selectedRegistrations) {
+		this.selectedRegistrations = selectedRegistrations;
+	}
+
+	public Map<Registration, Boolean> getSelectedRegistrations() {
+		return selectedRegistrations;
 	}
 }
