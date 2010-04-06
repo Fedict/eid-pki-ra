@@ -34,6 +34,8 @@ import javax.xml.ws.handler.Handler;
 
 import org.w3._2000._09.xmldsig_.KeyInfoType;
 import org.w3._2002._03.xkms_xbulk.BatchHeaderType;
+import org.w3._2002._03.xkms_xbulk.BulkRegisterResultType;
+import org.w3._2002._03.xkms_xbulk.BulkRegisterType;
 import org.w3._2002._03.xkms_xbulk.ObjectFactory;
 import org.w3._2002._03.xkms_xbulk.RequestType;
 import org.w3._2002._03.xkms_xbulk.RequestsType;
@@ -59,9 +61,7 @@ public class XKMSClient {
 		XKMSPortType xkmsPort = xkmsService.getXKMSPort();
 
 		BindingProvider bindingProvider = (BindingProvider) xkmsPort;
-		bindingProvider.getRequestContext()
-				.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-						this.endpointAddress);
+		bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, this.endpointAddress);
 
 		Binding binding = bindingProvider.getBinding();
 		List<Handler> handlerChain = binding.getHandlerChain();
@@ -79,21 +79,17 @@ public class XKMSClient {
 			throw new RuntimeException(e);
 		}
 
-		SignedPart signedPart = xbulkObjectFactory
-				.createBulkRegisterTypeSignedPart();
+		SignedPart signedPart = xbulkObjectFactory.createBulkRegisterTypeSignedPart();
 		String signedPartId = "signed-part-" + UUID.randomUUID().toString();
 		signedPart.setId(signedPartId);
 
-		BatchHeaderType batchHeader = xbulkObjectFactory
-				.createBatchHeaderType();
+		BatchHeaderType batchHeader = xbulkObjectFactory.createBatchHeaderType();
 		String batchId = "batch-id-" + UUID.randomUUID().toString();
 		batchHeader.getBatchIDAndBatchTimeAndNumberOfRequests().add(batchId);
 		GregorianCalendar batchTime = new GregorianCalendar();
 		batchTime.setTimeZone(TimeZone.getTimeZone("Z"));
-		batchHeader.getBatchIDAndBatchTimeAndNumberOfRequests().add(
-				datatypeFactory.newXMLGregorianCalendar(batchTime));
-		batchHeader.getBatchIDAndBatchTimeAndNumberOfRequests().add(
-				BigInteger.valueOf(1));
+		batchHeader.getBatchIDAndBatchTimeAndNumberOfRequests().add(datatypeFactory.newXMLGregorianCalendar(batchTime));
+		batchHeader.getBatchIDAndBatchTimeAndNumberOfRequests().add(BigInteger.valueOf(1));
 		signedPart.setBatchHeader(batchHeader);
 
 		Respond respond = xkmsObjectFactory.createRespond();
@@ -110,12 +106,16 @@ public class XKMSClient {
 		String keyId = "key-id-" + UUID.randomUUID().toString();
 		request.setKeyID(keyId);
 		KeyInfoType keyInfo = xmldsigObjectFactory.createKeyInfoType();
-		JAXBElement<byte[]> pkcs10Element = xbulkObjectFactory
-				.createPKCS10(csrData);
+		JAXBElement<byte[]> pkcs10Element = xbulkObjectFactory.createPKCS10(csrData);
 		keyInfo.getContent().add(pkcs10Element);
 		request.setKeyInfo(keyInfo);
 
-		xkmsPort.bulkRegister(signedPart, null, null);
+		BulkRegisterType register = xbulkObjectFactory.createBulkRegisterType();
+		register.setSignedPart(signedPart);
+
+		// TODO Determine signature
+
+		BulkRegisterResultType registerResult = xkmsPort.bulkRegister(register);
 
 		return null;
 	}
