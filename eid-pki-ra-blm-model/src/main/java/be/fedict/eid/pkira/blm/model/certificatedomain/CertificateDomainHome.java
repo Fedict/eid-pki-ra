@@ -18,16 +18,17 @@
 
 package be.fedict.eid.pkira.blm.model.certificatedomain;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.NoResultException;
 
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.framework.EntityHome;
 
+import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 import be.fedict.eid.pkira.blm.model.usermgmt.User;
-import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;
 
 /**
  * @author Bram Baeyens
@@ -39,41 +40,11 @@ public class CertificateDomainHome extends EntityHome<CertificateDomain> {
 	
 	public static final String NAME = "be.fedict.eid.pkira.blm.certificateDomainHome";
 	
-	@In(create=true, value=CertificateDomainValidator.NAME)
-	private CertificateDomainValidator certificateDomainValidator;
-	
-	@Override
-	public String persist() {
-		try {
-			certificateDomainValidator.validate(getInstance());
-		} catch (CertificateDomainException e) {
-			getStatusMessages().addFromResourceBundle(e.getMessageKey());
-			return null;
-		} catch (InvalidDistinguishedNameException e) {
-			getStatusMessages().addFromResourceBundle("certificatedomain.error.invalidname");
-			return null;
-		}
-		return super.persist();
-	}
-	
-	@Override
-	public String update() {
-		try {
-			certificateDomainValidator.validate(getInstance());
-		} catch (CertificateDomainException e) {
-			getStatusMessages().addFromResourceBundle(e.getMessageKey());
-			return null;
-		} catch (InvalidDistinguishedNameException e) {
-			getStatusMessages().addFromResourceBundle("certificatedomain.error.invalidname");
-			return null;
-		}
-		return super.update();
-	}
-
 	public CertificateDomain findByDnExpression(String dnExpression) {
 		try {
 			return (CertificateDomain) getEntityManager().createNamedQuery("findCertificateDomainByDnExpression")
-					.setParameter("dnExpression", dnExpression).getSingleResult();
+					.setParameter("dnExpression", dnExpression)
+					.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		}
@@ -81,7 +52,40 @@ public class CertificateDomainHome extends EntityHome<CertificateDomain> {
 
 	@SuppressWarnings("unchecked")
 	public List<CertificateDomain> findUnregistered(User requester) {
-		return getEntityManager().createNamedQuery("findCertificateDomainUnregistered").setParameter("requester", requester)
+		return getEntityManager().createNamedQuery("findCertificateDomainUnregistered")
+				.setParameter("requester", requester)
+				.getResultList();
+	}
+
+	public CertificateDomain findByName(String name) {
+		try {
+			return (CertificateDomain) getEntityManager().createNamedQuery("findCertificateDomainByName")
+					.setParameter("name", name)
+					.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+		
+	@SuppressWarnings("unchecked")
+	public List<CertificateDomain> findByCertificateTypes(Set<CertificateType> types) {
+		if (types == null || types.size() == 0) {
+			return Collections.emptyList();
+		}
+
+		// Build the query
+		StringBuilder query = new StringBuilder();
+		for (CertificateType type : types) {
+			if (query.length() != 0) {
+				query.append(" OR ");
+			}
+			query.append(type.name());
+			query.append("CERT=true");
+		}
+		query.insert(0, "FROM CertificateDomain WHERE ");
+
+		// Execute it
+		return getEntityManager().createQuery(query.toString())
 				.getResultList();
 	}
 	
@@ -93,10 +97,5 @@ public class CertificateDomainHome extends EntityHome<CertificateDomain> {
 	@Override
 	protected String getCreatedMessageKey() {
 		return "certificatedomain.created";
-	}
-
-	public void setCertificateDomainValidator(CertificateDomainValidator certificateDomainValidator) {
-		this.certificateDomainValidator = certificateDomainValidator;
-	}
-	
+	}	
 }
