@@ -19,8 +19,7 @@
 package be.fedict.eid.pkira.blm.model.certificatedomain.validation;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Documented;
@@ -34,9 +33,9 @@ import org.hibernate.validator.ValidatorClass;
  *
  */
 @Documented
-@ValidatorClass(UniqueCertificateDomainDnExpressionValidator.class)
-@Target({METHOD, FIELD, ANNOTATION_TYPE})
+@ValidatorClass(UniqueCertificateDomainValidator.class)
+@Target({ANNOTATION_TYPE, TYPE})
 @Retention( RUNTIME )
-public @interface UniqueCertificateDomainDnExpression {
-	String message() default "{validation.notUnique.certificateDomainDnExpression}";
+public @interface UniqueCertificateDomain {
+	String message() default "{validation.notUnique.certificateDomain}";
 }

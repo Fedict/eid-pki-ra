@@ -9,7 +9,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.framework.EntityHome;
 
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
-import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainRepository;
+import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainHome;
 
 @Name("registrationHome")
 public class RegistrationHome extends EntityHome<Registration> {
@@ -19,8 +19,8 @@ public class RegistrationHome extends EntityHome<Registration> {
 	@In(value=RegistrationManager.NAME, create=true)
 	private RegistrationManager registrationManager;
 	
-	@In(value = CertificateDomainRepository.NAME, create=true)
-	private CertificateDomainRepository certificateDomainRepository;
+	@In(value = CertificateDomainHome.NAME, create=true)
+	private CertificateDomainHome certificateDomainHome;
 	
 	private String reason;
 
@@ -49,7 +49,7 @@ public class RegistrationHome extends EntityHome<Registration> {
 	}
 	
 	public List<CertificateDomain> getCertificateDomains() {
-		List<CertificateDomain> certificateDomains = certificateDomainRepository.findUnregistered(getInstance().getRequester());
+		List<CertificateDomain> certificateDomains = certificateDomainHome.findUnregistered(getInstance().getRequester());
 		certificateDomains.add(getInstance().getCertificateDomain());
 		return certificateDomains;
 	}
