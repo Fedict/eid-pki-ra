@@ -30,8 +30,13 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.hibernate.validator.NotEmpty;
+import org.hibernate.validator.NotNull;
 import org.jboss.seam.annotations.Name;
 
+import be.fedict.eid.pkira.blm.model.certificatedomain.validation.UniqueCertificateDomainDnExpression;
+import be.fedict.eid.pkira.blm.model.certificatedomain.validation.UniqueCertificateDomainName;
+import be.fedict.eid.pkira.blm.model.certificatedomain.validation.ValidCertificateDomainDnExpression;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 
 /**
@@ -57,8 +62,13 @@ public class CertificateDomain implements Serializable {
 	@Column(name = "CERTIFICATE_DOMAIN_ID")
 	private Integer id;
 	@Column(name = "CERTIFICATE_DOMAIN_NAME", nullable = false, unique = true)
+	@NotNull
+	@UniqueCertificateDomainName
 	private String name;
 	@Column(name = "DN_EXPRESSION", nullable = false)
+	@NotNull
+	@ValidCertificateDomainDnExpression
+	@UniqueCertificateDomainDnExpression
 	private String dnExpression;
 	@Column(name = "SERVERCERT", nullable = false)
 	private boolean serverCertificate;
@@ -134,6 +144,7 @@ public class CertificateDomain implements Serializable {
 		this.codeSigningCertificate = codeSigningCertificate;
 	}
 
+	@NotEmpty(message="{validation.empty.certificatetypes}")
 	public Set<CertificateType> getCertificateTypes() {
 		Set<CertificateType> result = new HashSet<CertificateType>();
 		if (clientCertificate) {

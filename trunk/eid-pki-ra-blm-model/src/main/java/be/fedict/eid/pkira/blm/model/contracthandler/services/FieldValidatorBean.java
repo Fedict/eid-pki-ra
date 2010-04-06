@@ -25,8 +25,6 @@ import javax.ejb.Stateless;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.validator.NotEmptyValidator;
-import org.hibernate.validator.NotNullValidator;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 
@@ -162,13 +160,13 @@ public class FieldValidatorBean implements FieldValidator {
 	}
 
 	protected void validateNotEmpty(String name, String value, List<String> messages) {
-		if (!new NotEmptyValidator().isValid(value)) {
+		if (StringUtils.isBlank(value)) {
 			messages.add(name + " cannot be empty");
 		}
 	}
 
 	protected void validateNotNull(String name, Object value, List<String> messages) {
-		if (!new NotNullValidator().isValid(value)) {
+		if (value == null) {
 			messages.add(name + " is missing");
 		}
 	}

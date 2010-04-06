@@ -46,17 +46,8 @@ import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
  */
 public class RegistrationManagerBeanTest {
 
-	/**
-	 * 
-	 */
 	private static final String TEST_RRN = "RRN";
-	/**
-	 * 
-	 */
 	private static final String TEST_DN2 = "testDN2";
-	/**
-	 * 
-	 */
 	private static final String TEST_DN1 = "testDN";
 	private static final String RRN = "rrn";
 	private static final String LAST_NAME = "last";
@@ -94,32 +85,34 @@ public class RegistrationManagerBeanTest {
 		bean.setMailTemplate(mailTemplate);
 	}
 
-//	@Test
-//	public void testRegisterNewUser() throws RegistrationException {
-//		when(userRepository.findByNationalRegisterNumber(RRN)).thenReturn(null);
-//		when(certificateDomainHome.find()).thenReturn(DOMAIN);
-//
-//		bean.registerUser(RRN, LAST_NAME, FIRST_NAME, DOMAIN_ID, EMAIL_ADDRESS);
-//
-//		verify(userRepository).findByNationalRegisterNumber(RRN);
-//		verify(userRepository).persist(isA(User.class));
-//		verify(certificateDomainHome).find();
-//		verify(registrationRepository).persist(isA(Registration.class));
-//		verifyNoMoreInteractions(userRepository, certificateDomainHome);
-//	}
+	@Test
+	public void testRegisterNewUser() throws RegistrationException {
+		when(userRepository.findByNationalRegisterNumber(RRN)).thenReturn(null);
+		when(certificateDomainHome.find()).thenReturn(DOMAIN);
 
-//	@Test
-//	public void testRegisterExistingUser() throws RegistrationException {
-//		when(userRepository.findByNationalRegisterNumber(RRN)).thenReturn(USER);
-//		when(certificateDomainHome.find()).thenReturn(DOMAIN);
-//
-//		bean.registerUser(RRN, LAST_NAME, FIRST_NAME, DOMAIN_ID, EMAIL_ADDRESS);
-//
-//		verify(userRepository).findByNationalRegisterNumber(RRN);
-//		verify(certificateDomainHome).find();
-//		verify(registrationRepository).persist(isA(Registration.class));
-//		verifyNoMoreInteractions(userRepository, certificateDomainHome);
-//	}
+		bean.registerUser(RRN, LAST_NAME, FIRST_NAME, DOMAIN_ID, EMAIL_ADDRESS);
+
+		verify(userRepository).findByNationalRegisterNumber(RRN);
+		verify(userRepository).persist(isA(User.class));
+		verify(certificateDomainHome).setId(DOMAIN_ID);
+		verify(certificateDomainHome).find();
+		verify(registrationRepository).persist(isA(Registration.class));
+		verifyNoMoreInteractions(userRepository, certificateDomainHome);
+	}
+
+	@Test
+	public void testRegisterExistingUser() throws RegistrationException {
+		when(userRepository.findByNationalRegisterNumber(RRN)).thenReturn(USER);
+		when(certificateDomainHome.find()).thenReturn(DOMAIN);
+
+		bean.registerUser(RRN, LAST_NAME, FIRST_NAME, DOMAIN_ID, EMAIL_ADDRESS);
+
+		verify(userRepository).findByNationalRegisterNumber(RRN);
+		verify(certificateDomainHome).setId(DOMAIN_ID);
+		verify(certificateDomainHome).find();
+		verify(registrationRepository).persist(isA(Registration.class));
+		verifyNoMoreInteractions(userRepository, certificateDomainHome);
+	}
 
 	@Test
 	public void testCheckAuthorizationForUserAndDN() throws Exception {

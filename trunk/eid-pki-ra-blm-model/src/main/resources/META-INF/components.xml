@@ -17,7 +17,7 @@
 
 	<import>be.fedict.eid.pkira.blm</import>
 	<import>be.fedict.eid.pkira.common</import>
-
+	
 	<component name="be.fedict.eid.pkira.blm.digitalSignatureServiceClient" scope="application"
 		class="be.fedict.eid.dss.client.DigitalSignatureServiceClient" />
 
