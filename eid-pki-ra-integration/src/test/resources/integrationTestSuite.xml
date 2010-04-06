@@ -1,9 +1,0 @@
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="integrationTestSuite" verbose="1">
-	<parameter name="context" value="admin" />
-	<test name="TestClass test">
-		<classes>
-			<class name="be.fedict.eid.integration.TestClass" />
-		</classes>
-	</test>
-</suite>

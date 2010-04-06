@@ -59,6 +59,12 @@
 			<artifactId>hsqldb</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
 	<properties>
