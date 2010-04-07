@@ -33,6 +33,11 @@ public class CertificateDomainSeleniumTest extends BaseSeleniumTestCase {
 	private static final String NAME3 = "Third Domain";
 
 	@Test
+	public void login() {
+		super.autoLogin();
+	}
+	
+	@Test
 	public void testCreateCertificateDomainInvalidExpression() {
 		createCertificateDomain(NAME3, DNEXPR_INVALID, true, false, false);
 		assertTextPresent("The distinguished name expression is not valid");
@@ -86,5 +91,5 @@ public class CertificateDomainSeleniumTest extends BaseSeleniumTestCase {
 			getSelenium().check("certificateDetailForm:codeSigningCertDecoration:codeSigningCert");
 		}
 		clickAndWait("certificateDetailForm:submitButtonBox:submit");
-	}
+	}	
 }
