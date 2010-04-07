@@ -153,7 +153,7 @@ public class BaseSeleniumTestCase {
 	protected void autoLogin() {
 		// This assumes that a user with RRN 99999999999 is in the database and
 		// the application is running in debug mode.
-		openAndWait(getDeployURL() + "/postLogin.seam");
+		openAndWait(getDeployURL() + "postLogin.seam");
 		
 		assertTextPresent("Log out");
 	}
