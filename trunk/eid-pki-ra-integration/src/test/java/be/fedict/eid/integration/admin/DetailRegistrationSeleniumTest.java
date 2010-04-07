@@ -8,7 +8,7 @@ public class DetailRegistrationSeleniumTest extends BaseSeleniumTestCase {
 	private String pageDetailTitle = "Approval Detail overview"; 	
 	
 	private void createCertificateDomain() {
-		openAndWait(deployUrl);
+		openAndWait(getDeployURL());
 		clickAndWait("header-form:registrations");
 		assertTextPresent(pageOverviewTitle);
 		assertTextPresent("eHealth Client Certificates");

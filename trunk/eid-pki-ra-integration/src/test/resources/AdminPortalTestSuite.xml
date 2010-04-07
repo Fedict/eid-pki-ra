@@ -6,10 +6,9 @@
 			<class name="be.fedict.eid.integration.setup.db.SetupDatabase" />
 		</classes>
 	</test>
-	<!-- <test name="Certificate Domain tests">
+	<test name="Certificate Domain tests">
 		<classes>
 			<class name="be.fedict.eid.integration.admin.CertificateDomainSeleniumTest" />
 		</classes>
-	</test>
-	 -->
+	</test>	
 </suite>
