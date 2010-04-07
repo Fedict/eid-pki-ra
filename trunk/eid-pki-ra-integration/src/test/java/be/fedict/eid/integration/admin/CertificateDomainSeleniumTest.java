@@ -75,7 +75,7 @@ public class CertificateDomainSeleniumTest extends BaseSeleniumTestCase {
 
 	private void createCertificateDomain(String name, String dnExpr, boolean clientCert, boolean serverCert,
 			boolean codeSigningCert) {
-		openAndWait(deployUrl);
+		openAndWait(getDeployURL());
 		clickAndWait("header-form:certificatedomains");
 		assertTextPresent("Edit certificate domain");
 
