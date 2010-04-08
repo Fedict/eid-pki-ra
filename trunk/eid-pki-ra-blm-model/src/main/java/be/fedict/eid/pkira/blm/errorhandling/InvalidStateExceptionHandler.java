@@ -20,6 +20,7 @@ package be.fedict.eid.pkira.blm.errorhandling;
 
 import org.hibernate.validator.InvalidStateException;
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.Begin;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
@@ -33,6 +34,7 @@ public class InvalidStateExceptionHandler {
 	
 	public static final String NAME = "be.fedict.eid.pkira.blm.invalidStateExceptionHandler";
 	
+	@Begin(join=true)
 	public String handle(InvalidStateException e) {
 		return e.getInvalidValues()[0].getMessage();
 	}

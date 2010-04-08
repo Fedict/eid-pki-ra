@@ -41,6 +41,30 @@ public class CertificateDomainHome extends EntityHome<CertificateDomain> {
 	
 	public static final String NAME = "be.fedict.eid.pkira.blm.certificateDomainHome";
 	
+	public void setCertificateDomainId(Integer id) {
+		setId(id);
+	}
+	
+	public Integer getCertificateDomainId() {
+		return (Integer) getId();
+	}
+	
+	@Override
+	protected CertificateDomain createInstance() {
+		return new CertificateDomain();
+	}
+	
+	public void wire() {
+		if (getInstance() != null && getInstance().getId() != null 
+				 && !isManaged() && !getEntityManager().contains(getInstance())) {
+			getEntityManager().merge(getInstance());
+		}
+	}
+	
+	public boolean isWired() {
+		return true;
+	}
+	
 	public CertificateDomain findByDnExpression(String dnExpression) {
 		try {
 			getEntityManager().setFlushMode(FlushModeType.COMMIT);
