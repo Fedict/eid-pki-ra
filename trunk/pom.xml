@@ -111,7 +111,7 @@
 
 		<repository>
 			<id>fedict</id>
-			<name>Fedict repository</name>
+			<name>FedICT repository</name>
 			<url>https://www.e-contract.be/maven2/</url>
 			<releases>
 				<enabled>true</enabled>
@@ -152,6 +152,20 @@
 			<url>http://download.java.net/maven/2</url>
 		</pluginRepository>
 	</pluginRepositories>
+
+  <distributionManagement>
+		<repository>
+			<id>internal.releases</id>
+			<name>internal.releases</name>
+			<url>https://repository.aca-it.be/nexus/content/repositories/releases</url>
+			<uniqueVersion>true</uniqueVersion>
+		</repository>
+		<snapshotRepository>
+			<id>internal.snapshots</id>
+			<name>internal.snapshots</name>
+			<url>https://repository.aca-it.be/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 	<build>
 		<plugins>
@@ -523,7 +537,7 @@
 
 			<properties>
 				<!-- development mode (disable in production) -->
-				<seam.debug>true</seam.debug>
+				<seam.debug>false</seam.debug>
 
 				<!-- datasource configuration -->
 				<min.pool.size>1</min.pool.size>
