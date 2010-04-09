@@ -16,6 +16,12 @@
  */
 package be.fedict.eid.pkira.crypto;
 
+import java.io.IOException;
+import java.io.StringWriter;
+
+import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.bouncycastle.openssl.PEMWriter;
+
 /**
  * Information extracted from a CSR.
  * 
@@ -23,10 +29,10 @@ package be.fedict.eid.pkira.crypto;
  */
 public class CSRInfo {
 
-	private final String subject;
+	private PKCS10CertificationRequest certificationRequest;
 
-	public CSRInfo(String subject) {
-		this.subject = subject;
+	public CSRInfo(PKCS10CertificationRequest certificationRequest) {
+		this.certificationRequest = certificationRequest;
 	}
 
 	/**
@@ -34,13 +40,39 @@ public class CSRInfo {
 	 * @return
 	 */
 	public String getSubject() {
-		return subject;
+		return certificationRequest.getCertificationRequestInfo().getSubject().toString();
+	}
+	
+	/**
+	 * Returns the DER encoded version of the CSR.
+	 * @return 
+	 */
+	public byte[] getDerEncoded() {
+		return certificationRequest.getDEREncoded();
+	}
+	
+	/**
+	 * Returns the PEM encoded CSR.
+	 * @return
+	 */
+	public String getPemEncoded() {
+		StringWriter writer = new StringWriter();
+		PEMWriter pemWriter = new PEMWriter(writer);
+		
+		try {
+			pemWriter.writeObject(certificationRequest);
+			pemWriter.flush();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		
+		return writer.toString();
 	}
 	
 	@Override
 	public String toString() {
 		return new StringBuilder("CSRInfo[")
-			.append("subject=").append(subject)
+			.append("subject=").append(getSubject())
 			.append(']').toString();
 	}
 }
