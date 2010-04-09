@@ -40,8 +40,9 @@ public class SignatureVerifierBean implements SignatureVerifier {
 	@Logger
 	private Log log;
 	
-	@In(value="digitalSignatureServiceClient", create=true)
-	private DigitalSignatureServiceClient dssClient;
+	//@In(value="digitalSignatureServiceClient", create=true)
+	//FIXME use configuration
+	private DigitalSignatureServiceClient dssClient = new DigitalSignatureServiceClient("https://www.e-contract.be/eid-dss-ws/dss");
 
 	/*
 	 * (non-Javadoc)
