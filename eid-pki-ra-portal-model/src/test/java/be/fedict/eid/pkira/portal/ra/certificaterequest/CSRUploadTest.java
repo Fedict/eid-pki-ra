@@ -61,7 +61,7 @@ public class CSRUploadTest {
 	
 	@Test
 	public void extractCsrInfoFromValidCsr() throws Exception {
-		CSRInfo csrInfo = new CSRInfo("testDN");
+		CSRInfo csrInfo = new CSRInfo(null);
 		when(csrParser.parseCSR(isA(String.class))).thenReturn(csrInfo);
 		csrUpload.setCsrAsString("abc");
 		assertEquals(csrInfo, csrUpload.extractCsrInfo());

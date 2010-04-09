@@ -91,8 +91,7 @@ public class ContractHandlerBeanTest {
 	private static final int VALID_VALIDITYPERIOD = 15;
 	
 	private static final Certificate THE_CERTIFICATE = createValidCertificate();
-
-	private static final CertificateInfo VALID_CERTIFICATE_INFO = createValidCertificateInfo();
+	
 	private static final Registration VALID_REGISTRATION = createValidRegistration();
 	private static final CertificateRevocationRequestType VALID_REVOCATION_REQUEST = createMinimalRevocationRequest();
 	private static final CertificateSigningRequestType VALID_SIGNING_REQUEST = createMinimalSigningRequest();
@@ -115,6 +114,8 @@ public class ContractHandlerBeanTest {
 	private SignatureVerifier signatureVerifier;
 	@Mock
 	private XKMSService xkmsService;
+	@Mock
+	private CertificateInfo certificateInfo;
 
 	@BeforeMethod
 	public void setup() {
@@ -151,7 +152,9 @@ public class ContractHandlerBeanTest {
 		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateRevocationRequestType.class)))
 				.thenReturn(VALID_REVOCATION_REQUEST);
 		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE))).thenReturn(SIGNER);
-		when(certificateParser.parseCertificate(VALID_CERTIFICATE)).thenReturn(VALID_CERTIFICATE_INFO);
+		when(certificateParser.parseCertificate(VALID_CERTIFICATE)).thenReturn(certificateInfo);
+		when(certificateInfo.getIssuer()).thenReturn(VALID_ISSUER);
+		when(certificateInfo.getSerialNumber()).thenReturn(VALID_SERIALNUMBER);
 		when(contractRepository.findCertificate(VALID_ISSUER, VALID_SERIALNUMBER)).thenReturn(THE_CERTIFICATE);
 		when(contractParser.marshalResponseMessage(
 				argThat(responseType(CertificateRevocationResponseType.class,
@@ -231,7 +234,9 @@ public class ContractHandlerBeanTest {
 		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateRevocationRequestType.class)))
 				.thenReturn(VALID_REVOCATION_REQUEST);
 		when(contractRepository.findCertificate(eq(VALID_ISSUER), eq(VALID_SERIALNUMBER))).thenReturn(THE_CERTIFICATE);
-		when(certificateParser.parseCertificate(VALID_CERTIFICATE)).thenReturn(VALID_CERTIFICATE_INFO);
+		when(certificateParser.parseCertificate(VALID_CERTIFICATE)).thenReturn(certificateInfo);
+		when(certificateInfo.getIssuer()).thenReturn(VALID_ISSUER);
+		when(certificateInfo.getSerialNumber()).thenReturn(VALID_SERIALNUMBER);		
 		doThrow(new ContractHandlerBeanException(ResultType.BACKEND_ERROR, ERROR_MSG)).when(xkmsService).revoke(VALID_CERTIFICATE);
 		when(contractParser.marshalResponseMessage(
 				argThat(responseType(CertificateRevocationResponseType.class, VALID_REQUEST_ID, ResultType.BACKEND_ERROR)), 
@@ -257,7 +262,7 @@ public class ContractHandlerBeanTest {
 				.thenReturn(VALID_SIGNING_REQUEST);
 		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE))).thenReturn(SIGNER);
 		when(xkmsService.sign(VALID_CSR)).thenReturn(VALID_CERTIFICATE);
-		when(certificateParser.parseCertificate(VALID_CERTIFICATE)).thenReturn(VALID_CERTIFICATE_INFO);
+		when(certificateParser.parseCertificate(VALID_CERTIFICATE)).thenReturn(certificateInfo);
 		when(
 				contractParser.marshalResponseMessage(argThat(responseType(CertificateSigningResponseType.class,
 						VALID_REQUEST_ID, ResultType.SUCCESS)), eq(CertificateSigningResponseType.class))).thenReturn(
@@ -378,10 +383,6 @@ public class ContractHandlerBeanTest {
 		Certificate result = new Certificate();
 		result.setCertificateType(VALID_CERTIFICATETYPE);
 		return result;
-	}
-	
-	private static CertificateInfo createValidCertificateInfo() {
-		return new CertificateInfo(VALID_ISSUER, VALID_DN, VALID_START, VALID_END, VALID_SERIALNUMBER);
 	}
 
 	private static Registration createValidRegistration() {

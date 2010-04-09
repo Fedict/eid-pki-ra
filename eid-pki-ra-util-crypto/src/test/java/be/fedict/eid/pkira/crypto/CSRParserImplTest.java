@@ -43,6 +43,8 @@ public class CSRParserImplTest {
 
 		assertNotNull(csrInfo);
 		assertEquals(csrInfo.getSubject(), TestConstants.CSR_SUBJECT);
+		assertNotNull(csrInfo.getDerEncoded());
+		assertNotNull(csrInfo.getPemEncoded());
 	}
 	
 	@Test(expectedExceptions = CryptoException.class)

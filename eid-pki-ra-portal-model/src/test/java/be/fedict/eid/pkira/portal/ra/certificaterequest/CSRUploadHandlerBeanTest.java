@@ -48,6 +48,7 @@ public class CSRUploadHandlerBeanTest {
 	@Mock private Log log;
 	@Mock private CSRUpload csrUpload;
 	@Mock private FacesMessages facesMessages;
+	@Mock private CSRInfo csrInfo;
 	private RequestContract contract;
 	
 	@BeforeMethod
@@ -62,7 +63,8 @@ public class CSRUploadHandlerBeanTest {
 	
 	@Test
 	public void uploadCertificateSigningRequestValid() throws Exception {
-		when(csrUpload.extractCsrInfo()).thenReturn(new CSRInfo("testDN"));
+		when(csrUpload.extractCsrInfo()).thenReturn(csrInfo);
+		when(csrInfo.getSubject()).thenReturn("testDN");
 		when(csrUpload.getBase64Csr()).thenReturn("testBase64CSR");
 		
 		String result = HANDLER.uploadCertificateSigningRequest();

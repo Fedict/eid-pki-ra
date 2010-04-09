@@ -16,8 +16,14 @@
  */
 package be.fedict.eid.pkira.crypto;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.math.BigInteger;
+import java.security.cert.CertificateEncodingException;
+import java.security.cert.X509Certificate;
 import java.util.Date;
+
+import org.bouncycastle.openssl.PEMWriter;
 
 /**
  * Information extracted from a certificate.
@@ -26,35 +32,66 @@ import java.util.Date;
  */
 public class CertificateInfo {
 
-	private final String distinguishedName, issuer;
-	private final Date validityStart, validityEnd;
-	private final BigInteger serialNumber;
+	private X509Certificate certificate;
 
-	public CertificateInfo(String issuer, String distinguishedName, Date validityStart, Date validityEnd, BigInteger serialNumber) {
-		this.issuer = issuer;
-		this.distinguishedName = distinguishedName;
-		this.validityStart = validityStart;
-		this.validityEnd = validityEnd;
-		this.serialNumber = serialNumber;
+	public CertificateInfo(X509Certificate certificate) {
+		this.certificate = certificate;
 	}
 	
 	public BigInteger getSerialNumber() {
-		return serialNumber;
+		return certificate.getSerialNumber();
 	}
 
 	public String getDistinguishedName() {
-		return distinguishedName;
+		return certificate.getSubjectDN().getName();
 	}
 
 	public String getIssuer() {
-		return issuer;
+		return certificate.getIssuerDN().getName();
 	}
 
 	public Date getValidityStart() {
-		return validityStart;
+		return certificate.getNotBefore();
 	}
 
 	public Date getValidityEnd() {
-		return validityEnd;
+		return certificate.getNotAfter();
+	}
+	
+	/**
+	 * Returns the DER encoded version of the CSR.
+	 * @return 
+	 */
+	public byte[] getDerEncoded() {
+		try {
+			return certificate.getEncoded();
+		} catch (CertificateEncodingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * Returns the PEM encoded CSR.
+	 * @return
+	 */
+	public String getPemEncoded() {
+		StringWriter writer = new StringWriter();
+		PEMWriter pemWriter = new PEMWriter(writer);
+		
+		try {
+			pemWriter.writeObject(certificate);
+			pemWriter.flush();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		
+		return writer.toString();
+	}
+
+	@Override
+	public String toString() {
+		return new StringBuilder("CertificateInfo[")
+		.append("subject=").append(getDistinguishedName())
+		.append(']').toString();
 	}
 }

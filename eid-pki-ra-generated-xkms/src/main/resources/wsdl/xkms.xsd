@@ -1,0 +1,423 @@
+<?xml version="1.0"?>
+<schema targetNamespace="http://www.xkms.org/schema/xkms-2001-01-20"
+	xmlns:xkms="http://www.xkms.org/schema/xkms-2001-01-20" xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+	xmlns="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified"
+	elementFormDefault="qualified">
+
+
+
+	<import namespace="http://www.w3.org/2000/09/xmldsig#"
+
+		schemaLocation="xmldsig-core-schema.xsd" />
+
+
+
+	<element name="Register">
+
+		<complexType>
+
+			<sequence>
+
+				<element name="Prototype" type="xkms:KeyBindingType" />
+
+				<element name="AuthInfo" minOccurs="0">
+
+					<complexType>
+
+						<choice>
+
+							<element name="AuthUserInfo" type="xkms:AuthUserInfoType" />
+
+							<element name="AuthServerInfo" type="xkms:AuthServerInfoType" />
+
+						</choice>
+
+					</complexType>
+
+				</element>
+
+				<element name="Respond" minOccurs="0">
+
+					<complexType>
+
+						<sequence>
+
+							<element name="string" type="string" minOccurs="0"
+								maxOccurs="unbounded" />
+
+						</sequence>
+
+					</complexType>
+
+				</element>
+
+			</sequence>
+
+		</complexType>
+
+	</element>
+
+
+
+	<complexType name="AuthUserInfoType">
+
+		<sequence>
+
+			<element name="ProofOfPossession" minOccurs="0">
+
+				<complexType>
+
+					<sequence>
+
+						<element ref="ds:Signature" minOccurs="0" />
+
+					</sequence>
+
+				</complexType>
+
+			</element>
+
+			<element name="KeyBindingAuth" minOccurs="0">
+
+				<complexType>
+
+					<sequence>
+
+						<element ref="ds:Signature" minOccurs="0" />
+
+					</sequence>
+
+				</complexType>
+
+			</element>
+
+			<element name="PassPhraseAuth" type="string" minOccurs="0" />
+
+		</sequence>
+
+	</complexType>
+
+
+
+	<complexType name="AuthServerInfoType">
+
+		<sequence>
+
+			<element name="KeyBindingAuth" minOccurs="0">
+
+				<complexType>
+
+					<sequence>
+
+						<element ref="ds:Signature" minOccurs="0" />
+
+					</sequence>
+
+				</complexType>
+
+			</element>
+
+			<element name="PassPhraseAuth" type="string" minOccurs="0" />
+
+		</sequence>
+
+	</complexType>
+
+
+
+	<complexType name="KeyBindingType">
+
+		<sequence>
+
+			<element name="TransactionID" type="string" minOccurs="0" />
+
+			<element name="Status" type="xkms:AssertionStatus" />
+
+			<element name="KeyID" type="string" minOccurs="0" />
+
+			<element ref="ds:KeyInfo" minOccurs="0" />
+
+			<element name="PassPhrase" type="string" minOccurs="0" />
+
+			<element name="ProcessInfo" minOccurs="0">
+
+				<complexType>
+
+					<sequence minOccurs="0" maxOccurs="unbounded">
+
+						<any namespace="##other" />
+
+					</sequence>
+
+				</complexType>
+
+			</element>
+
+			<element name="ValidityInterval" type="xkms:ValidityIntervalType"
+				minOccurs="0" />
+
+			<element name="KeyUsage" type="xkms:KeyUsageType" minOccurs="0"
+				maxOccurs="unbounded" />
+
+		</sequence>
+
+		<attribute name="Id" type="ID" use="optional" />
+
+	</complexType>
+
+
+
+	<simpleType name="AssertionStatus">
+
+		<restriction base="string">
+
+			<enumeration value="Valid" />
+
+			<enumeration value="Invalid" />
+
+			<enumeration value="Indeterminate" />
+
+		</restriction>
+
+	</simpleType>
+
+
+
+	<simpleType name="KeyUsageType">
+
+		<restriction base="string">
+
+			<enumeration value="Encryption" />
+
+			<enumeration value="Signature" />
+
+			<enumeration value="Exchange" />
+
+		</restriction>
+
+	</simpleType>
+
+
+
+	<complexType name="ValidityIntervalType">
+
+		<sequence>
+
+			<element name="NotBefore" type="dateTime" minOccurs="0" />
+
+			<element name="NotAfter" type="dateTime" minOccurs="0" />
+
+		</sequence>
+
+	</complexType>
+
+
+
+	<element name="RegisterResult">
+
+		<complexType>
+
+			<sequence>
+
+				<element name="Result" type="xkms:ResultCode" />
+
+				<element name="Answer">
+
+					<complexType>
+
+						<sequence>
+
+							<element name="KeyBinding" type="xkms:KeyBindingType"
+
+								minOccurs="0" maxOccurs="unbounded" />
+
+						</sequence>
+
+					</complexType>
+
+				</element>
+
+				<element name="Private" type="string" minOccurs="0" />
+
+			</sequence>
+
+		</complexType>
+
+	</element>
+
+
+
+	<simpleType name="ResultCode">
+
+		<restriction base="string">
+
+			<enumeration value="Success" />
+
+			<enumeration value="NoMatch" />
+
+			<enumeration value="NotFound" />
+
+			<enumeration value="Incomplete" />
+
+			<enumeration value="Failure" />
+
+			<enumeration value="Refused" />
+
+			<enumeration value="Pending" />
+
+		</restriction>
+
+	</simpleType>
+
+
+
+	<element name="Validate">
+
+		<complexType>
+
+			<sequence>
+
+				<element name="Query" type="xkms:KeyBindingType" />
+
+				<element name="Respond" minOccurs="0">
+
+					<complexType>
+
+						<sequence>
+
+							<element name="string" type="string" minOccurs="0"
+								maxOccurs="unbounded" />
+
+						</sequence>
+
+					</complexType>
+
+				</element>
+
+			</sequence>
+
+		</complexType>
+
+	</element>
+
+
+
+	<element name="ValidateResult">
+
+		<complexType>
+
+			<sequence>
+
+				<element name="Result" type="xkms:ResultCode" />
+
+				<element name="Answer" minOccurs="0">
+
+					<complexType>
+
+						<sequence>
+
+							<element name="KeyBinding" type="xkms:KeyBindingType"
+
+								minOccurs="0" maxOccurs="unbounded" />
+
+						</sequence>
+
+					</complexType>
+
+				</element>
+
+			</sequence>
+
+		</complexType>
+
+	</element>
+
+
+
+	<element name="Locate">
+
+		<complexType>
+
+			<sequence>
+
+				<element name="TransactionID" type="string" minOccurs="0" />
+
+				<element name="Query">
+
+					<complexType>
+
+						<sequence>
+
+							<element ref="ds:KeyInfo" />
+
+						</sequence>
+
+					</complexType>
+
+				</element>
+
+				<element name="Respond" minOccurs="0">
+
+					<complexType>
+
+						<sequence>
+
+							<element name="string" type="string" minOccurs="0"
+								maxOccurs="unbounded" />
+
+						</sequence>
+
+					</complexType>
+
+				</element>
+
+			</sequence>
+
+		</complexType>
+
+	</element>
+
+
+
+	<element name="LocateResult">
+
+		<complexType>
+
+			<sequence>
+
+				<element name="TransactionID" type="string" minOccurs="0" />
+
+				<element name="Result" type="xkms:ResultCode" />
+
+				<element name="Answer" minOccurs="0">
+
+					<complexType>
+
+						<sequence>
+
+							<element ref="ds:KeyInfo" minOccurs="0" maxOccurs="unbounded" />
+
+						</sequence>
+
+					</complexType>
+
+				</element>
+
+			</sequence>
+
+		</complexType>
+
+	</element>
+
+	<element name="KeyID" type="string" />
+
+	<element name="Respond">
+		<complexType>
+			<sequence>
+				<element name="string" type="string" minOccurs="0"
+					maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+	</element>
+
+</schema>

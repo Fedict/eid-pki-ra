@@ -10,7 +10,7 @@
 	<groupId>be.fedict</groupId>
 	<artifactId>eid-pki-ra-mock-dss</artifactId>
 	<packaging>war</packaging>
-	<name>eid-pki-ra - web service mocks</name>
+	<name>eid-pki-ra-mock - dss</name>
 	<url>http://maven.apache.org</url>
 
 	<dependencies>

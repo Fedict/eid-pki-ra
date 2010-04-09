@@ -48,6 +48,11 @@
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-common-model</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-client-xkms</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>be.fedict</groupId>
