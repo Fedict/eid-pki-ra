@@ -30,7 +30,6 @@ import javax.xml.ws.Endpoint;
 
 import org.apache.commons.io.FileUtils;
 import org.custommonkey.xmlunit.Diff;
-import org.custommonkey.xmlunit.SimpleNamespaceContext;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.jboss.seam.log.Logging;
@@ -43,6 +42,8 @@ import org.w3c.dom.Document;
 import be.fedict.eid.pki.ra.xkms.ws.MockXKMSWebService;
 import be.fedict.eid.pkira.crypto.CSRParser;
 import be.fedict.eid.pkira.crypto.CSRParserImpl;
+import be.fedict.eid.pkira.xkmsws.keyinfo.SigningKeyKeyStoreProvider;
+import be.fedict.eid.pkira.xkmsws.keyinfo.SigningKeyKeyStoreProviderTest;
 
 public class XKMSClientTest {
 
@@ -80,18 +81,21 @@ public class XKMSClientTest {
 	public void setup() {
 		// Instantiate client
 		parameters.put(XKMSClient.PARAMETER_BUC, "8047651269");
+		parameters.put(XKMSSignatureSOAPHandler.PARAMETER_SIGNING_KEY_PROVIDER_CLASS, SigningKeyKeyStoreProvider.class
+				.getName());
+		String url = SigningKeyKeyStoreProviderTest.class.getResource("/test.jks").toExternalForm();
+		parameters.put(SigningKeyKeyStoreProvider.PARAMETER_KEYSTORE_URL, url);
+		parameters.put(SigningKeyKeyStoreProvider.PARAMETER_KEYSTORE_ENTRYNAME, "test");
+		parameters.put(SigningKeyKeyStoreProvider.PARAMETER_KEYSTORE_PASSWORD, "changeit");
+		parameters.put(SigningKeyKeyStoreProvider.PARAMETER_KEYSTORE_ENTRY_PASSWORD, "changeit");
+		
 		messageInterceptionHandler = new MessageInterceptionHandler();
+		
 		xkmsClient = new XKMSClient(URL, parameters, messageInterceptionHandler);
 
 		// Configure XML Unit
 		XMLUnit.setIgnoreWhitespace(true);
 		XMLUnit.setNormalizeWhitespace(true);
-		Map<String, String> namespaceMap = new HashMap<String, String>();
-		namespaceMap.put("xbulk", "http://www.w3.org/2002/03/xkms-xbulk");
-		namespaceMap.put("ogcm", "http://xkms.og.ubizen.com/schema/xkms-2003-09/");
-		namespaceMap.put("xkms", "http://www.xkms.org/schema/xkms-2001-01-20");
-		namespaceMap.put("dsig", "http://www.w3.org/2000/09/xmldsig#");
-		XMLUnit.setXpathNamespaceContext(new SimpleNamespaceContext(namespaceMap));
 	}
 
 	@Test
@@ -111,7 +115,6 @@ public class XKMSClientTest {
 		diff = new IgnoreLocationsDifferenceListener(diff, ACCEPTED_DIFFERENCES_CREATE_CERTIFICATE);
 
 		XMLAssert.assertXMLIdentical(diff, true);
-
 	}
 
 	private String readResource(String resourceName) throws IOException {

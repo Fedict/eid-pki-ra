@@ -152,6 +152,20 @@
 			<url>http://download.java.net/maven/2</url>
 		</pluginRepository>
 	</pluginRepositories>
+	
+	<distributionManagement>
+		<repository>
+			<id>internal.releases</id>
+			<name>internal.releases</name>
+			<url>https://repository.aca-it.be/nexus/content/repositories/releases</url>
+			<uniqueVersion>true</uniqueVersion>
+		</repository>
+		<snapshotRepository>
+			<id>internal.snapshots</id>
+			<name>internal.snapshots</name>
+			<url>https://repository.aca-it.be/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 	<build>
 		<plugins>
