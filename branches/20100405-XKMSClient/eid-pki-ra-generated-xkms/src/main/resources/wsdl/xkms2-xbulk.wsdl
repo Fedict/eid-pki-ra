@@ -1,13 +1,12 @@
 <?xml version="1.0"?>
-<wsdl:definitions name="XMLKeyManagement"
-	targetNamespace="http://www.w3.org/2002/03/xkms-xbulk#wsdl" xmlns:tns="http://www.w3.org/2002/03/xkms-xbulk#wsdl"
-	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/"
+<wsdl:definitions name="XMLKeyManagement" targetNamespace="http://www.w3.org/2002/03/xkms-xbulk#wsdl"
+	xmlns:tns="http://www.w3.org/2002/03/xkms-xbulk#wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xbulk="http://www.w3.org/2002/03/xkms-xbulk">
 
 	<types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema">
-			<import namespace="http://www.w3.org/2002/03/xkms-xbulk"
-				schemaLocation="xkms2-xbulk.xsd" />
+			<import namespace="http://www.w3.org/2002/03/xkms-xbulk" schemaLocation="xkms2-xbulk.xsd" />
+			<import namespace="http://xkms.og.ubizen.com/schema/xkms-2003-09/" schemaLocation="ogcm.xsd" />
 		</schema>
 	</types>
 
@@ -26,8 +25,7 @@
 	</portType>
 
 	<binding name="SOAPBinding" type="tns:XKMSPortType">
-		<wsdlsoap:binding transport="http://schemas.xmlsoap.org/soap/http"
-			style="document" />
+		<wsdlsoap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
 		<operation name="BulkRegister">
 			<wsdlsoap:operation />
 			<input>

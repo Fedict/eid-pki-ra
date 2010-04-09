@@ -36,4 +36,11 @@ public interface CSRParser {
 	 */
 	CSRInfo parseCSR(String csr) throws CryptoException;
 
+	/**
+	 * Parse and verify a CSR and return information extracted from it.
+	 * @param csr the CSR to parse.
+	 * @return the information.
+	 * @throws CryptoException if the CSR is invalid.
+	 */
+	CSRInfo parseCSR(byte[] csr) throws CryptoException;
 }

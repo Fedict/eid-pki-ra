@@ -20,7 +20,6 @@ import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.fail;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +30,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
-import be.fedict.eid.pkira.blm.model.contracthandler.services.FieldValidatorBean;
 import be.fedict.eid.pkira.contracts.CertificateRevocationRequestBuilder;
 import be.fedict.eid.pkira.contracts.CertificateSigningRequestBuilder;
 import be.fedict.eid.pkira.contracts.EntityBuilder;
@@ -47,8 +45,6 @@ import be.fedict.eid.pkira.generated.contracts.CertificateTypeType;
 import be.fedict.eid.pkira.generated.contracts.EntityType;
 
 public class FieldValidatorBeanTest {
-
-	// TODO test for validation of revocation requests
 
 	private static final String INVALID_CERTIFICATE = "Invalid certificate";
 	private static final CertificateTypeType INVALID_CERTIFICATE_TYPE = null;
@@ -71,7 +67,6 @@ public class FieldValidatorBeanTest {
 	private static final String VALID_NAME = "Jan Van den Bergh";
 	private static final String VALID_PHONE = "+32 3 123.456";
 	private static final String VALID_REQUEST_ID = "REQUEST_ID";
-	private static final BigInteger VALID_SERIALNUMBER = BigInteger.TEN;
 	private static final Date VALID_STARTDATE = new Date(VALID_ENDDATE.getTime()+1000);
 	private static final int VALID_VALIDITY_PERIOD = 15;
 
@@ -80,16 +75,24 @@ public class FieldValidatorBeanTest {
 	private CertificateParser certificateParser;
 	@Mock 
 	private CSRParser csrParser;
+	@Mock
+	private CertificateInfo certificateInfo;
+	@Mock
+	private CSRInfo csrInfo;
 	private List<String> messages;
 
 	@BeforeMethod
 	public void setup() throws CryptoException {
 		MockitoAnnotations.initMocks(this);
 		
-		when(csrParser.parseCSR(VALID_CSR)).thenReturn(new CSRInfo(VALID_DN));
+		when(csrParser.parseCSR(VALID_CSR)).thenReturn(csrInfo);
 		when(csrParser.parseCSR(INVALID_CSR)).thenThrow(new CryptoException());
-		when(certificateParser.parseCertificate(VALID_CERTIFICATE)).thenReturn(new CertificateInfo(VALID_DN, VALID_DN, VALID_STARTDATE, VALID_ENDDATE, VALID_SERIALNUMBER));
+		when(certificateParser.parseCertificate(VALID_CERTIFICATE)).thenReturn(certificateInfo);
 		when(certificateParser.parseCertificate(INVALID_CERTIFICATE)).thenThrow(new CryptoException());
+		when(certificateInfo.getValidityStart()).thenReturn(VALID_STARTDATE);
+		when(certificateInfo.getValidityEnd()).thenReturn(VALID_ENDDATE);
+		when(certificateInfo.getDistinguishedName()).thenReturn(VALID_DN);
+		when(csrInfo.getSubject()).thenReturn(VALID_DN);
 		
 		bean = new FieldValidatorBean();		
 		bean.setCSRParser(csrParser);
@@ -105,7 +108,7 @@ public class FieldValidatorBeanTest {
 	}
 
 	@Test
-	public void testValidateCertificateRevocationRequestInvalidDNAndDates() {
+	public void testValidateCertificateRevocationRequestInvalidDNAndDates() {			
 		CertificateRevocationRequestType contract = createValidCertificateRevocationRequest();
 		contract.setDistinguishedName(VALID_DN + ",test=test");
 		contract.setValidityStart(contract.getValidityEnd());

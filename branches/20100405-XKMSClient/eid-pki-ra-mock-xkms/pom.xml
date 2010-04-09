@@ -13,7 +13,7 @@
 	<artifactId>eid-pki-ra-mock-xkms</artifactId>
 	<packaging>jar</packaging>
 	<name>eid-pki-ra-mock - xkms</name>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>be.fedict</groupId>
@@ -24,19 +24,12 @@
 			<artifactId>commons-logging-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk16</artifactId>			
 		</dependency>
 		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<scope>test</scope>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-util-crypto</artifactId>
 		</dependency>
 	</dependencies>
 </project>

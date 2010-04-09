@@ -24,6 +24,9 @@ public class XKMSServiceBeanTest {
 	
 	@Mock
 	private CSRParser csrParser;
+	
+	@Mock
+	private CSRInfo csrInfo;
 
 	@BeforeTest
 	public void setup(){
@@ -37,7 +40,8 @@ public class XKMSServiceBeanTest {
 	
 	@Test
 	public void signTest() throws CryptoException, ContractHandlerBeanException{
-		when(csrParser.parseCSR(anyString())).thenReturn(new CSRInfo("c=be,o=test"));
+		when(csrParser.parseCSR(anyString())).thenReturn(csrInfo);
+		when(csrInfo.getSubject()).thenReturn("c=be,o=test");
 		
 		String certificate = service.sign("");
 		System.err.println(certificate);

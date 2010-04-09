@@ -18,50 +18,111 @@
 
 package be.fedict.eid.pkira.xkmsws;
 
-import java.net.ServerSocket;
+import static org.testng.Assert.assertNotNull;
 
-import javax.jws.WebService;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.xml.ws.Endpoint;
 
-import org.junit.Test;
-import org.w3._2002._03.xkms_xbulk.BulkRegisterResultType;
-import org.w3._2002._03.xkms_xbulk.BulkRegisterType;
-import org.w3._2002._03.xkms_xbulk_wsdl.XKMSPortType;
+import org.apache.commons.io.FileUtils;
+import org.custommonkey.xmlunit.Diff;
+import org.custommonkey.xmlunit.SimpleNamespaceContext;
+import org.custommonkey.xmlunit.XMLAssert;
+import org.custommonkey.xmlunit.XMLUnit;
+import org.jboss.seam.log.Logging;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Test;
+import org.w3c.dom.Document;
+
+import be.fedict.eid.pki.ra.xkms.ws.MockXKMSWebService;
+import be.fedict.eid.pkira.crypto.CSRParser;
+import be.fedict.eid.pkira.crypto.CSRParserImpl;
 
 public class XKMSClientTest {
 
-	@WebService(endpointInterface = "org.w3._2002._03.xkms_xbulk_wsdl.XKMSPortType")
-	public static class XKMSTestPort implements XKMSPortType {
+	public static final String URL = "http://localhost:33333/xkms";
 
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		public BulkRegisterResultType bulkRegister(BulkRegisterType bulkRegister) {
-			// TODO Auto-generated method stub
-			return null;
-		}
+	private static final String[] ACCEPTED_DIFFERENCES_CREATE_CERTIFICATE =
+		{
+				"/Envelope[1]/Body[1]/BulkRegister[1]/SignedPart[1]/BatchHeader[1]/BatchID[1]/text()[1]",
+				"/Envelope[1]/Body[1]/BulkRegister[1]/SignedPart[1]/BatchHeader[1]/BatchTime[1]/text()[1]",
+				"/Envelope[1]/Body[1]/BulkRegister[1]/SignedPart[1]/Requests[1]/Request[1]/KeyID[1]/text()[1]",
+				"/Envelope[1]/Body[1]/BulkRegister[1]/SignedPart[1]/Requests[1]/Request[1]/ProcessInfo[1]/AttributeCertificate[1]/ValidityInterval[1]/NotBefore[1]/text()[1]",
+				"/Envelope[1]/Body[1]/BulkRegister[1]/SignedPart[1]/Requests[1]/Request[1]/ProcessInfo[1]/AttributeCertificate[1]/ValidityInterval[1]/NotAfter[1]/text()[1]",
+				"/Envelope[1]/Body[1]/BulkRegister[1]/Signature[1]/SignedInfo[1]/Reference[1]/DigestValue[1]/text()[1]",
+				"/Envelope[1]/Body[1]/BulkRegister[1]/Signature[1]/SignatureValue[1]/text()[1]", };
 
-		
+	private Endpoint webServiceEndpoint;
+	private MessageInterceptionHandler messageInterceptionHandler;
+	private XKMSClient xkmsClient;
+
+	private Map<String, String> parameters = new HashMap<String, String>();
+
+	@BeforeSuite
+	public void startTestWebService() {
+		webServiceEndpoint = Endpoint.create(new MockXKMSWebService());
+		webServiceEndpoint.publish(URL);
 	}
 
-	private static int getFreePort() throws Exception {
-		ServerSocket serverSocket = new ServerSocket(0);
-		int port = serverSocket.getLocalPort();
-		serverSocket.close();
-		return port;
+	@AfterSuite
+	public void stopTestWebService() {
+		webServiceEndpoint.stop();
+	}
+
+	@SuppressWarnings("unchecked")
+	@BeforeMethod
+	public void setup() {
+		// Instantiate client
+		parameters.put(XKMSClient.PARAMETER_BUC, "8047651269");
+		messageInterceptionHandler = new MessageInterceptionHandler();
+		xkmsClient = new XKMSClient(URL, parameters, messageInterceptionHandler);
+
+		// Configure XML Unit
+		XMLUnit.setIgnoreWhitespace(true);
+		XMLUnit.setNormalizeWhitespace(true);
+		Map<String, String> namespaceMap = new HashMap<String, String>();
+		namespaceMap.put("xbulk", "http://www.w3.org/2002/03/xkms-xbulk");
+		namespaceMap.put("ogcm", "http://xkms.og.ubizen.com/schema/xkms-2003-09/");
+		namespaceMap.put("xkms", "http://www.xkms.org/schema/xkms-2001-01-20");
+		namespaceMap.put("dsig", "http://www.w3.org/2000/09/xmldsig#");
+		XMLUnit.setXpathNamespaceContext(new SimpleNamespaceContext(namespaceMap));
 	}
 
 	@Test
 	public void testCreateCertificate() throws Exception {
-		Endpoint endpoint = Endpoint.create(new XKMSTestPort());
-		int port = getFreePort();
-		String url = "http://localhost:" + port + "/xkms";
-		endpoint.publish(url);
+		// Create CSR der to use
+		String csrPem = readResource("/valid.csr");
+		byte[] csrDer = createCSRParser().parseCSR(csrPem).getDerEncoded();
 
-		XKMSClient xkmsClient = new XKMSClient(url);
-		xkmsClient.createCertificate("hello world".getBytes());
+		// Call the certificate creation
+		byte[] certificate = xkmsClient.createCertificate(csrDer, 15);
+		assertNotNull(certificate);
 
-		endpoint.stop();
+		// Validate the outgoing message
+		Document controlDocument = XMLUnit.buildControlDocument(readResource("/exampleSigningRequest.xml"));
+		Document testDocument = messageInterceptionHandler.getLastOutboundMessage().getOwnerDocument();
+		Diff diff = XMLUnit.compareXML(controlDocument, testDocument);
+		diff = new IgnoreLocationsDifferenceListener(diff, ACCEPTED_DIFFERENCES_CREATE_CERTIFICATE);
+
+		XMLAssert.assertXMLIdentical(diff, true);
+
+	}
+
+	private String readResource(String resourceName) throws IOException {
+		URL resourceUrl = XKMSClientTest.class.getResource(resourceName);
+		File resourceFile = new File(resourceUrl.getFile());
+		return FileUtils.readFileToString(resourceFile);
+	}
+
+	private CSRParser createCSRParser() {
+		CSRParserImpl csrParser = new CSRParserImpl();
+		csrParser.setLog(Logging.getLog(XKMSClientTest.class));
+		return csrParser;
 	}
 }
