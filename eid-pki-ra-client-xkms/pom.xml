@@ -19,8 +19,12 @@
 			<artifactId>eid-pki-ra-generated-xkms</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-mock-xkms</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging-api</artifactId>
+			<artifactId>commons-logging</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -32,5 +36,22 @@
 			<classifier>jdk15</classifier>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>xmlunit</groupId>
+			<artifactId>xmlunit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>		
 	</dependencies>
 </project>

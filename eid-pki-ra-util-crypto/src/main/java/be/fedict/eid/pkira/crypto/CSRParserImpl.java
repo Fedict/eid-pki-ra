@@ -39,9 +39,15 @@ public class CSRParserImpl extends BouncyCastleProviderUser implements CSRParser
 	@Logger
 	private Log log;
 
-	/*
-	 * (non-Javadoc)
-	 * @see be.fedict.eid.pkira.crypto.CSRParser#parseCSR(java.lang.String)
+	/**
+	 * {@inheritDoc}
+	 */
+	public CSRInfo parseCSR(byte[] csr) throws CryptoException {
+		return extractCSRInfo(new PKCS10CertificationRequest(csr));
+	}
+	
+	/**
+	 * {@inheritDoc}
 	 */
 	public CSRInfo parseCSR(String csr) throws CryptoException {
 		log.debug(">>> parseCSR(csr[{0}])", csr);
@@ -57,25 +63,28 @@ public class CSRParserImpl extends BouncyCastleProviderUser implements CSRParser
 
 		if (pemObject instanceof PKCS10CertificationRequest) {
 			PKCS10CertificationRequest certificationRequest = (PKCS10CertificationRequest) pemObject;
-			try {
-				if (!certificationRequest.verify()) {
-					log.info("<<< parseCSR: CSR signature is not correct.");
-					throw new CryptoException("CSR signature is not correct.");
-				}
-			} catch (Exception e) {
-				log.info("<<< parseCSR: Cannot verify CSR signature: ", e);
-				throw new CryptoException("Cannot verify CSR signature: " + e.getMessage(), e);
-			}
-
-			String dn = certificationRequest.getCertificationRequestInfo().getSubject().toString();
-			CSRInfo csrInfo = new CSRInfo(dn);
-
-			log.debug("<<< parseCSR: {0}", csrInfo);
-			return csrInfo;
+			return extractCSRInfo(certificationRequest);
 		}
 
 		log.info("<<< parseCSR: No CSR found.");
 		throw new CryptoException("No CSR found.");
+	}
+
+	private CSRInfo extractCSRInfo(PKCS10CertificationRequest certificationRequest) throws CryptoException {
+		try {
+			if (!certificationRequest.verify()) {
+				log.info("<<< parseCSR: CSR signature is not correct.");
+				throw new CryptoException("CSR signature is not correct.");
+			}
+		} catch (Exception e) {
+			log.info("<<< parseCSR: Cannot verify CSR signature: ", e);
+			throw new CryptoException("Cannot verify CSR signature: " + e.getMessage(), e);
+		}
+
+		CSRInfo csrInfo = new CSRInfo(certificationRequest);
+
+		log.debug("<<< parseCSR: {0}", csrInfo);
+		return csrInfo;
 	}
 
 	public void setLog(Log log) {

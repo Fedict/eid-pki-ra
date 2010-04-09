@@ -414,6 +414,12 @@
 				<artifactId>eid-pki-ra-authentication-client</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			
+			<dependency>
+				<groupId>be.fedict</groupId>
+				<artifactId>eid-pki-ra-mock-xkms</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 
 			<!--  Libraries -->
 

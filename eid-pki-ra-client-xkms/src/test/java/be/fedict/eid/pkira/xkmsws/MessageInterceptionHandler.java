@@ -18,33 +18,31 @@
 
 package be.fedict.eid.pkira.xkmsws;
 
-import java.io.ByteArrayOutputStream;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
-import javax.xml.soap.SOAPMessage;
+import javax.xml.soap.SOAPException;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.w3c.dom.Element;
 
 /**
  * Logging JAX-WS SOAP handler.
  * 
  * @author Frank Cornelis
  */
-public class LoggingSoapHandler implements SOAPHandler<SOAPMessageContext> {
+public class MessageInterceptionHandler implements SOAPHandler<SOAPMessageContext> {
 
-	private static final Log LOG = LogFactory.getLog(LoggingSoapHandler.class);
+	private Element lastOutboundMessage;
+	private Element lastInboundMessage;
 
 	public Set<QName> getHeaders() {
 		return null;
 	}
 
 	public void close(MessageContext context) {
-		LOG.debug("close");
 	}
 
 	public boolean handleFault(SOAPMessageContext context) {
@@ -52,20 +50,28 @@ public class LoggingSoapHandler implements SOAPHandler<SOAPMessageContext> {
 	}
 
 	public boolean handleMessage(SOAPMessageContext context) {
-		LOG.debug("handle message");
-		
-		Boolean outboundProperty = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
-		LOG.debug("outbound message: " + outboundProperty);
-
-		SOAPMessage soapMessage = context.getMessage();
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		Element soapBody;
 		try {
-			soapMessage.writeTo(output);
-		} catch (Exception e) {
-			LOG.error("SOAP error: " + e.getMessage());
+			soapBody = context.getMessage().getSOAPBody();
+		} catch (SOAPException e) {
+			throw new RuntimeException(e);
 		}
-		LOG.debug("SOAP message: " + output.toString());
-		
+
+		Boolean outboundProperty = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+		if (outboundProperty) {
+			this.lastOutboundMessage = soapBody;
+		} else {
+			this.lastInboundMessage = soapBody;
+		}
+
 		return true;
+	}
+
+	public Element getLastOutboundMessage() {
+		return lastOutboundMessage;
+	}
+
+	public Element getLastInboundMessage() {
+		return lastInboundMessage;
 	}
 }

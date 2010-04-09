@@ -32,4 +32,12 @@ public interface CertificateParser {
 	 * @throws CryptoException when the certificate could not be successfully parsed.
 	 */
 	CertificateInfo parseCertificate(String certificate) throws CryptoException;
+	
+	/**
+	 * Parses the certificate and returns a list of fields in it.
+	 * @param certificate certificate to parse.
+	 * @return information extracted from the certificate.
+	 * @throws CryptoException when the certificate could not be successfully parsed.
+	 */
+	CertificateInfo parseCertificate(byte[] certificate) throws CryptoException;
 }
