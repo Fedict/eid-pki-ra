@@ -76,7 +76,7 @@ public class XKMSClient {
 	private final org.xkms.schema.xkms_2001_01_20.ObjectFactory xkmsObjectFactory = new org.xkms.schema.xkms_2001_01_20.ObjectFactory();
 	private final org.w3._2000._09.xmldsig_.ObjectFactory xmldsigObjectFactory = new org.w3._2000._09.xmldsig_.ObjectFactory();
 	private com.ubizen.og.xkms.schema.xkms_2003_09.ObjectFactory ogcmObjectFactory = new com.ubizen.og.xkms.schema.xkms_2003_09.ObjectFactory();
-	private final DatatypeFactory datatypeFactory;	
+	private final DatatypeFactory datatypeFactory;
 
 	/**
 	 * Creates an XKMSClient for the specific endpoint address using the
@@ -86,7 +86,7 @@ public class XKMSClient {
 			SOAPHandler<SOAPMessageContext>... extraHandlers) {
 		this.endpointAddress = endpointAddress;
 		this.parameters = parameters;
-		this.extraHandlers = extraHandlers;		
+		this.extraHandlers = extraHandlers;
 
 		try {
 			datatypeFactory = DatatypeFactory.newInstance();
@@ -122,7 +122,7 @@ public class XKMSClient {
 	}
 
 	public void revokeCertificate(/* TODO Parameters */) {
-		// TODO implementation		
+		// TODO implementation
 	}
 
 	/**
@@ -264,20 +264,18 @@ public class XKMSClient {
 		// Set its endpoint address
 		BindingProvider bindingProvider = (BindingProvider) xkmsPort;
 		bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, this.endpointAddress);
-		
-		
 
 		// Add the handlers
 		Binding binding = bindingProvider.getBinding();
 		List<Handler> handlerChain = binding.getHandlerChain();
-		handlerChain.add(new XKMSSignatureSOAPHandler());
+		handlerChain.add(new XKMSSignatureSOAPHandler(parameters));
 		handlerChain.add(new LoggingSoapHandler());
-		if (extraHandlers!=null) {
-			for(SOAPHandler<SOAPMessageContext> handler: extraHandlers) {
+		if (extraHandlers != null) {
+			for (SOAPHandler<SOAPMessageContext> handler : extraHandlers) {
 				handlerChain.add(handler);
 			}
 		}
-			
+
 		binding.setHandlerChain(handlerChain);
 
 		return xkmsPort;

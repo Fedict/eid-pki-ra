@@ -18,12 +18,12 @@
 
 package be.fedict.eid.pkira.xkmsws;
 
-import java.io.FileInputStream;
-import java.security.KeyStore;
+import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.crypto.dsig.CanonicalizationMethod;
@@ -48,9 +48,21 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Element;
 
+import be.fedict.eid.pkira.xkmsws.keyinfo.SigningKeyProvider;
+
 public class XKMSSignatureSOAPHandler implements SOAPHandler<SOAPMessageContext> {
 
+	public static final String PARAMETER_SIGNING_KEY_PROVIDER_CLASS = "signing.provider";
+
 	private static final Log LOG = LogFactory.getLog(XKMSSignatureSOAPHandler.class);
+
+	private final XMLSignatureFactory signatureFactory = XMLSignatureFactory.getInstance("DOM");
+
+	private Map<String, String> parameters;
+
+	public XKMSSignatureSOAPHandler(Map<String, String> parameters) {
+		this.parameters = parameters;
+	}
 
 	@Override
 	public Set<QName> getHeaders() {
@@ -81,37 +93,34 @@ public class XKMSSignatureSOAPHandler implements SOAPHandler<SOAPMessageContext>
 				Element signedPartElement = (Element) bulkRegisterElement.getElementsByTagNameNS("*", "SignedPart")
 						.item(0);
 
-				XMLSignatureFactory signatureFactory = XMLSignatureFactory.getInstance("DOM");
-
+				// Create reference with digest method and transforms
 				String referenceUri = "#" + signedPartElement.getAttribute("Id");
 				DigestMethod digestMethod = signatureFactory.newDigestMethod(DigestMethod.SHA1, null);
-				List<Transform> transforms = Collections.singletonList(signatureFactory.newTransform(
-						Transform.ENVELOPED, (TransformParameterSpec) null));
+				Transform transform = signatureFactory.newTransform(Transform.ENVELOPED, (TransformParameterSpec) null);
+				List<Transform> transforms = Collections.singletonList(transform);
 				Reference reference = signatureFactory.newReference(referenceUri, digestMethod, transforms, null, null);
 
+				// Create signed info
 				SignedInfo signedInfo = signatureFactory.newSignedInfo(signatureFactory.newCanonicalizationMethod(
 						CanonicalizationMethod.INCLUSIVE, (C14NMethodParameterSpec) null), signatureFactory
 						.newSignatureMethod(SignatureMethod.RSA_SHA1, null), Collections.singletonList(reference));
 
-				KeyStore keyStore = KeyStore.getInstance("JKS");
-				keyStore.load(new FileInputStream(
-						"C:\\Dev\\Fedict\\eid-pki-ra\\eid-pki-ra\\eid-pki-ra-client-xkms\\test.jks"), "changeit"
-						.toCharArray());
-				KeyStore.PrivateKeyEntry keyEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry("test",
-						new KeyStore.PasswordProtection("changeit".toCharArray()));
-				X509Certificate cert = (X509Certificate) keyEntry.getCertificate();
+				// Instantiate the SigningKeyProvider
+				SigningKeyProvider signingKeyProvider = instantiateSigningKeyProvider();
+				X509Certificate certificate = signingKeyProvider.getCertificate();
+				PrivateKey privateKey = signingKeyProvider.getPrivateKey();
 
 				// Create the KeyInfo containing the X509Data.
 				KeyInfoFactory keyInfoFactory = signatureFactory.getKeyInfoFactory();
 				List<Object> x509Content = new ArrayList<Object>();
-				x509Content.add(cert.getSubjectX500Principal().getName());
-				x509Content.add(cert);
+				x509Content.add(certificate.getSubjectX500Principal().getName());
+				x509Content.add(certificate);
 				KeyInfo keyInfo = keyInfoFactory.newKeyInfo(Collections.singletonList(keyInfoFactory
 						.newX509Data(x509Content)));
 
 				// Create a DOMSignContext and specify the RSA PrivateKey and
 				// location of the resulting XMLSignature's parent element.
-				DOMSignContext domSigningContext = new DOMSignContext(keyEntry.getPrivateKey(), bulkRegisterElement);
+				DOMSignContext domSigningContext = new DOMSignContext(privateKey, bulkRegisterElement);
 
 				// Create the XMLSignature, but don't sign it yet.
 				XMLSignature signature = signatureFactory.newXMLSignature(signedInfo, keyInfo);
@@ -124,5 +133,18 @@ public class XKMSSignatureSOAPHandler implements SOAPHandler<SOAPMessageContext>
 		}
 
 		return true;
+	}
+
+	private SigningKeyProvider instantiateSigningKeyProvider() throws XMLSigningException {
+		try {
+			String providerClassName = parameters.get(PARAMETER_SIGNING_KEY_PROVIDER_CLASS);
+			Class<?> providerClass = Class.forName(providerClassName);
+			SigningKeyProvider provider = (SigningKeyProvider) providerClass.newInstance();
+			provider.setParameters(parameters);
+
+			return provider;
+		} catch (Exception e) {
+			throw new XMLSigningException("Error creating signing key provider.", e);
+		}
 	}
 }
