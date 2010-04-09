@@ -21,6 +21,7 @@
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-mock-xkms</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>
