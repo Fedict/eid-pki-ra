@@ -17,10 +17,8 @@
 			<span class="#{invalid ? 'errors' : ''} #{readonly ? 'readonly' : ''}">
 				<s:validateAll>
 					<ui:insert/>
+					<s:message styleClass="errors" showSummary="true" showDetail="false" />
 				</s:validateAll>
-			</span>
-			<span class="error">
-				<s:message styleClass="errors" showSummary="true" showDetail="false" />
 			</span>
 		</h:column> 
 	</h:panelGrid>

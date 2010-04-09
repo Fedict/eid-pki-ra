@@ -38,5 +38,5 @@ import org.hibernate.validator.ValidatorClass;
 @Target({METHOD, FIELD, ANNOTATION_TYPE})
 @Retention( RUNTIME )
 public @interface ValidCertificateDomainDnExpression {
-	String message() default "validation.notValid.certificateDomainDnExpression";
+	String message() default "{validation.notValid.certificateDomainDnExpression}";
 }

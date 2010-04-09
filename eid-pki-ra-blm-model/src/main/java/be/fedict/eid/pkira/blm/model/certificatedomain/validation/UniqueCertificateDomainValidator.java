@@ -20,6 +20,7 @@ package be.fedict.eid.pkira.blm.model.certificatedomain.validation;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.Validator;
 import org.jboss.seam.Component;
 
@@ -43,11 +44,16 @@ public class UniqueCertificateDomainValidator implements Validator<UniqueCertifi
 	public boolean isValid(Object value) {		
 		// Create the DN
 		CertificateDomain certificateDomain = (CertificateDomain) value;
+		if (StringUtils.isEmpty(certificateDomain.getDnExpression())) {
+			return true;
+		}		
+		
 		DistinguishedName distinguishedName;		
 		try {
 			distinguishedName = getDistinguishedNameManager().createDistinguishedName(certificateDomain.getDnExpression());
 		} catch (InvalidDistinguishedNameException e) {
-			return false;
+			// handled in a other validator
+			return true;
 		}
 		
 		// Look up the matching certificate domains

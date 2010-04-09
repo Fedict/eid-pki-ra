@@ -8,7 +8,9 @@
 	</test>
 	<test name="Certificate Domain tests">
 		<classes>
-			<class name="be.fedict.eid.integration.admin.CertificateDomainSeleniumTest" />
+			<class name="be.fedict.eid.integration.admin.CertificateDomainCreateSeleniumTest" />
+			<class name="be.fedict.eid.integration.admin.CertificateDomainUpdateSeleniumTest" />
+			<class name="be.fedict.eid.integration.admin.CertificateDomainListSeleniumTest" />			
 		</classes>
 	</test>	
 </suite>

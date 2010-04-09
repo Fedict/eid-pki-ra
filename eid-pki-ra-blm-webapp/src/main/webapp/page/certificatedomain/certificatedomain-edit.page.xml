@@ -7,20 +7,18 @@
 	
 	<restrict>#{s:hasRole('ADMIN_USER')}</restrict>
 	
-	<begin-conversation join="true" />
-	
-	<action execute="#{certificateDomainHome.wire}" />
-	
-	<param name="certificateDomainId" value="#{certificateDomainHome.certificateDomainId}" />
+	<param name="certificateDomainId" value="#{certificateDomainHome.id}" converterId="javax.faces.Integer" />
 	
 	<navigation from-action="#{certificateDomainHome.persist}">
-		<end-conversation/>
-		<redirect view-id="/page/certificatedomain/certificatedomain-list.xhtml" />	
+		<rule>
+			<redirect view-id="/page/certificatedomain/certificatedomain-list.xhtml" />	
+		</rule>
 	</navigation>
 	
 	<navigation from-action="#{certificateDomainHome.update}">
-		<end-conversation/>
-		<redirect view-id="/page/certificatedomain/certificatedomain-list.xhtml" />	
+		<rule>
+			<redirect view-id="/page/certificatedomain/certificatedomain-list.xhtml" />	
+		</rule>
 	</navigation>
 	
 </page>
