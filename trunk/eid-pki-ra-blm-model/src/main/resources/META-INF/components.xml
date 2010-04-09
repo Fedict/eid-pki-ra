@@ -38,4 +38,7 @@
 	<persistence:managed-persistence-context name="entityManager"
 		entity-manager-factory="#{be.fedict.eid.pkira.blm.eidPkiRaEntityManagerFactory}"
 		auto-create="true" />
+		
+     <core:manager conversation-timeout="120000" default-flush-mode="MANUAL" />
+    
 </components>

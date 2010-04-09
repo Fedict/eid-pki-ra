@@ -16,6 +16,7 @@
  */
 package be.fedict.eid.integration.admin;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.integration.BaseSeleniumTestCase;
@@ -23,7 +24,7 @@ import be.fedict.eid.integration.BaseSeleniumTestCase;
 /**
  * @author Jan Van den Bergh
  */
-public class CertificateDomainSeleniumTest extends BaseSeleniumTestCase {
+public class CertificateDomainCreateSeleniumTest extends BaseSeleniumTestCase {
 
 	private static final String DNEXPR_INVALID = "xyz";
 	private static final String DNEXPR1 = "c=be,ou=test,cn=*";
@@ -32,9 +33,15 @@ public class CertificateDomainSeleniumTest extends BaseSeleniumTestCase {
 	private static final String NAME2 = "Second Domain";
 	private static final String NAME3 = "Third Domain";
 
-	@Test
+	@BeforeClass
 	public void login() {
 		super.autoLogin();
+	}
+
+	@Test
+	public void testCreateFirstCertificateDomain() {
+		createCertificateDomain(NAME1, DNEXPR1, true, false, false);
+		assertTextPresent("The certificate domain has been added to the database");
 	}
 	
 	@Test
@@ -55,16 +62,22 @@ public class CertificateDomainSeleniumTest extends BaseSeleniumTestCase {
 		assertTextPresent("The distinguished name expression overlaps with an existing certificate domain");
 	}
 
-	@Test(dependsOnMethods = "testCreateFirstCertificateDomain")
-	public void testCreateCertificateDomainSameName() {
-		createCertificateDomain(NAME1, DNEXPR2, true, false, false);
-		assertTextPresent("The name of the certificate domain is not valid");
+	@Test
+	public void testCreateCertificateDomainNameNull() {
+		createCertificateDomain("", DNEXPR1, true, true, true);
+		assertTextPresent("Please add a valid name for the certificate domain");
 	}
 
 	@Test
-	public void testCreateFirstCertificateDomain() {
-		createCertificateDomain(NAME1, DNEXPR1, true, false, false);
-		assertTextPresent("The certificate domain has been added to the database");
+	public void testCreateCertificateDomainDnNull() {
+		createCertificateDomain(NAME3, "", true, true, true);
+		assertTextPresent("Please add a valid distinguished name expression for the certificate domain");
+	}
+
+	@Test(dependsOnMethods = "testCreateFirstCertificateDomain")
+	public void testCreateCertificateDomainSameName() {
+		createCertificateDomain(NAME1, DNEXPR2, true, false, false);
+		assertTextPresent("The name of the certificate domain already exists");
 	}
 
 	@Test(dependsOnMethods = "testCreateFirstCertificateDomain")
@@ -75,9 +88,9 @@ public class CertificateDomainSeleniumTest extends BaseSeleniumTestCase {
 
 	private void createCertificateDomain(String name, String dnExpr, boolean clientCert, boolean serverCert,
 			boolean codeSigningCert) {
-		openAndWait(getDeployURL());
 		clickAndWait("header-form:certificatedomains");
-		assertTextPresent("Edit certificate domain");
+		clickAndWait("certificateDomainListForm:submitButtonBox:newCertificateDomain");
+		assertTextPresent("Create certificate domain");
 
 		getSelenium().type("certificateDetailForm:nameDecoration:name", name);
 		getSelenium().type("certificateDetailForm:dnPatternDecoration:dnPattern", dnExpr);
@@ -90,6 +103,6 @@ public class CertificateDomainSeleniumTest extends BaseSeleniumTestCase {
 		if (codeSigningCert) {
 			getSelenium().check("certificateDetailForm:codeSigningCertDecoration:codeSigningCert");
 		}
-		clickAndWait("certificateDetailForm:submitButtonBox:submit");
+		clickAndWait("certificateDetailForm:submitButtonBox:save");
 	}	
 }

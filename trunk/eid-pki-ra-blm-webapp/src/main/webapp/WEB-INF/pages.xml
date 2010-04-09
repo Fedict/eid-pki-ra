@@ -48,8 +48,72 @@
 	</page>
 	
 	<exception class="org.hibernate.validator.InvalidStateException">
-		<redirect>
-			<message severity="ERROR">#{be.fedict.eid.pkira.blm.invalidStateExceptionHandler.handle(org.jboss.seam.handledException)}</message>
+		<redirect view-id="/error.xhtml">
+			<message severity="ERROR">org.jboss.seam.handledException</message>
 		</redirect>		
+	</exception>
+
+	<exception class="be.fedict.eid.pkira.authentication.AuthenticationException">
+		<redirect view-id="/login.xhtml">
+			<message>#{messages['validator.invalid.authentication']}</message>
+		</redirect>
+	</exception>
+
+	<exception class="javax.security.auth.login.LoginException">
+		<redirect view-id="/login.xhtml">
+			<message>#{messages['validator.invalid.authentication']}</message>
+		</redirect>
+	</exception>
+
+	<exception class="org.jboss.seam.framework.EntityNotFoundException">
+		<redirect view-id="/error.xhtml">
+			<message>Not found</message>
+		</redirect>
+	</exception>
+
+	<exception class="org.hibernate.validator.InvalidStateException">
+		<end-conversation />
+		<redirect view-id="/error.xhtml" />
+	</exception>
+
+	<exception class="javax.persistence.EntityNotFoundException">
+		<redirect view-id="/error.xhtml">
+			<message>Not found</message>
+		</redirect>
+	</exception>
+
+	<exception class="javax.persistence.OptimisticLockException">
+		<end-conversation />
+		<redirect view-id="/error.xhtml">
+			<message>
+				Another user changed the same data, please try again
+			</message>
+		</redirect>
+	</exception>
+
+	<exception class="org.jboss.seam.security.AuthorizationException">
+		<redirect view-id="/error.xhtml">
+			<message>You don't have permission to do this</message>
+		</redirect>
+	</exception>
+
+	<exception class="org.jboss.seam.security.NotLoggedInException">
+		<redirect view-id="/login.xhtml">
+			<message>#{messages['org.jboss.seam.NotLoggedIn']}</message>
+		</redirect>
+	</exception>
+
+	<exception class="javax.faces.application.ViewExpiredException">
+		<redirect view-id="/error.xhtml">
+			<message>
+				Your session has timed out, please try again
+			</message>
+		</redirect>
+	</exception>
+
+	<exception>
+		<redirect view-id="/error.xhtml">
+			<message>Unexpected error, please try again</message>
+		</redirect>
 	</exception>
 </pages>

@@ -18,6 +18,7 @@
 
 package be.fedict.eid.pkira.blm.model.certificatedomain.validation;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.Validator;
 import org.jboss.seam.Component;
 
@@ -36,6 +37,9 @@ public class ValidCertificateDomainDnExpressionValidator implements Validator<Va
 
 	@Override
 	public boolean isValid(Object value) {
+		if (StringUtils.isEmpty((String) value)) {
+			return true;
+		}		
 		DistinguishedNameManager distinguishedNameManager = 
 			(DistinguishedNameManager) Component.getInstance(DistinguishedNameManager.NAME);
 		// Create the DN

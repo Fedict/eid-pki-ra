@@ -45,7 +45,7 @@ import com.thoughtworks.selenium.Selenium;
  */
 public class BaseSeleniumTestCase {
 	
-	public static final String DEFAULT_PAGE_LOADTIME = "150000";
+	public static final String DEFAULT_PAGE_LOADTIME = "5000";
 	
 	private static String deployUrl;	
 	private static Selenium selenium;
@@ -197,7 +197,7 @@ public class BaseSeleniumTestCase {
 	}
 	
     protected void waitForPageToLoad() {
-    	String pageLoadTime = ConnectionDetailsReader.getConnectionProperty("webidm.test.selenium.pageLoadTime");
+    	String pageLoadTime = ConnectionDetailsReader.getConnectionProperty("be.fedict.eid.integration.selenium.pageLoadTime");
     	if(pageLoadTime == null) {
     		pageLoadTime = DEFAULT_PAGE_LOADTIME;
     	}
