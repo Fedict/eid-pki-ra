@@ -16,11 +16,16 @@
  */
 package be.fedict.eid.pkira.blm.model.config;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import be.fedict.eid.pkira.blm.model.certificatedomain.validation.ValidConfigurationEntry;
 
 /**
  * An entry in the configuration.
@@ -29,19 +34,24 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="CONFIGURATION")
+@ValidConfigurationEntry
 public class ConfigurationEntry {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="ENTRY_ID")
 	private Integer id;
-	private String key;
+	@Enumerated(EnumType.STRING)
+	@Column(name="ENTRY_KEY", nullable=false, unique=true)
+	private ConfigurationEntryKey key;
+	@Column(name="ENTRY_VALUE", nullable=false)
 	private String value;
-	
-	public String getKey() {
+
+	public ConfigurationEntryKey getKey() {
 		return key;
 	}
 	
-	public void setKey(String key) {
+	public void setKey(ConfigurationEntryKey key) {
 		this.key = key;
 	}
 	
@@ -55,5 +65,13 @@ public class ConfigurationEntry {
 	
 	public Integer getId() {
 		return id;
+	}
+
+	public boolean isValid() {
+		try {
+			return key.getConfigurationEntryType().isValid(value);
+		} catch (NullPointerException e) {
+			return false;
+		}
 	}
 }

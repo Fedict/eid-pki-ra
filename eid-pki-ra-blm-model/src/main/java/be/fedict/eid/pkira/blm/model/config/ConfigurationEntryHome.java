@@ -16,30 +16,25 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.blm.model.certificatedomain;
+package be.fedict.eid.pkira.blm.model.config;
 
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.framework.EntityQuery;
+
+import be.fedict.eid.pkira.blm.model.framework.ValidatingEntityHome;
 
 /**
  * @author Bram Baeyens
  *
  */
-@Name(value=AllCertificateDomainQuery.NAME)
-public class AllCertificateDomainQuery extends EntityQuery<CertificateDomain> {
+@Name(ConfigurationEntryHome.NAME)
+public class ConfigurationEntryHome extends ValidatingEntityHome<ConfigurationEntry> {
 
-	private static final long serialVersionUID = 2047569824505992173L;
+	private static final long serialVersionUID = 2424663996981960743L;
 	
-	public static final String NAME = "be.fedict.eid.pkira.blm.allCertificateDomainQuery";
+	public static final String NAME = "be.fedict.eid.pkira.blm.configurationEntryHome";
 	
 	@Override
-	public String getEjbql() {
-		return "select cd from CertificateDomain cd";
+	protected String getUpdatedMessageKey() {
+		return "configurationentry.updated";
 	}
-	
-	@Override
-	public String getOrderColumn() {
-		return "cd.name";
-	}
-
 }

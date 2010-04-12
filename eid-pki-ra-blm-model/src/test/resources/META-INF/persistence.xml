@@ -10,8 +10,7 @@
 		<class>be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract</class>
 		<class>be.fedict.eid.pkira.blm.model.contracts.CertificateRevocationContract</class>
 		<class>be.fedict.eid.pkira.blm.model.usermgmt.Registration</class>
-		<class>be.fedict.eid.pkira.blm.model.usermgmt.User</class>
-		
+		<class>be.fedict.eid.pkira.blm.model.usermgmt.User</class>		
 		<class>be.fedict.eid.pkira.blm.model.config.ConfigurationEntry</class>
 		
 		<properties>

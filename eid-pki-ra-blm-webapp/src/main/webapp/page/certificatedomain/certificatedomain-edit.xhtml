@@ -12,7 +12,7 @@
 				
 				<s:decorate id="nameDecoration" template="/layout/edit.xhtml">
 	               	<ui:define name="label">#{messages['certificatedomain.edit.name']}:</ui:define>
-	               	<h:inputText id="name" value="#{certificateDomainHome.instance.name}" />
+	               	<h:inputText id="name" value="#{certificateDomainHome.instance.name}" readonly="#{certificateDomainHome.managed}" />
 	           	</s:decorate>
 	           	
 	           	<s:decorate id="dnPatternDecoration" template="/layout/edit.xhtml">

@@ -37,7 +37,7 @@ public class CertificateDomainUpdateSeleniumTest extends BaseSeleniumTestCase {
 
 	@Test
 	public void testUpdateCertificateDomain() {
-		updateName(0, "updated1");
+		updateCertificateTypes(0, true, false, true);
 		assertTextPresent("The certificate domain has been updated.");
 	}
 
@@ -71,34 +71,12 @@ public class CertificateDomainUpdateSeleniumTest extends BaseSeleniumTestCase {
 	}
 
 	@Test
-	public void testUpdateCertificateDomainNameNull() {
-		updateName(0, "");
-		assertTextPresent("Please add a valid name for the certificate domain");
-		getSelenium().type("certificateDetailForm:nameDecoration:name", "Updated3");
-		clickAndWait("certificateDetailForm:submitButtonBox:update");
-		assertTextPresent("The certificate domain has been updated.");
-	}
-
-	@Test
 	public void testUpdateCertificateDomainDnNull() {
 		updateDnExpression(0, "");
 		assertTextPresent("Please add a valid distinguished name expression for the certificate domain");
 		getSelenium().type("certificateDetailForm:dnPatternDecoration:dnPattern", "c=en,ou=eHealth,uid=*");
 		clickAndWait("certificateDetailForm:submitButtonBox:update");
 		assertTextPresent("The certificate domain has been updated.");
-	}
-
-	@Test
-	public void testUpdateCertificateDomainSameName() {
-		updateName(0, "eHealth Client Certificates");
-		assertTextPresent("The name of the certificate domain already exists");
-		getSelenium().type("certificateDetailForm:nameDecoration:name", "Updated4");
-		clickAndWait("certificateDetailForm:submitButtonBox:update");
-		assertTextPresent("The certificate domain has been updated.");
-	}
-	
-	private void updateName(int rowToUpdate, String name) {
-		updateCertificateDomain(rowToUpdate, name, null, null, null, null);
 	}
 	
 	private void updateDnExpression(int rowToUpdate, String dnExpr) {
