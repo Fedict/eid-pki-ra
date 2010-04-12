@@ -56,6 +56,9 @@ import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 					name = "findRegistrationByCertificateDomainAndRequester", 
 					query = "FROM Registration r WHERE r.certificateDomain = :certificateDomain AND r.requester=:requester"),
 			@NamedQuery(
+					name = "findRegistrationsByCertificateDomain", 
+					query = "FROM Registration r WHERE r.status=Active and r.certificateDomain=:certificateDomain"), 
+			@NamedQuery(
 					name = "getNumberOfRegistrationsByUserAndStatus", 
 					query = "SELECT count(*) FROM Registration r WHERE r.requester=:user AND r.status=:status"),
 			@NamedQuery(

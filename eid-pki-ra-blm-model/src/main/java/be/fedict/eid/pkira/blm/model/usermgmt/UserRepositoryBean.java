@@ -18,14 +18,19 @@
 
 package be.fedict.eid.pkira.blm.model.usermgmt;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.jboss.seam.annotations.Name;
+
+import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 
 
 /**
@@ -34,7 +39,7 @@ import org.jboss.seam.annotations.Name;
 @Stateless
 @Name(UserRepository.NAME)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
-public class UserRepositoryBean implements UserRepository {
+public class UserRepositoryBean	implements UserRepository {
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -70,6 +75,18 @@ public class UserRepositoryBean implements UserRepository {
 	@Override
 	public User getReference(Integer primaryKey) {
 		return entityManager.getReference(User.class, primaryKey);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Registration> findActiveUsersByCertificateDomain(
+			CertificateDomain certificateDomain) {
+		Query namedQuery = entityManager.createNamedQuery("findRegistrationsByCertificateDomain");
+		namedQuery.setParameter("certificateDomain", certificateDomain.getId());
+		
+		List<Registration> requestors = (List<Registration>) namedQuery.getResultList();
+		
+		return requestors;
 	}
 
 }

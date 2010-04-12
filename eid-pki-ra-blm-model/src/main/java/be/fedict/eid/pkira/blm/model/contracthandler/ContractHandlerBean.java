@@ -28,6 +28,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.log.Log;
+import org.quartz.SchedulerException;
 
 import be.fedict.eid.pkira.blm.model.contracthandler.services.ContractParser;
 import be.fedict.eid.pkira.blm.model.contracthandler.services.FieldValidator;
@@ -64,7 +65,7 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
 @Stateless
 @Name(ContractHandler.NAME)
 public class ContractHandlerBean implements ContractHandler {
-
+	
 	@In(value = CertificateParser.NAME, create = true)
 	private CertificateParser certificateParser;
 
@@ -123,6 +124,8 @@ public class ContractHandlerBean implements ContractHandler {
 
 			// Delete the certificate
 			contractRepository.removeCertificate(certificate);
+			
+			certificate.cancelNotificationMail();
 
 			// Return result message
 			fillResponseFromRequest(responseBuilder, request, ResultType.SUCCESS, "Success");
@@ -132,6 +135,9 @@ public class ContractHandlerBean implements ContractHandler {
 			log.error("Error while processing the contract", e);
 			fillResponseFromRequest(responseBuilder, request, ResultType.GENERAL_FAILURE,
 					"An error occurred while processing the contract.");
+		} catch (SchedulerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		return contractParser.marshalResponseMessage(responseBuilder.toResponseType(),
@@ -183,7 +189,9 @@ public class ContractHandlerBean implements ContractHandler {
 			String requesterName = requester.getName();
 			Certificate certificate = new Certificate(certificateAsPem, certificateInfo, requesterName, contract);
 			contractRepository.persistCertificate(certificate);
-
+		
+			scheduleNotificationMail(registration, certificateInfo, certificate);
+			
 			// Send the mail
 			sendCertificateByMail(certificate, registration);
 
@@ -199,6 +207,12 @@ public class ContractHandlerBean implements ContractHandler {
 
 		return contractParser.marshalResponseMessage(responseBuilder.toResponseType(),
 				CertificateSigningResponseType.class);
+	}
+
+	protected void scheduleNotificationMail(Registration registration,
+			CertificateInfo certificateInfo, Certificate certificate) {
+		//TODO: Add configuration option!
+		certificate.scheduleNotificationMail(certificateInfo.getValidityEnd(), 0L, certificate.getValidityEnd(), certificate, registration.getEmail());
 	}
 
 	private Certificate findCertificate(CertificateRevocationRequestType request) throws ContractHandlerBeanException {

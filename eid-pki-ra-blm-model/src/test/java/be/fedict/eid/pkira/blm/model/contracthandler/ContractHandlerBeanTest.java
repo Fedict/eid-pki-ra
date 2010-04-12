@@ -77,7 +77,8 @@ public class ContractHandlerBeanTest {
 	private static final String ERROR_MSG = "Error";
 	private static final String REQUEST_MESSAGE = "Request message";
 	private static final String RESPONSE_MESSAGE = "Response message";
-	private static final String SIGNER = "69123110110";	
+	private static final String SIGNER = "69123110110";
+	private static final String REQUESTER = "69123110110";	
 	private static final String VALID_CERTIFICATE = "Certificate";
 	private static final CertificateTypeType VALID_CERTIFICATETYPETYPE = CertificateTypeType.CLIENT;
 	private static final CertificateType VALID_CERTIFICATETYPE = CertificateType.CLIENT;
@@ -121,7 +122,12 @@ public class ContractHandlerBeanTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 
-		bean = new ContractHandlerBean();
+		bean = new ContractHandlerBean() {
+			protected void scheduleNotificationMail(Registration registration,
+			CertificateInfo certificateInfo, Certificate certificate) {
+				
+			}
+		};
 		bean.setContractParser(contractParser);
 		bean.setFieldValidator(fieldValidator);
 		bean.setSignatureVerifier(signatureVerifier);
@@ -269,7 +275,7 @@ public class ContractHandlerBeanTest {
 				RESPONSE_MESSAGE);
 		when(registrationManager.findRegistrationForUserDNAndCertificateType(SIGNER, VALID_DN, VALID_CERTIFICATETYPE)).thenReturn(VALID_REGISTRATION);
 		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE))).thenReturn(SIGNER);
-
+		when(certificateInfo.getValidityEnd()).thenReturn(new Date());
 		// Run it
 		String result = bean.signCertificate(REQUEST_MESSAGE);
 
