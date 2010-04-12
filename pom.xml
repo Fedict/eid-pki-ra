@@ -94,6 +94,7 @@
 		<selenium-server.version>1.0.3</selenium-server.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<quartz-version>1.7.3</quartz-version>
 	</properties>
 
 	<repositories>
@@ -505,6 +506,13 @@
 				<artifactId>opensaml</artifactId>
 				<version>${opensaml.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.quartz-scheduler</groupId>
+				<artifactId>quartz-jboss</artifactId>
+				<version>${quartz-version}</version>
+				<type>jar</type>
+				<scope>provided</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -623,7 +631,7 @@
 
 			<properties>
 				<!-- development mode (disable in production) -->
-				<seam.debug>false</seam.debug>
+				<seam.debug>true</seam.debug>
 
 				<!-- datasource configuration   -->
 				<jdbc.connection.url>jdbc:...</jdbc.connection.url>
