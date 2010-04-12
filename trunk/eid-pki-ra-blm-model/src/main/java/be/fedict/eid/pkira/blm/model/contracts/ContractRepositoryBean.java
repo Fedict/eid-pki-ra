@@ -31,6 +31,8 @@ import javax.persistence.Query;
 
 import org.jboss.seam.annotations.Name;
 
+import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
+
 /**
  * Implementation of the domain repository.
  * 
@@ -55,7 +57,7 @@ public class ContractRepositoryBean implements ContractRepository {
 			throw new RuntimeException("Duplicate certificate in database: " + certificate.getIssuer() + "/"
 					+ certificate.getSerialNumber());
 		}
-
+		
 		entityManager.persist(certificate);
 	}
 
@@ -100,6 +102,26 @@ public class ContractRepositoryBean implements ContractRepository {
 			throw new RuntimeException("Too many results for certificate search" + issuer + "/" + serialNumber);
 		}
 	}
+	
+	@Override
+	public Certificate findCertificateByCertificateDomain(
+			CertificateDomain certificateDomain) {
+		Query query = entityManager
+		//TODO: add issuer
+				.createQuery("SELECT distinct c from Certificate c WHERE distinguishedName=?");
+		//query.setParameter(1, issuer);
+		query.setParameter(1, certificateDomain.getDnExpression());
+		try {
+			Certificate result = (Certificate) query.getSingleResult();
+			return result;
+		} catch (NoResultException e) {
+			return null;
+		} catch (EntityNotFoundException e) {
+			return null;
+		} catch (NonUniqueResultException e) {
+			throw new RuntimeException("Too many results for certificate search:" +  certificateDomain.getDnExpression());
+		}
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -117,5 +139,4 @@ public class ContractRepositoryBean implements ContractRepository {
 	protected void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
-
 }

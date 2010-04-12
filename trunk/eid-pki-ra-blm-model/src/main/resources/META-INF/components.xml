@@ -4,6 +4,7 @@
 	xmlns:persistence="http://jboss.com/products/seam/persistence" xmlns:security="http://jboss.com/products/seam/security"
 	xmlns:transaction="http://jboss.com/products/seam/transaction" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:ui="http://jboss.com/products/seam/ui"	
+	xmlns:async="http://jboss.com/products/seam/async"
 	xsi:schemaLocation="http://jboss.com/products/seam/transaction http://jboss.com/products/seam/transaction-2.2.xsd 
 			http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.2.xsd                   
 			http://jboss.com/products/seam/persistence http://jboss.com/products/seam/persistence-2.2.xsd                   
@@ -39,6 +40,7 @@
 		entity-manager-factory="#{be.fedict.eid.pkira.blm.eidPkiRaEntityManagerFactory}"
 		auto-create="true" />
 		
-     <core:manager conversation-timeout="120000" default-flush-mode="MANUAL" />
-    
+	<core:manager conversation-timeout="120000" default-flush-mode="MANUAL" />	
+	
+	<async:quartz-dispatcher />
 </components>

@@ -18,7 +18,11 @@
 
 package be.fedict.eid.pkira.blm.model.usermgmt;
 
+import java.util.List;
+
 import javax.ejb.Local;
+
+import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 
 
 /**
@@ -37,4 +41,6 @@ public interface UserRepository {
 	User findByNationalRegisterNumber(String nationalRegisterNumber);
 
 	User getReference(Integer primaryKey);	
+	
+	List<Registration> findActiveUsersByCertificateDomain(CertificateDomain certificateDomain);
 }
