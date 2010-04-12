@@ -21,6 +21,11 @@
 		id="registrations" 
 		rendered="#{s:hasRole('ADMIN_USER')}" 
 		propagation="none" />
+	<s:link value="#{messages['menu.configurationentries']}" 
+		view="/page/configurationentry/configurationentry-list.xhtml" 
+		id="configurationentries" 
+		rendered="#{s:hasRole('ADMIN_USER')}" 
+		propagation="none" />
 		
 	<rich:toolBarGroup location="right" id="tool-bar-group-right">
 		<s:link value="#{messages['menu.login']}" 

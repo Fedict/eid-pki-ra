@@ -16,30 +16,26 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.blm.model.certificatedomain;
+package be.fedict.eid.pkira.blm.model.certificatedomain.validation;
 
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.framework.EntityQuery;
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import org.hibernate.validator.ValidatorClass;
 
 /**
  * @author Bram Baeyens
  *
  */
-@Name(value=AllCertificateDomainQuery.NAME)
-public class AllCertificateDomainQuery extends EntityQuery<CertificateDomain> {
-
-	private static final long serialVersionUID = 2047569824505992173L;
-	
-	public static final String NAME = "be.fedict.eid.pkira.blm.allCertificateDomainQuery";
-	
-	@Override
-	public String getEjbql() {
-		return "select cd from CertificateDomain cd";
-	}
-	
-	@Override
-	public String getOrderColumn() {
-		return "cd.name";
-	}
-
+@Documented
+@ValidatorClass(ValidConfigurationEntryValidator.class)
+@Target({ANNOTATION_TYPE, TYPE})
+@Retention( RUNTIME )
+public @interface ValidConfigurationEntry {
+	String message() default "{validation.notValid.configurationEntry}";
 }

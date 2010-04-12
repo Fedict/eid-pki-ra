@@ -550,7 +550,7 @@
 
 			<properties>
 				<!-- development mode (disable in production) -->
-				<seam.debug>false</seam.debug>
+				<seam.debug>true</seam.debug>
 
 				<!-- datasource configuration -->
 				<min.pool.size>1</min.pool.size>
