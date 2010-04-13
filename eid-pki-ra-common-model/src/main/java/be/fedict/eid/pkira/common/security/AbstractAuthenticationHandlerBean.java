@@ -18,17 +18,11 @@
 
 package be.fedict.eid.pkira.common.security;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
-import org.jboss.seam.core.Conversation;
 import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.authentication.AuthenticationDecoderFactory;
@@ -50,27 +44,6 @@ public abstract class AbstractAuthenticationHandlerBean implements Authenticatio
 
 	@In
 	private EIdUserCredentials credentials;
-
-	@Factory(value = NAME_LOGIN_URL, scope = ScopeType.EVENT)
-	public String getLoginURL() {
-		try {
-			// TODO get from configuration
-			String url = "https://www.e-contract.be/eid-idp-sp/saml-request?IdPDestination=https://www.e-contract.be/eid-idp/protocol/saml2";
-
-			String returnURL = getRequest().getRequestURL().toString();
-			returnURL = returnURL.replaceFirst("/[^/]*$", "/postLogin.seam");
-			returnURL += "?cid=" + Conversation.instance().getId();
-			String parameter = "SPDestination=" + URLEncoder.encode(returnURL, "UTF-8");
-
-			if (url.indexOf('?') != -1) {
-				return url + '&' + parameter;
-			} else {
-				return url + '?' + parameter;
-			}
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
-	}
 
 	public boolean authenticate() {
 		log.info(">>> authenticate()");

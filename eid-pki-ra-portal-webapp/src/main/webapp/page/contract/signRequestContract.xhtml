@@ -8,7 +8,7 @@
 	login-required="true">
 
 	<ui:define name="center">
-		<form id="dssRequestForm" method="post" action="https://www.e-contract.be/eid-dss/dss-post-entry">
+		<form id="dssRequestForm" method="post" action="#{configurationEntryContainer.dssServletUrl}">
 			<rich:panel id="panel">
 				<f:facet name="header">#{messages['contract.sign.title']}</f:facet>
 				<p>#{messages['contract.sign.subtitle']}</p>

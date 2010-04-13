@@ -25,12 +25,16 @@ import javax.xml.ws.BindingProvider;
 
 import be.fedict.eid.pkira.generated.privatews.CertificateDomainWS;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
+import be.fedict.eid.pkira.generated.privatews.ConfigurationEntryKeyWS;
+import be.fedict.eid.pkira.generated.privatews.ConfigurationEntryWS;
 import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserRequest;
 import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivateService;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateRequest;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateResponse;
+import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryRequest;
+import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryResponse;
 import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsForUserRequest;
 import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.FindUserRequest;
@@ -109,6 +113,14 @@ public class EIDPKIRAPrivateServiceClient {
 		
 		CreateRegistrationForUserResponse response = getWebservicePort().createRegistrationForUser(request);
 		return response.isSuccess();
+	}
+	
+	public ConfigurationEntryWS findConfigurationEntry(String configurationEntryKey) {
+		FindConfigurationEntryRequest request = factory.createFindConfigurationEntryRequest();
+		request.setEntryKey(Enum.valueOf(ConfigurationEntryKeyWS.class, configurationEntryKey));
+		
+		FindConfigurationEntryResponse response = getWebservicePort().findConfigurationEntry(request);
+		return response.getConfigurationEntry();
 	}
 
 	/**

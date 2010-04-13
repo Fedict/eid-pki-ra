@@ -19,7 +19,6 @@ package be.fedict.eid.pkira.blm.model.contracthandler.services;
 
 import javax.ejb.Stateless;
 
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.log.Log;

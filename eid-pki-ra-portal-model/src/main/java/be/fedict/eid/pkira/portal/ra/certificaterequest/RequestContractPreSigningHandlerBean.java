@@ -56,7 +56,8 @@ public class RequestContractPreSigningHandlerBean extends AbstractPreSigningHand
 				.setDistinguishedName(contract.getDistinguishedName())
 				.setCsr(contract.getBase64Csr())
 				.setCertificateType(Enum.valueOf(CertificateTypeType.class, contract.getCertificateType().name()))
-				.setValidityPeriodMonths(contract.getValidityPeriod()).setDescription(contract.getDescription());
+				.setValidityPeriodMonths(contract.getValidityPeriod())
+				.setDescription(contract.getDescription());
 	}
 
 	@Override

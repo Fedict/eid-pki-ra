@@ -37,7 +37,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import org.hibernate.validator.NotNull;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.async.Asynchronous;
@@ -259,7 +258,7 @@ public class Certificate implements Serializable {
 	}
 
 
-	public void cancelNotificationMail() throws SchedulerException{
+	public void cancelNotificationMail() throws SchedulerException {
 		if(timer != null){
 			timer.cancel();
 		}

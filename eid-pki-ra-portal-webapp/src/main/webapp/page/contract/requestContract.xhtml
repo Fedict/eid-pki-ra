@@ -32,7 +32,7 @@
 				<s:decorate id="validityPeriodDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['contract.validityperiod']}:</ui:define>
                 	<h:selectOneMenu value="#{requestContract.validityPeriod}" required="true"> 
-                		<f:selectItems value="#{listContainer.validityPeriods}" />                		
+                		<f:selectItems value="#{configurationEntryContainer.validityPeriods}" />                		
                 	</h:selectOneMenu>
             	</s:decorate>
 				
