@@ -38,7 +38,20 @@ public class ConfigurationEntryUpdateSeleniumTest extends BaseSeleniumTestCase {
 	public void testUpdateCertificateDomain() {
 		updateConfigurationEntry(2004, "100,150,300");
 		assertTextPresent("The configuration parameter has been updated.");
-	}	
+		assertTextPresent("100,150,300");
+	}
+
+	@Test
+	public void testUpdateCertificateDomainInvalidValue() {
+		updateConfigurationEntry(2004, "abc");
+		assertTextPresent("Please add a valid value for the configuration entry");
+	}
+
+	@Test
+	public void testUpdateCertificateDomainEmptyValue() {
+		updateConfigurationEntry(2004, "");
+		assertTextPresent("Please add a valid value for the configuration entry");
+	}
 	
 	private void updateConfigurationEntry(int entryId, String value) {
 		clickAndWait("header-form:configurationentries");

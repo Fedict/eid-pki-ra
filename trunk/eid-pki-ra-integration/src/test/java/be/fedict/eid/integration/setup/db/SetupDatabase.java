@@ -71,7 +71,7 @@ public class SetupDatabase {
 		return DriverManager.getConnection(jdbcUrl, user, password);
 	}
 
-	private String readSql(String context) throws IOException {
+	protected String readSql(String context) throws IOException {
 		String resourceName = ConnectionDetailsReader.getConnectionProperty("be.fedict.eid.integration.db.sql." + context);
 		InputStream input = getClass().getClassLoader().getResourceAsStream(resourceName);
 		

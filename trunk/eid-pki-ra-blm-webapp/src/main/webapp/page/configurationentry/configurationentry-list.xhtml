@@ -9,17 +9,17 @@
 
 	<ui:define name="center">
 		<h:form id="configurationEntryListForm">
-			<rich:dataTable id="allConfigurationEntry" var="configurationEntry" 
+			<rich:dataTable id="allConfigurationEntry" var="configurationEntry" rows="10" 
 					value="#{allConfigurationEntryQuery.resultList}" width="100%">
 				<rich:column sortBy="#{messages[configurationEntry.key.message]}" filterBy="#{messages[configurationEntry.key.message]}" filterEvent="onkeyup">
-					<f:facet name="header">
+					<f:facet name="header" id="entryKeyHeader">
 						<h:outputText value="#{messages['configurationentry.list.key']}" />
 					</f:facet>
 					<h:outputText value="#{messages[configurationEntry.key.message]}" />
 				</rich:column>
 
 				<rich:column sortBy="#{configurationEntry.value}" filterBy="#{configurationEntry.value}" filterEvent="onkeyup">
-					<f:facet name="header">
+					<f:facet name="header" id="entryValueHeader">
 						<h:outputText value="#{messages['configurationentry.list.value']}" />
 					</f:facet>
 					<h:outputText value="#{configurationEntry.value}" />
@@ -32,7 +32,7 @@
 				</rich:column>
 
 				<f:facet name="footer">
-					<rich:datascroller maxPages="10" rows="10" />
+					<rich:datascroller maxPages="10" fastStep="5" for="allConfigurationEntry" />
 				</f:facet>
 			</rich:dataTable>
 				           	

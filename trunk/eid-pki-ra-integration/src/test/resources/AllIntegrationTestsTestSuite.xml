@@ -3,6 +3,7 @@
 <suite name="AllTests">
 	<suite-files>
 		<suite-file path="AdminPortalTestSuite.xml" />
+		<suite-file path="AdminPortalListsTestSuite.xml" />
 		<suite-file path="WebServiceTestSuite.xml" />
 	</suite-files>
 </suite>
