@@ -9,7 +9,7 @@
 
 	<ui:define name="center">
 		<h:form id="certificateDomainListForm">
-			<rich:dataTable id="allCertificateDomain" var="certificateDomain" 
+			<rich:dataTable id="allCertificateDomain" var="certificateDomain" rows="10"
 					value="#{allCertificateDomainQuery.resultList}" width="100%">
 				<rich:column sortBy="#{certificateDomain.name}" filterBy="#{certificateDomain.name}" filterEvent="onkeyup">
 					<f:facet name="header">
@@ -56,7 +56,7 @@
 				</rich:column>
 
 				<f:facet name="footer">
-					<rich:datascroller maxPages="10" rows="10" />
+					<rich:datascroller maxPages="10" fastStep="5" for="allCertificateDomain" />
 				</f:facet>
 			</rich:dataTable>
 				           	

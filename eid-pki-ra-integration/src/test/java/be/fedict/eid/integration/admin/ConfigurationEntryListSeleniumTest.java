@@ -29,7 +29,7 @@ import be.fedict.eid.integration.BaseSeleniumTestCase;
  * @author Bram Baeyens
  *
  */
-public class CertificateDomainListSeleniumTest extends BaseSeleniumTestCase {
+public class ConfigurationEntryListSeleniumTest extends BaseSeleniumTestCase {
 	
 	@BeforeClass
 	public void login() {
@@ -38,16 +38,16 @@ public class CertificateDomainListSeleniumTest extends BaseSeleniumTestCase {
 
 	@Test
 	public void testListContent() {
-		goToCertificateDomainList();
-		validateRows(10);
+		goToConfigurationEntryList();
+		validateRows(5);
 	}
 
 	private void validateRows(Integer numberOfRows) {
-		Number actual = getSelenium().getXpathCount("//table[@id='certificateDomainListForm:allCertificateDomain']/tbody/tr");
+		Number actual = getSelenium().getXpathCount("//table[@id='configurationEntryListForm:allConfigurationEntry']/tbody/tr");
 		Assert.assertEquals(numberOfRows + " rows expected, but found " + actual, numberOfRows, actual);
 	}
 
-	private void goToCertificateDomainList() {
-		clickAndWait("header-form:certificatedomains");		
+	private void goToConfigurationEntryList() {
+		clickAndWait("header-form:configurationentries");		
 	}
 }

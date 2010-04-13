@@ -6,12 +6,15 @@
 			<class name="be.fedict.eid.integration.setup.db.SetupDatabase" />
 		</classes>
 	</test>
-	<test name="Certificate Domain tests">
+	<test name="Certificate Domain create/update tests">
 		<classes>
-<!--			<class name="be.fedict.eid.integration.admin.CertificateDomainCreateSeleniumTest" />-->
-<!--			<class name="be.fedict.eid.integration.admin.CertificateDomainUpdateSeleniumTest" />-->
-<!--			<class name="be.fedict.eid.integration.admin.CertificateDomainListSeleniumTest" />	-->
-			<class name="be.fedict.eid.integration.admin.ConfigurationEntryUpdateSeleniumTest" />		
+			<class name="be.fedict.eid.integration.admin.CertificateDomainCreateSeleniumTest" />
+			<class name="be.fedict.eid.integration.admin.CertificateDomainUpdateSeleniumTest" />		
 		</classes>
 	</test>	
+	<test name="Configuration Entry update tests">
+		<classes>
+			<class name="be.fedict.eid.integration.admin.ConfigurationEntryUpdateSeleniumTest" />		
+		</classes>
+	</test>
 </suite>
