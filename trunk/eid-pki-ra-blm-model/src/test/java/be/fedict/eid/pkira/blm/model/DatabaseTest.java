@@ -23,7 +23,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
+import org.hsqldb.Server;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
@@ -35,7 +37,7 @@ import org.testng.annotations.BeforeSuite;
 public class DatabaseTest {
 
 	private static EntityManager entityManager;
-	
+
 	public static final Integer TEST_USER_ID = 2001;
 	public static final Integer TEST_CERTIFICATE_DOMAIN_ID = 1003;
 
@@ -51,12 +53,28 @@ public class DatabaseTest {
 	 */
 	@BeforeSuite
 	public static void setupDatabase() {
+		databaseServer = new Server();
+		databaseServer.setDatabaseName(0, "test");
+		databaseServer.setDatabasePath(0, "mem:test");
+		databaseServer.setPort(9999);
+		databaseServer.setLogWriter(null);
+		databaseServer.setErrWriter(null);
+		databaseServer.start();
+
+		// Start hibernate
 		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("PersistenceUnitTest",
 				Collections.emptyMap());
 		entityManager = entityManagerFactory.createEntityManager();
 	}
 
+	@AfterSuite
+	public static void stopDatabase() {
+		databaseServer.stop();
+	}
+
 	private boolean commit;
+
+	private static Server databaseServer;
 
 	/**
 	 * Forces a rollback of the transaction after the test. If this method is
@@ -71,13 +89,14 @@ public class DatabaseTest {
 	 */
 	public final void persistObject(final Object object) {
 		runInTransaction(new Runnable() {
+
 			@Override
 			public void run() {
 				getEntityManager().persist(object);
 			}
 		});
 	}
-	
+
 	public final <T> T loadObject(Class<T> clazz, Integer id) {
 		return getEntityManager().find(clazz, id);
 	}
@@ -101,12 +120,12 @@ public class DatabaseTest {
 			}
 		}
 	}
-	
+
 	/**
 	 * Merges the given objects back to the context.
 	 */
 	public final void merge(Object... entities) {
-		for(Object entity: entities) {
+		for (Object entity : entities) {
 			getEntityManager().merge(entity);
 		}
 	}
