@@ -26,6 +26,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
@@ -33,6 +35,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.validator.NotEmpty;
 import org.jboss.seam.annotations.Name;
 
+import be.fedict.eid.pkira.blm.model.ca.CertificateAuthority;
 import be.fedict.eid.pkira.blm.model.certificatedomain.validation.UniqueCertificateDomain;
 import be.fedict.eid.pkira.blm.model.certificatedomain.validation.UniqueCertificateDomainName;
 import be.fedict.eid.pkira.blm.model.certificatedomain.validation.ValidCertificateDomainDnExpression;
@@ -64,6 +67,11 @@ public class CertificateDomain implements Serializable {
 	@Column(name = "CERTIFICATE_DOMAIN_NAME", nullable = false, unique = true)
 	@NotEmpty(message="{validation.empty.certificateDomainName}")
 	@UniqueCertificateDomainName
+	
+	@ManyToOne(optional = false)
+	@JoinColumn(name="CA_ID", nullable=false)
+	private CertificateAuthority certificateAuthority;
+	
 	private String name;
 	@Column(name = "DN_EXPRESSION", nullable = false)
 	@NotEmpty(message="{validation.empty.dnExpression}")
@@ -156,5 +164,15 @@ public class CertificateDomain implements Serializable {
 			result.add(CertificateType.CODE);
 		}
 		return result;
+	}
+
+	
+	public CertificateAuthority getCertificateAuthority() {
+		return certificateAuthority;
+	}
+
+	
+	public void setCertificateAuthority(CertificateAuthority certificateAuthority) {
+		this.certificateAuthority = certificateAuthority;
 	}
 }
