@@ -27,9 +27,5 @@ public interface AuthenticationHandler {
 	
 	String NAME = "be.fedict.eid.pkira.common.authenticationHandler";
 	
-	String NAME_LOGIN_URL = "be.fedict.eid.pkira.common.loginUrl";
-	
-	String getLoginURL();
-	
 	boolean authenticate();
 }

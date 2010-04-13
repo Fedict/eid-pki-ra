@@ -78,7 +78,6 @@ public class ContractHandlerBeanTest {
 	private static final String REQUEST_MESSAGE = "Request message";
 	private static final String RESPONSE_MESSAGE = "Response message";
 	private static final String SIGNER = "69123110110";
-	private static final String REQUESTER = "69123110110";	
 	private static final String VALID_CERTIFICATE = "Certificate";
 	private static final CertificateTypeType VALID_CERTIFICATETYPETYPE = CertificateTypeType.CLIENT;
 	private static final CertificateType VALID_CERTIFICATETYPE = CertificateType.CLIENT;

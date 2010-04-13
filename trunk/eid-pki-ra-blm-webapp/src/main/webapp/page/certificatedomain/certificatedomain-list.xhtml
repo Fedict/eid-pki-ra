@@ -10,7 +10,7 @@
 	<ui:define name="center">
 		<h:form id="certificateDomainListForm">
 			<rich:dataTable id="allCertificateDomain" var="certificateDomain" rows="10"
-					value="#{allCertificateDomainQuery.resultList}" width="100%">
+					value="#{certificateDomainQuery.resultList}" width="100%">
 				<rich:column sortBy="#{certificateDomain.name}" filterBy="#{certificateDomain.name}" filterEvent="onkeyup">
 					<f:facet name="header">
 						<h:outputText value="#{messages['certificatedomain.list.name']}" />

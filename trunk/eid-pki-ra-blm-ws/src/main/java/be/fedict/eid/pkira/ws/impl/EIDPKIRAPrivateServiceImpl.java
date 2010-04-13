@@ -14,10 +14,13 @@ import org.jboss.seam.log.Logging;
 
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainHome;
+import be.fedict.eid.pkira.blm.model.config.ConfigurationEntry;
+import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
 import be.fedict.eid.pkira.blm.model.contracts.Certificate;
 import be.fedict.eid.pkira.blm.model.contracts.ContractRepository;
 import be.fedict.eid.pkira.blm.model.mappers.CertificateDomainMapper;
 import be.fedict.eid.pkira.blm.model.mappers.CertificateMapper;
+import be.fedict.eid.pkira.blm.model.mappers.ConfigurationEntryMapper;
 import be.fedict.eid.pkira.blm.model.mappers.UserMapper;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationException;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationManager;
@@ -30,6 +33,8 @@ import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserResponse
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateRequest;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateResponse;
+import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryRequest;
+import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryResponse;
 import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsForUserRequest;
 import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.FindUserRequest;
@@ -126,6 +131,18 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 		return response;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public FindConfigurationEntryResponse findConfigurationEntry(FindConfigurationEntryRequest request) {
+		ConfigurationEntry configurationEntry = getConfigurationEntryQuery().findByEntryKey(
+				getConfigurationEntryMapper().map(request.getEntryKey()));
+		FindConfigurationEntryResponse response = new ObjectFactory().createFindConfigurationEntryResponse();
+		response.setConfigurationEntry(getConfigurationEntryMapper().map(configurationEntry));
+		return response;
+	}
+
 	private ContractRepository getDomainRepository() {
 		return (ContractRepository) Component.getInstance(ContractRepository.NAME, true);
 	}
@@ -156,6 +173,14 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 
 	private CertificateDomainMapper getCertificateDomainMapper() {
 		return (CertificateDomainMapper) Component.getInstance(CertificateDomainMapper.NAME, true);
+	}
+	
+	private ConfigurationEntryMapper getConfigurationEntryMapper() {
+		return (ConfigurationEntryMapper) Component.getInstance(ConfigurationEntryMapper.NAME, true);
+	}
+	
+	private ConfigurationEntryQuery getConfigurationEntryQuery() {
+		return (ConfigurationEntryQuery) Component.getInstance(ConfigurationEntryQuery.class, true);
 	}
 
 }

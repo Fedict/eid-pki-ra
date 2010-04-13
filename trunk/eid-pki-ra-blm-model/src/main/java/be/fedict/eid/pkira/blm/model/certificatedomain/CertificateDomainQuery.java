@@ -18,6 +18,8 @@
 
 package be.fedict.eid.pkira.blm.model.certificatedomain;
 
+import java.util.List;
+
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.framework.EntityQuery;
 
@@ -25,21 +27,21 @@ import org.jboss.seam.framework.EntityQuery;
  * @author Bram Baeyens
  *
  */
-@Name(value=AllCertificateDomainQuery.NAME)
-public class AllCertificateDomainQuery extends EntityQuery<CertificateDomain> {
+@Name(value=CertificateDomainQuery.NAME)
+public class CertificateDomainQuery extends EntityQuery<CertificateDomain> {
 
 	private static final long serialVersionUID = 2047569824505992173L;
 	
-	public static final String NAME = "be.fedict.eid.pkira.blm.allCertificateDomainQuery";
+	public static final String NAME = "be.fedict.eid.pkira.blm.certificateDomainQuery";
 	
 	@Override
 	public String getEjbql() {
-		return "select cd from CertificateDomain cd";
+		return "select certificateDomain from CertificateDomain certificateDomain";
 	}
 	
 	@Override
-	public String getOrderColumn() {
-		return "cd.name";
+	public List<CertificateDomain> getResultList() {
+		setOrderColumn("certificateDomain.name");
+		return super.getResultList();
 	}
-
 }

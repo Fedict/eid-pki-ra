@@ -30,6 +30,8 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.log.Log;
 import org.quartz.SchedulerException;
 
+import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryKey;
+import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
 import be.fedict.eid.pkira.blm.model.contracthandler.services.ContractParser;
 import be.fedict.eid.pkira.blm.model.contracthandler.services.FieldValidator;
 import be.fedict.eid.pkira.blm.model.contracthandler.services.SignatureVerifier;
@@ -91,7 +93,10 @@ public class ContractHandlerBean implements ContractHandler {
 	private SignatureVerifier signatureVerifier;
 
 	@In(value = XKMSService.NAME, create = true)
-	private XKMSService xkmsService;
+	private XKMSService xkmsService;;
+	
+	@In(value = ConfigurationEntryQuery.NAME, create = true) 
+	private ConfigurationEntryQuery configurationEntryQuery;
 
 	/** {@inheritDoc} */
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -211,8 +216,8 @@ public class ContractHandlerBean implements ContractHandler {
 
 	protected void scheduleNotificationMail(Registration registration,
 			CertificateInfo certificateInfo, Certificate certificate) {
-		//TODO: Add configuration option!
-		certificate.scheduleNotificationMail(certificateInfo.getValidityEnd(), 0L, certificate.getValidityEnd(), certificate, registration.getEmail());
+		Long intervalParam = Long.valueOf(configurationEntryQuery.findByEntryKey(ConfigurationEntryKey.NOTIFICATION_MAIL_DAYS).getValue());
+		certificate.scheduleNotificationMail(certificateInfo.getValidityEnd(), intervalParam, certificate.getValidityEnd(), certificate, registration.getEmail());
 	}
 
 	private Certificate findCertificate(CertificateRevocationRequestType request) throws ContractHandlerBeanException {
@@ -344,5 +349,9 @@ public class ContractHandlerBean implements ContractHandler {
 
 	protected void setXkmsService(XKMSService xkmsService) {
 		this.xkmsService = xkmsService;
+	}
+
+	protected void setConfigurationEntryQuery(ConfigurationEntryQuery configurationEntryQuery) {
+		this.configurationEntryQuery = configurationEntryQuery;
 	}
 }

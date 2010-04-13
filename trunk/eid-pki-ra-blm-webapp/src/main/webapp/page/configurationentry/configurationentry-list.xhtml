@@ -10,7 +10,7 @@
 	<ui:define name="center">
 		<h:form id="configurationEntryListForm">
 			<rich:dataTable id="allConfigurationEntry" var="configurationEntry" rows="10" 
-					value="#{allConfigurationEntryQuery.resultList}" width="100%">
+					value="#{configurationEntryQuery.resultList}" width="100%">
 				<rich:column sortBy="#{messages[configurationEntry.key.message]}" filterBy="#{messages[configurationEntry.key.message]}" filterEvent="onkeyup">
 					<f:facet name="header" id="entryKeyHeader">
 						<h:outputText value="#{messages['configurationentry.list.key']}" />

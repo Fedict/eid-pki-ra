@@ -42,6 +42,8 @@ import org.jboss.seam.annotations.In;
 
 import be.fedict.eid.pkira.blm.errorhandling.Component;
 import be.fedict.eid.pkira.blm.errorhandling.ErrorLogger;
+import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryKey;
+import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
 
 /**
  * @author hans
@@ -53,11 +55,9 @@ public class MailHandlerBean implements MessageListener {
 
 	@In(value = ErrorLogger.NAME, create = true)
 	private ErrorLogger errorLogger;
-
-	// TODO: retrieve from admin config
-	private String smtpServer = "mail.aca-it.be";
-	// TODO: retrieve from admin config
-	private String port = "25";
+	
+	@In(value = ConfigurationEntryQuery.NAME, create = true)
+	private ConfigurationEntryQuery configurationEntryQuery;
 
 	/*
 	 * (non-Javadoc)
@@ -113,32 +113,16 @@ public class MailHandlerBean implements MessageListener {
 		}
 	}
 
-	/**
-	 * @param smtpServer
-	 */
-	public void setSmtpServer(String smtpServer) {
-		this.smtpServer = smtpServer;
-	}
-
-	/**
-	 * @return
-	 */
 	public String getSmtpServer() {
-		return smtpServer;
+		return getMailProperty(ConfigurationEntryKey.MAIL_SERVER);
 	}
 
-	/**
-	 * @param port
-	 */
-	public void setPort(String port) {
-		this.port = port;
-	}
-
-	/**
-	 * @return
-	 */
 	public String getPort() {
-		return port;
+		return getMailProperty(ConfigurationEntryKey.MAIL_PORT);
+	}
+
+	private String getMailProperty(ConfigurationEntryKey configurationEntryKey) {
+		return configurationEntryQuery.findByEntryKey(configurationEntryKey).getValue();
 	}
 
 }
