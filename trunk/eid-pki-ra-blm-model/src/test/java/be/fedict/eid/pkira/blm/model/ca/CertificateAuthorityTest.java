@@ -30,6 +30,8 @@ import be.fedict.eid.pkira.blm.model.DatabaseTest;
  */
 public class CertificateAuthorityTest extends DatabaseTest {
 
+	private Integer caId;
+
 	@Test
 	public void testPersist() {
 		CertificateAuthority ca = new CertificateAuthority();
@@ -40,11 +42,16 @@ public class CertificateAuthorityTest extends DatabaseTest {
 
 		forceCommit();
 		getEntityManager().persist(ca);
+		
+		this.caId = ca.getId();
 	}
 
 	@Test(dependsOnMethods="testPersist")
 	public void testGetCA() {
-		List<?> resultList = getEntityManager().createQuery("FROM CertificateAuthority").getResultList();
+		List<?> resultList = getEntityManager().
+			createQuery("FROM CertificateAuthority WHERE id=:id").
+			setParameter("id", caId).
+			getResultList();
 
 		assertNotNull(resultList);
 		assertEquals(resultList.size(), 1);
@@ -57,8 +64,6 @@ public class CertificateAuthorityTest extends DatabaseTest {
 		List<?> resultList = getEntityManager().createQuery("FROM CertificateAuthority").getResultList();
 
 		assertNotNull(resultList);
-		assertEquals(resultList.size(), 1);
-		CertificateAuthority ca = (CertificateAuthority) resultList.get(0);
-		assertEquals(ca.getParameters().size(), 2);
+		assertEquals(resultList.size(), 2);
 	}
 }
