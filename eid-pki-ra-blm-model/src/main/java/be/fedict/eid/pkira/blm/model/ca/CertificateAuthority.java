@@ -90,4 +90,14 @@ public class CertificateAuthority implements Serializable {
 		return id;
 	}
 
+	
+	public String getLegalNotice() {
+		return legalNotice;
+	}
+
+	
+	public void setLegalNotice(String legalNotice) {
+		this.legalNotice = legalNotice;
+	}
+
 }

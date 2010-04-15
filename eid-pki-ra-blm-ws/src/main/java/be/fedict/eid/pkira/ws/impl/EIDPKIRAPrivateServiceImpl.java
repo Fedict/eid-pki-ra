@@ -12,16 +12,19 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.log.Log;
 import org.jboss.seam.log.Logging;
 
+import be.fedict.eid.pkira.blm.model.ca.CertificateAuthority;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainHome;
 import be.fedict.eid.pkira.blm.model.config.ConfigurationEntry;
 import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
 import be.fedict.eid.pkira.blm.model.contracts.Certificate;
+import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 import be.fedict.eid.pkira.blm.model.contracts.ContractRepository;
 import be.fedict.eid.pkira.blm.model.mappers.CertificateDomainMapper;
 import be.fedict.eid.pkira.blm.model.mappers.CertificateMapper;
 import be.fedict.eid.pkira.blm.model.mappers.ConfigurationEntryMapper;
 import be.fedict.eid.pkira.blm.model.mappers.UserMapper;
+import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationException;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationManager;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationRepository;
@@ -39,6 +42,8 @@ import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsFo
 import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.FindUserRequest;
 import be.fedict.eid.pkira.generated.privatews.FindUserResponse;
+import be.fedict.eid.pkira.generated.privatews.GetLegalNoticeRequest;
+import be.fedict.eid.pkira.generated.privatews.GetLegalNoticeResponse;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesRequest;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesResponse;
 import be.fedict.eid.pkira.generated.privatews.ObjectFactory;
@@ -140,6 +145,22 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 				getConfigurationEntryMapper().map(request.getEntryKey()));
 		FindConfigurationEntryResponse response = new ObjectFactory().createFindConfigurationEntryResponse();
 		response.setConfigurationEntry(getConfigurationEntryMapper().map(configurationEntry));
+		return response;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public GetLegalNoticeResponse getLegalNotice(GetLegalNoticeRequest request) {
+		String userRRN = request.getUserRRN();
+		String dn = request.getCertificateDN();		
+		CertificateType certificateType = getCertificateMapper().map(request.getCertificateType());
+		Registration registration = getRegistrationManager().findRegistrationForUserDNAndCertificateType(userRRN, dn, certificateType);
+		CertificateAuthority ca = registration.getCertificateDomain().getCertificateAuthority();
+		
+		GetLegalNoticeResponse response = new ObjectFactory().createGetLegalNoticeResponse();
+		response.setLegalNotice(ca.getLegalNotice());
 		return response;
 	}
 

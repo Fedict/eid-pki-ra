@@ -94,7 +94,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			
+
 			<xsd:element name="CreateRegistrationForUserResponse">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -102,7 +102,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			
+
 			<xsd:element name="FindConfigurationEntryRequest">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -110,10 +110,29 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+
 			<xsd:element name="FindConfigurationEntryResponse">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="configurationEntry" type="types:configurationEntryWS" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="GetLegalNoticeRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="certificateDN" type="xsd:string" />
+						<xsd:element name="userRRN" type="xsd:string" />
+						<xsd:element name="certificateType" type="types:certificateTypeWS" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="GetLegalNoticeResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="legalNotice" type="xsd:string" />
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
@@ -206,7 +225,7 @@
 	<wsdl:message name="FindRemainingCertificateDomainsForUserResult">
 		<wsdl:part name="response" element="types:FindRemainingCertificateDomainsForUserResponse" />
 	</wsdl:message>
-	
+
 	<wsdl:message name="CreateRegistrationForUserRequest">
 		<wsdl:part name="request" element="types:CreateRegistrationForUserRequest" />
 	</wsdl:message>
@@ -221,6 +240,14 @@
 
 	<wsdl:message name="FindConfigurationEntryResult">
 		<wsdl:part name="response" element="types:FindConfigurationEntryResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="GetLegalNoticeRequest">
+		<wsdl:part name="request" element="types:GetLegalNoticeRequest" />		
+	</wsdl:message>
+
+	<wsdl:message name="GetLegalNoticeResponse">
+		<wsdl:part name="request" element="types:GetLegalNoticeResponse" />
 	</wsdl:message>
 
 	<wsdl:portType name="EIDPKIRAPrivatePortType">
@@ -247,6 +274,10 @@
 		<wsdl:operation name="FindConfigurationEntry">
 			<wsdl:input message="tns:FindConfigurationEntryRequest" />
 			<wsdl:output message="tns:FindConfigurationEntryResult" />
+		</wsdl:operation>
+		<wsdl:operation name="GetLegalNotice">
+			<wsdl:input message="tns:GetLegalNoticeRequest" />
+			<wsdl:output message="tns:GetLegalNoticeResponse" />
 		</wsdl:operation>
 	</wsdl:portType>
 
@@ -303,6 +334,15 @@
 				<soap:body use="literal" />
 			</wsdl:input>
 			<wsdl:output message="tns:FindConfigurationEntryResult">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetLegalNotice">
+			<soap:operation />
+			<wsdl:input message="tns:GetLegalNoticeRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output message="tns:GetLegalNoticeResponse">
 				<soap:body use="literal" />
 			</wsdl:output>
 		</wsdl:operation>

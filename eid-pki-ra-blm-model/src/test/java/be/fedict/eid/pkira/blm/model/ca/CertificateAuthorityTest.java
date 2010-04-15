@@ -39,6 +39,7 @@ public class CertificateAuthorityTest extends DatabaseTest {
 		ca.setXkmsUrl("http://ca.com/");
 		ca.getParameters().put("abc", "def");
 		ca.getParameters().put("def", "ghi");
+		ca.setLegalNotice("Some legal notice");
 
 		forceCommit();
 		getEntityManager().persist(ca);
