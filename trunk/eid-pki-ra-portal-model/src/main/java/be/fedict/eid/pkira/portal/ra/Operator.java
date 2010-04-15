@@ -20,6 +20,7 @@ package be.fedict.eid.pkira.portal.ra;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.Pattern;
 import org.jboss.seam.annotations.Name;
 
 /**
@@ -35,6 +36,8 @@ public class Operator implements Serializable {
 
 	private String name;
 	private String function;
+	
+	
 	private String phone;
 	
 	public String getName() {
@@ -52,11 +55,12 @@ public class Operator implements Serializable {
 	public void setFunction(String function) {
 		this.function = function;
 	}
-	
+
+	@Pattern(regex="(\\+|0)[-0-9 \\./]+", message="Invalid phone number")
 	public String getPhone() {
 		return phone;
 	}
-	
+
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
