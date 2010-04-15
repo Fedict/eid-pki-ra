@@ -20,10 +20,13 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CollectionOfElements;
@@ -54,6 +57,11 @@ public class CertificateAuthority implements Serializable {
 	@CollectionOfElements(targetElement = String.class)
 	@MapKeyManyToMany(targetEntity = String.class)
 	private Map<String, String> parameters;
+	
+	@Lob
+	@Basic(fetch = FetchType.LAZY)
+	@Column(name = "LEGAL_NOTICE", nullable = false)
+	private String legalNotice;
 
 	public String getName() {
 		return name;

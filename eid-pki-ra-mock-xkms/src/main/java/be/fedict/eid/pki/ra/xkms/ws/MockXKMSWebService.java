@@ -36,12 +36,14 @@ import org.w3._2000._09.xmldsig_.X509DataType;
 import org.w3._2002._03.xkms_xbulk.BulkRegisterResultType;
 import org.w3._2002._03.xkms_xbulk.BulkRegisterType;
 import org.w3._2002._03.xkms_xbulk.RegisterResultsType;
+import org.w3._2002._03.xkms_xbulk.RequestType;
 import org.w3._2002._03.xkms_xbulk.BulkRegisterResultType.SignedPart;
 import org.w3._2002._03.xkms_xbulk_wsdl.XKMSPortType;
 import org.xkms.schema.xkms_2001_01_20.AssertionStatus;
 import org.xkms.schema.xkms_2001_01_20.KeyBindingType;
 import org.xkms.schema.xkms_2001_01_20.RegisterResult;
 import org.xkms.schema.xkms_2001_01_20.ResultCode;
+import org.xkms.schema.xkms_2001_01_20.KeyBindingType.ProcessInfo;
 import org.xkms.schema.xkms_2001_01_20.RegisterResult.Answer;
 
 import be.fedict.eid.pkira.crypto.CSRParserImpl;
@@ -51,16 +53,24 @@ public class MockXKMSWebService implements XKMSPortType {
 
 	private final org.w3._2002._03.xkms_xbulk.ObjectFactory xbulkObjectFactory = new org.w3._2002._03.xkms_xbulk.ObjectFactory();
 	private final org.xkms.schema.xkms_2001_01_20.ObjectFactory xkmsObjectFactory = new org.xkms.schema.xkms_2001_01_20.ObjectFactory();
-	private org.w3._2000._09.xmldsig_.ObjectFactory dsigObjectFactory = new org.w3._2000._09.xmldsig_.ObjectFactory();
-
+	private final org.w3._2000._09.xmldsig_.ObjectFactory dsigObjectFactory = new org.w3._2000._09.xmldsig_.ObjectFactory();
+	private final com.ubizen.og.xkms.schema.xkms_2003_09.ObjectFactory ogcmObjectFactory = new com.ubizen.og.xkms.schema.xkms_2003_09.ObjectFactory(); 
 	
 	@Override
-	public BulkRegisterResultType bulkRegister(BulkRegisterType bulkRegister) {		
-		// Extract the CSR
-		KeyInfoType requestKeyInfo = bulkRegister.getSignedPart().getRequests().getRequest().get(0).getKeyInfo();
-		byte[] csr = getFromList(byte[].class, requestKeyInfo.getContent());
-		byte[] certificate = createCertificate(csr);
+	public BulkRegisterResultType bulkRegister(BulkRegisterType bulkRegister) {	
+		RequestType request = bulkRegister.getSignedPart().getRequests().getRequest().get(0);
 		
+		// See if revoke or request
+		RegisterResult registerResult;
+		if (request.getStatus()==AssertionStatus.INVALID) {
+			// Revocation
+			registerResult = processRevocation(request);
+		} else {
+			// Request
+			registerResult = processRequest(request);
+		}
+		
+		// Create the result
 		BulkRegisterResultType result = xbulkObjectFactory.createBulkRegisterResultType();
 		
 		SignedPart signedPart = xbulkObjectFactory.createBulkRegisterResultTypeSignedPart();
@@ -70,18 +80,50 @@ public class MockXKMSWebService implements XKMSPortType {
 		RegisterResultsType registerResults = xbulkObjectFactory.createRegisterResultsType();
 		signedPart.setRegisterResults(registerResults);
 		registerResults.setNumber("1");
-		
-		RegisterResult registerResult = xkmsObjectFactory.createRegisterResult();
-		registerResult.setResult(ResultCode.SUCCESS);
 		registerResults.getRegisterResult().add(registerResult);
-				
-		Answer answer = xkmsObjectFactory.createRegisterResultAnswer();
-		registerResult.setAnswer(answer);
 		
-		KeyBindingType keyBinding = xkmsObjectFactory.createKeyBindingType();
-		keyBinding.setStatus(AssertionStatus.VALID);
-		keyBinding.setId("123");
-		answer.getKeyBinding().add(keyBinding);
+		return result;		
+	}
+	
+	private RegisterResult processRevocation(RequestType request) {
+		RegisterResult registerResult = createRegisterResultWithKeyBinding();
+		
+		String keyName = getFromList(String.class, request.getKeyInfo().getContent());		
+		KeyBindingType keyBinding = registerResult.getAnswer().getKeyBinding().get(0);
+		if (keyName.contains("000")) {
+			registerResult.setResult(ResultCode.FAILURE);
+			addReasonAndReasonCode(keyBinding, BigInteger.valueOf(123), "Error");
+		} else if (keyName.contains("123")) {
+			registerResult.setResult(ResultCode.FAILURE);
+			addReasonAndReasonCode(keyBinding, BigInteger.valueOf(566), "Already revoked");
+		} else {
+			keyBinding.setStatus(AssertionStatus.INVALID);
+			addReasonAndReasonCode(keyBinding, BigInteger.ZERO, "No reason");
+		}
+		
+		return registerResult;		
+	}
+
+	private void addReasonAndReasonCode(KeyBindingType keyBinding, BigInteger reasonCode, String reason) {
+		ProcessInfo processInfo = xkmsObjectFactory.createKeyBindingTypeProcessInfo();
+		keyBinding.setProcessInfo(processInfo);
+		
+		processInfo.getAny().add(ogcmObjectFactory.createReason(reason));		
+		processInfo.getAny().add(ogcmObjectFactory.createReasonCode(reasonCode));
+	}
+
+	/**
+	 * @param request
+	 * @return
+	 */
+	private RegisterResult processRequest(RequestType request) {
+		KeyInfoType requestKeyInfo = request.getKeyInfo();
+		byte[] csr = getFromList(byte[].class, requestKeyInfo.getContent());
+		byte[] certificate = createCertificate(csr);
+		
+		// Build result message
+		RegisterResult registerResult = createRegisterResultWithKeyBinding();		
+		KeyBindingType keyBinding = registerResult.getAnswer().getKeyBinding().get(0);
 		
 		KeyInfoType keyInfo = dsigObjectFactory.createKeyInfoType();
 		keyBinding.setKeyInfo(keyInfo);
@@ -90,10 +132,26 @@ public class MockXKMSWebService implements XKMSPortType {
 		x509Data.getX509IssuerSerialOrX509SKIOrX509SubjectName().add(
 				dsigObjectFactory.createX509DataTypeX509Certificate(certificate));
 		keyInfo.getContent().add(dsigObjectFactory.createX509Data(x509Data));
-
-		return result;		
+		
+		addReasonAndReasonCode(keyBinding, BigInteger.ZERO, "No reason");
+		
+		return registerResult;
 	}
-	
+
+	private RegisterResult createRegisterResultWithKeyBinding() {
+		RegisterResult registerResult = xkmsObjectFactory.createRegisterResult();
+		registerResult.setResult(ResultCode.SUCCESS);
+						
+		Answer answer = xkmsObjectFactory.createRegisterResultAnswer();
+		registerResult.setAnswer(answer);
+		
+		KeyBindingType keyBinding = xkmsObjectFactory.createKeyBindingType();		
+		keyBinding.setStatus(AssertionStatus.VALID);
+		keyBinding.setId("123");
+		answer.getKeyBinding().add(keyBinding);
+		return registerResult;
+	}
+
 	private byte[] createCertificate(byte[] csr) {
 		try {
 			CSRParserImpl csrParserImpl = createCSRParser();

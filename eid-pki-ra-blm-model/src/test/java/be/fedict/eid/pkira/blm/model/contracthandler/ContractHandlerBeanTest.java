@@ -174,7 +174,7 @@ public class ContractHandlerBeanTest {
 
 		// Validate it
 		assertEquals(result, RESPONSE_MESSAGE);
-		verify(xkmsService).revoke(VALID_CERTIFICATE);
+		verify(xkmsService).revoke(isA(CertificateRevocationContract.class));
 		verify(contractRepository).findCertificate(VALID_ISSUER, VALID_SERIALNUMBER);
 		verify(contractRepository).persistContract(isA(CertificateRevocationContract.class));
 		verify(contractRepository).removeCertificate(THE_CERTIFICATE);
@@ -242,7 +242,7 @@ public class ContractHandlerBeanTest {
 		when(certificateParser.parseCertificate(VALID_CERTIFICATE)).thenReturn(certificateInfo);
 		when(certificateInfo.getIssuer()).thenReturn(VALID_ISSUER);
 		when(certificateInfo.getSerialNumber()).thenReturn(VALID_SERIALNUMBER);		
-		doThrow(new ContractHandlerBeanException(ResultType.BACKEND_ERROR, ERROR_MSG)).when(xkmsService).revoke(VALID_CERTIFICATE);
+		doThrow(new ContractHandlerBeanException(ResultType.BACKEND_ERROR, ERROR_MSG)).when(xkmsService).revoke(isA(CertificateRevocationContract.class));
 		when(contractParser.marshalResponseMessage(
 				argThat(responseType(CertificateRevocationResponseType.class, VALID_REQUEST_ID, ResultType.BACKEND_ERROR)), 
 				eq(CertificateRevocationResponseType.class)))
@@ -266,7 +266,7 @@ public class ContractHandlerBeanTest {
 		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateSigningRequestType.class)))
 				.thenReturn(VALID_SIGNING_REQUEST);
 		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE))).thenReturn(SIGNER);
-		when(xkmsService.sign(VALID_CSR)).thenReturn(VALID_CERTIFICATE);
+		when(xkmsService.sign(isA(CertificateSigningContract.class))).thenReturn(VALID_CERTIFICATE);
 		when(certificateParser.parseCertificate(VALID_CERTIFICATE)).thenReturn(certificateInfo);
 		when(
 				contractParser.marshalResponseMessage(argThat(responseType(CertificateSigningResponseType.class,
@@ -349,7 +349,7 @@ public class ContractHandlerBeanTest {
 		// Setup test
 		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateSigningRequestType.class)))
 				.thenReturn(VALID_SIGNING_REQUEST);
-		when(xkmsService.sign(VALID_CSR)).thenReturn(null);
+		when(xkmsService.sign(isA(CertificateSigningContract.class))).thenReturn(null);
 		when(
 				contractParser.marshalResponseMessage(argThat(responseType(CertificateSigningResponseType.class,
 						VALID_REQUEST_ID, ResultType.BACKEND_ERROR)), eq(CertificateSigningResponseType.class)))

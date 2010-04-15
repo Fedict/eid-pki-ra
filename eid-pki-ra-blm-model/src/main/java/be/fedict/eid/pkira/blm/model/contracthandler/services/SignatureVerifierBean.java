@@ -16,15 +16,16 @@
  */
 package be.fedict.eid.pkira.blm.model.contracthandler.services;
 
-
-import javax.ejb.Stateless;
-
+import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.log.Log;
 
 import be.fedict.eid.dss.client.DigitalSignatureServiceClient;
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
+import be.fedict.eid.pkira.blm.model.framework.WebserviceLocator;
 import be.fedict.eid.pkira.generated.contracts.ResultType;
 
 /**
@@ -32,16 +33,15 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
  * 
  * @author Jan Van den Bergh
  */
-@Stateless
 @Name(SignatureVerifier.NAME)
+@Scope(ScopeType.STATELESS)
 public class SignatureVerifierBean implements SignatureVerifier {
 
 	@Logger
 	private Log log;
-	
-	//@In(value="digitalSignatureServiceClient", create=true)
-	//FIXME use configuration
-	private DigitalSignatureServiceClient dssClient = new DigitalSignatureServiceClient("https://www.e-contract.be/eid-dss-ws/dss");
+
+	@In(value = WebserviceLocator.NAME, create = true)
+	private WebserviceLocator webserviceLocator;
 
 	/*
 	 * (non-Javadoc)
@@ -50,8 +50,9 @@ public class SignatureVerifierBean implements SignatureVerifier {
 	 * java.lang.String)
 	 */
 	public String verifySignature(String requestMessage) throws ContractHandlerBeanException {
+		DigitalSignatureServiceClient dssClient = webserviceLocator.getDigitalSignatureServiceClient();
 		try {
-			String identity = dssClient.verifyWithSignerIdentity(requestMessage);						
+			String identity = dssClient.verifyWithSignerIdentity(requestMessage);
 			if (identity != null) {
 				return identity;
 			}
@@ -64,18 +65,15 @@ public class SignatureVerifierBean implements SignatureVerifier {
 			throw new ContractHandlerBeanException(ResultType.INVALID_SIGNATURE, "Error verifying signature", e);
 		}
 	}
-	
-	/**
-	 * Injects the client.
-	 */
-	protected void setDigitalSignatureServiceClient(DigitalSignatureServiceClient dssClient) {
-		this.dssClient = dssClient;
-	}
 
 	/**
 	 * Injects the log.
 	 */
 	protected void setLog(Log log) {
-		this.log= log;		
+		this.log = log;
+	}
+
+	protected void setWebserviceLocator(WebserviceLocator webserviceLocator) {
+		this.webserviceLocator = webserviceLocator;
 	}
 }

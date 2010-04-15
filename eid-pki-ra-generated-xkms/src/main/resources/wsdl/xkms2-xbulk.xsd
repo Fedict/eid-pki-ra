@@ -1,182 +1,184 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema
-  targetNamespace="http://www.w3.org/2002/03/xkms-xbulk"
-  xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" 
-  xmlns:xkms="http://www.xkms.org/schema/xkms-2001-01-20" 
-  xmlns:xbulk="http://www.w3.org/2002/03/xkms-xbulk" 
-  xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="http://www.w3.org/2002/03/xkms-xbulk" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"
+	xmlns:xkms="http://www.xkms.org/schema/xkms-2001-01-20" xmlns:xbulk="http://www.w3.org/2002/03/xkms-xbulk" xmlns:ogcm="http://xkms.og.ubizen.com/schema/xkms-2003-09/"
+	xmlns="http://www.w3.org/2001/XMLSchema">
 
-  <import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="xmldsig-core-schema.xsd"/>
-  <import namespace="http://www.xkms.org/schema/xkms-2001-01-20" schemaLocation="xkms.xsd"/>
-  
-  <annotation>
-    <documentation xml:lang="en">
-      XML Schema for X-BULK version 1.1 draft 5
+	<import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="xmldsig-core-schema.xsd" />
+	<import namespace="http://www.xkms.org/schema/xkms-2001-01-20" schemaLocation="xkms.xsd" />
+	<import namespace="http://xkms.og.ubizen.com/schema/xkms-2003-09/" schemaLocation="ogcm.xsd" />
+
+	<annotation>
+		<documentation xml:lang="en">
+			XML Schema for X-BULK version 1.1 draft 5
     </documentation>
-  </annotation>
+	</annotation>
 
-  <!-- General Stuff -->
+	<!-- General Stuff -->
 
-  <complexType name="BatchHeaderType">
-    <choice minOccurs="0" maxOccurs="unbounded">
-      <sequence>
-        <element name="BatchID" type="string"/>
-        <element name="BatchTime" type="dateTime"/>
-        <element name="NumberOfRequests" type="positiveInteger"/>
-        <element ref="xbulk:ProcessInfo" minOccurs="0"/>
-      </sequence>
-    </choice>
-  </complexType>
+	<complexType name="BatchHeaderType">
+		<choice minOccurs="0" maxOccurs="unbounded">
+			<sequence>
+				<element name="BatchID" type="string" />
+				<element name="BatchTime" type="dateTime" />
+				<element name="NumberOfRequests" type="positiveInteger" />
+				<element ref="xbulk:ProcessInfo" minOccurs="0" />
+			</sequence>
+		</choice>
+	</complexType>
 
-  <element name="BatchHeader" type="xbulk:BatchHeaderType"/>
+	<element name="BatchHeader" type="xbulk:BatchHeaderType" />
 
-  <complexType name="ProcessInfoType">
-    <sequence minOccurs="1" maxOccurs="unbounded">
-      <any namespace="##other"/>
-    </sequence>
-  </complexType>
+	<complexType name="ProcessInfoType">
+		<sequence minOccurs="1" maxOccurs="unbounded">
+			<!--  JanVDB workaround for JBoss WS problem       
+      		<any namespace="##other"/> 
+      		-->
+			<element ref="ogcm:AttributeCertificate" />
+		</sequence>
+	</complexType>
 
-  <element name="ProcessInfo" type="xbulk:ProcessInfoType"/>
+	<element name="ProcessInfo" type="xbulk:ProcessInfoType" />
 
-  <!-- copied from XKMS, since not typed there -->
+	<!-- copied from XKMS, since not typed there -->
 
-  <element name="KeyID" type="string"/>
+	<element name="KeyID" type="string" />
 
-  <element name="Respond">
-    <complexType>
-      <sequence>
-        <element name="string" type="string" minOccurs="0" maxOccurs="unbounded"/>
-      </sequence>
-    </complexType>
-  </element>
+	<element name="Respond">
+		<complexType>
+			<sequence>
+				<element name="string" type="string" minOccurs="0" maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+	</element>
 
-  <!-- Register Stuff -->
+	<!-- Register Stuff -->
 
-  <complexType name="BulkRegisterType">
-    <sequence>
-      <element name="SignedPart">
-        <complexType>
-          <sequence>
-            <element ref="xbulk:BatchHeader"/>
-            <element ref="xkms:Respond" minOccurs="0"/>
-            <element ref="xbulk:Requests"/>
-          </sequence>
-          <attribute name="Id" type="ID" use="required"/>
-        </complexType>
-      </element>
-      <element ref="dsig:Signature"/>
-    </sequence>
-  </complexType>
+	<complexType name="BulkRegisterType">
+		<sequence>
+			<element name="SignedPart">
+				<complexType>
+					<sequence>
+						<element ref="xbulk:BatchHeader" />
+						<element ref="xkms:Respond" minOccurs="0" />
+						<element ref="xbulk:Requests" />
+					</sequence>
+					<attribute name="Id" type="ID" use="required" />
+				</complexType>
+			</element>
+			<element ref="dsig:Signature" />
+		</sequence>
+	</complexType>
 
-  <element name="BulkRegister" type="xbulk:BulkRegisterType"/>
+	<element name="BulkRegister" type="xbulk:BulkRegisterType" />
 
-  <complexType name="RequestsType">
-    <sequence>
-      <element ref="xbulk:Request" maxOccurs="unbounded"/>
-    </sequence>
-    <attribute name="number" use="required"/>
-  </complexType>
+	<complexType name="RequestsType">
+		<sequence>
+			<element ref="xbulk:Request" maxOccurs="unbounded" />
+		</sequence>
+		<attribute name="number" use="required" />
+	</complexType>
 
-  <element name="Requests" type="xbulk:RequestsType"/>
+	<element name="Requests" type="xbulk:RequestsType" />
 
-  <complexType name="RequestType">
-    <sequence>
-      <element ref="xkms:KeyID"/>
-      <element ref="dsig:KeyInfo"/>
-      <element ref="xkms:Respond" minOccurs="0"/>
-      <element ref="xbulk:ProcessInfo" minOccurs="0"/>
-      <element ref="xbulk:ClientInfo" minOccurs="0"/>
-    </sequence>
-  </complexType>
+	<complexType name="RequestType">
+		<sequence>
+			<element ref="xkms:KeyID" />
+			<element ref="xkms:Status" />
+			<element ref="dsig:KeyInfo" />
+			<element ref="xkms:Respond" minOccurs="0" />
+			<element ref="xbulk:ProcessInfo" minOccurs="0" />
+			<element ref="xbulk:ClientInfo" minOccurs="0" />
+		</sequence>
+	</complexType>
 
-  <element name="Request" type="xbulk:RequestType"/>
+	<element name="Request" type="xbulk:RequestType" />
 
-  <complexType name="ClientInfoType">
-    <sequence maxOccurs="unbounded">
-      <any namespace="##other"/>
-    </sequence>
-  </complexType>
+	<complexType name="ClientInfoType">
+		<sequence maxOccurs="unbounded">
+			<any namespace="##other" />
+		</sequence>
+	</complexType>
 
-  <element name="ClientInfo" type="xbulk:ClientInfoType"/>
+	<element name="ClientInfo" type="xbulk:ClientInfoType" />
 
-  <!-- Result Specific Stuff -->
+	<!-- Result Specific Stuff -->
 
-  <complexType name="BulkRegisterResultType">
-    <sequence>
-      <element name="SignedPart">
-        <complexType>
-          <sequence>
-            <element ref="xbulk:BatchHeader"/>
-            <element ref="xbulk:RegisterResults"/>
-          </sequence>
-          <attribute name="Id" type="ID" use="required"/>
-        </complexType>
-      </element>
-      <element ref="dsig:Signature"/>
-    </sequence>
-  </complexType>
+	<complexType name="BulkRegisterResultType">
+		<sequence>
+			<element name="SignedPart">
+				<complexType>
+					<sequence>
+						<element ref="xbulk:BatchHeader" />
+						<element ref="xbulk:RegisterResults" />
+					</sequence>
+					<attribute name="Id" type="ID" use="required" />
+				</complexType>
+			</element>
+			<element ref="dsig:Signature" />
+		</sequence>
+	</complexType>
 
-  <element name="BulkRegisterResult" type="xbulk:BulkRegisterResultType"/>
+	<element name="BulkRegisterResult" type="xbulk:BulkRegisterResultType" />
 
-  <complexType name="RegisterResultsType">
-    <sequence>
-      <element ref="xkms:RegisterResult" maxOccurs="unbounded"/>
-    </sequence>
-    <attribute name="number" use="required"/>
-  </complexType>
+	<complexType name="RegisterResultsType">
+		<sequence>
+			<element ref="xkms:RegisterResult" maxOccurs="unbounded" />
+		</sequence>
+		<attribute name="number" use="required" />
+	</complexType>
 
-  <element name="RegisterResults" type="xbulk:RegisterResultsType"/>
+	<element name="RegisterResults" type="xbulk:RegisterResultsType" />
 
-  <!-- Status Specific Stuff -->
+	<!-- Status Specific Stuff -->
 
-  <complexType name="BulkStatusType">
-    <sequence>
-      <element name="SignedPart">
-        <complexType>
-          <sequence>
-            <element ref="xbulk:BatchHeader"/>
-          </sequence>
-        <attribute name="Id" type="ID" use="required"/>
-        </complexType>
-      </element>
-      <element ref="dsig:Signature"/>
-    </sequence>
-  </complexType>
+	<complexType name="BulkStatusType">
+		<sequence>
+			<element name="SignedPart">
+				<complexType>
+					<sequence>
+						<element ref="xbulk:BatchHeader" />
+					</sequence>
+					<attribute name="Id" type="ID" use="required" />
+				</complexType>
+			</element>
+			<element ref="dsig:Signature" />
+		</sequence>
+	</complexType>
 
-  <element name="BulkStatus" type="xbulk:BulkStatusType"/>
+	<element name="BulkStatus" type="xbulk:BulkStatusType" />
 
-  <complexType name="BulkStatusResultType">
-    <sequence>
-      <element name="SignedPart">
-        <complexType>
-          <sequence>
-            <element ref="xbulk:BatchHeader"/>
-            <element ref="xbulk:StatusResult"/>
-          </sequence>
-          <attribute name="Id" type="ID" use="required"/>
-        </complexType>
-      </element>
-      <element ref="dsig:Signature"/>
-    </sequence>
-  </complexType>
+	<complexType name="BulkStatusResultType">
+		<sequence>
+			<element name="SignedPart">
+				<complexType>
+					<sequence>
+						<element ref="xbulk:BatchHeader" />
+						<element ref="xbulk:StatusResult" />
+					</sequence>
+					<attribute name="Id" type="ID" use="required" />
+				</complexType>
+			</element>
+			<element ref="dsig:Signature" />
+		</sequence>
+	</complexType>
 
-  <element name="BulkStatusResult" type="xbulk:BulkStatusResultType"/>
+	<element name="BulkStatusResult" type="xbulk:BulkStatusResultType" />
 
-  <complexType name="StatusResultType">
-    <sequence>
-      <element name="Pending" type="positiveInteger"/>
-      <element name="Successful" type="positiveInteger"/>
-      <element name="Failed" type="positiveInteger"/>
-    </sequence>
-  </complexType>
+	<complexType name="StatusResultType">
+		<sequence>
+			<element name="Pending" type="positiveInteger" />
+			<element name="Successful" type="positiveInteger" />
+			<element name="Failed" type="positiveInteger" />
+		</sequence>
+	</complexType>
 
-  <element name="StatusResult" type="xbulk:StatusResultType"/>
+	<element name="StatusResult" type="xbulk:StatusResultType" />
 
-  <!-- new types of dsig:KeyInfo -->
+	<!-- new types of dsig:KeyInfo -->
 
-  <element name="PKCS1" type="base64Binary"/>
+	<element name="PKCS1" type="base64Binary" />
 
-  <element name="PKCS10" type="base64Binary"/>
+	<element name="PKCS10" type="base64Binary" />
 
 </schema>
 

@@ -19,8 +19,6 @@ package be.fedict.eid.pkira.blm.model.contracts;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -35,19 +33,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.async.Asynchronous;
-import org.jboss.seam.annotations.async.Expiration;
-import org.jboss.seam.annotations.async.FinalExpiration;
-import org.jboss.seam.annotations.async.IntervalDuration;
 import org.jboss.seam.async.QuartzTriggerHandle;
 import org.quartz.SchedulerException;
 
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
-import be.fedict.eid.pkira.blm.model.mail.MailTemplate;
 import be.fedict.eid.pkira.crypto.CertificateInfo;
 
 @Entity
@@ -58,12 +49,8 @@ public class Certificate implements Serializable {
 
 	private static final long serialVersionUID = -6539022465744360747L;
 
-	@In(create=true)
+	@Column(name="TRIGGERHANDLE", nullable=true)
 	private QuartzTriggerHandle timer;
-	
-	@In(value = MailTemplate.NAME, create = true)
-	@Transient
-	private MailTemplate mailTemplate;
 	
 	@Id
 	@GeneratedValue
@@ -244,24 +231,21 @@ public class Certificate implements Serializable {
 	public void setCertificateDomain(CertificateDomain certificateDomain) {
 		this.certificateDomain = certificateDomain;
 	}
-	
-	@Asynchronous
-	public QuartzTriggerHandle scheduleNotificationMail(@Expiration Date when, @IntervalDuration Long interval, @FinalExpiration Date endDate, Certificate certificate, String mail){
-		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("certificate", certificate);
-	
-		String[] email = new String[1]; 
-		email[0] = mail;
-		mailTemplate.sendTemplatedMail("certificateNearlyExpired.ftl", parameters, email);
-		
-		return timer;
-	}
-
 
 	public void cancelNotificationMail() throws SchedulerException {
 		if(timer != null){
 			timer.cancel();
 		}
+	}
+
+	
+	public QuartzTriggerHandle getTimer() {
+		return timer;
+	}
+
+	
+	public void setTimer(QuartzTriggerHandle timer) {
+		this.timer = timer;
 	}
 }
 

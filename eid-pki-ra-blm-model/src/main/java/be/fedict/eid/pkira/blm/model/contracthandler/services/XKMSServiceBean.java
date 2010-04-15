@@ -1,22 +1,22 @@
 package be.fedict.eid.pkira.blm.model.contracthandler.services;
 
-import java.io.StringWriter;
 import java.math.BigInteger;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.cert.X509Certificate;
-import java.util.Date;
 
 import javax.ejb.Stateless;
-import javax.security.auth.x500.X500Principal;
 
-import org.bouncycastle.openssl.PEMWriter;
-import org.bouncycastle.x509.X509V1CertificateGenerator;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
+import be.fedict.eid.pkira.blm.model.contracts.CertificateRevocationContract;
+import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
+import be.fedict.eid.pkira.blm.model.framework.WebserviceLocator;
 import be.fedict.eid.pkira.crypto.CSRParser;
+import be.fedict.eid.pkira.crypto.CertificateParser;
+import be.fedict.eid.pkira.crypto.CryptoException;
+import be.fedict.eid.pkira.generated.contracts.ResultType;
+import be.fedict.eid.pkira.xkmsws.XKMSClient;
+import be.fedict.eid.pkira.xkmsws.XKMSClientException;
 
 /**
  * XKMS Service implementation.
@@ -27,63 +27,82 @@ import be.fedict.eid.pkira.crypto.CSRParser;
 @Name(XKMSService.NAME)
 public class XKMSServiceBean implements XKMSService {
 
+	@In(value = WebserviceLocator.NAME, create = true)
+	private WebserviceLocator webserviceLocator;
+
 	@In(value = CSRParser.NAME, create = true)
 	private CSRParser csrParser;
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void revoke(String certificate) throws ContractHandlerBeanException {
-		// TODO implement me when we have an XKMS service
-	}
+	@In(value = CertificateParser.NAME, create = true)
+	private CertificateParser certificateParser;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String sign(String csr) throws ContractHandlerBeanException {
-		return createCertificate(csr);
-	}
-
-	private String createCertificate(String csr) {
+	public void revoke(CertificateRevocationContract contract) throws ContractHandlerBeanException {
+		// Parse the certificate
+		BigInteger serialNumber;
 		try {
-			String dn = csrParser.parseCSR(csr).getSubject();
-
-			Date startDate = new Date();
-			Date expiryDate = new Date(startDate.getTime() + 1000L * 3600 * 24 * 360);
-			BigInteger serialNumber = BigInteger.valueOf(System.currentTimeMillis());
-
-			KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA", "BC");
-			generator.initialize(512);
-			KeyPair keyPair = generator.generateKeyPair();
-
-			X509V1CertificateGenerator certGen = new X509V1CertificateGenerator();
-			X500Principal dnName = new X500Principal(dn);
-
-			certGen.setSerialNumber(serialNumber);
-			certGen.setIssuerDN(dnName);
-			certGen.setNotBefore(startDate);
-			certGen.setNotAfter(expiryDate);
-			certGen.setSubjectDN(dnName);
-			certGen.setPublicKey(keyPair.getPublic());
-			certGen.setSignatureAlgorithm("SHA1withRSA");
-
-			X509Certificate cert = certGen.generate(keyPair.getPrivate(), "BC");
-
-			StringWriter writer = new StringWriter();
-			PEMWriter pemWriter = new PEMWriter(writer);
-			pemWriter.writeObject(cert);
-			pemWriter.flush();
-
-			return writer.toString();
-		} catch (Exception e) {
-			throw new RuntimeException("Error creating self-signed demo certificate", e);
+			serialNumber = certificateParser.parseCertificate(contract.getContractDocument()).getSerialNumber();
+		} catch (CryptoException e) {
+			// this should not occur: validation has to happen sooner
+			throw new RuntimeException(e);
 		}
+		
+		try {
+			XKMSClient xkmsClient = webserviceLocator.getXKMSClient(contract.getCertificateDomain()
+					.getCertificateAuthority());
+			xkmsClient.revokeCertificate(serialNumber.toString());
+		} catch (XKMSClientException e) {
+			throw new ContractHandlerBeanException(ResultType.BACKEND_ERROR, "Error revoking the certificate: "
+					+ e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String sign(CertificateSigningContract contract) throws ContractHandlerBeanException {
+		// Convert the CSR to DER format
+		byte[] csrData;
+		try {
+			csrData = csrParser.parseCSR(contract.getContractDocument()).getDerEncoded();
+		} catch (CryptoException e) {
+			// this should not occur: validation has to happen sooner
+			throw new RuntimeException(e);
+		}
+
+		// Call XKMS
+		byte[] certificateData;
+		try {
+			XKMSClient xkmsClient = webserviceLocator.getXKMSClient(contract.getCertificateDomain()
+					.getCertificateAuthority());
+			certificateData = xkmsClient.createCertificate(csrData, contract.getValidityPeriodMonths().intValue());
+		} catch (XKMSClientException e) {
+			throw new ContractHandlerBeanException(ResultType.BACKEND_ERROR, "Error signing the certificate: "
+					+ e.getMessage(), e);
+		}
+		
+		// Convert the certificate to PEM format
+		try {
+			return certificateParser.parseCertificate(certificateData).getPemEncoded();
+		} catch (CryptoException e) {
+			throw new ContractHandlerBeanException(ResultType.BACKEND_ERROR, "Invalid certificate retrieved from XKMS.", e);
+		}
+	}
+
+	protected void setWebserviceLocator(WebserviceLocator webserviceLocator) {
+		this.webserviceLocator = webserviceLocator;
 	}
 
 	protected void setCsrParser(CSRParser csrParser) {
 		this.csrParser = csrParser;
+	}
+
+	protected void setCertificateParser(CertificateParser certificateParser) {
+		this.certificateParser = certificateParser;
 	}
 
 }

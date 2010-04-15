@@ -13,8 +13,10 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.core.Conversation;
 
 import be.fedict.eid.dss.client.DigitalSignatureServiceClient;
+import be.fedict.eid.pkira.blm.model.ca.CertificateAuthority;
 import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryKey;
 import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
+import be.fedict.eid.pkira.xkmsws.XKMSClient;
 
 @Name(WebserviceLocator.NAME)
 @Scope(ScopeType.STATELESS)
@@ -49,6 +51,10 @@ public class WebserviceLocator {
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public XKMSClient getXKMSClient(CertificateAuthority ca) {
+		return new XKMSClient(ca.getXkmsUrl(), ca.getParameters());
 	}
 
 	protected HttpServletRequest getRequest() {

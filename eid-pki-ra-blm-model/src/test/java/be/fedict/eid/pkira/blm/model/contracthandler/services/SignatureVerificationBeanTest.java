@@ -16,6 +16,7 @@ import org.testng.annotations.Test;
 import be.fedict.eid.dss.client.DigitalSignatureServiceClient;
 import be.fedict.eid.dss.client.NotParseableXMLDocumentException;
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
+import be.fedict.eid.pkira.blm.model.framework.WebserviceLocator;
 
 
 public class SignatureVerificationBeanTest {
@@ -28,6 +29,7 @@ public class SignatureVerificationBeanTest {
 	private Log log;
 	@Mock
 	private DigitalSignatureServiceClient dssClient;
+	@Mock WebserviceLocator webserviceLocator;
 
 	@BeforeMethod
 	public void setup() {
@@ -35,7 +37,9 @@ public class SignatureVerificationBeanTest {
 		
 		bean = new SignatureVerifierBean();
 		bean.setLog(log);
-		bean.setDigitalSignatureServiceClient(dssClient);
+		bean.setWebserviceLocator(webserviceLocator);
+		
+		when(webserviceLocator.getDigitalSignatureServiceClient()).thenReturn(dssClient);
 	}
 	
 	@Test

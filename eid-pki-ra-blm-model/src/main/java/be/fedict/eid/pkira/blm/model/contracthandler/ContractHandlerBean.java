@@ -16,6 +16,7 @@
  */
 package be.fedict.eid.pkira.blm.model.contracthandler;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -27,6 +28,7 @@ import javax.ejb.TransactionAttributeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.async.QuartzTriggerHandle;
 import org.jboss.seam.log.Log;
 import org.quartz.SchedulerException;
 
@@ -34,6 +36,7 @@ import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryKey;
 import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
 import be.fedict.eid.pkira.blm.model.contracthandler.services.ContractParser;
 import be.fedict.eid.pkira.blm.model.contracthandler.services.FieldValidator;
+import be.fedict.eid.pkira.blm.model.contracthandler.services.SchedulerBean;
 import be.fedict.eid.pkira.blm.model.contracthandler.services.SignatureVerifier;
 import be.fedict.eid.pkira.blm.model.contracthandler.services.XKMSService;
 import be.fedict.eid.pkira.blm.model.contracts.Certificate;
@@ -79,6 +82,9 @@ public class ContractHandlerBean implements ContractHandler {
 
 	@In(value = FieldValidator.NAME, create = true)
 	private FieldValidator fieldValidator;
+	
+	@In(value=SchedulerBean.NAME, create=true)
+	private SchedulerBean schedulerBean;
 
 	@Logger
 	private Log log;
@@ -121,10 +127,10 @@ public class ContractHandlerBean implements ContractHandler {
 					.getCertificateType());
 
 			// Persist the contract
-			saveContract(registration, requestMsg, request, signer);
+			CertificateRevocationContract contract = saveContract(registration, requestMsg, request, signer);
 
 			// Call XKMS
-			xkmsService.revoke(request.getCertificate());
+			xkmsService.revoke(contract);
 			// TODO log problem with CA
 
 			// Delete the certificate
@@ -173,7 +179,7 @@ public class ContractHandlerBean implements ContractHandler {
 					certificateType);
 
 			// Call XKMS
-			String certificateAsPem = xkmsService.sign(request.getCSR());
+			String certificateAsPem = xkmsService.sign(contract);
 			if (certificateAsPem == null) {
 				// TODO log problem with CA
 				throw new ContractHandlerBeanException(ResultType.BACKEND_ERROR,
@@ -193,9 +199,8 @@ public class ContractHandlerBean implements ContractHandler {
 			User requester = registration.getRequester();
 			String requesterName = requester.getName();
 			Certificate certificate = new Certificate(certificateAsPem, certificateInfo, requesterName, contract);
-			contractRepository.persistCertificate(certificate);
-		
 			scheduleNotificationMail(registration, certificateInfo, certificate);
+			contractRepository.persistCertificate(certificate);
 			
 			// Send the mail
 			sendCertificateByMail(certificate, registration);
@@ -217,8 +222,12 @@ public class ContractHandlerBean implements ContractHandler {
 	protected void scheduleNotificationMail(Registration registration,
 			CertificateInfo certificateInfo, Certificate certificate) {
 		Long intervalParam = Long.valueOf(configurationEntryQuery.findByEntryKey(ConfigurationEntryKey.NOTIFICATION_MAIL_DAYS).getValue());
-		//TODO: dit nog even bekijken!
-		certificate.scheduleNotificationMail(certificateInfo.getValidityEnd(), intervalParam, certificate.getValidityEnd(), certificate, registration.getEmail());
+		
+		Date when = certificateInfo.getValidityEnd();
+		when.setTime(when.getTime() - intervalParam*1000*60*60*24);
+		
+		QuartzTriggerHandle timer = schedulerBean.scheduleNotifcation(when, certificate, registration.getEmail());
+		certificate.setTimer(timer);
 	}
 
 	private Certificate findCertificate(CertificateRevocationRequestType request) throws ContractHandlerBeanException {
@@ -255,7 +264,7 @@ public class ContractHandlerBean implements ContractHandler {
 		return certificateType;
 	}
 
-	private void saveContract(Registration registration, String requestMsg, CertificateRevocationRequestType request,
+	private CertificateRevocationContract saveContract(Registration registration, String requestMsg, CertificateRevocationRequestType request,
 			String signer) {
 		CertificateRevocationContract contract = new CertificateRevocationContract();
 		contract.setRequester(signer);
@@ -265,6 +274,8 @@ public class ContractHandlerBean implements ContractHandler {
 		contract.setEndDate(request.getValidityEnd().toGregorianCalendar().getTime());
 		contract.setCertificateDomain(registration.getCertificateDomain());
 		contractRepository.persistContract(contract);
+		
+		return contract;
 	}
 
 	private CertificateSigningContract saveContract(Registration registration, String requestMsg,

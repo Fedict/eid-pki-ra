@@ -88,9 +88,9 @@ public class XKMSSignatureSOAPHandler implements SOAPHandler<SOAPMessageContext>
 			try {
 				Element soapRootElement = context.getMessage().getSOAPBody();
 
-				Element bulkRegisterElement = (Element) soapRootElement.getElementsByTagNameNS("*", "BulkRegister")
+				Element bulkRegisterElement = (Element) soapRootElement.getElementsByTagName("BulkRegister")
 						.item(0);
-				Element signedPartElement = (Element) bulkRegisterElement.getElementsByTagNameNS("*", "SignedPart")
+				Element signedPartElement = (Element) bulkRegisterElement.getElementsByTagName("SignedPart")
 						.item(0);
 
 				// Create reference with digest method and transforms
