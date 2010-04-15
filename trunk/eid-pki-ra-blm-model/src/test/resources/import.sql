@@ -3,7 +3,7 @@ INSERT INTO USER (USER_ID, LAST_NAME, FIRST_NAME, NATIONAL_REGISTER_NUMBER, IS_A
 INSERT INTO USER (USER_ID, LAST_NAME, FIRST_NAME, NATIONAL_REGISTER_NUMBER, IS_ADMIN) VALUES (2002, 'Baeyens', 'Bram', '75033022781', 1);
 	
 -- Certificate authorities
-INSERT INTO CA(CA_ID, NAME, XKMS_URL) VALUES (5001, 'CertiPost CA', 'http://xkms-url.be/xkms');
+INSERT INTO CA(CA_ID, NAME, XKMS_URL, LEGAL_NOTICE) VALUES (5001, 'CertiPost CA', 'http://xkms-url.be/xkms', 'Test Legal Notice');
 
 -- Certificate domains
 INSERT INTO CertificateDomain (CERTIFICATE_DOMAIN_ID, CERTIFICATE_DOMAIN_NAME, DN_EXPRESSION, CLIENTCERT, SERVERCERT, CODECERT, CA_ID) VALUES (1001, 'eHealth Client Certificates', 'c=be,ou=eHealth,uid=*', 1, 0, 0, 5001);

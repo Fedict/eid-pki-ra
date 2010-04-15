@@ -88,10 +88,17 @@ public class XKMSSignatureSOAPHandler implements SOAPHandler<SOAPMessageContext>
 			try {
 				Element soapRootElement = context.getMessage().getSOAPBody();
 
-				Element bulkRegisterElement = (Element) soapRootElement.getElementsByTagName("BulkRegister")
-						.item(0);
-				Element signedPartElement = (Element) bulkRegisterElement.getElementsByTagName("SignedPart")
-						.item(0);
+				Element bulkRegisterElement = (Element) soapRootElement.getElementsByTagName("BulkRegister").item(0);
+				if (bulkRegisterElement == null) {
+					// JBossWS >< SunWS workaround
+					bulkRegisterElement = (Element) soapRootElement.getElementsByTagNameNS("*", "BulkRegister").item(0);
+				}
+				
+				Element signedPartElement = (Element) bulkRegisterElement.getElementsByTagName("SignedPart").item(0);
+				if (signedPartElement == null) {
+					// JBossWS >< SunWS workaround
+					signedPartElement = (Element) soapRootElement.getElementsByTagNameNS("*", "SignedPart").item(0);
+				}
 
 				// Create reference with digest method and transforms
 				String referenceUri = "#" + signedPartElement.getAttribute("Id");
