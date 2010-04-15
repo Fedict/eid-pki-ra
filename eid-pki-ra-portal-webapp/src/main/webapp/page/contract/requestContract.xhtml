@@ -48,7 +48,9 @@
 				
 				<s:decorate id="operatorPhoneDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['operator.phone']}:</ui:define>
-                	<h:inputText required="true" id="operatorPhone" value="#{requestContract.operator.phone}" />
+	                	<h:inputText required="true" id="operatorPhone" value="#{requestContract.operator.phone}">
+	                	 	<s:validate/>
+	                	</h:inputText>
             	</s:decorate>
 				
 				<s:decorate id="base64CsrDecoration" template="/layout/edit.xhtml">
