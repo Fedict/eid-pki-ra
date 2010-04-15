@@ -69,7 +69,6 @@
 		<module>eid-pki-ra-portal-webapp</module>
 		<module>eid-pki-ra-portal-ear</module>
 		<module>eid-pki-ra-blm-sar</module>
-		<module>eid-pki-ra-mock-dss</module>
 		<module>eid-pki-ra-mock-xkms</module>
 
 		<!-- <module>eid-pki-ra-integration</module>  -->
@@ -631,7 +630,7 @@
 
 			<properties>
 				<!-- development mode (disable in production) -->
-				<seam.debug>true</seam.debug>
+				<seam.debug>false</seam.debug>
 
 				<!-- datasource configuration   -->
 				<jdbc.connection.url>jdbc:...</jdbc.connection.url>

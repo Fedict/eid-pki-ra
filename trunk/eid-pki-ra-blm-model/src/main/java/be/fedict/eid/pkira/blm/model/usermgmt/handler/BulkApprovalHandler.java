@@ -16,6 +16,7 @@
  */
 package be.fedict.eid.pkira.blm.model.usermgmt.handler;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -43,8 +44,10 @@ import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationRepository;
  */
 @Name(BulkApprovalHandler.NAME)
 @Scope(ScopeType.CONVERSATION)
-public class BulkApprovalHandler {
-
+public class BulkApprovalHandler implements Serializable {
+	
+	private static final long serialVersionUID = -6783798704960869564L;
+	
 	public static final String NAME = "be.fedict.eid.pkira.blm.bulkApprovalHandler";
 	public static final String NAMEITEMS = "registrations";
 	

@@ -35,6 +35,7 @@
 		<dependency>
 			<groupId>org.jboss.seam</groupId>
 			<artifactId>jboss-seam</artifactId>
+			<type>ejb</type>
 		</dependency>
 		<dependency>
 			<groupId>be.fedict</groupId>
@@ -52,11 +53,11 @@
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-authentication-client</artifactId>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.bouncycastle</groupId>-->
-<!--			<artifactId>bcprov-jdk16</artifactId>-->
-<!--			<scope>provided</scope>-->
-<!--		</dependency>-->
+		<!--		<dependency>-->
+		<!--			<groupId>org.bouncycastle</groupId>-->
+		<!--			<artifactId>bcprov-jdk16</artifactId>-->
+		<!--			<scope>provided</scope>-->
+		<!--		</dependency>-->
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
@@ -108,5 +109,17 @@
 			<artifactId>servlet-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
+
+		<!--
+			<dependency> <groupId>com.sun.xml.ws</groupId> <artifactId>jaxws-rt</artifactId> <exclusions> <exclusion>
+			<groupId>javax.xml.ws</groupId> <artifactId>jaxws-api</artifactId> </exclusion> <exclusion>
+			<groupId>javax.xml.bind</groupId> <artifactId>jaxb-api</artifactId> </exclusion> <exclusion>
+			<groupId>javax.xml.soap</groupId> <artifactId>saaj-api</artifactId> </exclusion> <exclusion>
+			<groupId>javax.activation</groupId> <artifactId>activation</artifactId> </exclusion> <exclusion>
+			<groupId>javax.xml.stream</groupId> <artifactId>stax-api</artifactId> </exclusion> <exclusion>
+			<groupId>stax</groupId> <artifactId>stax-api</artifactId> </exclusion> <exclusion>
+			<groupId>com.sun.org.apache.xml.internal</groupId> <artifactId>resolver</artifactId> </exclusion> <exclusion>
+			<groupId>org.jvnet</groupId> <artifactId>mimepull</artifactId> </exclusion> </exclusions> </dependency>
+		-->
 	</dependencies>
 </project>

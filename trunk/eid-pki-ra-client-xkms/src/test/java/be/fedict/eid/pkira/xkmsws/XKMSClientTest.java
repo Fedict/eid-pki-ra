@@ -78,7 +78,7 @@ public class XKMSClientTest {
 
 	@SuppressWarnings("unchecked")
 	@BeforeMethod
-	public void setup() {
+	public void setup() {		
 		// Instantiate client
 		parameters.put(XKMSClient.PARAMETER_BUC, "8047651269");
 		parameters.put(XKMSSignatureSOAPHandler.PARAMETER_SIGNING_KEY_PROVIDER_CLASS, SigningKeyKeyStoreProvider.class
@@ -115,6 +115,21 @@ public class XKMSClientTest {
 		diff = new IgnoreLocationsDifferenceListener(diff, ACCEPTED_DIFFERENCES_CREATE_CERTIFICATE);
 
 		XMLAssert.assertXMLIdentical(diff, true);
+	}
+	
+	@Test
+	public void testRevokeCertificate() throws Exception {
+		xkmsClient.revokeCertificate("123");
+	}
+	
+	@Test
+	public void testRevokeCertificateAlreadyRevoked() throws Exception {
+		xkmsClient.revokeCertificate("001");
+	}
+	
+	@Test(expectedExceptions=XKMSClientException.class)
+	public void testRevokeCertificateAlreadyError() throws Exception {
+		xkmsClient.revokeCertificate("000");
 	}
 
 	private String readResource(String resourceName) throws IOException {

@@ -38,6 +38,8 @@ import javax.xml.ws.handler.Handler;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.w3._2000._09.xmldsig_.KeyInfoType;
 import org.w3._2000._09.xmldsig_.X509DataType;
 import org.w3._2002._03.xkms_xbulk.BatchHeaderType;
@@ -49,6 +51,8 @@ import org.w3._2002._03.xkms_xbulk.RequestsType;
 import org.w3._2002._03.xkms_xbulk.BulkRegisterType.SignedPart;
 import org.w3._2002._03.xkms_xbulk_wsdl.XKMSPortType;
 import org.w3._2002._03.xkms_xbulk_wsdl.XKMSService;
+import org.xkms.schema.xkms_2001_01_20.AssertionStatus;
+import org.xkms.schema.xkms_2001_01_20.KeyBindingType;
 import org.xkms.schema.xkms_2001_01_20.RegisterResult;
 import org.xkms.schema.xkms_2001_01_20.Respond;
 import org.xkms.schema.xkms_2001_01_20.ResultCode;
@@ -59,24 +63,26 @@ import com.ubizen.og.xkms.schema.xkms_2003_09.ValidityIntervalType;
 
 public class XKMSClient {
 
-	private static final TimeZone TIMEZONE_GMT = TimeZone.getTimeZone("Z");
-
+	public static final String KEYNAME_REQUEST = "http://xkms.og.ubizen.com/keyname?buc_id={0}";
+	public static final String KEYNAME_REVOKE = "http://xkms.og.ubizen.com/keyname?buc_id={0}&cert_serialnumber={1}";
 	public static final String NAMESPACE_URI = "http://www.w3.org/2002/03/xkms-xbulk#wsdl";
+	public static final String PARAMETER_BUC = "buc";
 	public static final String SERVICE_NAME = "XKMSService";
 	public static final String WSDL_RESOURCE = "/wsdl/xkms2-xbulk.wsdl";
+	
+	private static final Log LOG = LogFactory.getLog(XKMSClient.class);
+	
+	private static final TimeZone TIMEZONE_GMT = TimeZone.getTimeZone("Z");
 
-	public static final String KEYNAME = "http://xkms.og.ubizen.com/keyname?buc_id={0}";
-	public static final String PARAMETER_BUC = "buc";
-
+	private final DatatypeFactory datatypeFactory;
 	private final String endpointAddress;
-	private final Map<String, String> parameters;
 	private SOAPHandler<SOAPMessageContext>[] extraHandlers;
 
+	private final com.ubizen.og.xkms.schema.xkms_2003_09.ObjectFactory ogcmObjectFactory = new com.ubizen.og.xkms.schema.xkms_2003_09.ObjectFactory();
+	private final Map<String, String> parameters;
 	private final org.w3._2002._03.xkms_xbulk.ObjectFactory xbulkObjectFactory = new org.w3._2002._03.xkms_xbulk.ObjectFactory();
 	private final org.xkms.schema.xkms_2001_01_20.ObjectFactory xkmsObjectFactory = new org.xkms.schema.xkms_2001_01_20.ObjectFactory();
 	private final org.w3._2000._09.xmldsig_.ObjectFactory xmldsigObjectFactory = new org.w3._2000._09.xmldsig_.ObjectFactory();
-	private final com.ubizen.og.xkms.schema.xkms_2003_09.ObjectFactory ogcmObjectFactory = new com.ubizen.og.xkms.schema.xkms_2003_09.ObjectFactory();
-	private final DatatypeFactory datatypeFactory;
 
 	/**
 	 * Creates an XKMSClient for the specific endpoint address using the
@@ -84,6 +90,8 @@ public class XKMSClient {
 	 */
 	public XKMSClient(String endpointAddress, Map<String, String> parameters,
 			SOAPHandler<SOAPMessageContext>... extraHandlers) {
+		LOG.info("Creating XKMSClient to " + endpointAddress);
+		
 		this.endpointAddress = endpointAddress;
 		this.parameters = parameters;
 		this.extraHandlers = extraHandlers;
@@ -107,6 +115,8 @@ public class XKMSClient {
 	 *             if an error occurred while communicating to the XKMS service.
 	 */
 	public byte[] createCertificate(byte[] csrData, int validityInMonths) throws XKMSClientException {
+		LOG.info("Creating certificate");
+
 		// Create the request
 		RequestType request = createCSRRequestElement(csrData, validityInMonths);
 
@@ -118,13 +128,32 @@ public class XKMSClient {
 		RegisterResult result = results.get(0);
 
 		// Parse the result
-		return parseCertificateResultElement(result);
+		return parseCreateCertificateResult(result);
 	}
 
-	public void revokeCertificate(/* TODO Parameters */) {
-		// TODO implementation
-	}
+	/**
+	 * Sends a request to the XKMS to revoke a certificate.
+	 * 
+	 * @param serialNumber
+	 *            serial number of the certificate to revoke.
+	 * @throws XKMSClientException
+	 *             if an error occurred while communicating to the XKMS service.
+	 */
+	public void revokeCertificate(String serialNumber) throws XKMSClientException {
+		LOG.info("Revoking certificate");
+		
+		// Create the request
+		RequestType request = createRevocationElement(serialNumber);
 
+		// Execute it
+		List<RegisterResult> results = executeRequest(request);
+		if (results.size() != 1) {
+			throw new XKMSClientException("Expected one result from the XKMS service, but got " + results.size());
+		}
+		// Parse the result
+		parseRevokeCertificateResult(results.get(0));
+	}
+	
 	/**
 	 * Creates a bulk register request containing the specified request objects.
 	 */
@@ -183,7 +212,7 @@ public class XKMSClient {
 		request.setKeyInfo(keyInfo);
 
 		// Add the key name
-		String keyName = MessageFormat.format(KEYNAME, parameters.get(PARAMETER_BUC));
+		String keyName = MessageFormat.format(KEYNAME_REQUEST, encode(parameters.get(PARAMETER_BUC)));
 		keyInfo.getContent().add(xmldsigObjectFactory.createKeyName(keyName));
 
 		// Add the CSR
@@ -196,7 +225,7 @@ public class XKMSClient {
 
 		// Add the attribute certificate
 		AttributeCertificate attributeCertificate = ogcmObjectFactory.createAttributeCertificate();
-		processInfo.getAny().add(attributeCertificate);
+		processInfo.getAttributeCertificate().add(attributeCertificate);
 
 		// Add the validity interval
 		ValidityIntervalType validityInterval = ogcmObjectFactory.createValidityIntervalType();
@@ -208,6 +237,50 @@ public class XKMSClient {
 		attributeCertificate.setValidityInterval(validityInterval);
 
 		return request;
+	}
+
+	/**
+	 * Creates a bulk XKMS request for a revocation.
+	 */
+	private RequestType createRevocationElement(String serialNumber) {
+		// Create the request
+		RequestType request = xbulkObjectFactory.createRequestType();
+		request.setKeyID("key-id-" + UUID.randomUUID().toString());
+		request.setStatus(AssertionStatus.INVALID);
+
+		// Add the key info
+		KeyInfoType keyInfo = xmldsigObjectFactory.createKeyInfoType();
+		request.setKeyInfo(keyInfo);
+
+		// Add the key name
+		String keyName = MessageFormat.format(KEYNAME_REVOKE, encode(parameters.get(PARAMETER_BUC)),
+				encode(serialNumber));
+		keyInfo.getContent().add(xmldsigObjectFactory.createKeyName(keyName));
+
+		return request;
+
+	}
+
+	/**
+	 * Encodes a parameter in the key name.
+	 */
+	private String encode(String toEncode) {
+		if (toEncode == null) {
+			return "";
+		}
+
+		final String ENCODED = ",+\"\\<>;&";
+
+		StringBuilder result = new StringBuilder();
+		for (int i = 0; i < toEncode.length(); i++) {
+			char ch = toEncode.charAt(i);
+			if (ENCODED.indexOf(ch) != -1) {
+				result.append('\\');
+			}
+			result.append(ch);
+		}
+
+		return result.toString();
 	}
 
 	/**
@@ -240,6 +313,28 @@ public class XKMSClient {
 	 *            list with either this type of a JAXBElement with this type.
 	 * @return the first matching element.
 	 */
+	private Object getFromJAXBElementList(List<Object> list, String name) {
+		for (Object object : list) {
+			JAXBElement<?> element = (JAXBElement<?>) object;
+			if (name.equals(element.getName().getLocalPart())) {
+				return element.getValue();
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Extracts the first element from the list matching the type.
+	 * 
+	 * @param <T>
+	 *            expected type.
+	 * @param clazz
+	 *            expected type.
+	 * @param list
+	 *            list with either this type of a JAXBElement with this type.
+	 * @return the first matching element.
+	 */
 	private <T> T getFromList(Class<T> clazz, List<Object> list) {
 		for (Object object : list) {
 			if (clazz.isInstance(object)) {
@@ -256,6 +351,44 @@ public class XKMSClient {
 		return null;
 	}
 
+	/**
+	 * Get the key binding, handling errors (missing element).
+	 */
+	private KeyBindingType getKeyBinding(RegisterResult result) throws XKMSClientException {
+		Answer answer = result.getAnswer();
+		if (answer == null || answer.getKeyBinding() == null || answer.getKeyBinding().size() == 0) {
+			throw new XKMSClientException("No key info found in the reply from XKMS.");
+		}
+
+		KeyBindingType keyBinding = answer.getKeyBinding().get(0);
+		return keyBinding;
+	}
+
+	/**
+	 * Get the result reason from the OGCM parameters.
+	 */
+	private String getResultReason(KeyBindingType keyBinding) {
+		if (keyBinding == null || keyBinding.getProcessInfo() == null || keyBinding.getProcessInfo().getAny() == null) {
+			return null;
+		}
+
+		return (String) getFromJAXBElementList(keyBinding.getProcessInfo().getAny(), "Reason");
+	}
+
+	/**
+	 * Get the result reason code from the OGCM parameters.
+	 */
+	private BigInteger getResultReasonCode(KeyBindingType keyBinding) {
+		if (keyBinding == null || keyBinding.getProcessInfo() == null || keyBinding.getProcessInfo().getAny() == null) {
+			return null;
+		}
+
+		return (BigInteger) getFromJAXBElementList(keyBinding.getProcessInfo().getAny(), "ReasonCode");
+	}
+
+	/**
+	 * Create the port to the XKMS service.
+	 */
 	@SuppressWarnings("unchecked")
 	private XKMSPortType getXKMSPort() {
 		// Create the port
@@ -296,19 +429,16 @@ public class XKMSClient {
 	/**
 	 * Parses the certificate result element and extracts the certificate data.
 	 */
-	private byte[] parseCertificateResultElement(RegisterResult result) throws XKMSClientException {
+	private byte[] parseCreateCertificateResult(RegisterResult result) throws XKMSClientException {
+		KeyBindingType keyBinding = getKeyBinding(result);
+		
 		// Check the result
 		if (result.getResult() != ResultCode.SUCCESS) {
-			throw new XKMSClientException("Expected SUCCESS from XKMS service, but got: " + result.getResult());
+			throwXKMSClientExceptionWithReasonCode(keyBinding);
 		}
 
-		// Extract the X509 data
-		Answer answer = result.getAnswer();
-		if (answer == null || answer.getKeyBinding() == null || answer.getKeyBinding().size() == 0) {
-			throw new XKMSClientException("No key info found in the reply from XKMS.");
-		}
-
-		List<Object> content = answer.getKeyBinding().get(0).getKeyInfo().getContent();
+		// Extract the X509 data		
+		List<Object> content = keyBinding.getKeyInfo().getContent();
 		X509DataType x509Data = getFromList(X509DataType.class, content);
 		if (x509Data == null) {
 			throw new XKMSClientException("No X509Data found in the reply from XKMS.");
@@ -320,5 +450,31 @@ public class XKMSClient {
 		}
 
 		return certificateData;
+	}
+	
+	/**
+	 * Parses the certificate revocation element and extracts the certificate data.
+	 */
+	private void parseRevokeCertificateResult(RegisterResult result) throws XKMSClientException {
+		// Parse the result
+		KeyBindingType keyBinding = getKeyBinding(result);
+		if (result.getResult() == ResultCode.SUCCESS && keyBinding.getStatus() == AssertionStatus.INVALID) {
+			return;
+		}
+
+		BigInteger reasonCode = getResultReasonCode(keyBinding);
+		if (reasonCode != null && reasonCode.intValue() == 566 ) {
+			// already revoked
+			return;
+		}
+
+		throwXKMSClientExceptionWithReasonCode(keyBinding);
+	}
+
+	/**
+	 * Throw an exception with reason code and reason.
+	 */
+	private void throwXKMSClientExceptionWithReasonCode(KeyBindingType keyBinding) throws XKMSClientException {
+		throw new XKMSClientException("Error during revocation: reasonCode=" + getResultReasonCode(keyBinding)+ ", reason=" + getResultReason(keyBinding));
 	}
 }

@@ -3,6 +3,8 @@ package be.fedict.eid.pkira.blm.model.contracthandler.services;
 import javax.ejb.Local;
 
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
+import be.fedict.eid.pkira.blm.model.contracts.CertificateRevocationContract;
+import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
 
 @Local
 public interface XKMSService {
@@ -15,11 +17,11 @@ public interface XKMSService {
 	 * @return the signed certificate in PEM format. 
 	 * @exception ContractHandlerBeanException when an error occurred calling the back-end.
 	 */
-	public String sign(String csr) throws ContractHandlerBeanException;
+	public String sign(CertificateSigningContract contract) throws ContractHandlerBeanException;
 	
 	/**
 	 * Revoke a certificate, returning if this was succesful.
 	 * @exception ContractHandlerBeanException when an error occurred calling the back-end.
 	 */
-	public void revoke(String certificate) throws ContractHandlerBeanException;
+	public void revoke(CertificateRevocationContract contract) throws ContractHandlerBeanException;
 }
