@@ -25,6 +25,13 @@
 					<h:outputText value="#{certificateDomain.dnExpression}" />
 				</rich:column>
 
+				<rich:column sortBy="#{certificateDomain.certificateAuthority.name}" filterBy="#{certificateDomain.certificateAuthority.name}" filterEvent="onkeyup">
+					<f:facet name="header">
+						<h:outputText value="#{messages['certificatedomain.list.certificateAuthority.name']}" />
+					</f:facet>
+					<h:outputText value="#{certificateDomain.certificateAuthority.name}" />
+				</rich:column>
+
 				<rich:column>
 					<f:facet name="header">
 						<h:outputText value="#{messages['certificatedomain.list.servercertificates']}" />

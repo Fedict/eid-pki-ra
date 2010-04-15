@@ -217,6 +217,7 @@ public class ContractHandlerBean implements ContractHandler {
 	protected void scheduleNotificationMail(Registration registration,
 			CertificateInfo certificateInfo, Certificate certificate) {
 		Long intervalParam = Long.valueOf(configurationEntryQuery.findByEntryKey(ConfigurationEntryKey.NOTIFICATION_MAIL_DAYS).getValue());
+		//TODO: dit nog even bekijken!
 		certificate.scheduleNotificationMail(certificateInfo.getValidityEnd(), intervalParam, certificate.getValidityEnd(), certificate, registration.getEmail());
 	}
 

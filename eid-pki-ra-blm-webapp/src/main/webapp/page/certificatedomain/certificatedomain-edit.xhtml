@@ -20,6 +20,15 @@
 	               	<h:inputText id="dnPattern" value="#{certificateDomainHome.instance.dnExpression}" />
 	           	</s:decorate>
 	           	
+	           	<s:decorate id="CertificateAuthorityDecoration" template="/layout/edit.xhtml">
+	           		<ui:define name="label">#{messages['certificatedomain.edit.certificateAuthority']}:</ui:define>
+	           		<h:selectOneMenu value="#{certificateDomainHome.instance.certificateAuthority}" required="true">
+   						<s:selectItems value="#{certificateAuthorityQuery.resultList}" var="ca" 
+                  						label="#{ca.name}"/>
+   						<s:convertEntity />
+					</h:selectOneMenu>    
+	           	</s:decorate>
+	           	
 	           	<s:decorate id="clientCertDecoration" template="/layout/edit.xhtml">
 	               	<ui:define name="label">#{messages['certificatedomain.edit.clientCertificates']}:</ui:define>
 	               	<h:selectBooleanCheckbox id="clientCert" value="#{certificateDomainHome.instance.clientCertificate}" />           
