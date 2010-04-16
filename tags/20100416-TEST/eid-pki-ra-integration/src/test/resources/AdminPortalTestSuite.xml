@@ -1,0 +1,20 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="AdminPortalTestSuite" verbose="1">
+	<parameter name="context" value="admin" />
+	<test name="Database setup">
+		<classes>
+			<class name="be.fedict.eid.integration.setup.db.SetupDatabase" />
+		</classes>
+	</test>
+	<test name="Certificate Domain create/update tests">
+		<classes>
+			<class name="be.fedict.eid.integration.admin.CertificateDomainCreateSeleniumTest" />
+			<class name="be.fedict.eid.integration.admin.CertificateDomainUpdateSeleniumTest" />		
+		</classes>
+	</test>	
+	<test name="Configuration Entry update tests">
+		<classes>
+			<class name="be.fedict.eid.integration.admin.ConfigurationEntryUpdateSeleniumTest" />		
+		</classes>
+	</test>
+</suite>

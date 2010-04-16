@@ -1,0 +1,24 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml"
+	login-required="true">
+
+	<ui:define name="center">
+		<form id="dssRequestForm" method="post" action="#{configurationEntryContainer.dssServletUrl}">
+			<rich:panel id="panel">
+				<f:facet name="header">#{messages['revocation.sign.title']}</f:facet>
+				<p>#{messages['revocation.sign.subtitle']}</p>
+				<input type="hidden" name="SignatureRequest" value="#{revocationContractSigningWrapper.base64CsrXml}" />
+				<input type="hidden" name="target" value="#{revocationContractSigningWrapper.dssRequestHandlerUrl}" />
+				<input type="submit" value="#{messages['button.send']}" />
+				<script type="text/javascript">
+					document.getElementById('dssRequestForm').submit();
+				</script>
+			</rich:panel>
+		</form>
+	</ui:define>
+</ui:composition>

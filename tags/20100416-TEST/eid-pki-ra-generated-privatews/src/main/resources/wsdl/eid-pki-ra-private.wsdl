@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+	<!--  eID PKI RA Project. -->
+	<!--  Copyright (C) 2010 FedICT. -->
+	<!-- -->
+	<!--  This is free software; you can redistribute it and/or modify it -->
+	<!--  under the terms of the GNU Lesser General Public License version -->
+	<!--  3.0 as published by the Free Software Foundation. -->
+	<!-- -->
+	<!--  This software is distributed in the hope that it will be useful, -->
+	<!--  but WITHOUT ANY WARRANTY; without even the implied warranty of -->
+	<!--  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU -->
+	<!--  Lesser General Public License for more details. -->
+	<!-- -->
+	<!--  You should have received a copy of the GNU Lesser General Public -->
+	<!--  License along with this software; if not, see -->
+	<!--  http://www.gnu.org/licenses/. -->
+<wsdl:definitions targetNamespace="urn:be:fedict:eid:pkira:privatews" xmlns:tns="urn:be:fedict:eid:pkira:privatews"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="eid-pki-ra-private"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:types="urn:be:fedict:eid:pkira:privatews:types">
+
+	<wsdl:types>
+		<xsd:schema targetNamespace="urn:be:fedict:eid:pkira:privatews:types">
+			<xsd:element name="ListCertificatesRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="userRRN" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListCertificatesResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="certificates" type="types:certificateWS" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="FindCertificateRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="userRRN" type="xsd:string" />
+						<xsd:element name="serialNumber" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="FindCertificateResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="certificate" type="types:certificateWS" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="FindUserRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="userRRN" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="FindUserResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="user" type="types:userWS" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="FindRemainingCertificateDomainsForUserRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="userRRN" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="FindRemainingCertificateDomainsForUserResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="certificateDomains" type="types:certificateDomainWS" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="CreateRegistrationForUserRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="userRRN" type="xsd:string" />
+						<xsd:element name="userLastName" type="xsd:string" />
+						<xsd:element name="userFirstName" type="xsd:string" />
+						<xsd:element name="certificateDomainId" type="xsd:string" />
+						<xsd:element name="userEmail" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="CreateRegistrationForUserResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="success" type="xsd:boolean" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="FindConfigurationEntryRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="entryKey" type="types:configurationEntryKeyWS" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="FindConfigurationEntryResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="configurationEntry" type="types:configurationEntryWS" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="GetLegalNoticeRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="certificateDN" type="xsd:string" />
+						<xsd:element name="userRRN" type="xsd:string" />
+						<xsd:element name="certificateType" type="types:certificateTypeWS" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="GetLegalNoticeResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="legalNotice" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:complexType name="certificateWS">
+				<xsd:sequence>
+					<xsd:element name="serialNumber" type="xsd:string" />
+					<xsd:element name="distinguishedName" type="xsd:string" />
+					<xsd:element name="validityStart" type="xsd:dateTime" />
+					<xsd:element name="validityEnd" type="xsd:dateTime" />
+					<xsd:element name="requesterName" type="xsd:string" />
+					<xsd:element name="issuer" type="xsd:string" />
+					<xsd:element name="certificateType" type="types:certificateTypeWS" />
+					<xsd:element name="x509" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:simpleType name="certificateTypeWS">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="server" />
+					<xsd:enumeration value="client" />
+					<xsd:enumeration value="code" />
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:complexType name="userWS">
+				<xsd:sequence>
+					<xsd:element name="id" type="xsd:string" />
+					<xsd:element name="firstName" type="xsd:string" />
+					<xsd:element name="lastName" type="xsd:string" />
+					<xsd:element name="nationalRegisterNumber" type="xsd:string" />
+					<xsd:element name="withRegistrations" type="xsd:boolean" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="certificateDomainWS">
+				<xsd:sequence>
+					<xsd:element name="id" type="xsd:string" />
+					<xsd:element name="name" type="xsd:string" />
+					<xsd:element name="certificateTypes" type="types:certificateTypeWS" maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="configurationEntryWS">
+				<xsd:sequence>
+					<xsd:element name="entryKey" type="types:configurationEntryKeyWS" />
+					<xsd:element name="entryValue" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:simpleType name="configurationEntryKeyWS">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="VALIDITY_PERIODS" />
+					<xsd:enumeration value="DSS_SERVLET" />
+					<xsd:enumeration value="IDP_SERVLET" />
+					<xsd:enumeration value="IDP_DESTINATION" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="ListCertificatesRequest">
+		<wsdl:part name="request" element="types:ListCertificatesRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="ListCertificatesResult">
+		<wsdl:part name="response" element="types:ListCertificatesResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="FindCertificateRequest">
+		<wsdl:part name="request" element="types:FindCertificateRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="FindCertificateResult">
+		<wsdl:part name="response" element="types:FindCertificateResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="FindUserRequest">
+		<wsdl:part name="request" element="types:FindUserRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="FindUserResult">
+		<wsdl:part name="response" element="types:FindUserResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="FindRemainingCertificateDomainsForUserRequest">
+		<wsdl:part name="request" element="types:FindRemainingCertificateDomainsForUserRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="FindRemainingCertificateDomainsForUserResult">
+		<wsdl:part name="response" element="types:FindRemainingCertificateDomainsForUserResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="CreateRegistrationForUserRequest">
+		<wsdl:part name="request" element="types:CreateRegistrationForUserRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="CreateRegistrationForUserResult">
+		<wsdl:part name="response" element="types:CreateRegistrationForUserResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="FindConfigurationEntryRequest">
+		<wsdl:part name="request" element="types:FindConfigurationEntryRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="FindConfigurationEntryResult">
+		<wsdl:part name="response" element="types:FindConfigurationEntryResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="GetLegalNoticeRequest">
+		<wsdl:part name="request" element="types:GetLegalNoticeRequest" />		
+	</wsdl:message>
+
+	<wsdl:message name="GetLegalNoticeResponse">
+		<wsdl:part name="request" element="types:GetLegalNoticeResponse" />
+	</wsdl:message>
+
+	<wsdl:portType name="EIDPKIRAPrivatePortType">
+		<wsdl:operation name="ListCertificates">
+			<wsdl:input message="tns:ListCertificatesRequest" />
+			<wsdl:output message="tns:ListCertificatesResult" />
+		</wsdl:operation>
+		<wsdl:operation name="FindCertificate">
+			<wsdl:input message="tns:FindCertificateRequest" />
+			<wsdl:output message="tns:FindCertificateResult" />
+		</wsdl:operation>
+		<wsdl:operation name="FindUser">
+			<wsdl:input message="tns:FindUserRequest" />
+			<wsdl:output message="tns:FindUserResult" />
+		</wsdl:operation>
+		<wsdl:operation name="FindRemainingCertificateDomainsForUser">
+			<wsdl:input message="tns:FindRemainingCertificateDomainsForUserRequest" />
+			<wsdl:output message="tns:FindRemainingCertificateDomainsForUserResult" />
+		</wsdl:operation>
+		<wsdl:operation name="CreateRegistrationForUser">
+			<wsdl:input message="tns:CreateRegistrationForUserRequest" />
+			<wsdl:output message="tns:CreateRegistrationForUserResult" />
+		</wsdl:operation>
+		<wsdl:operation name="FindConfigurationEntry">
+			<wsdl:input message="tns:FindConfigurationEntryRequest" />
+			<wsdl:output message="tns:FindConfigurationEntryResult" />
+		</wsdl:operation>
+		<wsdl:operation name="GetLegalNotice">
+			<wsdl:input message="tns:GetLegalNoticeRequest" />
+			<wsdl:output message="tns:GetLegalNoticeResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="SOAPBinding" type="tns:EIDPKIRAPrivatePortType">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+		<wsdl:operation name="ListCertificates">
+			<soap:operation />
+			<wsdl:input message="tns:ListCertificatesRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output message="tns:ListCertificatesResult">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="FindCertificate">
+			<soap:operation />
+			<wsdl:input message="tns:FindCertificateRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output message="tns:FindCertificateResult">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="FindUser">
+			<soap:operation />
+			<wsdl:input message="tns:FindUserRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output message="tns:FindUserResult">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="FindRemainingCertificateDomainsForUser">
+			<soap:operation />
+			<wsdl:input message="tns:FindRemainingCertificateDomainsForUserRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output message="tns:FindRemainingCertificateDomainsForUserResult">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CreateRegistrationForUser">
+			<soap:operation />
+			<wsdl:input message="tns:CreateRegistrationForUserRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output message="tns:CreateRegistrationForUserResult">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="FindConfigurationEntry">
+			<soap:operation />
+			<wsdl:input message="tns:FindConfigurationEntryRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output message="tns:FindConfigurationEntryResult">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetLegalNotice">
+			<soap:operation />
+			<wsdl:input message="tns:GetLegalNoticeRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output message="tns:GetLegalNoticeResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="EIDPKIRAPrivateService">
+		<wsdl:port name="EIDPKIRAPrivatePort" binding="tns:SOAPBinding">
+			<soap:address location="http://localhost:8080/eid-pki-ra/webservice/eid-pki-ra-private-service" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
