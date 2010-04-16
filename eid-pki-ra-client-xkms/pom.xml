@@ -13,6 +13,7 @@
 	<artifactId>eid-pki-ra-client-xkms</artifactId>
 	<packaging>jar</packaging>
 	<name>eid-pki-ra-client - xkms</name>
+
 	<dependencies>
 		<dependency>
 			<groupId>be.fedict</groupId>
@@ -22,6 +23,8 @@
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-mock-xkms</artifactId>
 			<scope>test</scope>
+			<classifier>classes</classifier>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>

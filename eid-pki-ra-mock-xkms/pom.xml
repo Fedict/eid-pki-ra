@@ -14,6 +14,17 @@
 	<packaging>war</packaging>
 	<name>eid-pki-ra-mock - xkms</name>
 
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<attachClasses>true</attachClasses>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>be.fedict</groupId>
@@ -29,9 +40,9 @@
 		</dependency>
 		<dependency>
 			<groupId>be.fedict</groupId>
-			<artifactId>eid-pki-ra-util-crypto</artifactId>			
+			<artifactId>eid-pki-ra-util-crypto</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.sun.xml.ws</groupId>
 			<artifactId>jaxws-rt</artifactId>
@@ -56,12 +67,12 @@
 				<exclusion>
 					<groupId>javax.xml.soap</groupId>
 					<artifactId>saaj-api</artifactId>
-				</exclusion>		
+				</exclusion>
 				<exclusion>
 					<groupId>stax</groupId>
 					<artifactId>stax-api</artifactId>
-				</exclusion>				
+				</exclusion>
 			</exclusions>
-		</dependency>	
+		</dependency>
 	</dependencies>
 </project>
