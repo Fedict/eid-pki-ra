@@ -32,7 +32,7 @@ public class ErrorLoggerBeanTest {
 	
 	@Test
 	public void testLogging() {
-		bean.logError(Component.MAIL, "Mail error", new RuntimeException());
-		bean.logError(Component.XKMS, "XKMS Error without exception.");
+		bean.logError(ApplicationComponent.MAIL, "Mail error", new RuntimeException());
+		bean.logError(ApplicationComponent.XKMS, "XKMS Error without exception.");
 	}
 }

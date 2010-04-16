@@ -39,8 +39,9 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Name;
 
-import be.fedict.eid.pkira.blm.errorhandling.Component;
+import be.fedict.eid.pkira.blm.errorhandling.ApplicationComponent;
 import be.fedict.eid.pkira.blm.errorhandling.ErrorLogger;
 import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryKey;
 import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
@@ -51,8 +52,11 @@ import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
 @MessageDriven(activationConfig =
 	{ @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.queue"),
 			@ActivationConfigProperty(propertyName = "destination", propertyValue = "mail-queue") })
+@Name(MailHandlerBean.NAME)
 public class MailHandlerBean implements MessageListener {
 
+	public static final String NAME = "be.fedict.eid.pkira.blm.mailHandlerBean";
+	
 	@In(value = ErrorLogger.NAME, create = true)
 	private ErrorLogger errorLogger;
 	
@@ -105,10 +109,10 @@ public class MailHandlerBean implements MessageListener {
 
 			Transport.send(msg);
 		} catch (JMSException e) {
-			errorLogger.logError(Component.MAIL, "Cannot handle the object message from the queue", e);
+			errorLogger.logError(ApplicationComponent.MAIL, "Cannot handle the object message from the queue", e);
 			throw new RuntimeException(e);
 		} catch (MessagingException e) {
-			errorLogger.logError(Component.MAIL, "Cannot send a mail message", e);
+			errorLogger.logError(ApplicationComponent.MAIL, "Cannot send a mail message", e);
 			throw new RuntimeException(e);
 		}
 	}

@@ -22,7 +22,7 @@ package be.fedict.eid.pkira.blm.errorhandling;
  * @author Jan Van den Bergh
  *
  */
-public enum Component {
+public enum ApplicationComponent {
 
 	MAIL, XKMS;
 }

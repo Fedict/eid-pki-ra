@@ -40,13 +40,13 @@ public class ErrorLoggerBean implements ErrorLogger {
 	private Log log;
 
 	@Override
-	public void logError(Component component, String message, Throwable exception) {
-		log.error("[{0}] {1}", exception, component, message);
+	public void logError(ApplicationComponent applicationComponent, String message, Throwable exception) {
+		log.error("[{0}] {1}", exception, applicationComponent, message);
 	}
 
 	@Override
-	public void logError(Component component, String message) {
-		log.error("[{0}] {1}", component, message);
+	public void logError(ApplicationComponent applicationComponent, String message) {
+		log.error("[{0}] {1}", applicationComponent, message);
 	}
 
 	protected void setLog(Log log) {
