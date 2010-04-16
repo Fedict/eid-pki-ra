@@ -1,0 +1,78 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" 
+	template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:form id="certificateDomainListForm">
+			<rich:dataTable id="allCertificateDomain" var="certificateDomain" rows="10"
+					value="#{certificateDomainQuery.resultList}" width="100%">
+				<rich:column sortBy="#{certificateDomain.name}" filterBy="#{certificateDomain.name}" filterEvent="onkeyup">
+					<f:facet name="header">
+						<h:outputText value="#{messages['certificatedomain.list.name']}" />
+					</f:facet>
+					<h:outputText value="#{certificateDomain.name}" />
+				</rich:column>
+
+				<rich:column sortBy="#{certificateDomain.dnExpression}" filterBy="#{certificateDomain.dnExpression}" filterEvent="onkeyup">
+					<f:facet name="header">
+						<h:outputText value="#{messages['certificatedomain.list.dnexpression']}" />
+					</f:facet>
+					<h:outputText value="#{certificateDomain.dnExpression}" />
+				</rich:column>
+
+				<rich:column sortBy="#{certificateDomain.certificateAuthority.name}" filterBy="#{certificateDomain.certificateAuthority.name}" filterEvent="onkeyup">
+					<f:facet name="header">
+						<h:outputText value="#{messages['certificatedomain.list.certificateAuthority.name']}" />
+					</f:facet>
+					<h:outputText value="#{certificateDomain.certificateAuthority.name}" />
+				</rich:column>
+
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages['certificatedomain.list.servercertificates']}" />
+					</f:facet>
+					<h:outputText value="#{messages['general.yes']}" rendered="#{certificateDomain.serverCertificate}" />
+					<h:outputText value="#{messages['general.no']}" rendered="#{not certificateDomain.serverCertificate}" />
+				</rich:column>
+
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages['certificatedomain.list.clientcertificates']}" />
+					</f:facet>
+					<h:outputText value="#{messages['general.yes']}" rendered="#{certificateDomain.clientCertificate}" />
+					<h:outputText value="#{messages['general.no']}" rendered="#{not certificateDomain.clientCertificate}" />
+				</rich:column>
+
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages['certificatedomain.list.codesigningcertificates']}" />
+					</f:facet>
+					<h:outputText value="#{messages['general.yes']}" rendered="#{certificateDomain.codeSigningCertificate}" />
+					<h:outputText value="#{messages['general.no']}" rendered="#{not certificateDomain.codeSigningCertificate}" />
+				</rich:column>
+
+				<rich:column>
+					<s:link view="/page/certificatedomain/certificatedomain-edit.xhtml" value="#{messages['link.edit']}" id="edit" >
+						<f:param name="certificateDomainId" value="#{certificateDomain.id}" />
+					</s:link>
+				</rich:column>
+
+				<f:facet name="footer">
+					<rich:datascroller maxPages="10" fastStep="5" for="allCertificateDomain" />
+				</f:facet>
+			</rich:dataTable>
+				           	
+          	<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
+				<s:button view="/page/certificatedomain/certificatedomain-edit.xhtml" value="#{messages['button.new']}" id="newCertificateDomain">
+					<f:param name="certificateDomainId" />
+				</s:button>
+				<s:button view="/home.xhtml" value="#{messages['button.cancel']}" id="cancel"/>
+			</s:decorate> 
+		</h:form>
+	</ui:define>
+</ui:composition>

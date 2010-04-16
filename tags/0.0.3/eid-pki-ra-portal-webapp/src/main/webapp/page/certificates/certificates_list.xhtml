@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:form id="certificatesListForm">
+			<h:outputText value="No messages to display" rendered="#{empty certificatesList}" />
+			<h:outputText value="messages to display is: " rendered="#{not empty certificatesList}" />
+			<h:messages />
+			<rich:dataTable id="cerList" var="cer" value="#{certificates}" rendered="#{not empty certificates}" width="75%">
+				<rich:column sortBy="#{cer.serialNumber}" filterBy="#{cer.serialNumber}" filterEvent="onkeyup">
+					<f:facet name="header">
+						<h:outputText value="#{messages['certificate.serialNumber']}" />
+					</f:facet>
+					<h:outputText value="#{cer.serialNumber}" />
+				</rich:column>
+
+				<rich:column sortBy="#{cer.distinguishedName}" filterBy="#{cer.distinguishedName}" filterEvent="onkeyup">
+					<f:facet name="header">
+						<h:outputText value="#{messages['certificate.subject']}" />
+					</f:facet>
+					<h:outputText value="#{cer.distinguishedName}" />
+				</rich:column>
+
+				<rich:column sortBy="#{cer.validityStart}" filterBy="#{cer.validityStart}" filterEvent="onkeyup">
+					<f:facet name="header">
+						<h:outputText value="#{messages['certificate.validityStart']}" />
+					</f:facet>
+					<h:outputText value="#{cer.validityStart}" />
+				</rich:column>
+
+				<rich:column sortBy="#{cer.validityEnd}" filterBy="#{cer.validityEnd}" filterEvent="onkeyup">
+					<f:facet name="header">
+						<h:outputText value="#{messages['certificate.validityEnd']}" />
+					</f:facet>
+					<h:outputText value="#{cer.validityEnd}" />
+				</rich:column>
+
+				<rich:column sortBy="#{cer.issuer}" filterBy="#{cer.issuer}" filterEvent="onkeyup">
+					<f:facet name="header">
+						<h:outputText value="#{messages['certificate.issuer']}" />
+					</f:facet>
+					<h:outputText value="#{cer.issuer}" />
+				</rich:column>
+
+<!--				<rich:column sortBy="#{cer.requesterName}" filterBy="#{cer.requesterName}" filterEvent="onkeyup">-->
+<!--					<f:facet name="header">-->
+<!--						<h:outputText value="Requester Name" />-->
+<!--					</f:facet>-->
+<!--					<h:outputText value="#{cer.requesterName}" />-->
+<!--				</rich:column>-->
+
+				<rich:column sortBy="#{cer.type}" filterBy="#{cer.type}" filterEvent="onkeyup">
+					<f:facet name="header">
+						<h:outputText value="#{messages['certificate.type']}" />
+					</f:facet>
+					<h:outputText value="#{cer.type}" />
+				</rich:column>
+
+				<rich:column>
+					<s:link id="detailCertificate" value="#{messages['link.detail']}"
+						action="#{certificateHandler.showDetail(cer)}" />
+				</rich:column>
+
+				<rich:column>
+					<s:link id="revokeCertificate" value="#{messages['link.revoke']}"
+						action="#{certificateHandler.prepareRevocation(cer.serialNumber, cer.issuer)}" />
+				</rich:column>
+
+				<f:facet name="footer">
+					<f:facet name="header">
+						<h:outputText value="Action" />
+					</f:facet>
+					<rich:datascroller maxPages="10" rows="10" />
+				</f:facet>
+			</rich:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,18 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib"
+		xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich"
+		xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml"
+		login-required="true">
+
+	<ui:define name="center">
+		<h:form id="dssSignSuccesForm">
+			<rich:panel id="panel">
+				<f:facet name="header">#{messages['dssSignSucces.title']}</f:facet>
+	           	<h:messages />
+	          	<s:decorate template="/layout/buttonbox.xhtml" id="dssSignSuccesButtonBox">
+					<s:button value="#{messages['general.continue']}" action="list" id="continue"/>
+				</s:decorate> 
+			</rich:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
