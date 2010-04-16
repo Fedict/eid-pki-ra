@@ -147,8 +147,7 @@ public class ContractHandlerBean implements ContractHandler {
 			fillResponseFromRequest(responseBuilder, request, ResultType.GENERAL_FAILURE,
 					"An error occurred while processing the contract.");
 		} catch (SchedulerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Error while scheduling the notification mail.", e);
 		}
 
 		return contractParser.marshalResponseMessage(responseBuilder.toResponseType(),
