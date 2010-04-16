@@ -28,6 +28,8 @@ import org.apache.commons.lang.StringUtils;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 
+import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryKey;
+import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
 import be.fedict.eid.pkira.crypto.CSRInfo;
 import be.fedict.eid.pkira.crypto.CSRParser;
@@ -52,9 +54,12 @@ public class FieldValidatorBean implements FieldValidator {
 
 	@In(value = CSRParser.NAME, create = true)
 	private CSRParser csrParser;
-	
-	@In(value = CertificateParser.NAME, create=true)
+
+	@In(value = CertificateParser.NAME, create = true)
 	private CertificateParser certificateParser;
+
+	@In(value = ConfigurationEntryQuery.NAME, create = true)
+	private ConfigurationEntryQuery configurationEntryQuery;
 
 	/*
 	 * (non-Javadoc)
@@ -73,10 +78,11 @@ public class FieldValidatorBean implements FieldValidator {
 			validateNotNull("start date", contract.getValidityStart(), messages);
 			validateNotNull("end date", contract.getValidityEnd(), messages);
 			validateNotEmpty("description", contract.getDescription(), messages);
-			validateNotEmpty("legal notice", contract.getLegalNotice(), messages);			
+			validateNotEmpty("legal notice", contract.getLegalNotice(), messages);
 			validateNotNull("signature", contract.getSignature(), messages);
-			validateOperator(contract.getOperator(), messages);			
-			validateCertificate(contract.getCertificate(), contract.getDistinguishedName(), contract.getValidityStart(), contract.getValidityEnd(), messages);						
+			validateOperator(contract.getOperator(), messages);
+			validateCertificate(contract.getCertificate(), contract.getDistinguishedName(),
+					contract.getValidityStart(), contract.getValidityEnd(), messages);
 		}
 
 		if (messages.size() != 0) {
@@ -116,7 +122,7 @@ public class FieldValidatorBean implements FieldValidator {
 	protected void setCSRParser(CSRParser csrParser) {
 		this.csrParser = csrParser;
 	}
-	
+
 	protected void setCertificateParser(CertificateParser certificateParser) {
 		this.certificateParser = certificateParser;
 	}
@@ -124,25 +130,29 @@ public class FieldValidatorBean implements FieldValidator {
 	protected void validateCertificate(String certificate, String distinguishedName, XMLGregorianCalendar startDate,
 			XMLGregorianCalendar endDate, List<String> messages) {
 		validateNotEmpty("certificate", certificate, messages);
-		if (StringUtils.isNotEmpty(certificate)){
+		if (StringUtils.isNotEmpty(certificate)) {
 			try {
 				CertificateInfo certificateInfo = certificateParser.parseCertificate(certificate);
-				
+
 				if (!StringUtils.equals(distinguishedName, certificateInfo.getDistinguishedName())) {
 					messages.add("distinguished name does not match certificate");
 				}
-				
-				if (startDate!=null && startDate.toGregorianCalendar().getTime().getTime()!=certificateInfo.getValidityStart().getTime()) {
+
+				if (startDate != null
+						&& startDate.toGregorianCalendar().getTime().getTime() != certificateInfo.getValidityStart()
+								.getTime()) {
 					messages.add("start date does not match certificate");
 				}
-				
-				if (endDate!=null && endDate.toGregorianCalendar().getTime().getTime()!=certificateInfo.getValidityEnd().getTime()) {
+
+				if (endDate != null
+						&& endDate.toGregorianCalendar().getTime().getTime() != certificateInfo.getValidityEnd()
+								.getTime()) {
 					messages.add("end date does not match certificate");
 				}
 			} catch (CryptoException e) {
 				messages.add("invalid certificate: " + e.getMessage());
 			}
-		}		
+		}
 	}
 
 	protected void validateCSR(String csr, String distinguishedName, List<String> messages) {
@@ -188,9 +198,30 @@ public class FieldValidatorBean implements FieldValidator {
 	}
 
 	protected void validateValidityPeriod(BigInteger validityPeriodMonths, List<String> messages) {
-		// TODO use list of validities from database.
-		if (validityPeriodMonths != null && validityPeriodMonths.intValue() != 15) {
-			messages.add("invalid validity period");
+		// Null check is done elsewhere
+		if (validityPeriodMonths == null) {
+			return;
 		}
+
+		// Get valid periods
+		String periodsStr = configurationEntryQuery.findByEntryKey(ConfigurationEntryKey.VALIDITY_PERIODS).getValue();
+		if (periodsStr == null) {
+			throw new RuntimeException("Validity periods not set in the configuration");
+		}
+		String[] periods = periodsStr.split(",");
+
+		// Check if it is there
+		String thePeriod = validityPeriodMonths.toString();
+		for (String period : periods) {
+			if (period.trim().equals(thePeriod)) {
+				return;
+			}
+		}
+
+		messages.add("invalid validity period");
+	}
+	
+	protected void setConfigurationEntryQuery(ConfigurationEntryQuery configurationEntryQuery) {
+		this.configurationEntryQuery = configurationEntryQuery;
 	}
 }

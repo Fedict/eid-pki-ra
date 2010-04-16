@@ -29,6 +29,9 @@ import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import be.fedict.eid.pkira.blm.model.config.ConfigurationEntry;
+import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryKey;
+import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
 import be.fedict.eid.pkira.contracts.CertificateRevocationRequestBuilder;
 import be.fedict.eid.pkira.contracts.CertificateSigningRequestBuilder;
@@ -79,6 +82,8 @@ public class FieldValidatorBeanTest {
 	private CertificateInfo certificateInfo;
 	@Mock
 	private CSRInfo csrInfo;
+	@Mock
+	private ConfigurationEntryQuery configurationEntryQuery;
 	private List<String> messages;
 
 	@BeforeMethod
@@ -94,9 +99,15 @@ public class FieldValidatorBeanTest {
 		when(certificateInfo.getDistinguishedName()).thenReturn(VALID_DN);
 		when(csrInfo.getSubject()).thenReturn(VALID_DN);
 		
+		ConfigurationEntry validities = new ConfigurationEntry();
+		validities.setKey(ConfigurationEntryKey.VALIDITY_PERIODS);
+		validities.setValue("15,30");
+		when(configurationEntryQuery.findByEntryKey(ConfigurationEntryKey.VALIDITY_PERIODS)).thenReturn(validities);
+		
 		bean = new FieldValidatorBean();		
 		bean.setCSRParser(csrParser);
 		bean.setCertificateParser(certificateParser);
+		bean.setConfigurationEntryQuery(configurationEntryQuery);
 		
 		messages = new ArrayList<String>();
 	}

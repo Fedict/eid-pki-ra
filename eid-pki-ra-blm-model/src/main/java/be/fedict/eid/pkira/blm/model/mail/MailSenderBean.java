@@ -35,7 +35,7 @@ import javax.jms.Session;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 
-import be.fedict.eid.pkira.blm.errorhandling.Component;
+import be.fedict.eid.pkira.blm.errorhandling.ApplicationComponent;
 import be.fedict.eid.pkira.blm.errorhandling.ErrorLogger;
 
 /**
@@ -84,7 +84,7 @@ public class MailSenderBean implements MailSender {
 				queueConnection.close();
 			}
 		} catch (JMSException e) {
-			errorLogger.logError(Component.MAIL, "Mail sending problem: message cannot be added to the queue", e);
+			errorLogger.logError(ApplicationComponent.MAIL, "Mail sending problem: message cannot be added to the queue", e);
 			throw new RuntimeException(e);
 		}
 	}

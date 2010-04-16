@@ -28,7 +28,7 @@ public interface ErrorLogger {
 
 	String NAME = "be.fedict.eid.pkira.blm.errorLogger";
 
-	void logError(Component component, String message);
+	void logError(ApplicationComponent applicationComponent, String message);
 
-	void logError(Component component, String message, Throwable exception);
+	void logError(ApplicationComponent applicationComponent, String message, Throwable exception);
 }
