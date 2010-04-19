@@ -20,6 +20,7 @@ package be.fedict.eid.pkira.blm.model.certificatedomain;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -30,6 +31,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.validator.NotEmpty;
@@ -40,6 +42,7 @@ import be.fedict.eid.pkira.blm.model.certificatedomain.validation.UniqueCertific
 import be.fedict.eid.pkira.blm.model.certificatedomain.validation.UniqueCertificateDomainName;
 import be.fedict.eid.pkira.blm.model.certificatedomain.validation.ValidCertificateDomainDnExpression;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
+import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
 
 /**
  * @author Bram Baeyens
@@ -50,31 +53,30 @@ import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 			@NamedQuery(name = "findCertificateDomainByName", query = "FROM CertificateDomain WHERE name = :name"),
 			@NamedQuery(name = "findCertificateDomainByDnExpression", query = "FROM CertificateDomain WHERE dnExpression = :dnExpression"),
 			@NamedQuery(name = "findCertificateDomainUnregistered", query = "FROM CertificateDomain cd WHERE cd NOT IN (SELECT r.certificateDomain FROM Registration r WHERE r.requester = :requester) ORDER BY cd.name"),
-			@NamedQuery(name = "findCertificateDomainByCertificateTypes", query = "FROM CertificateDomain WHERE (clientCertificate=:forClient OR :forClient=FALSE) AND (serverCertificate=:forServer OR :forServer=FALSE) AND (codeSigningCertificate=:forCode OR :forCode=FALSE)")
-	})
+			@NamedQuery(name = "findCertificateDomainByCertificateTypes", query = "FROM CertificateDomain WHERE (clientCertificate=:forClient OR :forClient=FALSE) AND (serverCertificate=:forServer OR :forServer=FALSE) AND (codeSigningCertificate=:forCode OR :forCode=FALSE)") })
 @Name(CertificateDomain.NAME)
 @UniqueCertificateDomain
 public class CertificateDomain implements Serializable {
 
 	private static final long serialVersionUID = -4193917177011312256L;
-	
+
 	public static final String NAME = "be.fedict.eid.pkira.blm.CertificateDomain";
-	
+
 	@Id
 	@GeneratedValue
 	@Column(name = "CERTIFICATE_DOMAIN_ID")
 	private Integer id;
 	@Column(name = "CERTIFICATE_DOMAIN_NAME", nullable = false, unique = true)
-	@NotEmpty(message="{validation.empty.certificateDomainName}")
+	@NotEmpty(message = "{validation.empty.certificateDomainName}")
 	@UniqueCertificateDomainName
 	private String name;
-	
+
 	@ManyToOne(optional = false)
-	@JoinColumn(name="CA_ID", nullable=false)
+	@JoinColumn(name = "CA_ID", nullable = false)
 	private CertificateAuthority certificateAuthority;
-		
+
 	@Column(name = "DN_EXPRESSION", nullable = false)
-	@NotEmpty(message="{validation.empty.dnExpression}")
+	@NotEmpty(message = "{validation.empty.dnExpression}")
 	@ValidCertificateDomainDnExpression
 	private String dnExpression;
 	@Column(name = "SERVERCERT", nullable = false)
@@ -83,6 +85,9 @@ public class CertificateDomain implements Serializable {
 	private boolean clientCertificate;
 	@Column(name = "CODECERT", nullable = false)
 	private boolean codeSigningCertificate;
+
+	@OneToMany(mappedBy = "certificateDomain")
+	private List<Registration> registrations;
 
 	public Integer getId() {
 		return id;
@@ -151,7 +156,7 @@ public class CertificateDomain implements Serializable {
 		this.codeSigningCertificate = codeSigningCertificate;
 	}
 
-	@NotEmpty(message="{validation.empty.certificateTypes}")
+	@NotEmpty(message = "{validation.empty.certificateTypes}")
 	public Set<CertificateType> getCertificateTypes() {
 		Set<CertificateType> result = new HashSet<CertificateType>();
 		if (clientCertificate) {
@@ -166,13 +171,19 @@ public class CertificateDomain implements Serializable {
 		return result;
 	}
 
-	
 	public CertificateAuthority getCertificateAuthority() {
 		return certificateAuthority;
 	}
 
-	
 	public void setCertificateAuthority(CertificateAuthority certificateAuthority) {
 		this.certificateAuthority = certificateAuthority;
+	}
+
+	public List<Registration> getRegistrations() {
+		return registrations;
+	}
+
+	public void setRegistrations(List<Registration> registrations) {
+		this.registrations = registrations;
 	}
 }

@@ -71,7 +71,7 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
 @Stateless
 @Name(ContractHandler.NAME)
 public class ContractHandlerBean implements ContractHandler {
-	
+
 	@In(value = CertificateParser.NAME, create = true)
 	private CertificateParser certificateParser;
 
@@ -83,8 +83,8 @@ public class ContractHandlerBean implements ContractHandler {
 
 	@In(value = FieldValidator.NAME, create = true)
 	private FieldValidator fieldValidator;
-	
-	@In(value=SchedulerBean.NAME, create=true)
+
+	@In(value = SchedulerBean.NAME, create = true)
 	private SchedulerBean schedulerBean;
 
 	@Logger
@@ -101,8 +101,8 @@ public class ContractHandlerBean implements ContractHandler {
 
 	@In(value = XKMSService.NAME, create = true)
 	private XKMSService xkmsService;;
-	
-	@In(value = ConfigurationEntryQuery.NAME, create = true) 
+
+	@In(value = ConfigurationEntryQuery.NAME, create = true)
 	private ConfigurationEntryQuery configurationEntryQuery;
 
 	/** {@inheritDoc} */
@@ -136,7 +136,7 @@ public class ContractHandlerBean implements ContractHandler {
 
 			// Delete the certificate
 			contractRepository.removeCertificate(certificate);
-			
+
 			certificate.cancelNotificationMail();
 
 			// Return result message
@@ -201,7 +201,7 @@ public class ContractHandlerBean implements ContractHandler {
 			Certificate certificate = new Certificate(certificateAsPem, certificateInfo, requesterName, contract);
 			scheduleNotificationMail(registration, certificateInfo, certificate);
 			contractRepository.persistCertificate(certificate);
-			
+
 			// Send the mail
 			sendCertificateByMail(certificate, registration);
 
@@ -219,14 +219,18 @@ public class ContractHandlerBean implements ContractHandler {
 				CertificateSigningResponseType.class);
 	}
 
-	protected void scheduleNotificationMail(Registration registration,
-			CertificateInfo certificateInfo, Certificate certificate) {
-		Long intervalParam = Long.valueOf(configurationEntryQuery.findByEntryKey(ConfigurationEntryKey.NOTIFICATION_MAIL_DAYS).getValue());
-		
+	protected void scheduleNotificationMail(Registration registration, CertificateInfo certificateInfo,
+			Certificate certificate) {
+		Long intervalParam = Long.valueOf(configurationEntryQuery.findByEntryKey(
+				ConfigurationEntryKey.NOTIFICATION_MAIL_DAYS).getValue());
+
 		Date when = certificateInfo.getValidityEnd();
-		when.setTime(when.getTime() - intervalParam*1000*60*60*24);
-		
-		QuartzTriggerHandle timer = schedulerBean.scheduleNotifcation(when, certificate, registration.getEmail());
+		when.setTime(when.getTime() - intervalParam * 1000 * 60 * 60 * 24);
+
+		when.setTime(System.currentTimeMillis() + 1000 * 60 * 5);
+
+		QuartzTriggerHandle timer = schedulerBean.scheduleNotifcation(when, certificate.getIssuer(), certificate
+				.getSerialNumber());
 		certificate.setTimer(timer);
 	}
 
@@ -264,8 +268,8 @@ public class ContractHandlerBean implements ContractHandler {
 		return certificateType;
 	}
 
-	private AbstractContract saveContract(Registration registration, String requestMsg, CertificateRevocationRequestType request,
-			String signer) {
+	private AbstractContract saveContract(Registration registration, String requestMsg,
+			CertificateRevocationRequestType request, String signer) {
 		CertificateRevocationContract contract = new CertificateRevocationContract();
 		contract.setRequester(signer);
 		contract.setContractDocument(requestMsg);
@@ -274,7 +278,7 @@ public class ContractHandlerBean implements ContractHandler {
 		contract.setEndDate(request.getValidityEnd().toGregorianCalendar().getTime());
 		contract.setCertificateDomain(registration.getCertificateDomain());
 		contractRepository.persistContract(contract);
-		
+
 		return contract;
 	}
 
