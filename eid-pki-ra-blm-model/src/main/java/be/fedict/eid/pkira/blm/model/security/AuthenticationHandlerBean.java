@@ -23,6 +23,8 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.security.Identity;
 
 import be.fedict.eid.pkira.authentication.EIdUser;
+import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationException;
+import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationManager;
 import be.fedict.eid.pkira.blm.model.usermgmt.User;
 import be.fedict.eid.pkira.blm.model.usermgmt.UserRepository;
 import be.fedict.eid.pkira.common.security.AbstractAuthenticationHandlerBean;
@@ -37,6 +39,9 @@ public class AuthenticationHandlerBean extends AbstractAuthenticationHandlerBean
 	@In(value = UserRepository.NAME, create=true)
 	protected UserRepository userRepository;
 	
+	@In(value = RegistrationManager.NAME, create=true)
+	protected RegistrationManager registrationManager;
+	
 	@In
 	protected Identity identity;
 
@@ -48,11 +53,13 @@ public class AuthenticationHandlerBean extends AbstractAuthenticationHandlerBean
 		// Look up the user object or create it
 		User user = userRepository.findByNationalRegisterNumber(eidUser.getRRN());
 		if (user == null) {
-			user = new User();
-			user.setFirstName(eidUser.getFirstName());
-			user.setLastName(eidUser.getLastName());
-			user.setNationalRegisterNumber(eidUser.getRRN());
-			userRepository.persist(user);
+			try {
+				registrationManager.registerUser(eidUser.getRRN(), eidUser.getLastName(), eidUser.getFirstName(), null, null);
+			} catch (RegistrationException e) {
+				throw new RuntimeException(e);
+			}
+			
+			user = userRepository.findByNationalRegisterNumber(eidUser.getRRN());
 		}
 
 		// Determine the roles

@@ -38,7 +38,11 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 @NamedQueries(value={
 		@NamedQuery(
 				name = "findByNationalRegisterNumber", 
-				query = "SELECT u FROM User u WHERE u.nationalRegisterNumber = :nationalRegisterNumber")		
+				query = "SELECT u FROM User u WHERE u.nationalRegisterNumber = :nationalRegisterNumber"),
+		@NamedQuery(
+				name = "getUserCount",
+				query = "SELECT COUNT(u) FROM User u"
+		)
 })
 public class User implements Serializable {
 

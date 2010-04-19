@@ -71,14 +71,10 @@ public class RegistrationManagerBean implements RegistrationManager {
 	 */
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void registerUser(String userRRN, String userLastName, String userFirstName, int domainId,
-			String emailAddress) throws RegistrationException {
-		// Lookup the domain
-		certificateDomainHome.setId(domainId);
-		CertificateDomain domain = certificateDomainHome.find();
-		if (domain == null) {
-			throw new RegistrationException("Unknown certificate domain.");
-		}
+	public void registerUser(String userRRN, String userLastName, String userFirstName, Integer domainId,
+			String emailAddress) throws RegistrationException {				
+		// Check if there are already users in the database; if not this one becomes admin
+		boolean isAdmin = 0 == userRepository.getUserCount();
 
 		// Lookup or create the user
 		if (StringUtils.isBlank(userRRN)) {
@@ -90,27 +86,38 @@ public class RegistrationManagerBean implements RegistrationManager {
 			user.setFirstName(userFirstName);
 			user.setLastName(userLastName);
 			user.setNationalRegisterNumber(userRRN);
+			user.setAdmin(isAdmin);
 			userRepository.persist(user);
 		}
-
-		// Validate the e-mail address
-		if (StringUtils.isBlank(emailAddress) || !createEmailValidator().isValid(emailAddress)) {
-			throw new RegistrationException("Invalid e-mail address");
+		
+		// Check if we have to add him to a certificate domain
+		if (domainId!=null) {			
+			// Lookup the domain
+			certificateDomainHome.setId(domainId);
+			CertificateDomain domain = certificateDomainHome.find();
+			if (domain == null) {
+				throw new RegistrationException("Unknown certificate domain.");
+			}
+	
+			// Validate the e-mail address
+			if (StringUtils.isBlank(emailAddress) || !createEmailValidator().isValid(emailAddress)) {
+				throw new RegistrationException("Invalid e-mail address");
+			}
+	
+			// Check if the registration is new
+			if (registrationRepository.findRegistration(domain, user) != null) {
+				throw new RegistrationException("User already has a registration for this domain.");
+			}
+	
+			// Create the registration
+			Registration registration = new Registration();
+			registration.setCertificateDomain(domain);
+			registration.setRequester(user);
+			registration.setEmail(emailAddress);
+			registration.setStatus(RegistrationStatus.NEW);
+	
+			registrationRepository.persist(registration);
 		}
-
-		// Check if the registration is new
-		if (registrationRepository.findRegistration(domain, user) != null) {
-			throw new RegistrationException("User already has a registration for this domain.");
-		}
-
-		// Create the registration
-		Registration registration = new Registration();
-		registration.setCertificateDomain(domain);
-		registration.setRequester(user);
-		registration.setEmail(emailAddress);
-		registration.setStatus(RegistrationStatus.NEW);
-
-		registrationRepository.persist(registration);
 	}
 
 	/**
