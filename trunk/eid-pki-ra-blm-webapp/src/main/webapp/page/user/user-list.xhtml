@@ -40,11 +40,11 @@
 					<h:outputText value="#{messages['general.no']}" rendered="#{not user.admin}" />
 				</rich:column>
 				
-<!--				<rich:column>-->
-<!--					<s:link view="/page/user/user-edit.xhtml" value="#{messages['link.edit']}" id="edit" >-->
-<!--						<f:param name="userId" value="#{user.id}" />-->
-<!--					</s:link>-->
-<!--				</rich:column>-->
+				<rich:column>
+					<s:link view="/page/user/user-edit.xhtml" value="#{messages['link.edit']}" id="edit" >
+						<f:param name="userId" value="#{user.id}" />
+					</s:link>
+				</rich:column>
 
 				<f:facet name="footer">
 					<rich:datascroller maxPages="10" fastStep="5" for="allUser" />

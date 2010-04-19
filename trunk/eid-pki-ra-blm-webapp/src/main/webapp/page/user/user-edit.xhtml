@@ -1,0 +1,44 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib"
+		xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich"
+		xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:form id="configurationEntryForm">
+			<rich:panel id="panel">
+				<f:facet name="header">
+					#{messages['user.edit.title']}
+				</f:facet>
+				
+				<s:decorate id="lastNameDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['user.lastName']}:</ui:define>
+	               	<h:outputText id="lastName" value="#{userHome.instance.lastName}" />
+	           	</s:decorate>
+				
+				<s:decorate id="firstNameDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['user.firstName']}:</ui:define>
+	               	<h:outputText id="firstName" value="#{userHome.instance.firstName}" />
+	           	</s:decorate>
+				
+				<s:decorate id="nationalRegisterNumberDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['user.nationalRegisterNumber']}:</ui:define>
+	               	<h:outputText id="nationalRegisterNumber" value="#{userHome.instance.nationalRegisterNumber}" />
+	           	</s:decorate>
+	           	
+	          	<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
+					<h:commandButton id="grantAdmin"
+							action="#{userHome.grantAdmin}" 
+							value="#{messages['button.grantadmin']}"
+							rendered="#{not userHome.instance.admin}" />
+					<h:commandButton id="revokeAdmin"
+							action="#{userHome.revokeAdmin}" 
+							value="#{messages['button.revokeadmin']}"
+							rendered="#{userHome.instance.admin and not userHome.currentUser}" />
+					<s:button id="cancel" 
+							value="#{messages['button.cancel']}" 
+							view="/page/user/user-list.xhtml" />
+				</s:decorate> 
+			</rich:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
