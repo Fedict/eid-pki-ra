@@ -1,14 +1,17 @@
 package be.fedict.eid.pkira.blm.model.contracthandler.services;
 
 import java.math.BigInteger;
+import java.text.MessageFormat;
 
 import javax.ejb.Stateless;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 
+import be.fedict.eid.pkira.blm.errorhandling.ApplicationComponent;
+import be.fedict.eid.pkira.blm.errorhandling.ErrorLogger;
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
-import be.fedict.eid.pkira.blm.model.contracts.CertificateRevocationContract;
+import be.fedict.eid.pkira.blm.model.contracts.AbstractContract;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
 import be.fedict.eid.pkira.blm.model.framework.WebserviceLocator;
 import be.fedict.eid.pkira.crypto.CSRParser;
@@ -35,27 +38,30 @@ public class XKMSServiceBean implements XKMSService {
 
 	@In(value = CertificateParser.NAME, create = true)
 	private CertificateParser certificateParser;
+	
+	@In(value=ErrorLogger.NAME, create=true)
+	private ErrorLogger errorLogger;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void revoke(CertificateRevocationContract contract) throws ContractHandlerBeanException {
+	public void revoke(AbstractContract contract) throws ContractHandlerBeanException {
 		// Parse the certificate
 		BigInteger serialNumber;
 		try {
 			serialNumber = certificateParser.parseCertificate(contract.getContractDocument()).getSerialNumber();
-		} catch (CryptoException e) {
-			// this should not occur: validation has to happen sooner
-			throw new RuntimeException(e);
-		}
 		
-		try {
 			XKMSClient xkmsClient = webserviceLocator.getXKMSClient(contract.getCertificateDomain()
 					.getCertificateAuthority());
-			xkmsClient.revokeCertificate(serialNumber.toString());
+			xkmsClient.revokeCertificate(serialNumber);
 		} catch (XKMSClientException e) {
+			logError(contract, e);			
 			throw new ContractHandlerBeanException(ResultType.BACKEND_ERROR, "Error revoking the certificate: "
+					+ e.getMessage(), e);
+		} catch (Exception e) {
+			logError(contract, e);			
+			throw new ContractHandlerBeanException(ResultType.GENERAL_FAILURE, "Error revoking the certificate: "
 					+ e.getMessage(), e);
 		}
 	}
@@ -69,27 +75,23 @@ public class XKMSServiceBean implements XKMSService {
 		byte[] csrData;
 		try {
 			csrData = csrParser.parseCSR(contract.getContractDocument()).getDerEncoded();
-		} catch (CryptoException e) {
-			// this should not occur: validation has to happen sooner
-			throw new RuntimeException(e);
-		}
-
-		// Call XKMS
-		byte[] certificateData;
-		try {
+				
 			XKMSClient xkmsClient = webserviceLocator.getXKMSClient(contract.getCertificateDomain()
 					.getCertificateAuthority());
-			certificateData = xkmsClient.createCertificate(csrData, contract.getValidityPeriodMonths().intValue());
-		} catch (XKMSClientException e) {
-			throw new ContractHandlerBeanException(ResultType.BACKEND_ERROR, "Error signing the certificate: "
-					+ e.getMessage(), e);
-		}
+			byte[] certificateData = xkmsClient.createCertificate(csrData, contract.getValidityPeriodMonths().intValue());
 		
-		// Convert the certificate to PEM format
-		try {
 			return certificateParser.parseCertificate(certificateData).getPemEncoded();
+		} catch (XKMSClientException e) {
+			logError(contract, e);			
+			throw new ContractHandlerBeanException(ResultType.BACKEND_ERROR, "Error revoking the certificate: "
+					+ e.getMessage(), e);
 		} catch (CryptoException e) {
-			throw new ContractHandlerBeanException(ResultType.BACKEND_ERROR, "Invalid certificate retrieved from XKMS.", e);
+			logError(contract, e);
+			throw new ContractHandlerBeanException(ResultType.BACKEND_ERROR, "The created certificate could not be parsed.", e);
+		} catch (Exception e) {
+			logError(contract, e);			
+			throw new ContractHandlerBeanException(ResultType.GENERAL_FAILURE, "Error revoking the certificate: "
+					+ e.getMessage(), e);
 		}
 	}
 
@@ -103,6 +105,16 @@ public class XKMSServiceBean implements XKMSService {
 
 	protected void setCertificateParser(CertificateParser certificateParser) {
 		this.certificateParser = certificateParser;
+	}
+	
+	private void logError(AbstractContract contract, Exception e) {
+		String message = MessageFormat.format("Error during XKMS invocation: {0}. Contract is: {1}.", e.getMessage(), contract);
+		errorLogger.logError(ApplicationComponent.XKMS, message, e);
+	}
+
+	
+	protected void setErrorLogger(ErrorLogger errorLogger) {
+		this.errorLogger = errorLogger;
 	}
 
 }

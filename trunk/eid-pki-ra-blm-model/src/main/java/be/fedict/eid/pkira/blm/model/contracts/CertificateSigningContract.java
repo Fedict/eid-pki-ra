@@ -52,4 +52,11 @@ public class CertificateSigningContract extends AbstractContract {
 	public void setCertificateType(CertificateType certificateType) {
 		this.certificateType = certificateType;
 	}
+
+	@Override
+	protected void appendFields(StringBuilder builder) {
+		super.appendFields(builder);
+		appendField(builder, "Validity period", validityPeriodMonths);
+		appendField(builder, "Certificate type", certificateType);
+	}
 }

@@ -3,7 +3,7 @@ package be.fedict.eid.pkira.blm.model.contracthandler.services;
 import javax.ejb.Local;
 
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
-import be.fedict.eid.pkira.blm.model.contracts.CertificateRevocationContract;
+import be.fedict.eid.pkira.blm.model.contracts.AbstractContract;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
 
 @Local
@@ -23,5 +23,5 @@ public interface XKMSService {
 	 * Revoke a certificate, returning if this was succesful.
 	 * @exception ContractHandlerBeanException when an error occurred calling the back-end.
 	 */
-	public void revoke(CertificateRevocationContract contract) throws ContractHandlerBeanException;
+	public void revoke(AbstractContract contract) throws ContractHandlerBeanException;
 }
