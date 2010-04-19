@@ -505,12 +505,17 @@
 				<artifactId>opensaml</artifactId>
 				<version>${opensaml.version}</version>
 			</dependency>
+<!--			<dependency>-->
+<!--			    <groupId>.mnt.mvndata.mavenrepository-app.jars</groupId>-->
+<!--			    <artifactId>quartz-jboss</artifactId>-->
+<!--			    <version>${quartz-version}</version>-->
+<!--			</dependency>			-->
 			<dependency>
 				<groupId>org.quartz-scheduler</groupId>
 				<artifactId>quartz-jboss</artifactId>
 				<version>${quartz-version}</version>
 				<type>jar</type>
-				<scope>provided</scope>
+<!--				<scope>provided</scope>-->
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

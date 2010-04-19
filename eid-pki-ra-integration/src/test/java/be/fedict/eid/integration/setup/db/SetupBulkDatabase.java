@@ -66,7 +66,7 @@ public class SetupBulkDatabase extends SetupDatabase {
 	private StringBuilder generateCertificateAuthoritySQL(){
 		StringBuilder builder = new StringBuilder();
 		
-		builder.append("INSERT INTO CA (CA_ID, NAME, XKMS_URL) VALUES (5001, 'CertiPost CA', 'http://xkms-url.be/xkms')");
+		builder.append("INSERT INTO CA (CA_ID, NAME, XKMS_URL, LEGAL_NOTICE) VALUES (5001, 'CertiPost CA', 'http://xkms-url.be/xkms', 'testLegalNotice')");
 		
 		return builder;
 	}
@@ -79,6 +79,7 @@ public class SetupBulkDatabase extends SetupDatabase {
 				.append("DELETE FROM USER;\n")
 				.append("DELETE FROM CERTIFICATEDOMAIN;\n")
 				.append("DELETE FROM CA;\n")
+				.append("DELETE FROM CA_PARAMETERS;\n")
 				.append("DELETE FROM CONFIGURATION;\n");
 	}
 
