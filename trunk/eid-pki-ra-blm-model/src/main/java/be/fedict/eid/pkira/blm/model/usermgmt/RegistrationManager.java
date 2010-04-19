@@ -33,7 +33,7 @@ public interface RegistrationManager {
 	 * @throws RegistrationException
 	 *             if this fails.
 	 */
-	void registerUser(String userRRN, String userLastName, String userFirstName, int domainId, String emailAddress)
+	void registerUser(String userRRN, String userLastName, String userFirstName, Integer domainId, String emailAddress)
 			throws RegistrationException;
 
 	/**

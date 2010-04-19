@@ -43,4 +43,6 @@ public interface UserRepository {
 	User getReference(Integer primaryKey);	
 	
 	List<Registration> findActiveUsersByCertificateDomain(CertificateDomain certificateDomain);
+
+	int getUserCount();
 }

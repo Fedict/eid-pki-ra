@@ -19,6 +19,7 @@
 package be.fedict.eid.pkira.blm.model.usermgmt;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.fail;
 
@@ -67,6 +68,11 @@ public class UserRepositoryBeanTest extends DatabaseTest {
 		User user = repository.findByNationalRegisterNumber(NRN);
 		assertEquals(valid, user);
 	}	
+	
+	@Test(dependsOnMethods="persist")
+	public void getUserCount() {
+		assertFalse(0 == repository.getUserCount());
+	}
 	
 	private User createUser(String nationalRegisterNumber, String firstName, String lastName) {
 		User user = new User();

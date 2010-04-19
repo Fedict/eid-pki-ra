@@ -89,4 +89,11 @@ public class UserRepositoryBean	implements UserRepository {
 		return requestors;
 	}
 
+	@Override
+	public int getUserCount() {
+		Query namedQuery = entityManager.createNamedQuery("getUserCount");
+		Long result = (Long) namedQuery.getSingleResult();
+		return result.intValue();
+	}
+
 }

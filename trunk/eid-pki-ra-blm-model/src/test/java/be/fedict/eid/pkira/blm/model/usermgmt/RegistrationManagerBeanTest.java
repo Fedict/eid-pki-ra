@@ -94,6 +94,7 @@ public class RegistrationManagerBeanTest {
 
 		verify(userRepository).findByNationalRegisterNumber(RRN);
 		verify(userRepository).persist(isA(User.class));
+		verify(userRepository).getUserCount();
 		verify(certificateDomainHome).setId(DOMAIN_ID);
 		verify(certificateDomainHome).find();
 		verify(registrationRepository).persist(isA(Registration.class));
@@ -108,6 +109,7 @@ public class RegistrationManagerBeanTest {
 		bean.registerUser(RRN, LAST_NAME, FIRST_NAME, DOMAIN_ID, EMAIL_ADDRESS);
 
 		verify(userRepository).findByNationalRegisterNumber(RRN);
+		verify(userRepository).getUserCount();
 		verify(certificateDomainHome).setId(DOMAIN_ID);
 		verify(certificateDomainHome).find();
 		verify(registrationRepository).persist(isA(Registration.class));
