@@ -46,6 +46,8 @@ import org.xkms.schema.xkms_2001_01_20.ResultCode;
 import org.xkms.schema.xkms_2001_01_20.KeyBindingType.ProcessInfo;
 import org.xkms.schema.xkms_2001_01_20.RegisterResult.Answer;
 
+import com.ubizen.og.xkms.schema.xkms_2003_09.ValidityIntervalType;
+
 import be.fedict.eid.pkira.crypto.CSRParserImpl;
 
 @WebService(endpointInterface = "org.w3._2002._03.xkms_xbulk_wsdl.XKMSPortType")
@@ -119,7 +121,9 @@ public class MockXKMSWebService implements XKMSPortType {
 	private RegisterResult processRequest(RequestType request) {
 		KeyInfoType requestKeyInfo = request.getKeyInfo();
 		byte[] csr = getFromList(byte[].class, requestKeyInfo.getContent());
-		byte[] certificate = createCertificate(csr);
+		
+		ValidityIntervalType validityInterval = request.getProcessInfo().getAttributeCertificate().get(0).getValidityInterval();		
+		byte[] certificate = createCertificate(csr, validityInterval);
 		
 		// Build result message
 		RegisterResult registerResult = createRegisterResultWithKeyBinding();		
@@ -152,13 +156,13 @@ public class MockXKMSWebService implements XKMSPortType {
 		return registerResult;
 	}
 
-	private byte[] createCertificate(byte[] csr) {
+	private byte[] createCertificate(byte[] csr, ValidityIntervalType validityInterval) {
 		try {
 			CSRParserImpl csrParserImpl = createCSRParser();
 			String dn = csrParserImpl.parseCSR(csr).getSubject();
 
-			Date startDate = new Date();
-			Date expiryDate = new Date(startDate.getTime() + 1000L * 3600 * 24 * 360);
+			Date startDate = validityInterval.getNotBefore().toGregorianCalendar().getTime();
+			Date expiryDate = validityInterval.getNotAfter().toGregorianCalendar().getTime();
 			BigInteger serialNumber = BigInteger.valueOf(System.currentTimeMillis());
 
 			KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA", "BC");
@@ -196,7 +200,7 @@ public class MockXKMSWebService implements XKMSPortType {
 	 * @param list list with either this type of a JAXBElement with this type.
 	 * @return the first matching element.
 	 */
-	private <T> T getFromList(Class<T> clazz, List<Object> list) {
+	private <T> T getFromList(Class<T> clazz, List<?> list) {
 		for (Object object : list) {
 			if (clazz.isInstance(object)) {
 				return clazz.cast(object);
