@@ -16,12 +16,16 @@
  */
 package be.fedict.eid.pkira.blm.model.contracthandler.services;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.TransactionPropagationType;
@@ -29,9 +33,13 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.async.Asynchronous;
 import org.jboss.seam.annotations.async.Expiration;
 import org.jboss.seam.async.QuartzTriggerHandle;
+import org.jboss.seam.log.Log;
 
+import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.contracts.Certificate;
+import be.fedict.eid.pkira.blm.model.contracts.ContractRepository;
 import be.fedict.eid.pkira.blm.model.mail.MailTemplate;
+import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
 
 /**
  * @author Jan Van den Bergh
@@ -47,17 +55,36 @@ public class SchedulerBean {
 
 	@In(create = true)
 	private QuartzTriggerHandle timer;
+	
+	@In(value=ContractRepository.NAME, create=true)
+	private ContractRepository contractRepository;
+	
+	@Logger
+	private Log log;
 
 	@Asynchronous
 	@Transactional(TransactionPropagationType.REQUIRED)
-	public QuartzTriggerHandle scheduleNotifcation(@Expiration Date when, Certificate certificate,
-			String mail) {
+	public QuartzTriggerHandle scheduleNotifcation(@Expiration Date when, String issuer, BigInteger serialNumber) {
+		// Get the certificate
+		Certificate certificate = contractRepository.findCertificate(issuer, serialNumber);
+		if (certificate==null) {
+			log.warn("Certificate not found for issuer {0} and serial number {1}.", issuer, serialNumber);
+			return timer;
+		}
+		
+		// Get the recipients
+		CertificateDomain certificateDomain = certificate.getCertificateDomain();
+		List<String> emailsList = new ArrayList<String>();
+		for(Registration registration: certificateDomain.getRegistrations()) {
+			emailsList.add(registration.getEmail());
+		}
+		String[] emails = emailsList.toArray(new String[0]);
+		
+		// Create the parameter map 
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("certificate", certificate);
 
-		String[] email = new String[1];
-		email[0] = mail;
-		mailTemplate.sendTemplatedMail("certificateNearlyExpired.ftl", parameters, email);
+		mailTemplate.sendTemplatedMail("certificateNearlyExpired.ftl", parameters, emails);
 
 		return timer;
 	}
