@@ -22,6 +22,7 @@ import static org.testng.Assert.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -119,17 +120,17 @@ public class XKMSClientTest {
 	
 	@Test
 	public void testRevokeCertificate() throws Exception {
-		xkmsClient.revokeCertificate("123");
+		xkmsClient.revokeCertificate(BigInteger.valueOf(123L));
 	}
 	
 	@Test
 	public void testRevokeCertificateAlreadyRevoked() throws Exception {
-		xkmsClient.revokeCertificate("001");
+		xkmsClient.revokeCertificate(BigInteger.valueOf(1001L));
 	}
 	
 	@Test(expectedExceptions=XKMSClientException.class)
 	public void testRevokeCertificateAlreadyError() throws Exception {
-		xkmsClient.revokeCertificate("000");
+		xkmsClient.revokeCertificate(BigInteger.valueOf(1002L));
 	}
 
 	private String readResource(String resourceName) throws IOException {

@@ -55,4 +55,11 @@ public class CertificateRevocationContract extends AbstractContract {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
+
+	@Override
+	protected void appendFields(StringBuilder builder) {
+		super.appendFields(builder);
+		appendField(builder, "Start date", getStartDate());
+		appendField(builder, "End date", getEndDate());
+	}	
 }

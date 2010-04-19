@@ -39,6 +39,7 @@ import be.fedict.eid.pkira.blm.model.contracthandler.services.FieldValidator;
 import be.fedict.eid.pkira.blm.model.contracthandler.services.SchedulerBean;
 import be.fedict.eid.pkira.blm.model.contracthandler.services.SignatureVerifier;
 import be.fedict.eid.pkira.blm.model.contracthandler.services.XKMSService;
+import be.fedict.eid.pkira.blm.model.contracts.AbstractContract;
 import be.fedict.eid.pkira.blm.model.contracts.Certificate;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateRevocationContract;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
@@ -127,7 +128,7 @@ public class ContractHandlerBean implements ContractHandler {
 					.getCertificateType());
 
 			// Persist the contract
-			CertificateRevocationContract contract = saveContract(registration, requestMsg, request, signer);
+			AbstractContract contract = saveContract(registration, requestMsg, request, signer);
 
 			// Call XKMS
 			xkmsService.revoke(contract);
@@ -263,7 +264,7 @@ public class ContractHandlerBean implements ContractHandler {
 		return certificateType;
 	}
 
-	private CertificateRevocationContract saveContract(Registration registration, String requestMsg, CertificateRevocationRequestType request,
+	private AbstractContract saveContract(Registration registration, String requestMsg, CertificateRevocationRequestType request,
 			String signer) {
 		CertificateRevocationContract contract = new CertificateRevocationContract();
 		contract.setRequester(signer);

@@ -48,23 +48,24 @@ public abstract class AbstractContract implements Serializable {
 
 	private static final long serialVersionUID = -5082287440865809644L;
 
-	@Id	@GeneratedValue
-	@Column(name = "CONTRACT_ID", nullable=false)
+	@Id
+	@GeneratedValue
+	@Column(name = "CONTRACT_ID", nullable = false)
 	private Integer id;
-	
+
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
-	@Column(name = "CONTRACT_DOCUMENT", nullable=false)
+	@Column(name = "CONTRACT_DOCUMENT", nullable = false)
 	private String contractDocument;
-	
-	@Column(name = "SUBJECT", nullable=false)
+
+	@Column(name = "SUBJECT", nullable = false)
 	private String subject;
-	
-	@Column(name = "REQUESTER", nullable=false)
+
+	@Column(name = "REQUESTER", nullable = false)
 	private String requester;
-	
-	@ManyToOne(optional=false)
-	@JoinColumn(name="CERTIFICATE_DOMAIN_ID", nullable=false)
+
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "CERTIFICATE_DOMAIN_ID", nullable = false)
 	private CertificateDomain certificateDomain;
 
 	public String getContractDocument() {
@@ -95,13 +96,38 @@ public abstract class AbstractContract implements Serializable {
 		return id;
 	}
 
-	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("[");
+		builder.append(getClass().getSimpleName());
+		builder.append(":\n");		
+		appendFields(builder);		
+		builder.append(']');		
+		return builder.toString();
+	}
+
 	public CertificateDomain getCertificateDomain() {
 		return certificateDomain;
 	}
 
-	
 	public void setCertificateDomain(CertificateDomain certificateDomain) {
 		this.certificateDomain = certificateDomain;
+	}
+
+	protected void appendFields(StringBuilder builder) {
+		appendField(builder, "Id", getId());
+		appendField(builder, "Subject", getSubject());
+		appendField(builder, "Requester", getRequester());
+		appendField(builder, "Certificate domain", getCertificateDomain().getName());
+		appendField(builder, "Contract document", getContractDocument());
+	}
+
+	protected void appendField(StringBuilder builder, String name, Object value) {
+		builder.append("    ");
+		builder.append(name);
+		builder.append(" = ");
+		builder.append(value);
+		builder.append('\n');		
 	}
 }

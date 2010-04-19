@@ -139,7 +139,7 @@ public class XKMSClient {
 	 * @throws XKMSClientException
 	 *             if an error occurred while communicating to the XKMS service.
 	 */
-	public void revokeCertificate(String serialNumber) throws XKMSClientException {
+	public void revokeCertificate(BigInteger serialNumber) throws XKMSClientException {
 		LOG.info("Revoking certificate");
 		
 		// Create the request
@@ -242,7 +242,7 @@ public class XKMSClient {
 	/**
 	 * Creates a bulk XKMS request for a revocation.
 	 */
-	private RequestType createRevocationElement(String serialNumber) {
+	private RequestType createRevocationElement(BigInteger serialNumber) {
 		// Create the request
 		RequestType request = xbulkObjectFactory.createRequestType();
 		request.setKeyID("key-id-" + UUID.randomUUID().toString());
@@ -254,7 +254,7 @@ public class XKMSClient {
 
 		// Add the key name
 		String keyName = MessageFormat.format(KEYNAME_REVOKE, encode(parameters.get(PARAMETER_BUC)),
-				encode(serialNumber));
+				encode(serialNumber.toString()));
 		keyInfo.getContent().add(xmldsigObjectFactory.createKeyName(keyName));
 
 		return request;
