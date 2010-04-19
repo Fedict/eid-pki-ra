@@ -9,7 +9,8 @@
 	<test name="List tests">
 		<classes>
 			<class name="be.fedict.eid.integration.admin.CertificateDomainListSeleniumTest" />
-			<class name="be.fedict.eid.integration.admin.ConfigurationEntryListSeleniumTest" />		
+			<class name="be.fedict.eid.integration.admin.ConfigurationEntryListSeleniumTest" />	
+			<class name="be.fedict.eid.integration.admin.UserListSeleniumTest" />		
 		</classes>
 	</test>	
 </suite>

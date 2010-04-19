@@ -182,12 +182,12 @@
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
 			<scope>test</scope>
-		</dependency>
+		</dependency>			    
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz-jboss</artifactId>
 			<type>jar</type>
-			<scope>provided</scope>
+<!--			<scope>provided</scope>-->
 		</dependency>
 	</dependencies>
 </project>
