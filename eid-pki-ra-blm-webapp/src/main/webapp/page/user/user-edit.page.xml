@@ -8,6 +8,7 @@
 	<restrict>#{s:hasRole('ADMIN_USER')}</restrict>
 	
 	<param name="userId" value="#{userHome.id}" converterId="javax.faces.Integer" />
+	<param name="registrationId" value="#{registrationHome.id}" converterId="javax.faces.Integer" />
 	
 	<navigation from-action="#{userHome.grantAdmin}">
 		<rule>
@@ -18,6 +19,12 @@
 	<navigation from-action="#{userHome.revokeAdmin}">
 		<rule>
 			<redirect view-id="/page/user/user-list.xhtml" />	
+		</rule>
+	</navigation>
+	
+	<navigation from-action="#{registrationHome.remove}">
+		<rule>
+			<redirect view-id="/page/user/user-edit.xhtml" />	
 		</rule>
 	</navigation>
 	

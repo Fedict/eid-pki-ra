@@ -18,8 +18,10 @@
 
 package be.fedict.eid.pkira.blm.model.usermgmt;
 
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 
 import be.fedict.eid.pkira.blm.model.framework.ValidatingEntityHome;
 import be.fedict.eid.pkira.common.security.EIdUserCredentials;
@@ -29,6 +31,7 @@ import be.fedict.eid.pkira.common.security.EIdUserCredentials;
  *
  */
 @Name(UserHome.NAME)
+@Scope(ScopeType.CONVERSATION)
 public class UserHome extends ValidatingEntityHome<User> {
 
 	private static final long serialVersionUID = -9041171409557145771L;
