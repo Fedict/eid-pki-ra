@@ -37,7 +37,7 @@ public class CertificateDomainUpdateSeleniumTest extends BaseSeleniumTestCase {
 
 	@Test
 	public void testUpdateCertificateDomain() {
-		updateCertificateTypes(0, true, false, true);
+		updateCertificateDomain(0, null, "c=be,ou=test5,uid=*", true, false, true);
 		assertTextPresent("The certificate domain has been updated.");
 	}
 

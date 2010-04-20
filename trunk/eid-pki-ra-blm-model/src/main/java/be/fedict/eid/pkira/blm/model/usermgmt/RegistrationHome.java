@@ -53,4 +53,9 @@ public class RegistrationHome extends EntityHome<Registration> {
 		certificateDomains.add(getInstance().getCertificateDomain());
 		return certificateDomains;
 	}
+	
+	@Override
+	public String getDeletedMessageKey() {
+		return "user.registration.deleted";
+	}
 }

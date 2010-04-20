@@ -78,8 +78,8 @@ public class SetupBulkDatabase extends SetupDatabase {
 				.append("DELETE FROM REGISTRATION;\n")
 				.append("DELETE FROM USER;\n")
 				.append("DELETE FROM CERTIFICATEDOMAIN;\n")
-				.append("DELETE FROM CA;\n")
 				.append("DELETE FROM CA_PARAMETERS;\n")
+				.append("DELETE FROM CA;\n")
 				.append("DELETE FROM CONFIGURATION;\n");
 	}
 

@@ -4,8 +4,8 @@
 		xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
 
 	<ui:define name="center">
-		<h:form id="configurationEntryForm">
-			<rich:panel id="panel">
+		<h:form id="userForm">
+			<rich:panel id="userEditPanel">
 				<f:facet name="header">
 					#{messages['user.edit.title']}
 				</f:facet>
@@ -38,6 +38,49 @@
 							value="#{messages['button.cancel']}" 
 							view="/page/user/user-list.xhtml" />
 				</s:decorate> 
+			</rich:panel>
+			<rich:panel id="userRegistrationsPanel">
+				<f:facet name="header">
+					#{messages['user.registrations.title']}
+				</f:facet>
+				<h:outputText value="#{messages['user.registrations.empty']}" 
+						rendered="#{empty userHome.instance.registrations}" />
+				<rich:dataTable id="userRegistrations" var="registration" rows="10" 
+						value="#{userHome.instance.registrations}" 
+						rendered="#{not empty userHome.instance.registrations}" width="50%">
+					<rich:column>
+						<f:facet name="header" id="statusHeader">
+							<h:outputText value="#{messages['registrations.status']}" />
+						</f:facet>
+						<h:outputText value="#{registration.status}" />
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header" id="emailHeader">
+							<h:outputText value="#{messages['registrations.email']}" />
+						</f:facet>
+						<h:outputText value="#{registration.email}" />
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header" id="certificateDomainNameHeader">
+							<h:outputText value="#{messages['registrations.certificateDomain']}" />
+						</f:facet>
+						<h:outputText value="#{registration.certificateDomain.name}" />
+					</rich:column>
+					
+					<rich:column>
+						<s:link value="#{messages['link.delete']}" id="delete" action="#{registrationHome.remove}" 
+								onclick="return confirm('#{messages['user.registration.confirm.delete']}');">
+							<f:param name="userId" value="#{userHome.id}" />
+							<f:param name="registrationId" value="#{registration.id}" />
+						</s:link>
+					</rich:column>
+	
+					<f:facet name="footer">
+						<rich:datascroller maxPages="10" fastStep="5" for="userRegistrations" />
+					</f:facet>
+				</rich:dataTable>
 			</rich:panel>
 		</h:form>
 	</ui:define>
