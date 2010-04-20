@@ -21,6 +21,7 @@ package be.fedict.eid.integration.admin;
 import junit.framework.Assert;
 
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.integration.BaseSeleniumTestCase;
@@ -35,56 +36,78 @@ public class UserAdminSeleniumTest extends BaseSeleniumTestCase {
 	public void login() {
 		super.autoLogin();
 	}
+	
+	@BeforeMethod
+	public void goToUserList() {
+		clickAndWait("header-form:users");
+	}
 
 	@Test
 	public void testRevokeAdmin() {
-		executeTest(0, true, false, 0);
+		goToUserEditPage(0);
+		validateRegistrationRows(2);
+		Assert.assertTrue(getSelenium().getAllButtons().length == 2);
+		clickAndWait("userForm:submitButtonBox:revokeAdmin");
+		assertTextPresent("The user has been updated.");
 	}
 
 	@Test
 	public void testGrantAdmin() {
-		executeTest(1, false, false, 0);
+		goToUserEditPage(1);
+		validateRegistrationRows(0);
+		Assert.assertTrue(getSelenium().getAllButtons().length == 2);
+		clickAndWait("userForm:submitButtonBox:grantAdmin");
+		assertTextPresent("The user has been updated.");
 	}
 
 	@Test
 	public void testCurrentUser() {
-		executeTest(2, true, true, 0);
+		goToUserEditPage(2);
+		validateRegistrationRows(1);
+		Assert.assertTrue(getSelenium().getAllButtons().length == 1);
 	}	
 	
-	private void executeTest(int rowToUpdate, boolean isAdmin, boolean isCurrentUser, int numberOfRegistrations) {
-		clickAndWait("header-form:users");
-		clickAndWait(deriveEditLinkToClick(rowToUpdate));
+	@Test
+	public void testRemoveRegistrationCancel() {
+		goToUserEditPage(0);	
+		getSelenium().chooseCancelOnNextConfirmation();
+		click(deriveDeleteLinkToClick(0));
+		Assert.assertTrue(getSelenium().isConfirmationPresent());
+		Assert.assertEquals("Are you sure you want to delete the registration", getSelenium().getConfirmation());
+		validateRegistrationRows(2);
+	}
+
+	@Test
+	public void testRemoveRegistrationOk() {
+		goToUserEditPage(2);
+		click(deriveDeleteLinkToClick(0));
+		Assert.assertTrue(getSelenium().isConfirmationPresent());
+		Assert.assertEquals("Are you sure you want to delete the registration", getSelenium().getConfirmation());
+		waitForPageToLoad();
+		assertTextPresent("The registered certificate domain has been removed");
+		validateRegistrationRows(0);
+	}
+	
+	private void goToUserEditPage(int rowToEdit) {		
+		clickAndWait(deriveEditLinkToClick(rowToEdit));
 		assertTextPresent("User");
-		assertTextPresent("Registered certificate domains");
-		if (numberOfRegistrations == 1) {
+		assertTextPresent("Registered certificate domains");		
+	}
+
+	private String deriveEditLinkToClick(int rowToEdit) {
+		return "userListForm:allUser:" + rowToEdit + ":edit";
+	}
+
+	private String deriveDeleteLinkToClick(int rowToDelete) {
+		return "userForm:userRegistrations:" + rowToDelete + ":delete";
+	}
+
+	private void validateRegistrationRows(Integer expectedRows) {
+		if (expectedRows == 0) {
 			assertTextPresent("There are no registered certificate domains for this user");
 		} else {
-			validateRows(numberOfRegistrations);
+			Number actual = getSelenium().getXpathCount("//table[@id='userForm:userRegistrations']/tbody/tr");
+			Assert.assertEquals(expectedRows + " rows expected, but found " + actual, expectedRows, actual);
 		}
-		if (isAdmin && !isCurrentUser) {
-			clickAndWait("userForm:submitButtonBox:revokeAdmin");
-			assertTextPresent("The user has been updated.");
-			clickAndWait(deriveEditLinkToClick(rowToUpdate));
-			clickAndWait("userForm:submitButtonBox:grantAdmin");
-		}
-		if (!isAdmin && !isCurrentUser) {
-			clickAndWait("userForm:submitButtonBox:grantAdmin");
-			assertTextPresent("The user has been updated.");
-			clickAndWait(deriveEditLinkToClick(rowToUpdate));
-			clickAndWait("userForm:submitButtonBox:revokeAdmin");
-		}
-		if (isCurrentUser) {
-			assertTextNotPresent("Revoke admin rights");
-			assertTextNotPresent("Grant admin rights");
-		}
-	}
-
-	private String deriveEditLinkToClick(int rowToUpdate) {
-		return "userListForm:allUser:" + rowToUpdate + ":edit";
-	}
-
-	private void validateRows(Integer numberOfRows) {
-		Number actual = getSelenium().getXpathCount("//table[@id='userForm:userRegistrations']/tbody/tr");
-		Assert.assertEquals(numberOfRows + " rows expected, but found " + actual, numberOfRows, actual);
 	}
 }
