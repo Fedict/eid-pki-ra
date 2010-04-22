@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<report xmlns="urn:be:fedict:eid:pkira:reports">
+	<monthlyReport>
+		<reportDate>
+			<year>2010</year>
+			<month>4</month>
+		</reportDate>
+		<certificateDomainReportItem>
+			<certificateDomainName>Test Domain</certificateDomainName>
+			<signingRequests>
+				<successCount>8</successCount>
+				<failureCount>2</failureCount>
+				<totalCount>10</totalCount>
+			</signingRequests>
+		</certificateDomainReportItem>
+		<certificateDomainReportItem>
+			<certificateDomainName>Test Domain 2</certificateDomainName>
+			<signingRequests>
+				<successCount>2</successCount>
+				<failureCount>1</failureCount>
+				<totalCount>3</totalCount>
+			</signingRequests>
+		</certificateDomainReportItem>
+		<certificateAuthorityReportItem>
+			<certificateAuthorityName>Test CA</certificateAuthorityName>
+			<signingRequests>
+				<successCount>10</successCount>
+				<failureCount>3</failureCount>
+				<totalCount>13</totalCount>
+			</signingRequests>
+			<revocationRequests>
+				<successCount>5</successCount>
+				<failureCount>2</failureCount>
+				<totalCount>7</totalCount>
+			</revocationRequests>
+			<totalRequests>
+				<successCount>15</successCount>
+				<failureCount>5</failureCount>
+				<totalCount>20</totalCount>
+			</totalRequests>
+		</certificateAuthorityReportItem>
+	</monthlyReport>
+</report>

@@ -54,11 +54,12 @@
 		<module>eid-pki-ra-generated-publicws</module>
 		<module>eid-pki-ra-generated-privatews</module>
 		<module>eid-pki-ra-generated-xkms</module>
-		<!-- <module>eid-pki-ra-generated-reports</module> -->
+		<module>eid-pki-ra-generated-reports</module>
 		<module>eid-pki-ra-client-privatews</module>
 		<module>eid-pki-ra-client-publicws</module>
 		<module>eid-pki-ra-client-contracts</module>
 		<module>eid-pki-ra-client-xkms</module>
+		<module>eid-pki-ra-client-reports</module>
 		<module>eid-pki-ra-util-crypto</module>
 		<module>eid-pki-ra-util-dnfilter</module>
 		<module>eid-pki-ra-common-model</module>
@@ -119,7 +120,6 @@
 			</releases>
 			<snapshots>
 				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
 			</snapshots>
 		</repository>
 
@@ -333,6 +333,12 @@
 				<artifactId>eid-pki-ra-generated-xkms</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			
+			<dependency>
+				<groupId>be.fedict</groupId>
+				<artifactId>eid-pki-ra-generated-reports</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>be.fedict</groupId>
@@ -349,6 +355,12 @@
 			<dependency>
 				<groupId>be.fedict</groupId>
 				<artifactId>eid-pki-ra-client-xkms</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>be.fedict</groupId>
+				<artifactId>eid-pki-ra-client-contracts</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
