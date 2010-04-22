@@ -28,37 +28,27 @@ import org.jboss.seam.framework.EntityQuery;
  * @author Bram Baeyens
  *
  */
-@Name(UserQuery.NAME)
-public class UserQuery extends EntityQuery<User> {
+@Name(RegistrationQuery.NAME)
+public class RegistrationQuery extends EntityQuery<Registration> {
 
-	private static final long serialVersionUID = -8523995221764583699L;
+	private static final long serialVersionUID = 636702321975305314L;
 	
-public static final String NAME = "be.fedict.eid.pkira.blm.userQuery";
+	public static final String NAME = "be.fedict.eid.pkira.blm.registrationQuery";
 	
-	private User user;
+	private Registration registration;
 	
-	@Override
 	public String getEjbql() {
-		return "select user from User user";
+		return "select registration from Registration registration";
 	}
 	
-	@Override
-	public List<User> getResultList() {
-		setOrderColumn("user.lastName");
-		return super.getResultList();
-	}
-	
-	public User getFindByUserRRN(String userRRN) {
-		user = new User();
-		user.setNationalRegisterNumber(userRRN);
+	public List<Registration> findByUserRRN(String userRRN) {
+		User requester = new User();
+		requester.setNationalRegisterNumber(userRRN);
+		registration = new Registration();
+		registration.setRequester(requester);
 		setRestrictionExpressionStrings(Arrays.asList(
 				new String[] {
-						"user.nationalRegisterNumber = #{userQuery.user.nationalRegisterNumber}"}));
-		return super.getSingleResult();
+						"registration.requester.nationalRegisterNumber = #{registration.requester.nationalRegisterNumber}"}));
+		return getResultList();
 	}
-	
-	public User getUser() {
-		return user;
-	}
-	
 }

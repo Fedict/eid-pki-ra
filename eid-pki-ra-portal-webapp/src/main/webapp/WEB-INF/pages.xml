@@ -11,20 +11,7 @@
 		</navigation>
 	</page>
 
-	<page view-id="/page/registration/requestRegistration.xhtml">
-		<restrict>#{s:hasRole('AUTHENTICATED_USER')}</restrict>
-		<navigation>
-			<rule if-outcome="success">
-				<redirect view-id="/home.xhtml" />
-			</rule>
-			<rule if-outcome="cancel">
-				<end-conversation before-redirect="true" />
-				<redirect view-id="/home.xhtml" />
-			</rule>
-		</navigation>
-	</page>
-
-	<page view-id="/page/contract/uploadCsr.xhtml">
+	<page view-id="/page/contract/upload-csr.xhtml">
 		<restrict>#{s:hasRole('REGISTERED_USER')}</restrict>
 		<navigation from-action="#{csrUploadHandler.uploadCertificateSigningRequest}">
 			<rule if-outcome="success">
@@ -48,65 +35,6 @@
 			<rule if-outcome="success">
 				<redirect view-id="/page/contract/signRevocationContract.xhtml" />
 			</rule>
-		</navigation>
-	</page>
-
-	<page view-id="/page/certificates/certificates_list.xhtml">
-		<restrict>#{s:hasRole('REGISTERED_USER')}</restrict>
-		<navigation from-action="#{certificateHandler.showDetail(cer)}">
-			<rule if-outcome="certificateDetail">
-				<redirect view-id="/page/certificates/certificate_detail.xhtml" />
-			</rule>
-		</navigation>
-		<navigation from-action="#{certificateHandler.prepareRevocation(cer.serialNumber, cer.issuer)}">
-			<rule if-outcome="revokeContract">
-				<redirect view-id="/page/contract/revocationContract.xhtml" />
-			</rule>
-		</navigation>
-	</page>
-
-	<page view-id="/page/certificates/certificates_detail.xhtml">
-		<restrict>#{s:hasRole('REGISTERED_USER')}</restrict>
-		<navigation>
-			<rule if-outcome="revokeContract">
-				<redirect view-id="/page/contract/revocationContract.xhtml" />
-			</rule>
-		</navigation>
-	</page>
-
-	<page view-id="/*">
-		<navigation from-action="home">
-			<end-conversation before-redirect="true" />
-			<redirect view-id="/home.xhtml" />
-		</navigation>
-
-		<navigation from-action="login">
-			<redirect view-id="/login.xhtml" />
-		</navigation>
-
-		<navigation from-action="csr">
-			<end-conversation before-redirect="true" />
-			<redirect view-id="/page/contract/uploadCsr.xhtml" />
-		</navigation>
-
-		<navigation from-action="list">
-			<begin-conversation join="true" />
-			<redirect view-id="/page/certificates/certificates_list.xhtml" />
-		</navigation>
-
-		<navigation from-action="revokeContract">
-			<begin-conversation join="true" />
-			<redirect view-id="/page/contract/revocationContract.xhtml" />
-		</navigation>
-
-		<navigation from-action="register">
-			<begin-conversation join="true" />
-			<redirect view-id="/page/registration/requestRegistration.xhtml" />
-		</navigation>
-
-		<navigation>
-			<end-conversation before-redirect="true" />
-			<redirect view-id="/login.xhtml" />
 		</navigation>
 	</page>
 

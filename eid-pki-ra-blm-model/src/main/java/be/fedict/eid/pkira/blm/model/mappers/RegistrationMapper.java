@@ -16,24 +16,23 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.blm.model.usermgmt;
+package be.fedict.eid.pkira.blm.model.mappers;
+
+import java.util.List;
+
+import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
+import be.fedict.eid.pkira.generated.privatews.RegistrationWS;
 
 /**
  * @author Bram Baeyens
  *
  */
-public enum RegistrationStatus {
+public interface RegistrationMapper {
 	
-	NEW("registration.status.new"),
-	APPROVED("registration.status.approved");
+	public static final String NAME = "be.fedict.eid.pkira.blm.registrationMapper";
 	
-	private final String messageKey;
+	List<RegistrationWS> map(List<Registration> registrations);
 	
-	private RegistrationStatus(String messageKey) {
-		this.messageKey = messageKey;
-	}
-	
-	public String getMessageKey() {
-		return messageKey;
-	}
+	RegistrationWS map(Registration registration);
+
 }

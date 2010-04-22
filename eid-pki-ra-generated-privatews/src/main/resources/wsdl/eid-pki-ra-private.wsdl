@@ -102,6 +102,54 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			
+			<xsd:element name="FindRegistrationsByUserRRNRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="userRRN" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			
+			<xsd:element name="FindRegistrationsByUserRRNResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="registration" type="types:registrationWS" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			
+			<xsd:element name="FindRegistrationByIdRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="registrationId" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			
+			<xsd:element name="FindRegistrationByIdResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="registration" type="types:registrationWS" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			
+			<xsd:element name="CreateOrUpdateRegistrationRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="registration" type="types:registrationWS" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="CreateOrUpdateRegistrationResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="success" type="xsd:boolean" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 
 			<xsd:element name="FindConfigurationEntryRequest">
 				<xsd:complexType>
@@ -191,6 +239,24 @@
 					<xsd:enumeration value="IDP_DESTINATION" />
 				</xsd:restriction>
 			</xsd:simpleType>
+			
+			<xsd:complexType name="registrationWS">
+				<xsd:sequence>
+					<xsd:element name="id" type="xsd:string" />
+					<xsd:element name="status" type="types:registrationStatusWS" />
+					<xsd:element name="userEmail" type="xsd:string" />
+					<xsd:element name="userRRN" type="xsd:string" />
+					<xsd:element name="certificateDomainName" type="xsd:string" />
+					<xsd:element name="certificateDomainId" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:simpleType name="registrationStatusWS">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="NEW" />
+					<xsd:enumeration value="APPROVED" />
+				</xsd:restriction>
+			</xsd:simpleType>
 		</xsd:schema>
 	</wsdl:types>
 
@@ -234,6 +300,30 @@
 		<wsdl:part name="response" element="types:CreateRegistrationForUserResponse" />
 	</wsdl:message>
 
+	<wsdl:message name="FindRegistrationsByUserRRNRequest">
+		<wsdl:part name="request" element="types:FindRegistrationsByUserRRNRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="FindRegistrationsByUserRRNResult">
+		<wsdl:part name="response" element="types:FindRegistrationsByUserRRNResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="FindRegistrationByIdRequest">
+		<wsdl:part name="request" element="types:FindRegistrationByIdRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="FindRegistrationByIdResult">
+		<wsdl:part name="response" element="types:FindRegistrationByIdResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="CreateOrUpdateRegistrationRequest">
+		<wsdl:part name="request" element="types:CreateOrUpdateRegistrationRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="CreateOrUpdateRegistrationResult">
+		<wsdl:part name="response" element="types:CreateOrUpdateRegistrationResponse" />
+	</wsdl:message>
+
 	<wsdl:message name="FindConfigurationEntryRequest">
 		<wsdl:part name="request" element="types:FindConfigurationEntryRequest" />
 	</wsdl:message>
@@ -270,6 +360,18 @@
 		<wsdl:operation name="CreateRegistrationForUser">
 			<wsdl:input message="tns:CreateRegistrationForUserRequest" />
 			<wsdl:output message="tns:CreateRegistrationForUserResult" />
+		</wsdl:operation>
+		<wsdl:operation name="FindRegistrationsByUserRRN">
+			<wsdl:input message="tns:FindRegistrationsByUserRRNRequest" />
+			<wsdl:output message="tns:FindRegistrationsByUserRRNResult" />
+		</wsdl:operation>
+		<wsdl:operation name="FindRegistrationById">
+			<wsdl:input message="tns:FindRegistrationByIdRequest" />
+			<wsdl:output message="tns:FindRegistrationByIdResult" />
+		</wsdl:operation>
+		<wsdl:operation name="CreateOrUpdateRegistration">
+			<wsdl:input message="tns:CreateOrUpdateRegistrationRequest" />
+			<wsdl:output message="tns:CreateOrUpdateRegistrationResult" />
 		</wsdl:operation>
 		<wsdl:operation name="FindConfigurationEntry">
 			<wsdl:input message="tns:FindConfigurationEntryRequest" />
@@ -325,6 +427,33 @@
 				<soap:body use="literal" />
 			</wsdl:input>
 			<wsdl:output message="tns:CreateRegistrationForUserResult">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="FindRegistrationsByUserRRN">
+			<soap:operation />
+			<wsdl:input message="tns:FindRegistrationsByUserRRNRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output message="tns:FindRegistrationsByUserRRNResult">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="FindRegistrationById">
+			<soap:operation />
+			<wsdl:input message="tns:FindRegistrationByIdRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output message="tns:FindRegistrationByIdResult">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CreateOrUpdateRegistration">
+			<soap:operation />
+			<wsdl:input message="tns:CreateOrUpdateRegistrationRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output message="tns:CreateOrUpdateRegistrationResult">
 				<soap:body use="literal" />
 			</wsdl:output>
 		</wsdl:operation>

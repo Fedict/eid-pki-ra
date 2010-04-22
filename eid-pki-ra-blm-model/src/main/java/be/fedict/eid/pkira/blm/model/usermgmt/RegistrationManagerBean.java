@@ -38,6 +38,7 @@ import be.fedict.eid.pkira.blm.model.mail.MailTemplate;
 import be.fedict.eid.pkira.dnfilter.DistinguishedName;
 import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
 import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;
+import be.fedict.eid.pkira.generated.privatews.RegistrationWS;
 
 /**
  * Registration manager implementation.
@@ -53,9 +54,15 @@ public class RegistrationManagerBean implements RegistrationManager {
 
 	@In(value = RegistrationRepository.NAME, create = true)
 	private RegistrationRepository registrationRepository;
+	
+	@In(value=RegistrationHome.NAME, create=true)
+	private RegistrationHome registrationHome;
 
 	@In(value = CertificateDomainHome.NAME, create = true)
 	private CertificateDomainHome certificateDomainHome;
+	
+	@In(value=UserQuery.NAME, create=true)
+	private UserQuery userQuery;
 
 	@In(value = UserRepository.NAME, create = true)
 	private UserRepository userRepository;
@@ -118,6 +125,21 @@ public class RegistrationManagerBean implements RegistrationManager {
 	
 			registrationRepository.persist(registration);
 		}
+	}
+	
+	public boolean createOrUpdateRegistration(RegistrationWS registrationWS) {
+		registrationHome.setId(registrationWS.getId() != null ? Integer.valueOf(registrationWS.getId()) : null);
+		Registration registration = registrationHome.getInstance();
+		registration.setEmail(registrationWS.getUserEmail());
+		certificateDomainHome.setId(Integer.valueOf(registrationWS.getCertificateDomainId()));
+		registration.setCertificateDomain(certificateDomainHome.find());
+		registration.setRequester(userQuery.getFindByUserRRN(registrationWS.getUserRRN()));
+		if (registrationHome.isManaged()) {
+			return registrationHome.update() != null ? true : false;
+		} else {
+			registration.setStatus(RegistrationStatus.NEW);
+			return registrationHome.persist() != null ? true : false;
+		}		
 	}
 
 	/**

@@ -27,6 +27,8 @@ import be.fedict.eid.pkira.generated.privatews.CertificateDomainWS;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 import be.fedict.eid.pkira.generated.privatews.ConfigurationEntryKeyWS;
 import be.fedict.eid.pkira.generated.privatews.ConfigurationEntryWS;
+import be.fedict.eid.pkira.generated.privatews.CreateOrUpdateRegistrationRequest;
+import be.fedict.eid.pkira.generated.privatews.CreateOrUpdateRegistrationResponse;
 import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserRequest;
 import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType;
@@ -35,6 +37,10 @@ import be.fedict.eid.pkira.generated.privatews.FindCertificateRequest;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateResponse;
 import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryRequest;
 import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryResponse;
+import be.fedict.eid.pkira.generated.privatews.FindRegistrationByIdRequest;
+import be.fedict.eid.pkira.generated.privatews.FindRegistrationByIdResponse;
+import be.fedict.eid.pkira.generated.privatews.FindRegistrationsByUserRRNRequest;
+import be.fedict.eid.pkira.generated.privatews.FindRegistrationsByUserRRNResponse;
 import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsForUserRequest;
 import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.FindUserRequest;
@@ -42,6 +48,7 @@ import be.fedict.eid.pkira.generated.privatews.FindUserResponse;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesRequest;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesResponse;
 import be.fedict.eid.pkira.generated.privatews.ObjectFactory;
+import be.fedict.eid.pkira.generated.privatews.RegistrationWS;
 import be.fedict.eid.pkira.generated.privatews.UserWS;
 
 /**
@@ -112,6 +119,27 @@ public class EIDPKIRAPrivateServiceClient {
 		request.setUserEmail(userEmail);
 		
 		CreateRegistrationForUserResponse response = getWebservicePort().createRegistrationForUser(request);
+		return response.isSuccess();
+	}
+	
+	public List<RegistrationWS> findRegistrationsByUserRRN(String userRRN) {
+		FindRegistrationsByUserRRNRequest request = factory.createFindRegistrationsByUserRRNRequest();
+		request.setUserRRN(userRRN);
+		FindRegistrationsByUserRRNResponse response = getWebservicePort().findRegistrationsByUserRRN(request);
+		return response.getRegistration();
+	}
+
+	public RegistrationWS findRegistrationById(String id) {
+		FindRegistrationByIdRequest request = factory.createFindRegistrationByIdRequest();
+		request.setRegistrationId(id);
+		FindRegistrationByIdResponse response = getWebservicePort().findRegistrationById(request);
+		return response.getRegistration();
+	}
+	
+	public boolean createOrUpdateRegistration(RegistrationWS registrationWS) {
+		CreateOrUpdateRegistrationRequest request = factory.createCreateOrUpdateRegistrationRequest();
+		request.setRegistration(registrationWS);
+		CreateOrUpdateRegistrationResponse response = getWebservicePort().createOrUpdateRegistration(request);
 		return response.isSuccess();
 	}
 	

@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.blm.model.usermgmt;
+package be.fedict.eid.pkira.portal.registration;
 
 /**
  * @author Bram Baeyens
@@ -36,4 +36,5 @@ public enum RegistrationStatus {
 	public String getMessageKey() {
 		return messageKey;
 	}
+
 }

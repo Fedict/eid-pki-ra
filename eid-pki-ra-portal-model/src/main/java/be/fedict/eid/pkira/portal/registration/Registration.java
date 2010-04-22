@@ -35,18 +35,46 @@ public class Registration implements Serializable {
 	
 	public static final String NAME = "be.fedict.pkira.portal.registration";
 
+	private String id;
+	private RegistrationStatus status;
+	private String certificateDomainName;
+	
 	@NotEmpty
-	private String selectedDomainId;
+	private String certificateDomainId;
 	
 	@NotEmpty @Email
 	private String emailAddress;
 	
-	public String getSelectedDomainId() {
-		return selectedDomainId;
+	public String getId() {
+		return id;
 	}
 
-	public void setSelectedDomainId(String selectedDomain) {
-		this.selectedDomainId = selectedDomain;
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public RegistrationStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(RegistrationStatus status) {
+		this.status = status;
+	}
+
+	public String getCertificateDomainName() {
+		return certificateDomainName;
+	}
+
+	public void setCertificateDomainName(String certificateDomainName) {
+		this.certificateDomainName = certificateDomainName;
+	}
+	
+	public String getCertificateDomainId() {
+		return certificateDomainId;
+	}
+
+	public void setCertificateDomainId(String certificateDomainId) {
+		this.certificateDomainId = certificateDomainId;
 	}
 
 	public String getEmailAddress() {

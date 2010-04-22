@@ -16,24 +16,26 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.blm.model.usermgmt;
+package be.fedict.eid.pkira.portal.ra;
+
+import java.io.Serializable;
+
+import org.jboss.seam.annotations.In;
+
+import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 
 /**
  * @author Bram Baeyens
  *
  */
-public enum RegistrationStatus {
+public class WSHome implements Serializable {
+
+	private static final long serialVersionUID = -8029624317292385958L;
 	
-	NEW("registration.status.new"),
-	APPROVED("registration.status.approved");
-	
-	private final String messageKey;
-	
-	private RegistrationStatus(String messageKey) {
-		this.messageKey = messageKey;
-	}
-	
-	public String getMessageKey() {
-		return messageKey;
+	@In(value = EIDPKIRAPrivateServiceClient.NAME, create = true)
+	private EIDPKIRAPrivateServiceClient serviceClient;
+
+	public EIDPKIRAPrivateServiceClient getServiceClient() {
+		return serviceClient;
 	}
 }

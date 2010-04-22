@@ -17,6 +17,7 @@
 package be.fedict.eid.pkira.blm.model.usermgmt;
 
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
+import be.fedict.eid.pkira.generated.privatews.RegistrationWS;
 
 /**
  * Manager for registrations.
@@ -35,6 +36,8 @@ public interface RegistrationManager {
 	 */
 	void registerUser(String userRRN, String userLastName, String userFirstName, Integer domainId, String emailAddress)
 			throws RegistrationException;
+	
+	boolean createOrUpdateRegistration(RegistrationWS registrationWS);
 
 	/**
 	 * Approve the registration.
