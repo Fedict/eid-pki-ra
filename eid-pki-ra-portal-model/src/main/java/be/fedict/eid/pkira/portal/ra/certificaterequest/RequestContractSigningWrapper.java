@@ -52,8 +52,8 @@ public class RequestContractSigningWrapper extends AbstractSigningWrapper<Reques
 	}
 	
 	@Override
-	protected String getDssSignatureHttpRequestHandlerPath() {
-		return "/seam/resource/requestContractHandler";
+	protected String getViewId() {
+		return "/postSignRequestContract.seam";
 	}
 
 }

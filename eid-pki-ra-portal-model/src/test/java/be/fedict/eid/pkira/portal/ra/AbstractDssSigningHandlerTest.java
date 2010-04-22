@@ -13,7 +13,7 @@ import org.testng.annotations.BeforeMethod;
 import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
 import be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient;
 
-public abstract class AbstractSignatureHttpRequestHandlerTest<S, T> {
+public abstract class AbstractDssSigningHandlerTest<S, T> {
 	
 	protected static final String SIGNATURE_RESPONSE_PARAMETER = "SignatureResponse";
 	protected static final String SIGNATURE_STATUS_PARAMETER = "SignatureStatus";
@@ -22,7 +22,6 @@ public abstract class AbstractSignatureHttpRequestHandlerTest<S, T> {
 	@Mock protected EIDPKIRAServiceClient serviceClient;
 	@Mock protected EIDPKIRAContractsClient contractsClient;
 	@Mock protected HttpServletRequest request;
-	@Mock protected HttpServletResponse response;
 	@Mock protected FacesMessages facesMessages;
 	protected T certificateResponse;
 	

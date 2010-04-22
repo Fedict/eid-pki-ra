@@ -11,6 +11,41 @@
 		</navigation>
 	</page>
 
+	<page view-id="/postSignRequestContract.xhtml" action="#{requestContractDssSigningHandler.handleDssRequest}">
+		<navigation>
+			<rule if-outcome="success">
+				<redirect view-id="/page/contract/dssSignSuccess.xhtml" />
+			</rule>
+			<rule if-outcome="error">
+				<redirect view-id="/page/contract/dssSignError.xhtml" />
+			</rule>
+		</navigation>
+	</page>	
+
+	<page view-id="/postSignRevocationContract.xhtml" action="#{revocationContractDssSigningHandler.handleDssRequest}">
+		<navigation>
+			<rule if-outcome="success">
+				<redirect view-id="/page/contract/dssSignSuccess.xhtml" />
+			</rule>
+			<rule if-outcome="error">
+				<redirect view-id="/page/contract/dssSignError.xhtml" />
+			</rule>
+		</navigation>
+	</page>	
+
+	<page view-id="/page/registration/requestRegistration.xhtml">
+		<restrict>#{s:hasRole('AUTHENTICATED_USER')}</restrict>
+		<navigation>
+			<rule if-outcome="success">
+				<redirect view-id="/home.xhtml" />
+			</rule>
+			<rule if-outcome="cancel">
+				<end-conversation before-redirect="true" />
+				<redirect view-id="/home.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
 	<page view-id="/page/contract/upload-csr.xhtml">
 		<restrict>#{s:hasRole('REGISTERED_USER')}</restrict>
 		<navigation from-action="#{csrUploadHandler.uploadCertificateSigningRequest}">

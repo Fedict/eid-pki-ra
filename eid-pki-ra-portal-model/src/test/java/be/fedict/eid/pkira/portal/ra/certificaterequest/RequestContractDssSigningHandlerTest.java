@@ -1,26 +1,27 @@
 package be.fedict.eid.pkira.portal.ra.certificaterequest;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.jboss.seam.faces.FacesMessages;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningResponseType;
 import be.fedict.eid.pkira.generated.contracts.ResultType;
-import be.fedict.eid.pkira.portal.ra.AbstractSignatureHttpRequestHandlerTest;
-import be.fedict.eid.pkira.portal.ra.certificaterequest.RequestContractSignatureHttpRequestHandler;
+import be.fedict.eid.pkira.portal.ra.AbstractDssSigningHandlerTest;
 import be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient;
 
-public class RequestContractSignatureHttpRequestHandlerTest
-		extends AbstractSignatureHttpRequestHandlerTest<RequestContractSignatureHttpRequestHandler, 
+public class RequestContractDssSigningHandlerTest
+		extends AbstractDssSigningHandlerTest<RequestContractDssSigningHandler, 
 				CertificateSigningResponseType> {
 
 	@Override
 	protected void initHandler() {
-		handler = new RequestContractSignatureHttpRequestHandler() {
+		handler = new RequestContractDssSigningHandler() {
 
 			@Override
 			protected EIDPKIRAServiceClient getServiceClient() {
@@ -41,6 +42,11 @@ public class RequestContractSignatureHttpRequestHandlerTest
 			protected FacesMessages getFacesMessages() {
 				return facesMessages;
 			}
+			
+			@Override
+			protected HttpServletRequest getRequest(){
+				return request;
+			} 
 		};
 	}
 
@@ -53,16 +59,16 @@ public class RequestContractSignatureHttpRequestHandlerTest
 	public void successfulRequest() throws Exception {
 		when(request.getParameter(SIGNATURE_STATUS_PARAMETER)).thenReturn("OK");
 		when(certificateResponse.getResult()).thenReturn(ResultType.SUCCESS);
-		handler.handleRequest(request, response);
-		verify(response).sendRedirect("/page/contract/dssSignSucces.seam");
+		String outcome = handler.handleDssRequest();
+		Assert.assertEquals(outcome, "success");
 	}
 
 	@Test
 	public void signatureNotOk() throws Exception {
 		when(request.getParameter(SIGNATURE_STATUS_PARAMETER)).thenReturn(
 				"NOT_OK");
-		handler.handleRequest(request, response);
-		verify(response).sendRedirect("/page/contract/dssSignError.seam");
+		String outcome = handler.handleDssRequest();
+		Assert.assertEquals(outcome, "error");
 	}
 
 	@Test
@@ -70,17 +76,7 @@ public class RequestContractSignatureHttpRequestHandlerTest
 		when(request.getParameter(SIGNATURE_STATUS_PARAMETER)).thenReturn("OK");
 		when(certificateResponse.getResult()).thenReturn(
 				ResultType.BACKEND_ERROR);
-		handler.handleRequest(request, response);
-		verify(response).sendRedirect("/page/contract/dssSignError.seam");
+		String outcome = handler.handleDssRequest();
+		Assert.assertEquals(outcome, "error");
 	}
-
-	@Test
-	public void exception() throws Exception {
-		when(request.getParameter(SIGNATURE_STATUS_PARAMETER)).thenReturn("OK");
-		when(certificateResponse.getResult()).thenThrow(
-				new NullPointerException());
-		handler.handleRequest(request, response);
-		verify(response).sendRedirect("/page/contract/dssSignError.seam");
-	}
-
 }
