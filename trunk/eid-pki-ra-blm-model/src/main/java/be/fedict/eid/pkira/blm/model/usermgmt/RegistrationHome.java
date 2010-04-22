@@ -11,10 +11,12 @@ import org.jboss.seam.framework.EntityHome;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainHome;
 
-@Name("registrationHome")
+@Name(RegistrationHome.NAME)
 public class RegistrationHome extends EntityHome<Registration> {
 
 	private static final long serialVersionUID = 8487479089538426398L;
+	
+	public static final String NAME = "be.fedict.eid.pkira.blm.registrationHome";
 	
 	@In(value=RegistrationManager.NAME, create=true)
 	private RegistrationManager registrationManager;

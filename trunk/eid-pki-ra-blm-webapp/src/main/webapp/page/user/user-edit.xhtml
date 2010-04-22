@@ -52,7 +52,7 @@
 						<f:facet name="header" id="statusHeader">
 							<h:outputText value="#{messages['registrations.status']}" />
 						</f:facet>
-						<h:outputText value="#{registration.status}" />
+						<h:outputText value="#{messages[registration.status.messageKey]}" />
 					</rich:column>
 					
 					<rich:column>

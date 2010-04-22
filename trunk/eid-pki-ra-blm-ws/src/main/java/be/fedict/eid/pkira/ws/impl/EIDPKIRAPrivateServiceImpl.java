@@ -23,14 +23,19 @@ import be.fedict.eid.pkira.blm.model.contracts.ContractRepository;
 import be.fedict.eid.pkira.blm.model.mappers.CertificateDomainMapper;
 import be.fedict.eid.pkira.blm.model.mappers.CertificateMapper;
 import be.fedict.eid.pkira.blm.model.mappers.ConfigurationEntryMapper;
+import be.fedict.eid.pkira.blm.model.mappers.RegistrationMapper;
 import be.fedict.eid.pkira.blm.model.mappers.UserMapper;
 import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationException;
+import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationHome;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationManager;
+import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationQuery;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationRepository;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationStatus;
 import be.fedict.eid.pkira.blm.model.usermgmt.User;
 import be.fedict.eid.pkira.blm.model.usermgmt.UserRepository;
+import be.fedict.eid.pkira.generated.privatews.CreateOrUpdateRegistrationRequest;
+import be.fedict.eid.pkira.generated.privatews.CreateOrUpdateRegistrationResponse;
 import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserRequest;
 import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType;
@@ -38,6 +43,10 @@ import be.fedict.eid.pkira.generated.privatews.FindCertificateRequest;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateResponse;
 import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryRequest;
 import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryResponse;
+import be.fedict.eid.pkira.generated.privatews.FindRegistrationByIdRequest;
+import be.fedict.eid.pkira.generated.privatews.FindRegistrationByIdResponse;
+import be.fedict.eid.pkira.generated.privatews.FindRegistrationsByUserRRNRequest;
+import be.fedict.eid.pkira.generated.privatews.FindRegistrationsByUserRRNResponse;
 import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsForUserRequest;
 import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.FindUserRequest;
@@ -136,6 +145,31 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 		return response;
 	}
 
+	@Override
+	public FindRegistrationsByUserRRNResponse findRegistrationsByUserRRN(FindRegistrationsByUserRRNRequest request) {
+		FindRegistrationsByUserRRNResponse response = new ObjectFactory().createFindRegistrationsByUserRRNResponse();
+		List<Registration> registrations = getRegistrationQuery().findByUserRRN(request.getUserRRN());
+		response.getRegistration().addAll(getRegistrationMapper().map(registrations));
+		return response;
+	}
+
+	@Override
+	public FindRegistrationByIdResponse findRegistrationById(FindRegistrationByIdRequest request) {
+		FindRegistrationByIdResponse response = new ObjectFactory().createFindRegistrationByIdResponse();
+		RegistrationHome registrationHome = getRegistrationHome();
+		registrationHome.setId(Integer.valueOf(request.getRegistrationId()));
+		Registration registration = registrationHome.find();
+		response.setRegistration(getRegistrationMapper().map(registration));
+		return response;
+	}
+
+	@Override
+	public CreateOrUpdateRegistrationResponse createOrUpdateRegistration(CreateOrUpdateRegistrationRequest request) {
+		CreateOrUpdateRegistrationResponse response = new ObjectFactory().createCreateOrUpdateRegistrationResponse();
+		response.setSuccess(getRegistrationManager().createOrUpdateRegistration(request.getRegistration()));
+		return response;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -203,5 +237,16 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	private ConfigurationEntryQuery getConfigurationEntryQuery() {
 		return (ConfigurationEntryQuery) Component.getInstance(ConfigurationEntryQuery.class, true);
 	}
+	
+	private RegistrationQuery getRegistrationQuery() {
+		return (RegistrationQuery) Component.getInstance(RegistrationQuery.NAME, true);
+	}
 
+	private RegistrationHome getRegistrationHome() {
+		return (RegistrationHome) Component.getInstance(RegistrationHome.NAME, true);
+	}
+	
+	private RegistrationMapper getRegistrationMapper() {
+		return (RegistrationMapper) Component.getInstance(RegistrationMapper.NAME, true);
+	}
 }
