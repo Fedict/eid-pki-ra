@@ -2,6 +2,7 @@ package be.fedict.eid.pkira.blm.model.contracthandler.services;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -26,6 +27,7 @@ import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanExceptio
 import be.fedict.eid.pkira.blm.model.contracts.CertificateRevocationContract;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
 import be.fedict.eid.pkira.blm.model.framework.WebserviceLocator;
+import be.fedict.eid.pkira.blm.model.reporting.ReportManager;
 import be.fedict.eid.pkira.crypto.CSRInfo;
 import be.fedict.eid.pkira.crypto.CSRParser;
 import be.fedict.eid.pkira.crypto.CertificateInfo;
@@ -66,6 +68,9 @@ public class XKMSServiceBeanTest {
 
 	@Mock
 	private ErrorLogger errorLogger;
+	
+	@Mock
+	private ReportManager reportManager;
 
 	private CertificateAuthority certificateAuthority = new CertificateAuthority();
 	private CertificateDomain certificateDomain = createCertificateDomain();
@@ -81,6 +86,7 @@ public class XKMSServiceBeanTest {
 		service.setWebserviceLocator(webserviceLocator);
 		service.setCertificateParser(certificateParser);
 		service.setErrorLogger(errorLogger);
+		service.setReportManager(reportManager);
 
 		when(csrParser.parseCSR(CSR)).thenReturn(csrInfo);
 		when(csrInfo.getDerEncoded()).thenReturn(CSR_BYTES);
@@ -88,15 +94,18 @@ public class XKMSServiceBeanTest {
 		when(certificateParser.parseCertificate(CERTIFICATE_BYTES)).thenReturn(certificateInfo);
 		when(certificateParser.parseCertificate(CERTIFICATE)).thenReturn(certificateInfo);
 		when(certificateInfo.getPemEncoded()).thenReturn(CERTIFICATE);
-		when(certificateInfo.getSerialNumber()).thenReturn(SERIAL_NUMBER);
+		when(certificateInfo.getSerialNumber()).thenReturn(SERIAL_NUMBER);		
 	}
 
 	@Test
 	public void signTest() throws Exception {
 		when(xkmsClient.createCertificate(CSR_BYTES, VALIDITY)).thenReturn(CERTIFICATE_BYTES);
-
-		String certificate = service.sign(createCertificateSigningContract());
+		
+		CertificateSigningContract contract = createCertificateSigningContract();			
+		String certificate = service.sign(contract);
+		
 		assertEquals(certificate, CERTIFICATE);
+		verify(reportManager).addLineToReport(contract, true);
 		verifyNoMoreInteractions(errorLogger);
 	}
 
@@ -105,21 +114,44 @@ public class XKMSServiceBeanTest {
 		XKMSClientException exception = new XKMSClientException("Oops");
 		when(xkmsClient.createCertificate(CSR_BYTES, VALIDITY)).thenThrow(exception);
 
+		CertificateSigningContract contract = createCertificateSigningContract();
 		try {
-			service.sign(createCertificateSigningContract());
+			
+			service.sign(contract);
 			fail("Expected exception.");
 		} catch (ContractHandlerBeanException e) {
 			// Ok
 		}
+		
+		verify(reportManager).addLineToReport(contract, false);
 		verify(errorLogger).logError(eq(ApplicationComponent.XKMS), anyString(), eq(exception));
 	}
 	
 	@Test
 	public void revocationTest() throws Exception  {
-		service.revoke(createCertificateRevocationContract());
+		CertificateRevocationContract contract = createCertificateRevocationContract();
+		service.revoke(contract);
 		
 		verify(xkmsClient).revokeCertificate(SERIAL_NUMBER);
+		verify(reportManager).addLineToReport(contract, true);
 		verifyNoMoreInteractions(errorLogger);
+	}
+	
+	@Test
+	public void revocationTestError() throws Exception {
+		XKMSClientException exception = new XKMSClientException("Oops");
+		doThrow(exception).when(xkmsClient).revokeCertificate(SERIAL_NUMBER);
+
+		CertificateRevocationContract contract = createCertificateRevocationContract();
+		try {			
+			service.revoke(contract);
+			fail("Expected exception.");
+		} catch (ContractHandlerBeanException e) {
+			// Ok
+		}
+		
+		verify(reportManager).addLineToReport(contract, false);
+		verify(errorLogger).logError(eq(ApplicationComponent.XKMS), anyString(), eq(exception));
 	}
 
 	private CertificateSigningContract createCertificateSigningContract() {
