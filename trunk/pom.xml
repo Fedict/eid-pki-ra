@@ -54,6 +54,7 @@
 		<module>eid-pki-ra-generated-publicws</module>
 		<module>eid-pki-ra-generated-privatews</module>
 		<module>eid-pki-ra-generated-xkms</module>
+		<!-- <module>eid-pki-ra-generated-reports</module> -->
 		<module>eid-pki-ra-client-privatews</module>
 		<module>eid-pki-ra-client-publicws</module>
 		<module>eid-pki-ra-client-contracts</module>
@@ -118,6 +119,7 @@
 			</releases>
 			<snapshots>
 				<enabled>true</enabled>
+				<updatePolicy>interval:60</updatePolicy>
 			</snapshots>
 		</repository>
 
