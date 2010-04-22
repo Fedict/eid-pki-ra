@@ -227,7 +227,7 @@ public class ContractHandlerBean implements ContractHandler {
 		Date when = certificateInfo.getValidityEnd();
 		when.setTime(when.getTime() - intervalParam * 1000 * 60 * 60 * 24);
 
-		when.setTime(System.currentTimeMillis() + 1000 * 60 * 5);
+		//when.setTime(System.currentTimeMillis() + 1000 * 60 * 5);
 
 		QuartzTriggerHandle timer = schedulerBean.scheduleNotifcation(when, certificate.getIssuer(), certificate
 				.getSerialNumber());
