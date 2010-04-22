@@ -13,7 +13,7 @@
 				<f:facet name="header">#{messages['contract.sign.title']}</f:facet>
 				<p>#{messages['contract.sign.subtitle']}</p>
 				<input type="hidden" name="SignatureRequest" value="#{requestContractSigningWrapper.base64CsrXml}" />
-				<input type="hidden" name="target" value="#{requestContractSigningWrapper.dssRequestHandlerUrl}" />
+				<input type="hidden" name="target" value="#{requestContractSigningWrapper.dssSigningHandlerViewID}" />
 				<input type="submit" value="#{messages['button.send']}" />
 				<script type="text/javascript">
 					document.getElementById('dssRequestForm').submit();

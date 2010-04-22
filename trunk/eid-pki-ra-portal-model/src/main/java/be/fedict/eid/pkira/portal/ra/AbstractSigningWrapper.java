@@ -21,6 +21,7 @@ package be.fedict.eid.pkira.portal.ra;
 import java.io.Serializable;
 
 import org.jboss.seam.annotations.In;
+import org.jboss.seam.core.Conversation;
 
 import be.fedict.eid.pkira.portal.util.FacesUtil;
 
@@ -62,11 +63,11 @@ public abstract class AbstractSigningWrapper<T extends AbstractContract> impleme
 		this.base64CsrXml = base64CsrXml;
 	}
 	
-	public String getDssRequestHandlerUrl() {
-		return facesUtil.getContextUrl().concat(getDssSignatureHttpRequestHandlerPath());
+	public String getDssSigningHandlerViewID() { 
+		return facesUtil.getContextUrl().concat(getViewId() + "?cid=" + Conversation.instance().getId());
 	}
 	
-	protected abstract String getDssSignatureHttpRequestHandlerPath();
+	protected abstract String getViewId();
 	
 	@Override
 	public String toString() {

@@ -1,17 +1,15 @@
 package be.fedict.eid.pkira.portal.ra;
 
-import java.io.IOException;
 import java.util.logging.Logger;
 
+import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
 import org.jboss.seam.Component;
 import org.jboss.seam.faces.FacesMessages;
-import org.jboss.seam.servlet.ContextualHttpServletRequest;
-import org.jboss.seam.web.AbstractResource;
+import org.jboss.seam.international.StatusMessage.Severity;
 
 import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
 import be.fedict.eid.pkira.contracts.XmlMarshallingException;
@@ -19,7 +17,7 @@ import be.fedict.eid.pkira.generated.contracts.ResponseType;
 import be.fedict.eid.pkira.generated.contracts.ResultType;
 import be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient;
 
-public abstract class AbstractSignatureHttpRequestHandler<T extends ResponseType> extends AbstractResource {
+public abstract class AbstractDssSigningHandler<T extends ResponseType> {
 
 	private static final Logger LOG = Logger.getLogger("AbstractSignatureHttpRequestHandler");
 
@@ -28,28 +26,16 @@ public abstract class AbstractSignatureHttpRequestHandler<T extends ResponseType
 	
 	private static final String SUCCESSFUL_REDIRECT = "success";
 
-	@Override
-	public void getResource(final HttpServletRequest request, final HttpServletResponse response) 
-			throws ServletException, IOException {
-
-		new ContextualHttpServletRequest(request) {
-			@Override
-			public void process() throws IOException {
-				handleRequest(request, response);
-			}
-		}.run();
-	}
-
-	public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		LOG.info(">>> handleRequest()");
+	public String handleDssRequest() {
 		String redirectStatus = null;
+		T serviceClientResponse = null;
 		try {
-			String signatureStatus = nullSafeGetRequestParameter(request, SIGNATURE_STATUS_PARAMETER);
+			String signatureStatus = nullSafeGetRequestParameter(getRequest(), SIGNATURE_STATUS_PARAMETER);
 			if ("OK".equals(signatureStatus)) {				
-				String signatureResponse = nullSafeGetRequestParameter(request, SIGNATURE_RESPONSE_PARAMETER);
+				String signatureResponse = nullSafeGetRequestParameter(getRequest(), SIGNATURE_RESPONSE_PARAMETER);
 				byte[] contract = Base64.decodeBase64(signatureResponse);
 				String result = invokeServiceClient(new String(contract));
-				T serviceClientResponse = unmarshall(result);
+				serviceClientResponse = unmarshall(result);
 				
 				getFacesMessages().addFromResourceBundle("contract.status." + serviceClientResponse.getResult().name(), serviceClientResponse.getResultMessage());
 				
@@ -62,22 +48,17 @@ public abstract class AbstractSignatureHttpRequestHandler<T extends ResponseType
 			getFacesMessages().addFromResourceBundle("validator.error.sign");
 			LOG.info("<<< handleRequest: exception");
 		}
-		handleRedirect(request, response, redirectStatus);
-		LOG.info("<<< handleRequest: redirectStatus[" + redirectStatus + ']');
-	}
-
-	protected void handleRedirect(HttpServletRequest request, HttpServletResponse response, String redirectStatus) throws IOException {
+		
 		if (SUCCESSFUL_REDIRECT.equals(redirectStatus)) {
-			response.sendRedirect(getNextPage(request));
+			return SUCCESSFUL_REDIRECT;
 		} else {
-			response.sendRedirect(getErrorPage(request));
-		}		
+			if(serviceClientResponse != null){
+				getFacesMessages().add(Severity.ERROR, serviceClientResponse.getResultMessage());
+			}
+			return "error";
+		}
 	}
-
-	protected abstract String getErrorPage();
-
-	protected abstract String getNextPage();
-
+	
 	protected abstract String invokeServiceClient(String signedRequest)throws Exception;
 
 	protected abstract T unmarshall(String result)throws XmlMarshallingException;
@@ -91,14 +72,6 @@ public abstract class AbstractSignatureHttpRequestHandler<T extends ResponseType
 		}
 		LOG.info("<<< nullSafeGetRequestParameter: " + parameter);
 		return parameter;
-	}
-
-	private String getErrorPage(HttpServletRequest request) {
-		return request.getContextPath().concat(getErrorPage());
-	}
-
-	private String getNextPage(HttpServletRequest request) {
-		return request.getContextPath().concat(getNextPage());
 	}
 
 	/**
@@ -120,5 +93,11 @@ public abstract class AbstractSignatureHttpRequestHandler<T extends ResponseType
 	 */
 	protected FacesMessages getFacesMessages() {
 		return (FacesMessages) Component.getInstance(FacesMessages.class, true);
+	}
+	
+	protected HttpServletRequest getRequest() {
+		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
+				.getRequest();
+		return request;
 	}
 }

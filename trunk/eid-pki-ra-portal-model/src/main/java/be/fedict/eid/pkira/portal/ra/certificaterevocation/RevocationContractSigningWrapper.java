@@ -51,8 +51,8 @@ public class RevocationContractSigningWrapper extends AbstractSigningWrapper<Rev
 	}
 	
 	@Override
-	protected String getDssSignatureHttpRequestHandlerPath() {
-		return "/seam/resource/revocationContractHandler";
+	protected String getViewId() {
+		return "/postSignRevocationContract.seam";
 	}
 
 }
