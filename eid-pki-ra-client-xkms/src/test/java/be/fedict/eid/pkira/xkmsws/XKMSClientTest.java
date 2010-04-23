@@ -20,17 +20,14 @@ package be.fedict.eid.pkira.xkmsws;
 
 import static org.testng.Assert.assertNotNull;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.ws.Endpoint;
 
-import org.apache.commons.io.FileUtils;
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;

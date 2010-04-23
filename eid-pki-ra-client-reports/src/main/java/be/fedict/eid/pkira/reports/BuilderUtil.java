@@ -26,9 +26,9 @@ public class BuilderUtil {
 
 	public static SuccessFailureCountType createSuccessFailureCountType(int successes, int failures) {
 		SuccessFailureCountType result = new ObjectFactory().createSuccessFailureCountType();
-		result.setSuccessCount(BigInteger.valueOf(successes));
-		result.setFailureCount(BigInteger.valueOf(failures));
-		result.setTotalCount(BigInteger.valueOf(successes+failures));
+		result.setSuccess(BigInteger.valueOf(successes));
+		result.setFailure(BigInteger.valueOf(failures));
+		result.setTotal(BigInteger.valueOf(successes+failures));
 		
 		return result;
 	}

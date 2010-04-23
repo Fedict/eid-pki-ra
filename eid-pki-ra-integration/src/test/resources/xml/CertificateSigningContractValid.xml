@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ns2:CertificateSigningRequest xmlns:ns2="urn:be:fedict:eid:pkira:contracts" xmlns="http://www.w3.org/2000/09/xmldsig#">
-	<ns2:RequestId>18882bc2-686f-41cb-b0d4-7e78d984ad0a</ns2:RequestId>
-	<ns2:Description>My new certificate</ns2:Description>
+	<ns2:RequestId>86e3ba17-661d-4504-87d6-d2d28a76d19c</ns2:RequestId>
+	<ns2:Description>Test</ns2:Description>
 	<ns2:Operator>
-		<ns2:Name>Name</ns2:Name>
-		<ns2:Function>Function</ns2:Function>
-		<ns2:Phone>02123456</ns2:Phone>
+		<ns2:Name>Jan Ludo Van den Bergh</ns2:Name>
+		<ns2:Function>Test</ns2:Function>
+		<ns2:Phone>02 3456789</ns2:Phone>
 	</ns2:Operator>
-	<ns2:LegalNotice>LegalNotice</ns2:LegalNotice>
-	<ns2:DistinguishedName>O=Legal Name of Organisation,OU=Free Text Field,CN=www.domainname.com,L=City associated with Org,ST=State Associated with Org,C=Country Associated with Org,E=webmaster@organisation.com</ns2:DistinguishedName>
-	<ns2:CertificateType>Client</ns2:CertificateType>
+	<ns2:LegalNotice>testLegalNotice</ns2:LegalNotice>
+	<ns2:DistinguishedName>C=BE,ST=Limburg,L=Hasselt,O=ACA IT-Solutions,CN=Jan Van den Bergh</ns2:DistinguishedName>
+	<ns2:CertificateType>Server</ns2:CertificateType>
 	<ns2:ValidityPeriodMonths>15</ns2:ValidityPeriodMonths>
 	<ns2:CSR>-----BEGIN CERTIFICATE REQUEST-----
-		MIICMTCCAZwCAQAwgfQxIzAhBgNVBAoMGkxlZ2FsIE5hbWUgb2YgT3JnYW5pc2F0aW9uMRgwFgYDVQQLDA9GcmVlIFRleHQgRmllbGQxGzAZBgNVBAMMEnd3dy5kb21haW5uYW1lLmNvbTEhMB8GA1UEBwwYQ2l0eSBhc3NvY2lhdGVkIHdpdGggT3JnMSIwIAYDVQQIDBlTdGF0ZSBBc3NvY2lhdGVkIHdpdGggT3JnMSQwIgYDVQQGExtDb3VudHJ5IEFzc29jaWF0ZWQgd2l0aCBPcmcxKTAnBgkqhkiG9w0BCQEWGndlYm1hc3RlckBvcmdhbmlzYXRpb24uY29tMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJB3xcylAI+qcOhQ/CHrIl5K99k20BeTcGo+KSbfboSfo+94pDk46ToutUP7SYwIMK1sd3v4jWnLL150w4oE6KVSDdbSDilpF3NtsfKP3N+JhDfgQkYs8ARtfE0uL9uL+/THjl43byycnelnvTvypWI43jO2X9Cv5UvQ+LARwetQIDAQABMAsGCSqGSIb3DQEBBQOBgQA0k+8SCxO7EZacrQRkZ2w39muj2ro2k+FBmIgqEm6+RkkJ799mTuLtD5R0zgA2/ti+eIG6uhzOGabrETZ4VZYWUD4SWnnN6HzXu3NgrEenexEuEF0w1XHsrcjx72wlz7g7ewCcZsy4LvRQOzwYG9GGtBm1Vk1av/HM+qRDecrzvQ==
-		-----END CERTIFICATE REQUEST-----</ns2:CSR>
-	<Signature Id="xmldsig-f5ce985e-7781-4890-81a1-897a43cf2868" xmlns="http://www.w3.org/2000/09/xmldsig#">
+		MIIBqDCCARECAQAwaDELMAkGA1UEBhMCQkUxEDAOBgNVBAgTB0xpbWJ1cmcxEDAO
+		BgNVBAcTB0hhc3NlbHQxGTAXBgNVBAoTEEFDQSBJVC1Tb2x1dGlvbnMxGjAYBgNV
+		BAMTEUphbiBWYW4gZGVuIEJlcmdoMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKB
+		gQCl9kIB3oD4AO4RBICIW8jkXXc/alX0cRHb+BrorI8g95eaN15VV4WTXsaw+Kx6
+		7xn8QkjgrI76z2dTaBhgaTFdzxYNO4Pqt+ajKGV4BP0Lquh7qyO1k/IT/KyyAdlH
+		bJq8VD+Od/AnknnQminCw1TEPZfFck+HGGCvRrSeflRaXwIDAQABoAAwDQYJKoZI
+		hvcNAQEFBQADgYEAJTlkGaB4CQIiZ+RP6NFYqe23ZpkU2GpSbUNJRGd7+a7RHQxo
+		dGQjZWpctP14R3C0iBHi6G8C7E5zhHWRyFtzxT3MVBFH33kuHxcRkAlDKZNAWyu8
+		/pH4Z3DIUVriyhH2pUweqSXaaAaqmgocOH7vJzXLQ3WpNR1UsC/69kNpmpE=
+		-----END CERTIFICATE REQUEST-----
+</ns2:CSR>
+	<Signature Id="xmldsig-202f9f3f-ba62-48f0-a627-1701f3fff8d8" xmlns="http://www.w3.org/2000/09/xmldsig#">
 		<SignedInfo>
 			<CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
 			<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
@@ -24,19 +33,19 @@
 					<Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
 				</Transforms>
 				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-				<DigestValue>t7UH6oJAMAi/FtJQAPAlHP+2oQg=</DigestValue>
+				<DigestValue>f19/cII67VD8FqienEmbdtwjEAo=</DigestValue>
 			</Reference>
-			<Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xmldsig-f5ce985e-7781-4890-81a1-897a43cf2868-xades">
+			<Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xmldsig-202f9f3f-ba62-48f0-a627-1701f3fff8d8-xades">
 				<Transforms>
 					<Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
 				</Transforms>
 				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-				<DigestValue>dELpEndqwHi49gpGstoDQNRv7x8=</DigestValue>
+				<DigestValue>vK32tvx3eFynLuP0ALu2zm/GtPc=</DigestValue>
 			</Reference>
 		</SignedInfo>
-		<SignatureValue Id="xmldsig-f5ce985e-7781-4890-81a1-897a43cf2868-signature-value">Z8TFgprWXs5YYecwSH5GBzclXBIxT+GRv+ezNFh675SGS8HP38nQn2JvbvmmKg0eIVL1HrhUYWjt
-			VuX6y4XQDLehcysVaaYksI007yx+CLgO00X6j7/Ik48dcv9wSjxUyoDeTxuHU1Kx2nr5eXWfctzN
-			7Qo7MJYVOvipMbZBEko=</SignatureValue>
+		<SignatureValue Id="xmldsig-202f9f3f-ba62-48f0-a627-1701f3fff8d8-signature-value">XML0XD9sqCcbuKmiH8L5v4Qegf5IAxwgl4GKX9lFFg6dZunABQfdlre0Cm4SMO17LSK7sWR57x61
+			KzB4jKRxLDkjchlYO390G+ZYM3e2o1IMonlRnDYx3jhAlX4W9BjrZm32KaT5NDbeSJWt/UilsW06
+			dvZgr6PRacVL886kCfs=</SignatureValue>
 		<KeyInfo>
 			<X509Data>
 				<X509Certificate>MIIEAzCCAuugAwIBAgIQEAAAAAAAhuWjs6RShDTclDANBgkqhkiG9w0BAQUFADAzMQswCQYDVQQG
@@ -97,10 +106,10 @@
 		</KeyInfo>
 		<Object>
 			<QualifyingProperties xmlns="http://uri.etsi.org/01903/v1.3.2#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
-				Target="#xmldsig-f5ce985e-7781-4890-81a1-897a43cf2868">
-				<SignedProperties Id="xmldsig-f5ce985e-7781-4890-81a1-897a43cf2868-xades">
+				Target="#xmldsig-202f9f3f-ba62-48f0-a627-1701f3fff8d8">
+				<SignedProperties Id="xmldsig-202f9f3f-ba62-48f0-a627-1701f3fff8d8-xades">
 					<SignedSignatureProperties>
-						<SigningTime>2010-03-05T07:19:36.633Z</SigningTime>
+						<SigningTime>2010-04-23T12:26:18.533Z</SigningTime>
 						<SigningCertificate>
 							<Cert>
 								<CertDigest>

@@ -48,11 +48,11 @@ public class CertificateAuthorityReportItemBuilder implements Builder<Certificat
 	@Override
 	public CertificateAuthorityReportItemType toXmlType() {
 		CertificateAuthorityReportItemType result = new ObjectFactory().createCertificateAuthorityReportItemType();
-		result.setCertificateAuthorityName(certificateAuthorityName);
+		result.setName(certificateAuthorityName);
 
-		result.setRevocationRequests(createSuccessFailureCountType(revocationRequestSuccesses, revocationRequestFailures));
-		result.setSigningRequests(createSuccessFailureCountType(signingRequestSuccesses, signingRequestFailures));
-		result.setTotalRequests(createSuccessFailureCountType(signingRequestSuccesses + revocationRequestSuccesses,
+		result.setRevoke(createSuccessFailureCountType(revocationRequestSuccesses, revocationRequestFailures));
+		result.setSign(createSuccessFailureCountType(signingRequestSuccesses, signingRequestFailures));
+		result.setTotal(createSuccessFailureCountType(signingRequestSuccesses + revocationRequestSuccesses,
 				signingRequestFailures + revocationRequestFailures));
 
 		return result;

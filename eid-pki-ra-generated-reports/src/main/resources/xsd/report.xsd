@@ -27,7 +27,7 @@
 
 	<complexType name="monthlyReportType">
 		<sequence>
-			<element name="reportDate">
+			<element name="date">
 				<complexType>
 					<sequence>
 						<element name="year" type="int" />
@@ -35,34 +35,34 @@
 					</sequence>
 				</complexType>
 			</element>
-			<element name="certificateDomainReportItem" type="tns:certificateDomainReportItemType" minOccurs="0"
+			<element name="certificateDomain" type="tns:certificateDomainReportItemType" minOccurs="0"
 				maxOccurs="unbounded" />
-			<element name="certificateAuthorityReportItem" type="tns:certificateAuthorityReportItemType" minOccurs="0"
+			<element name="certificateAuthority" type="tns:certificateAuthorityReportItemType" minOccurs="0"
 				maxOccurs="unbounded" />
 		</sequence>
 	</complexType>
 
 	<complexType name="certificateAuthorityReportItemType">
 		<sequence>
-			<element name="certificateAuthorityName" type="string" />
-			<element name="signingRequests" type="tns:successFailureCountType" />
-			<element name="revocationRequests" type="tns:successFailureCountType" />
-			<element name="totalRequests" type="tns:successFailureCountType" />
+			<element name="name" type="string" />
+			<element name="sign" type="tns:successFailureCountType" />
+			<element name="revoke" type="tns:successFailureCountType" />
+			<element name="total" type="tns:successFailureCountType" />
 		</sequence>
 	</complexType>
 
 	<complexType name="certificateDomainReportItemType">
 		<sequence>
-			<element name="certificateDomainName" type="string" />
-			<element name="signingRequests" type="tns:successFailureCountType" />
+			<element name="name" type="string" />
+			<element name="sign" type="tns:successFailureCountType" />
 		</sequence>
 	</complexType>
 
 	<complexType name="successFailureCountType">
 		<sequence>
-			<element name="successCount" type="nonNegativeInteger" />
-			<element name="failureCount" type="nonNegativeInteger" />
-			<element name="totalCount" type="nonNegativeInteger" />
+			<element name="success" type="nonNegativeInteger" />
+			<element name="failure" type="nonNegativeInteger" />
+			<element name="total" type="nonNegativeInteger" />
 		</sequence>
 	</complexType>
 </schema>

@@ -21,7 +21,7 @@ import java.util.List;
 
 import be.fedict.eid.pkira.generated.reports.MonthlyReportType;
 import be.fedict.eid.pkira.generated.reports.ObjectFactory;
-import be.fedict.eid.pkira.generated.reports.MonthlyReportType.ReportDate;
+import be.fedict.eid.pkira.generated.reports.MonthlyReportType.Date;
 
 /**
  * Builder for one monthly report.
@@ -63,17 +63,17 @@ public class MonthlyReportBuilder implements Builder<MonthlyReportType> {
 
 		MonthlyReportType result = objectFactory.createMonthlyReportType();
 
-		ReportDate reportDate = objectFactory.createMonthlyReportTypeReportDate();
-		result.setReportDate(reportDate);
+		Date reportDate = objectFactory.createMonthlyReportTypeDate();
+		result.setDate(reportDate);
 		reportDate.setMonth(month);
 		reportDate.setYear(year);
 
 		for (CertificateAuthorityReportItemBuilder reportItemBuilder : certificateAuthorityReportItemBuilders) {
-			result.getCertificateAuthorityReportItem().add(reportItemBuilder.toXmlType());
+			result.getCertificateAuthority().add(reportItemBuilder.toXmlType());
 		}
 		
 		for (CertificateDomainReportItemBuilder reportItemBuilder : certificateDomainReportItemBuilders) {
-			result.getCertificateDomainReportItem().add(reportItemBuilder.toXmlType());
+			result.getCertificateDomain().add(reportItemBuilder.toXmlType());
 		}
 
 		return result;
