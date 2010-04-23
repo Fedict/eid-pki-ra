@@ -67,6 +67,7 @@ a{
 	margin-right: 3px;
 	padding: 5px 20px 7px;
 	display:block;
+	text-decoration:none;
 }
 
 a:hover, .itemSelected{
