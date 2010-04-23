@@ -16,27 +16,35 @@
  */
 package be.fedict.eid.pkira.blm.model.reporting;
 
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import be.fedict.eid.pkira.blm.model.reporting.ReportEntry.ContractType;
 
-import be.fedict.eid.pkira.blm.model.contracts.AbstractContract;
+public class AggregateData {
 
-/**
- * @author Jan Van den Bergh
- *
- */
-public interface ReportManager {
-
-	public static final String NAME = "be.fedict.eid.pkira.blm.reportManager";
+	private String name;
+	private ContractType contractType;
+	private boolean success;
+	private int count;
 	
-	/**
-	 * Log a report entry line.
-	 * @param contract contract to log.
-	 * @param success if the contract was processed successfully.
-	 */
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	void addLineToReport(AbstractContract contract, boolean success);
-	
-	String generateReport(String monthYear, boolean showCertificateAuthorities, boolean showCertificateDomains);
+	public AggregateData(String name, ContractType contractType, Boolean success, Long count) {
+		this.name = name;
+		this.contractType = contractType;
+		this.success = success;
+		this.count = count.intValue();
+	}
 
+	public String getName() {
+		return name;
+	}
+	
+	public ContractType getContractType() {
+		return contractType;
+	}
+	
+	public boolean isSuccess() {
+		return success;
+	}
+	
+	public int getCount() {
+		return count;
+	}
 }

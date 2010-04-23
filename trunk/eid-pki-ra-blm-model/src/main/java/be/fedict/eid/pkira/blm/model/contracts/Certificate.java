@@ -23,6 +23,7 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -82,7 +83,7 @@ public class Certificate implements Serializable {
 	@Column(name = "ISSUER", nullable = false)
 	private String issuer;
 
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	@Column(name = "CERTIFICATE_TYPE", nullable = false)
 	private CertificateType certificateType;
 

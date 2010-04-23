@@ -38,6 +38,11 @@
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-client-contracts</artifactId>
 		</dependency>
+				
+		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-client-reports</artifactId>
+		</dependency>
 		
 		<dependency>
 			<groupId>be.fedict</groupId>
