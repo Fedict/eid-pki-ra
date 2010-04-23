@@ -39,19 +39,12 @@ import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
  */
 public class ReportManagerBeanTest {
 
-	/**
-	 * 
-	 */
 	private static final String CD_NAME = "certificateDomain";
-
-	/**
-	 * 
-	 */
 	private static final String CA_NAME = "certifcateAuthority";
 
 	@Mock
-	private ReportEntryHome reportEntryHome;
-
+	private ReportEntryHome reportEntryHome;	
+	
 	private ReportManagerBean reportManager;
 
 	@BeforeMethod

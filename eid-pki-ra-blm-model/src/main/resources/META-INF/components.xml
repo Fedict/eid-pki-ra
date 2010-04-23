@@ -23,7 +23,10 @@
 		class="be.fedict.eid.dss.client.DigitalSignatureServiceClient" />
 
 	<component name="be.fedict.eid.pkira.wsclient.eidPKIRAContractsClient" scope="application" 
-		class="be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient" />		
+		class="be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient" />
+		
+	<component name="be.fedict.eid.pkira.blm.reportsClient" scope="application"
+		class="be.fedict.eid.pkira.reports.ReportsClient" />		
 
 	<component name="be.fedict.eid.pkira.blm.currentUser" scope="session"
 		class="be.fedict.eid.pkira.blm.model.usermgmt.User" />		

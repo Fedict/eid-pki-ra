@@ -14,6 +14,7 @@
 		<class>be.fedict.eid.pkira.blm.model.ca.CertificateAuthority</class>
 		
 		<class>be.fedict.eid.pkira.blm.model.config.ConfigurationEntry</class>
+		<class>be.fedict.eid.pkira.blm.model.reporting.ReportEntry</class>
 		
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />

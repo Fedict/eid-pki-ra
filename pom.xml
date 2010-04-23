@@ -372,7 +372,7 @@
 
 			<dependency>
 				<groupId>be.fedict</groupId>
-				<artifactId>eid-pki-ra-client-contracts</artifactId>
+				<artifactId>eid-pki-ra-client-reports</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 

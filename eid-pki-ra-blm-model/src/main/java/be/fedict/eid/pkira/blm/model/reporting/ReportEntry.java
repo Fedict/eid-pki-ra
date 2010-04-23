@@ -26,6 +26,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -43,6 +45,10 @@ import be.fedict.eid.pkira.blm.model.contracts.AbstractContract;
  */
 @Entity
 @Table(name = "REPORT_ENTRY")
+@NamedQueries({
+	@NamedQuery(name="getCertificateAuthorityAggregateData", query="SELECT NEW be.fedict.eid.pkira.blm.model.reporting.AggregateData(certificateAuthorityName, contractType, success, COUNT(*)) FROM ReportEntry WHERE month=:month GROUP BY certificateAuthorityName, contractType, success"),
+	@NamedQuery(name="getCertificateDomainAggregateData", query="SELECT NEW be.fedict.eid.pkira.blm.model.reporting.AggregateData(certificateDomainName, contractType, success, COUNT(*)) FROM ReportEntry WHERE month=:month GROUP BY certificateDomainName, contractType, success")
+})
 public class ReportEntry {
 
 	public static enum ContractType {
