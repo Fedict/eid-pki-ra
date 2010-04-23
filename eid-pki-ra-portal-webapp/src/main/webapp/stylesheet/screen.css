@@ -52,129 +52,87 @@ h3 {
 	padding-right: 10px;
 }
 
-#header {
-	width: 700px;
-	margin: 0 auto;
-}
-
-#menu {
-	width: 700px;
+.rich-toolbar, .dr-toolbar-ext{
+	background-color: #E0E0E0;
 	height: 44px;
-	background-color: #e0e0e0;
 	margin: 0 auto;
+	background-image:none;
+	border:0 none;
 }
 
-#menu ul {
-	padding: 13px 0 0 20px;
-	list-style: none;
-}
-
-#menu li {
-	float: left;
-}
-
-#menu a {
-	display: block;
-	margin-right: 3px;
-	margin-left: 3px;
-	padding: 5px 20px 7px 20px;
-	text-decoration: none;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 13px;
+a{
 	color: #000000;
+	font-family: Arial, Helvetica, sans-serif;
+	margin-left: 3px;
+	margin-right: 3px;
+	padding: 5px 20px 7px;
+	display:block;
 }
 
-#menu a:hover {
-	background: #FF9000;
-	text-decoration: none;
+a:hover, .itemSelected{
+	display:block;
+	background: none repeat scroll 0 0 #FF9000;
 	cursor: pointer;
+	text-decoration: none;
+}
+
+.rich-page-content {
+	margin:0 auto;
+}
+
+.dr-pnl{
+	border-style:solid;
+}
+
+.dr-table {
+	border-collapse:collapse;
+	border-spacing: 0px;
+	border-left:none;
+}
+
+.dr-table-cell, .rich-table-cell {
+	border-bottom: 1px #FF9000 dotted;
+	border-right: none;
+	text-align: left;
+	font-family: Verdana, sans-serif, Arial;
+	font-weight: normal;
+	padding: 4px 0 4px 8px;
+}
+
+.logo{
+	padding: 25px;
+	padding-right: 50px;
+}
+
+.dr-table-subheader, .dr-table-headercell, .rich-table-headercell {
+	background-color: #E0E0E0;
+	vertical-align:baseline;
+	border-right: none;
+}
+
+.dr-pnl-h, .rich-panel-header{
+	color:#FF9000;
+	font-family:Arial;
+	font-size:large;
+	background-image: none;
+	background-color: white;
+	border: 0px;
+} 
+
+.dr-table-footercell {
+	padding: 0px;
+	background-color: white;
+	border-right: none;
+	border-bottom: none;
+	border-left:none;
 }
 
 .selected {
-	background: #FF9000;
+	background: none repeat scroll 0 0 #FF9000;
 }
 
 #content {
-	width: 700px;
-	margin: 0 auto;
 	color: #303030;
+	margin: 0 auto;
 }
 
-html{
-	background-color: #DBD4C6;
-}
-
-input, textarea, select{
-	border: 1px solid #C3BBB6;
-	margin-right: 5px;
-}
-
-/* Layout
------------------------------------------------ */
-
-#footer {
-	padding: 5px;
-	border-top: 1px solid #C3BBB6 ;
-	text-align: center;	
-}
-
-/* common */
-
-.message {
-	border: 1px solid #FF9933;
-	padding: 5px;
-	margin-top: 5px;
-	margin-bottom: 5px;
-	width:100%;
-	font-size: 12px;
-}
-
-.name {
-	vertical-align: top;
-	font-weight: bold;
-	width: 150px;
-	margin-top: 3px;
-}
-.value {
-}
-
-/*.buttonBox {
-	border-top: 1px solid #C3BBB6;
-	padding-right:10px;
-	margin-top:10px;
-	width:100%;
-}*/
-
-.error {
-	padding: 5px;
-}
-.errors {
-	color: #CC0000;
-	vertical-align: middle;
-}
-
-img.errors {
-	padding-right: 5px;
-}
-
-.errors input, .errors textarea{ 
-	border: 1px solid #CC0000; 
-}
-
-.required {
-	color: #CC0000;
-	padding-left: 2px;
-}
-
-/* customize richfaces */
-
-.rich-panel{
-	padding-top:0;
-	border-right:0;
-	border-bottom:0;
-	border-top:0;
-}
-
-.rich-table{
-	width:100%;
-}

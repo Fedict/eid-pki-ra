@@ -5,13 +5,15 @@
 		xmlns:s="http://jboss.com/products/seam/taglib"
 		xmlns:rich="http://richfaces.org/rich"
 		id="header-form">
-	<div id="header">
-		<div id="fed">fed</div>
-		<div id="ictegov">
-			<div id="ict">ict</div>
-			<div id="egov">e-gov</div>
-		</div>
-		<h1>#{messages['general.title']}</h1>
-	</div>
+	<table id="header">
+		<tr>
+			<td>
+				<h:graphicImage value="/img/logo_fedict.png" class="logo"/>
+			</td>
+			<td>
+				<h1>#{messages['general.title']}</h1>
+			</td>
+		</tr>
+	</table>
 	<ui:include src="/layout/menu.xhtml" />
 </h:form>

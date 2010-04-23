@@ -8,6 +8,10 @@
 
 	<ui:define name="center">
 		<h:form id="certificatesListForm">
+		<rich:panel id="panel">
+			<f:facet name="header">
+				<h:outputText value="#{messages['certificates.title']}" />
+			</f:facet>
 			<h:outputText value="No messages to display" rendered="#{empty certificatesList}" />
 			<h:outputText value="messages to display is: " rendered="#{not empty certificatesList}" />
 			<h:messages />
@@ -78,6 +82,7 @@
 					<rich:datascroller maxPages="10" rows="10" />
 				</f:facet>
 			</rich:dataTable>
+			</rich:panel>
 		</h:form>
 	</ui:define>
 </ui:composition>
