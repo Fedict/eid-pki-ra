@@ -22,4 +22,9 @@
 			<class name="be.fedict.eid.integration.admin.UserAdminSeleniumTest" />		
 		</classes>
 	</test>
+	<test name="Reporting tests">
+		<classes>			
+			<class name="be.fedict.eid.integration.admin.ReportGenerationSeleniumTest" />		
+		</classes>
+	</test>
 </suite>
