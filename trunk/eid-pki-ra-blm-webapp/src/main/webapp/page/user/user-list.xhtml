@@ -9,6 +9,8 @@
 
 	<ui:define name="center">
 		<h:form id="userListForm">
+		<rich:panel id="panel">
+			<f:facet name="header">#{messages['users.title']}</f:facet>
 			<rich:dataTable id="allUser" var="user" rows="10" 
 					value="#{userQuery.resultList}" width="100%">
 				<rich:column sortBy="#{user.lastName}" filterBy="#{user.lastName}" filterEvent="onkeyup">
@@ -53,7 +55,8 @@
 				           	
           	<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
 				<s:button view="/home.xhtml" value="#{messages['button.cancel']}" id="cancel"/>
-			</s:decorate> 
+			</s:decorate>
+			</rich:panel> 
 		</h:form>
 	</ui:define>
 </ui:composition>

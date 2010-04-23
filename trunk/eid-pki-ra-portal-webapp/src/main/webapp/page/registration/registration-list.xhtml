@@ -9,6 +9,7 @@
 
 	<ui:define name="center">
 		<h:form id="registrationListForm">
+		<rich:panel id="panel">
 			<f:facet name="header">
 				<h:outputText value="#{messages['registrations.title']}" />
 			</f:facet>
@@ -54,7 +55,8 @@
 						rendered="#{not empty certificateDomainWSQuery.findRemainingCertificateDomains}">
 					<f:param name="registrationId" />
 				</s:button>
-			</s:decorate>         	
+			</s:decorate>
+			</rich:panel>         	
 		</h:form>
 	</ui:define>
 </ui:composition>

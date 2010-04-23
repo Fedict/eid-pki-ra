@@ -7,31 +7,45 @@
 	xmlns:rich="http://richfaces.org/rich"
 	id="tool-bar" style="height:25px;">
 	
+	
 	<rich:toolBarGroup location="left" id="tool-bar-group-left">
-		<s:link view="/home.xhtml" value="#{messages['menu.home']}" />
+			<s:link id="home" view="/home.xhtml" value="#{messages['menu.home']}" 
+			action="#{menuHandler.selectItem('home')}"
+			styleClass="#{menuHandler.styleIfSelected('home')}"/>
 	</rich:toolBarGroup>
 	
 	<s:link value="#{messages['menu.certificatedomains']}" 
 		view="/page/certificatedomain/certificatedomain-list.xhtml" 
 		id="certificatedomains" 
 		rendered="#{s:hasRole('ADMIN_USER')}" 
-		propagation="none" />
+		propagation="none" 
+		action="#{menuHandler.selectItem('certificatedomains')}"
+		styleClass="#{menuHandler.styleIfSelected('certificatedomains')}"
+		/>
 	<s:link value="#{messages['menu.registrations']}" 
 		view="/page/registration/bulkapproval.xhtml" 
 		id="registrations" 
 		rendered="#{s:hasRole('ADMIN_USER')}" 
-		propagation="none" />
+		propagation="none" 
+		action="#{menuHandler.selectItem('registrations')}"
+		styleClass="#{menuHandler.styleIfSelected('registrations')}"
+		/>
 	<s:link value="#{messages['menu.configurationentries']}" 
 		view="/page/configurationentry/configurationentry-list.xhtml" 
 		id="configurationentries" 
 		rendered="#{s:hasRole('ADMIN_USER')}" 
-		propagation="none" />
+		propagation="none" 
+		action="#{menuHandler.selectItem('configurationentries')}"
+		styleClass="#{menuHandler.styleIfSelected('configurationentries')}"
+		/>
 	<s:link value="#{messages['menu.users']}" 
 		view="/page/user/user-list.xhtml" 
 		id="users" 
 		rendered="#{s:hasRole('ADMIN_USER')}" 
-		propagation="none" />
-		
+		propagation="none" 
+		action="#{menuHandler.selectItem('users')}"
+		styleClass="#{menuHandler.styleIfSelected('users')}"
+		/>
 	<rich:toolBarGroup location="right" id="tool-bar-group-right">
 		<s:link value="#{messages['menu.login']}" 
 			view="/login.xhtml" 
@@ -43,6 +57,5 @@
 			rendered="#{s:hasRole('AUTHENTICATED_USER')}" />
 	</rich:toolBarGroup>
 </rich:toolBar>
-	
-	
+
 	

@@ -6,9 +6,10 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a="http://richfaces.org/a4j" 
 	template="/layout/template.xhtml">
-
 	<ui:define name="center">
 		<h:form id="configurationEntryListForm">
+		<rich:panel id="panel">
+			<f:facet name="header">#{messages['configurationentry.title']}</f:facet>
 			<rich:dataTable id="allConfigurationEntry" var="configurationEntry" rows="10" 
 					value="#{configurationEntryQuery.resultList}" width="100%">
 				<rich:column sortBy="#{messages[configurationEntry.key.message]}" filterBy="#{messages[configurationEntry.key.message]}" filterEvent="onkeyup">
@@ -26,9 +27,9 @@
 				</rich:column>
 
 				<rich:column>
-					<s:link view="/page/configurationentry/configurationentry-edit.xhtml" value="#{messages['link.edit']}" id="edit" >
-						<f:param name="configurationEntryId" value="#{configurationEntry.id}" />
-					</s:link>
+						<s:link view="/page/configurationentry/configurationentry-edit.xhtml" value="#{messages['link.edit']}" id="edit" style="editLink">
+							<f:param name="configurationEntryId" value="#{configurationEntry.id}" />
+						</s:link>
 				</rich:column>
 
 				<f:facet name="footer">
@@ -38,7 +39,9 @@
 				           	
           	<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
 				<s:button view="/home.xhtml" value="#{messages['button.cancel']}" id="cancel"/>
-			</s:decorate> 
+			</s:decorate>
+		</rich:panel> 
 		</h:form>
+
 	</ui:define>
 </ui:composition>

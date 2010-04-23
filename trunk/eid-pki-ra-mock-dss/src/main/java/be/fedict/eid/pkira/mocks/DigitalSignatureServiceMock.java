@@ -54,7 +54,7 @@ public class DigitalSignatureServiceMock implements DigitalSignatureServicePortT
 		response.setResult(result);
 
 		NameIdentifierType nameIdentifier = samlObjectFactory.createNameIdentifierType();
-		nameIdentifier.setValue("75033022781");		
+		nameIdentifier.setValue("82010631174");		
 		AnyType any = dssObjectFactory.createAnyType();
 		any.getAny().add(samlObjectFactory.createNameIdentifier(nameIdentifier));
 		response.setOptionalOutputs(any);
