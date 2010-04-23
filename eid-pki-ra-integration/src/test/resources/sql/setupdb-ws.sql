@@ -21,12 +21,6 @@ INSERT INTO CONFIGURATION(ENTRY_ID, ENTRY_KEY, ENTRY_VALUE) VALUES(2008, 'IDP_DE
 
 -- Certificate authorities
 INSERT INTO CA(CA_ID, NAME, XKMS_URL, LEGAL_NOTICE) VALUES (5001, 'Test CA', 'http://localhost:8080/xkms/xkms', 'Test Legal Notice');
-INSERT INTO CA_PARAMETERS(CA_CA_ID, mapkey, element) VALUES (5001, 'buc', '8047651269');
-INSERT INTO CA_PARAMETERS(CA_CA_ID, mapkey, element) VALUES (5001, 'signing.provider', 'be.fedict.eid.pkira.xkmsws.keyinfo.SigningKeyKeyStoreProvider');
-INSERT INTO CA_PARAMETERS(CA_CA_ID, mapkey, element) VALUES (5001, 'signing.keystore.url', 'file:/C:/Dev/Fedict/eid-pki-ra/eid-pki-ra/eid-pki-ra-client-xkms/target/test-classes/test.jks');
-INSERT INTO CA_PARAMETERS(CA_CA_ID, mapkey, element) VALUES (5001, 'signing.keystore.entry', 'test');
-INSERT INTO CA_PARAMETERS(CA_CA_ID, mapkey, element) VALUES (5001, 'signing.keystore.password', 'changeit');
-INSERT INTO CA_PARAMETERS(CA_CA_ID, mapkey, element) VALUES (5001, 'signing.keystore.entry.password', 'changeit');
 
 -- Insert the test user
 INSERT INTO USER (USER_ID, LAST_NAME, FIRST_NAME, NATIONAL_REGISTER_NUMBER, IS_ADMIN) VALUES(5001, 'Puk', 'Pietje', '99123129212', 0);
