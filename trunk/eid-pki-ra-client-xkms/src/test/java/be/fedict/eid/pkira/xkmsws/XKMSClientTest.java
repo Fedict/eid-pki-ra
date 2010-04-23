@@ -22,6 +22,7 @@ import static org.testng.Assert.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.net.URL;
 import java.util.HashMap;
@@ -134,9 +135,16 @@ public class XKMSClientTest {
 	}
 
 	private String readResource(String resourceName) throws IOException {
-		URL resourceUrl = XKMSClientTest.class.getResource(resourceName);
-		File resourceFile = new File(resourceUrl.getFile());
-		return FileUtils.readFileToString(resourceFile);
+		String result = "";
+		
+		InputStream inputStream = XKMSClientTest.class.getResourceAsStream(resourceName);
+		byte[] inputBytes = new byte[8192];
+		int read;				
+		while (-1 != (read=inputStream.read(inputBytes))) {
+			result += new String(inputBytes, 0, read);
+		}
+		
+		return result;
 	}
 
 	private CSRParser createCSRParser() {
