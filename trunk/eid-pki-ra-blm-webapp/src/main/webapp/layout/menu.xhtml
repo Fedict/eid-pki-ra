@@ -46,6 +46,14 @@
 		action="#{menuHandler.selectItem('users')}"
 		styleClass="#{menuHandler.styleIfSelected('users')}"
 		/>
+	<s:link value="#{messages['menu.reports']}" 
+		view="/page/report/report-generation.xhtml" 
+		id="reports" 
+		rendered="#{s:hasRole('ADMIN_USER')}" 
+		propagation="none" 
+		action="#{menuHandler.selectItem('reports')}"
+		styleClass="#{menuHandler.styleIfSelected('reports')}"
+		/>
 	<rich:toolBarGroup location="right" id="tool-bar-group-right">
 		<s:link value="#{messages['menu.login']}" 
 			view="/login.xhtml" 

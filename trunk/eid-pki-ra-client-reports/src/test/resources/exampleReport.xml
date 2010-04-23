@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <report xmlns="urn:be:fedict:eid:pkira:reports">
 	<monthlyReport>
-		<reportDate>
+		<date>
 			<year>2010</year>
 			<month>4</month>
-		</reportDate>
-		<certificateDomainReportItem>
-			<certificateDomainName>Test Domain</certificateDomainName>
-			<signingRequests>
-				<successCount>8</successCount>
-				<failureCount>2</failureCount>
-				<totalCount>10</totalCount>
-			</signingRequests>
-		</certificateDomainReportItem>
-		<certificateDomainReportItem>
-			<certificateDomainName>Test Domain 2</certificateDomainName>
-			<signingRequests>
-				<successCount>2</successCount>
-				<failureCount>1</failureCount>
-				<totalCount>3</totalCount>
-			</signingRequests>
-		</certificateDomainReportItem>
-		<certificateAuthorityReportItem>
-			<certificateAuthorityName>Test CA</certificateAuthorityName>
-			<signingRequests>
-				<successCount>10</successCount>
-				<failureCount>3</failureCount>
-				<totalCount>13</totalCount>
-			</signingRequests>
-			<revocationRequests>
-				<successCount>5</successCount>
-				<failureCount>2</failureCount>
-				<totalCount>7</totalCount>
-			</revocationRequests>
-			<totalRequests>
-				<successCount>15</successCount>
-				<failureCount>5</failureCount>
-				<totalCount>20</totalCount>
-			</totalRequests>
-		</certificateAuthorityReportItem>
+		</date>
+		<certificateDomain>
+			<name>Test Domain</name>
+			<sign>
+				<success>8</success>
+				<failure>2</failure>
+				<total>10</total>
+			</sign>
+		</certificateDomain>
+		<certificateDomain>
+			<name>Test Domain 2</name>
+			<sign>
+				<success>2</success>
+				<failure>1</failure>
+				<total>3</total>
+			</sign>
+		</certificateDomain>
+		<certificateAuthority>
+			<name>Test CA</name>
+			<sign>
+				<success>10</success>
+				<failure>3</failure>
+				<total>13</total>
+			</sign>
+			<revoke>
+				<success>5</success>
+				<failure>2</failure>
+				<total>7</total>
+			</revoke>
+			<total>
+				<success>15</success>
+				<failure>5</failure>
+				<total>20</total>
+			</total>
+		</certificateAuthority>
 	</monthlyReport>
 </report>

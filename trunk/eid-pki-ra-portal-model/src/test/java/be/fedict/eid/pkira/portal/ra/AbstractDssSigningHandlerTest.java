@@ -3,7 +3,6 @@ package be.fedict.eid.pkira.portal.ra;
 import static org.mockito.Mockito.when;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.jboss.seam.faces.FacesMessages;
 import org.mockito.Mock;

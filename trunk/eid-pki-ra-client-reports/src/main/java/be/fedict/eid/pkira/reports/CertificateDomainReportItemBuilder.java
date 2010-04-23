@@ -42,9 +42,9 @@ public class CertificateDomainReportItemBuilder implements Builder<CertificateDo
 	@Override
 	public CertificateDomainReportItemType toXmlType() {
 		CertificateDomainReportItemType result = new ObjectFactory().createCertificateDomainReportItemType();
-		result.setCertificateDomainName(certificateDomainName);
+		result.setName(certificateDomainName);
 
-		result.setSigningRequests(createSuccessFailureCountType(signingRequestSuccesses, signingRequestFailures));
+		result.setSign(createSuccessFailureCountType(signingRequestSuccesses, signingRequestFailures));
 
 		return result;
 	}

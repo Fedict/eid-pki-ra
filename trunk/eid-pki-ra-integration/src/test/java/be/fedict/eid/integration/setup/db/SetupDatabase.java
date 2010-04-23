@@ -37,25 +37,30 @@ public class SetupDatabase {
 	@BeforeSuite
 	@Parameters("context")
 	public void setupDatabase(String context) throws ClassNotFoundException, SQLException, IOException {
-		// Setup the database
-		loadJdbcDriver();
-		
-		// Get a connection
-		Connection connection = openConnection();
-		
-		// Execute the update
 		try {
-			Statement statement = connection.createStatement();
-			
+			// Setup the database
+			loadJdbcDriver();
+
+			// Get a connection
+			Connection connection = openConnection();
+
+			// Execute the update
 			try {
-				String sql = readSql(context);
-				statement.execute(sql);
+				Statement statement = connection.createStatement();
+
+				try {
+					String sql = readSql(context);
+					statement.execute(sql);
+				} finally {
+					statement.close();
+				}
+
 			} finally {
-				statement.close();
+				connection.close();
 			}
-			
-		} finally {
-			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
 		}
 	}
 
@@ -66,15 +71,18 @@ public class SetupDatabase {
 
 	private Connection openConnection() throws SQLException {
 		String jdbcUrl = ConnectionDetailsReader.getConnectionProperty("be.fedict.eid.integration.db.jdbcUrl");
-		String user = ConnectionDetailsReader.getConnectionProperty("be.fedict.eid.integration.db.userName");;
-		String password = ConnectionDetailsReader.getConnectionProperty("be.fedict.eid.integration.db.password");;
+		String user = ConnectionDetailsReader.getConnectionProperty("be.fedict.eid.integration.db.userName");
+		;
+		String password = ConnectionDetailsReader.getConnectionProperty("be.fedict.eid.integration.db.password");
+		;
 		return DriverManager.getConnection(jdbcUrl, user, password);
 	}
 
 	protected String readSql(String context) throws IOException {
-		String resourceName = ConnectionDetailsReader.getConnectionProperty("be.fedict.eid.integration.db.sql." + context);
+		String resourceName = ConnectionDetailsReader.getConnectionProperty("be.fedict.eid.integration.db.sql."
+				+ context);
 		InputStream input = getClass().getClassLoader().getResourceAsStream(resourceName);
-		
+
 		return IOUtils.toString(input);
 	}
 }
