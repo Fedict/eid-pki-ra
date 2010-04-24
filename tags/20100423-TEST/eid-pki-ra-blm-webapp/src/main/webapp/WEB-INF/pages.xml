@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+	no-conversation-view-id="/home.xhtml" 
+	login-view-id="/login.xhtml">
+
+	<!--  Home page -->
+	<page view-id="*">
+		<navigation>
+			<rule if-outcome="home">
+				<redirect view-id="/home.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<!-- Authentication -->
+	<page view-id="/postLogin.xhtml" action="#{identity.login}">
+		<navigation>
+			<redirect view-id="/home.xhtml" />
+		</navigation>
+	</page>
+
+	<!--  Approval management -->
+	<page view-id="/page/registration/bulkapproval.xhtml">
+		<restrict>#{s:hasRole('ADMIN_USER')}</restrict>
+		<navigation
+			from-action="#{be.fedict.eid.pkira.blm.bulkApprovalHandler.showDetail(item)}">
+			<rule if-outcome="showApprovalItemDetail">
+				<redirect view-id="/page/registration/approvalDetails.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/page/registration/registrationDetails.xhtml">
+		<param name="registrationId" value="#{registrationHome.id}" converterId="javax.faces.Integer"/>
+		<navigation
+			from-action="#{registrationHome.approve}">
+			<rule if-outcome="approved">
+				<redirect view-id="/page/registration/bulkapproval.xhtml" />
+			</rule>
+		</navigation>
+		<navigation
+			from-action="#{registrationHome.disapproved}">
+			<rule if-outcome="disapproved">
+				<redirect view-id="/page/registration/bulkapproval.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+	
+	<exception class="org.hibernate.validator.InvalidStateException">
+		<redirect view-id="/error.xhtml">
+			<message severity="ERROR">org.jboss.seam.handledException</message>
+		</redirect>		
+	</exception>
+
+	<exception class="be.fedict.eid.pkira.authentication.AuthenticationException">
+		<redirect view-id="/login.xhtml">
+			<message>#{messages['validator.invalid.authentication']}</message>
+		</redirect>
+	</exception>
+
+	<exception class="javax.security.auth.login.LoginException">
+		<redirect view-id="/login.xhtml">
+			<message>#{messages['validator.invalid.authentication']}</message>
+		</redirect>
+	</exception>
+
+	<exception class="org.jboss.seam.framework.EntityNotFoundException">
+		<redirect view-id="/error.xhtml">
+			<message>Not found</message>
+		</redirect>
+	</exception>
+
+	<exception class="org.hibernate.validator.InvalidStateException">
+		<end-conversation />
+		<redirect view-id="/error.xhtml" />
+	</exception>
+
+	<exception class="javax.persistence.EntityNotFoundException">
+		<redirect view-id="/error.xhtml">
+			<message>Not found</message>
+		</redirect>
+	</exception>
+
+	<exception class="javax.persistence.OptimisticLockException">
+		<end-conversation />
+		<redirect view-id="/error.xhtml">
+			<message>
+				Another user changed the same data, please try again
+			</message>
+		</redirect>
+	</exception>
+
+	<exception class="org.jboss.seam.security.AuthorizationException">
+		<redirect view-id="/error.xhtml">
+			<message>You don't have permission to do this</message>
+		</redirect>
+	</exception>
+
+	<exception class="org.jboss.seam.security.NotLoggedInException">
+		<redirect view-id="/login.xhtml">
+			<message>#{messages['org.jboss.seam.NotLoggedIn']}</message>
+		</redirect>
+	</exception>
+
+	<exception class="javax.faces.application.ViewExpiredException">
+		<redirect view-id="/error.xhtml">
+			<message>
+				Your session has timed out, please try again
+			</message>
+		</redirect>
+	</exception>
+
+	<exception>
+		<redirect view-id="/error.xhtml">
+			<message>Unexpected error, please try again</message>
+		</redirect>
+	</exception>
+</pages>

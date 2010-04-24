@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+	no-conversation-view-id="/page/configurationentry/configurationentry-list.xhtml" 
+	login-required="true">
+	
+	<restrict>#{s:hasRole('ADMIN_USER')}</restrict>
+	
+	<param name="userId" value="#{userHome.id}" converterId="javax.faces.Integer" />
+	<param name="registrationId" value="#{registrationHome.id}" converterId="javax.faces.Integer" />
+	
+	<navigation from-action="#{userHome.grantAdmin}">
+		<rule>
+			<redirect view-id="/page/user/user-list.xhtml" />	
+		</rule>
+	</navigation>
+	
+	<navigation from-action="#{userHome.revokeAdmin}">
+		<rule>
+			<redirect view-id="/page/user/user-list.xhtml" />	
+		</rule>
+	</navigation>
+	
+	<navigation from-action="#{registrationHome.remove}">
+		<rule>
+			<redirect view-id="/page/user/user-edit.xhtml" />	
+		</rule>
+	</navigation>
+	
+</page>

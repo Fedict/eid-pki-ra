@@ -1,0 +1,62 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" 
+	template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:form id="registrationListForm">
+		<rich:panel id="panel">
+			<f:facet name="header">
+				<h:outputText value="#{messages['registrations.title']}" />
+			</f:facet>
+			<h:outputText value="#{messages['registrations.empty']}" 
+					rendered="#{empty registrationWSQuery.findByUserRRN}" />
+			<rich:dataTable id="registrations" var="registration" rows="10" 
+					value="#{registrationWSQuery.findByUserRRN}" 
+					rendered="#{not empty registrationWSQuery.findByUserRRN}" width="50%">
+				
+				<rich:column>
+					<f:facet name="header" id="certificateDomainNameHeader">
+						<h:outputText value="#{messages['registration.certificatedomain']}" />
+					</f:facet>
+					<h:outputText value="#{registration.certificateDomainName}" />
+				</rich:column>
+				
+				<rich:column>
+					<f:facet name="header" id="emailHeader">
+						<h:outputText value="#{messages['registration.email']}" />
+					</f:facet>
+					<h:outputText value="#{registration.emailAddress}" />
+				</rich:column>
+				
+				<rich:column>
+					<f:facet name="header" id="statusHeader">
+						<h:outputText value="#{messages['registration.status']}" />
+					</f:facet>
+					<h:outputText value="#{messages[registration.status.messageKey]}" />
+				</rich:column>
+				
+				<rich:column>
+					<s:link view="/page/registration/registration-edit.xhtml" value="#{messages['link.edit']}" id="edit">
+						<f:param name="registrationId" value="#{registration.id}" />
+					</s:link>
+				</rich:column>
+
+				<f:facet name="footer">
+					<rich:datascroller maxPages="10" fastStep="5" for="registrations" />
+				</f:facet>
+			</rich:dataTable>
+			<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
+				<s:button view="/page/registration/registration-edit.xhtml" value="#{messages['button.new']}" id="newRegistration" 
+						rendered="#{not empty certificateDomainWSQuery.findRemainingCertificateDomains}">
+					<f:param name="registrationId" />
+				</s:button>
+			</s:decorate>
+			</rich:panel>         	
+		</h:form>
+	</ui:define>
+</ui:composition>
