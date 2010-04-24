@@ -16,8 +16,11 @@
  */
 package be.fedict.eid.pkira.blm.model.contracts;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 import org.jboss.seam.annotations.Name;
 
@@ -34,7 +37,11 @@ public class CertificateSigningContract extends AbstractContract {
 
 	public static final String NAME="be.fedict.eid.pkira.blm.certificateSigningContract";
 
+	@Column(name="VALIDITY", nullable=false)
 	private Integer validityPeriodMonths;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name="CERTIFICATE_TYPE", nullable=false)
 	private CertificateType certificateType;
 
 	public Integer getValidityPeriodMonths() {

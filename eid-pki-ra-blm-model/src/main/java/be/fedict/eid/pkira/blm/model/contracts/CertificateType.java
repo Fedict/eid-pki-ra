@@ -24,17 +24,8 @@ package be.fedict.eid.pkira.blm.model.contracts;
  */
 public enum CertificateType {
 
-	SERVER("Server"),
-    CLIENT("Client"),
-    CODE("Code");
-    
-	private final String value;
+	SERVER,
+    CLIENT,
+    CODE;
 
-    private CertificateType(String value) {
-        this.value = value;
-    }
-
-    public String value() {
-        return value;
-    }
 }
