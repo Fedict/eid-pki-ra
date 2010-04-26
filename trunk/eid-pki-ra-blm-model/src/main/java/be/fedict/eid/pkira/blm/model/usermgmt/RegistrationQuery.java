@@ -22,14 +22,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.framework.EntityQuery;
+import org.jboss.seam.annotations.Observer;
+
+import be.fedict.eid.pkira.blm.model.framework.DataTableEntityQuery;
 
 /**
  * @author Bram Baeyens
  *
  */
 @Name(RegistrationQuery.NAME)
-public class RegistrationQuery extends EntityQuery<Registration> {
+public class RegistrationQuery extends DataTableEntityQuery<Registration> {
 
 	private static final long serialVersionUID = 636702321975305314L;
 	
@@ -41,6 +43,16 @@ public class RegistrationQuery extends EntityQuery<Registration> {
 		return "select registration from Registration registration";
 	}
 	
+	public List<Registration> getResultList() {
+		setOrderColumn("registration.certificateDomain.name");
+		return super.getResultList();
+	}
+	
+	@Observer("org.jboss.seam.afterTransactionSuccess.Registration")
+	public void refresh() {
+		super.refresh();
+	}
+	
 	public List<Registration> findByUserRRN(String userRRN) {
 		User requester = new User();
 		requester.setNationalRegisterNumber(userRRN);
@@ -50,5 +62,14 @@ public class RegistrationQuery extends EntityQuery<Registration> {
 				new String[] {
 						"registration.requester.nationalRegisterNumber = #{registration.requester.nationalRegisterNumber}"}));
 		return getResultList();
+	}
+	
+	public boolean isContainsNewRegistrations() {
+		for (Registration registration : super.getResultList()) {
+			if (registration.isNew()) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

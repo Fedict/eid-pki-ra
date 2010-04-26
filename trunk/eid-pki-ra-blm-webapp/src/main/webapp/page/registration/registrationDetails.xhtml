@@ -8,33 +8,34 @@
 	login-required="true">
 
 	<ui:define name="center">
-		<h:messages />
 		<h:form id="approvalDetailForm">
 			<h:panelGrid columns="1" title="Approval Detail">
 				<f:facet name="header">
-					<h:outputText value="Approval Detail overview." />
+					<h:outputText value="#{messages['registration.detail.title']}" />
 				</f:facet>
 
-				<s:decorate id="requesterDecoration" template="/layout/edit.xhtml">
-					<ui:define name="label">#{messages['registrations.requester']}:</ui:define>
-					<h:outputText value="#{registration.requester.nationalRegisterNumber}" />
+				<s:decorate id="requesterRrnDecoration" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['registrations.requesterrrn']}:</ui:define>
+					<h:outputText value="#{registrationHome.instance.requester.nationalRegisterNumber}" />
+				</s:decorate>
+
+				<s:decorate id="requesterNameDecoration" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['registrations.requestername']}:</ui:define>
+					<h:outputText value="#{registrationHome.instance.requester.name}" />
 				</s:decorate>
 
 				<s:decorate id="emailDecorator" template="/layout/edit.xhtml">
 					<ui:define name="label">#{messages['registrations.email']}:</ui:define>
-					<h:outputText value="#{registration.email}" />
+					<h:outputText value="#{registrationHome.instance.email}" />
 				</s:decorate>
 
 				<s:decorate id="certificateDomainDecorator"
 					template="/layout/edit.xhtml">
 					<ui:define name="label">#{messages['registrations.certificateDomain']}:</ui:define>
-					<h:selectOneMenu 
-						value="#{registration.certificateDomain}">
-						<s:selectItems
-							value="#{registrationHome.certificateDomains}"
-							var="certificateDomain"
-							label="#{certificateDomain.name}"/>
-							<s:convertEntity />
+					<h:selectOneMenu value="#{registrationHome.instance.certificateDomain}">
+						<s:selectItems value="#{registrationHome.certificateDomains}"
+							var="certificateDomain" label="#{certificateDomain.name}"/>
+						<s:convertEntity />
 					</h:selectOneMenu>
 				</s:decorate>
 
@@ -47,14 +48,19 @@
 					<h:commandButton
 						action="#{registrationHome.update}"
 						value="#{messages['registrations.update']}" id="update" />
+					<s:button
+						view="/page/registration/bulkapproval.xhtml"
+						value="#{messages['button.back']}" id="back" />
 				</s:decorate>
 				<s:decorate id="buttonDecorator" template="/layout/edit.xhtml">
 					<h:commandButton
 						action="#{registrationHome.approve}"
-						value="#{messages['registrations.approve']}" id="approve" />
+						value="#{messages['registrations.approve']}" id="approve" 
+						rendered="#{registrationHome.instance.new}"/>
 					<h:commandButton
 						action="#{registrationHome.disapprove}"
-						value="#{messages['registrations.disapprove']}" id="disapprove" />
+						value="#{messages['registrations.disapprove']}" id="disapprove"
+						rendered="#{registrationHome.instance.new}" />
 				</s:decorate>
 			</h:panelGrid>
 		</h:form>

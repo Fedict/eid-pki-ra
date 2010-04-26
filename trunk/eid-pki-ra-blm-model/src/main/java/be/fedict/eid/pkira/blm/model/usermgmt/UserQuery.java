@@ -22,14 +22,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.framework.EntityQuery;
+
+import be.fedict.eid.pkira.blm.model.framework.DataTableEntityQuery;
 
 /**
  * @author Bram Baeyens
  *
  */
 @Name(UserQuery.NAME)
-public class UserQuery extends EntityQuery<User> {
+public class UserQuery extends DataTableEntityQuery<User> {
 
 	private static final long serialVersionUID = -8523995221764583699L;
 	
