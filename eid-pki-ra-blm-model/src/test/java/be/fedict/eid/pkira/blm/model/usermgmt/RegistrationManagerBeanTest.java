@@ -82,7 +82,7 @@ public class RegistrationManagerBeanTest {
 		bean.setUserRepository(userRepository);
 		bean.setLog(log);
 		bean.setDistinguishedNameManager(distinguishedNameManager);
-		bean.setMailTemplate(mailTemplate);
+//		bean.setMailTemplate(mailTemplate);
 	}
 
 	@Test

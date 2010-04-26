@@ -16,9 +16,7 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.integration.admin;
-
-import junit.framework.Assert;
+package be.fedict.eid.integration.publicportal;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -29,25 +27,33 @@ import be.fedict.eid.integration.BaseSeleniumTestCase;
  * @author Bram Baeyens
  *
  */
-public class CertificateDomainListSeleniumTest extends BaseSeleniumTestCase {
+public class RegistrationUpdateSeleniumTest extends BaseSeleniumTestCase {
 	
 	@BeforeClass
 	public void login() {
 		super.autoLogin();
 	}
-
+	
 	@Test
-	public void testListContent() {
-		goToCertificateDomainList();
-		validateRows(20);
+	public void updateRegistration() {
+		updateRegistrationEmail("pietje.puk@aca-it.be", "Your registration has been updated.");
 	}
-
-	private void validateRows(Integer numberOfRows) {
-		Number actual = getSelenium().getXpathCount("//table[@id='certificateDomainListForm:certificateDomainTable']/tbody/tr");
-		Assert.assertEquals(numberOfRows + " rows expected, but found " + actual, numberOfRows, actual);
+	
+	@Test
+	public void updateRegistrationInvalidEmail() {
+		updateRegistrationEmail("invalid", "The e-mail address is invalid.");
 	}
-
-	private void goToCertificateDomainList() {
-		clickAndWait("header-form:certificatedomains");		
+	
+	@Test
+	public void updateRegistrationNoEmail() {
+		updateRegistrationEmail("", "The e-mail address is required.");
+	}
+	
+	private void updateRegistrationEmail(String newEmail, String expectedText) {
+		clickAndWait("header-form:registrations");
+		clickAndWait("registrationListForm:registrationsTable:0:edit");
+		getSelenium().type("registrationForm:emailDecoration:email", newEmail);
+		clickAndWait("registrationForm:submitButtonBox:createOrUpdate");
+		assertTextPresent(expectedText);
 	}
 }

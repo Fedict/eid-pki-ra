@@ -20,15 +20,12 @@ import java.io.Serializable;
 
 import org.hibernate.validator.Email;
 import org.hibernate.validator.NotEmpty;
-import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
 
 /**
  * @author Jan Van den Bergh
  */
 @Name(Registration.NAME)
-@Scope(ScopeType.CONVERSATION)
 public class Registration implements Serializable {
 
 	private static final long serialVersionUID = 6787261553475188888L;
@@ -42,7 +39,8 @@ public class Registration implements Serializable {
 	@NotEmpty
 	private String certificateDomainId;
 	
-	@NotEmpty @Email
+	@NotEmpty(message="{registration.email.required}") 
+	@Email(message="{registration.email.invalid}")
 	private String emailAddress;
 	
 	public String getId() {

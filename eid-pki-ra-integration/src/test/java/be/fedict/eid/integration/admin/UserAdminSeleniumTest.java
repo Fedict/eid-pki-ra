@@ -95,7 +95,7 @@ public class UserAdminSeleniumTest extends BaseSeleniumTestCase {
 	}
 
 	private String deriveEditLinkToClick(int rowToEdit) {
-		return "userListForm:allUser:" + rowToEdit + ":edit";
+		return "userListForm:userTable:" + rowToEdit + ":edit";
 	}
 
 //	private String deriveDeleteLinkToClick(int rowToDelete) {

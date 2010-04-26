@@ -92,7 +92,7 @@ public class CertificateDomainCreateSeleniumTest extends BaseSeleniumTestCase {
 		clickAndWait("certificateDomainListForm:submitButtonBox:newCertificateDomain");
 		assertTextPresent("Create certificate domain");
 
-		getSelenium().type("certificateDetailForm:nameDecoration:name", name);
+		getSelenium().type("certificateDetailForm:nameDecoration:nameEdit", name);
 		getSelenium().type("certificateDetailForm:dnPatternDecoration:dnPattern", dnExpr);
 		if (clientCert) {
 			getSelenium().check("certificateDetailForm:clientCertDecoration:clientCert");

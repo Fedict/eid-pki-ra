@@ -16,9 +16,7 @@
  */
 package be.fedict.eid.pkira.blm.model.usermgmt;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -34,7 +32,6 @@ import org.jboss.seam.log.Log;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainHome;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
-import be.fedict.eid.pkira.blm.model.mail.MailTemplate;
 import be.fedict.eid.pkira.dnfilter.DistinguishedName;
 import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
 import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;
@@ -66,9 +63,6 @@ public class RegistrationManagerBean implements RegistrationManager {
 
 	@In(value = UserRepository.NAME, create = true)
 	private UserRepository userRepository;
-
-	@In(value = MailTemplate.NAME, create = true)
-	private MailTemplate mailTemplate;
 
 	@In(value = DistinguishedNameManager.NAME, create = true)
 	private DistinguishedNameManager distinguishedNameManager;
@@ -146,40 +140,6 @@ public class RegistrationManagerBean implements RegistrationManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public void approveRegistration(Integer registrationId, String reasonText) {
-		// Mark as approved
-		Registration registration = registrationRepository.getReference(registrationId);
-		registrationRepository.setApproved(registration);
-
-		// Send the mail
-		String[] recipients = new String[]
-			{ registration.getEmail() };
-		Map<String, Object> parameters = createMapForRegistrationMail(registration, reasonText);
-		mailTemplate.sendTemplatedMail("registrationApproved.ftl", parameters, recipients);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public void disapproveRegistration(Integer registrationId, String reasonText) {
-		// Mark as disapproved
-		Registration registration = registrationRepository.getReference(registrationId);
-		registrationRepository.setDisapproved(registration);
-
-		// Send the mail
-		String[] recipients = new String[]
-			{ registration.getEmail() };
-		Map<String, Object> parameters = createMapForRegistrationMail(registration, reasonText);
-		mailTemplate.sendTemplatedMail("registrationDisapproved.ftl", parameters, recipients);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public Registration findRegistrationForUserDNAndCertificateType(String userRRN, String distinguishedName, CertificateType type) {
 		// Parse the DN
@@ -232,15 +192,6 @@ public class RegistrationManagerBean implements RegistrationManager {
 		return theDN;
 	}
 
-	private Map<String, Object> createMapForRegistrationMail(Registration registration, String reasonText) {
-		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("user", registration.getRequester());
-		result.put("certificateDomain", registration.getCertificateDomain());
-		result.put("reason", reasonText);
-
-		return result;
-	}
-
 	private EmailValidator createEmailValidator() {
 		EmailValidator emailValidator = new EmailValidator();
 		emailValidator.initialize(null);
@@ -261,10 +212,6 @@ public class RegistrationManagerBean implements RegistrationManager {
 
 	protected void setLog(Log log) {
 		this.log = log;
-	}
-
-	protected void setMailTemplate(MailTemplate mailTemplate) {
-		this.mailTemplate = mailTemplate;
 	}
 
 	protected void setDistinguishedNameManager(DistinguishedNameManager distinguishedNameManager) {
