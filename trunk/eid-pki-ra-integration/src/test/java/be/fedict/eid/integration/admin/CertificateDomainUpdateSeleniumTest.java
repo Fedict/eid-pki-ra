@@ -118,6 +118,6 @@ public class CertificateDomainUpdateSeleniumTest extends BaseSeleniumTestCase {
 	}
 
 	private String deriveEditLinkToClick(int rowToUpdate) {
-		return "certificateDomainListForm:allCertificateDomain:" + rowToUpdate + ":edit";
+		return "certificateDomainListForm:certificateDomainTable:" + rowToUpdate + ":edit";
 	}
 }

@@ -38,16 +38,12 @@ public class ConfigurationEntryListSeleniumTest extends BaseSeleniumTestCase {
 
 	@Test
 	public void testListContent() {
-		goToConfigurationEntryList();
+		clickAndWait("header-form:configurationentries");		
 		validateRows(5);
 	}
 
 	private void validateRows(Integer numberOfRows) {
-		Number actual = getSelenium().getXpathCount("//table[@id='configurationEntryListForm:allConfigurationEntry']/tbody/tr");
+		Number actual = getSelenium().getXpathCount("//table[@id='configurationEntryListForm:configurationEntriesTable']/tbody/tr");
 		Assert.assertEquals(numberOfRows + " rows expected, but found " + actual, numberOfRows, actual);
-	}
-
-	private void goToConfigurationEntryList() {
-		clickAndWait("header-form:configurationentries");		
 	}
 }

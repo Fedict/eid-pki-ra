@@ -4,10 +4,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.framework.EntityQuery;
+
+import be.fedict.eid.pkira.blm.model.framework.DataTableEntityQuery;
 
 @Name(ConfigurationEntryQuery.NAME)
-public class ConfigurationEntryQuery extends EntityQuery<ConfigurationEntry> {
+public class ConfigurationEntryQuery extends DataTableEntityQuery<ConfigurationEntry> {
 
 	private static final long serialVersionUID = -7625408832624979621L;
 	

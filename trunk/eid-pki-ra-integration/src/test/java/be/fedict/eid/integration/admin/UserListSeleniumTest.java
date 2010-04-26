@@ -43,7 +43,7 @@ public class UserListSeleniumTest extends BaseSeleniumTestCase {
 	}
 
 	private void validateRows(Integer numberOfRows) {
-		Number actual = getSelenium().getXpathCount("//table[@id='userListForm:allUser']/tbody/tr");
+		Number actual = getSelenium().getXpathCount("//table[@id='userListForm:userTable']/tbody/tr");
 		Assert.assertEquals(numberOfRows + " rows expected, but found " + actual, numberOfRows, actual);
 	}
 

@@ -27,7 +27,7 @@
 
 				<s:decorate id="emailDecoration" template="/layout/edit.xhtml">
 					<ui:define name="label">#{messages['registration.email']}:</ui:define>
-					<h:inputText required="true" id="email" value="#{registrationWSHome.instance.emailAddress}" />
+					<h:inputText id="email" value="#{registrationWSHome.instance.emailAddress}" />
 				</s:decorate>
 
 				<s:decorate id="certificateDomainDecoration" template="/layout/edit.xhtml">

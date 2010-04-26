@@ -40,26 +40,6 @@ public interface RegistrationManager {
 	boolean createOrUpdateRegistration(RegistrationWS registrationWS);
 
 	/**
-	 * Approve the registration.
-	 * 
-	 * @param integer
-	 *            the ID of the registration.
-	 * @param reasonText
-	 *            reason to approve the registration.
-	 */
-	void approveRegistration(Integer integer, String reasonText);
-
-	/**
-	 * Disapprove the registration.
-	 * 
-	 * @param integer
-	 *            the ID of the registration.
-	 * @param reasonText
-	 *            reason to disapprove the registration.
-	 */
-	void disapproveRegistration(Integer integer, String reasonText);
-
-	/**
 	 * Checks if a user is allowed to register or revoke certificates with the
 	 * given DN.
 	 * 

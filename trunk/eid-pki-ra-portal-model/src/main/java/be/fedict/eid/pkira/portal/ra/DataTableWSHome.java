@@ -18,24 +18,27 @@
 
 package be.fedict.eid.pkira.portal.ra;
 
-import java.io.Serializable;
-
-import org.jboss.seam.annotations.In;
-
-import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
-
 /**
  * @author Bram Baeyens
  *
  */
-public abstract class WSHome implements Serializable {
-
-	private static final long serialVersionUID = -8029624317292385958L;
+public abstract class DataTableWSHome extends WSHome {
 	
-	@In(value = EIDPKIRAPrivateServiceClient.NAME, create = true)
-	private EIDPKIRAPrivateServiceClient serviceClient;
+	private static final long serialVersionUID = 5506541459954523480L;
+	
+	private static final int DEFAULT_ROWS = 20;
+	private static final int DEFAULT_MAX_PAGES = 10;
+	private static final int DEFAULT_FAST_STEP = 5;
+	
+	public int getRows() {
+		return DEFAULT_ROWS;
+	}
 
-	public EIDPKIRAPrivateServiceClient getServiceClient() {
-		return serviceClient;
+	public int getMaxPages() {
+		return DEFAULT_MAX_PAGES;
+	}
+
+	public int getFastStep() {
+		return DEFAULT_FAST_STEP;
 	}
 }
