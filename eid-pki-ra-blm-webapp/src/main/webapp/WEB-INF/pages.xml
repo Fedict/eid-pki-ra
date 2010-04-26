@@ -23,24 +23,40 @@
 	<!--  Approval management -->
 	<page view-id="/page/registration/bulkapproval.xhtml">
 		<restrict>#{s:hasRole('ADMIN_USER')}</restrict>
-		<navigation
-			from-action="#{be.fedict.eid.pkira.blm.bulkApprovalHandler.showDetail(item)}">
+		<param name="registrationToDeleteId" value="#{registrationHome.id}" converterId="javax.faces.Integer"/>
+		<navigation from-action="#{be.fedict.eid.pkira.blm.bulkApprovalHandler.showDetail(item)}">
 			<rule if-outcome="showApprovalItemDetail">
 				<redirect view-id="/page/registration/approvalDetails.xhtml" />
 			</rule>
 		</navigation>
+		
+<!--		<navigation from-action="#{be.fedict.eid.pkira.blm.bulkApprovalHandler.approveRegistrations}">-->
+<!--			<rule if-outcome="approved">-->
+<!--				<redirect view-id="/page/registration/bulkapproval.xhtml" />-->
+<!--			</rule>-->
+<!--		</navigation>-->
+<!--		-->
+<!--		<navigation from-action="#{be.fedict.eid.pkira.blm.bulkApprovalHandler.disapproveRegistrations}">-->
+<!--			<rule if-outcome="disapproved">-->
+<!--				<redirect view-id="/page/registration/bulkapproval.xhtml" />-->
+<!--			</rule>-->
+<!--		</navigation>-->
+<!--		-->
+<!--		<navigation from-action="#{be.fedict.eid.pkira.blm.registrationHome.remove}">-->
+<!--			<rule if-outcome="removed">-->
+<!--				<redirect view-id="/page/registration/bulkapproval.xhtml" />-->
+<!--			</rule>-->
+<!--		</navigation>-->
 	</page>
 
 	<page view-id="/page/registration/registrationDetails.xhtml">
 		<param name="registrationId" value="#{registrationHome.id}" converterId="javax.faces.Integer"/>
-		<navigation
-			from-action="#{registrationHome.approve}">
+		<navigation from-action="#{registrationHome.approve}">
 			<rule if-outcome="approved">
 				<redirect view-id="/page/registration/bulkapproval.xhtml" />
 			</rule>
 		</navigation>
-		<navigation
-			from-action="#{registrationHome.disapproved}">
+		<navigation from-action="#{registrationHome.disapprove}">
 			<rule if-outcome="disapproved">
 				<redirect view-id="/page/registration/bulkapproval.xhtml" />
 			</rule>

@@ -16,33 +16,31 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.blm.model.certificatedomain;
+package be.fedict.eid.pkira.blm.model.framework;
 
-import java.util.List;
-
-import org.jboss.seam.annotations.Name;
-
-import be.fedict.eid.pkira.blm.model.framework.DataTableEntityQuery;
+import org.jboss.seam.framework.EntityQuery;
 
 /**
  * @author Bram Baeyens
  *
  */
-@Name(value=CertificateDomainQuery.NAME)
-public class CertificateDomainQuery extends DataTableEntityQuery<CertificateDomain> {
+public abstract class DataTableEntityQuery<E> extends EntityQuery<E> {
 
-	private static final long serialVersionUID = 2047569824505992173L;
+	private static final long serialVersionUID = 6208755736619644115L;
+
+	private static final int DEFAULT_ROWS = 20;
+	private static final int DEFAULT_MAX_PAGES = 10;
+	private static final int DEFAULT_FAST_STEP = 5;
 	
-	public static final String NAME = "be.fedict.eid.pkira.blm.certificateDomainQuery";
-	
-	@Override
-	public String getEjbql() {
-		return "select certificateDomain from CertificateDomain certificateDomain";
+	public int getRows() {
+		return DEFAULT_ROWS;
 	}
-	
-	@Override
-	public List<CertificateDomain> getResultList() {
-		setOrderColumn("certificateDomain.name");
-		return super.getResultList();
+
+	public int getMaxPages() {
+		return DEFAULT_MAX_PAGES;
+	}
+
+	public int getFastStep() {
+		return DEFAULT_FAST_STEP;
 	}
 }

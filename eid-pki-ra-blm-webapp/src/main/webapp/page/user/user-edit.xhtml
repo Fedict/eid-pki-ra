@@ -35,7 +35,7 @@
 							value="#{messages['button.revokeadmin']}"
 							rendered="#{userHome.instance.admin and not userHome.currentUser}" />
 					<s:button id="cancel" 
-							value="#{messages['button.cancel']}" 
+							value="#{messages['button.back']}" 
 							view="/page/user/user-list.xhtml" />
 				</s:decorate> 
 			</rich:panel>
@@ -47,12 +47,12 @@
 						rendered="#{empty userHome.instance.registrations}" />
 				<rich:dataTable id="userRegistrations" var="registration" rows="10" 
 						value="#{userHome.instance.registrations}" 
-						rendered="#{not empty userHome.instance.registrations}" width="50%">
+						rendered="#{not empty userHome.instance.registrations}" width="50%">					
 					<rich:column>
-						<f:facet name="header" id="statusHeader">
-							<h:outputText value="#{messages['registrations.status']}" />
+						<f:facet name="header" id="certificateDomainNameHeader">
+							<h:outputText value="#{messages['registrations.certificateDomain']}" />
 						</f:facet>
-						<h:outputText value="#{messages[registration.status.messageKey]}" />
+						<h:outputText value="#{registration.certificateDomain.name}" />
 					</rich:column>
 					
 					<rich:column>
@@ -63,18 +63,10 @@
 					</rich:column>
 					
 					<rich:column>
-						<f:facet name="header" id="certificateDomainNameHeader">
-							<h:outputText value="#{messages['registrations.certificateDomain']}" />
+						<f:facet name="header" id="statusHeader">
+							<h:outputText value="#{messages['registrations.status']}" />
 						</f:facet>
-						<h:outputText value="#{registration.certificateDomain.name}" />
-					</rich:column>
-					
-					<rich:column>
-						<s:link value="#{messages['link.delete']}" id="delete" action="#{registrationHome.remove}" 
-								onclick="return confirm('#{messages['user.registration.confirm.delete']}');">
-							<f:param name="userId" value="#{userHome.id}" />
-							<f:param name="registrationId" value="#{registration.id}" />
-						</s:link>
+						<h:outputText value="#{messages[registration.status.messageKey]}" />
 					</rich:column>
 	
 					<f:facet name="footer">

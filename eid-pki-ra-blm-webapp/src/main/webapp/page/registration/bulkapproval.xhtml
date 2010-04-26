@@ -4,77 +4,109 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:rich="http://richfaces.org/rich"
-	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml"
+	xmlns:a4j="http://richfaces.org/a4j" template="/layout/template.xhtml"
 	login-required="true">
 
 	<ui:define name="center">
 		<h:form id="bulkApprovalForm">
 			<rich:panel id="panel">
 				<f:facet name="header">#{messages['registrations.bulk.title']}</f:facet>
-				<rich:dataTable id="registrationList" var="item" value="#{registrations}"
-					rendered="#{not empty registrations}"
-					width="75%" rows="20">
+				<rich:dataTable id="registrationsTable" var="registration" value="#{registrationQuery.resultList}"
+					rendered="#{not empty registrationQuery.resultList}" reRender="registrationsTableDataScroller"
+					width="75%" rows="#{registrationQuery.rows}">
 
 					<rich:column>
 						<f:facet name="header">
 							<h:outputText value="#{messages['registrations.bulk.selected']}" />
 						</f:facet>
-						<h:selectBooleanCheckbox value="#{be.fedict.eid.pkira.blm.bulkApprovalHandler.selectedRegistrations[item]}" />
+						<h:selectBooleanCheckbox value="#{bulkApprovalHandler.selectedRegistrations[registration.id]}" rendered="#{registration.new}" />
 					</rich:column>
-					<rich:column sortBy="#{item.key.requester}"
-						filterBy="#{item.requester}" filterEvent="onkeyup">
+					
+					<rich:column sortBy="#{registration.requester.nationalRegisterNumber}" filterBy="#{registration.requester.nationalRegisterNumber}" filterEvent="onkeyup">
 						<f:facet name="header">
-							<h:outputText value="#{messages['registrations.bulk.requester']}" />
+							<h:outputText value="#{messages['user.nationalRegisterNumber']}" />
 						</f:facet>
-						<h:outputText value="#{item.requester.nationalRegisterNumber}" />
+						<h:outputText value="#{registration.requester.nationalRegisterNumber}" />
 					</rich:column>
-					<rich:column sortBy="#{item.certificateDomain}"
-						filterBy="#{item.certificateDomain}" filterEvent="onkeyup">
+					
+					<rich:column sortBy="#{registration.requester.firstName}" filterBy="#{registration.requester.firstName}" filterEvent="onkeyup">
 						<f:facet name="header">
-							<h:outputText
-								value="#{messages['registrations.bulk.certificateDomain']}" />
+							<h:outputText value="#{messages['user.firstName']}" />
 						</f:facet>
-						<h:outputText value="#{item.certificateDomain.name}" />
+						<h:outputText value="#{registration.requester.firstName}" />
 					</rich:column>
-					<rich:column>
+					
+					<rich:column sortBy="#{registration.requester.lastName}" filterBy="#{registration.requester.lastName}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['user.lastName']}" />
+						</f:facet>
+						<h:outputText value="#{registration.requester.lastName}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{registration.certificateDomain.name}" filterBy="#{registration.certificateDomain.name}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['registrations.bulk.certificateDomainName']}" />
+						</f:facet>
+						<h:outputText value="#{registration.certificateDomain.name}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{registration.certificateDomain.dnExpression}" filterBy="#{registration.certificateDomain.dnExpression}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['registrations.bulk.certificateDomainDnExpression']}" />
+						</f:facet>
+						<h:outputText value="#{registration.certificateDomain.dnExpression}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{registration.email}" filterBy="#{registration.email}" filterEvent="onkeyup">
 						<f:facet name="header">
 							<h:outputText value="#{messages['registrations.bulk.email']}" />
 						</f:facet>
-						<h:outputText value="#{item.email}" />
+						<h:outputText value="#{registration.email}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{messages[registration.status.messageKey]}" filterBy="#{messages[registration.status.messageKey]}" filterEvent="onkeyup">
+						<f:facet name="header" id="statusHeader">
+							<h:outputText value="#{messages['registrations.bulk.status']}" />
+						</f:facet>
+						<h:outputText value="#{messages[registration.status.messageKey]}" />
 					</rich:column>
 
 					<rich:column>
 					    <h:outputLink id="detailItem" value="registrationDetails.seam">
 							<h:outputText value="#{messages['link.detail']}"/>
-							<f:param name="registrationId" value="#{item.id}"/>
+							<f:param name="registrationId" value="#{registration.id}"/>
 					    </h:outputLink>
+					    <h:outputText value=" " />						
+					   	<s:link value="#{messages['link.delete']}" id="delete" action="#{registrationHome.remove}" 
+								onclick="return confirm('#{messages['registration.confirm.delete']}');" rendered="#{registration.approved}"
+								reRender="registrationsTable">
+							<f:param name="registrationToDeleteId" value="#{registration.id}" />
+						</s:link>
 					</rich:column>
 
 					<f:facet name="footer">
-						<rich:datascroller maxPages="10" rows="20" />
+						<rich:datascroller id="registrationsTableDataScroller" for="registrationsTable" renderIfSinglePage="false" 
+								maxPages="#{registrationQuery.maxPages}" fastStep="#{registrationQuery.fastStep}" />
 					</f:facet>
 				</rich:dataTable>
 
-				<s:decorate id="reasonDecoration" template="/layout/edit.xhtml"
-					rendered="#{not empty registrations}">
+				<s:decorate id="reasonDecoration" template="/layout/edit.xhtml" rendered="#{registrationQuery.containsNewRegistrations}">
 					<ui:define name="label">#{messages['registrations.bulk.reason']}:</ui:define>
-					<h:inputText id="reason"
-						value="#{be.fedict.eid.pkira.blm.bulkApprovalHandler.reason}" />
+					<h:inputText id="reason" value="#{bulkApprovalHandler.reason}" />
 				</s:decorate>
 
 				<h:outputText
 					value="#{messages['registrations.bulk.noregistrations']}"
-					rendered="#{not empty registrations}" />
+					rendered="#{empty registrationQuery.resultList}" />
 
 				<h:commandButton
-					action="#{be.fedict.eid.pkira.blm.bulkApprovalHandler.approveRegistrations}"
+					action="#{bulkApprovalHandler.approveRegistrations}"
 					value="#{messages['registrations.bulk.approve']}" id="approve"
-					rendered="#{not empty registrations}" />
+					rendered="#{registrationQuery.containsNewRegistrations}" reRender="registrationsTable" />
 				<h:commandButton
-					action="#{be.fedict.eid.pkira.blm.bulkApprovalHandler.disapproveRegistrations}"
-					value="#{messages['registrations.bulk.disapprove']}"
-					id="disapprove"
-					rendered="#{not empty registrations}" />
+					action="#{bulkApprovalHandler.disapproveRegistrations}"
+					value="#{messages['registrations.bulk.disapprove']}" id="disapprove"
+					rendered="#{registrationQuery.containsNewRegistrations}" reRender="registrationsTable" />
 			</rich:panel>
 		</h:form>
 	</ui:define>

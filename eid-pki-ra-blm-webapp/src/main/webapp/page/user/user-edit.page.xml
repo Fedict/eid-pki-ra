@@ -8,7 +8,6 @@
 	<restrict>#{s:hasRole('ADMIN_USER')}</restrict>
 	
 	<param name="userId" value="#{userHome.id}" converterId="javax.faces.Integer" />
-	<param name="registrationId" value="#{registrationHome.id}" converterId="javax.faces.Integer" />
 	
 	<navigation from-action="#{userHome.grantAdmin}">
 		<rule>

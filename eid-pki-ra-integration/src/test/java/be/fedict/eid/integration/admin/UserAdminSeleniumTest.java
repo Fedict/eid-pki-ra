@@ -67,26 +67,26 @@ public class UserAdminSeleniumTest extends BaseSeleniumTestCase {
 		Assert.assertTrue(getSelenium().getAllButtons().length == 1);
 	}	
 	
-	@Test
-	public void testRemoveRegistrationCancel() {
-		goToUserEditPage(0);	
-		getSelenium().chooseCancelOnNextConfirmation();
-		click(deriveDeleteLinkToClick(0));
-		Assert.assertTrue(getSelenium().isConfirmationPresent());
-		Assert.assertEquals("Are you sure you want to delete the registration", getSelenium().getConfirmation());
-		validateRegistrationRows(2);
-	}
-
-	@Test
-	public void testRemoveRegistrationOk() {
-		goToUserEditPage(2);
-		click(deriveDeleteLinkToClick(0));
-		Assert.assertTrue(getSelenium().isConfirmationPresent());
-		Assert.assertEquals("Are you sure you want to delete the registration", getSelenium().getConfirmation());
-		waitForPageToLoad();
-		assertTextPresent("The registered certificate domain has been removed");
-		validateRegistrationRows(0);
-	}
+//	@Test
+//	public void testRemoveRegistrationCancel() {
+//		goToUserEditPage(0);	
+//		getSelenium().chooseCancelOnNextConfirmation();
+//		click(deriveDeleteLinkToClick(0));
+//		Assert.assertTrue(getSelenium().isConfirmationPresent());
+//		Assert.assertEquals("Are you sure you want to delete the registration", getSelenium().getConfirmation());
+//		validateRegistrationRows(2);
+//	}
+//
+//	@Test
+//	public void testRemoveRegistrationOk() {
+//		goToUserEditPage(2);
+//		click(deriveDeleteLinkToClick(0));
+//		Assert.assertTrue(getSelenium().isConfirmationPresent());
+//		Assert.assertEquals("Are you sure you want to delete the registration", getSelenium().getConfirmation());
+//		waitForPageToLoad();
+//		assertTextPresent("The registered certificate domain has been removed");
+//		validateRegistrationRows(0);
+//	}
 	
 	private void goToUserEditPage(int rowToEdit) {		
 		clickAndWait(deriveEditLinkToClick(rowToEdit));
@@ -98,9 +98,9 @@ public class UserAdminSeleniumTest extends BaseSeleniumTestCase {
 		return "userListForm:allUser:" + rowToEdit + ":edit";
 	}
 
-	private String deriveDeleteLinkToClick(int rowToDelete) {
-		return "userForm:userRegistrations:" + rowToDelete + ":delete";
-	}
+//	private String deriveDeleteLinkToClick(int rowToDelete) {
+//		return "userForm:userRegistrations:" + rowToDelete + ":delete";
+//	}
 
 	private void validateRegistrationRows(Integer expectedRows) {
 		if (expectedRows == 0) {

@@ -127,6 +127,14 @@ public class Registration implements Serializable {
 	public void setCertificateDomain(CertificateDomain certificateDomain) {
 		this.certificateDomain = certificateDomain;
 	}
+	
+	public boolean isNew() {
+		return RegistrationStatus.NEW == status;
+	}
+	
+	public boolean isApproved() {
+		return RegistrationStatus.APPROVED == status;
+	}
 
 	@Override
 	public boolean equals(Object obj) {
