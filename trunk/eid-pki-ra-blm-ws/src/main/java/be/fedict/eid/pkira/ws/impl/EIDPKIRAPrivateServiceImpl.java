@@ -1,3 +1,21 @@
+/**
+ * eID PKI RA Project. 
+ * Copyright (C) 2010 FedICT. 
+ * 
+ * This is free software; you can redistribute it and/or modify it 
+ * under the terms of the GNU Lesser General Public License version 
+ * 3.0 as published by the Free Software Foundation. 
+ * 
+ * This software is distributed in the hope that it will be useful, 
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * Lesser General Public License for more details. 
+ * 
+ * You should have received a copy of the GNU Lesser General Public 
+ * License along with this software; if not, see 
+ * http://www.gnu.org/licenses/. 
+ */
+ 
 package be.fedict.eid.pkira.ws.impl;
 
 import java.math.BigInteger;
@@ -15,6 +33,7 @@ import org.jboss.seam.log.Logging;
 import be.fedict.eid.pkira.blm.model.ca.CertificateAuthority;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainHome;
+import be.fedict.eid.pkira.blm.model.certificatedomain.RegisteredCertificateDomainQuery;
 import be.fedict.eid.pkira.blm.model.config.ConfigurationEntry;
 import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
 import be.fedict.eid.pkira.blm.model.contracts.AbstractContract;
@@ -46,6 +65,8 @@ import be.fedict.eid.pkira.generated.privatews.FindCertificateRequest;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateResponse;
 import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryRequest;
 import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryResponse;
+import be.fedict.eid.pkira.generated.privatews.FindRegisteredCertificateDomainsForUserRequest;
+import be.fedict.eid.pkira.generated.privatews.FindRegisteredCertificateDomainsForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.FindContractsRequest;
 import be.fedict.eid.pkira.generated.privatews.FindContractsResponse;
 import be.fedict.eid.pkira.generated.privatews.FindRegistrationByIdRequest;
@@ -77,7 +98,7 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	 */
 	@Override
 	public ListCertificatesResponse listCertificates(ListCertificatesRequest request) {
-		List<Certificate> allCertificates = getDomainRepository().findAllCertificates(request.getUserRRN());
+		List<Certificate> allCertificates = getDomainRepository().findAllCertificates(request.getUserRRN(), request.getCertificateDomainId());
 
 		ListCertificatesResponse certificatesResponse = new ObjectFactory().createListCertificatesResponse();
 		for (Certificate certificate : allCertificates) {
@@ -124,6 +145,18 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 				.createFindRemainingCertificateDomainsForUserResponse();
 		response.getCertificateDomains().addAll(getCertificateDomainMapper().map(domains));
 		return response;
+	}
+	
+	@Override
+	public FindRegisteredCertificateDomainsForUserResponse findRegisteredCertificateDomainsForUser(
+			FindRegisteredCertificateDomainsForUserRequest request) {
+		User user = getUserRepository().findByNationalRegisterNumber(request.getUserRRN());
+		List<CertificateDomain> domains = getRegistratedCertificateDomainQuery().getFindRegisteredCertificateDomains(user.getNationalRegisterNumber());
+		
+		FindRegisteredCertificateDomainsForUserResponse response = new ObjectFactory().createFindRegisteredCertificateDomainsForUserResponse();
+		response.getCertificateDomains().addAll(getCertificateDomainMapper().map(domains));
+		return response;
+		
 	}
 
 	/**
@@ -222,6 +255,10 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 
 	private CertificateDomainHome getCertificateDomainHome() {
 		return (CertificateDomainHome) Component.getInstance(CertificateDomainHome.NAME, true);
+	}
+
+	private RegisteredCertificateDomainQuery getRegistratedCertificateDomainQuery() {
+		return (RegisteredCertificateDomainQuery) Component.getInstance(RegisteredCertificateDomainQuery.NAME, true);
 	}
 
 	private RegistrationManager getRegistrationManager() {

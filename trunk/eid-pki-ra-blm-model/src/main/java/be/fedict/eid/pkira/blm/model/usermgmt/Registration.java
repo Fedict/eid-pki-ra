@@ -37,6 +37,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.validator.Email;
 import org.hibernate.validator.NotEmpty;
 import org.hibernate.validator.NotNull;
+import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 
@@ -64,10 +65,13 @@ import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 			@NamedQuery(
 					name = "getRegistrationsByUserAndStatus", 
 					query = "FROM Registration r WHERE r.requester=:user AND r.status=:status") })
+@Name(Registration.NAME)
 public class Registration implements Serializable {
 
 	private static final long serialVersionUID = -703013819235326427L;
 
+	public static final String NAME = "be.fedict.eid.pkira.blm.Registration";
+	
 	@Id
 	@GeneratedValue
 	@Column(name = "REGISTRATION_ID")

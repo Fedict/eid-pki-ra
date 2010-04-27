@@ -34,12 +34,12 @@ public class PrivateWebserviceTest {
 	
 	@Test
 	public void getCertificateList() {
-		findCertificates("");
+		findCertificates(null);
 	}
 
 	private void findCertificates(String userRRN) {
 		// Sign the message
-		List<CertificateWS> responseMsg = getPrivateWebServiceClient().listCertificates(userRRN);
+		List<CertificateWS> responseMsg = getPrivateWebServiceClient().listCertificates(userRRN, null);
 		
 		Assert.assertNotNull(responseMsg);
 	}

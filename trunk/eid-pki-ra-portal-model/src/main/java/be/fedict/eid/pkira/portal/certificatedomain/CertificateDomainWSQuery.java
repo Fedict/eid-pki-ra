@@ -50,5 +50,13 @@ public class CertificateDomainWSQuery extends WSHome {
 		}
 		return certificateDomains;
 	}
+	
+	public List<CertificateDomainWS> getFindRegisteredCertificateDomains(){
+		if (certificateDomains == null) {
+			certificateDomains = getServiceClient().findRegisteredCertificateDomainsForUser(
+					credentials.getUser().getRRN());
+		}
+		return certificateDomains;
+	}
 
 }

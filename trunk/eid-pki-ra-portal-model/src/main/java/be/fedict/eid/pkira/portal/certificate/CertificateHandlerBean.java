@@ -64,10 +64,12 @@ public class CertificateHandlerBean implements CertificateHandler {
 	private Log log;
 	
 	@DataModel
-	List<Certificate> certificates;
+	private List<Certificate> certificates;
 	
 	@In(value="#{facesContext}")
-	javax.faces.context.FacesContext facesContext;	
+	private javax.faces.context.FacesContext facesContext;	
+	
+	private String certificateDomainWSID = null;
 	
 	@Override
 	public void download(){
@@ -88,9 +90,14 @@ public class CertificateHandlerBean implements CertificateHandler {
 		}		
 	}
 	
+	@Override
+	public List<Certificate> findCertificateList(){
+		return findCertificateList(credentials.getUser().getRRN());
+	}
+	
 	@Override 
 	public List<Certificate> findCertificateList(String userRRN) {
-		List<CertificateWS> listCertificates = eidpkiraPrivateServiceClient.listCertificates(userRRN);
+		List<CertificateWS> listCertificates = eidpkiraPrivateServiceClient.listCertificates(userRRN, certificateDomainWSID);
 		certificates = new ArrayList<Certificate>();
 		for (CertificateWS certificatews : listCertificates) {
 			certificates.add(parse(certificatews));
@@ -158,5 +165,13 @@ public class CertificateHandlerBean implements CertificateHandler {
 	
 	protected void setEidpkiraPrivateServiceClient(EIDPKIRAPrivateServiceClient eidpkiraPrivateServiceClient) {
 		this.eidpkiraPrivateServiceClient = eidpkiraPrivateServiceClient;
+	}
+
+	public void setCertificateDomainWSID(String certificateDomainWSID) {
+		this.certificateDomainWSID = certificateDomainWSID;
+	}
+
+	public String getCertificateDomainWSID() {
+		return certificateDomainWSID;
 	}
 }

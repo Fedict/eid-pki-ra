@@ -12,22 +12,33 @@
 			<f:facet name="header">
 				<h:outputText value="#{messages['certificates.title']}" />
 			</f:facet>
-			<h:outputText value="No messages to display" rendered="#{empty certificatesList}" />
-			<h:outputText value="messages to display is: " rendered="#{not empty certificatesList}" />
-			<h:messages />
+			
+			<s:decorate id="distinguishedNameDecorator" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['certificate.subject']}:</ui:define>
+				<h:outputText value="#{cer.distinguishedName}" />
+			</s:decorate>
+
+			<s:decorate id="CertificateDomainDecorator" template="/layout/edit.xhtml">
+           		<ui:define name="label">#{messages['certificate.domain.selection.label']}:</ui:define>
+				
+				<h:selectOneMenu id="selectRegisteredCertificateDomain" value="#{certificateHandler.certificateDomainWSID}" 
+							required="true">
+						<s:selectItems 
+							value="#{certificateDomainWSQuery.findRegisteredCertificateDomains}" 
+							var="certificateDomain" 
+							label="#{certificateDomain.name}" 
+							itemValue="#{certificateDomain.id}"
+							noSelectionLabel="#{messages['no.selection.label']}" />
+							<a:support event="onchange" action="#{certificateHandler.findCertificateList()}" reRender="cerList"/>
+					</h:selectOneMenu>
+           	</s:decorate>
+			
 			<rich:dataTable id="cerList" var="cer" value="#{certificates}" rendered="#{not empty certificates}" width="75%">
 				<rich:column sortBy="#{cer.serialNumber}" filterBy="#{cer.serialNumber}" filterEvent="onkeyup">
 					<f:facet name="header">
 						<h:outputText value="#{messages['certificate.serialNumber']}" />
 					</f:facet>
 					<h:outputText value="#{cer.serialNumber}" />
-				</rich:column>
-
-				<rich:column sortBy="#{cer.distinguishedName}" filterBy="#{cer.distinguishedName}" filterEvent="onkeyup">
-					<f:facet name="header">
-						<h:outputText value="#{messages['certificate.subject']}" />
-					</f:facet>
-					<h:outputText value="#{cer.distinguishedName}" />
 				</rich:column>
 
 				<rich:column sortBy="#{cer.validityStart}" filterBy="#{cer.validityStart}" filterEvent="onkeyup">
