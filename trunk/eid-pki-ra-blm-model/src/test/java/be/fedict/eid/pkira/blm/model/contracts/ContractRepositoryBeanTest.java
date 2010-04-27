@@ -101,6 +101,7 @@ public class ContractRepositoryBeanTest extends DatabaseTest {
 
 	private CertificateSigningContract createValidCertificateSigningContract() {
 		CertificateSigningContract contract = new CertificateSigningContract();
+		contract.setCreationDate(new Date());
 		contract.setCertificateType(VALID_CERTIFICATE_TYPE);
 		contract.setContractDocument(VALID_CONTRACT);
 		contract.setRequester(VALID_REQUESTER);
