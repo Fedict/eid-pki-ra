@@ -20,6 +20,7 @@ package be.fedict.eid.pkira.blm.model.certificatedomain;
 
 import java.util.List;
 
+import be.fedict.eid.pkira.blm.model.usermgmt.User;
 import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.blm.model.framework.DataTableEntityQuery;
@@ -35,6 +36,8 @@ public class CertificateDomainQuery extends DataTableEntityQuery<CertificateDoma
 	
 	public static final String NAME = "be.fedict.eid.pkira.blm.certificateDomainQuery";
 	
+	private User user;
+	
 	@Override
 	public String getEjbql() {
 		return "select certificateDomain from CertificateDomain certificateDomain";
@@ -44,5 +47,13 @@ public class CertificateDomainQuery extends DataTableEntityQuery<CertificateDoma
 	public List<CertificateDomain> getResultList() {
 		setOrderColumn("certificateDomain.name");
 		return super.getResultList();
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public User getUser() {
+		return user;
 	}
 }

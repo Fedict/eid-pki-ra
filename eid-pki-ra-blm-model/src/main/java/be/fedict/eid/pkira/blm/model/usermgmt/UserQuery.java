@@ -34,7 +34,7 @@ public class UserQuery extends DataTableEntityQuery<User> {
 
 	private static final long serialVersionUID = -8523995221764583699L;
 	
-public static final String NAME = "be.fedict.eid.pkira.blm.userQuery";
+	public static final String NAME = "be.fedict.eid.pkira.blm.userQuery";
 	
 	private User user;
 	

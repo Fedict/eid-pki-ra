@@ -64,7 +64,7 @@ public class EIDPKIRAPrivateServiceClientTest {
 		when(port.listCertificates(isA(ListCertificatesRequest.class))).thenReturn(response);
 		
 		// Call
-		List<CertificateWS> result = serviceClient.listCertificates(userRRN);
+		List<CertificateWS> result = serviceClient.listCertificates(userRRN, null);
 		
 		// Verify
 		verify(port).listCertificates(isA(ListCertificatesRequest.class));

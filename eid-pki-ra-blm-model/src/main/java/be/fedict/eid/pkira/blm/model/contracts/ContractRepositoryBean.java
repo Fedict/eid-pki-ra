@@ -32,6 +32,7 @@ import javax.persistence.Query;
 import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
+import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationStatus;
 
 /**
  * Implementation of the domain repository.
@@ -75,9 +76,17 @@ public class ContractRepositoryBean implements ContractRepository {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	// TODO: Select aanpassen met userRRN
-	public List<Certificate> findAllCertificates(String issuer) {
-		Query query = entityManager.createQuery("SELECT distinct c from Certificate c");
+	public List<Certificate> findAllCertificates(String userRRN, String certificateDomainID) {		
+		String squery = "SELECT c" +
+						" FROM Certificate c, Registration r" +
+						" WHERE c.certificateDomain=r.certificateDomain" +
+						" AND r.status='" + RegistrationStatus.APPROVED.name() + "'" +
+						" AND r.requester.nationalRegisterNumber=" + userRRN;
+		
+		if(certificateDomainID != null){
+			squery += " AND c.certificateDomain.id = " + certificateDomainID ;
+		}
+		Query query = entityManager.createQuery(squery);
 		return query.getResultList();
 	}
 

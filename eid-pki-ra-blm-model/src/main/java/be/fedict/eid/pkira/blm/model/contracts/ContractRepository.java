@@ -52,7 +52,7 @@ public interface ContractRepository {
 	/**
 	 * Retrieves a list of all certificates.
 	 */
-	public List<Certificate> findAllCertificates(String userRRN);
+	public List<Certificate> findAllCertificates(String userRRN, String certificateDomainID);
 
 	/**
 	 * Finds a certificate using its issuer's DN and its serial number.

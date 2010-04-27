@@ -37,6 +37,8 @@ import be.fedict.eid.pkira.generated.privatews.FindCertificateRequest;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateResponse;
 import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryRequest;
 import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryResponse;
+import be.fedict.eid.pkira.generated.privatews.FindRegisteredCertificateDomainsForUserRequest;
+import be.fedict.eid.pkira.generated.privatews.FindRegisteredCertificateDomainsForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.FindRegistrationByIdRequest;
 import be.fedict.eid.pkira.generated.privatews.FindRegistrationByIdResponse;
 import be.fedict.eid.pkira.generated.privatews.FindRegistrationsByUserRRNRequest;
@@ -79,9 +81,10 @@ public class EIDPKIRAPrivateServiceClient {
 	 *            the "rijksregisternummer" (national number) of the user.
 	 * @return the list of certificates available to him.
 	 */
-	public List<CertificateWS> listCertificates(String userRRN) {
+	public List<CertificateWS> listCertificates(String userRRN, String certificateDomainId) {
 		ListCertificatesRequest request = factory.createListCertificatesRequest();
 		request.setUserRRN(userRRN);
+		request.setCertificateDomainId(certificateDomainId);
 		ListCertificatesResponse response = getWebservicePort().listCertificates(request);
 
 		return response.getCertificates();
@@ -107,6 +110,14 @@ public class EIDPKIRAPrivateServiceClient {
 		request.setUserRRN(userRRN);
 		
 		FindRemainingCertificateDomainsForUserResponse response = getWebservicePort().findRemainingCertificateDomainsForUser(request);
+		return response.getCertificateDomains();
+	}
+	
+	public List<CertificateDomainWS> findRegisteredCertificateDomainsForUser(String userRRN){
+		FindRegisteredCertificateDomainsForUserRequest request = factory.createFindRegisteredCertificateDomainsForUserRequest();
+		request.setUserRRN(userRRN);
+		
+		FindRegisteredCertificateDomainsForUserResponse response = getWebservicePort().findRegisteredCertificateDomainsForUser(request);
 		return response.getCertificateDomains();
 	}
 	
