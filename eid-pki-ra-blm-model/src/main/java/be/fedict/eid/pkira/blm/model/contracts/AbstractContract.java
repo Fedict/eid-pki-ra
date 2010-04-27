@@ -17,6 +17,7 @@
 package be.fedict.eid.pkira.blm.model.contracts;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -32,6 +33,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.validator.NotNull;
 
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 
@@ -67,6 +72,11 @@ public abstract class AbstractContract implements Serializable {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "CERTIFICATE_DOMAIN_ID", nullable = false)
 	private CertificateDomain certificateDomain;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@NotNull
+	@Column(name = "CREATION_DATE", nullable = false)
+	private Date creationDate;
 
 	public String getContractDocument() {
 		return contractDocument;
@@ -94,6 +104,14 @@ public abstract class AbstractContract implements Serializable {
 
 	public Integer getId() {
 		return id;
+	}
+
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
 	}
 
 	@Override

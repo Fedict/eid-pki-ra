@@ -37,7 +37,6 @@ import org.testng.annotations.Test;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainHome;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
-import be.fedict.eid.pkira.blm.model.mail.MailTemplate;
 import be.fedict.eid.pkira.dnfilter.DistinguishedName;
 import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
 
@@ -69,8 +68,6 @@ public class RegistrationManagerBeanTest {
 	private Log log;
 	@Mock
 	private DistinguishedNameManager distinguishedNameManager;
-	@Mock
-	private MailTemplate mailTemplate;
 
 	@BeforeMethod
 	public void setup() {
@@ -82,7 +79,6 @@ public class RegistrationManagerBeanTest {
 		bean.setUserRepository(userRepository);
 		bean.setLog(log);
 		bean.setDistinguishedNameManager(distinguishedNameManager);
-//		bean.setMailTemplate(mailTemplate);
 	}
 
 	@Test

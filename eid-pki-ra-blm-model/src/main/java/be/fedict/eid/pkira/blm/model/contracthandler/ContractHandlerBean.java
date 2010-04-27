@@ -272,6 +272,7 @@ public class ContractHandlerBean implements ContractHandler {
 			CertificateRevocationRequestType request, String signer) {
 		CertificateRevocationContract contract = new CertificateRevocationContract();
 		contract.setRequester(signer);
+		contract.setCreationDate(new Date());
 		contract.setContractDocument(requestMsg);
 		contract.setSubject(request.getDistinguishedName());
 		contract.setStartDate(request.getValidityStart().toGregorianCalendar().getTime());
@@ -286,6 +287,7 @@ public class ContractHandlerBean implements ContractHandler {
 			CertificateSigningRequestType request, String signer, CertificateType certificateType) {
 		CertificateSigningContract contract = new CertificateSigningContract();
 		contract.setRequester(signer);
+		contract.setCreationDate(new Date());
 		contract.setCertificateType(certificateType);
 		contract.setContractDocument(requestMsg);
 		contract.setSubject(request.getDistinguishedName());

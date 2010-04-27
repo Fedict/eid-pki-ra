@@ -17,12 +17,15 @@ import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainHome;
 import be.fedict.eid.pkira.blm.model.config.ConfigurationEntry;
 import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
+import be.fedict.eid.pkira.blm.model.contracts.AbstractContract;
 import be.fedict.eid.pkira.blm.model.contracts.Certificate;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
+import be.fedict.eid.pkira.blm.model.contracts.ContractQuery;
 import be.fedict.eid.pkira.blm.model.contracts.ContractRepository;
 import be.fedict.eid.pkira.blm.model.mappers.CertificateDomainMapper;
 import be.fedict.eid.pkira.blm.model.mappers.CertificateMapper;
 import be.fedict.eid.pkira.blm.model.mappers.ConfigurationEntryMapper;
+import be.fedict.eid.pkira.blm.model.mappers.ContractMapper;
 import be.fedict.eid.pkira.blm.model.mappers.RegistrationMapper;
 import be.fedict.eid.pkira.blm.model.mappers.UserMapper;
 import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
@@ -43,6 +46,8 @@ import be.fedict.eid.pkira.generated.privatews.FindCertificateRequest;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateResponse;
 import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryRequest;
 import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryResponse;
+import be.fedict.eid.pkira.generated.privatews.FindContractsRequest;
+import be.fedict.eid.pkira.generated.privatews.FindContractsResponse;
 import be.fedict.eid.pkira.generated.privatews.FindRegistrationByIdRequest;
 import be.fedict.eid.pkira.generated.privatews.FindRegistrationByIdResponse;
 import be.fedict.eid.pkira.generated.privatews.FindRegistrationsByUserRRNRequest;
@@ -198,6 +203,15 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 		return response;
 	}
 
+	@Override
+	public FindContractsResponse findContracts(FindContractsRequest request) {
+		List<AbstractContract> contracts = getContractQuery().getFindContracts(
+				Integer.valueOf(request.getCertificateDomainId()), request.getUserRrn());
+		FindContractsResponse response = new ObjectFactory().createFindContractsResponse();
+		response.getContracts().addAll(getContractMapper().map(contracts));
+		return response;
+	}
+
 	private ContractRepository getDomainRepository() {
 		return (ContractRepository) Component.getInstance(ContractRepository.NAME, true);
 	}
@@ -248,5 +262,13 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	
 	private RegistrationMapper getRegistrationMapper() {
 		return (RegistrationMapper) Component.getInstance(RegistrationMapper.NAME, true);
+	}
+	
+	private ContractQuery getContractQuery() {
+		return (ContractQuery) Component.getInstance(ContractQuery.NAME, true);
+	}
+
+	private ContractMapper getContractMapper() {
+		return (ContractMapper) Component.getInstance(ContractMapper.NAME, true);
 	}
 }
