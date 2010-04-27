@@ -39,6 +39,7 @@ import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
 import be.fedict.eid.pkira.blm.model.contracts.AbstractContract;
 import be.fedict.eid.pkira.blm.model.contracts.Certificate;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
+import be.fedict.eid.pkira.blm.model.contracts.ContractHome;
 import be.fedict.eid.pkira.blm.model.contracts.ContractQuery;
 import be.fedict.eid.pkira.blm.model.contracts.ContractRepository;
 import be.fedict.eid.pkira.blm.model.mappers.CertificateDomainMapper;
@@ -77,6 +78,8 @@ import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsFo
 import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.FindUserRequest;
 import be.fedict.eid.pkira.generated.privatews.FindUserResponse;
+import be.fedict.eid.pkira.generated.privatews.GetContractDocumentRequest;
+import be.fedict.eid.pkira.generated.privatews.GetContractDocumentResponse;
 import be.fedict.eid.pkira.generated.privatews.GetLegalNoticeRequest;
 import be.fedict.eid.pkira.generated.privatews.GetLegalNoticeResponse;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesRequest;
@@ -245,6 +248,15 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 		return response;
 	}
 
+	@Override
+	public GetContractDocumentResponse getContractDocument(GetContractDocumentRequest request) {
+		GetContractDocumentResponse response = new ObjectFactory().createGetContractDocumentResponse();
+		ContractHome contractHome = getContractHome();
+		contractHome.setId(request.getContractId());
+		response.setContractDocument(contractHome.getInstance().getContractDocument());
+		return response;
+	}
+
 	private ContractRepository getDomainRepository() {
 		return (ContractRepository) Component.getInstance(ContractRepository.NAME, true);
 	}
@@ -307,5 +319,9 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 
 	private ContractMapper getContractMapper() {
 		return (ContractMapper) Component.getInstance(ContractMapper.NAME, true);
+	}
+
+	private ContractHome getContractHome() {
+		return (ContractHome) Component.getInstance(ContractHome.NAME, true);
 	}
 }

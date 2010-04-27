@@ -27,6 +27,7 @@ import be.fedict.eid.pkira.generated.privatews.CertificateDomainWS;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 import be.fedict.eid.pkira.generated.privatews.ConfigurationEntryKeyWS;
 import be.fedict.eid.pkira.generated.privatews.ConfigurationEntryWS;
+import be.fedict.eid.pkira.generated.privatews.ContractWS;
 import be.fedict.eid.pkira.generated.privatews.CreateOrUpdateRegistrationRequest;
 import be.fedict.eid.pkira.generated.privatews.CreateOrUpdateRegistrationResponse;
 import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserRequest;
@@ -37,6 +38,8 @@ import be.fedict.eid.pkira.generated.privatews.FindCertificateRequest;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateResponse;
 import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryRequest;
 import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryResponse;
+import be.fedict.eid.pkira.generated.privatews.FindContractsRequest;
+import be.fedict.eid.pkira.generated.privatews.FindContractsResponse;
 import be.fedict.eid.pkira.generated.privatews.FindRegisteredCertificateDomainsForUserRequest;
 import be.fedict.eid.pkira.generated.privatews.FindRegisteredCertificateDomainsForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.FindRegistrationByIdRequest;
@@ -160,6 +163,14 @@ public class EIDPKIRAPrivateServiceClient {
 		
 		FindConfigurationEntryResponse response = getWebservicePort().findConfigurationEntry(request);
 		return response.getConfigurationEntry();
+	}
+	
+	public List<ContractWS> findContracts(Integer certificateDomainId, String userRrn) {
+		FindContractsRequest request = factory.createFindContractsRequest();
+		request.setCertificateDomainId(certificateDomainId);
+		request.setUserRrn(userRrn);
+		FindContractsResponse response = getWebservicePort().findContracts(request);
+		return response.getContracts();
 	}
 
 	/**

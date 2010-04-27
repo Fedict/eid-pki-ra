@@ -26,7 +26,6 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.framework.EntityQuery;
 
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainHome;
-import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainQuery;
 import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationStatus;
 import be.fedict.eid.pkira.blm.model.usermgmt.User;
@@ -44,7 +43,7 @@ public class ContractQuery extends EntityQuery<AbstractContract> {
 	
 	private Registration registration;
 	
-	@In(value = CertificateDomainQuery.NAME, create = true)
+	@In(value = CertificateDomainHome.NAME, create = true)
 	private CertificateDomainHome certificateDomainHome;
 	
 	public String getEjbql() {
@@ -64,7 +63,7 @@ public class ContractQuery extends EntityQuery<AbstractContract> {
 				new String[] {
 						"registration.requester.nationalRegisterNumber = #{registration.requester.nationalRegisterNumber}", 
 						"registration.status = #{registration.status}", 
-						"contract.certificateDomain = registration.certificateDomain", 
+						"registration.certificateDomain = #{certificateDomainHome.instance}", 
 						"contract.certificateDomain = #{certificateDomainHome.instance}"}));
 		return getResultList();
 	}

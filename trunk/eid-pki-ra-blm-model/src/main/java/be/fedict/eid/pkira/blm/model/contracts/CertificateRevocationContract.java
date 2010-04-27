@@ -18,6 +18,7 @@ package be.fedict.eid.pkira.blm.model.contracts;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
@@ -37,8 +38,10 @@ public class CertificateRevocationContract extends AbstractContract {
 
 	public static final String NAME = "be.fedict.eid.pkira.blm.certificateRevocationContract";
 
+	@Column(name = "START_DATE")
 	private Date startDate;    
-    private Date endDate;
+	@Column(name = "END_DATE")
+	private Date endDate;
 	
 	public Date getStartDate() {
 		return startDate;

@@ -16,24 +16,18 @@
  */
 package be.fedict.eid.pkira.blm.model.contracts;
 
-import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.fail;
 
 import java.math.BigInteger;
 import java.util.Date;
-import java.util.List;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.blm.model.DatabaseTest;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
-import be.fedict.eid.pkira.blm.model.contracts.Certificate;
-import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
-import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
-import be.fedict.eid.pkira.blm.model.contracts.ContractRepositoryBean;
 
 /**
  * @author Jan Van den Bergh
@@ -138,15 +132,15 @@ public class ContractRepositoryBeanTest extends DatabaseTest {
 		return certificate;
 	}
 
-	private void validateCertificate(Certificate certificate) {
-		assertEquals(certificate.getIssuer() ,VALID_ISSUER );
-		assertEquals(certificate.getCertificateType() ,VALID_CERTIFICATE_TYPE);
-		assertEquals(certificate.getRequesterName() ,VALID_REQUESTER);
-		assertEquals(certificate.getSerialNumber() ,VALID_SERIALNUMBER);
-		assertEquals(certificate.getDistinguishedName() ,VALID_DN);
-		assertEquals(certificate.getValidityEnd() ,VALID_ENDDATE);
-		assertEquals(certificate.getValidityStart() ,VALID_STARTDATE );
-		assertEquals(certificate.getX509() ,VALID_X509);
-		assertNotNull(certificate.getId());		
-	}
+//	private void validateCertificate(Certificate certificate) {
+//		assertEquals(certificate.getIssuer() ,VALID_ISSUER );
+//		assertEquals(certificate.getCertificateType() ,VALID_CERTIFICATE_TYPE);
+//		assertEquals(certificate.getRequesterName() ,VALID_REQUESTER);
+//		assertEquals(certificate.getSerialNumber() ,VALID_SERIALNUMBER);
+//		assertEquals(certificate.getDistinguishedName() ,VALID_DN);
+//		assertEquals(certificate.getValidityEnd() ,VALID_ENDDATE);
+//		assertEquals(certificate.getValidityStart() ,VALID_STARTDATE );
+//		assertEquals(certificate.getX509() ,VALID_X509);
+//		assertNotNull(certificate.getId());		
+//	}
 }
