@@ -185,6 +185,23 @@
 				</xsd:complexType>
 			</xsd:element>
 
+			<xsd:element name="FindContractsRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="certificateDomainId" type="xsd:string" />
+						<xsd:element name="userRrn" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="FindContractsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="contracts" type="types:contractWS" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
 			<xsd:complexType name="certificateWS">
 				<xsd:sequence>
 					<xsd:element name="serialNumber" type="xsd:string" />
@@ -255,6 +272,25 @@
 				<xsd:restriction base="xsd:string">
 					<xsd:enumeration value="NEW" />
 					<xsd:enumeration value="APPROVED" />
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:complexType name="contractWS">
+				<xsd:sequence>
+					<xsd:element name="contractId" type="xsd:integer" />
+					<xsd:element name="dnExpression" type="xsd:string" />
+					<xsd:element name="requesterName" type="xsd:string" />
+					<xsd:element name="certificateDomainName" type="xsd:string" />
+					<xsd:element name="creationDate" type="xsd:dateTime" />
+					<xsd:element name="certificateType" type="types:certificateTypeWS" />
+					<xsd:element name="contractType" type="types:contractTypeWS" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:simpleType name="contractTypeWS">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="SIGNING" />
+					<xsd:enumeration value="REVOCATION" />
 				</xsd:restriction>
 			</xsd:simpleType>
 		</xsd:schema>
@@ -339,6 +375,14 @@
 	<wsdl:message name="GetLegalNoticeResponse">
 		<wsdl:part name="request" element="types:GetLegalNoticeResponse" />
 	</wsdl:message>
+	
+	<wsdl:message name="FindContractsRequest">
+		<wsdl:part name="request" element="types:FindContractsRequest" />		
+	</wsdl:message>
+
+	<wsdl:message name="FindContractsResponse">
+		<wsdl:part name="request" element="types:FindContractsResponse" />
+	</wsdl:message>
 
 	<wsdl:portType name="EIDPKIRAPrivatePortType">
 		<wsdl:operation name="ListCertificates">
@@ -380,6 +424,10 @@
 		<wsdl:operation name="GetLegalNotice">
 			<wsdl:input message="tns:GetLegalNoticeRequest" />
 			<wsdl:output message="tns:GetLegalNoticeResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="FindContracts">
+			<wsdl:input message="tns:FindContractsRequest" />
+			<wsdl:output message="tns:FindContractsResponse" />
 		</wsdl:operation>
 	</wsdl:portType>
 
@@ -472,6 +520,15 @@
 				<soap:body use="literal" />
 			</wsdl:input>
 			<wsdl:output message="tns:GetLegalNoticeResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="FindContracts">
+			<soap:operation />
+			<wsdl:input message="tns:FindContractsRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output message="tns:FindContractsResponse">
 				<soap:body use="literal" />
 			</wsdl:output>
 		</wsdl:operation>

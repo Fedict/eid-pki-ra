@@ -48,6 +48,7 @@ public class RegistrationHome extends EntityHome<Registration> {
 		setId(id);
 		getInstance().setStatus(RegistrationStatus.APPROVED);
 		update();
+		// raise an event for sending the approval mail
 		raiseEvent("be.fedict.eid.pkira.blm.registrationHome.approved", getInstance(), reason);
 		return "approved";
 	}
@@ -59,6 +60,7 @@ public class RegistrationHome extends EntityHome<Registration> {
 	public String disapprove(Integer id, String reason) {
 		setId(id);
 		remove();
+		// raise an event for sending the disapproval mail
 		raiseEvent("be.fedict.eid.pkira.blm.registrationHome.disapproved", getInstance(), reason);
 		return "disapproved";
 	}
