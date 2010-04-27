@@ -16,32 +16,24 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.portal.ra;
+package be.fedict.eid.pkira.portal.contract;
 
 /**
  * @author Bram Baeyens
  *
  */
-public enum CertificateType {
+public enum ContractType {
 	
-	SERVER("Server", "certificate.type.server"), 
-	CLIENT("Client", "certificate.type.client"), 
-	CODE("Code", "certificate.type.code");
+	REVOCATION("contract.type.revocation"),
+	SIGNING("contract.type.signing");
 	
-	private final String type;
 	private final String messageKey;
 	
-	private CertificateType(String type, String messageKey){
-		this.type = type;
+	private ContractType(String messageKey) {
 		this.messageKey = messageKey;
-	}
-	
-	public String toString(){
-		return type;
 	}
 	
 	public String getMessageKey() {
 		return messageKey;
 	}
-	
 }

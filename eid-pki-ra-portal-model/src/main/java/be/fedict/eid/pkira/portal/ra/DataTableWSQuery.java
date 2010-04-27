@@ -22,7 +22,7 @@ package be.fedict.eid.pkira.portal.ra;
  * @author Bram Baeyens
  *
  */
-public abstract class DataTableWSHome extends WSHome {
+public abstract class DataTableWSQuery extends WSHome {
 	
 	private static final long serialVersionUID = 5506541459954523480L;
 	

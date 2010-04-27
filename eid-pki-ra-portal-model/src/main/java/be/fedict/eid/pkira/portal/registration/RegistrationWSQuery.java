@@ -26,14 +26,14 @@ import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.common.security.EIdUserCredentials;
 import be.fedict.eid.pkira.generated.privatews.RegistrationWS;
-import be.fedict.eid.pkira.portal.ra.DataTableWSHome;
+import be.fedict.eid.pkira.portal.ra.DataTableWSQuery;
 
 /**
  * @author Bram Baeyens
  *
  */
 @Name(RegistrationWSQuery.NAME)
-public class RegistrationWSQuery extends DataTableWSHome {
+public class RegistrationWSQuery extends DataTableWSQuery {
 
 	private static final long serialVersionUID = -6479453928366362421L;
 	

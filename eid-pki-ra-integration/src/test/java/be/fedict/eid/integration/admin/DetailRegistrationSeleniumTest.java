@@ -26,7 +26,7 @@ import be.fedict.eid.integration.BaseSeleniumTestCase;
 public class DetailRegistrationSeleniumTest extends BaseSeleniumTestCase {
 	
 	private String pageOverviewTitle = "Handle registrations"; 
-	private String pageDetailTitle = "Approval Detail overview"; 	
+//	private String pageDetailTitle = "Approval Detail overview"; 	
 	
 	@BeforeClass
 	public void login() {

@@ -35,13 +35,13 @@ public class CertificateSigningContract extends AbstractContract {
 	
 	private static final long serialVersionUID = 582083322769739724L;
 
-	public static final String NAME="be.fedict.eid.pkira.blm.certificateSigningContract";
+	public static final String NAME = "be.fedict.eid.pkira.blm.certificateSigningContract";
 
-	@Column(name="VALIDITY", nullable=false)
+	@Column(name="VALIDITY")
 	private Integer validityPeriodMonths;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name="CERTIFICATE_TYPE", nullable=false)
+	@Column(name="CERTIFICATE_TYPE")
 	private CertificateType certificateType;
 
 	public Integer getValidityPeriodMonths() {

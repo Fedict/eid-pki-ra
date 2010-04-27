@@ -18,6 +18,8 @@
 
 package be.fedict.eid.pkira.blm.model.mappers;
 
+import static be.fedict.eid.pkira.contracts.util.JAXBUtil.createXmlGregorianCalendar;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,7 +30,12 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
 import be.fedict.eid.pkira.blm.model.contracts.AbstractContract;
+import be.fedict.eid.pkira.blm.model.contracts.CertificateRevocationContract;
+import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
+import be.fedict.eid.pkira.generated.privatews.CertificateTypeWS;
+import be.fedict.eid.pkira.generated.privatews.ContractTypeWS;
 import be.fedict.eid.pkira.generated.privatews.ContractWS;
+import be.fedict.eid.pkira.generated.privatews.ObjectFactory;
 
 /**
  * @author Bram Baeyens
@@ -39,13 +46,48 @@ import be.fedict.eid.pkira.generated.privatews.ContractWS;
 public class ContractMapperBean implements Serializable, ContractMapper {
 
 	private static final long serialVersionUID = 518966394376372668L;
+	
+	private final ObjectFactory factory;
+	
+	public ContractMapperBean() {
+		this.factory = new ObjectFactory();
+	}
 
 	public Collection<ContractWS> map(List<AbstractContract> contracts) {
 		List<ContractWS> contractWSList = new ArrayList<ContractWS>();
 		for (AbstractContract contract : contracts) {
-			
+			contractWSList.add(map(contract));
 		}
 		return contractWSList;
+	}
+
+	private ContractWS map(AbstractContract contract) {
+		ContractWS contractWS = factory.createContractWS();
+		contractWS.setContractId(contract.getId());
+		contractWS.setCreationDate(createXmlGregorianCalendar(contract.getCreationDate()));
+		contractWS.setDnExpression(contract.getSubject());
+		contractWS.setRequesterName(contract.getRequester());
+		contractWS.setCertificateDomainName(contract.getCertificateDomain().getName());
+		contractWS.setContractType(deriveContractType(contract));
+		contractWS.setCertificateType(getCertificateType(contract));		
+		return contractWS;
+	}
+
+	private ContractTypeWS deriveContractType(AbstractContract contract) {
+		if (contract instanceof CertificateRevocationContract) {
+			return ContractTypeWS.REVOCATION;
+		} else if (contract instanceof CertificateSigningContract) {
+			return ContractTypeWS.SIGNING;
+		}
+		return null;
+	}
+
+	private CertificateTypeWS getCertificateType(AbstractContract contract) {
+		if (contract instanceof CertificateSigningContract) {
+			return Enum.valueOf(CertificateTypeWS.class, 
+					((CertificateSigningContract) contract).getCertificateType().name());
+		}
+		return null;
 	}
 
 }

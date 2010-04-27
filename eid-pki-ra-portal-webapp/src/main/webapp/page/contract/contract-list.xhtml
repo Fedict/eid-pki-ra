@@ -1,0 +1,81 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:form id="contractListForm">
+			<rich:panel id="panel">
+				<f:facet name="header">
+					<h:outputText value="#{messages['contracts.title']}" />
+				</f:facet>
+	
+				<s:decorate id="CertificateDomainDecorator" template="/layout/edit.xhtml">
+	           		<ui:define name="label">#{messages['certificate.domain.selection.label']}:</ui:define>
+					
+					<h:selectOneMenu id="selectRegisteredCertificateDomain" value="#{contractWSQuery.certificateDomainId}">
+						<s:selectItems value="#{certificateDomainWSQuery.findRegisteredCertificateDomains}" 
+								var="certificateDomain" label="#{certificateDomain.name}" itemValue="#{certificateDomain.id}"
+								noSelectionLabel="#{messages['general.noselectionlabel']}" />
+						<a:support event="onchange" reRender="contractTable" />
+					</h:selectOneMenu>
+	           	</s:decorate>
+				
+<!--				<s:decorate id="dnExpressionDecorator" template="/layout/edit.xhtml">-->
+<!--					<ui:define name="label">#{messages['contract.dnExpression']}:</ui:define>-->
+<!--					<h:outputText id="certificateDomainName" value="#{certificateDomain.name}" />-->
+<!--				</s:decorate>-->
+				
+				<rich:dataTable id="contractTable" var="contract" rows="#{contractWSQuery.rows}"
+						value="#{contractWSQuery.findContracts}" 
+						reRender="contractTableDataScroller" width="75%">
+					
+					<rich:column sortBy="#{messages[contract.contractType.messageKey]}" filterBy="#{messages[contract.contractType.messageKey]}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['contract.type']}" />
+						</f:facet>
+						<h:outputText value="#{messages[contract.contractType.messageKey]}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{contract.requesterName}" filterBy="#{contract.requesterName}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['contract.requestername']}" />
+						</f:facet>
+						<h:outputText value="#{contract.requesterName}" />
+					</rich:column>
+	
+					<rich:column sortBy="#{messages[contract.certificateType.messageKey]}" filterBy="#{messages[contract.certificateType.messageKey]}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['certificate.type']}" />
+						</f:facet>
+						<h:outputText value="#{messages[contract.certificateType.messageKey]}" />
+					</rich:column>
+	
+					<rich:column sortBy="#{contract.creationDate}" filterBy="#{contract.creationDate}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['contract.creationdate']}" />
+						</f:facet>
+						<h:outputText value="#{contract.creationDate}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</rich:column>
+	
+					<rich:column>
+						<s:link id="downloadContractDocument" value="#{messages['link.download']}"
+								action="#{contractWSHome.download(contract.id)}" />
+						<h:outputText value=" " />
+						<s:link id="showCertificate" value="#{messages['link.detail']}" rendered="#{contract.hasCertificate}" />
+					</rich:column>
+	
+					<f:facet name="footer">
+						<rich:datascroller id="contractTableDataScroller" for="contractTable" renderIfSinglePage="false" 
+								maxPages="#{contractWSQuery.maxPages}" fastStep="#{contractWSQuery.fastStep}" />
+					</f:facet>
+				</rich:dataTable>
+			</rich:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

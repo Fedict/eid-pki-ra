@@ -16,32 +16,20 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.portal.ra;
+package be.fedict.eid.pkira.blm.model.contracts;
+
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.framework.EntityHome;
 
 /**
  * @author Bram Baeyens
  *
  */
-public enum CertificateType {
+@Name(ContractHome.NAME)
+public class ContractHome extends EntityHome<AbstractContract> {
+
+	private static final long serialVersionUID = 4867309070918612476L;
 	
-	SERVER("Server", "certificate.type.server"), 
-	CLIENT("Client", "certificate.type.client"), 
-	CODE("Code", "certificate.type.code");
-	
-	private final String type;
-	private final String messageKey;
-	
-	private CertificateType(String type, String messageKey){
-		this.type = type;
-		this.messageKey = messageKey;
-	}
-	
-	public String toString(){
-		return type;
-	}
-	
-	public String getMessageKey() {
-		return messageKey;
-	}
-	
+	public static final String NAME = "be.fedict.eid.pkira.blm.contractHome";
+
 }
