@@ -37,6 +37,14 @@ public interface ReportManager {
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	void addLineToReport(AbstractContract contract, boolean success);
 	
-	String generateReport(String monthYear, boolean showCertificateAuthorities, boolean showCertificateDomains);
+	/**
+	 * Creates a new report.
+	 * @param startMonthYear month to start.
+	 * @param endMonthYear month to end.
+	 * @param showCertificateAuthorities show CA in report?
+	 * @param showCertificateDomains show CD in report?
+	 * @return the report as XML string.
+	 */
+	String generateReport(String startMonthYear, String endMonthYear, boolean showCertificateAuthorities, boolean showCertificateDomains);
 
 }

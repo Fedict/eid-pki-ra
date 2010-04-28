@@ -1,43 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <report xmlns="urn:be:fedict:eid:pkira:reports">
-	<monthlyReport>
-		<date>
-			<year>2010</year>
-			<month>4</month>
-		</date>
-		<certificateDomain>
-			<name>Test Domain</name>
-			<sign>
-				<success>8</success>
-				<failure>2</failure>
-				<total>10</total>
-			</sign>
+	<monthlyReport month="4" year="2010">
+		<certificateDomain name="Test Domain">
+			<summary>
+				<requests total="10" failure="2" success="8" />
+				<revocations total="11" failure="10" success="1" />
+				<total total="21" failure="12" success="9" />
+			</summary>
+			<details>
+				<detail success="false" type="request" time="2010-04-26T20:41:24.000+02:00" requester="Requester" subject="Subject" />
+			</details>
 		</certificateDomain>
-		<certificateDomain>
-			<name>Test Domain 2</name>
-			<sign>
-				<success>2</success>
-				<failure>1</failure>
-				<total>3</total>
-			</sign>
-		</certificateDomain>
-		<certificateAuthority>
-			<name>Test CA</name>
-			<sign>
-				<success>10</success>
-				<failure>3</failure>
-				<total>13</total>
-			</sign>
-			<revoke>
-				<success>5</success>
-				<failure>2</failure>
-				<total>7</total>
-			</revoke>
-			<total>
-				<success>15</success>
-				<failure>5</failure>
-				<total>20</total>
-			</total>
+		<certificateAuthority name="Test CA">
+			<summary>
+				<requests total="13" failure="3" success="10" />
+				<revocations total="7" failure="2" success="5" />
+				<total total="20" failure="5" success="15" />
+			</summary>
+			<details>
+				<detail success="true" type="revocation" time="2010-04-26T20:41:24.000+02:00" requester="Requester" subject="Subject" />
+			</details>
 		</certificateAuthority>
 	</monthlyReport>
 </report>

@@ -66,7 +66,8 @@ public class ReportManagerBeanTest {
 		verify(reportEntryHome).persist();
 		assertEquals(entry.getCertificateAuthorityName(), CA_NAME);
 		assertEquals(entry.getCertificateDomainName(), CD_NAME);
-		assertEquals(entry.getContract(), contract);
+		assertEquals(entry.getRequester(), contract.getRequester());
+		assertEquals(entry.getSubject(), contract.getSubject());
 		assertEquals(entry.getContractType(), ReportEntry.ContractType.REQUEST);
 		assertEquals(entry.getMonth(), getMonth());
 	}
@@ -82,8 +83,9 @@ public class ReportManagerBeanTest {
 		verify(reportEntryHome).persist();
 		assertEquals(entry.getCertificateAuthorityName(), CA_NAME);
 		assertEquals(entry.getCertificateDomainName(), CD_NAME);
-		assertEquals(entry.getContract(), contract);
-		assertEquals(entry.getContractType(), ReportEntry.ContractType.REVOKE);
+		assertEquals(entry.getRequester(), contract.getRequester());
+		assertEquals(entry.getSubject(), contract.getSubject());
+		assertEquals(entry.getContractType(), ReportEntry.ContractType.REVOCATION);
 		assertEquals(entry.getMonth(), getMonth());
 	}
 

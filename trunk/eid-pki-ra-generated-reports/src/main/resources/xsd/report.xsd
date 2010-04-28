@@ -27,42 +27,53 @@
 
 	<complexType name="monthlyReportType">
 		<sequence>
-			<element name="date">
-				<complexType>
-					<sequence>
-						<element name="year" type="int" />
-						<element name="month" type="int" />
-					</sequence>
-				</complexType>
-			</element>
-			<element name="certificateDomain" type="tns:certificateDomainReportItemType" minOccurs="0"
-				maxOccurs="unbounded" />
-			<element name="certificateAuthority" type="tns:certificateAuthorityReportItemType" minOccurs="0"
-				maxOccurs="unbounded" />
+			<element name="certificateDomain" type="tns:reportItemType" minOccurs="0" maxOccurs="unbounded" />
+			<element name="certificateAuthority" type="tns:reportItemType" minOccurs="0" maxOccurs="unbounded" />
 		</sequence>
+		<attribute name="year" type="int" use="required" />
+		<attribute name="month" type="int" use="required" />
 	</complexType>
 
-	<complexType name="certificateAuthorityReportItemType">
+	<complexType name="reportItemType">
 		<sequence>
-			<element name="name" type="string" />
-			<element name="sign" type="tns:successFailureCountType" />
-			<element name="revoke" type="tns:successFailureCountType" />
+			<element name="summary" type="tns:summaryType" minOccurs="0" />
+			<element name="details" type="tns:detailsType" minOccurs="0" />
+		</sequence>
+		<attribute name="name" type="string" use="required" />
+	</complexType>
+
+	<complexType name="summaryType">
+		<sequence>
+			<element name="requests" type="tns:successFailureCountType" />
+			<element name="revocations" type="tns:successFailureCountType" />
 			<element name="total" type="tns:successFailureCountType" />
 		</sequence>
 	</complexType>
 
-	<complexType name="certificateDomainReportItemType">
-		<sequence>
-			<element name="name" type="string" />
-			<element name="sign" type="tns:successFailureCountType" />
+	<complexType name="detailsType">
+		<sequence minOccurs="0" maxOccurs="unbounded">
+			<element name="detail" type="tns:detailType" />
 		</sequence>
 	</complexType>
 
-	<complexType name="successFailureCountType">
-		<sequence>
-			<element name="success" type="nonNegativeInteger" />
-			<element name="failure" type="nonNegativeInteger" />
-			<element name="total" type="nonNegativeInteger" />
-		</sequence>
+	<complexType name="detailType">
+		<attribute name="subject" type="string" use="required" />
+		<attribute name="requester" type="string" use="required" />
+		<attribute name="time" type="dateTime" use="required" />
+		<attribute name="type" type="tns:contractType" use="required" />
+		<attribute name="success" type="boolean" use="required" />
 	</complexType>
+
+	<complexType name="successFailureCountType">
+		<attribute name="success" type="nonNegativeInteger" use="required" />
+		<attribute name="failure" type="nonNegativeInteger" use="required" />
+		<attribute name="total" type="nonNegativeInteger" use="required" />
+	</complexType>
+
+	<simpleType name="contractType">
+		<restriction base="string">
+			<enumeration value="request" />
+			<enumeration value="revocation" />
+		</restriction>
+	</simpleType>
 </schema>

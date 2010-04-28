@@ -38,6 +38,7 @@ import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
 import be.fedict.eid.pkira.blm.model.reporting.ReportEntry.ContractType;
 import be.fedict.eid.pkira.reports.MonthlyReportBuilder;
 import be.fedict.eid.pkira.reports.ReportBuilder;
+import be.fedict.eid.pkira.reports.ReportItemBuilder;
 import be.fedict.eid.pkira.reports.ReportsClient;
 
 /**
@@ -64,7 +65,8 @@ public class ReportManagerBean implements ReportManager {
 		ReportEntry entry = reportEntryHome.getInstance();
 		entry.setCertificateAuthorityName(contract.getCertificateDomain().getCertificateAuthority().getName());
 		entry.setCertificateDomainName(contract.getCertificateDomain().getName());
-		entry.setContract(contract);
+		entry.setSubject(contract.getSubject());
+		entry.setRequester(contract.getRequester());
 		entry.setSuccess(success);
 		entry.setMonth(new SimpleDateFormat("yyyy-MM").format(new Date()));
 		entry.setContractType(mapToContractType(contract));
@@ -75,100 +77,121 @@ public class ReportManagerBean implements ReportManager {
 	/**
 	 * {@inheritDoc}
 	 */
-	public String generateReport(String monthYear, boolean showCertificateAuthorities, boolean showCertificateDomains) {
+	public String generateReport(String startMonthYear, String endMonthYear, boolean showCertificateAuthorities,
+			boolean showCertificateDomains) {
+		// Get the months
+		List<String> monthYears = getMonthsFromUntil(startMonthYear, endMonthYear);
+
 		// Basic report builder
 		ReportBuilder reportBuilder = new ReportBuilder();
-		MonthlyReportBuilder monthlyReportBuilder = reportBuilder.newMonthlyReport().setDate(monthYear);
 
-		// Get CA data
-		if (showCertificateAuthorities) {
-			addCertificateAuthorityReports(monthlyReportBuilder, monthYear);
-		}
-		
-		// Get CD data
-		if (showCertificateDomains) {
-			addCertificateDomainReports(monthlyReportBuilder, monthYear);
+		// Add monthly reports
+		for (String monthYear : monthYears) {
+			// Add subelement
+			MonthlyReportBuilder monthlyReportBuilder = reportBuilder.newMonthlyReport().withDate(monthYear);
+
+			// Get the data
+			List<ReportEntry> entries = getReportEntriesPerMonth(monthYear);
+
+			// Build CA reports
+			if (showCertificateAuthorities) {
+				for(final String certificateAuthorityName: getCertificateAuthorityNames(entries)) {
+					ReportItemBuilder builder = monthlyReportBuilder.newCertificateAuthorityReportBuilder().withName(certificateAuthorityName);
+					fillReportItemBuilder(builder, certificateAuthorityName, entries, new Filter<ReportEntry>() {						
+						public boolean accept(ReportEntry item) {
+							return StringUtils.equals(certificateAuthorityName, item.getCertificateAuthorityName());
+						}
+					});
+				}
+			}
+
+			// Build CD reports
+			if (showCertificateDomains) {
+				for(final String certificateDomainName: getCertificateDomainNames(entries)) {
+					ReportItemBuilder builder = monthlyReportBuilder.newCertificateDomainReportBuilder().withName(certificateDomainName);
+					fillReportItemBuilder(builder, certificateDomainName, entries, new Filter<ReportEntry>() {						
+						public boolean accept(ReportEntry item) {
+							return StringUtils.equals(certificateDomainName, item.getCertificateDomainName());
+						}
+					});
+				}
+			}
 		}
 
 		// Convert to XML
-		return reportsClient.marshalReport(reportBuilder.toXmlType());
+		return reportsClient.marshalReport(reportBuilder.build());
 	}
 
 	@SuppressWarnings("unchecked")
-	private void addCertificateAuthorityReports(MonthlyReportBuilder monthlyReportBuilder, String monthYear) {
-		// Do the query
-		List<AggregateData> list = entityManager.createNamedQuery(
-				"getCertificateAuthorityAggregateData").setParameter("month", monthYear).getResultList();
+	private List<ReportEntry> getReportEntriesPerMonth(String monthYear) {
+		return entityManager.createNamedQuery("getReportData").setParameter("month", monthYear).getResultList();
+	}
 
-		// Get the CA names
-		Set<String> caNames = new TreeSet<String>();
-		for (AggregateData item : list) {
-			caNames.add(item.getName());
-		}
+	@SuppressWarnings("unchecked")
+	private List<String> getMonthsFromUntil(String startMonthYear, String endMonthYear) {
+		return entityManager.createNamedQuery("getMonths").setParameter("startMonth", startMonthYear).setParameter(
+				"endMonth", endMonthYear).getResultList();
+	}
 
-		// Create the report elements
-		for (String caName : caNames) {
-			int requestSuccessCount = 0;
-			int requestFailureCount = 0;
-			int revokeSuccessCount = 0;
-			int revokeFailureCount = 0;
-
-			for (AggregateData item : list) {
-				if (StringUtils.equals(item.getName(), caName)) {
-					if (item.getContractType() == ContractType.REQUEST) {
-						if (item.isSuccess()) {
-							requestSuccessCount = item.getCount();
-						} else {
-							requestFailureCount = item.getCount();
-						}
+	private void fillReportItemBuilder(ReportItemBuilder reportItembuilder, String name, List<ReportEntry> allEntries, Filter<ReportEntry> filter) {
+		int signingSuccessCount = 0;
+		int signingFailureCount = 0;
+		int revokeSuccessCount = 0;
+		int revokeFailureCount = 0;
+		
+		for(ReportEntry entry: allEntries) {
+			if (filter.accept(entry)) {
+				if (entry.getContractType()==ContractType.REQUEST) {
+					if (entry.isSuccess()) {
+						signingSuccessCount++;
 					} else {
-						if (item.isSuccess()) {
-							revokeSuccessCount = item.getCount();
-						} else {
-							revokeFailureCount = item.getCount();
-						}
+						signingFailureCount++;
 					}
-				}
+				} else if (entry.getContractType()==ContractType.REVOCATION) {
+					if (entry.isSuccess()) {
+						revokeSuccessCount++;
+					} else {
+						revokeFailureCount++;
+					}
+				}			
+			
+				reportItembuilder.addDetailBuilder()
+					.withRequester(entry.getRequester())
+					.withSubject(entry.getSubject())
+					.withTime(entry.getLogTime())
+					.withContractType(mapContractType(entry.getContractType()))
+					.withSuccess(entry.isSuccess());
 			}
-
-			monthlyReportBuilder.newCertificateAuthorityReportBuilder().setCertificateAuthorityName(caName)
-					.setSigningRequestCounts(requestSuccessCount, requestFailureCount).setRevocationRequestCounts(
-							revokeSuccessCount, revokeFailureCount);
 		}
+		
+		reportItembuilder
+			.withName(name)
+			.withRequestCounts(signingSuccessCount, signingFailureCount)
+			.withRevocationCounts(revokeSuccessCount, revokeFailureCount);
 	}
 	
-	@SuppressWarnings("unchecked")
-	private void addCertificateDomainReports(MonthlyReportBuilder monthlyReportBuilder, String monthYear) {
-		// Do the query
-		List<AggregateData> list = entityManager.createNamedQuery(
-				"getCertificateDomainAggregateData").setParameter("month", monthYear).getResultList();
+	/**
+	 * @param contractType
+	 * @return
+	 */
+	private be.fedict.eid.pkira.generated.reports.ContractType mapContractType(ContractType contractType) {
+		return Enum.valueOf(be.fedict.eid.pkira.generated.reports.ContractType.class, contractType.name());
+	}
 
-		// Get the CA names
+	private Set<String> getCertificateAuthorityNames(List<ReportEntry> entries) {
+		Set<String> caNames = new TreeSet<String>();
+		for (ReportEntry entry: entries) {
+			caNames.add(entry.getCertificateAuthorityName());
+		}
+		return caNames;
+	}
+
+	private Set<String> getCertificateDomainNames(List<ReportEntry> entries) {
 		Set<String> cdNames = new TreeSet<String>();
-		for (AggregateData item : list) {
-			cdNames.add(item.getName());
+		for (ReportEntry entry: entries) {
+			cdNames.add(entry.getCertificateDomainName());
 		}
-
-		// Create the report elements
-		for (String cdName : cdNames) {
-			int requestSuccessCount = 0;
-			int requestFailureCount = 0;
-
-			for (AggregateData item : list) {
-				if (StringUtils.equals(item.getName(), cdName)) {
-					if (item.getContractType() == ContractType.REQUEST) {
-						if (item.isSuccess()) {
-							requestSuccessCount = item.getCount();
-						} else {
-							requestFailureCount = item.getCount();
-						}
-					}
-				}
-			}
-
-			monthlyReportBuilder.newCertificateDomainReportBuilder().setCertificateDomainName(cdName)
-					.setSigningRequestCounts(requestSuccessCount, requestFailureCount);
-		}
+		return cdNames;
 	}
 
 	private ContractType mapToContractType(AbstractContract contract) {
@@ -176,7 +199,7 @@ public class ReportManagerBean implements ReportManager {
 			return ContractType.REQUEST;
 		}
 		if (contract instanceof CertificateRevocationContract) {
-			return ContractType.REVOKE;
+			return ContractType.REVOCATION;
 		}
 
 		throw new RuntimeException("Invalid contract type: " + contract.getClass().getName());

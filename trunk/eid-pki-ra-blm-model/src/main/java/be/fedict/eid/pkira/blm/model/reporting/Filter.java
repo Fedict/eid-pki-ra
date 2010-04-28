@@ -16,35 +16,12 @@
  */
 package be.fedict.eid.pkira.blm.model.reporting;
 
-import be.fedict.eid.pkira.blm.model.reporting.ReportEntry.ContractType;
+/**
+ * Filter that either accepts or rejects entries.
+ * 
+ * @author Jan Van den Bergh
+ */
+public interface Filter<T> {
 
-public class AggregateData {
-
-	private String name;
-	private ContractType contractType;
-	private boolean success;
-	private int count;
-	
-	public AggregateData(String name, ContractType contractType, Boolean success, Long count) {
-		this.name = name;
-		this.contractType = contractType;
-		this.success = success;
-		this.count = count.intValue();
-	}
-
-	public String getName() {
-		return name;
-	}
-	
-	public ContractType getContractType() {
-		return contractType;
-	}
-	
-	public boolean isSuccess() {
-		return success;
-	}
-	
-	public int getCount() {
-		return count;
-	}
+	public boolean accept(T item);
 }

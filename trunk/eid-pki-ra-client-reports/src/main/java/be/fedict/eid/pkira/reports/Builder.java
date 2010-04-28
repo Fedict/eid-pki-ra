@@ -23,5 +23,5 @@ package be.fedict.eid.pkira.reports;
  */
 public interface Builder<T> {
 
-	T toXmlType();
+	T build();
 }
