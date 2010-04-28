@@ -46,5 +46,19 @@
 				</executions>
 			</plugin>
 		</plugins>
-	</build>	
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<scope>test</scope>
+			<classifier>jdk15</classifier>
+		</dependency>
+		<dependency>
+			<groupId>xmlunit</groupId>
+			<artifactId>xmlunit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 </project>
