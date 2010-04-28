@@ -22,21 +22,16 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 import org.hibernate.annotations.Index;
-
-import be.fedict.eid.pkira.blm.model.contracts.AbstractContract;
 
 /**
  * A line in a report.
@@ -45,14 +40,14 @@ import be.fedict.eid.pkira.blm.model.contracts.AbstractContract;
  */
 @Entity
 @Table(name = "REPORT_ENTRY")
-@NamedQueries({
-	@NamedQuery(name="getCertificateAuthorityAggregateData", query="SELECT NEW be.fedict.eid.pkira.blm.model.reporting.AggregateData(certificateAuthorityName, contractType, success, COUNT(*)) FROM ReportEntry WHERE month=:month GROUP BY certificateAuthorityName, contractType, success"),
-	@NamedQuery(name="getCertificateDomainAggregateData", query="SELECT NEW be.fedict.eid.pkira.blm.model.reporting.AggregateData(certificateDomainName, contractType, success, COUNT(*)) FROM ReportEntry WHERE month=:month GROUP BY certificateDomainName, contractType, success")
-})
+@NamedQueries(
+	{
+			@NamedQuery(name = "getReportData", query = "SELECT DISTINCT e FROM ReportEntry e WHERE month=:month"),
+			@NamedQuery(name = "getMonths", query = "SELECT DISTINCT e.month FROM ReportEntry e WHERE month>=:startMonth AND month<=:endMonth") })
 public class ReportEntry {
 
 	public static enum ContractType {
-		REQUEST, REVOKE
+		REQUEST, REVOCATION
 	}
 
 	@Column(name = "CERTIFICATE_AUTHORITY_NAME", nullable = false, updatable = false)
@@ -60,10 +55,6 @@ public class ReportEntry {
 
 	@Column(name = "CERTIFICATE_DOMAIN_NAME", nullable = false, updatable = false)
 	private String certificateDomainName;
-
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CONTRACT_ID", updatable = false)
-	private AbstractContract contract;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "CONTRACT_TYPE", updatable = false)
@@ -83,6 +74,12 @@ public class ReportEntry {
 	@Index(name = "idxReportEntryMonth")
 	private String month;
 
+	@Column(name = "REQUESTER", nullable = false, updatable = false)
+	private String requester;
+
+	@Column(name = "SUBJECT", nullable = false, updatable = false)
+	private String subject;
+
 	@Column(name = "SUCCESS", nullable = false, updatable = false)
 	private boolean success;
 
@@ -92,10 +89,6 @@ public class ReportEntry {
 
 	public String getCertificateDomainName() {
 		return certificateDomainName;
-	}
-
-	public AbstractContract getContract() {
-		return contract;
 	}
 
 	public ContractType getContractType() {
@@ -114,6 +107,14 @@ public class ReportEntry {
 		return month;
 	}
 
+	public String getRequester() {
+		return requester;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
 	public boolean isSuccess() {
 		return success;
 	}
@@ -126,10 +127,6 @@ public class ReportEntry {
 		this.certificateDomainName = certificateDomainName;
 	}
 
-	public void setContract(AbstractContract contract) {
-		this.contract = contract;
-	}
-
 	public void setContractType(ContractType contractType) {
 		this.contractType = contractType;
 	}
@@ -138,8 +135,20 @@ public class ReportEntry {
 		this.month = month;
 	}
 
+	public void setRequester(String requester) {
+		this.requester = requester;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
 	public void setSuccess(boolean success) {
 		this.success = success;
+	}
+
+	protected void setLogTime(Date logTime) {
+		this.logTime = logTime;
 	}
 
 }

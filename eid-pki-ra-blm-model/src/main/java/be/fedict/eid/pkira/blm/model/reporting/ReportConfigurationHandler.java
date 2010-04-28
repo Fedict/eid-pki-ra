@@ -24,23 +24,26 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.faces.FacesMessages;
+import org.jboss.seam.international.StatusMessage.Severity;
 
 /**
  * Backing bean for the reporting.
  * 
  * @author Jan Van den Bergh
  */
-@Name(ReportConfiguration.NAME)
+@Name(ReportConfigurationHandler.NAME)
 @Scope(ScopeType.CONVERSATION)
-public class ReportConfiguration implements Serializable {
+public class ReportConfigurationHandler implements Serializable {
 
 	private static final long serialVersionUID = -8148256572976871989L;
 
-	public static final String NAME = "be.fedict.eid.pkira.blm.reportConfiguration";
+	public static final String NAME = "be.fedict.eid.pkira.blm.reportConfigurationHandler";
 
 	@In(value = ReportManagerBean.NAME, create = true)
 	private ReportManager reportManager;
@@ -50,21 +53,31 @@ public class ReportConfiguration implements Serializable {
 
 	@In(value = "#{facesContext}")
 	private FacesContext facesContext;
+	
+	@In(create=true)
+	private FacesMessages facesMessages;
 
-	private String month;
+	private String endMonth;
+	private String startMonth;
 	private boolean includeCertificateAuthorityReport = true;
 	private boolean includeCertificateDomainReport = true;
 
-	public ReportConfiguration() {
-		System.out.println("test");
-	}
-
 	public void generateReport() {
+		if (StringUtils.isBlank(startMonth) || StringUtils.isBlank(endMonth)) {
+			return;
+		}
+		
+		if (startMonth.compareTo(endMonth)>0) {
+			facesMessages.addFromResourceBundle(Severity.ERROR, "reports.startAfterEnd");
+			return;
+		}
+		
 		HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
 		response.setContentType("test/xml");
-		response.addHeader("Content-disposition", "attachment; filename=\"" + month + ".xml\"");
+		String fileName = (StringUtils.equals(startMonth,endMonth) ? startMonth : startMonth + " - " + endMonth) + ".xml\"";
+		response.addHeader("Content-disposition", "attachment; filename=\"" + fileName);
 
-		String report = reportManager.generateReport(month, includeCertificateAuthorityReport,
+		String report = reportManager.generateReport(startMonth, endMonth, includeCertificateAuthorityReport,
 				includeCertificateDomainReport);
 
 		try {
@@ -76,14 +89,6 @@ public class ReportConfiguration implements Serializable {
 			throw new RuntimeException(e);
 		}
 		facesContext.responseComplete();
-	}
-
-	public String getMonth() {
-		return month;
-	}
-
-	public void setMonth(String month) {
-		this.month = month;
 	}
 
 	public boolean isIncludeCertificateAuthorityReport() {
@@ -100,5 +105,21 @@ public class ReportConfiguration implements Serializable {
 
 	public void setIncludeCertificateDomainReport(boolean includeCertificateDomainReport) {
 		this.includeCertificateDomainReport = includeCertificateDomainReport;
+	}
+
+	public String getEndMonth() {
+		return endMonth;
+	}
+
+	public void setEndMonth(String endMonth) {
+		this.endMonth = endMonth;
+	}
+
+	public String getStartMonth() {
+		return startMonth;
+	}
+
+	public void setStartMonth(String startMonth) {
+		this.startMonth = startMonth;
 	}
 }

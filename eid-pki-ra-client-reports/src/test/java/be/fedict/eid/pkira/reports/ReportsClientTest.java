@@ -20,12 +20,14 @@ import static org.testng.Assert.assertTrue;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Date;
 
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import be.fedict.eid.pkira.generated.reports.ContractType;
 import be.fedict.eid.pkira.generated.reports.ReportType;
 
 
@@ -58,21 +60,30 @@ public class ReportsClientTest {
 		ReportBuilder builder = new ReportBuilder();
 		
 		MonthlyReportBuilder monthlyReport = builder.newMonthlyReport();
-		monthlyReport.setDate("2010-04");
+		monthlyReport.withDate("2010-04");
 		
 		monthlyReport.newCertificateAuthorityReportBuilder()
-			.setCertificateAuthorityName("Test CA")
-			.setSigningRequestCounts(10, 3)
-			.setRevocationRequestCounts(5, 2);
+			.withName("Test CA")
+			.withRequestCounts(10, 3)
+			.withRevocationCounts(5, 2)
+			.addDetailBuilder()
+				.withTime(new Date(1272307284000L))
+				.withRequester("Requester")
+				.withSubject("Subject")
+				.withContractType(ContractType.REVOCATION)
+				.withSuccess(true);
 		
 		monthlyReport.newCertificateDomainReportBuilder()
-			.setCertificateDomainName("Test Domain")
-			.setSigningRequestCounts(8, 2);
+			.withName("Test Domain")
+			.withRequestCounts(8, 2)
+			.withRevocationCounts(1, 10)
+			.addDetailBuilder()
+				.withTime(new Date(1272307284000L))
+				.withRequester("Requester")
+				.withSubject("Subject")
+				.withContractType(ContractType.REQUEST)
+				.withSuccess(false);
 		
-		monthlyReport.newCertificateDomainReportBuilder()
-			.setCertificateDomainName("Test Domain 2")
-			.setSigningRequestCounts(2, 1);	
-		
-		return builder.toXmlType();
+		return builder.build();
 	}
 }

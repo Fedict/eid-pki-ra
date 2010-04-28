@@ -21,7 +21,6 @@ import java.util.List;
 
 import be.fedict.eid.pkira.generated.reports.MonthlyReportType;
 import be.fedict.eid.pkira.generated.reports.ObjectFactory;
-import be.fedict.eid.pkira.generated.reports.MonthlyReportType.Date;
 
 /**
  * Builder for one monthly report.
@@ -31,13 +30,13 @@ import be.fedict.eid.pkira.generated.reports.MonthlyReportType.Date;
 public class MonthlyReportBuilder implements Builder<MonthlyReportType> {
 
 	private int year, month;
-	private List<CertificateAuthorityReportItemBuilder> certificateAuthorityReportItemBuilders = new ArrayList<CertificateAuthorityReportItemBuilder>();
-	private List<CertificateDomainReportItemBuilder> certificateDomainReportItemBuilders = new ArrayList<CertificateDomainReportItemBuilder>();
+	private List<ReportItemBuilder> certificateAuthorityReportItemBuilders = new ArrayList<ReportItemBuilder>();
+	private List<ReportItemBuilder> certificateDomainReportItemBuilders = new ArrayList<ReportItemBuilder>();
 
 	/**
 	 * Sets the date in the format yyyy-mm.
 	 */
-	public MonthlyReportBuilder setDate(String date) {
+	public MonthlyReportBuilder withDate(String date) {
 		int index = date.indexOf('-');
 		year = Integer.parseInt(date.substring(0, index));
 		month = Integer.parseInt(date.substring(index + 1));
@@ -45,35 +44,32 @@ public class MonthlyReportBuilder implements Builder<MonthlyReportType> {
 		return this;
 	}
 
-	public CertificateAuthorityReportItemBuilder newCertificateAuthorityReportBuilder() {
-		CertificateAuthorityReportItemBuilder result = new CertificateAuthorityReportItemBuilder();
+	public ReportItemBuilder newCertificateAuthorityReportBuilder() {
+		ReportItemBuilder result = new ReportItemBuilder();
 		certificateAuthorityReportItemBuilders.add(result);
 		return result;
 	}
 	
-	public CertificateDomainReportItemBuilder newCertificateDomainReportBuilder() {
-		CertificateDomainReportItemBuilder result = new CertificateDomainReportItemBuilder();
+	public ReportItemBuilder newCertificateDomainReportBuilder() {
+		ReportItemBuilder result = new ReportItemBuilder();
 		certificateDomainReportItemBuilders.add(result);
 		return result;
 	}
 
 	@Override
-	public MonthlyReportType toXmlType() {
+	public MonthlyReportType build() {
 		ObjectFactory objectFactory = new ObjectFactory();
 
 		MonthlyReportType result = objectFactory.createMonthlyReportType();
+		result.setMonth(month);
+		result.setYear(year);
 
-		Date reportDate = objectFactory.createMonthlyReportTypeDate();
-		result.setDate(reportDate);
-		reportDate.setMonth(month);
-		reportDate.setYear(year);
-
-		for (CertificateAuthorityReportItemBuilder reportItemBuilder : certificateAuthorityReportItemBuilders) {
-			result.getCertificateAuthority().add(reportItemBuilder.toXmlType());
+		for (ReportItemBuilder reportItemBuilder : certificateAuthorityReportItemBuilders) {
+			result.getCertificateAuthority().add(reportItemBuilder.build());
 		}
 		
-		for (CertificateDomainReportItemBuilder reportItemBuilder : certificateDomainReportItemBuilders) {
-			result.getCertificateDomain().add(reportItemBuilder.toXmlType());
+		for (ReportItemBuilder reportItemBuilder : certificateDomainReportItemBuilders) {
+			result.getCertificateDomain().add(reportItemBuilder.build());
 		}
 
 		return result;

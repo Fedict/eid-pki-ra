@@ -37,10 +37,10 @@ public class ReportBuilder implements Builder<ReportType> {
 		return result;
 	}
 
-	public ReportType toXmlType() {
+	public ReportType build() {
 		ReportType result = new ObjectFactory().createReportType();
 		for(MonthlyReportBuilder monthlyReportBuilder: monthlyReportBuilders) {
-			result.getMonthlyReport().add(monthlyReportBuilder.toXmlType());
+			result.getMonthlyReport().add(monthlyReportBuilder.build());
 		}
 		
 		return result;

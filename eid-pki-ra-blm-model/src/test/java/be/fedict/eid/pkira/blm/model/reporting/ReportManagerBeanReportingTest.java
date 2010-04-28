@@ -20,6 +20,7 @@ import static org.testng.Assert.assertTrue;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.Date;
 
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
@@ -36,6 +37,7 @@ import be.fedict.eid.pkira.reports.ReportsClient;
  */
 public class ReportManagerBeanReportingTest extends DatabaseTest {
 
+	private static final String MONTH = "2010-01";
 	private ReportManagerBean reportManagerBean;
 	
 	@BeforeMethod
@@ -49,18 +51,18 @@ public class ReportManagerBeanReportingTest extends DatabaseTest {
 	
 	@BeforeClass
 	public void insertTestData() {
-		createReportEntry("testCA1", "testCD1", ContractType.REQUEST, "2010-01", true);
-		createReportEntry("testCA1", "testCD1", ContractType.REQUEST, "2010-01", false);
-		createReportEntry("testCA1", "testCD1", ContractType.REVOKE, "2010-01", true);
-		createReportEntry("testCA1", "testCD2", ContractType.REQUEST, "2010-01", true);
-		createReportEntry("testCA2", "testCD3", ContractType.REQUEST, "2010-01", true);
-		createReportEntry("testCA2", "testCD3", ContractType.REQUEST, "2010-01", true);
-		createReportEntry("testCA2", "testCD3", ContractType.REVOKE, "2010-01", false);
+		createReportEntry("testCA1", "testCD1", ContractType.REQUEST, MONTH, true, 1);
+		createReportEntry("testCA1", "testCD1", ContractType.REQUEST, MONTH, false, 2);
+		createReportEntry("testCA1", "testCD1", ContractType.REVOCATION, MONTH, true, 3);
+		createReportEntry("testCA1", "testCD2", ContractType.REQUEST, MONTH, true, 4);
+		createReportEntry("testCA2", "testCD3", ContractType.REQUEST, MONTH, true, 5);
+		createReportEntry("testCA2", "testCD3", ContractType.REQUEST, MONTH, true, 6);
+		createReportEntry("testCA2", "testCD3", ContractType.REVOCATION, MONTH, false, 7);
 	}
 	
 	@Test
 	public void testCreateReport() throws Exception {
-		String report = reportManagerBean.generateReport("2010-01", true, true);
+		String report = reportManagerBean.generateReport(MONTH, MONTH, true, true);
 		System.out.println(report);
 		
 		Reader xmlReader = new InputStreamReader(ReportManagerBeanReportingTest.class.getResourceAsStream("testReport.xml"));
@@ -70,13 +72,16 @@ public class ReportManagerBeanReportingTest extends DatabaseTest {
 	}
 
 	private void createReportEntry(String certificateAuthorityName, String certificateDomainName,
-			ContractType contractType, String month, boolean success) {
+			ContractType contractType, String month, boolean success, int number) {
 		ReportEntry entry = new ReportEntry();
 		entry.setCertificateAuthorityName(certificateAuthorityName);
 		entry.setCertificateDomainName(certificateDomainName);
 		entry.setContractType(contractType);
+		entry.setSubject("Subject " + number);
+		entry.setRequester("Requester " + number);
 		entry.setMonth(month);
 		entry.setSuccess(success);
+		entry.setLogTime(new Date(1272307284000L + number*1000*55));
 
 		persistObject(entry);
 	}
