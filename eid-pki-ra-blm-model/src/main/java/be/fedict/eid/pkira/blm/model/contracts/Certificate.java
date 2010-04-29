@@ -248,5 +248,9 @@ public class Certificate implements Serializable {
 	public void setTimer(QuartzTriggerHandle timer) {
 		this.timer = timer;
 	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 }
 

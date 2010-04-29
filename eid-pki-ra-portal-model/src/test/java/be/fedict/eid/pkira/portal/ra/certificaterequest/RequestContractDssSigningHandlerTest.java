@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningResponseType;
 import be.fedict.eid.pkira.generated.contracts.ResultType;
+import be.fedict.eid.pkira.portal.certificate.CertificateHandlerBean;
 import be.fedict.eid.pkira.portal.ra.AbstractDssSigningHandlerTest;
 import be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient;
 
@@ -47,7 +48,14 @@ public class RequestContractDssSigningHandlerTest
 			@Override
 			protected HttpServletRequest getRequest(){
 				return request;
-			} 
+			}
+
+			@Override
+			public CertificateHandlerBean getCertificateHandlerBean() {
+				return certificateHandlerBean;
+			}
+			
+			
 		};
 		
 		handler.setLog(mock(Log.class));
@@ -59,9 +67,10 @@ public class RequestContractDssSigningHandlerTest
 	}
 
 	@Test
-	public void successfulRequest() throws Exception {
+	public void successfullRequest() throws Exception {
 		when(request.getParameter(SIGNATURE_STATUS_PARAMETER)).thenReturn("OK");
 		when(certificateResponse.getResult()).thenReturn(ResultType.SUCCESS);
+		when(certificateHandlerBean.findCertificate(String.valueOf(0))).thenReturn("success");
 		String outcome = handler.handleDssRequest();
 		Assert.assertEquals(outcome, "success");
 	}

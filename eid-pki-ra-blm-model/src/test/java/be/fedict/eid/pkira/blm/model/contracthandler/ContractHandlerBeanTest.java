@@ -27,6 +27,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doAnswer;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
@@ -37,6 +38,8 @@ import java.util.GregorianCalendar;
 import org.jboss.seam.log.Logging;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -275,6 +278,17 @@ public class ContractHandlerBeanTest {
 		when(registrationManager.findRegistrationForUserDNAndCertificateType(SIGNER, VALID_DN, VALID_CERTIFICATETYPE)).thenReturn(VALID_REGISTRATION);
 		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE))).thenReturn(SIGNER);
 		when(certificateInfo.getValidityEnd()).thenReturn(new Date());
+		
+		Answer<?> answer = new Answer<Object>() {
+			public Object answer(InvocationOnMock invocation) {
+				Object[] args = invocation.getArguments();
+				Certificate certificate = (Certificate) args[0];
+				certificate.setId(123);
+				return null;
+			}
+		};
+		doAnswer(answer).when(contractRepository).persistCertificate(any(Certificate.class));
+		
 		// Run it
 		String result = bean.signCertificate(REQUEST_MESSAGE);
 

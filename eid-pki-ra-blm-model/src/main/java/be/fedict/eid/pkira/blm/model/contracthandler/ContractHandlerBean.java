@@ -160,6 +160,7 @@ public class ContractHandlerBean implements ContractHandler {
 	public String signCertificate(String requestMsg) {
 		CertificateSigningResponseBuilder responseBuilder = new CertificateSigningResponseBuilder();
 		CertificateSigningRequestType request = null;
+		int certificateId = -1;
 		try {
 			// Parse the request
 			request = contractParser.unmarshalRequestMessage(requestMsg, CertificateSigningRequestType.class);
@@ -206,6 +207,7 @@ public class ContractHandlerBean implements ContractHandler {
 			sendCertificateByMail(certificate, registration);
 
 			// All ok
+			certificateId = certificate.getId();
 			fillResponseFromRequest(responseBuilder, request, ResultType.SUCCESS, "Success");
 		} catch (ContractHandlerBeanException e) {
 			fillResponseFromRequest(responseBuilder, request, e.getResultType(), e.getMessage());
@@ -215,7 +217,9 @@ public class ContractHandlerBean implements ContractHandler {
 					"An error occurred while processing the contract.");
 		}
 
-		return contractParser.marshalResponseMessage(responseBuilder.toResponseType(),
+		
+		CertificateSigningResponseType responseType = responseBuilder.toResponseType(certificateId);
+		return contractParser.marshalResponseMessage(responseType,
 				CertificateSigningResponseType.class);
 	}
 
@@ -238,8 +242,7 @@ public class ContractHandlerBean implements ContractHandler {
 		Certificate certificate;
 		try {
 			CertificateInfo certificateInfo = certificateParser.parseCertificate(request.getCertificate());
-			certificate = contractRepository.findCertificate(certificateInfo.getIssuer(), certificateInfo
-					.getSerialNumber());
+			certificate = contractRepository.findCertificate(certificateInfo.getIssuer(), certificateInfo.getSerialNumber());
 			if (certificate == null) {
 				throw new ContractHandlerBeanException(ResultType.UNKNOWN_CERTIFICATE,
 						"The certificate was not found in our database.");

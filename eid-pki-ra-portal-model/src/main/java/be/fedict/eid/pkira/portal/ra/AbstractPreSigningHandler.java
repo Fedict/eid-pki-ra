@@ -20,7 +20,6 @@ package be.fedict.eid.pkira.portal.ra;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
-import org.jboss.seam.annotations.Out;
 import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
@@ -39,7 +38,6 @@ public abstract class AbstractPreSigningHandler<T extends AbstractSigningWrapper
 	@In(create=true, value=EIDPKIRAContractsClient.NAME)
 	private EIDPKIRAContractsClient contractsClientPortal;
 	
-	@Out
 	protected abstract T getSigningWrapper();
 	
 	protected abstract void setSigningWrapper(T signingWrapper);

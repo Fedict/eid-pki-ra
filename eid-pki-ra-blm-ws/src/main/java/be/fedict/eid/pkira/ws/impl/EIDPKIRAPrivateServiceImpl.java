@@ -62,6 +62,8 @@ import be.fedict.eid.pkira.generated.privatews.CreateOrUpdateRegistrationRespons
 import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserRequest;
 import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType;
+import be.fedict.eid.pkira.generated.privatews.FindCertificateByIDRequest;
+import be.fedict.eid.pkira.generated.privatews.FindCertificateByIDResponse;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateDomainRequest;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateDomainResponse;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateRequest;
@@ -120,6 +122,15 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 		Certificate certificate = getDomainRepository().findCertificate(request.getUserRRN(),
 				new BigInteger(request.getSerialNumber()));
 		FindCertificateResponse response = new ObjectFactory().createFindCertificateResponse();
+		response.setCertificate(getCertificateMapper().map(certificate, true));
+		return response;
+	}
+	
+	@Override
+	public FindCertificateByIDResponse findCertificateByID(
+			FindCertificateByIDRequest request) {
+		Certificate certificate = getDomainRepository().findCertificate(Integer.parseInt(request.getCertificateID()));
+		FindCertificateByIDResponse response = new ObjectFactory().createFindCertificateByIDResponse();
 		response.setCertificate(getCertificateMapper().map(certificate, true));
 		return response;
 	}

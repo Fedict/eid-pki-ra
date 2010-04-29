@@ -33,7 +33,11 @@ public interface CertificateHandler extends Serializable {
 	
 	String getCertificate(String serialNumber);
 	
+	String findCertificate(String certificateID);
+	
 	void download();
 
 	List<Certificate> findCertificateList();
+	
+	String gotoList();
 }

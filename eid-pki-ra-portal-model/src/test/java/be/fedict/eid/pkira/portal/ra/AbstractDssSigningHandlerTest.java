@@ -10,6 +10,7 @@ import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 
 import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
+import be.fedict.eid.pkira.portal.certificate.CertificateHandlerBean;
 import be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient;
 
 public abstract class AbstractDssSigningHandlerTest<S, T> {
@@ -22,6 +23,7 @@ public abstract class AbstractDssSigningHandlerTest<S, T> {
 	@Mock protected EIDPKIRAContractsClient contractsClient;
 	@Mock protected HttpServletRequest request;
 	@Mock protected FacesMessages facesMessages;
+	@Mock protected CertificateHandlerBean certificateHandlerBean; 
 	protected T certificateResponse;
 	
 	@BeforeMethod
