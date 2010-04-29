@@ -11,5 +11,8 @@
 		<rule if-outcome="revokeContract">
 			<redirect view-id="/page/contract/revocationContract.xhtml" />
 		</rule>
-	</navigation>	
+		<rule if-outcome="list">
+			<redirect view-id="/page/certificates/certificate-list.xhtml" />
+		</rule>
+	</navigation>		
 </page>

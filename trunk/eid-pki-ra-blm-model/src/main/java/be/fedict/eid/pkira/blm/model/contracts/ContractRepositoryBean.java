@@ -60,6 +60,7 @@ public class ContractRepositoryBean implements ContractRepository {
 		}
 		
 		entityManager.persist(certificate);
+		entityManager.flush();
 	}
 
 	/**
@@ -95,11 +96,9 @@ public class ContractRepositoryBean implements ContractRepository {
 	 */
 	@Override
 	public Certificate findCertificate(String issuer, BigInteger serialNumber) {
-		Query query = entityManager
-		//TODO: add issuer
-				.createQuery("SELECT distinct c from Certificate c WHERE serialNumber=?");
-		//query.setParameter(1, issuer);
+		Query query = entityManager.createQuery("SELECT distinct c from Certificate c WHERE serialNumber=?");
 		query.setParameter(1, serialNumber);
+		
 		try {
 			Certificate result = (Certificate) query.getSingleResult();
 			return result;
@@ -108,7 +107,27 @@ public class ContractRepositoryBean implements ContractRepository {
 		} catch (EntityNotFoundException e) {
 			return null;
 		} catch (NonUniqueResultException e) {
-			throw new RuntimeException("Too many results for certificate search" + issuer + "/" + serialNumber);
+			throw new RuntimeException("Too many results for certificate search " + serialNumber);
+		}
+	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Certificate findCertificate(int certificateID) {
+		Query query = entityManager.createQuery("SELECT distinct c from Certificate c WHERE id=?");
+		//query.setParameter(1, issuer);
+		query.setParameter(1, certificateID);
+		
+		try {
+			Certificate result = (Certificate) query.getSingleResult();
+			return result;
+		} catch (NoResultException e) {
+			return null;
+		} catch (EntityNotFoundException e) {
+			return null;
+		} catch (NonUniqueResultException e) {
+			throw new RuntimeException("Too many results for certificate search" + certificateID);
 		}
 	}
 	

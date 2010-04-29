@@ -34,6 +34,8 @@ import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserRequest;
 import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivateService;
+import be.fedict.eid.pkira.generated.privatews.FindCertificateByIDRequest;
+import be.fedict.eid.pkira.generated.privatews.FindCertificateByIDResponse;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateDomainRequest;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateDomainResponse;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateRequest;
@@ -102,6 +104,14 @@ public class EIDPKIRAPrivateServiceClient {
 		request.setUserRRN(userRRN);
 		request.setSerialNumber(serialNumber);
 		FindCertificateResponse response = getWebservicePort().findCertificate(request);
+		return response.getCertificate();
+	}
+
+	public CertificateWS findCertificateWithID(String userRRN, String certificateID) {
+		FindCertificateByIDRequest request = factory.createFindCertificateByIDRequest();
+		request.setUserRRN(userRRN);
+		request.setCertificateID(certificateID);
+		FindCertificateByIDResponse response = getWebservicePort().findCertificateByID(request);
 		return response.getCertificate();
 	}
 	

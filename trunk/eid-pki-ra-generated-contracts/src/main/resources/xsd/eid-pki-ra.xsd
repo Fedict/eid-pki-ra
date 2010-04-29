@@ -68,7 +68,11 @@
 
 	<complexType name="certificateSigningResponseType">
 		<complexContent>
-			<extension base="tns:responseType" />
+			<extension base="tns:responseType">
+				<sequence>
+					<element name="certificateID" type="int" />
+				</sequence>
+			</extension>
 		</complexContent>
 	</complexType>
 

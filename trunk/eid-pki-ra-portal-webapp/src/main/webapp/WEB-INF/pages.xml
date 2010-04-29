@@ -14,7 +14,7 @@
 	<page view-id="/postSignRequestContract.xhtml" action="#{requestContractDssSigningHandler.handleDssRequest}">
 		<navigation>
 			<rule if-outcome="success">
-				<redirect view-id="/page/contract/dssSignSuccess.xhtml" />
+				<redirect view-id="/page/certificates/certificate-detail.xhtml" />
 			</rule>
 			<rule if-outcome="error">
 				<redirect view-id="/page/contract/dssSignError.xhtml" />

@@ -44,7 +44,6 @@ public abstract class AbstractDssSigningHandler<T extends ResponseType> {
 				getFacesMessages().addFromResourceBundle("contract.status." + serviceClientResponse.getResult().name(), serviceClientResponse.getResultMessage());
 				
 				if (ResultType.SUCCESS.equals(serviceClientResponse.getResult())) {
-					// TODO (20100308): put necessary data on the context
 					redirectStatus = SUCCESSFUL_REDIRECT;
 				} 
 			}
@@ -53,6 +52,10 @@ public abstract class AbstractDssSigningHandler<T extends ResponseType> {
 			log.info("<<< handleRequest: exception");
 		}
 		
+		return handelRedirect(redirectStatus, serviceClientResponse);
+	}
+	
+	protected String handelRedirect(String redirectStatus, T serviceClientResponse){
 		if (SUCCESSFUL_REDIRECT.equals(redirectStatus)) {
 			return SUCCESSFUL_REDIRECT;
 		} else {

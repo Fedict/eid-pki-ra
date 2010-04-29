@@ -40,6 +40,7 @@ import org.jboss.seam.log.Log;
 import be.fedict.eid.pkira.common.security.EIdUserCredentials;
 import be.fedict.eid.pkira.generated.privatews.CertificateTypeWS;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
+import be.fedict.eid.pkira.portal.menu.MenuHandler;
 import be.fedict.eid.pkira.portal.ra.CertificateType;
 import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 
@@ -69,6 +70,9 @@ public class CertificateHandlerBean implements CertificateHandler {
 	
 	@In(value="#{facesContext}")
 	private javax.faces.context.FacesContext facesContext;	
+	
+	@In
+	private MenuHandler menuHandler; 
 	
 	private String certificateDomainWSID = null;
 	
@@ -111,6 +115,12 @@ public class CertificateHandlerBean implements CertificateHandler {
 		certificate = findCertificate(credentials.getUser().getRRN(), serialNumber);
 		return "success";
 	}
+	
+	@Override
+	public String findCertificate(String certificateID) {
+		certificate = findCertificateWithID(credentials.getUser().getRRN(), certificateID);
+		return "success";
+	}
 	 
 	@Factory("certificates")
 	public void initCertificateList(){
@@ -136,6 +146,11 @@ public class CertificateHandlerBean implements CertificateHandler {
 
 	private Certificate findCertificate(String userRRN, String serialNumber) {
 		CertificateWS certificateWS = eidpkiraPrivateServiceClient.findCertificate(userRRN, serialNumber);
+		return parse(certificateWS);
+	}
+
+	private Certificate findCertificateWithID(String userRRN, String certificateID) {
+		CertificateWS certificateWS = eidpkiraPrivateServiceClient.findCertificateWithID(userRRN, certificateID);
 		return parse(certificateWS);
 	}
 
@@ -175,5 +190,11 @@ public class CertificateHandlerBean implements CertificateHandler {
 
 	public String getCertificateDomainWSID() {
 		return certificateDomainWSID;
+	}
+
+	@Override
+	public String gotoList() {
+		menuHandler.setSelectedItem("certificates");
+		return "list";
 	}
 }

@@ -43,6 +43,10 @@ public class RevocationContract extends AbstractContract {
 	public Certificate getCertificate() {
 		return certificate;
 	}
+
+	public void setCertificate(Certificate certificate) {
+		this.certificate = certificate;
+	}
 	
 	@Override
 	public String toString() {

@@ -45,4 +45,11 @@ public class CertificateSigningResponseBuilder extends AbstractResponseBuilder<C
 		fillInResponseType(response);
 		return response;
 	}
+
+	public CertificateSigningResponseType toResponseType(int certificateId) {
+		CertificateSigningResponseType response = getObjectFactory().createCertificateSigningResponseType();
+		fillInResponseType(response);
+		response.setCertificateID(certificateId);
+		return response;
+	}
 }

@@ -37,7 +37,7 @@ public class Certificate implements Serializable {
 
 	private static final long serialVersionUID = 5429725347686453892L;
 	
-	public static final String NAME = "be.fedict.eid.pkira.portal.Certificate";
+	public static final String NAME = "be.fedict.eid.pkira.portal.certificate";
 	
 	private String serialNumber;
 	private CertificateType type;

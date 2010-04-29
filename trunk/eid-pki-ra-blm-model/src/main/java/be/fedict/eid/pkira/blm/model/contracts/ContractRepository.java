@@ -62,6 +62,13 @@ public interface ContractRepository {
 	 */
 	public Certificate findCertificate(String issuer, BigInteger serialNumber);
 
+	/**
+	 * Find a certificate using its certificateID
+	 * @param certificateID the certificateID
+	 * @return the certificate
+	 */
+	public Certificate findCertificate(int certificateID);
+
 	
 	public Certificate findCertificateByCertificateDomain(CertificateDomain certificateDomain);
 	
