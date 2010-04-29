@@ -35,7 +35,7 @@
 					<h:outputText id="certificateDomainName" value="#{registrationWSHome.instance.certificateDomainName}" rendered="#{registrationWSHome.managed}" />
 					<h:inputHidden id="certificateDomainId" value="#{registrationWSHome.instance.certificateDomainId}" rendered="#{registrationWSHome.managed}" />	
 					<h:selectOneMenu id="selectCertificateDomain" value="#{registrationWSHome.instance.certificateDomainId}" 
-							required="true" rendered="#{not registrationWSHome.managed}">
+							rendered="#{not registrationWSHome.managed}">
 						<s:selectItems 
 							value="#{certificateDomainWSQuery.findRemainingCertificateDomains}" 
 							var="certificateDomain" 
