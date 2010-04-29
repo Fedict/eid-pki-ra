@@ -21,7 +21,9 @@ package be.fedict.eid.pkira.portal.ra;
 import java.io.Serializable;
 
 import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.core.Conversation;
+import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.portal.util.FacesUtil;
 
@@ -42,6 +44,9 @@ public abstract class AbstractSigningWrapper<T extends AbstractContract> impleme
 	protected void setFacesUtil(FacesUtil facesUtil) {
 		this.facesUtil = facesUtil;
 	}	
+	
+	@Logger
+	private Log log;
 
 	public abstract void setContract(T contract);
 
@@ -56,6 +61,7 @@ public abstract class AbstractSigningWrapper<T extends AbstractContract> impleme
 	}
 
 	public String getBase64CsrXml() {
+		log.info("Sending contract to DSS:\n{0}" , base64CsrXml);
 		return base64CsrXml;
 	}
 

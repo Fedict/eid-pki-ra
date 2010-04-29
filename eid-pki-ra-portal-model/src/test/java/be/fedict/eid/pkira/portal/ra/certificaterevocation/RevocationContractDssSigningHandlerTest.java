@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import javax.servlet.http.HttpServletRequest;
 
 import org.jboss.seam.faces.FacesMessages;
+import org.jboss.seam.log.Log;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -48,6 +49,8 @@ public class RevocationContractDssSigningHandlerTest
 				return request;
 			} 
 		};		
+		
+		handler.setLog(mock(Log.class));
 	}
 	
 	protected void initMocks() throws Exception {
