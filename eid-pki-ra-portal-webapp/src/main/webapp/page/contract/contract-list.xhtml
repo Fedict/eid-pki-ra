@@ -15,7 +15,7 @@
 	
 				<s:decorate id="CertificateDomainDecorator" template="/layout/edit.xhtml">
 	           		<ui:define name="label">#{messages['certificate.domain.selection.label']}:</ui:define>					
-					<h:selectOneMenu id="selectRegisteredCertificateDomain" value="#{contractWSQuery.certificateDomainId}">
+					<h:selectOneMenu id="selectRegisteredCertificateDomain" value="#{contractWSQuery.certificateDomainId}" required="true">
 						<s:selectItems value="#{certificateDomainWSQuery.findRegisteredCertificateDomains}" 
 								var="certificateDomain" label="#{certificateDomain.name}" itemValue="#{certificateDomain.id}"
 								noSelectionLabel="#{messages['general.noselectionlabel']}" />

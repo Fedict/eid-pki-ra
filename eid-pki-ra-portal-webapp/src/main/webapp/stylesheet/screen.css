@@ -137,3 +137,10 @@ a:hover, .itemSelected{
 	margin: 0 auto;
 }
 
+.required {
+	color: #ff0000;
+}
+
+.error-label {
+    color: #ff0000;
+}

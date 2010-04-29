@@ -27,7 +27,7 @@
 
 				<s:decorate id="emailDecoration" template="/layout/edit.xhtml">
 					<ui:define name="label">#{messages['registration.email']}:</ui:define>
-					<h:inputText id="email" value="#{registrationWSHome.instance.emailAddress}" />
+					<h:inputText id="email" value="#{registrationWSHome.instance.emailAddress}" required="true"/>
 				</s:decorate>
 
 				<s:decorate id="certificateDomainDecoration" template="/layout/edit.xhtml">
@@ -35,7 +35,7 @@
 					<h:outputText id="certificateDomainName" value="#{registrationWSHome.instance.certificateDomainName}" rendered="#{registrationWSHome.managed}" />
 					<h:inputHidden id="certificateDomainId" value="#{registrationWSHome.instance.certificateDomainId}" rendered="#{registrationWSHome.managed}" />	
 					<h:selectOneMenu id="selectCertificateDomain" value="#{registrationWSHome.instance.certificateDomainId}" 
-							rendered="#{not registrationWSHome.managed}">
+							rendered="#{not registrationWSHome.managed}" required="true">
 						<s:selectItems 
 							value="#{certificateDomainWSQuery.findRemainingCertificateDomains}" 
 							var="certificateDomain" 
