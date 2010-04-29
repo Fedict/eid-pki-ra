@@ -1,15 +1,15 @@
 package be.fedict.eid.pkira.portal.ra;
 
-import java.util.logging.Logger;
-
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Base64;
 import org.jboss.seam.Component;
+import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.StatusMessage.Severity;
+import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
 import be.fedict.eid.pkira.contracts.XmlMarshallingException;
@@ -19,7 +19,8 @@ import be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient;
 
 public abstract class AbstractDssSigningHandler<T extends ResponseType> {
 
-	private static final Logger LOG = Logger.getLogger("AbstractSignatureHttpRequestHandler");
+	@Logger
+	private Log log;
 
 	private static final String SIGNATURE_RESPONSE_PARAMETER = "SignatureResponse";
 	private static final String SIGNATURE_STATUS_PARAMETER = "SignatureStatus";
@@ -33,6 +34,9 @@ public abstract class AbstractDssSigningHandler<T extends ResponseType> {
 			String signatureStatus = nullSafeGetRequestParameter(getRequest(), SIGNATURE_STATUS_PARAMETER);
 			if ("OK".equals(signatureStatus)) {				
 				String signatureResponse = nullSafeGetRequestParameter(getRequest(), SIGNATURE_RESPONSE_PARAMETER);
+				
+				log.info("Got signed contract from DSS:\n{0}" , signatureResponse);
+				
 				byte[] contract = Base64.decodeBase64(signatureResponse);
 				String result = invokeServiceClient(new String(contract));
 				serviceClientResponse = unmarshall(result);
@@ -46,7 +50,7 @@ public abstract class AbstractDssSigningHandler<T extends ResponseType> {
 			}
 		} catch (Exception e) {
 			getFacesMessages().addFromResourceBundle("validator.error.sign");
-			LOG.info("<<< handleRequest: exception");
+			log.info("<<< handleRequest: exception");
 		}
 		
 		if (SUCCESSFUL_REDIRECT.equals(redirectStatus)) {
@@ -65,12 +69,12 @@ public abstract class AbstractDssSigningHandler<T extends ResponseType> {
 
 	protected String nullSafeGetRequestParameter(HttpServletRequest request, String parameterName)
 			throws ServletException {
-		LOG.info(">>> nullSafeGetRequestParameter(parameterName[" + parameterName + "])");
+		log.info(">>> nullSafeGetRequestParameter(parameterName[" + parameterName + "])");
 		String parameter = request.getParameter(parameterName);
 		if (parameter == null) {
 			throw new ServletException(parameterName + " parameter not present");
 		}
-		LOG.info("<<< nullSafeGetRequestParameter: " + parameter);
+		log.info("<<< nullSafeGetRequestParameter: " + parameter);
 		return parameter;
 	}
 
@@ -99,5 +103,12 @@ public abstract class AbstractDssSigningHandler<T extends ResponseType> {
 		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
 				.getRequest();
 		return request;
+	}
+	
+	/**
+	 * Injects the log.
+	 */
+	public void setLog(Log log) {
+		this.log = log;
 	}
 }
