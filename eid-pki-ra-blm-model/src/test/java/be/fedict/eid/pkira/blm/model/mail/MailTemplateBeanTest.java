@@ -33,6 +33,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.blm.model.contracts.Certificate;
+import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 import be.fedict.eid.pkira.blm.model.usermgmt.User;
 
 
@@ -93,6 +94,7 @@ public class MailTemplateBeanTest {
 		certificate.setValidityEnd(new Date());
 		certificate.setValidityStart(new Date());
 		certificate.setX509("X509");
+		certificate.setCertificateType(CertificateType.SERVER);
 		return certificate;
 	}
 
