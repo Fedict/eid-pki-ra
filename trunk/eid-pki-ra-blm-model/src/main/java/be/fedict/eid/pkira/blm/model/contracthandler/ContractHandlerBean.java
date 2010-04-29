@@ -25,6 +25,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
+import org.apache.commons.lang.StringUtils;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
@@ -126,13 +127,15 @@ public class ContractHandlerBean implements ContractHandler {
 			// Check the authorization
 			Registration registration = getMatchingRegistration(signer, request.getDistinguishedName(), certificate
 					.getCertificateType());
+			
+			// Check the legal notice
+			checkLegalNotice(request, registration);
 
 			// Persist the contract
 			AbstractContract contract = saveContract(registration, requestMsg, request, signer);
 
 			// Call XKMS
 			xkmsService.revoke(contract);
-			// TODO log problem with CA
 
 			// Delete the certificate
 			contractRepository.removeCertificate(certificate);
@@ -174,6 +177,9 @@ public class ContractHandlerBean implements ContractHandler {
 			CertificateType certificateType = mapCertificateType(request);
 			Registration registration = getMatchingRegistration(signer, request.getDistinguishedName(), certificateType);
 
+			// Check the legal notice
+			checkLegalNotice(request, registration);
+			
 			// Persist the contract
 			CertificateSigningContract contract = saveContract(registration, requestMsg, request, signer,
 					certificateType);
@@ -181,7 +187,6 @@ public class ContractHandlerBean implements ContractHandler {
 			// Call XKMS
 			String certificateAsPem = xkmsService.sign(contract);
 			if (certificateAsPem == null) {
-				// TODO log problem with CA
 				throw new ContractHandlerBeanException(ResultType.BACKEND_ERROR,
 						"Error contacting the backend service.");
 			}
@@ -191,7 +196,6 @@ public class ContractHandlerBean implements ContractHandler {
 			try {
 				certificateInfo = certificateParser.parseCertificate(certificateAsPem);
 			} catch (CryptoException e) {
-				// TODO log problem with certificate received from CA
 				throw new ContractHandlerBeanException(ResultType.GENERAL_FAILURE,
 						"Error processing received certificate.");
 			}
@@ -219,6 +223,15 @@ public class ContractHandlerBean implements ContractHandler {
 				CertificateSigningResponseType.class);
 	}
 
+	private void checkLegalNotice(RequestType request, Registration registration) throws ContractHandlerBeanException {
+		String incomingLegalNotice = StringUtils.trimToEmpty(request.getLegalNotice());
+		String expectedLegalNotice = StringUtils.trimToEmpty(registration.getCertificateDomain().getCertificateAuthority().getLegalNotice());
+		
+		if (!StringUtils.equals(expectedLegalNotice, incomingLegalNotice)) {
+			throw new ContractHandlerBeanException(ResultType.INVALID_MESSAGE, "Invalid legal notice");
+		}		
+	}
+
 	protected void scheduleNotificationMail(Registration registration, CertificateInfo certificateInfo,
 			Certificate certificate) {
 		Long intervalParam = Long.valueOf(configurationEntryQuery.findByEntryKey(
@@ -238,7 +251,7 @@ public class ContractHandlerBean implements ContractHandler {
 		Certificate certificate;
 		try {
 			CertificateInfo certificateInfo = certificateParser.parseCertificate(request.getCertificate());
-			certificate = contractRepository.findCertificate(certificateInfo.getIssuer(), certificateInfo
+			certificate = contractRepository.findCertificateBySerialNumber(certificateInfo.getIssuer(), certificateInfo
 					.getSerialNumber());
 			if (certificate == null) {
 				throw new ContractHandlerBeanException(ResultType.UNKNOWN_CERTIFICATE,
