@@ -74,7 +74,7 @@ public class CertificateHandlerBean implements CertificateHandler {
 	@Override
 	public void download(){
 		HttpServletResponse response = (HttpServletResponse) extCtx.getResponse();
-
+	
 		response.setContentType("application/x-pem-file");
 		String fileName = certificate.getSerialNumber() + ".crt";
 		response.addHeader("Content-disposition", "attachment; filename=\"" + fileName +"\"");
@@ -87,7 +87,7 @@ public class CertificateHandlerBean implements CertificateHandler {
 			facesContext.responseComplete();
 		}catch(Exception e){
 			log.error("Failure: " + e.toString());
-		}		
+		}
 	}
 	
 	@Override

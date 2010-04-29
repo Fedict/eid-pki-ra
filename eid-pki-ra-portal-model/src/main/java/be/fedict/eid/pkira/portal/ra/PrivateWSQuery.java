@@ -16,33 +16,26 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.blm.model.certificatedomain;
+package be.fedict.eid.pkira.portal.ra;
 
-import java.util.List;
+import java.io.Serializable;
 
-import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.In;
 
-import be.fedict.eid.pkira.blm.model.framework.DataTableEntityQuery;
+import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 
 /**
  * @author Bram Baeyens
  *
  */
-@Name(value=CertificateDomainQuery.NAME)
-public class CertificateDomainQuery extends DataTableEntityQuery<CertificateDomain> {
+public abstract class PrivateWSQuery implements Serializable {
+	
+	private static final long serialVersionUID = 8675955887714887342L;
+	
+	@In(value = EIDPKIRAPrivateServiceClient.NAME, create = true)
+	private EIDPKIRAPrivateServiceClient serviceClient;
 
-	private static final long serialVersionUID = 2047569824505992173L;
-	
-	public static final String NAME = "be.fedict.eid.pkira.blm.certificateDomainQuery";
-	
-	@Override
-	public String getEjbql() {
-		return "select certificateDomain from CertificateDomain certificateDomain";
-	}
-	
-	@Override
-	public List<CertificateDomain> getResultList() {
-		setOrderColumn("certificateDomain.name");
-		return super.getResultList();
+	public EIDPKIRAPrivateServiceClient getServiceClient() {
+		return serviceClient;
 	}
 }

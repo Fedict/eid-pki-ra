@@ -34,10 +34,14 @@ import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserRequest;
 import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivateService;
+import be.fedict.eid.pkira.generated.privatews.FindCertificateDomainRequest;
+import be.fedict.eid.pkira.generated.privatews.FindCertificateDomainResponse;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateRequest;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateResponse;
 import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryRequest;
 import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryResponse;
+import be.fedict.eid.pkira.generated.privatews.FindContractDocumentRequest;
+import be.fedict.eid.pkira.generated.privatews.FindContractDocumentResponse;
 import be.fedict.eid.pkira.generated.privatews.FindContractsRequest;
 import be.fedict.eid.pkira.generated.privatews.FindContractsResponse;
 import be.fedict.eid.pkira.generated.privatews.FindRegisteredCertificateDomainsForUserRequest;
@@ -171,6 +175,20 @@ public class EIDPKIRAPrivateServiceClient {
 		request.setUserRrn(userRrn);
 		FindContractsResponse response = getWebservicePort().findContracts(request);
 		return response.getContracts();
+	}
+	
+	public CertificateDomainWS findCertificateDomain(Integer certificateDomainId) {
+		FindCertificateDomainRequest request = factory.createFindCertificateDomainRequest();
+		request.setCertificateDomainId(certificateDomainId);
+		FindCertificateDomainResponse response = getWebservicePort().findCertificateDomain(request);
+		return response.getCertificateDomain();
+	}
+	
+	public String findContractDocument(Integer contractId) {
+		FindContractDocumentRequest request = factory.createFindContractDocumentRequest();
+		request.setContractId(contractId);
+		FindContractDocumentResponse response = getWebservicePort().findContractDocument(request);
+		return response.getContractDocument();
 	}
 
 	/**

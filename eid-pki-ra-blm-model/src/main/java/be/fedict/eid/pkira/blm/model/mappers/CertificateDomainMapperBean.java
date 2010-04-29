@@ -48,6 +48,7 @@ public class CertificateDomainMapperBean implements CertificateDomainMapper {
 		CertificateDomainWS result = new ObjectFactory().createCertificateDomainWS();
 		result.setId(domain.getId()!=null ? domain.getId().toString() : null);
 		result.setName(domain.getName());
+		result.setDnExpression(domain.getDnExpression());
 		
 		if (domain.isClientCertificate()) {
 			result.getCertificateTypes().add(CertificateTypeWS.CLIENT);

@@ -35,8 +35,6 @@ public class RegisteredCertificateDomainQuery  extends EntityQuery<CertificateDo
 	
 	public static final String NAME = "be.fedict.eid.pkira.blm.registeredCertificateDomainQuery";
 	
-	private User user;
-	
 	private Registration registration;
 	
 	@Override
@@ -51,34 +49,22 @@ public class RegisteredCertificateDomainQuery  extends EntityQuery<CertificateDo
 	}
 	
 	public List<CertificateDomain> getFindRegisteredCertificateDomains(String userRRN){
-		setUser(new User());
-		getUser().setNationalRegisterNumber(userRRN);
+		User requester = new User();
+		requester.setNationalRegisterNumber(userRRN);
 		
 		registration = new Registration();
 		registration.setStatus(RegistrationStatus.APPROVED);
+		registration.setRequester(requester);
 		
 		setRestrictionExpressionStrings(Arrays.asList(
 				new String[] {
-						"registration.requester.nationalRegisterNumber = #{certificateDomainQuery.user.nationalRegisterNumber}",
+						"registration.requester.nationalRegisterNumber = #{registeredCertificateDomainQuery.registration.requester.nationalRegisterNumber}",
 						"registration.status = #{registeredCertificateDomainQuery.registration.status}"}));
 		
 		return getResultList();
 	}
 
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setRegistration(Registration registration) {
-		this.registration = registration;
-	}
-
 	public Registration getRegistration() {
 		return registration;
 	}
-
 }

@@ -25,14 +25,14 @@ import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.common.security.EIdUserCredentials;
 import be.fedict.eid.pkira.generated.privatews.CertificateDomainWS;
-import be.fedict.eid.pkira.portal.ra.WSHome;
+import be.fedict.eid.pkira.portal.ra.PrivateWSQuery;
 
 /**
  * @author Bram Baeyens
  *
  */
 @Name(CertificateDomainWSQuery.NAME)
-public class CertificateDomainWSQuery extends WSHome {
+public class CertificateDomainWSQuery extends PrivateWSQuery {
 
 	private static final long serialVersionUID = -1247395543330472577L;
 	

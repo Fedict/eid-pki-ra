@@ -26,6 +26,7 @@ import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.common.security.EIdUserCredentials;
 import be.fedict.eid.pkira.generated.privatews.ContractWS;
+import be.fedict.eid.pkira.portal.certificatedomain.CertificateDomainWSHome;
 import be.fedict.eid.pkira.portal.ra.DataTableWSQuery;
 
 /**
@@ -45,21 +46,19 @@ public class ContractWSQuery extends DataTableWSQuery {
 	@In(value=ContractMapper.NAME, create=true)
 	private ContractMapper contractMapper;
 	
+	@In(value=CertificateDomainWSHome.NAME, create=true)
+	private CertificateDomainWSHome certificateDomainWSHome;
+
 	private Integer certificateDomainId;
 
 	private List<Contract> resultList;
-	
-	public void refresh() {
-		certificateDomainId = null;
-		resultList = null;
-	}
 	
 	public List<Contract> getFindContracts() {
 		if (certificateDomainId != null) {
 			if (resultList == null) {
 				resultList = new ArrayList<Contract>();
 				for (ContractWS contractWS : getServiceClient().findContracts(
-						certificateDomainId, credentials.getUser().getRRN())) {
+						Integer.valueOf(certificateDomainId), credentials.getUser().getRRN())) {
 					resultList.add(contractMapper.map(contractWS));
 				}
 			}
@@ -73,6 +72,13 @@ public class ContractWSQuery extends DataTableWSQuery {
 
 	public void setCertificateDomainId(Integer certificateDomainId) {
 		this.certificateDomainId = certificateDomainId;
+	}
+	
+	public CertificateDomainWSHome getCertificateDomainWSHome() {
+		if (certificateDomainId != null) {
+			certificateDomainWSHome.setId(certificateDomainId);		
+		}
+		return certificateDomainWSHome;
 	}
 
 }

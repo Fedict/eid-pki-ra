@@ -18,15 +18,10 @@
 
 package be.fedict.eid.pkira.portal.registration;
 
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.validator.ClassValidator;
 import org.hibernate.validator.InvalidStateException;
-import org.hibernate.validator.InvalidValue;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.core.Validators;
 import org.jboss.seam.international.StatusMessage;
-import org.jboss.seam.international.StatusMessages;
 
 import be.fedict.eid.pkira.generated.privatews.RegistrationWS;
 import be.fedict.eid.pkira.portal.ra.WSHome;
@@ -36,7 +31,7 @@ import be.fedict.eid.pkira.portal.ra.WSHome;
  *
  */
 @Name(RegistrationWSHome.NAME)
-public class RegistrationWSHome extends WSHome {
+public class RegistrationWSHome extends WSHome<Registration> {
 
 	private static final long serialVersionUID = -4683807097138681240L;
 	
@@ -44,50 +39,9 @@ public class RegistrationWSHome extends WSHome {
 	
 	@In(value=RegistrationMapper.NAME, create=true)
 	private RegistrationMapper registrationMapper;
-	
-	@In
-	private Validators validators;
-	
-	private String id;
-	private Registration instance;
-	
-	public void setId(String id) {
-		this.id = id;
-	}
-	
-	public String getId() {
-		return id;
-	}
 
-	public void setInstance(Registration instance) {
-		this.instance = instance;
-	}
-
-	public Registration getInstance() {
-		if (instance == null) {
-			initInstance();
-		}
-		return instance;
-	}
-
-	private void initInstance() {
-		if (isIdDefined()) {
-			setInstance(find());
-		} else {
-			setInstance(new Registration());
-		}
-	}
-
-	private boolean isIdDefined() {
-		return StringUtils.isNotBlank(id);
-	}
-	
-	public boolean isManaged() {
-		return isIdDefined();
-	}
-
-	private Registration find() {
-		RegistrationWS registrationWS = getServiceClient().findRegistrationById(id);		
+	public Registration find() {
+		RegistrationWS registrationWS = getServiceClient().findRegistrationById((String) getId());		
 		return registrationMapper.map(registrationWS);
 	}
 	
@@ -96,35 +50,16 @@ public class RegistrationWSHome extends WSHome {
 			validate();
 			boolean result = getServiceClient().createOrUpdateRegistration(registrationMapper.map(getInstance()));
 			if (result) {
-				getStatusMessages().addFromResourceBundle(
-						StatusMessage.Severity.INFO, isManaged()
+				getStatusMessages().addFromResourceBundle(StatusMessage.Severity.INFO, isManaged()
 								? "registration.updated" : "registration.created");
 				return "success";
 			} else {
-				getStatusMessages().addFromResourceBundle(
-						StatusMessage.Severity.ERROR, isManaged()
+				getStatusMessages().addFromResourceBundle(StatusMessage.Severity.ERROR, isManaged()
 								? "registration.update.failed" : "registration.create.failed");
 				return null;
 			}
 		} catch (InvalidStateException e) {
 			return handleInvalidStateException(e);
 		}
-	}
-	
-	private void validate() throws InvalidStateException {
-		ClassValidator<Registration> validator = validators.getValidator(Registration.class);
-		if (validator.getInvalidValues(getInstance()).length > 0)
-			throw new InvalidStateException(validator.getInvalidValues(getInstance()));
-	}
-
-	private String handleInvalidStateException(InvalidStateException e) {
-		for (InvalidValue invalidValue : e.getInvalidValues()) {
-			getStatusMessages().addFromResourceBundle(invalidValue.getMessage());
-		}
-		return null;
-	}
-
-	private StatusMessages getStatusMessages() {
-		return StatusMessages.instance();
 	}
 }
