@@ -36,7 +36,7 @@ public class Registration implements Serializable {
 	private RegistrationStatus status;
 	private String certificateDomainName;
 	
-	@NotEmpty
+	@NotEmpty(message="{registration.certificateDomain.required}")
 	private String certificateDomainId;
 	
 	@NotEmpty(message="{registration.email.required}") 
