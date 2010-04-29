@@ -62,14 +62,18 @@ import be.fedict.eid.pkira.generated.privatews.CreateOrUpdateRegistrationRespons
 import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserRequest;
 import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType;
+import be.fedict.eid.pkira.generated.privatews.FindCertificateDomainRequest;
+import be.fedict.eid.pkira.generated.privatews.FindCertificateDomainResponse;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateRequest;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateResponse;
 import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryRequest;
 import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryResponse;
-import be.fedict.eid.pkira.generated.privatews.FindRegisteredCertificateDomainsForUserRequest;
-import be.fedict.eid.pkira.generated.privatews.FindRegisteredCertificateDomainsForUserResponse;
+import be.fedict.eid.pkira.generated.privatews.FindContractDocumentRequest;
+import be.fedict.eid.pkira.generated.privatews.FindContractDocumentResponse;
 import be.fedict.eid.pkira.generated.privatews.FindContractsRequest;
 import be.fedict.eid.pkira.generated.privatews.FindContractsResponse;
+import be.fedict.eid.pkira.generated.privatews.FindRegisteredCertificateDomainsForUserRequest;
+import be.fedict.eid.pkira.generated.privatews.FindRegisteredCertificateDomainsForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.FindRegistrationByIdRequest;
 import be.fedict.eid.pkira.generated.privatews.FindRegistrationByIdResponse;
 import be.fedict.eid.pkira.generated.privatews.FindRegistrationsByUserRRNRequest;
@@ -78,8 +82,6 @@ import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsFo
 import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.FindUserRequest;
 import be.fedict.eid.pkira.generated.privatews.FindUserResponse;
-import be.fedict.eid.pkira.generated.privatews.GetContractDocumentRequest;
-import be.fedict.eid.pkira.generated.privatews.GetContractDocumentResponse;
 import be.fedict.eid.pkira.generated.privatews.GetLegalNoticeRequest;
 import be.fedict.eid.pkira.generated.privatews.GetLegalNoticeResponse;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesRequest;
@@ -249,11 +251,20 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	}
 
 	@Override
-	public GetContractDocumentResponse getContractDocument(GetContractDocumentRequest request) {
-		GetContractDocumentResponse response = new ObjectFactory().createGetContractDocumentResponse();
+	public FindContractDocumentResponse findContractDocument(FindContractDocumentRequest request) {
+		FindContractDocumentResponse response = new ObjectFactory().createFindContractDocumentResponse();
 		ContractHome contractHome = getContractHome();
 		contractHome.setId(request.getContractId());
 		response.setContractDocument(contractHome.getInstance().getContractDocument());
+		return response;
+	}
+
+	@Override
+	public FindCertificateDomainResponse findCertificateDomain(FindCertificateDomainRequest request) {
+		FindCertificateDomainResponse response = new ObjectFactory().createFindCertificateDomainResponse();
+		CertificateDomainHome certificateDomainHome = getCertificateDomainHome();
+		certificateDomainHome.setId(request.getCertificateDomainId());
+		response.setCertificateDomain(getCertificateDomainMapper().map(certificateDomainHome.getInstance()));
 		return response;
 	}
 

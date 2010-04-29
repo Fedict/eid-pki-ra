@@ -42,7 +42,7 @@ public class ContractQuery extends EntityQuery<AbstractContract> {
 	public static final String NAME = "be.fedict.eid.pkira.blm.contractQuery" ;
 	
 	private Registration registration;
-	
+
 	@In(value = CertificateDomainHome.NAME, create = true)
 	private CertificateDomainHome certificateDomainHome;
 	
@@ -61,10 +61,18 @@ public class ContractQuery extends EntityQuery<AbstractContract> {
 		
 		setRestrictionExpressionStrings(Arrays.asList(
 				new String[] {
-						"registration.requester.nationalRegisterNumber = #{registration.requester.nationalRegisterNumber}", 
-						"registration.status = #{registration.status}", 
-						"registration.certificateDomain = #{certificateDomainHome.instance}", 
-						"contract.certificateDomain = #{certificateDomainHome.instance}"}));
+						"registration.requester.nationalRegisterNumber = #{contractQuery.registration.requester.nationalRegisterNumber}", 
+						"registration.status = #{contractQuery.registration.status}", 
+						"registration.certificateDomain = #{contractQuery.certificateDomainHome.instance}", 
+						"contract.certificateDomain = #{contractQuery.certificateDomainHome.instance}"}));
 		return getResultList();
+	}
+	
+	public Registration getRegistration() {
+		return registration;
+	}
+
+	public CertificateDomainHome getCertificateDomainHome() {
+		return certificateDomainHome;
 	}
 }

@@ -37,8 +37,8 @@ public class RegistrationQuery extends DataTableEntityQuery<Registration> {
 	
 	public static final String NAME = "be.fedict.eid.pkira.blm.registrationQuery";
 	
-	private Registration registration;
-	
+	private User requester;
+
 	public String getEjbql() {
 		return "select registration from Registration registration";
 	}
@@ -54,13 +54,11 @@ public class RegistrationQuery extends DataTableEntityQuery<Registration> {
 	}
 	
 	public List<Registration> findByUserRRN(String userRRN) {
-		User requester = new User();
+		requester = new User();
 		requester.setNationalRegisterNumber(userRRN);
-		registration = new Registration();
-		registration.setRequester(requester);
 		setRestrictionExpressionStrings(Arrays.asList(
 				new String[] {
-						"registration.requester.nationalRegisterNumber = #{registration.requester.nationalRegisterNumber}"}));
+						"registration.requester.nationalRegisterNumber = #{registrationQuery.requester.nationalRegisterNumber}"}));
 		return getResultList();
 	}
 	
@@ -71,5 +69,9 @@ public class RegistrationQuery extends DataTableEntityQuery<Registration> {
 			}
 		}
 		return false;
+	}
+	
+	public User getRequester() {
+		return requester;
 	}
 }

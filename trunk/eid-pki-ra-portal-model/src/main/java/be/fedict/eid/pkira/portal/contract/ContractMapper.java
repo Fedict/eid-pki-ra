@@ -40,7 +40,9 @@ public class ContractMapper implements Serializable {
 		Contract contract = new Contract();
 		contract.setId(contractWS.getContractId());
 		contract.setCertificateDomainName(contractWS.getCertificateDomainName());
-		contract.setCertificateType(Enum.valueOf(CertificateType.class, contractWS.getCertificateType().name()));
+		if (contractWS.getCertificateType() != null) {
+			contract.setCertificateType(Enum.valueOf(CertificateType.class, contractWS.getCertificateType().name()));
+		}
 		contract.setContractType(Enum.valueOf(ContractType.class, contractWS.getContractType().name()));
 		contract.setCreationDate(contractWS.getCreationDate().toGregorianCalendar().getTime());
 		contract.setDnExpression(contractWS.getDnExpression());

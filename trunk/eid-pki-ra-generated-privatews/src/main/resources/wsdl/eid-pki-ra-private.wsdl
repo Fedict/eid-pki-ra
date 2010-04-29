@@ -219,7 +219,7 @@
 				</xsd:complexType>
 			</xsd:element>
 
-			<xsd:element name="GetContractDocumentRequest">
+			<xsd:element name="FindContractDocumentRequest">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="contractId" type="xsd:int" nillable="true" />
@@ -227,10 +227,26 @@
 				</xsd:complexType>
 			</xsd:element>
 
-			<xsd:element name="GetContractDocumentResponse">
+			<xsd:element name="FindContractDocumentResponse">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="contractDocument" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="FindCertificateDomainRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="certificateDomainId" type="xsd:int" nillable="true" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="FindCertificateDomainResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="certificateDomain" type="types:certificateDomainWS" />
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
@@ -271,6 +287,7 @@
 					<xsd:element name="id" type="xsd:string" />
 					<xsd:element name="name" type="xsd:string" />
 					<xsd:element name="certificateTypes" type="types:certificateTypeWS" maxOccurs="unbounded" />
+					<xsd:element name="dnExpression" type="xsd:string" />
 				</xsd:sequence>
 			</xsd:complexType>
 
@@ -426,12 +443,20 @@
 		<wsdl:part name="request" element="types:FindContractsResponse" />
 	</wsdl:message>
 	
-	<wsdl:message name="GetContractDocumentRequest">
-		<wsdl:part name="request" element="types:GetContractDocumentRequest" />		
+	<wsdl:message name="FindContractDocumentRequest">
+		<wsdl:part name="request" element="types:FindContractDocumentRequest" />		
 	</wsdl:message>
 
-	<wsdl:message name="GetContractDocumentResponse">
-		<wsdl:part name="request" element="types:GetContractDocumentResponse" />
+	<wsdl:message name="FindContractDocumentResponse">
+		<wsdl:part name="request" element="types:FindContractDocumentResponse" />
+	</wsdl:message>
+	
+	<wsdl:message name="FindCertificateDomainRequest">
+		<wsdl:part name="request" element="types:FindCertificateDomainRequest" />		
+	</wsdl:message>
+
+	<wsdl:message name="FindCertificateDomainResponse">
+		<wsdl:part name="request" element="types:FindCertificateDomainResponse" />
 	</wsdl:message>
 
 	<wsdl:portType name="EIDPKIRAPrivatePortType">
@@ -483,9 +508,13 @@
 			<wsdl:input message="tns:FindContractsRequest" />
 			<wsdl:output message="tns:FindContractsResponse" />
 		</wsdl:operation>
-		<wsdl:operation name="GetContractDocument">
-			<wsdl:input message="tns:GetContractDocumentRequest" />
-			<wsdl:output message="tns:GetContractDocumentResponse" />
+		<wsdl:operation name="FindContractDocument">
+			<wsdl:input message="tns:FindContractDocumentRequest" />
+			<wsdl:output message="tns:FindContractDocumentResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="FindCertificateDomain">
+			<wsdl:input message="tns:FindCertificateDomainRequest" />
+			<wsdl:output message="tns:FindCertificateDomainResponse" />
 		</wsdl:operation>
 	</wsdl:portType>
 
@@ -599,12 +628,21 @@
 				<soap:body use="literal" />
 			</wsdl:output>
 		</wsdl:operation>
-		<wsdl:operation name="GetContractDocument">
+		<wsdl:operation name="FindContractDocument">
 			<soap:operation />
-			<wsdl:input message="tns:GetContractDocumentRequest">
+			<wsdl:input message="tns:FindContractDocumentRequest">
 				<soap:body use="literal" />
 			</wsdl:input>
-			<wsdl:output message="tns:GetContractDocumentResponse">
+			<wsdl:output message="tns:FindContractDocumentResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="FindCertificateDomain">
+			<soap:operation />
+			<wsdl:input message="tns:FindCertificateDomainRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output message="tns:FindCertificateDomainResponse">
 				<soap:body use="literal" />
 			</wsdl:output>
 		</wsdl:operation>
