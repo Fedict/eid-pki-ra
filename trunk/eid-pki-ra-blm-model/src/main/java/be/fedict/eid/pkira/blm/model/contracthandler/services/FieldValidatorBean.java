@@ -150,7 +150,7 @@ public class FieldValidatorBean implements FieldValidator {
 					messages.add("end date does not match certificate");
 				}
 			} catch (CryptoException e) {
-				messages.add("invalid certificate: " + e.getMessage());
+				messages.add("invalid certificate: the certificate could not be parsed.");
 			}
 		}
 	}
@@ -220,7 +220,7 @@ public class FieldValidatorBean implements FieldValidator {
 
 		messages.add("invalid validity period");
 	}
-	
+
 	protected void setConfigurationEntryQuery(ConfigurationEntryQuery configurationEntryQuery) {
 		this.configurationEntryQuery = configurationEntryQuery;
 	}

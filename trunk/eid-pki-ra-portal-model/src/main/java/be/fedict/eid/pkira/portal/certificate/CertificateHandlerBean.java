@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.Begin;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
@@ -117,6 +118,7 @@ public class CertificateHandlerBean implements CertificateHandler {
 	}
 	
 	@Override
+	@Begin(join=true)
 	public String prepareRevocation(String serialNumber, String issuer) {
 		log.info(">>> preprareRevocation(serialNumber[{0}])",serialNumber);
 		certificate = findCertificate(issuer, serialNumber);
