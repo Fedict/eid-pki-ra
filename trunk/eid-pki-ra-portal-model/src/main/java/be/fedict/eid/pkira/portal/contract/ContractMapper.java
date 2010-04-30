@@ -20,16 +20,19 @@ package be.fedict.eid.pkira.portal.contract;
 
 import java.io.Serializable;
 
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 
 import be.fedict.eid.pkira.generated.privatews.ContractWS;
-import be.fedict.eid.pkira.portal.ra.CertificateType;
+import be.fedict.eid.pkira.portal.certificate.CertificateType;
 
 /**
  * @author Bram Baeyens
  *
  */
 @Name(ContractMapper.NAME)
+@Scope(ScopeType.STATELESS)
 public class ContractMapper implements Serializable {
 
 	private static final long serialVersionUID = 7720168050778002320L;
@@ -46,7 +49,7 @@ public class ContractMapper implements Serializable {
 		contract.setContractType(Enum.valueOf(ContractType.class, contractWS.getContractType().name()));
 		contract.setCreationDate(contractWS.getCreationDate().toGregorianCalendar().getTime());
 		contract.setDnExpression(contractWS.getDnExpression());
-		contract.setHasCertificate(contractWS.isHasCertificate());
+		contract.setCertificateId(contractWS.getCertificateId());
 		contract.setRequesterName(contractWS.getRequesterName());		
 		return contract;
 	}

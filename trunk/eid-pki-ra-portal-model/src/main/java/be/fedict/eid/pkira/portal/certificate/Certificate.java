@@ -25,7 +25,6 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
-import be.fedict.eid.pkira.portal.ra.CertificateType;
 
 /**
  * @author Bram Baeyens
@@ -39,6 +38,7 @@ public class Certificate implements Serializable {
 	
 	public static final String NAME = "be.fedict.eid.pkira.portal.certificate";
 	
+	private Integer id;
 	private String serialNumber;
 	private CertificateType type;
 	private Date validityStart;
@@ -46,10 +46,17 @@ public class Certificate implements Serializable {
 	private String x509;
 	private String issuer;
 	private String requesterName;
-	private String subject;
-	
+	private String subject;	
 	private String distinguishedName;
-		
+	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public String getSerialNumber() {
 		return serialNumber;
 	}
@@ -106,30 +113,18 @@ public class Certificate implements Serializable {
 		this.issuer = issuer;
 	}
 
-	/**
-	 * @return the requesterName
-	 */
 	public String getRequesterName() {
 		return requesterName;
 	}
 	
-	/**
-	 * @param requesterName the requesterName to set
-	 */
 	public void setRequesterName(String requesterName) {
 		this.requesterName = requesterName;
 	}
 	
-	/**
-	 * @return the subject
-	 */
 	public String getSubject() {
 		return subject;
 	}
 	
-	/**
-	 * @param subject the subject to set
-	 */
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
@@ -137,7 +132,8 @@ public class Certificate implements Serializable {
 	@Override
 	public String toString() {
 		return new StringBuilder("Certificate[")
-				.append("number=").append(serialNumber)
+				.append("id=").append(id)
+				.append(", number=").append(serialNumber)
 				.append(", type=").append(type)
 				.append(", validityStart=").append(validityStart)
 				.append(", validityEnd=").append(validityEnd)

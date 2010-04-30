@@ -13,19 +13,19 @@
 					<h:outputText value="#{messages['contracts.title']}" />
 				</f:facet>
 	
-				<s:decorate id="CertificateDomainDecorator" template="/layout/edit.xhtml">
+				<s:decorate id="certificateDomainDecorator" template="/layout/edit.xhtml">
 	           		<ui:define name="label">#{messages['certificate.domain.selection.label']}:</ui:define>					
 					<h:selectOneMenu id="selectRegisteredCertificateDomain" value="#{contractWSQuery.certificateDomainId}" required="true">
 						<s:selectItems value="#{certificateDomainWSQuery.findRegisteredCertificateDomains}" 
 								var="certificateDomain" label="#{certificateDomain.name}" itemValue="#{certificateDomain.id}"
 								noSelectionLabel="#{messages['general.noselectionlabel']}" />
-						<a:support event="onchange" reRender="contractTable,certificateDomainName" />
+						<a:support event="onchange" reRender="contractTable,certificateDomainDnExpression" />
 					</h:selectOneMenu>
 	           	</s:decorate>
 				
 				<s:decorate id="dnExpressionDecorator" template="/layout/edit.xhtml">
 					<ui:define name="label">#{messages['certificatedomain.dnExpression']}:</ui:define>
-					<h:outputText id="certificateDomainName" value="#{contractWSQuery.certificateDomainWSHome.instance.dnExpression}" />
+					<h:outputText id="certificateDomainDnExpression" value="#{contractWSQuery.certificateDomainWSHome.instance.dnExpression}" />
 				</s:decorate>
 				
 				<rich:dataTable id="contractTable" var="contract" rows="#{contractWSQuery.rows}"
@@ -58,16 +58,18 @@
 							<h:outputText value="#{messages['contract.creationdate']}" />
 						</f:facet>
 						<h:outputText value="#{contract.creationDate}">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="Europe/Brussels" />
 						</h:outputText>
 					</rich:column>
 	
 					<rich:column>
-						<s:link id="downloadContractDocument" value="#{messages['link.download']}" view="/page/contract/contract-download.xhtml">
+						<s:link id="downloadContractDocument" view="/page/contract/contract-download.xhtml" value="#{messages['link.download']}">
 							<f:param name="contractId" value="#{contract.id}" />
 						</s:link>
 						<h:outputText value=" " />
-						<s:link id="showCertificate" value="#{messages['link.detail']}" rendered="#{contract.hasCertificate}" />
+						<s:link id="certificateDetail" view="/page/certificates/certificate-detail.xhtml" value="#{messages['link.detail']}" rendered="#{contract.hasCertificate}">
+							<f:param name="certificateId" value="#{contract.certificateId}" />
+						</s:link>
 					</rich:column>
 	
 					<f:facet name="footer">

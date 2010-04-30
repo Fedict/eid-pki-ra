@@ -23,7 +23,7 @@ import java.util.Date;
 
 import org.jboss.seam.annotations.Name;
 
-import be.fedict.eid.pkira.portal.ra.CertificateType;
+import be.fedict.eid.pkira.portal.certificate.CertificateType;
 
 /**
  * @author Bram Baeyens
@@ -43,8 +43,8 @@ public class Contract implements Serializable {
 	private Date creationDate;
 	private CertificateType certificateType;
 	private ContractType contractType;
-	private boolean hasCertificate;
-	
+	private Integer certificateId;
+
 	public Integer getId() {
 		return id;
 	}
@@ -101,12 +101,16 @@ public class Contract implements Serializable {
 		this.contractType = contractType;
 	}
 	
-	public boolean isHasCertificate() {
-		return hasCertificate;
+	public Integer getCertificateId() {
+		return certificateId;
+	}
+
+	public void setCertificateId(Integer certificateId) {
+		this.certificateId = certificateId;
 	}
 	
-	public void setHasCertificate(boolean hasCertificate) {
-		this.hasCertificate = hasCertificate;
+	public boolean isHasCertificate() {
+		return certificateId != null;
 	}
 }
 

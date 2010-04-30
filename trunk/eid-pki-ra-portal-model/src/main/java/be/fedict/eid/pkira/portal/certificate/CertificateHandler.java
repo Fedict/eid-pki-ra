@@ -27,17 +27,7 @@ public interface CertificateHandler extends Serializable {
 	
 	List<Certificate> findCertificateList(String userRRN);
 	
-	String prepareRevocation(String serialNumber, String issuer);
-
-	String showDetail(Certificate certificate);
-	
-	String getCertificate(String serialNumber);
-	
-	String findCertificate(String certificateID);
-	
-	void download();
+	String prepareRevocation(Integer certificateId);
 
 	List<Certificate> findCertificateList();
-	
-	String gotoList();
 }

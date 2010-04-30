@@ -18,16 +18,12 @@
 
 package be.fedict.eid.pkira.portal.contract;
 
-import javax.faces.context.ExternalContext;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-
 import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.log.Log;
 
-import be.fedict.eid.pkira.portal.ra.WSHome;
+import be.fedict.eid.pkira.portal.download.Document;
+import be.fedict.eid.pkira.portal.download.DownloadManager;
+import be.fedict.eid.pkira.portal.framework.WSHome;
 
 /**
  * @author Bram Baeyens
@@ -40,24 +36,13 @@ public class ContractDocumentWSHome extends WSHome<String> {
 
 	public static final String NAME = "be.fedict.eid.pkira.portal.contractDocumentWSHome";
 	
-	@In(value="#{facesContext.externalContext}")
-	private ExternalContext extCtx;
+	@In(value=DownloadManager.NAME, create=true)
+	private DownloadManager downloadManager;
 	
-	@Logger
-	private Log log;
 	
-	@In(value="#{facesContext}")
-	private javax.faces.context.FacesContext facesContext;
-	
-	private String fileName;
-
 	@Override
 	public String find() {
 		return getServiceClient().findContractDocument((Integer) getId());
-	}
-	
-	public byte[] getData() {
-		return getInstance().getBytes();
 	}
 	
 	public String getContentType() {
@@ -65,28 +50,10 @@ public class ContractDocumentWSHome extends WSHome<String> {
 	}
 	
 	public String getFileName() {
-		if (fileName == null) {
-			fileName = "contract-".concat(getId().toString()).concat(".xml");
-		}
-		return fileName;
+		return "contract-".concat(getId().toString()).concat(".xml");
 	}	
 	
 	public void download() {
-		if (getId() != null) {
-			HttpServletResponse response = (HttpServletResponse) extCtx.getResponse();
-
-			response.setContentType(getContentType());
-			response.addHeader("Content-disposition", "attachment; filename=\"" + getFileName() + "\"");
-			
-			try {
-				ServletOutputStream servletOutputStream = response.getOutputStream();
-				servletOutputStream.write(getData());
-				servletOutputStream.flush();
-				servletOutputStream.close();
-				facesContext.responseComplete();
-			} catch(Exception e){
-				log.error("Failure: " + e.toString());
-			}
-		}
+		downloadManager.download(new Document(getFileName(), getContentType(), getInstance().getBytes()));			
 	}
 }

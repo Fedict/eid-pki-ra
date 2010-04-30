@@ -6,13 +6,7 @@
 	
 	<restrict>#{s:hasRole('REGISTERED_USER')}</restrict>
 
-	<navigation from-action="#{certificateHandler.showDetail(cer)}">
-		<rule if-outcome="certificateDetail">
-			<redirect view-id="/page/certificates/certificate_detail.xhtml" />
-		</rule>
-	</navigation>
-	
-	<navigation from-action="#{certificateHandler.prepareRevocation(cer.serialNumber, cer.issuer)}">
+	<navigation from-action="#{certificateHandler.prepareRevocation(cer.id)}">
 		<rule if-outcome="revokeContract">
 			<redirect view-id="/page/contract/revocationContract.xhtml" />
 		</rule>

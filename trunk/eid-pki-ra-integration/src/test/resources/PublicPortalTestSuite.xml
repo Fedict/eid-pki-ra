@@ -11,4 +11,9 @@
 			<class name="be.fedict.eid.integration.publicportal.RegistrationUpdateSeleniumTest" />
 		</classes>
 	</test>
+	<test name="Contract list tests">
+		<classes>
+			<class name="be.fedict.eid.integration.publicportal.ContractListSeleniumTest" />
+		</classes>
+	</test>
 </suite>

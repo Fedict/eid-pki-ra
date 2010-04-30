@@ -11,7 +11,7 @@
 	
 	<action execute="#{contractDocumentWSHome.download}" />
 		
-	<navigation>
-		<render view-id="/page/contract/contract-list.xhtml" />
-	</navigation>	
+<!--	<navigation>-->
+<!--		<render view-id="/page/contract/contract-list.xhtml" />-->
+<!--	</navigation>	-->
 </page>

@@ -35,35 +35,17 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-
+			
 			<xsd:element name="FindCertificateRequest">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="userRRN" type="xsd:string" />
-						<xsd:element name="serialNumber" type="xsd:string" />
+						<xsd:element name="certificateId" type="xsd:int" nillable="true" />
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+
 
 			<xsd:element name="FindCertificateResponse">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element name="certificate" type="types:certificateWS" maxOccurs="1" />
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-
-			<xsd:element name="FindCertificateByIDRequest">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element name="userRRN" type="xsd:string" />
-						<xsd:element name="certificateID" type="xsd:string" />
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-
-
-			<xsd:element name="FindCertificateByIDResponse">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="certificate" type="types:certificateWS" maxOccurs="1" />
@@ -286,6 +268,7 @@
 
 			<xsd:complexType name="certificateWS">
 				<xsd:sequence>
+					<xsd:element name="certificateId" type="xsd:int" nillable="true" />
 					<xsd:element name="serialNumber" type="xsd:string" />
 					<xsd:element name="distinguishedName" type="xsd:string" />
 					<xsd:element name="validityStart" type="xsd:dateTime" />
@@ -367,7 +350,7 @@
 					<xsd:element name="creationDate" type="xsd:dateTime" />
 					<xsd:element name="certificateType" type="types:certificateTypeWS" />
 					<xsd:element name="contractType" type="types:contractTypeWS" />
-					<xsd:element name="hasCertificate" type="xsd:boolean" />
+					<xsd:element name="certificateId" type="xsd:int" nillable="true" />
 				</xsd:sequence>
 			</xsd:complexType>
 
@@ -394,14 +377,6 @@
 
 	<wsdl:message name="FindCertificateResult">
 		<wsdl:part name="response" element="types:FindCertificateResponse" />
-	</wsdl:message>
-
-	<wsdl:message name="FindCertificateByIDRequest">
-		<wsdl:part name="request" element="types:FindCertificateByIDRequest" />
-	</wsdl:message>
-
-	<wsdl:message name="FindCertificateByIDResult">
-		<wsdl:part name="response" element="types:FindCertificateByIDResponse" />
 	</wsdl:message>
 
 	<wsdl:message name="FindUserRequest">
@@ -509,10 +484,6 @@
 			<wsdl:input message="tns:FindCertificateRequest" />
 			<wsdl:output message="tns:FindCertificateResult" />
 		</wsdl:operation>
-		<wsdl:operation name="FindCertificateByID">
-			<wsdl:input message="tns:FindCertificateByIDRequest" />
-			<wsdl:output message="tns:FindCertificateByIDResult" />
-		</wsdl:operation>
 		<wsdl:operation name="FindUser">
 			<wsdl:input message="tns:FindUserRequest" />
 			<wsdl:output message="tns:FindUserResult" />
@@ -580,15 +551,6 @@
 				<soap:body use="literal" />
 			</wsdl:input>
 			<wsdl:output message="tns:FindCertificateResult">
-				<soap:body use="literal" />
-			</wsdl:output>
-		</wsdl:operation>
-		<wsdl:operation name="FindCertificateByID">
-			<soap:operation />
-			<wsdl:input message="tns:FindCertificateByIDRequest">
-				<soap:body use="literal" />
-			</wsdl:input>
-			<wsdl:output message="tns:FindCertificateByIDResult">
 				<soap:body use="literal" />
 			</wsdl:output>
 		</wsdl:operation>

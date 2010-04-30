@@ -71,6 +71,7 @@ public class CertificateMapperBean implements CertificateMapper {
 		}
 
 		CertificateWS result = new ObjectFactory().createCertificateWS();
+		result.setCertificateId(certificate.getId());
 		result.setIssuer(certificate.getIssuer());
 		result.setRequesterName(certificate.getRequesterName());
 		result.setDistinguishedName(certificate.getDistinguishedName());

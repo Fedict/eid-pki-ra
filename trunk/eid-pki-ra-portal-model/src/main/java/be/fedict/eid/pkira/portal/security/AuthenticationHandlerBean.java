@@ -28,7 +28,7 @@ import be.fedict.eid.pkira.authentication.EIdUser;
 import be.fedict.eid.pkira.common.security.AbstractAuthenticationHandlerBean;
 import be.fedict.eid.pkira.common.security.AuthenticationHandler;
 import be.fedict.eid.pkira.generated.privatews.UserWS;
-import be.fedict.eid.pkira.portal.ra.Operator;
+import be.fedict.eid.pkira.portal.framework.Operator;
 import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 
 /**

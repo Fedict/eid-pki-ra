@@ -18,13 +18,7 @@
 package be.fedict.eid.pkira.portal.certificate;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import javax.faces.context.ExternalContext;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Begin;
@@ -38,10 +32,7 @@ import org.jboss.seam.annotations.datamodel.DataModel;
 import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.common.security.EIdUserCredentials;
-import be.fedict.eid.pkira.generated.privatews.CertificateTypeWS;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
-import be.fedict.eid.pkira.portal.menu.MenuHandler;
-import be.fedict.eid.pkira.portal.ra.CertificateType;
 import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 
 @Name(CertificateHandler.NAME)
@@ -59,41 +50,19 @@ public class CertificateHandlerBean implements CertificateHandler {
 	@In(value = EIDPKIRAPrivateServiceClient.NAME, create = true)
 	private EIDPKIRAPrivateServiceClient eidpkiraPrivateServiceClient;
 
-	@In(value="#{facesContext.externalContext}")
-	private ExternalContext extCtx;
-	
 	@Logger
 	private Log log;
 	
 	@DataModel
 	private List<Certificate> certificates;
 	
-	@In(value="#{facesContext}")
-	private javax.faces.context.FacesContext facesContext;	
-	
-	@In
-	private MenuHandler menuHandler; 
+	@In(value=CertificateMapper.NAME, create=true)
+	private CertificateMapper certificateMapper;
 	
 	private String certificateDomainWSID = null;
 	
-	@Override
-	public void download(){
-		HttpServletResponse response = (HttpServletResponse) extCtx.getResponse();
-	
-		response.setContentType("application/x-pem-file");
-		String fileName = certificate.getSerialNumber() + ".crt";
-		response.addHeader("Content-disposition", "attachment; filename=\"" + fileName +"\"");
-		
-		try{
-			ServletOutputStream servletOutputStream = response.getOutputStream();
-			servletOutputStream.write(certificate.getX509().getBytes());
-			servletOutputStream.flush();
-			servletOutputStream.close();
-			facesContext.responseComplete();
-		}catch(Exception e){
-			log.error("Failure: " + e.toString());
-		}
-	}
+	@In(value=CertificateWSHome.NAME, create=true)
+	private CertificateWSHome certificateWSHome;
 	
 	@Override
 	public List<Certificate> findCertificateList(){
@@ -105,21 +74,9 @@ public class CertificateHandlerBean implements CertificateHandler {
 		List<CertificateWS> listCertificates = eidpkiraPrivateServiceClient.listCertificates(userRRN, certificateDomainWSID);
 		certificates = new ArrayList<Certificate>();
 		for (CertificateWS certificatews : listCertificates) {
-			certificates.add(parse(certificatews));
+			certificates.add(certificateMapper.map(certificatews));
 		}
 		return certificates;
-	}
-
-	@Override
-	public String getCertificate(String serialNumber) {
-		certificate = findCertificate(credentials.getUser().getRRN(), serialNumber);
-		return "success";
-	}
-	
-	@Override
-	public String findCertificate(String certificateID) {
-		certificate = findCertificateWithID(credentials.getUser().getRRN(), certificateID);
-		return "success";
 	}
 	 
 	@Factory("certificates")
@@ -129,57 +86,14 @@ public class CertificateHandlerBean implements CertificateHandler {
 	
 	@Override
 	@Begin(join=true)
-	public String prepareRevocation(String serialNumber, String issuer) {
-		log.info(">>> preprareRevocation(serialNumber[{0}])",serialNumber);
-		certificate = findCertificate(issuer, serialNumber);
-		log.info("<<< preprareRevocation: {0})",certificate);
+	public String prepareRevocation(Integer certificateId) {
+		log.info(">>> preprareRevocation(certificateId[{0}])", certificateId);
+		certificateWSHome.setId(certificateId);
+		certificate = certificateWSHome.getInstance();
+		log.info("<<< preprareRevocation: {0})", certificate);
 		return "revokeContract";
 	}
 
-	@Override
-	public String showDetail(Certificate certificate) {
-		log.info(">>> showDetail(certificaat:{0})",certificate.toString());
-		this.certificate = findCertificate(credentials.getUser().getRRN(), certificate.getSerialNumber());
-		log.info("<<< showDetail: {0})",certificate);
-		return "certificateDetail";
-	}
-
-	private Certificate findCertificate(String userRRN, String serialNumber) {
-		CertificateWS certificateWS = eidpkiraPrivateServiceClient.findCertificate(userRRN, serialNumber);
-		return parse(certificateWS);
-	}
-
-	private Certificate findCertificateWithID(String userRRN, String certificateID) {
-		CertificateWS certificateWS = eidpkiraPrivateServiceClient.findCertificateWithID(userRRN, certificateID);
-		return parse(certificateWS);
-	}
-
-	private CertificateType map(CertificateTypeWS certificateType) {
-		return Enum.valueOf(CertificateType.class, certificateType.toString());
-	}
-
-	private Date map(XMLGregorianCalendar validityStart) {
-		return validityStart.toGregorianCalendar().getTime();
-	}
-	
-	private Certificate parse(CertificateWS certificatews) {
-		Certificate certificate = new Certificate();
-		certificate.setDistinguishedName(certificatews.getDistinguishedName());
-		certificate.setIssuer(certificatews.getIssuer());
-		certificate.setSerialNumber(certificatews.getSerialNumber());
-		certificate.setType(map(certificatews.getCertificateType()));
-		if(certificatews.getValidityStart() != null){
-			certificate.setValidityStart(map(certificatews.getValidityStart()));
-		}
-		if(certificatews.getValidityEnd() != null){
-			certificate.setValidityEnd(map(certificatews.getValidityEnd()));
-		}
-		certificate.setX509(certificatews.getX509());
-		certificate.setRequesterName(certificatews.getRequesterName());
-		
-		return certificate;
-	}
-	
 	protected void setEidpkiraPrivateServiceClient(EIDPKIRAPrivateServiceClient eidpkiraPrivateServiceClient) {
 		this.eidpkiraPrivateServiceClient = eidpkiraPrivateServiceClient;
 	}
@@ -190,11 +104,5 @@ public class CertificateHandlerBean implements CertificateHandler {
 
 	public String getCertificateDomainWSID() {
 		return certificateDomainWSID;
-	}
-
-	@Override
-	public String gotoList() {
-		menuHandler.setSelectedItem("certificates");
-		return "list";
 	}
 }

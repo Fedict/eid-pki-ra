@@ -38,6 +38,7 @@ import be.fedict.eid.pkira.blm.model.config.ConfigurationEntry;
 import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
 import be.fedict.eid.pkira.blm.model.contracts.AbstractContract;
 import be.fedict.eid.pkira.blm.model.contracts.Certificate;
+import be.fedict.eid.pkira.blm.model.contracts.CertificateHome;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 import be.fedict.eid.pkira.blm.model.contracts.ContractHome;
 import be.fedict.eid.pkira.blm.model.contracts.ContractQuery;
@@ -62,8 +63,6 @@ import be.fedict.eid.pkira.generated.privatews.CreateOrUpdateRegistrationRespons
 import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserRequest;
 import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType;
-import be.fedict.eid.pkira.generated.privatews.FindCertificateByIDRequest;
-import be.fedict.eid.pkira.generated.privatews.FindCertificateByIDResponse;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateDomainRequest;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateDomainResponse;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateRequest;
@@ -120,17 +119,9 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	 */
 	@Override
 	public FindCertificateResponse findCertificate(FindCertificateRequest request) {
-		Certificate certificate = getDomainRepository().findCertificate(request.getUserRRN(),
-				new BigInteger(request.getSerialNumber()));
+		getCertificateHome().setId(request.getCertificateId());
+		Certificate certificate = getCertificateHome().getInstance();
 		FindCertificateResponse response = new ObjectFactory().createFindCertificateResponse();
-		response.setCertificate(getCertificateMapper().map(certificate, true));
-		return response;
-	}
-
-	@Override
-	public FindCertificateByIDResponse findCertificateByID(FindCertificateByIDRequest request) {
-		Certificate certificate = getDomainRepository().findCertificate(Integer.parseInt(request.getCertificateID()));
-		FindCertificateByIDResponse response = new ObjectFactory().createFindCertificateByIDResponse();
 		response.setCertificate(getCertificateMapper().map(certificate, true));
 		return response;
 	}
@@ -367,6 +358,10 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 		return (ContractHome) Component.getInstance(ContractHome.NAME, true);
 	}
 	
+	private CertificateHome getCertificateHome() {
+		return (CertificateHome) Component.getInstance(CertificateHome.NAME, true);
+	}
+
 	private ContractRepository getContractRepository() {
 		return (ContractRepository) Component.getInstance(ContractRepository.NAME, true);
 	}
