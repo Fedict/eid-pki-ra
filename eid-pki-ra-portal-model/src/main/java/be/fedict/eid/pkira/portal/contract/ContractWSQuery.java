@@ -27,7 +27,7 @@ import org.jboss.seam.annotations.Name;
 import be.fedict.eid.pkira.common.security.EIdUserCredentials;
 import be.fedict.eid.pkira.generated.privatews.ContractWS;
 import be.fedict.eid.pkira.portal.certificatedomain.CertificateDomainWSHome;
-import be.fedict.eid.pkira.portal.ra.DataTableWSQuery;
+import be.fedict.eid.pkira.portal.framework.DataTableWSQuery;
 
 /**
  * @author Bram Baeyens

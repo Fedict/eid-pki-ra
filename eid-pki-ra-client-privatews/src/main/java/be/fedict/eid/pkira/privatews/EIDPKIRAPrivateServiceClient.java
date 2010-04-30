@@ -35,8 +35,6 @@ import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserRequest;
 import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivateService;
-import be.fedict.eid.pkira.generated.privatews.FindCertificateByIDRequest;
-import be.fedict.eid.pkira.generated.privatews.FindCertificateByIDResponse;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateDomainRequest;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateDomainResponse;
 import be.fedict.eid.pkira.generated.privatews.FindCertificateRequest;
@@ -86,13 +84,6 @@ public class EIDPKIRAPrivateServiceClient {
 		this.factory = new ObjectFactory();
 	}
 
-	/**
-	 * Lists all the certificates that are available to the user.
-	 * 
-	 * @param userRRN
-	 *            the "rijksregisternummer" (national number) of the user.
-	 * @return the list of certificates available to him.
-	 */
 	public List<CertificateWS> listCertificates(String userRRN, String certificateDomainId) {
 		ListCertificatesRequest request = factory.createListCertificatesRequest();
 		request.setUserRRN(userRRN);
@@ -102,19 +93,10 @@ public class EIDPKIRAPrivateServiceClient {
 		return response.getCertificates();
 	}
 
-	public CertificateWS findCertificate(String userRRN, String serialNumber) {
+	public CertificateWS findCertificate(Integer certificateId) {
 		FindCertificateRequest request = factory.createFindCertificateRequest();
-		request.setUserRRN(userRRN);
-		request.setSerialNumber(serialNumber);
+		request.setCertificateId(certificateId);
 		FindCertificateResponse response = getWebservicePort().findCertificate(request);
-		return response.getCertificate();
-	}
-
-	public CertificateWS findCertificateWithID(String userRRN, String certificateID) {
-		FindCertificateByIDRequest request = factory.createFindCertificateByIDRequest();
-		request.setUserRRN(userRRN);
-		request.setCertificateID(certificateID);
-		FindCertificateByIDResponse response = getWebservicePort().findCertificateByID(request);
 		return response.getCertificate();
 	}
 	

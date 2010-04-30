@@ -29,7 +29,7 @@
 							label="#{certificateDomain.name}" 
 							itemValue="#{certificateDomain.id}"
 							noSelectionLabel="#{messages['general.noselectionlabel']}" />
-							<a:support event="onchange" action="#{certificateHandler.findCertificateList()}" reRender="cerList"/>
+						<a:support event="onchange" action="#{certificateHandler.findCertificateList()}" reRender="cerList"/>
 					</h:selectOneMenu>
            	</s:decorate>
 			
@@ -77,19 +77,17 @@
 				</rich:column>
 
 				<rich:column>
-					<s:link id="detailCertificate" value="#{messages['link.detail']}"
-						action="#{certificateHandler.showDetail(cer)}" />
+					<s:link id="detailCertificate" view="/page/certificates/certificate-detail.xhtml" value="#{messages['link.detail']}">
+						<f:param name="certificateId" value="#{cer.id}" />
+					</s:link>
 				</rich:column>
 
 				<rich:column>
 					<s:link id="revokeCertificate" value="#{messages['link.revoke']}"
-						action="#{certificateHandler.prepareRevocation(cer.serialNumber, cer.issuer)}" />
+						action="#{certificateHandler.prepareRevocation(cer.id)}" />
 				</rich:column>
 
 				<f:facet name="footer">
-					<f:facet name="header">
-						<h:outputText value="Action" />
-					</f:facet>
 					<rich:datascroller maxPages="10" rows="10" />
 				</f:facet>
 			</rich:dataTable>

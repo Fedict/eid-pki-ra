@@ -69,7 +69,8 @@ public class ContractMapperBean implements Serializable, ContractMapper {
 		contractWS.setRequesterName(contract.getRequester());
 		contractWS.setCertificateDomainName(contract.getCertificateDomain().getName());
 		contractWS.setContractType(deriveContractType(contract));
-		contractWS.setCertificateType(getCertificateType(contract));		
+		contractWS.setCertificateType(getCertificateType(contract));
+		contractWS.setCertificateId(getCertificateId(contract)); 
 		return contractWS;
 	}
 
@@ -86,6 +87,14 @@ public class ContractMapperBean implements Serializable, ContractMapper {
 		if (contract instanceof CertificateSigningContract) {
 			return Enum.valueOf(CertificateTypeWS.class, 
 					((CertificateSigningContract) contract).getCertificateType().name());
+		}
+		return null;
+	}
+
+	private Integer getCertificateId(AbstractContract contract) {
+		if (contract instanceof CertificateSigningContract) {
+			CertificateSigningContract certificateSigningContract = (CertificateSigningContract) contract;
+			return certificateSigningContract.getCertificate() != null ? certificateSigningContract.getCertificate().getId() : null;
 		}
 		return null;
 	}

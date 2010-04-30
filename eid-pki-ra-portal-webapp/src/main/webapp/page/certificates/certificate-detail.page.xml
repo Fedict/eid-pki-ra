@@ -6,6 +6,10 @@
 	login-required="true">
 	
 	<restrict>#{s:hasRole('REGISTERED_USER')}</restrict>
+	
+	<param name="certificateId" value="#{certificateWSHome.id}" converterId="javax.faces.Integer"/>
+	
+	<action execute="#{menuHandler.setSelectedItem('certificates')}"/>
 		
 	<navigation>
 		<rule if-outcome="revokeContract">

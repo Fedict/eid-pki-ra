@@ -24,7 +24,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.StatusMessage;
 
 import be.fedict.eid.pkira.generated.privatews.RegistrationWS;
-import be.fedict.eid.pkira.portal.ra.WSHome;
+import be.fedict.eid.pkira.portal.framework.WSHome;
 
 /**
  * @author Bram Baeyens

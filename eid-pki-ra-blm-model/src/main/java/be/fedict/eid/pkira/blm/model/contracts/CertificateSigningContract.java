@@ -21,6 +21,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.OneToOne;
 
 import org.jboss.seam.annotations.Name;
 
@@ -43,6 +44,9 @@ public class CertificateSigningContract extends AbstractContract {
 	@Enumerated(EnumType.STRING)
 	@Column(name="CERTIFICATE_TYPE")
 	private CertificateType certificateType;
+	
+	@OneToOne(mappedBy="contract")
+	private Certificate certificate;
 
 	public Integer getValidityPeriodMonths() {
 		return validityPeriodMonths;
@@ -58,6 +62,14 @@ public class CertificateSigningContract extends AbstractContract {
 
 	public void setCertificateType(CertificateType certificateType) {
 		this.certificateType = certificateType;
+	}
+
+	public Certificate getCertificate() {
+		return certificate;
+	}
+	
+	public void setCertificate(Certificate certificate) {
+		this.certificate = certificate;
 	}
 
 	@Override

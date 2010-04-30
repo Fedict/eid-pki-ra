@@ -21,7 +21,7 @@ package be.fedict.eid.pkira.portal.certificatedomain;
 import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.generated.privatews.CertificateDomainWS;
-import be.fedict.eid.pkira.portal.ra.WSHome;
+import be.fedict.eid.pkira.portal.framework.WSHome;
 
 /**
  * @author Bram Baeyens
