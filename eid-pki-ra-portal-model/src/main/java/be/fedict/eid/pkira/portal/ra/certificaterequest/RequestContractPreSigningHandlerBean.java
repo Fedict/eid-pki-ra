@@ -28,7 +28,6 @@ import be.fedict.eid.pkira.contracts.CertificateSigningRequestBuilder;
 import be.fedict.eid.pkira.contracts.XmlMarshallingException;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
 import be.fedict.eid.pkira.generated.contracts.CertificateTypeType;
-import be.fedict.eid.pkira.generated.privatews.CertificateTypeWS;
 import be.fedict.eid.pkira.portal.ra.AbstractContract;
 import be.fedict.eid.pkira.portal.ra.AbstractPreSigningHandler;
 
@@ -40,7 +39,7 @@ import be.fedict.eid.pkira.portal.ra.AbstractPreSigningHandler;
 public class RequestContractPreSigningHandlerBean extends AbstractPreSigningHandler<RequestContractSigningWrapper> {
 
 	public static final String NAME = "be.fedict.eid.pkira.portal.requestContractPreSigningHandler";
-
+	
 	@In(create = true, value = RequestContractSigningWrapper.NAME)
 	@Out(value = RequestContractSigningWrapper.NAME)
 	private RequestContractSigningWrapper signingWrapper;
@@ -51,18 +50,14 @@ public class RequestContractPreSigningHandlerBean extends AbstractPreSigningHand
 	}
 
 	private CertificateSigningRequestBuilder initBuilder(RequestContract contract) {
-		String distinguishedName = contract.getDistinguishedName();
-		CertificateTypeWS certificateTypeWS = CertificateTypeWS.fromValue(contract.getCertificateType().name()
-				.toLowerCase());
-		String userRRN = credentials.getUser().getRRN();
-		String legalNotice = privateServiceClient.getLegalNoticeByDN(distinguishedName, certificateTypeWS, userRRN);
-
-		return new CertificateSigningRequestBuilder().setOperator(initBuilder(contract.getOperator()).toEntityType())
-				.setLegalNotice(contract.getLegalNotice()).setDistinguishedName(contract.getDistinguishedName())
-				.setCsr(contract.getBase64Csr()).setCertificateType(
-						Enum.valueOf(CertificateTypeType.class, contract.getCertificateType().name()))
-				.setValidityPeriodMonths(contract.getValidityPeriod()).setDescription(contract.getDescription())
-				.setLegalNotice(legalNotice);
+		return new CertificateSigningRequestBuilder()
+				.setOperator(initBuilder(contract.getOperator()).toEntityType())
+				.setLegalNotice(contract.getLegalNotice())
+				.setDistinguishedName(contract.getDistinguishedName())
+				.setCsr(contract.getBase64Csr())
+				.setCertificateType(Enum.valueOf(CertificateTypeType.class, contract.getCertificateType().name()))
+				.setValidityPeriodMonths(contract.getValidityPeriod())
+				.setDescription(contract.getDescription());
 	}
 
 	@Override

@@ -24,7 +24,6 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 
 import be.fedict.eid.pkira.generated.privatews.CertificateDomainWS;
-import be.fedict.eid.pkira.generated.privatews.CertificateTypeWS;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 import be.fedict.eid.pkira.generated.privatews.ConfigurationEntryKeyWS;
 import be.fedict.eid.pkira.generated.privatews.ConfigurationEntryWS;
@@ -57,8 +56,6 @@ import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsFo
 import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.FindUserRequest;
 import be.fedict.eid.pkira.generated.privatews.FindUserResponse;
-import be.fedict.eid.pkira.generated.privatews.GetLegalNoticeRequest;
-import be.fedict.eid.pkira.generated.privatews.GetLegalNoticeResponse;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesRequest;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesResponse;
 import be.fedict.eid.pkira.generated.privatews.ObjectFactory;
@@ -188,29 +185,6 @@ public class EIDPKIRAPrivateServiceClient {
 		request.setUserRrn(userRrn);
 		FindContractsResponse response = getWebservicePort().findContracts(request);
 		return response.getContracts();
-	}
-	
-	public String getLegalNoticeByDN(String certificateDN, CertificateTypeWS certificateType, String userRRN) {
-		GetLegalNoticeRequest request = factory.createGetLegalNoticeRequest();
-		request.setByDN(factory.createGetLegalNoticeRequestByDN());
-		
-		request.getByDN().setCertificateDN(certificateDN);
-		request.getByDN().setCertificateType(certificateType);
-		request.getByDN().setUserRRN(userRRN);
-		
-		GetLegalNoticeResponse response = getWebservicePort().getLegalNotice(request);
-		return response.getLegalNotice();
-	}
-	
-	public String getLegalNoticeForCertificate(String issuer, String serialNumber) {
-		GetLegalNoticeRequest request = factory.createGetLegalNoticeRequest();
-		request.setByCertificate(factory.createGetLegalNoticeRequestByCertificate());
-		
-		request.getByCertificate().setIssuer(issuer);
-		request.getByCertificate().setSerialNumber(serialNumber);
-		
-		GetLegalNoticeResponse response = getWebservicePort().getLegalNotice(request);
-		return response.getLegalNotice();
 	}
 	
 	public CertificateDomainWS findCertificateDomain(Integer certificateDomainId) {
