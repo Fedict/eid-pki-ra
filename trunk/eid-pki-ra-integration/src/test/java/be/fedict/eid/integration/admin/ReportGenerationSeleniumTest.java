@@ -40,7 +40,7 @@ public class ReportGenerationSeleniumTest extends BaseSeleniumTestCase {
 	@Test
 	public void testGenerateReportMonthsInvalid() {
 		setReportParameters("2010-05", "2010-04");
-		click("reportConfigurationForm:submitButtonBox:generateReport");	
+		clickAndWait("reportConfigurationForm:submitButtonBox:generateReport");	
 		assertTextPresent("The from month cannot be after the end month.");
 	}
 

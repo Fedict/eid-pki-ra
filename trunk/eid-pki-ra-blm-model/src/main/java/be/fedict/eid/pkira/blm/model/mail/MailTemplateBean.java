@@ -25,10 +25,10 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 
 import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.log.Log;
 
+import be.fedict.eid.pkira.blm.errorhandling.ApplicationComponent;
+import be.fedict.eid.pkira.blm.errorhandling.ErrorLoggerBean;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
@@ -45,9 +45,9 @@ public class MailTemplateBean implements MailTemplate {
 
 	@In(value = MailSender.NAME, create = true)
 	private MailSender mailSender;
-
-	@Logger
-	private Log log;
+	
+	@In(value=ErrorLoggerBean.NAME, create=true)
+	private ErrorLoggerBean errorLoggerBean;
 
 	private Configuration configuration;
 
@@ -72,9 +72,11 @@ public class MailTemplateBean implements MailTemplate {
 
 			return out.toString();
 		} catch (IOException e) {
-			throw new RuntimeException("Error creating mail message", e);
+			errorLoggerBean.logError(ApplicationComponent.MAIL, "Error creating mail message", e);
+			return null;
 		} catch (TemplateException e) {
-			throw new RuntimeException("Error creating mail message", e);
+			errorLoggerBean.logError(ApplicationComponent.MAIL, "Error creating mail message", e);
+			return null;
 		}
 	}
 
@@ -87,6 +89,9 @@ public class MailTemplateBean implements MailTemplate {
 		try {
 			// Create the message
 			String processedTemplate = createMailMessage(templateName, parameters);
+			if (processedTemplate==null) {
+				return;
+			}
 			String[] parts = processedTemplate.split("\\s*===\\s*");
 
 			// Create the mail
@@ -104,7 +109,7 @@ public class MailTemplateBean implements MailTemplate {
 			// Send it
 			mailSender.sendMail(mail);
 		} catch (IOException e) {
-			log.error("Error sending mail with certificate", e);
+			errorLoggerBean.logError(ApplicationComponent.MAIL, "Error sending mail message", e);
 		}
 	}
 
@@ -118,10 +123,6 @@ public class MailTemplateBean implements MailTemplate {
 
 	protected void setMailSender(MailSender mailSender) {
 		this.mailSender = mailSender;
-	}
-
-	protected void setLog(Log log) {
-		this.log = log;
 	}
 
 }
