@@ -17,8 +17,7 @@
 			<s:decorate id="CertificateDomainDecorator" template="/layout/edit.xhtml">
            		<ui:define name="label">#{messages['certificate.domain.selection.label']}:</ui:define>
 				
-				<h:selectOneMenu id="selectRegisteredCertificateDomain" value="#{certificateHandler.certificateDomainWSID}" 
-							required="true">
+				<h:selectOneMenu id="selectRegisteredCertificateDomain" value="#{certificateHandler.certificateDomainWSID}" >
 						<s:selectItems 
 							value="#{certificateDomainWSQuery.findRegisteredCertificateDomains}" 
 							var="certificateDomain" 
@@ -91,6 +90,12 @@
 					<rich:datascroller maxPages="10" rows="10" />
 				</f:facet>
 			</rich:dataTable>
+			</s:decorate>
+			
+			<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
+					<h:commandButton id="requestCertificate" 
+							action="requestCertificate" 
+							value="#{messages['button.csr']}"/>
 			</s:decorate>
 			</rich:panel>
 		</h:form>

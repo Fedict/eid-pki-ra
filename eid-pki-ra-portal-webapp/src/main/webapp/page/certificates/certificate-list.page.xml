@@ -11,5 +11,9 @@
 			<redirect view-id="/page/contract/revocationContract.xhtml" />
 		</rule>
 	</navigation>
-	
+	<navigation>
+		<rule if-outcome="requestCertificate">
+			<redirect view-id="/page/contract/upload-csr.xhtml" />
+		</rule>
+	</navigation>
 </page>
