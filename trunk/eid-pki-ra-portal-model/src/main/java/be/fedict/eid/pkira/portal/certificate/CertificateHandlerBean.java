@@ -33,6 +33,7 @@ import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.common.security.EIdUserCredentials;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
+import be.fedict.eid.pkira.portal.certificatedomain.CertificateDomainWSHome;
 import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 
 @Name(CertificateHandler.NAME)
@@ -59,10 +60,14 @@ public class CertificateHandlerBean implements CertificateHandler {
 	@In(value=CertificateMapper.NAME, create=true)
 	private CertificateMapper certificateMapper;
 	
-	private String certificateDomainWSID = null;
+	private String certificateDomainWSID;
 	
 	@In(value=CertificateWSHome.NAME, create=true)
 	private CertificateWSHome certificateWSHome;
+	
+	@In(value=CertificateDomainWSHome.NAME, create=true)
+	private CertificateDomainWSHome certificateDomainWSHome;
+	
 	
 	@Override
 	public List<Certificate> findCertificateList(){
@@ -71,7 +76,7 @@ public class CertificateHandlerBean implements CertificateHandler {
 	
 	@Override 
 	public List<Certificate> findCertificateList(String userRRN) {
-		List<CertificateWS> listCertificates = eidpkiraPrivateServiceClient.listCertificates(userRRN, certificateDomainWSID);
+		List<CertificateWS> listCertificates = eidpkiraPrivateServiceClient.listCertificates(userRRN, getCertificateDomainWSID());
 		certificates = new ArrayList<Certificate>();
 		for (CertificateWS certificatews : listCertificates) {
 			certificates.add(certificateMapper.map(certificatews));
@@ -98,11 +103,23 @@ public class CertificateHandlerBean implements CertificateHandler {
 		this.eidpkiraPrivateServiceClient = eidpkiraPrivateServiceClient;
 	}
 
-	public void setCertificateDomainWSID(String certificateDomainWSID) {
-		this.certificateDomainWSID = certificateDomainWSID;
+	public void setCertificateDomainId(String certificateDomainId) {
+		this.setCertificateDomainWSID(certificateDomainId);
+	}
+	
+	public CertificateDomainWSHome getCertificateDomainWSHome() {
+		if (getCertificateDomainWSID() != null) {
+			certificateDomainWSHome.setId(Integer.parseInt(getCertificateDomainWSID()));		
+		}
+		return certificateDomainWSHome;
 	}
 
 	public String getCertificateDomainWSID() {
 		return certificateDomainWSID;
 	}
+
+	public void setCertificateDomainWSID(String certificateDomainWSID) {
+		this.certificateDomainWSID = certificateDomainWSID;
+	}
+
 }

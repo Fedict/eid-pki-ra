@@ -13,10 +13,6 @@
 				<h:outputText value="#{messages['certificates.title']}" />
 			</f:facet>
 			
-			<s:decorate id="distinguishedNameDecorator" template="/layout/edit.xhtml">
-				<ui:define name="label">#{messages['certificate.subject']}:</ui:define>
-				<h:outputText value="#{cer.distinguishedName}" />
-			</s:decorate>
 
 			<s:decorate id="CertificateDomainDecorator" template="/layout/edit.xhtml">
            		<ui:define name="label">#{messages['certificate.domain.selection.label']}:</ui:define>
@@ -29,10 +25,16 @@
 							label="#{certificateDomain.name}" 
 							itemValue="#{certificateDomain.id}"
 							noSelectionLabel="#{messages['general.noselectionlabel']}" />
-						<a:support event="onchange" action="#{certificateHandler.findCertificateList()}" reRender="cerList"/>
+							<a:support event="onchange" action="#{certificateHandler.findCertificateList()}" reRender="cerList,certificateDomainName"/>
 					</h:selectOneMenu>
            	</s:decorate>
 			
+			<s:decorate id="distinguishedNameDecorator" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['certificatedomain.dnExpression']}:</ui:define>
+				<h:outputText  id="certificateDomainName" value="#{certificateHandler.certificateDomainWSHome.instance.dnExpression}" />
+			</s:decorate>
+			
+			<s:decorate id="cerListDecorator" template="/layout/edit.xhtml">
 			<rich:dataTable id="cerList" var="cer" value="#{certificates}" rendered="#{not empty certificates}" width="75%">
 				<rich:column sortBy="#{cer.serialNumber}" filterBy="#{cer.serialNumber}" filterEvent="onkeyup">
 					<f:facet name="header">
@@ -62,13 +64,6 @@
 					<h:outputText value="#{cer.issuer}" />
 				</rich:column>
 
-<!--				<rich:column sortBy="#{cer.requesterName}" filterBy="#{cer.requesterName}" filterEvent="onkeyup">-->
-<!--					<f:facet name="header">-->
-<!--						<h:outputText value="Requester Name" />-->
-<!--					</f:facet>-->
-<!--					<h:outputText value="#{cer.requesterName}" />-->
-<!--				</rich:column>-->
-
 				<rich:column sortBy="#{cer.type}" filterBy="#{cer.type}" filterEvent="onkeyup">
 					<f:facet name="header">
 						<h:outputText value="#{messages['certificate.type']}" />
@@ -76,13 +71,18 @@
 					<h:outputText value="#{cer.type}" />
 				</rich:column>
 
+				<rich:column sortBy="#{cer.distinguishedName}" filterBy="#{cer.distinguishedName}" filterEvent="onkeyup">
+					<f:facet name="header">
+						<h:outputText value="#{messages['certificate.dn']}" />
+					</f:facet>
+					<h:outputText value="#{cer.distinguishedName}" />
+				</rich:column>
+
 				<rich:column>
 					<s:link id="detailCertificate" view="/page/certificates/certificate-detail.xhtml" value="#{messages['link.detail']}">
 						<f:param name="certificateId" value="#{cer.id}" />
 					</s:link>
-				</rich:column>
-
-				<rich:column>
+					
 					<s:link id="revokeCertificate" value="#{messages['link.revoke']}"
 						action="#{certificateHandler.prepareRevocation(cer.id)}" />
 				</rich:column>
@@ -91,6 +91,7 @@
 					<rich:datascroller maxPages="10" rows="10" />
 				</f:facet>
 			</rich:dataTable>
+			</s:decorate>
 			</rich:panel>
 		</h:form>
 	</ui:define>
