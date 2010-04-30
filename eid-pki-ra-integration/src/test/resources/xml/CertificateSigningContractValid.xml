@@ -7,7 +7,7 @@
 		<ns2:Function>Test</ns2:Function>
 		<ns2:Phone>02 3456789</ns2:Phone>
 	</ns2:Operator>
-	<ns2:LegalNotice>testLegalNotice</ns2:LegalNotice>
+	<ns2:LegalNotice>Test Legal Notice</ns2:LegalNotice>
 	<ns2:DistinguishedName>C=BE,ST=Limburg,L=Hasselt,O=ACA IT-Solutions,CN=Jan Van den Bergh</ns2:DistinguishedName>
 	<ns2:CertificateType>Server</ns2:CertificateType>
 	<ns2:ValidityPeriodMonths>15</ns2:ValidityPeriodMonths>

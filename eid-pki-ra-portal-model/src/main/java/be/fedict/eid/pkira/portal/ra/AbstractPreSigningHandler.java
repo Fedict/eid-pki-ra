@@ -22,9 +22,11 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.log.Log;
 
+import be.fedict.eid.pkira.common.security.EIdUserCredentials;
 import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
 import be.fedict.eid.pkira.contracts.EntityBuilder;
 import be.fedict.eid.pkira.contracts.XmlMarshallingException;
+import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 
 /**
  * @author Bram Baeyens
@@ -37,6 +39,12 @@ public abstract class AbstractPreSigningHandler<T extends AbstractSigningWrapper
 
 	@In(create=true, value=EIDPKIRAContractsClient.NAME)
 	private EIDPKIRAContractsClient contractsClientPortal;
+	
+	@In(create=true, value=EIDPKIRAPrivateServiceClient.NAME)
+	protected EIDPKIRAPrivateServiceClient privateServiceClient;
+	
+	@In
+	protected EIdUserCredentials credentials;
 	
 	protected abstract T getSigningWrapper();
 	

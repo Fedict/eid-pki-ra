@@ -15,7 +15,7 @@
  * License along with this software; if not, see 
  * http://www.gnu.org/licenses/. 
  */
- 
+
 package be.fedict.eid.pkira.ws.impl;
 
 import java.math.BigInteger;
@@ -105,7 +105,8 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	 */
 	@Override
 	public ListCertificatesResponse listCertificates(ListCertificatesRequest request) {
-		List<Certificate> allCertificates = getDomainRepository().findAllCertificates(request.getUserRRN(), request.getCertificateDomainId());
+		List<Certificate> allCertificates = getDomainRepository().findAllCertificates(request.getUserRRN(),
+				request.getCertificateDomainId());
 
 		ListCertificatesResponse certificatesResponse = new ObjectFactory().createListCertificatesResponse();
 		for (Certificate certificate : allCertificates) {
@@ -125,10 +126,9 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 		response.setCertificate(getCertificateMapper().map(certificate, true));
 		return response;
 	}
-	
+
 	@Override
-	public FindCertificateByIDResponse findCertificateByID(
-			FindCertificateByIDRequest request) {
+	public FindCertificateByIDResponse findCertificateByID(FindCertificateByIDRequest request) {
 		Certificate certificate = getDomainRepository().findCertificate(Integer.parseInt(request.getCertificateID()));
 		FindCertificateByIDResponse response = new ObjectFactory().createFindCertificateByIDResponse();
 		response.setCertificate(getCertificateMapper().map(certificate, true));
@@ -141,10 +141,11 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	@Override
 	public FindUserResponse findUser(FindUserRequest request) {
 		User user = getUserRepository().findByNationalRegisterNumber(request.getUserRRN());
-		int numberOfApprovedRegistrations = getRegistrationRepository().getNumberOfRegistrationsForForUserInStatus(user, RegistrationStatus.APPROVED);
+		int numberOfApprovedRegistrations = getRegistrationRepository().getNumberOfRegistrationsForForUserInStatus(
+				user, RegistrationStatus.APPROVED);
 
 		FindUserResponse response = new ObjectFactory().createFindUserResponse();
-		response.setUser(getUserMapper().map(user, numberOfApprovedRegistrations>0));
+		response.setUser(getUserMapper().map(user, numberOfApprovedRegistrations > 0));
 		return response;
 	}
 
@@ -162,17 +163,19 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 		response.getCertificateDomains().addAll(getCertificateDomainMapper().map(domains));
 		return response;
 	}
-	
+
 	@Override
 	public FindRegisteredCertificateDomainsForUserResponse findRegisteredCertificateDomainsForUser(
 			FindRegisteredCertificateDomainsForUserRequest request) {
 		User user = getUserRepository().findByNationalRegisterNumber(request.getUserRRN());
-		List<CertificateDomain> domains = getRegistratedCertificateDomainQuery().getFindRegisteredCertificateDomains(user.getNationalRegisterNumber());
-		
-		FindRegisteredCertificateDomainsForUserResponse response = new ObjectFactory().createFindRegisteredCertificateDomainsForUserResponse();
+		List<CertificateDomain> domains = getRegistratedCertificateDomainQuery().getFindRegisteredCertificateDomains(
+				user.getNationalRegisterNumber());
+
+		FindRegisteredCertificateDomainsForUserResponse response = new ObjectFactory()
+				.createFindRegisteredCertificateDomainsForUserResponse();
 		response.getCertificateDomains().addAll(getCertificateDomainMapper().map(domains));
 		return response;
-		
+
 	}
 
 	/**
@@ -235,20 +238,37 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 		response.setConfigurationEntry(getConfigurationEntryMapper().map(configurationEntry));
 		return response;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public GetLegalNoticeResponse getLegalNotice(GetLegalNoticeRequest request) {
-		String userRRN = request.getUserRRN();
-		String dn = request.getCertificateDN();		
-		CertificateType certificateType = getCertificateMapper().map(request.getCertificateType());
-		Registration registration = getRegistrationManager().findRegistrationForUserDNAndCertificateType(userRRN, dn, certificateType);
-		CertificateAuthority ca = registration.getCertificateDomain().getCertificateAuthority();
+		String legalNotice = null;
+
+		if (request.getByDN() != null) {
+			String userRRN = request.getByDN().getUserRRN();
+			String dn = request.getByDN().getCertificateDN();
+			CertificateType certificateType = getCertificateMapper().map(request.getByDN().getCertificateType());
+			
+			Registration registration = getRegistrationManager().findRegistrationForUserDNAndCertificateType(userRRN,
+					dn, certificateType);
+			CertificateAuthority ca = registration.getCertificateDomain().getCertificateAuthority();
+			legalNotice = ca.getLegalNotice();
+		}
 		
+		if (request.getByCertificate()!=null) {
+			String issuer = request.getByCertificate().getIssuer();
+			BigInteger serialNumber = new BigInteger(request.getByCertificate().getSerialNumber());
+			Certificate certificate = getContractRepository().findCertificate(issuer, serialNumber);
+			if (certificate != null) {
+				legalNotice=certificate.getCertificateDomain().getCertificateAuthority().getLegalNotice();
+			}
+		}
+
 		GetLegalNoticeResponse response = new ObjectFactory().createGetLegalNoticeResponse();
-		response.setLegalNotice(ca.getLegalNotice());
+
+		response.setLegalNotice(legalNotice);
 		return response;
 	}
 
@@ -298,7 +318,7 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	private RegistrationManager getRegistrationManager() {
 		return (RegistrationManager) Component.getInstance(RegistrationManager.NAME, true);
 	}
-	
+
 	private RegistrationRepository getRegistrationRepository() {
 		return (RegistrationRepository) Component.getInstance(RegistrationRepository.NAME, true);
 	}
@@ -314,15 +334,15 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	private CertificateDomainMapper getCertificateDomainMapper() {
 		return (CertificateDomainMapper) Component.getInstance(CertificateDomainMapper.NAME, true);
 	}
-	
+
 	private ConfigurationEntryMapper getConfigurationEntryMapper() {
 		return (ConfigurationEntryMapper) Component.getInstance(ConfigurationEntryMapper.NAME, true);
 	}
-	
+
 	private ConfigurationEntryQuery getConfigurationEntryQuery() {
 		return (ConfigurationEntryQuery) Component.getInstance(ConfigurationEntryQuery.class, true);
 	}
-	
+
 	private RegistrationQuery getRegistrationQuery() {
 		return (RegistrationQuery) Component.getInstance(RegistrationQuery.NAME, true);
 	}
@@ -330,11 +350,11 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	private RegistrationHome getRegistrationHome() {
 		return (RegistrationHome) Component.getInstance(RegistrationHome.NAME, true);
 	}
-	
+
 	private RegistrationMapper getRegistrationMapper() {
 		return (RegistrationMapper) Component.getInstance(RegistrationMapper.NAME, true);
 	}
-	
+
 	private ContractQuery getContractQuery() {
 		return (ContractQuery) Component.getInstance(ContractQuery.NAME, true);
 	}
@@ -346,4 +366,9 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	private ContractHome getContractHome() {
 		return (ContractHome) Component.getInstance(ContractHome.NAME, true);
 	}
+	
+	private ContractRepository getContractRepository() {
+		return (ContractRepository) Component.getInstance(ContractRepository.NAME, true);
+	}
+
 }

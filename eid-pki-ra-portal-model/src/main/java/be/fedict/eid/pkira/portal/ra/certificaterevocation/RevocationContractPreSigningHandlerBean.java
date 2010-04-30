@@ -60,6 +60,8 @@ public class RevocationContractPreSigningHandlerBean extends AbstractPreSigningH
 	}
 
 	private CertificateRevocationRequestBuilder initBuilder(RevocationContract contract) {
+		String legalNotice = privateServiceClient.getLegalNoticeForCertificate(contract.getCertificate().getIssuer(), contract.getCertificate().getSerialNumber());
+		
 		return new CertificateRevocationRequestBuilder()
 				.setOperator(initBuilder(contract.getOperator()).toEntityType())
 				.setDistinguishedName(contract.getCertificate().getDistinguishedName())
@@ -67,6 +69,7 @@ public class RevocationContractPreSigningHandlerBean extends AbstractPreSigningH
 				.setValidityEnd(contract.getCertificate().getValidityEnd())
 				.setCertificate(contract.getCertificate().getX509())
 				.setLegalNotice(contract.getLegalNotice())
-				.setDescription(contract.getDescription());
+				.setDescription(contract.getDescription())
+				.setLegalNotice(legalNotice);
 	}	
 }

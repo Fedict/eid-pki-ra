@@ -43,6 +43,7 @@ import org.mockito.stubbing.Answer;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import be.fedict.eid.pkira.blm.model.ca.CertificateAuthority;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.contracthandler.services.ContractParser;
 import be.fedict.eid.pkira.blm.model.contracthandler.services.FieldValidator;
@@ -98,6 +99,7 @@ public class ContractHandlerBeanTest {
 	private static final Registration VALID_REGISTRATION = createValidRegistration();
 	private static final CertificateRevocationRequestType VALID_REVOCATION_REQUEST = createMinimalRevocationRequest();
 	private static final CertificateSigningRequestType VALID_SIGNING_REQUEST = createMinimalSigningRequest();
+	private static final String VALID_LEGAL_NOTICE = "LegalNotice";
 	
 	private ContractHandlerBean bean;
 
@@ -386,6 +388,7 @@ public class ContractHandlerBeanTest {
 			.setCertificate(VALID_CERTIFICATE)
 			.setValidityStart(VALID_START)
 			.setValidityEnd(VALID_END)
+			.setLegalNotice(VALID_LEGAL_NOTICE)
 			.toRequestType();
 	}
 
@@ -395,6 +398,7 @@ public class ContractHandlerBeanTest {
 			.setCertificateType(VALID_CERTIFICATETYPETYPE)
 			.setValidityPeriodMonths(VALID_VALIDITYPERIOD)
 			.setCsr(VALID_CSR)
+			.setLegalNotice(VALID_LEGAL_NOTICE)
 			.toRequestType();
 	}
 	
@@ -411,9 +415,21 @@ public class ContractHandlerBeanTest {
 		requester.setFirstName("first");
 		requester.setLastName("last");
 		registration.setRequester(requester);
-		registration.setCertificateDomain(new CertificateDomain());
+		registration.setCertificateDomain(createValidCertificateDomain());
 		
 		return registration;
+	}
+
+	private static CertificateDomain createValidCertificateDomain() {
+		CertificateDomain certificateDomain = new CertificateDomain();
+		certificateDomain.setCertificateAuthority(createValidCertificateAuthority());
+		return certificateDomain;
+	}
+
+	private static CertificateAuthority createValidCertificateAuthority() {
+		CertificateAuthority result = new CertificateAuthority();
+		result.setLegalNotice(VALID_LEGAL_NOTICE);
+		return result;
 	}
 
 }
