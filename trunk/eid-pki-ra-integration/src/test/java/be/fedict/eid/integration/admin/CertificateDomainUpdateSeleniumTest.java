@@ -73,7 +73,7 @@ public class CertificateDomainUpdateSeleniumTest extends BaseSeleniumTestCase {
 	@Test
 	public void testUpdateCertificateDomainDnNull() {
 		updateDnExpression(0, "");
-		assertTextPresent("Please add a valid distinguished name expression for the certificate domain");
+		assertTextPresent("This field is required!");
 		getSelenium().type("certificateDetailForm:dnPatternDecoration:dnPattern", "c=en,ou=eHealth,uid=*");
 		clickAndWait("certificateDetailForm:submitButtonBox:update");
 		assertTextPresent("The certificate domain has been updated.");
