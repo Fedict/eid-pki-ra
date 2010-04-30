@@ -52,7 +52,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			
+
 			<xsd:element name="FindCertificateByIDRequest">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -138,7 +138,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			
+
 			<xsd:element name="FindRegistrationsByUserRRNRequest">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -146,7 +146,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			
+
 			<xsd:element name="FindRegistrationsByUserRRNResponse">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -154,7 +154,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			
+
 			<xsd:element name="FindRegistrationByIdRequest">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -162,7 +162,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			
+
 			<xsd:element name="FindRegistrationByIdResponse">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -170,7 +170,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			
+
 			<xsd:element name="CreateOrUpdateRegistrationRequest">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -205,11 +205,25 @@
 
 			<xsd:element name="GetLegalNoticeRequest">
 				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element name="certificateDN" type="xsd:string" />
-						<xsd:element name="userRRN" type="xsd:string" />
-						<xsd:element name="certificateType" type="types:certificateTypeWS" />
-					</xsd:sequence>
+					<xsd:choice>
+						<xsd:element name="ByDN">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="certificateDN" type="xsd:string" />
+									<xsd:element name="userRRN" type="xsd:string" />
+									<xsd:element name="certificateType" type="types:certificateTypeWS" />
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="ByCertificate">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="issuer" type="xsd:string" />
+									<xsd:element name="serialNumber" type="xsd:string" />
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:choice>
 				</xsd:complexType>
 			</xsd:element>
 
@@ -325,7 +339,7 @@
 					<xsd:enumeration value="IDP_DESTINATION" />
 				</xsd:restriction>
 			</xsd:simpleType>
-			
+
 			<xsd:complexType name="registrationWS">
 				<xsd:sequence>
 					<xsd:element name="id" type="xsd:string" />
@@ -381,7 +395,7 @@
 	<wsdl:message name="FindCertificateResult">
 		<wsdl:part name="response" element="types:FindCertificateResponse" />
 	</wsdl:message>
-	
+
 	<wsdl:message name="FindCertificateByIDRequest">
 		<wsdl:part name="request" element="types:FindCertificateByIDRequest" />
 	</wsdl:message>
@@ -455,31 +469,31 @@
 	</wsdl:message>
 
 	<wsdl:message name="GetLegalNoticeRequest">
-		<wsdl:part name="request" element="types:GetLegalNoticeRequest" />		
+		<wsdl:part name="request" element="types:GetLegalNoticeRequest" />
 	</wsdl:message>
 
 	<wsdl:message name="GetLegalNoticeResponse">
 		<wsdl:part name="request" element="types:GetLegalNoticeResponse" />
 	</wsdl:message>
-	
+
 	<wsdl:message name="FindContractsRequest">
-		<wsdl:part name="request" element="types:FindContractsRequest" />		
+		<wsdl:part name="request" element="types:FindContractsRequest" />
 	</wsdl:message>
 
 	<wsdl:message name="FindContractsResponse">
 		<wsdl:part name="request" element="types:FindContractsResponse" />
 	</wsdl:message>
-	
+
 	<wsdl:message name="FindContractDocumentRequest">
-		<wsdl:part name="request" element="types:FindContractDocumentRequest" />		
+		<wsdl:part name="request" element="types:FindContractDocumentRequest" />
 	</wsdl:message>
 
 	<wsdl:message name="FindContractDocumentResponse">
 		<wsdl:part name="request" element="types:FindContractDocumentResponse" />
 	</wsdl:message>
-	
+
 	<wsdl:message name="FindCertificateDomainRequest">
-		<wsdl:part name="request" element="types:FindCertificateDomainRequest" />		
+		<wsdl:part name="request" element="types:FindCertificateDomainRequest" />
 	</wsdl:message>
 
 	<wsdl:message name="FindCertificateDomainResponse">

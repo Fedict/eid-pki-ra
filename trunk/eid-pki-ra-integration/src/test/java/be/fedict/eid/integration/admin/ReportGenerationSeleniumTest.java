@@ -33,11 +33,21 @@ public class ReportGenerationSeleniumTest extends BaseSeleniumTestCase {
 
 	@Test
 	public void testGenerateReport() {
+		setReportParameters("2010-04", "2010-05");
+		//click("reportConfigurationForm:submitButtonBox:generateReport"); // Cannot be tested: download of a file is not supported		
+	}
+	
+	@Test
+	public void testGenerateReportMonthsInvalid() {
+		setReportParameters("2010-05", "2010-04");
+		click("reportConfigurationForm:submitButtonBox:generateReport");	
+		assertTextPresent("The from month cannot be after the end month.");
+	}
+
+	private void setReportParameters(String startMonth, String endMonth) {
 		clickAndWait("header-form:reports");
-		
-		getSelenium().select("reportConfigurationForm:monthDecoration:month", "2010-04");
+		getSelenium().select("reportConfigurationForm:startMonthDecoration:startMonth", startMonth);
+		getSelenium().select("reportConfigurationForm:endMonthDecoration:endMonth", endMonth);
 		getSelenium().uncheck("reportConfigurationForm:includeCAReportDecoration:includeCAReport");
-		// Cannot be tested - Selenium cannot handle download dialog
-		//click("reportConfigurationForm:submitButtonBox:generateReport");		
 	}
 }
