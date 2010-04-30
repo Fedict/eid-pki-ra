@@ -56,11 +56,19 @@ public class RevocationContractPreSigningHandlerBean extends AbstractPreSigningH
 
 	@Override
 	protected String marshalBase64CsrXml(AbstractContract contract) throws XmlMarshallingException {
-		return getContractsClientPortal().marshalToBase64(initBuilder((RevocationContract) contract).toRequestType(), CertificateRevocationRequestType.class);		
+		CertificateRevocationRequestBuilder builder = initBuilder((RevocationContract) contract);
+		if (builder==null) {
+			return null;
+		}
+		
+		return getContractsClientPortal().marshalToBase64(builder.toRequestType(), CertificateRevocationRequestType.class);		
 	}
 
 	private CertificateRevocationRequestBuilder initBuilder(RevocationContract contract) {
 		String legalNotice = privateServiceClient.getLegalNoticeForCertificate(contract.getCertificate().getIssuer(), contract.getCertificate().getSerialNumber());
+		if (legalNotice==null) {
+			return null;
+		}
 		
 		return new CertificateRevocationRequestBuilder()
 				.setOperator(initBuilder(contract.getOperator()).toEntityType())

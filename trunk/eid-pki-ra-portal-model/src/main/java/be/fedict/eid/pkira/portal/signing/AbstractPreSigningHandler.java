@@ -20,6 +20,8 @@ package be.fedict.eid.pkira.portal.signing;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
+import org.jboss.seam.faces.FacesMessages;
+import org.jboss.seam.international.StatusMessage.Severity;
 import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.common.security.EIdUserCredentials;
@@ -48,6 +50,9 @@ public abstract class AbstractPreSigningHandler<T extends AbstractSigningWrapper
 	@In
 	protected EIdUserCredentials credentials;
 	
+	@In
+	protected FacesMessages facesMessages;
+	
 	protected abstract T getSigningWrapper();
 	
 	protected abstract void setSigningWrapper(T signingWrapper);
@@ -58,6 +63,11 @@ public abstract class AbstractPreSigningHandler<T extends AbstractSigningWrapper
 		try {
 			T signingWrapper = getSigningWrapper();
 			String base64CsrXml = marshalBase64CsrXml(signingWrapper.getContract());
+			if (base64CsrXml==null) {
+				facesMessages.addFromResourceBundle(Severity.ERROR, "contract.noLegalNotice");
+				return null;
+			}
+			
 			signingWrapper.setBase64CsrXml(base64CsrXml);
 		} catch (XmlMarshallingException e) {
 			log.info("<<< prepareSignment: marshalling failed", e);

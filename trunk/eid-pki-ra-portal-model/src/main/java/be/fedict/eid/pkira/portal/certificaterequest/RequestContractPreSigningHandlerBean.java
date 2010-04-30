@@ -55,7 +55,11 @@ public class RequestContractPreSigningHandlerBean extends AbstractPreSigningHand
 		CertificateTypeWS certificateTypeWS = CertificateTypeWS.fromValue(contract.getCertificateType().name()
 				.toLowerCase());
 		String userRRN = credentials.getUser().getRRN();
-		String legalNotice = privateServiceClient.getLegalNoticeByDN(distinguishedName, certificateTypeWS, userRRN);
+		
+		String legalNotice = privateServiceClient.getLegalNoticeByDN(distinguishedName, certificateTypeWS, userRRN);		
+		if (legalNotice==null) {
+			return null;
+		}
 
 		return new CertificateSigningRequestBuilder().setOperator(initBuilder(contract.getOperator()).toEntityType())
 				.setLegalNotice(contract.getLegalNotice()).setDistinguishedName(contract.getDistinguishedName())
@@ -73,6 +77,10 @@ public class RequestContractPreSigningHandlerBean extends AbstractPreSigningHand
 	@Override
 	protected String marshalBase64CsrXml(AbstractContract contract) throws XmlMarshallingException {
 		CertificateSigningRequestBuilder builder = initBuilder((RequestContract) contract);
+		if (builder==null) {
+			return null;
+		}
+		
 		CertificateSigningRequestType requestType = builder.toRequestType();
 		String base64Xml = getContractsClientPortal().marshalToBase64(requestType, CertificateSigningRequestType.class);
 		return base64Xml;
