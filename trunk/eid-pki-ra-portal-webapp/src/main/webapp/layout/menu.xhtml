@@ -20,13 +20,6 @@
 		propagation="none" 
 		action="#{menuHandler.selectItem('registrations')}"
 		styleClass="#{menuHandler.styleIfSelected('registrations')}" />
-	<s:link value="#{messages['menu.csr']}" 
-		view="/page/contract/upload-csr.xhtml" 
-		id="csr" 
-		rendered="#{s:hasRole('REGISTERED_USER')}" 
-		propagation="none" 
-		action="#{menuHandler.selectItem('csr')}"
-		styleClass="#{menuHandler.styleIfSelected('csr')}" />
 	<s:link value="#{messages['menu.certificates']}" 
 		view="/page/certificates/certificate-list.xhtml" 
 		id="certificates" 
