@@ -25,8 +25,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jboss.seam.log.Log;
-import org.jboss.seam.log.Logging;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
@@ -45,8 +43,6 @@ public class MailTemplateBeanTest {
 	
 	@Mock
 	private MailSender mailSender;
-	
-	private Log log = Logging.getLog(MailTemplateBean.class);
 
 	private MailTemplateBean bean;
 	
@@ -56,7 +52,7 @@ public class MailTemplateBeanTest {
 		
 		bean = new MailTemplateBean();
 		
-		bean.setLog(log);
+
 		bean.setMailSender(mailSender);
 		bean.initialize();
 	}
