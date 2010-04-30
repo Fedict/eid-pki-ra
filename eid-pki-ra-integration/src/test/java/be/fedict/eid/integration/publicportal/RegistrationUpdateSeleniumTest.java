@@ -46,7 +46,7 @@ public class RegistrationUpdateSeleniumTest extends BaseSeleniumTestCase {
 	
 	@Test
 	public void updateRegistrationNoEmail() {
-		updateRegistrationEmail("", "The e-mail address is required.");
+		updateRegistrationEmail("", "This field is required!");
 	}
 	
 	private void updateRegistrationEmail(String newEmail, String expectedText) {

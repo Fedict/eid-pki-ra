@@ -65,13 +65,13 @@ public class CertificateDomainCreateSeleniumTest extends BaseSeleniumTestCase {
 	@Test
 	public void testCreateCertificateDomainNameNull() {
 		createCertificateDomain("", DNEXPR1, true, true, true);
-		assertTextPresent("Please add a valid name for the certificate domain");
+		assertTextPresent("This field is required!");
 	}
 
 	@Test
 	public void testCreateCertificateDomainDnNull() {
 		createCertificateDomain(NAME3, "", true, true, true);
-		assertTextPresent("Please add a valid distinguished name expression for the certificate domain");
+		assertTextPresent("This field is required!");
 	}
 
 	@Test(dependsOnMethods = "testCreateFirstCertificateDomain")
