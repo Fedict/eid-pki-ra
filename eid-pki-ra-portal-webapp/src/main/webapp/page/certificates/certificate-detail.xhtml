@@ -59,7 +59,7 @@
 				<f:param name="certificateId" value="#{certificateWSHome.instance.id}" />
 			</s:button>
 			<s:button id="revokeCertificate" action="#{certificateHandler.prepareRevocation(certificateWSHome.instance.id)}" value="#{messages['link.revoke']}" />
-			<s:button id="backButton"  value="#{messages['general.back']}" view="/page/certificates/certificate-list.xhtml"/>
+			<s:button id="backButton"  value="#{messages['general.list']}" view="/page/certificates/certificate-list.xhtml"/>
 		</s:decorate>
 		
 	</ui:define>
