@@ -30,7 +30,6 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.log.Log;
 import org.jboss.seam.log.Logging;
 
-import be.fedict.eid.pkira.blm.model.ca.CertificateAuthority;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainHome;
 import be.fedict.eid.pkira.blm.model.certificatedomain.RegisteredCertificateDomainQuery;
@@ -244,15 +243,16 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 			
 			Registration registration = getRegistrationManager().findRegistrationForUserDNAndCertificateType(userRRN,
 					dn, certificateType);
-			CertificateAuthority ca = registration.getCertificateDomain().getCertificateAuthority();
-			legalNotice = ca.getLegalNotice();
+			if (registration!=null) {
+				legalNotice = registration.getCertificateDomain().getCertificateAuthority().getLegalNotice();
+			}
 		}
 		
 		if (request.getByCertificate()!=null) {
 			String issuer = request.getByCertificate().getIssuer();
 			BigInteger serialNumber = new BigInteger(request.getByCertificate().getSerialNumber());
 			Certificate certificate = getContractRepository().findCertificate(issuer, serialNumber);
-			if (certificate != null) {
+			if (certificate!=null) {
 				legalNotice=certificate.getCertificateDomain().getCertificateAuthority().getLegalNotice();
 			}
 		}
