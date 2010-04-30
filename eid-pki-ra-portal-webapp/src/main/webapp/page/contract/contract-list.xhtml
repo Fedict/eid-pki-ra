@@ -52,6 +52,13 @@
 						</f:facet>
 						<h:outputText value="#{messages[contract.certificateType.messageKey]}" />
 					</rich:column>
+					
+					<rich:column sortBy="#{contract.dnExpression}" filterBy="#{contract.dnExpression}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['contract.dnexpression']}" />
+						</f:facet>
+						<h:outputText value="#{contract.dnExpression}" />
+					</rich:column>
 	
 					<rich:column sortBy="#{contract.creationDate}">
 						<f:facet name="header">
