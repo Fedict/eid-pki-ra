@@ -12,7 +12,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>eid-pki-ra-portal-model</artifactId>
 	<packaging>ejb</packaging>
-	<name>eid-pki-ra-blm - model</name>
+	<name>eid-pki-ra-portal - model</name>
 
 	<build>
 		<resources>
