@@ -28,7 +28,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.blm.errorhandling.ApplicationComponent;
-import be.fedict.eid.pkira.blm.errorhandling.ErrorLoggerBean;
+import be.fedict.eid.pkira.blm.errorhandling.ErrorLogger;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
@@ -46,8 +46,8 @@ public class MailTemplateBean implements MailTemplate {
 	@In(value = MailSender.NAME, create = true)
 	private MailSender mailSender;
 	
-	@In(value=ErrorLoggerBean.NAME, create=true)
-	private ErrorLoggerBean errorLoggerBean;
+	@In(value=ErrorLogger.NAME, create=true)
+	private ErrorLogger errorLogger;
 
 	private Configuration configuration;
 
@@ -72,10 +72,10 @@ public class MailTemplateBean implements MailTemplate {
 
 			return out.toString();
 		} catch (IOException e) {
-			errorLoggerBean.logError(ApplicationComponent.MAIL, "Error creating mail message", e);
+			errorLogger.logError(ApplicationComponent.MAIL, "Error creating mail message", e);
 			return null;
 		} catch (TemplateException e) {
-			errorLoggerBean.logError(ApplicationComponent.MAIL, "Error creating mail message", e);
+			errorLogger.logError(ApplicationComponent.MAIL, "Error creating mail message", e);
 			return null;
 		}
 	}
@@ -109,7 +109,7 @@ public class MailTemplateBean implements MailTemplate {
 			// Send it
 			mailSender.sendMail(mail);
 		} catch (IOException e) {
-			errorLoggerBean.logError(ApplicationComponent.MAIL, "Error sending mail message", e);
+			errorLogger.logError(ApplicationComponent.MAIL, "Error sending mail message", e);
 		}
 	}
 
