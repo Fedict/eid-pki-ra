@@ -53,6 +53,11 @@
 				<redirect view-id="/page/contract/requestContract.xhtml" />
 			</rule>
 		</navigation>
+		<navigation>
+			<rule if-outcome="cancel">
+				<redirect view-id="/page/certificates/certificate-list.xhtml" />
+			</rule>
+		</navigation>
 	</page>
 
 	<page view-id="/page/contract/requestContract.xhtml">
