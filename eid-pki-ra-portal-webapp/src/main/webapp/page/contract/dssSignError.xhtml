@@ -10,7 +10,8 @@
 			<rich:panel id="panel">
 				<f:facet name="header">#{messages['dssSignError.title']}</f:facet>
 	          	<s:decorate template="/layout/buttonbox.xhtml" id="dssSignErrorButtonBox">
-					<s:button value="#{messages['general.continue']}" action="list" id="continue"/>
+					<s:button id="continue" view="/page/certificates/certificate-list.xhtml" 
+							propagation="end" value="#{messages['general.continue']}" />
 				</s:decorate> 
 			</rich:panel>
 		</h:form>

@@ -54,13 +54,10 @@ public class ContractWSQuery extends DataTableWSQuery {
 	private List<Contract> resultList;
 	
 	public List<Contract> getFindContracts() {
-		if (certificateDomainId != null) {
-			if (resultList == null) {
-				resultList = new ArrayList<Contract>();
-				for (ContractWS contractWS : getServiceClient().findContracts(
-						Integer.valueOf(certificateDomainId), credentials.getUser().getRRN())) {
-					resultList.add(contractMapper.map(contractWS));
-				}
+		if (resultList == null) {
+			resultList = new ArrayList<Contract>();
+			for (ContractWS contractWS : getServiceClient().findContracts(certificateDomainId, credentials.getUser().getRRN())) {
+				resultList.add(contractMapper.map(contractWS));
 			}
 		}
 		return resultList;
@@ -71,6 +68,7 @@ public class ContractWSQuery extends DataTableWSQuery {
 	}
 
 	public void setCertificateDomainId(Integer certificateDomainId) {
+		resultList = null;
 		this.certificateDomainId = certificateDomainId;
 	}
 	

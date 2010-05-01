@@ -41,7 +41,7 @@ public class ContractListSeleniumTest extends BaseSeleniumTestCase {
 	@Test
 	public void testContractListArrive() {
 		goToContractOverview();
-		validateContractListPage("org.jboss.seam.ui.NoSelectionConverter.noSelectionValue", "", 0);		
+		validateContractListPage("org.jboss.seam.ui.NoSelectionConverter.noSelectionValue", "", 6);		
 	}
 	
 	@Test
