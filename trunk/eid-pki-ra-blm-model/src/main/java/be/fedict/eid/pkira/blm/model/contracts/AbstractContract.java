@@ -32,6 +32,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -49,9 +51,21 @@ import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 @Table(name = "CONTRACT")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "TYPE", discriminatorType = DiscriminatorType.STRING, length = 16)
+@NamedQueries(
+	{
+		@NamedQuery(name = AbstractContract.NQ_FIND_CONTRACTS_BY_USER_RRN, 
+				query = "SELECT DISTINCT contract FROM AbstractContract contract, Registration registration WHERE registration.requester.nationalRegisterNumber = :nationalRegisterNumber AND registration.status = :registrationStatus AND registration.certificateDomain = contract.certificateDomain ORDER BY contract.creationDate DESC"),
+		@NamedQuery(name = AbstractContract.NQ_FIND_CONTRACTS_BY_USER_RRN_AND_CERTIFICATE_DOMAIN_ID, 
+				query = "SELECT DISTINCT contract FROM AbstractContract contract, Registration registration WHERE registration.requester.nationalRegisterNumber = :nationalRegisterNumber AND registration.status = :registrationStatus AND registration.certificateDomain = contract.certificateDomain AND contract.certificateDomain.id = :certificateDomainId ORDER BY contract.creationDate DESC")
+	}
+)
 public abstract class AbstractContract implements Serializable {
 
 	private static final long serialVersionUID = -5082287440865809644L;
+
+	public static final String NQ_FIND_CONTRACTS_BY_USER_RRN = "findContractsByUserRrn";
+
+	public static final String NQ_FIND_CONTRACTS_BY_USER_RRN_AND_CERTIFICATE_DOMAIN_ID = "findContractsByUserRrnAndCertificateDomainId";
 
 	@Id
 	@GeneratedValue

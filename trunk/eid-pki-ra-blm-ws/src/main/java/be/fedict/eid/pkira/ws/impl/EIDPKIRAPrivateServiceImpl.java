@@ -266,7 +266,7 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	@Override
 	public FindContractsResponse findContracts(FindContractsRequest request) {
 		List<AbstractContract> contracts = getContractQuery().getFindContracts(
-				Integer.valueOf(request.getCertificateDomainId()), request.getUserRrn());
+				request.getCertificateDomainId(), request.getUserRrn());
 		FindContractsResponse response = new ObjectFactory().createFindContractsResponse();
 		response.getContracts().addAll(getContractMapper().map(contracts));
 		return response;

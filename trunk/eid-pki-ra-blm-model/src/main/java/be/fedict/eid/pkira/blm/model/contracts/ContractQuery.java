@@ -18,8 +18,9 @@
 
 package be.fedict.eid.pkira.blm.model.contracts;
 
-import java.util.Arrays;
 import java.util.List;
+
+import javax.persistence.Query;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -28,7 +29,6 @@ import org.jboss.seam.framework.EntityQuery;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainHome;
 import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationStatus;
-import be.fedict.eid.pkira.blm.model.usermgmt.User;
 
 /**
  * @author Bram Baeyens
@@ -39,7 +39,7 @@ public class ContractQuery extends EntityQuery<AbstractContract> {
 
 	private static final long serialVersionUID = -1687988818281539366L;
 	
-	public static final String NAME = "be.fedict.eid.pkira.blm.contractQuery" ;
+	public static final String NAME = "be.fedict.eid.pkira.blm.contractQuery";
 	
 	private Registration registration;
 
@@ -47,27 +47,28 @@ public class ContractQuery extends EntityQuery<AbstractContract> {
 	private CertificateDomainHome certificateDomainHome;
 	
 	public String getEjbql() {
-		return "select contract from AbstractContract contract, Registration registration";
+		return "select contract from AbstractContract contract";
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<AbstractContract> getFindContracts(Integer certificateDomainId, String userRrn) {
-		setOrder("contract.creationDate");
-		setOrderDirection("desc");
-		registration = new Registration();
-		registration.setRequester(new User());
-		registration.getRequester().setNationalRegisterNumber(userRrn);		
-		registration.setStatus(RegistrationStatus.APPROVED);		
-		certificateDomainHome.setId(certificateDomainId);
-		
-		setRestrictionExpressionStrings(Arrays.asList(
-				new String[] {
-						"registration.requester.nationalRegisterNumber = #{contractQuery.registration.requester.nationalRegisterNumber}", 
-						"registration.status = #{contractQuery.registration.status}", 
-						"registration.certificateDomain = #{contractQuery.certificateDomainHome.instance}", 
-						"contract.certificateDomain = #{contractQuery.certificateDomainHome.instance}"}));
-		return getResultList();
+		Query query = getEntityManager().createNamedQuery(getNamedQuery(certificateDomainId))
+				.setParameter("nationalRegisterNumber", userRrn)
+				.setParameter("registrationStatus", RegistrationStatus.APPROVED);
+		if (certificateDomainId != null) {
+			query.setParameter("certificateDomainId", certificateDomainId);
+		}
+		return query.getResultList();
 	}
 	
+	private String getNamedQuery(Integer certificateDomainId) {
+		if (certificateDomainId == null) {
+			return AbstractContract.NQ_FIND_CONTRACTS_BY_USER_RRN;
+		} else {
+			return AbstractContract.NQ_FIND_CONTRACTS_BY_USER_RRN_AND_CERTIFICATE_DOMAIN_ID;
+		}
+	}
+
 	public Registration getRegistration() {
 		return registration;
 	}
