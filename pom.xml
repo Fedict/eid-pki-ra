@@ -154,7 +154,7 @@
 			<url>http://download.java.net/maven/2</url>
 		</pluginRepository>
 	</pluginRepositories>
-	
+
 	<distributionManagement>
 		<repository>
 			<id>internal.releases</id>
@@ -327,13 +327,13 @@
 				<artifactId>eid-pki-ra-generated-privatews</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>be.fedict</groupId>
 				<artifactId>eid-pki-ra-generated-xkms</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>be.fedict</groupId>
 				<artifactId>eid-pki-ra-generated-reports</artifactId>
@@ -351,13 +351,13 @@
 				<artifactId>eid-pki-ra-client-privatews</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>be.fedict</groupId>
 				<artifactId>eid-pki-ra-client-xkms</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>be.fedict</groupId>
 				<artifactId>eid-pki-ra-client-contracts</artifactId>
@@ -442,7 +442,7 @@
 				<artifactId>eid-pki-ra-authentication-client</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>be.fedict</groupId>
 				<artifactId>eid-pki-ra-mock-xkms</artifactId>
@@ -583,58 +583,52 @@
 				<exclude.bootstrap>false</exclude.bootstrap>
 
 				<!-- persistence.xml configuration -->
-				<hibernate.dialect>org.hibernate.dialect.HSQLDialect
-				</hibernate.dialect>
+				<hibernate.dialect>org.hibernate.dialect.HSQLDialect</hibernate.dialect>
 				<hibernate.hbm2ddl.auto>create-drop</hibernate.hbm2ddl.auto>
-				<hibernate.connection.driver_class>org.hsqldb.jdbcDriver
-				</hibernate.connection.driver_class>
-				<hibernate.connection.username>sa</hibernate.connection.username>
-				<hibernate.connection.password></hibernate.connection.password>
-				<hibernate.connection.url>jdbc:hsqldb:eid-pki-ra-db
-				</hibernate.connection.url>
-				<hibernate.current_session_context_class>thread
-				</hibernate.current_session_context_class>
-				<hibernate.cache.provider_class>org.hibernate.cache.NoCacheProvider
-				</hibernate.cache.provider_class>
+				<hibernate.current_session_context_class>thread</hibernate.current_session_context_class>
+				<hibernate.cache.provider_class>org.hibernate.cache.NoCacheProvider</hibernate.cache.provider_class>
 				<hibernate.show_sql>true</hibernate.show_sql>
 				<hibernate.format_sql>true</hibernate.format_sql>
 				<hibernate.use_query_cache>false</hibernate.use_query_cache>
-				<hibernate.use_second_level_cache>false
-				</hibernate.use_second_level_cache>
+				<hibernate.use_second_level_cache>false</hibernate.use_second_level_cache>
 
+				<jta.dataSource>java:/DefaultDS</jta.dataSource>
+				
+				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.HSQLDBDelegate</quartz.driverDelegateClass>
+				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME \= ?</quartz.selectWithLockSql>
 			</properties>
 		</profile>
 		<profile>
 			<id>test</id>
 
 			<properties>
-				<!-- development mode (disable in production) -->
-				<seam.debug>false</seam.debug>
+				<!-- test mode (disable in production) -->
+				<seam.debug>true</seam.debug>
 
-				<!-- datasource configuration   -->
-				<jdbc.connection.url>jdbc:...</jdbc.connection.url>
-				<jdbc.driver.class>...</jdbc.driver.class>
-				<jdbc.user>user</jdbc.user>
-				<jdbc.password>pass</jdbc.password>
+				<!-- datasource configuration -->
 				<min.pool.size>1</min.pool.size>
 				<max.pool.size>10</max.pool.size>
 
 				<!-- package exploded war file -->
-				<exploded.war.file>false</exploded.war.file>
+				<exploded.war.file>true</exploded.war.file>
 
 				<!-- development mode (exclude in production) -->
-				<exclude.bootstrap>true</exclude.bootstrap>
+				<exclude.bootstrap>false</exclude.bootstrap>
 
 				<!-- persistence.xml configuration -->
-				<hibernate.dialect>
-					org.hibernate.dialect.HSQLDialect
-				</hibernate.dialect>
-				<hibernate.hbm2ddl.auto>
-					validate
-				</hibernate.hbm2ddl.auto>
-				<hibernate.show_sql>
-					false
-				</hibernate.show_sql>
+				<hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>
+				<hibernate.hbm2ddl.auto>create-drop</hibernate.hbm2ddl.auto>
+				<hibernate.current_session_context_class>thread</hibernate.current_session_context_class>
+				<hibernate.cache.provider_class>org.hibernate.cache.NoCacheProvider</hibernate.cache.provider_class>
+				<hibernate.show_sql>true</hibernate.show_sql>
+				<hibernate.format_sql>false</hibernate.format_sql>
+				<hibernate.use_query_cache>false</hibernate.use_query_cache>
+				<hibernate.use_second_level_cache>false</hibernate.use_second_level_cache>
+
+				<jta.dataSource>java:/pkiraDS</jta.dataSource>
+				
+				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.StdJDBCDelegate</quartz.driverDelegateClass>
+				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME \= ? FOR UPDATE</quartz.selectWithLockSql>
 			</properties>
 		</profile>
 

@@ -5,7 +5,7 @@
              version="1.0">
 	<persistence-unit name="eid-pki-ra-blm-PersistenceUnit" transaction-type="JTA">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<jta-data-source>java:/DefaultDS</jta-data-source>
+		<jta-data-source>${jta.dataSource}</jta-data-source>
 
 		<class>be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain</class>
 		<class>be.fedict.eid.pkira.blm.model.contracts.Certificate</class>
@@ -19,11 +19,7 @@
 		
 		<properties>		
 			<property name="hibernate.dialect" value="${hibernate.dialect}" />
-			<property name="hibernate.hbm2ddl.auto"	value="create" />
-			<property name="hibernate.connection.driver_class" value="${hibernate.connection.driver_class}" />
-			<property name="hibernate.connection.username" value="${hibernate.connection.username}" />
-			<property name="hibernate.connection.password" value="${hibernate.connection.password}" />
-       		<property name="hibernate.connection.url" value="${hibernate.connection.url}" />
+			<property name="hibernate.hbm2ddl.auto"	value="create" />			
        		<property name="current_session_context_class" value="${hibernate.current_session_context_class}" />
 			<property name="hibernate.show_sql" value="${hibernate.show_sql}" />
 			<property name="hibernate.format_sql" value="${hibernate.format_sql}" />
@@ -32,8 +28,7 @@
        		<property name="hibernate.jdbc.batch_size" value="20" />
 			<property name="hibernate.cache.use_query_cache" value="${hibernate.use_query_cache}" />
 			<property name="hibernate.cache.use_second_level_cache"	value="${hibernate.use_second_level_cache}" /> 
-			<property name="hibernate.transaction.manager_lookup_class" 
-				value="org.hibernate.transaction.JBossTransactionManagerLookup"/>       
+			<property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.JBossTransactionManagerLookup" />       
 		</properties>
 	</persistence-unit>
 </persistence>
