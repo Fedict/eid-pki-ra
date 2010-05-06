@@ -59,7 +59,7 @@ public class CSRUploadHandlerBean implements CSRUploadHandler, Serializable {
 	private RequestContract requestContract;
 
 	@Override
-	@Begin
+	@Begin(join=true)
 	public String uploadCertificateSigningRequest() {
 		log.debug(">>> uploadCertificateSigningRequest(csrUpload=[{0}])", csrUpload);
 		requestContract.setOperator(currentOperator);

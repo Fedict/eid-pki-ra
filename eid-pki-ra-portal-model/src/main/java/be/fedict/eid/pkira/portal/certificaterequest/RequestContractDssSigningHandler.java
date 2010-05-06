@@ -24,8 +24,8 @@ public class RequestContractDssSigningHandler extends AbstractDssSigningHandler<
 	}
 
 	@Override
-	protected String handelRedirect(String redirectStatus,
-			CertificateSigningResponseType serviceClientResponse) {
+	protected String handleRedirect(String redirectStatus,
+			CertificateSigningResponseType serviceClientResponse) {		
 		if(redirectStatus == null){
 			return "error";
 		}

@@ -46,7 +46,6 @@ public class Certificate implements Serializable {
 	private String x509;
 	private String issuer;
 	private String requesterName;
-	private String subject;	
 	private String distinguishedName;
 	
 	public Integer getId() {
@@ -120,14 +119,6 @@ public class Certificate implements Serializable {
 	public void setRequesterName(String requesterName) {
 		this.requesterName = requesterName;
 	}
-	
-	public String getSubject() {
-		return subject;
-	}
-	
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
 
 	@Override
 	public String toString() {
@@ -140,7 +131,6 @@ public class Certificate implements Serializable {
 				.append(", issuer=").append(issuer)
 				.append(", distinguishedName=").append(distinguishedName)
 				.append(", requestName=").append(requesterName)
-				.append(", subject=").append(subject)
 				.append(']').toString();
 	}
 }

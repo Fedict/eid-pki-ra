@@ -20,20 +20,24 @@ package be.fedict.eid.pkira.portal.certificate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Begin;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.datamodel.DataModel;
+import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.common.security.EIdUserCredentials;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 import be.fedict.eid.pkira.portal.certificatedomain.CertificateDomainWSHome;
+import be.fedict.eid.pkira.portal.signing.AbstractDssSigningHandler;
 import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 
 @Name(CertificateHandler.NAME)
@@ -41,6 +45,8 @@ import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 public class CertificateHandlerBean implements CertificateHandler {
 	
 	private static final long serialVersionUID = -5017092109045531172L;
+
+	private static final String CERTIFICATES_NAME = "certificates";
 
 	@Out(value=Certificate.NAME, scope=ScopeType.CONVERSATION, required=false)
 	private Certificate certificate;
@@ -68,7 +74,6 @@ public class CertificateHandlerBean implements CertificateHandler {
 	@In(value=CertificateDomainWSHome.NAME, create=true)
 	private CertificateDomainWSHome certificateDomainWSHome;
 	
-	
 	@Override
 	public List<Certificate> findCertificateList(){
 		return findCertificateList(credentials.getUser().getRRN());
@@ -84,9 +89,15 @@ public class CertificateHandlerBean implements CertificateHandler {
 		return certificates;
 	}
 	 
-	@Factory("certificates")
+	@Factory(CERTIFICATES_NAME)
 	public void initCertificateList(){
 		findCertificateList(credentials.getUser().getRRN());
+	}
+	
+	@Observer(AbstractDssSigningHandler.EVENT_CERTIFICATE_LIST_CHANGED) 
+	public void onCertificateListChanged() {
+		Contexts.getConversationContext().remove(CERTIFICATES_NAME);
+		Component.getInstance(CERTIFICATES_NAME);
 	}
 	
 	@Override

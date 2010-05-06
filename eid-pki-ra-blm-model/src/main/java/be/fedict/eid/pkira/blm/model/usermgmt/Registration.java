@@ -45,9 +45,11 @@ import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
  * @author Bram Baeyens
  */
 @Entity
-@Table(uniqueConstraints =
-	{ @UniqueConstraint(columnNames =
-		{ "FK_REQUESTER_ID", "FK_CERTIFICATE_DOMAIN_ID" }) })
+@Table(
+		name="REGISTRATION", 
+		uniqueConstraints =	{ 
+				@UniqueConstraint(columnNames = { "FK_REQUESTER_ID", "FK_CERTIFICATE_DOMAIN_ID" }) 
+		})
 @NamedQueries(
 	{
 			@NamedQuery(

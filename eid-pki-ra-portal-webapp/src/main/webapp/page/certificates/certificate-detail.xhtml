@@ -18,8 +18,8 @@
 			</s:decorate>
 			
 			<s:decorate id="distinguishedNameDecoration" template="/layout/edit.xhtml">
-				<ui:define name="label">#{messages['certificate.subject']}:</ui:define>
-				<h:outputText value="#{certificateWSHome.instance.subject}" />
+				<ui:define name="label">#{messages['certificate.distinguishedName']}:</ui:define>
+				<h:outputText value="#{certificateWSHome.instance.distinguishedName}" />
 			</s:decorate>
 
 			<s:decorate id="validityStartDecoration" template="/layout/edit.xhtml">

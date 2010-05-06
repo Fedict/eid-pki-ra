@@ -65,7 +65,7 @@
             	
 				<s:decorate template="/layout/buttonbox.xhtml" id="revocationContractButtonBox">
 					<h:commandButton action="#{revocationContractPreSigningHandler.prepareSignment}" value="#{messages['button.revoke']}" id="send"/>
-					<s:button value="#{messages['button.cancel']}" action="list" id="cancel" />
+					<s:button value="#{messages['button.cancel']}" action="cancel" id="cancel" />
 				</s:decorate>       
 			</rich:panel>
 		</h:form>	
