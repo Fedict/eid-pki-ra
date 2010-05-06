@@ -1,0 +1,23 @@
+<m:message xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:m="http://jboss.com/products/seam/mail"
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<m:from name="#{sender.firstname} #{sender.lastname}"
+		address="#{sender.address}" />
+
+	<ui:repeat value="#{recipients} var="recipient">
+		<m:to name="#{recipient.firstname} #{recipient.lastname}"
+			address="#{recipient.emailAddress}" />
+	</ui:repeat>
+
+	<m:subject>#{mail.subject}</m:subject>
+	<m:body>
+   		#{mail.body}
+   	</m:body>
+
+	<ui:repeat value="#{attachments}" var="attachment">
+		<m:attachment value="#{attachment.name}" contentType="#{attachment.type}"
+			fileName="#{attachment.filename}" />
+	</ui:repeat>
+</m:message>

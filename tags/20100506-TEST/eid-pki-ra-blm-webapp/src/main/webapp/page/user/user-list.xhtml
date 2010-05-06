@@ -1,0 +1,60 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j" 
+	template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:form id="userListForm">
+			<rich:panel id="userListPanel">
+				<f:facet name="header">
+					#{messages['user.list.title']}
+				</f:facet>
+				
+				<rich:dataTable id="userTable" value="#{userQuery.resultList}" var="user" reRender="userTableDataScroller" rows="#{userQuery.rows}" width="100%">
+					<rich:column sortBy="#{user.lastName}" filterBy="#{user.lastName}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['user.lastName']}" />
+						</f:facet>
+						<h:outputText value="#{user.lastName}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{user.firstName}" filterBy="#{user.firstName}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['user.firstName']}" />
+						</f:facet>
+						<h:outputText value="#{user.firstName}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{user.nationalRegisterNumber}" filterBy="#{user.nationalRegisterNumber}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['user.nationalRegisterNumber']}" />
+						</f:facet>
+						<h:outputText value="#{user.nationalRegisterNumber}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{user.admin}">
+		                <f:facet name="header">
+							<h:outputText value="#{messages['user.admin']}" />
+		                </f:facet>
+		                <h:outputText value="#{user.admin ? messages['general.yes'] : messages['general.no']}" />
+		            </rich:column>
+					
+					<rich:column>
+						<s:link view="/page/user/user-edit.xhtml" value="#{messages['link.detail']}" id="edit" >
+							<f:param name="userId" value="#{user.id}" />
+						</s:link>
+					</rich:column>
+		            
+		            <f:facet name="footer">
+		                <rich:datascroller id="userTableDataScroller" for="userTable" renderIfSinglePage="false" 
+		                		maxPages="#{userQuery.maxPages}" fastStep="#{userQuery.fastStep}" />
+		            </f:facet>
+				</rich:dataTable>
+			</rich:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
