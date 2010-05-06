@@ -28,6 +28,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -35,6 +36,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Bram Baeyens
  */
 @Entity
+@Table(name="USER")
 @NamedQueries(value={
 		@NamedQuery(
 				name = "findByNationalRegisterNumber", 

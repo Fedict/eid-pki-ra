@@ -32,8 +32,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.async.QuartzTriggerHandle;
@@ -43,6 +45,12 @@ import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.crypto.CertificateInfo;
 
 @Entity
+@Table(
+		name="CERTIFICATE", 
+		uniqueConstraints= {
+				@UniqueConstraint(columnNames={ "ISSUER", "SERIAL_NUMBER" })
+		}
+)
 @Name(Certificate.NAME)
 public class Certificate implements Serializable {
 

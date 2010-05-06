@@ -32,6 +32,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.validator.NotEmpty;
@@ -48,6 +49,7 @@ import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
  * @author Bram Baeyens
  */
 @Entity
+@Table(name="CERTIFICATE_DOMAIN")
 @NamedQueries(
 	{
 			@NamedQuery(name = "findCertificateDomainByName", query = "FROM CertificateDomain WHERE name = :name"),

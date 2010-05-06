@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.codec.binary.Base64;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Logger;
+import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.StatusMessage.Severity;
 import org.jboss.seam.log.Log;
@@ -27,6 +28,8 @@ public abstract class AbstractDssSigningHandler<T extends ResponseType> {
 	
 	private static final String SUCCESSFUL_REDIRECT = "success";
 
+	public static final String EVENT_CERTIFICATE_LIST_CHANGED = "CertificateListChanged";
+
 	public String handleDssRequest() {
 		String redirectStatus = null;
 		T serviceClientResponse = null;
@@ -43,6 +46,10 @@ public abstract class AbstractDssSigningHandler<T extends ResponseType> {
 				
 				getFacesMessages().addFromResourceBundle("contract.status." + serviceClientResponse.getResult().name(), serviceClientResponse.getResultMessage());
 				
+				if (Events.exists()) {
+					Events.instance().raiseEvent(EVENT_CERTIFICATE_LIST_CHANGED);
+				}
+				
 				if (ResultType.SUCCESS.equals(serviceClientResponse.getResult())) {
 					redirectStatus = SUCCESSFUL_REDIRECT;
 				} 
@@ -52,10 +59,10 @@ public abstract class AbstractDssSigningHandler<T extends ResponseType> {
 			log.info("<<< handleRequest: exception");
 		}
 		
-		return handelRedirect(redirectStatus, serviceClientResponse);
+		return handleRedirect(redirectStatus, serviceClientResponse);
 	}
-	
-	protected String handelRedirect(String redirectStatus, T serviceClientResponse){
+		
+	protected String handleRedirect(String redirectStatus, T serviceClientResponse){
 		if (SUCCESSFUL_REDIRECT.equals(redirectStatus)) {
 			return SUCCESSFUL_REDIRECT;
 		} else {

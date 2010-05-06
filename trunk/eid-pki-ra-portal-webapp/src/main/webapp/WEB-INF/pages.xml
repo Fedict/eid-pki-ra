@@ -76,6 +76,11 @@
 				<redirect view-id="/page/contract/signRevocationContract.xhtml" />
 			</rule>
 		</navigation>
+		<navigation>
+			<rule if-outcome="cancel">
+				<redirect view-id="/page/certificates/certificate-list.xhtml" />
+			</rule>
+		</navigation>
 	</page>
 
 	<exception class="be.fedict.eid.pkira.authentication.AuthenticationException">
