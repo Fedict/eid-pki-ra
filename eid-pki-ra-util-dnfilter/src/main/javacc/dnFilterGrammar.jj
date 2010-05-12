@@ -9,7 +9,7 @@ public class DistinguishedNameParser {  class State {    // Parts in the expre
 
 PARSER_END(DistinguishedNameParser)
 
-<DEFAULT> TOKEN: {  < #LETTER: ["a"-"z","A"-"Z"] >| < #DIGIT: ["0"-"9"] >| < #SPECIAL_CHAR: "-"|"_"|"."|"@" >| < #SPACE: " " >}<DEFAULT> TOKEN:{  < KEY:	 (<LETTER>)+ >| < EQUALS: "=" > : VALUE| < COMMA: "," >}<VALUE> TOKEN:{  < LITERAL_VALUE: (<LETTER>|<DIGIT>|<SPECIAL_CHAR>|<SPACE>)+ > : DEFAULT| < WILDCARD: "*" > : DEFAULT}
+<DEFAULT> TOKEN: {  < #LETTER: ["a"-"z","A"-"Z"] >| < #DIGIT: ["0"-"9"] >| < #SPECIAL_CHAR: "-"|"_"|"."|"@"|"/"|"+"|"="|"\\"|"#"|":"|"&"|"?" >| < #SPACE: " " >}<DEFAULT> TOKEN:{  < KEY:	 (<LETTER>)+ >| < EQUALS: "=" > : VALUE| < COMMA: "," >}<VALUE> TOKEN:{  < LITERAL_VALUE: (<LETTER>|<DIGIT>|<SPECIAL_CHAR>|<SPACE>)+ > : DEFAULT| < WILDCARD: "*" > : DEFAULT}
 
 <DEFAULT> SKIP: {
   <WS: <SPACE> >

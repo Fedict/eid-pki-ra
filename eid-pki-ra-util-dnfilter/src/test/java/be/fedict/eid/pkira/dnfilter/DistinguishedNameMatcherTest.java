@@ -68,6 +68,11 @@ public class DistinguishedNameMatcherTest {
 	public void testMatching6() throws InvalidDistinguishedNameException {
 		assertTrue(matches("c=*,ou=*,cn=*", "cn=test,c=test,ou=test"));
 	}
+	
+	@Test
+	public void testMatching7() throws InvalidDistinguishedNameException {
+		assertTrue(matches("C=BE,ST=Antwerpen,L=Antwerpen,O=*,OU=*,CN=*", "C=BE,ST=Antwerpen,L=Antwerpen,O=0860109391,OU=Informatica,CN=www.aspex.be/serenity_kbo"));
+	}
 
 	private boolean matches(String filter1, String filter2) throws InvalidDistinguishedNameException {
 		return manager.createDistinguishedName(filter1).matches(manager.createDistinguishedName(filter2));

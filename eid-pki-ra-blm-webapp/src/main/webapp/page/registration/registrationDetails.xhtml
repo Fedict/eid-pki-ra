@@ -39,9 +39,9 @@
 					</h:selectOneMenu>
 				</s:decorate>
 
-				<s:decorate id="ReasonDecorator" template="/layout/edit.xhtml">
+				<s:decorate id="ReasonDecorator" template="/layout/edit.xhtml" rendered="#{registrationHome.instance.new}">
 					<ui:define name="label">#{messages['registrations.reason']}:</ui:define>
-					<h:inputTextarea id="reasonTextArray" rows="5" cols="50"  value="#{registrationHome.reason}"/>
+					<h:inputTextarea id="reasonTextArray" rows="5" cols="50"  value="#{registrationHome.reason}" />
 				</s:decorate>
 
 				<s:decorate id="updateButtonDecorator" template="/layout/edit.xhtml">
