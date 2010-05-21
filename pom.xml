@@ -572,15 +572,8 @@
 				<!-- development mode (disable in production) -->
 				<seam.debug>true</seam.debug>
 
-				<!-- datasource configuration -->
-				<min.pool.size>1</min.pool.size>
-				<max.pool.size>10</max.pool.size>
-
 				<!-- package exploded war file -->
 				<exploded.war.file>true</exploded.war.file>
-
-				<!-- development mode (exclude in production) -->
-				<exclude.bootstrap>false</exclude.bootstrap>
 
 				<!-- persistence.xml configuration -->
 				<hibernate.dialect>org.hibernate.dialect.HSQLDialect</hibernate.dialect>
@@ -605,15 +598,8 @@
 				<!-- test mode (disable in production) -->
 				<seam.debug>true</seam.debug>
 
-				<!-- datasource configuration -->
-				<min.pool.size>1</min.pool.size>
-				<max.pool.size>10</max.pool.size>
-
 				<!-- package exploded war file -->
 				<exploded.war.file>true</exploded.war.file>
-
-				<!-- development mode (exclude in production) -->
-				<exclude.bootstrap>false</exclude.bootstrap>
 
 				<!-- persistence.xml configuration -->
 				<hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>
@@ -636,33 +622,26 @@
 			<id>production</id>
 
 			<properties>
-				<!-- development mode (disable in production) -->
+				<!-- test mode (disable in production) -->
 				<seam.debug>false</seam.debug>
 
-				<!-- datasource configuration   -->
-				<jdbc.connection.url>jdbc:...</jdbc.connection.url>
-				<jdbc.driver.class>...</jdbc.driver.class>
-				<jdbc.user>user</jdbc.user>
-				<jdbc.password>pass</jdbc.password>
-				<min.pool.size>10</min.pool.size>
-				<max.pool.size>50</max.pool.size>
-
-				<!-- development mode (exclude in production) -->
-				<exclude.bootstrap>true</exclude.bootstrap>
-
 				<!-- package exploded war file -->
-				<exploded.war.file>false</exploded.war.file>
+				<exploded.war.file>true</exploded.war.file>
 
 				<!-- persistence.xml configuration -->
-				<hibernate.dialect>
-					org.hibernate.dialect.HSQLDialect
-				</hibernate.dialect>
-				<hibernate.hbm2ddl.auto>
-					validate
-				</hibernate.hbm2ddl.auto>
-				<hibernate.show_sql>
-					false
-				</hibernate.show_sql>
+				<hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>
+				<hibernate.hbm2ddl.auto>validate</hibernate.hbm2ddl.auto>
+				<hibernate.current_session_context_class>thread</hibernate.current_session_context_class>
+				<hibernate.cache.provider_class>org.hibernate.cache.NoCacheProvider</hibernate.cache.provider_class>
+				<hibernate.show_sql>false</hibernate.show_sql>
+				<hibernate.format_sql>false</hibernate.format_sql>
+				<hibernate.use_query_cache>false</hibernate.use_query_cache>
+				<hibernate.use_second_level_cache>false</hibernate.use_second_level_cache>
+
+				<jta.dataSource>java:/pkiraDS</jta.dataSource>
+				
+				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.StdJDBCDelegate</quartz.driverDelegateClass>
+				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME \= ? FOR UPDATE</quartz.selectWithLockSql>
 			</properties>
 		</profile>
 	</profiles>
