@@ -12,13 +12,13 @@
 				
 				<s:decorate id="nameDecoration" template="/layout/edit.xhtml">
 	               	<ui:define name="label">#{messages['certificatedomain.edit.name']}:</ui:define>
-	               	<h:inputText id="nameEdit" value="#{certificateDomainHome.instance.name}" rendered="#{not certificateDomainHome.managed}" required="true" />
+	               	<h:inputText id="nameEdit" value="#{certificateDomainHome.instance.name}" rendered="#{not certificateDomainHome.managed}" required="true" size="30" />
 	               	<h:outputText id="nameView" value="#{certificateDomainHome.instance.name}" rendered="#{certificateDomainHome.managed}" />
 	           	</s:decorate>
 	           	
 	           	<s:decorate id="dnPatternDecoration" template="/layout/edit.xhtml">
 	               	<ui:define name="label">#{messages['certificatedomain.edit.dnExpression']}:</ui:define>
-	               	<h:inputText id="dnPattern" value="#{certificateDomainHome.instance.dnExpression}" required="true" />
+	               	<h:inputText id="dnPattern" value="#{certificateDomainHome.instance.dnExpression}" required="true" size="40" />
 	           	</s:decorate>
 	           	
 	           	<s:decorate id="CertificateAuthorityDecoration" template="/layout/edit.xhtml">
