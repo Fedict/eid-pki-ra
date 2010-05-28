@@ -58,6 +58,9 @@ public class MockXKMSWebService implements XKMSPortType {
 	private final org.w3._2000._09.xmldsig_.ObjectFactory dsigObjectFactory = new org.w3._2000._09.xmldsig_.ObjectFactory();
 	private final com.ubizen.og.xkms.schema.xkms_2003_09.ObjectFactory ogcmObjectFactory = new com.ubizen.og.xkms.schema.xkms_2003_09.ObjectFactory(); 
 	
+	
+	// FIXME This code should really be part of the eID IDP client. 
+	// FIXME At the moment, this class implements the same behaviour as the current IDP implementation and does not check the SAML signature!
 	@Override
 	public BulkRegisterResultType bulkRegister(BulkRegisterType bulkRegister) {	
 		RequestType request = bulkRegister.getSignedPart().getRequests().getRequest().get(0);

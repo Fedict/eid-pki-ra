@@ -21,8 +21,6 @@ import java.util.List;
 
 import javax.ejb.Local;
 
-import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
-
 /**
  * Interface to the repository used to store and retrieve domain objects.
  * 
@@ -68,9 +66,6 @@ public interface ContractRepository {
 	 * @return the certificate
 	 */
 	public Certificate findCertificate(int certificateID);
-
-	
-	public Certificate findCertificateByCertificateDomain(CertificateDomain certificateDomain);
 	
 	/**
 	 * Removes a certificate from the database.
