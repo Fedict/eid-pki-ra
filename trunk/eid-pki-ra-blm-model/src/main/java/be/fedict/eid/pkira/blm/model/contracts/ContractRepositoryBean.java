@@ -31,7 +31,6 @@ import javax.persistence.Query;
 
 import org.jboss.seam.annotations.Name;
 
-import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationStatus;
 
 /**
@@ -128,26 +127,6 @@ public class ContractRepositoryBean implements ContractRepository {
 			return null;
 		} catch (NonUniqueResultException e) {
 			throw new RuntimeException("Too many results for certificate search" + certificateID);
-		}
-	}
-	
-	@Override
-	public Certificate findCertificateByCertificateDomain(
-			CertificateDomain certificateDomain) {
-		Query query = entityManager
-		//TODO: add issuer
-				.createQuery("SELECT distinct c from Certificate c WHERE distinguishedName=?");
-		//query.setParameter(1, issuer);
-		query.setParameter(1, certificateDomain.getDnExpression());
-		try {
-			Certificate result = (Certificate) query.getSingleResult();
-			return result;
-		} catch (NoResultException e) {
-			return null;
-		} catch (EntityNotFoundException e) {
-			return null;
-		} catch (NonUniqueResultException e) {
-			throw new RuntimeException("Too many results for certificate search:" +  certificateDomain.getDnExpression());
 		}
 	}
 
