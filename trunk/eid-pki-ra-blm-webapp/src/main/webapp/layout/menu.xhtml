@@ -14,6 +14,14 @@
 			styleClass="#{menuHandler.styleIfSelected('home')}"/>
 	</rich:toolBarGroup>
 	
+	<s:link value="#{messages['menu.certificateauthorities']}" 
+		view="/page/certificateauthority/certificateauthority-list.xhtml" 
+		id="certificateauthorities" 
+		rendered="#{s:hasRole('ADMIN_USER')}" 
+		propagation="none" 
+		action="#{menuHandler.selectItem('certificateauthorities')}"
+		styleClass="#{menuHandler.styleIfSelected('certificateauthorities')}"
+		/>
 	<s:link value="#{messages['menu.certificatedomains']}" 
 		view="/page/certificatedomain/certificatedomain-list.xhtml" 
 		id="certificatedomains" 

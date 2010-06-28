@@ -53,7 +53,7 @@ public class SetupBulkDatabase extends SetupDatabase {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < 150; i++) {
 			String sequence = addLeadingZero(i);
-			builder.append("INSERT INTO CertificateDomain (CERTIFICATE_DOMAIN_NAME, DN_EXPRESSION, CLIENTCERT, SERVERCERT, CODECERT, CA_ID) VALUES ('Name")
+			builder.append("INSERT INTO CERTIFICATE_DOMAIN (CERTIFICATE_DOMAIN_NAME, DN_EXPRESSION, CLIENTCERT, SERVERCERT, CODECERT, CA_ID) VALUES ('Name")
 					.append(sequence)
 					.append("', 'DN")
 					.append(sequence)
@@ -77,7 +77,7 @@ public class SetupBulkDatabase extends SetupDatabase {
 				.append("DELETE FROM CONTRACT;\n")
 				.append("DELETE FROM REGISTRATION;\n")
 				.append("DELETE FROM USER;\n")
-				.append("DELETE FROM CERTIFICATEDOMAIN;\n")
+				.append("DELETE FROM CERTIFICATE_DOMAIN;\n")
 				.append("DELETE FROM CA_PARAMETERS;\n")
 				.append("DELETE FROM CA;\n")
 				.append("DELETE FROM CONFIGURATION;\n");
