@@ -1,11 +1,12 @@
 package be.fedict.eid.pkira.blm.model.ca;
 
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.framework.EntityQuery;
+
+import be.fedict.eid.pkira.blm.model.framework.DataTableEntityQuery;
 
 
 @Name(value=CertificateAuthorityQuery.NAME)
-public class CertificateAuthorityQuery extends EntityQuery<CertificateAuthority>  {
+public class CertificateAuthorityQuery extends DataTableEntityQuery<CertificateAuthority>  {
 	
 	private static final long serialVersionUID = -3160482419948863045L;
 	

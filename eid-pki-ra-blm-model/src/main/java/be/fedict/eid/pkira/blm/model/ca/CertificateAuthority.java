@@ -51,7 +51,7 @@ public class CertificateAuthority implements Serializable {
 	@Column(name = "NAME", nullable = false, unique = true)
 	private String name;
 
-	@Column(name = "XKMS_URL", nullable = false, unique = true)
+	@Column(name = "XKMS_URL", nullable = false)
 	private String xkmsUrl;
 
 	@CollectionOfElements(targetElement = String.class)
