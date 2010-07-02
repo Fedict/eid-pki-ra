@@ -51,6 +51,10 @@ public class CertificateParserImpl extends BouncyCastleProviderUser implements C
 			CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509", new BouncyCastleProvider());
 			X509Certificate certificate = (X509Certificate) certificateFactory
 					.generateCertificate(new ByteArrayInputStream(certificateData));
+			if (certificate==null) {
+				throw new CryptoException("Cannot parse certificate");
+			}
+			
 			return extractCertificateInfo(certificate);
 		} catch (CertificateException e) {
 			throw new CryptoException("Cannot parse certificate", e);

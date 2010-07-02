@@ -6,4 +6,6 @@
 	
 	<restrict>#{s:hasRole('ADMIN_USER')}</restrict>
 	
+	<end-conversation/>
+	
 </page>

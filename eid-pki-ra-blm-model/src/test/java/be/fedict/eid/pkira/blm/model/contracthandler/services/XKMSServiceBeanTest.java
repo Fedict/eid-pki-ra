@@ -99,6 +99,7 @@ public class XKMSServiceBeanTest {
 
 	@Test
 	public void signTest() throws Exception {
+		try {
 		when(xkmsClient.createCertificate(CSR_BYTES, VALIDITY)).thenReturn(CERTIFICATE_BYTES);
 		
 		CertificateSigningContract contract = createCertificateSigningContract();			
@@ -107,9 +108,13 @@ public class XKMSServiceBeanTest {
 		assertEquals(certificate, CERTIFICATE);
 		verify(reportManager).addLineToReport(contract, true);
 		verifyNoMoreInteractions(errorLogger);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
-	@Test
+	@Test(dependsOnMethods="signTest")
 	public void signTestError() throws Exception {
 		XKMSClientException exception = new XKMSClientException("Oops");
 		when(xkmsClient.createCertificate(CSR_BYTES, VALIDITY)).thenThrow(exception);
