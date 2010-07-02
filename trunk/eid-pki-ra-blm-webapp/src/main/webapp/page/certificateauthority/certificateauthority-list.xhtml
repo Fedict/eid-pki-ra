@@ -40,12 +40,18 @@
 						<h:outputText value="#{certificateAuthority.parameters.get('signing.provider')}" />
 					</rich:column>
 					
-					signing.provider
-
 					<rich:column>
 						<s:link
 							view="/page/certificateauthority/certificateauthority-edit.xhtml"
 							value="#{messages['link.edit']}" id="edit">
+							<f:param name="certificateAuthorityId"
+								value="#{certificateAuthority.id}" />
+						</s:link>
+					</rich:column>
+					<rich:column>
+						<s:link
+							view="/page/certificateauthority/certificateauthority-certificatechain.xhtml"
+							value="#{messages['link.chain']}" id="chains">
 							<f:param name="certificateAuthorityId"
 								value="#{certificateAuthority.id}" />
 						</s:link>

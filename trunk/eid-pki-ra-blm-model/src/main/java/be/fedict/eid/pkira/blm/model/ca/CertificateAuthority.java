@@ -21,12 +21,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CollectionOfElements;
@@ -43,40 +46,44 @@ public class CertificateAuthority implements Serializable {
 
 	private static final long serialVersionUID = -7367938441889939933L;
 
+	@JoinColumn(name="CERTIFICATE_CHAIN_ID")
+	@OneToOne(fetch=FetchType.LAZY, cascade=CascadeType.REMOVE)
+	private CertificateChain certificateChain;
+
 	@Id
 	@GeneratedValue
 	@Column(name = "CA_ID", nullable = false, unique = true)
 	private Integer id;
 
-	@Column(name = "NAME", nullable = false, unique = true)
-	private String name;
-
-	@Column(name = "XKMS_URL", nullable = false)
-	private String xkmsUrl;
-
-	@CollectionOfElements(targetElement = String.class)
-	@MapKeyManyToMany(targetEntity = String.class)
-	private Map<String, String> parameters;
-	
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
 	@Column(name = "LEGAL_NOTICE", nullable = false)
 	private String legalNotice;
 
+	@Column(name = "NAME", nullable = false, unique = true)
+	private String name;
+	
+	@CollectionOfElements(targetElement = String.class)
+	@MapKeyManyToMany(targetEntity = String.class)
+	private Map<String, String> parameters;
+	
+	@Column(name = "XKMS_URL", nullable = false)
+	private String xkmsUrl;
+
+	public CertificateChain getCertificateChain() {
+		return certificateChain;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public String getLegalNotice() {
+		return legalNotice;
+	}
+
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getXkmsUrl() {
-		return xkmsUrl;
-	}
-
-	public void setXkmsUrl(String xkmsUrl) {
-		this.xkmsUrl = xkmsUrl;
 	}
 
 	public Map<String, String> getParameters() {
@@ -86,18 +93,26 @@ public class CertificateAuthority implements Serializable {
 		return parameters;
 	}
 
-	public Integer getId() {
-		return id;
+	public String getXkmsUrl() {
+		return xkmsUrl;
 	}
 
-	
-	public String getLegalNotice() {
-		return legalNotice;
+	public void setCertificateChain(CertificateChain certificateChain) {
+		this.certificateChain = certificateChain;
 	}
 
-	
 	public void setLegalNotice(String legalNotice) {
 		this.legalNotice = legalNotice;
+	}
+
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	
+	public void setXkmsUrl(String xkmsUrl) {
+		this.xkmsUrl = xkmsUrl;
 	}
 
 }

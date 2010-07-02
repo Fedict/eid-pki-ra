@@ -19,6 +19,9 @@ package be.fedict.eid.pkira.crypto;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.math.BigInteger;
+import java.security.InvalidKeyException;
+import java.security.PublicKey;
+import java.security.SignatureException;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.Date;
@@ -87,11 +90,33 @@ public class CertificateInfo {
 		
 		return writer.toString();
 	}
+	
+	public boolean isSelfSigned() throws CryptoException {
+		return isSignedBy(certificate.getPublicKey());
+		
+	}
+
+	public boolean isSignedBy(PublicKey publicKey) throws CryptoException {
+		try {
+			certificate.verify(publicKey);
+			return true;
+		} catch (SignatureException e) {
+			return false;
+		} catch (InvalidKeyException e) {
+			return false;
+		} catch (Exception e) {
+			throw new CryptoException("Error validating signature.", e);
+		}
+	}
 
 	@Override
 	public String toString() {
 		return new StringBuilder("CertificateInfo[")
 		.append("subject=").append(getDistinguishedName())
 		.append(']').toString();
+	}
+
+	public X509Certificate getCertificate() {
+		return certificate;
 	}
 }

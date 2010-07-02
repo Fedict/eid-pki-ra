@@ -18,7 +18,11 @@
 
 package be.fedict.eid.pkira.blm.model.ca;
 
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.core.Expressions;
+import org.jboss.seam.core.Expressions.ValueExpression;
 
 import be.fedict.eid.pkira.blm.model.framework.ValidatingEntityHome;
 
@@ -26,6 +30,7 @@ import be.fedict.eid.pkira.blm.model.framework.ValidatingEntityHome;
  * @author Bram Baeyens
  */
 @Name(CertificateAuthorityHome.NAME)
+@Scope(ScopeType.CONVERSATION)
 public class CertificateAuthorityHome extends ValidatingEntityHome<CertificateAuthority> {
 
 	private static final long serialVersionUID = -1444261850784921995L;
@@ -40,5 +45,15 @@ public class CertificateAuthorityHome extends ValidatingEntityHome<CertificateAu
 	@Override
 	protected String getCreatedMessageKey() {
 		return "certificateauthority.created";
+	}
+
+	@Override
+	protected String getDeletedMessageKey() {
+		return "certificateauthority.deleted";
 	}	
+
+	@Override
+	public ValueExpression<?> getUpdatedMessage() {
+		return Expressions.instance().createValueExpression(null);
+	}
 }
