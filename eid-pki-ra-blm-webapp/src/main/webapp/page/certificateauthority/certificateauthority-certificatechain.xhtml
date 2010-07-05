@@ -1,0 +1,124 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<rich:panel id="panel1">
+			<f:facet name="header">#{messages['certificatechain.title']}</f:facet>
+
+			<h2>#{messages['certificatechain.certificates']}</h2>
+
+			<h:form id="certificateListForm">
+				<rich:dataTable id="certificateTable" var="certificate"
+					value="#{certificateChainHome.instance.certificates}" width="100%"
+					rendered="#{not empty certificateChainHome.instance.certificates}">
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText
+								value="#{messages['certificatechain.certificates.subject']}" />
+						</f:facet>
+						<h:outputText value="#{certificate.subject}" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText
+								value="#{messages['certificatechain.certificates.issuer']}" />
+						</f:facet>
+						<h:outputText value="#{certificate.issuer.subject}" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText
+								value="#{messages['certificatechain.certificates.serialnumber']}" />
+						</f:facet>
+						<h:outputText value="#{certificate.serialNumber}" />
+					</rich:column>
+
+					<rich:column>
+						<h:commandButton id="delete"
+							action="#{certificateChainHandler.deleteCertificate(certificate)}"
+							value="#{messages['button.delete']}" />
+					</rich:column>
+				</rich:dataTable>
+
+				<h:outputText value="#{messages['certificatechain.nocertificates']}"
+					rendered="#{empty certificateChainHome.instance.certificates}" />
+			</h:form>
+
+			<h:form id="certificateUploadForm" enctype="multipart/form-data">
+				<s:decorate id="certificateUploadDecoration"
+					template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['certificatechain.upload.certificate']}:</ui:define>
+					<s:fileUpload id="certificateUpload"
+						data="#{certificateChainHandler.certificateData}" />
+					<h:commandButton
+						action="#{certificateChainHandler.uploadCertificate}"
+						value="#{messages['certificatechain.upload.upload']}" id="upload" />
+				</s:decorate>
+			</h:form>
+
+			<h2>#{messages['certificatechain.managechains']}</h2>
+
+			<h:form id="certificateChainForm">
+				<s:decorate id="clientCertificateChainDecoration"
+					template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['certificatechain.chains.client']}:</ui:define>
+					<h:selectOneMenu
+						value="#{certificateChainHome.instance.clientChain}">
+						<s:selectItems
+							value="#{certificateChainHome.instance.certificates}"
+							var="certificate" label="#{certificate.subject}"
+							noSelectionLabel="-" />
+						<s:convertEntity />
+					</h:selectOneMenu>
+				</s:decorate>
+
+				<s:decorate id="serverCertificateChainDecoration"
+					template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['certificatechain.chains.server']}:</ui:define>
+					<h:selectOneMenu
+						value="#{certificateChainHome.instance.serverChain}">
+						<s:selectItems
+							value="#{certificateChainHome.instance.certificates}"
+							var="certificate" label="#{certificate.subject}"
+							noSelectionLabel="-" />
+						<s:convertEntity />
+					</h:selectOneMenu>
+				</s:decorate>
+
+				<s:decorate id="codeSigningCertificateChainDecoration"
+					template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['certificatechain.chains.codeSigning']}:</ui:define>
+					<h:selectOneMenu
+						value="#{certificateChainHome.instance.codeSigningChain}">
+						<s:selectItems
+							value="#{certificateChainHome.instance.certificates}"
+							var="certificate" label="#{certificate.subject}"
+							noSelectionLabel="-" />
+						<s:convertEntity />
+					</h:selectOneMenu>
+				</s:decorate>
+
+				<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
+					<h:commandButton id="update"
+						action="#{certificateChainHome.update}"
+						value="#{messages['button.update']}" />
+				</s:decorate>
+
+			</h:form>
+		</rich:panel>
+		
+		<rich:panel id="panel2">
+			<h:form id="backForm">
+				<s:button id="back" value="#{messages['button.back']}"
+						view="/page/certificateauthority/certificateauthority-list.xhtml" />
+			</h:form>
+		</rich:panel>
+	</ui:define>
+</ui:composition>
