@@ -10,6 +10,7 @@
 		<classes>
 			<class
 				name="be.fedict.eid.integration.admin.CertificateAuthorityListSeleniumTest" />
+			<class name="be.fedict.eid.integration.admin.CertificateAuthorityCertificateChainsSeleniumTest" />
 			<class
 				name="be.fedict.eid.integration.admin.CertificateDomainListSeleniumTest" />
 			<class
