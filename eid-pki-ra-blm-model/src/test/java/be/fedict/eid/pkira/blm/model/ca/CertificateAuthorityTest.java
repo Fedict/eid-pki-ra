@@ -35,10 +35,22 @@ public class CertificateAuthorityTest extends DatabaseTest {
 	@Test
 	public void testPersist() {
 		CertificateAuthority ca = new CertificateAuthority();
+		
+		CertificateAuthorityParameter cap1 = new CertificateAuthorityParameter();
+		cap1.setCa(ca);
+		cap1.setKey("abc");
+		cap1.setValue("def");
+
+		CertificateAuthorityParameter cap2 = new CertificateAuthorityParameter();
+		cap2.setCa(ca);
+		cap2.setKey("def");
+		cap2.setValue("ghi");
+		
+		
 		ca.setName("bla");
-		ca.setXkmsUrl("http://ca.com/");
-		ca.getParameters().put("abc", "def");
-		ca.getParameters().put("def", "ghi");
+		ca.setXkmsUrl("http://ca.com/");	
+		ca.getParameters().add(cap1);
+		ca.getParameters().add(cap2);
 		ca.setLegalNotice("Some legal notice");
 
 		forceCommit();

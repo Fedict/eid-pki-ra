@@ -13,6 +13,7 @@
 		<class>be.fedict.eid.pkira.blm.model.usermgmt.User</class>
 		
 		<class>be.fedict.eid.pkira.blm.model.ca.CertificateAuthority</class>
+		<class>be.fedict.eid.pkira.blm.model.ca.CertificateAuthorityParameter</class>
 		<class>be.fedict.eid.pkira.blm.model.ca.CertificateChain</class>
 		<class>be.fedict.eid.pkira.blm.model.ca.CertificateChainCertificate</class>
 		
