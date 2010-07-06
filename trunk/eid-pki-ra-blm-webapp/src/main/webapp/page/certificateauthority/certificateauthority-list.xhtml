@@ -37,7 +37,7 @@
 							<h:outputText
 								value="#{messages['certificateauthority.list.keyProvider']}" />
 						</f:facet>
-						<h:outputText value="#{certificateAuthority.parameters.get('signing.provider')}" />
+						<h:outputText value="#{certificateAuthority.getCertificateAuthorityParameterValueForKey('signing.provider')}" />
 					</rich:column>
 					
 					<rich:column>
@@ -69,7 +69,7 @@
 					<s:button
 						view="/page/certificateauthority/certificateauthority-edit.xhtml"
 						value="#{messages['button.new']}" id="newCertificateAuthority">
-						<f:param name="certificateAuthorityId" />
+							<f:param name="certificateAuthorityId" />
 					</s:button>
 				</s:decorate>
 			</rich:panel>

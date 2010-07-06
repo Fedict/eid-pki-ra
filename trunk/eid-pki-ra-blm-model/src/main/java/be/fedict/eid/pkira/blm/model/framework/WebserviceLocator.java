@@ -54,7 +54,7 @@ public class WebserviceLocator {
 	}
 	
 	public XKMSClient getXKMSClient(CertificateAuthority ca) {
-		return new XKMSClient(ca.getXkmsUrl(), ca.getParameters());
+		return new XKMSClient(ca.getXkmsUrl(), ca.getParametersAsMap());
 	}
 
 	protected HttpServletRequest getRequest() {
