@@ -20,16 +20,16 @@ package be.fedict.eid.pkira.blm.model.certificatedomain.validation;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.Validator;
-import org.jboss.seam.Component;
 
 import be.fedict.eid.pkira.blm.model.ca.CertificateAuthority;
 import be.fedict.eid.pkira.blm.model.ca.CertificateAuthorityHome;
+import be.fedict.eid.pkira.blm.model.util.BaseEntity;
 
 /**
  * @author Bram Baeyens
  *
  */
-public class UniqueCertificateAuthorityNameValidator implements Validator<UniqueCertificateAuthorityName> {
+public class UniqueCertificateAuthorityNameValidator extends BaseEntity implements Validator<UniqueCertificateAuthorityName> {
 
 	@Override
 	public void initialize(UniqueCertificateAuthorityName constraintAnnotation) {		
@@ -40,7 +40,7 @@ public class UniqueCertificateAuthorityNameValidator implements Validator<Unique
 		if (StringUtils.isEmpty((String) value)) {
 			return true;
 		}		
-		CertificateAuthorityHome certificateAuthorityHome = (CertificateAuthorityHome) Component.getInstance(CertificateAuthorityHome.NAME);
+		CertificateAuthorityHome certificateAuthorityHome = (CertificateAuthorityHome) getComponent(CertificateAuthorityHome.class, CertificateAuthorityHome.NAME);//Component.getInstance(CertificateAuthorityHome.NAME);
 		CertificateAuthority certificateAuthority = certificateAuthorityHome.findByName((String) value);
 		if (certificateAuthority == null || certificateAuthority.equals(certificateAuthorityHome.getInstance())) {
 			return true;
