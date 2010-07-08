@@ -21,19 +21,36 @@ import static org.testng.Assert.assertNotNull;
 
 import java.util.List;
 
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import be.fedict.eid.pkira.blm.model.DatabaseTest;
+import be.fedict.eid.pkira.blm.util.BaseTest;
 
 /**
  * @author Jan Van den Bergh
  */
-public class CertificateAuthorityTest extends DatabaseTest {
+public class CertificateAuthorityTest extends BaseTest {
 
 	private Integer caId;
 
+	@Mock
+	CertificateAuthorityHome authorityHome;
+	
+	@BeforeMethod
+	public void init(){
+		MockitoAnnotations.initMocks(this);
+		
+		registerMock(CertificateAuthorityHome.NAME, authorityHome);
+	}
+	
 	@Test
 	public void testPersist() {
+		
+		Mockito.when(authorityHome.findByName(Mockito.anyString())).thenReturn(null);
+		
 		CertificateAuthority ca = new CertificateAuthority();
 		
 		CertificateAuthorityParameter cap1 = new CertificateAuthorityParameter();
