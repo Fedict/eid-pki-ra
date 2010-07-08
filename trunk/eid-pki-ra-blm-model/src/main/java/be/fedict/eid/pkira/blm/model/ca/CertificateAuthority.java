@@ -75,8 +75,8 @@ public class CertificateAuthority implements Serializable {
 	private String legalNotice;
 
 	@Column(name = "NAME", nullable = false, unique = true)
-	//@NotEmpty(message = "{validation.empty.certificateauthorityname}")
-	//@UniqueCertificateAuthorityName
+	@NotEmpty(message = "{validation.empty.certificateauthorityname}")
+	@UniqueCertificateAuthorityName
 	private String name;
 
 	@OneToMany(cascade=CascadeType.ALL ,fetch=FetchType.LAZY, mappedBy="ca")
