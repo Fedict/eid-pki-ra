@@ -16,10 +16,17 @@
  */
 package be.fedict.eid.pkira.blm.model.contracthandler;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -33,6 +40,8 @@ import org.jboss.seam.async.QuartzTriggerHandle;
 import org.jboss.seam.log.Log;
 import org.quartz.SchedulerException;
 
+import be.fedict.eid.pkira.blm.model.ca.CertificateChain;
+import be.fedict.eid.pkira.blm.model.ca.CertificateChainCertificate;
 import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryKey;
 import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
 import be.fedict.eid.pkira.blm.model.contracthandler.services.ContractParser;
@@ -313,20 +322,64 @@ public class ContractHandlerBean implements ContractHandler {
 		return contract;
 	}
 
-	private void sendCertificateByMail(Certificate certificate, Registration registration) {
+	private void sendCertificateByMail(Certificate certificate, Registration registration) throws ContractHandlerBeanException {
 		String templateName = "sendCertificateMail.ftl";
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("certificate", certificate);
 		parameters.put("user", registration.getRequester());
 
-		String[] recipients = new String[]
-			{ registration.getEmail() };
-		byte[] attachmentData = certificate.getX509().getBytes();
-		String attachmentContentType = "application/x-pem-file";
-		String attachmentFileName = certificate.getSerialNumber() + ".crt";
+		CertificateType certificateType = certificate.getCertificateType();
+		CertificateChain certificateChain = certificate.getCertificateDomain().getCertificateAuthority().getCertificateChain();
+		
+		byte[] attachmentData = null;
+	
+		ZipOutputStream zip = null;
+		
+			
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			zip = new ZipOutputStream(baos);
+			
+				zip.putNextEntry(new ZipEntry("certificate.crt"));
+			
+			zip.write(certificate.getX509().getBytes());
+			zip.closeEntry();
+			if(certificateChain != null){
+			
+				CertificateChainCertificate chain =  null;
+				if(certificateType == CertificateType.CLIENT){
+					chain = certificateChain.getClientChain();
+				}else if(certificateType == CertificateType.SERVER){
+					chain =certificateChain.getServerChain();
+				}else if(certificateType == CertificateType.CODE){
+					chain = certificateChain.getCodeSigningChain();	
+				}
+	
+				int i = 0;
+				while(chain != null){
+						zip.putNextEntry(new ZipEntry("chain"+ i +".crt"));
+						zip.write(chain.getCertificateData());
+						zip.closeEntry();
+						chain = chain.getIssuer();
+				}
+			}
+			
+			zip.finish();
+			zip.close();
+			
+			baos.close();
 
-		mailTemplate.sendTemplatedMail(templateName, parameters, recipients, attachmentData, attachmentContentType,
-				attachmentFileName);
+			String[] recipients = new String[] { registration.getEmail() };
+			attachmentData = baos.toByteArray();
+			String attachmentContentType = "application/zip";
+			String attachmentFileName = certificate.getSerialNumber() + ".zip";
+			
+			mailTemplate.sendTemplatedMail(templateName, parameters, recipients, attachmentData, attachmentContentType,
+					attachmentFileName);
+			
+			} catch (IOException e) {
+				throw new ContractHandlerBeanException(ResultType.BACKEND_ERROR, "Failed to create zip file for certificate chain.");
+			}
 	}
 
 	/**
