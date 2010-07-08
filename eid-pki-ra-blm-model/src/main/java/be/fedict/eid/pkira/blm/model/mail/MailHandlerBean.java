@@ -17,8 +17,13 @@
  */
 package be.fedict.eid.pkira.blm.model.mail;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Properties;
 
+import javax.activation.DataHandler;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.ejb.TransactionAttribute;
@@ -37,7 +42,9 @@ import javax.mail.internet.InternetHeaders;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
 
+import org.apache.commons.codec.binary.Base64;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 
@@ -97,13 +104,13 @@ public class MailHandlerBean implements MessageListener {
 			messagePart.setContent(mail.getBody(), mail.getContentType());
 			multipart.addBodyPart(messagePart);
 
-			if (mail.getAttachmentData() != null) {
-				InternetHeaders headers = new InternetHeaders();
-				headers.setHeader("Content-type", mail.getAttachmentContentType());
-				headers.setHeader("Content-Disposition", "attachment; filename=\"" + mail.getAttachmentFileName()
-						+ "\"");
-
-				MimeBodyPart attachmentPart = new MimeBodyPart(headers, mail.getAttachmentData());
+			if (mail.getAttachmentData() != null) {	
+				ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(mail.getAttachmentData(),  mail.getAttachmentContentType());
+				DataHandler dataHandler = new DataHandler(byteArrayDataSource);
+				MimeBodyPart attachmentPart = new MimeBodyPart();
+				attachmentPart.setDataHandler(dataHandler);
+				attachmentPart.setFileName(mail.getAttachmentFileName());
+				
 				multipart.addBodyPart(attachmentPart);
 			}
 
