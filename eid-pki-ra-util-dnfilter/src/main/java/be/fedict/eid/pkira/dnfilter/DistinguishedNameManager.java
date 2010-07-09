@@ -16,8 +16,6 @@
  */
 package be.fedict.eid.pkira.dnfilter;
 
-import java.util.Collection;
-import java.util.Set;
 
 /**
  * Interface to the bean handling the DN filter logic.
@@ -29,7 +27,7 @@ public interface DistinguishedNameManager {
 	static final String NAME = "be.fedict.eid.pkira.dn.dnManager";
 
 	/**
-	 * Parses an expression and converts it to a DistinguishedName.
+	 * Parses a DN and converts it to a DistinguishedName.
 	 * 
 	 * @param expression
 	 *            expression to parse.
@@ -37,19 +35,7 @@ public interface DistinguishedNameManager {
 	 * @throws InvalidDistinguishedNameException
 	 *             if the expression in invalid.
 	 */
-	DistinguishedName createDistinguishedName(String expression) throws InvalidDistinguishedNameException;
-
-	/**
-	 * Checks if the given distinguished name overlaps with any of the other
-	 * distinguished names.
-	 * 
-	 * @param newDN
-	 *            the filter to check.
-	 * @param otherDNs
-	 *            filters to check with.
-	 * @return the distinguished names this name overlaps with.
-	 */
-	Set<DistinguishedName> overlapsWith(DistinguishedName newDN, Collection<DistinguishedName> otherDNs);
+	DistinguishedName createDistinguishedName(String dn) throws InvalidDistinguishedNameException;
 
 	/**
 	 * Normalizes a distinguished name expression. This puts all its parts in
@@ -61,5 +47,16 @@ public interface DistinguishedNameManager {
 	 * @throws InvalidDistinguishedNameException
 	 *             if the expression could not be parsed.
 	 */
-	String normalize(String dnExpression) throws InvalidDistinguishedNameException;
+	String normalizeDistinguishedNameExpression(String dnExpression) throws InvalidDistinguishedNameException;
+
+	/**
+	 * Parses a DN expression and converts it to a DistinguishedName.
+	 * 
+	 * @param expression
+	 *            expression to parse.
+	 * @return the distinguished name.
+	 * @throws InvalidDistinguishedNameException
+	 *             if the expression in invalid.
+	 */
+	DistinguishedNameExpression createDistinguishedNameExpression(String expression) throws InvalidDistinguishedNameException;
 }

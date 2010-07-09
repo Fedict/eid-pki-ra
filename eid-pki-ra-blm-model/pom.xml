@@ -38,22 +38,22 @@
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-client-contracts</artifactId>
 		</dependency>
-				
+
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-client-reports</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-generated-privatews</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-common-model</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-client-xkms</artifactId>
@@ -63,7 +63,7 @@
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-util-crypto</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-authentication-client</artifactId>
@@ -136,6 +136,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>jtrust</artifactId>
+		</dependency>
+		
+		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<scope>provided</scope>
@@ -159,7 +164,7 @@
 			<artifactId>mockito-all</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
@@ -200,7 +205,7 @@
 			<version>1.0.2</version>
 			<type>jar</type>
 			<scope>test</scope>
-		</dependency>		
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

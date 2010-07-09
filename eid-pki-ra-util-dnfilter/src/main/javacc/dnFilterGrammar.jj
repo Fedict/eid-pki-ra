@@ -4,19 +4,17 @@ PARSER_BEGIN(DistinguishedNameParser)
 package be.fedict.eid.pkira.dnfilter;
 
 import java.util.ArrayList;import java.util.List;import java.util.SortedMap;import java.util.TreeMap;
-public class DistinguishedNameParser {  class State {    // Parts in the expression: map of keys onto its set of values.    SortedMap<String, List<String>>  parts = new TreeMap<String, List<String>>();  }
-}
+public class DistinguishedNameParser {}
 
 PARSER_END(DistinguishedNameParser)
 
-<DEFAULT> TOKEN: {  < #LETTER: ["a"-"z","A"-"Z"] >| < #DIGIT: ["0"-"9"] >| < #SPECIAL_CHAR: "-"|"_"|"."|"@"|"/"|"+"|"="|"\\"|"#"|":"|"&"|"?" >| < #SPACE: " " >}<DEFAULT> TOKEN:{  < KEY:	 (<LETTER>)+ >| < EQUALS: "=" > : VALUE| < COMMA: "," >}<VALUE> TOKEN:{  < LITERAL_VALUE: (<LETTER>|<DIGIT>|<SPECIAL_CHAR>|<SPACE>)+ > : DEFAULT| < WILDCARD: "*" > : DEFAULT}
+<DEFAULT> TOKEN: {	  < #LETTER		: ["a"-"z","A"-"Z"] >	| < #DIGIT		: ["0"-"9"] >	| < #SYMBOL		: "-" | "_" | "." | "@" | "/" | "+" | ":" | "&" | "?" | "#" | "<" | ">" | ";" | "\"" | "=" >	| < #COMMA		: "," >	| < #BACKSLASH	: "\\" >	| < #EQUALS		: "=" >	| < #ASTERISK 	: "*" >	| < #SPACE		: " " >}<EXPR> TOKEN: {	  < EXPR_KEY		: (<LETTER>)+ >	| < EXPR_WC_KEY		: <ASTERISK> <EXPR_KEY> >  	| < EXPR_EQUALITY	: <EQUALS> >			  : EXPRVALUE	| < EXPR_SEPARATOR 	: <COMMA> >}<EXPRVALUE> TOKEN: {	  < EXPR_WILDCARD	: <ASTERISK> >			: EXPR	| < EXPR_VALUE		: ( ( (<BACKSLASH>)? ( <LETTER> | <DIGIT> | <SYMBOL> ) ) | ( <BACKSLASH> ( <BACKSLASH> | <COMMA> | <ASTERISK> ) ) )+ > : EXPR	}<DN> TOKEN: {	  < DN_KEY			: (<LETTER>)+ >	| < DN_EQUALITY		: <EQUALS> >			: DNVALUE	| < DN_SEPARATOR 	: <COMMA> >}<DNVALUE>	TOKEN: {	  < DN_VALUE		: ( ( (<BACKSLASH>)? ( <LETTER> | <DIGIT> | <SYMBOL> | <ASTERISK> ) ) | ( <BACKSLASH> ( <BACKSLASH> | <COMMA> ) ) )+ > : DN}
 
 <DEFAULT> SKIP: {
   <WS: <SPACE> >
-}
-
-private void dnPart(State state):{
+}private void dnExpressionPart(DistinguishedNameParserState state):{  Token key, value;}{   (   	(key=<EXPR_KEY>) <EXPR_EQUALITY> (value=<EXPR_VALUE> | value=<EXPR_WILDCARD>) |   	(key=<EXPR_WC_KEY>) <EXPR_EQUALITY> (value=<EXPR_WILDCARD>)   )    {    String n = key.image.toLowerCase();    String v = value.image;    state.addStateElement(n, v);  }}
+private void dnPart(DistinguishedNameParserState state):{
   Token key, value;}
 {
-  key = 	<KEY> <EQUALS> ( value=<LITERAL_VALUE> | value=<WILDCARD> )  
-  {    String k = key.image.toLowerCase();    if (!state.parts.containsKey(k))    {      state.parts.put(k, new ArrayList<String>());    }    state.parts.get(k).add(value.image.trim());  }}SortedMap<String, List<String>> distinguishedName():{  State state = new State();}{  dnPart(state) ( <COMMA> dnPart(state) )* <EOF>    {        return state.parts;  }}
+   (key=<DN_KEY>) <DN_EQUALITY> (value=<DN_VALUE>)  
+  {    String n = key.image.toLowerCase();    String v = value.image;    state.addStateElement(n, v);  }}DistinguishedNameParserState distinguishedName():{  DistinguishedNameParserState state = new DistinguishedNameParserState(false);}{  {    token_source.SwitchTo(DN);  }    dnPart(state) ( <DN_SEPARATOR> dnPart(state) )* <EOF>    {        return state;  }}DistinguishedNameParserState distinguishedNameExpression():{  DistinguishedNameParserState state = new DistinguishedNameParserState(true);}{  {    token_source.SwitchTo(EXPR);  }    dnExpressionPart(state) ( <EXPR_SEPARATOR> dnExpressionPart(state) )* <EOF>    {        return state;  }}

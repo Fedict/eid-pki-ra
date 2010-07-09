@@ -16,6 +16,9 @@
  */
 package be.fedict.eid.pkira.dnfilter;
 
+import static be.fedict.eid.pkira.dnfilter.Expressions.MATCHING_DNS;
+import static be.fedict.eid.pkira.dnfilter.Expressions.UNMATCHING_DNS;
+import static be.fedict.eid.pkira.dnfilter.Expressions.VALID_EXPRESSIONS;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -29,52 +32,24 @@ public class DistinguishedNameMatcherTest {
 	public DistinguishedNameManagerImpl manager = new DistinguishedNameManagerImpl();
 
 	@Test
-	public void testMatching1() throws InvalidDistinguishedNameException {
-		String expr = "c=be,CN=test";
-		assertTrue(matches(expr, "cn=test, c=be"));
-		assertTrue(matches(expr, "c=be, CN=test"));
-		assertFalse(matches(expr, "c=be,CN=Test"));
-	}
-
-	@Test
-	public void testMatching2() throws InvalidDistinguishedNameException {
-		String expr = "cn=Test,ou=*";
-		assertTrue(matches(expr, "cn=Test,ou=a"));
-		assertTrue(matches(expr, "ou=b,cn=Test"));
-	}
-
-	@Test
-	public void testMatching3() throws InvalidDistinguishedNameException {
-		String expr = "u=*,ou=*";
-		assertTrue(matches(expr, "U=Test,ou=a"));
-		assertTrue(matches(expr, "ou=b,u=Test"));
-		assertFalse(matches(expr, "ou=a,u=Test,u=Test"));
+	public void testMatching() throws InvalidDistinguishedNameException {
+		for (int i = 0; i < VALID_EXPRESSIONS.length; i++) {
+			DistinguishedNameExpression expression = manager.createDistinguishedNameExpression(VALID_EXPRESSIONS[i]);
+			for(String matchingDn: MATCHING_DNS[i]) {
+				DistinguishedName dn = manager.createDistinguishedName(matchingDn);
+				assertTrue(expression.matches(dn), VALID_EXPRESSIONS[i] + "/" + matchingDn);
+			}
+		}
 	}
 	
 	@Test
-	public void testMatching4() throws InvalidDistinguishedNameException {
-		String expr = "CN=Test,ou=a,ou=b,C=be";
-		assertTrue(matches(expr, "CN=Test,ou=a,ou=b,C=be"));
-		assertTrue(matches(expr, "C=be,ou=a,ou=b,CN=Test"));
-		assertFalse(matches(expr, "CN=Test,ou=b,ou=a,C=be"));
-	}
-	
-	@Test
-	public void testMatching5() throws InvalidDistinguishedNameException {
-		assertTrue(matches("c=be,ou=abc,ou=def,cn=*", "cn=test,c=be,ou=abc,ou=def"));
-	}
-
-	@Test
-	public void testMatching6() throws InvalidDistinguishedNameException {
-		assertTrue(matches("c=*,ou=*,cn=*", "cn=test,c=test,ou=test"));
-	}
-	
-	@Test
-	public void testMatching7() throws InvalidDistinguishedNameException {
-		assertTrue(matches("C=BE,ST=Antwerpen,L=Antwerpen,O=*,OU=*,CN=*", "C=BE,ST=Antwerpen,L=Antwerpen,O=0860109391,OU=Informatica,CN=www.aspex.be/serenity_kbo"));
-	}
-
-	private boolean matches(String filter1, String filter2) throws InvalidDistinguishedNameException {
-		return manager.createDistinguishedName(filter1).matches(manager.createDistinguishedName(filter2));
+	public void testUnmatching() throws InvalidDistinguishedNameException {
+		for (int i = 0; i < VALID_EXPRESSIONS.length; i++) {
+			DistinguishedNameExpression expression = manager.createDistinguishedNameExpression(VALID_EXPRESSIONS[i]);
+			for(String unmatchingDn: UNMATCHING_DNS[i]) {
+				DistinguishedName dn = manager.createDistinguishedName(unmatchingDn);
+				assertFalse(expression.matches(dn), VALID_EXPRESSIONS[i] + "/" + unmatchingDn);
+			}
+		}
 	}
 }
