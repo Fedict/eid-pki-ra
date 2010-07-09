@@ -44,8 +44,8 @@ public class CertificateChainCertificate implements Serializable, Comparable<Cer
 	@ManyToOne
 	private CertificateChainCertificate issuer;
 
-	@JoinColumn(name = "CHAIN_ID")
-	@ManyToOne
+	@JoinColumn(name = "CHAIN_ID", nullable=true)
+	@ManyToOne(optional=true)
 	private CertificateChain certificateChain;
 
 	@Column(name = "SERIALNUMBER", nullable = false)
