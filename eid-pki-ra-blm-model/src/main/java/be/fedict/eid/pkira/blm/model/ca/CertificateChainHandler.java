@@ -147,7 +147,8 @@ public class CertificateChainHandler implements Serializable {
 			certificateChainHome.getInstance().getCertificates().remove(other);
 
 			certificateChainCertificateHome.setInstance(other);
-			certificateChainCertificateHome.remove();
+			certificateChainCertificateHome.getInstance().setCertificateChain(null);
+			certificateChainCertificateHome.update();
 		}
 
 		certificateChainHome.update();
