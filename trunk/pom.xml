@@ -231,8 +231,9 @@
 					<!--					<configuration>-->
 					<!--						<skip>true</skip>-->
 					<!--
-						use this instead of excludes and includes <suiteXmlFiles> <suiteXmlFile>testng.xml</suiteXmlFile> </suiteXmlFiles>
-						or <groups>functest,perftest</groups>
+						use this instead of excludes and includes <suiteXmlFiles>
+						<suiteXmlFile>testng.xml</suiteXmlFile> </suiteXmlFiles> or
+						<groups>functest,perftest</groups>
 					-->
 					<!--					</configuration>-->
 					<!--					<executions>-->
@@ -525,13 +526,20 @@
 				<version>${quartz-version}</version>
 				<type>jar</type>
 			</dependency>
+			<dependency>
+				<groupId>be.fedict</groupId>
+				<artifactId>jtrust</artifactId>
+				<version>1.1.0</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
 	<!--
-		Can be used to generate reports about lines of code not covered by tests http://cobertura.sourceforge.net <reporting>
-		<plugins> <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>cobertura-maven-plugin</artifactId>
-		<version>2.2</version> </plugin> </plugins> </reporting>
+		Can be used to generate reports about lines of code not covered by
+		tests http://cobertura.sourceforge.net <reporting> <plugins> <plugin>
+		<groupId>org.codehaus.mojo</groupId>
+		<artifactId>cobertura-maven-plugin</artifactId> <version>2.2</version>
+		</plugin> </plugins> </reporting>
 	-->
 	<reporting>
 		<plugins>
@@ -553,9 +561,11 @@
 				</configuration>
 			</plugin>
 			<!--
-				Can be used to generate reports about lines of code not covered by tests http://cobertura.sourceforge.net <plugin>
-				<groupId>org.codehaus.mojo</groupId> <artifactId>cobertura-maven-plugin</artifactId> <version>2.2</version>
-				</plugin>
+				Can be used to generate reports about lines of code not covered by
+				tests http://cobertura.sourceforge.net <plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>2.2</version> </plugin>
 			-->
 		</plugins>
 	</reporting>
@@ -586,7 +596,7 @@
 				<hibernate.use_second_level_cache>false</hibernate.use_second_level_cache>
 
 				<jta.dataSource>java:/DefaultDS</jta.dataSource>
-				
+
 				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.HSQLDBDelegate</quartz.driverDelegateClass>
 				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME \= ?</quartz.selectWithLockSql>
 			</properties>
@@ -612,7 +622,7 @@
 				<hibernate.use_second_level_cache>false</hibernate.use_second_level_cache>
 
 				<jta.dataSource>java:/pkiraDS</jta.dataSource>
-				
+
 				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.StdJDBCDelegate</quartz.driverDelegateClass>
 				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME \= ? FOR UPDATE</quartz.selectWithLockSql>
 			</properties>
@@ -639,7 +649,7 @@
 				<hibernate.use_second_level_cache>false</hibernate.use_second_level_cache>
 
 				<jta.dataSource>java:/pkiraDS</jta.dataSource>
-				
+
 				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.StdJDBCDelegate</quartz.driverDelegateClass>
 				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME \= ? FOR UPDATE</quartz.selectWithLockSql>
 			</properties>

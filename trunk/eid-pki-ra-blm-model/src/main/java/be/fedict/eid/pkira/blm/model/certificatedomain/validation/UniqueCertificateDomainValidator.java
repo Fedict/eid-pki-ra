@@ -26,7 +26,7 @@ import org.jboss.seam.Component;
 
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainHome;
-import be.fedict.eid.pkira.dnfilter.DistinguishedName;
+import be.fedict.eid.pkira.dnfilter.DistinguishedNameExpression;
 import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
 import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;
 
@@ -48,9 +48,9 @@ public class UniqueCertificateDomainValidator implements Validator<UniqueCertifi
 			return true;
 		}		
 		
-		DistinguishedName distinguishedName;		
+		DistinguishedNameExpression distinguishedName;		
 		try {
-			distinguishedName = getDistinguishedNameManager().createDistinguishedName(certificateDomain.getDnExpression());
+			distinguishedName = getDistinguishedNameManager().createDistinguishedNameExpression(certificateDomain.getDnExpression());
 		} catch (InvalidDistinguishedNameException e) {
 			// handled in a other validator
 			return true;
@@ -62,9 +62,9 @@ public class UniqueCertificateDomainValidator implements Validator<UniqueCertifi
 		// Look for overlaps
 		for (CertificateDomain otherDomain : allDomains) {
 			try {
-				DistinguishedName otherDistinguishedName = 
-					getDistinguishedNameManager().createDistinguishedName(otherDomain.getDnExpression());
-				if (otherDistinguishedName.matches(distinguishedName) 
+				DistinguishedNameExpression otherDistinguishedName = 
+					getDistinguishedNameManager().createDistinguishedNameExpression(otherDomain.getDnExpression());
+				if (otherDistinguishedName.overlaps(distinguishedName) 
 						&& !otherDomain.equals(certificateDomain)) {
 					return false;
 				}

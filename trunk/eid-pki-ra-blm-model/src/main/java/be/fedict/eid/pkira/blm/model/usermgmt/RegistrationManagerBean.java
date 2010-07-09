@@ -33,6 +33,7 @@ import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainHome;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 import be.fedict.eid.pkira.dnfilter.DistinguishedName;
+import be.fedict.eid.pkira.dnfilter.DistinguishedNameExpression;
 import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
 import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;
 import be.fedict.eid.pkira.generated.privatews.RegistrationWS;
@@ -167,7 +168,7 @@ public class RegistrationManagerBean implements RegistrationManager {
 			}
 			
 			String dnExpression = certificateDomain.getDnExpression();
-			DistinguishedName domainDN = parseDN(dnExpression);
+			DistinguishedNameExpression domainDN = parseDNameExpression(dnExpression);
 			if (domainDN==null) {
 				throw new RuntimeException("Invalid certificate domain in database: " + dnExpression);
 			}
@@ -185,6 +186,17 @@ public class RegistrationManagerBean implements RegistrationManager {
 		DistinguishedName theDN;
 		try {
 			theDN = distinguishedNameManager.createDistinguishedName(distinguishedName);
+		} catch (InvalidDistinguishedNameException e) {
+			log.warn("Invalid DN given to checkAuthorizationForUserAndDN: {0}", e, distinguishedName);
+			theDN=null;
+		}
+		return theDN;
+	}
+	
+	private DistinguishedNameExpression parseDNameExpression(String distinguishedName) {
+		DistinguishedNameExpression theDN;
+		try {
+			theDN = distinguishedNameManager.createDistinguishedNameExpression(distinguishedName);
 		} catch (InvalidDistinguishedNameException e) {
 			log.warn("Invalid DN given to checkAuthorizationForUserAndDN: {0}", e, distinguishedName);
 			theDN=null;

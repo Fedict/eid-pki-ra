@@ -38,6 +38,7 @@ import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainHome;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 import be.fedict.eid.pkira.dnfilter.DistinguishedName;
+import be.fedict.eid.pkira.dnfilter.DistinguishedNameExpression;
 import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
 
 /**
@@ -123,12 +124,12 @@ public class RegistrationManagerBeanTest {
 		registration.setRequester(user);
 		
 		DistinguishedName dn1 = mock(DistinguishedName.class);
-		DistinguishedName dn2 = mock(DistinguishedName.class);
+		DistinguishedNameExpression dn2 = mock(DistinguishedNameExpression.class);
 		
 		when(userRepository.findByNationalRegisterNumber(eq(TEST_RRN))).thenReturn(user);
 		when(registrationRepository.findApprovedRegistrationsByUser(eq(user))).thenReturn(Collections.singletonList(registration));
 		when(distinguishedNameManager.createDistinguishedName(TEST_DN1)).thenReturn(dn1);
-		when(distinguishedNameManager.createDistinguishedName(TEST_DN2)).thenReturn(dn2);
+		when(distinguishedNameManager.createDistinguishedNameExpression(TEST_DN2)).thenReturn(dn2);
 		when(dn2.matches(eq(dn1))).thenReturn(true);
 		
 		Registration theRegistration = bean.findRegistrationForUserDNAndCertificateType(TEST_RRN, TEST_DN1, CertificateType.CLIENT);
@@ -146,12 +147,12 @@ public class RegistrationManagerBeanTest {
 		registration.setRequester(user);
 		
 		DistinguishedName dn1 = mock(DistinguishedName.class);
-		DistinguishedName dn2 = mock(DistinguishedName.class);
+		DistinguishedNameExpression dn2 = mock(DistinguishedNameExpression.class);
 		
 		when(userRepository.findByNationalRegisterNumber(eq(TEST_RRN))).thenReturn(user);
 		when(registrationRepository.findApprovedRegistrationsByUser(eq(user))).thenReturn(Collections.singletonList(registration));
 		when(distinguishedNameManager.createDistinguishedName(TEST_DN1)).thenReturn(dn1);
-		when(distinguishedNameManager.createDistinguishedName(TEST_DN2)).thenReturn(dn2);
+		when(distinguishedNameManager.createDistinguishedNameExpression(TEST_DN2)).thenReturn(dn2);
 		when(dn2.matches(eq(dn1))).thenReturn(true);
 		
 		Registration theRegistration = bean.findRegistrationForUserDNAndCertificateType(TEST_RRN, TEST_DN1, CertificateType.SERVER);
@@ -169,12 +170,12 @@ public class RegistrationManagerBeanTest {
 		registration.setRequester(user);
 		
 		DistinguishedName dn1 = mock(DistinguishedName.class);
-		DistinguishedName dn2 = mock(DistinguishedName.class);
+		DistinguishedNameExpression dn2 = mock(DistinguishedNameExpression.class);
 		
 		when(userRepository.findByNationalRegisterNumber(eq(TEST_RRN))).thenReturn(user);
 		when(registrationRepository.findApprovedRegistrationsByUser(eq(user))).thenReturn(Collections.singletonList(registration));
 		when(distinguishedNameManager.createDistinguishedName(TEST_DN1)).thenReturn(dn1);
-		when(distinguishedNameManager.createDistinguishedName(TEST_DN2)).thenReturn(dn2);
+		when(distinguishedNameManager.createDistinguishedNameExpression(TEST_DN2)).thenReturn(dn2);
 		when(dn2.matches(eq(dn1))).thenReturn(false);
 		
 		Registration theRegistration = bean.findRegistrationForUserDNAndCertificateType(TEST_RRN, TEST_DN1, CertificateType.CLIENT);
