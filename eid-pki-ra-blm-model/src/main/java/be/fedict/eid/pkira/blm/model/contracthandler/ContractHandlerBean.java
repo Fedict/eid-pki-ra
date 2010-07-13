@@ -17,9 +17,6 @@
 package be.fedict.eid.pkira.blm.model.contracthandler;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,7 +37,6 @@ import org.jboss.seam.async.QuartzTriggerHandle;
 import org.jboss.seam.log.Log;
 import org.quartz.SchedulerException;
 
-import be.fedict.eid.pkira.blm.model.ca.CertificateChain;
 import be.fedict.eid.pkira.blm.model.ca.CertificateChainCertificate;
 import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryKey;
 import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
@@ -248,12 +244,10 @@ public class ContractHandlerBean implements ContractHandler {
 	protected void scheduleNotificationMail(Registration registration, CertificateInfo certificateInfo,
 			Certificate certificate) {
 		Long intervalParam = Long.valueOf(configurationEntryQuery.findByEntryKey(
-				ConfigurationEntryKey.NOTIFICATION_MAIL_DAYS).getValue());
+				ConfigurationEntryKey.NOTIFICATION_MAIL_MINUTES).getValue());
 
 		Date when = certificateInfo.getValidityEnd();
-		when.setTime(when.getTime() - intervalParam * 1000 * 60 * 60 * 24);
-
-		//when.setTime(System.currentTimeMillis() + 1000 * 60 * 5);
+		when.setTime(when.getTime() - intervalParam * 1000 * 60);
 
 		QuartzTriggerHandle timer = schedulerBean.scheduleNotifcation(when, certificate.getIssuer(), certificate
 				.getSerialNumber());
@@ -328,14 +322,9 @@ public class ContractHandlerBean implements ContractHandler {
 		parameters.put("certificate", certificate);
 		parameters.put("user", registration.getRequester());
 
-		CertificateType certificateType = certificate.getCertificateType();
-		CertificateChain certificateChain = certificate.getCertificateDomain().getCertificateAuthority().getCertificateChain();
-		
-		byte[] attachmentData = null;
-	
-		ZipOutputStream zip = null;
-		
-			
+ 
+		byte[] attachmentData = null;	
+		ZipOutputStream zip = null;			
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			zip = new ZipOutputStream(baos);
@@ -344,24 +333,14 @@ public class ContractHandlerBean implements ContractHandler {
 			
 			zip.write(certificate.getX509().getBytes());
 			zip.closeEntry();
-			if(certificateChain != null){
 			
-				CertificateChainCertificate chain =  null;
-				if(certificateType == CertificateType.CLIENT){
-					chain = certificateChain.getClientChain();
-				}else if(certificateType == CertificateType.SERVER){
-					chain =certificateChain.getServerChain();
-				}else if(certificateType == CertificateType.CODE){
-					chain = certificateChain.getCodeSigningChain();	
-				}
-	
-				int i = 0;
-				while(chain != null){
-						zip.putNextEntry(new ZipEntry("chain"+ i +".crt"));
-						zip.write(chain.getCertificateData());
-						zip.closeEntry();
-						chain = chain.getIssuer();
-				}
+			int i = 0;
+			CertificateChainCertificate chain = certificate.getCertificateChainCertificate();
+			while(chain != null){
+					zip.putNextEntry(new ZipEntry("chain"+ i +".crt"));
+					zip.write(chain.getCertificateData());
+					zip.closeEntry();
+					chain = chain.getIssuer();
 			}
 			
 			zip.finish();

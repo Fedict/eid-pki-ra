@@ -41,6 +41,8 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.async.QuartzTriggerHandle;
 import org.quartz.SchedulerException;
 
+import be.fedict.eid.pkira.blm.model.ca.CertificateChain;
+import be.fedict.eid.pkira.blm.model.ca.CertificateChainCertificate;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.crypto.CertificateInfo;
 
@@ -102,6 +104,10 @@ public class Certificate implements Serializable {
 	@ManyToOne(optional = false)
 	@JoinColumn(name="CERTIFICATE_DOMAIN_ID", nullable=false)
 	private CertificateDomain certificateDomain;
+	
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "CERTIFICATE_CHAIN_CERTIFICATE", nullable=true)
+	private CertificateChainCertificate certificateChainCertificate; 
 
 	public Certificate() {
 	}
@@ -118,6 +124,19 @@ public class Certificate implements Serializable {
 		this.requesterName = requesterName;
 		this.contract = contract;
 		this.certificateDomain = contract.getCertificateDomain();
+		
+		this.certificateChainCertificate = null;
+		CertificateChain certificateChain = certificateDomain.getCertificateAuthority().getCertificateChain();
+		if (certificateChain != null) {
+			if (certificateType == CertificateType.CLIENT) {
+				certificateChainCertificate = certificateChain.getClientChain();
+			} else if (certificateType == CertificateType.SERVER) {
+				certificateChainCertificate = certificateChain.getServerChain();
+			} else if (certificateType == CertificateType.CODE) {
+				certificateChainCertificate = certificateChain
+						.getCodeSigningChain();
+			}
+		}
 	}
 
 	public BigInteger getSerialNumber() {
@@ -259,6 +278,15 @@ public class Certificate implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public void setCertificateChainCertificate(
+			CertificateChainCertificate certificateChainCertificate) {
+		this.certificateChainCertificate = certificateChainCertificate;
+	}
+
+	public CertificateChainCertificate getCertificateChainCertificate() {
+		return certificateChainCertificate;
 	}
 }
 

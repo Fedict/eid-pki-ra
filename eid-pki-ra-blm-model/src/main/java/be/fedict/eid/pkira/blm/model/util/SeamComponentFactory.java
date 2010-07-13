@@ -5,6 +5,7 @@ import org.jboss.seam.Component;
 public class SeamComponentFactory extends ComponentFactory {
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public <T> T getComponent(Class<T> componentClass, String name) {
 		return (T) Component.getInstance(name);
 	}

@@ -27,6 +27,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.blm.model.DatabaseTest;
+import be.fedict.eid.pkira.blm.model.ca.CertificateChainCertificate;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 
 /**
@@ -45,6 +46,8 @@ public class ContractRepositoryBeanTest extends DatabaseTest {
 	private static final String VALID_X509 = "X509";
 	private static final String VALID_CONTRACT = "CONTRACT";
 	private static final Integer VALID_VALIDITY = 15;
+	private static final CertificateChainCertificate CERTIFICATE_CHAIN_CERTIFICATE = null;
+	
 
 	private ContractRepositoryBean bean;
 	
@@ -128,6 +131,7 @@ public class ContractRepositoryBeanTest extends DatabaseTest {
 		certificate.setValidityStart(VALID_STARTDATE);
 		certificate.setX509(VALID_X509);
 		certificate.setCertificateDomain(certificateDomain);
+		certificate.setCertificateChainCertificate(CERTIFICATE_CHAIN_CERTIFICATE);
 		
 		return certificate;
 	}
