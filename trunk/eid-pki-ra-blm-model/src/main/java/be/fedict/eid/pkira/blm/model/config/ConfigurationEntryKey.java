@@ -26,7 +26,8 @@ public enum ConfigurationEntryKey {
 	
 	MAIL_SERVER(ConfigurationEntryType.STRING, "configurationEntry.key.mailServer"), 
 	MAIL_PORT(ConfigurationEntryType.DIGITS, "configurationEntry.key.mailPort"), 
-	NOTIFICATION_MAIL_DAYS(ConfigurationEntryType.DIGITS, "configurationEntry.key.notificationMailDays"), 
+	//NOTIFICATION_MAIL_DAYS(ConfigurationEntryType.DIGITS, "configurationEntry.key.notificationMailDays"), 
+	NOTIFICATION_MAIL_MINUTES(ConfigurationEntryType.NUMBER, "configurationEntry.key.notificationMailMinutes"), 
 	VALIDITY_PERIODS(ConfigurationEntryType.COMMA_SEPARATED_DIGITS, "configurationEntry.key.validityPeriods"), 
 	DSS_SERVLET(ConfigurationEntryType.URL, "configurationEntry.key.dssServlet"), 
 	DSS_WS_CLIENT(ConfigurationEntryType.URL, "configurationEntry.key.dssWsClient"), 

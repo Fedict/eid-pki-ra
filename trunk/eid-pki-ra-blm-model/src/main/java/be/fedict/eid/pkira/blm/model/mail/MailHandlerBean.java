@@ -17,10 +17,6 @@
  */
 package be.fedict.eid.pkira.blm.model.mail;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -38,13 +34,11 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.Message.RecipientType;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.InternetHeaders;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
-import org.apache.commons.codec.binary.Base64;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 

@@ -17,6 +17,8 @@
 package be.fedict.eid.pkira.blm.model.contracthandler.services;
 
 import java.math.BigInteger;
+import java.security.cert.CertPathValidatorException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -35,11 +37,18 @@ import org.jboss.seam.annotations.async.Expiration;
 import org.jboss.seam.async.QuartzTriggerHandle;
 import org.jboss.seam.log.Log;
 
+import be.fedict.eid.pkira.blm.model.ca.CertificateChainCertificate;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.contracts.Certificate;
 import be.fedict.eid.pkira.blm.model.contracts.ContractRepository;
 import be.fedict.eid.pkira.blm.model.mail.MailTemplate;
 import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
+import be.fedict.eid.pkira.crypto.CertificateInfo;
+import be.fedict.eid.pkira.crypto.CertificateParser;
+import be.fedict.eid.pkira.crypto.CertificateParserImpl;
+import be.fedict.eid.pkira.crypto.CryptoException;
+import be.fedict.trust.BelgianTrustValidatorFactory;
+import be.fedict.trust.TrustValidator;
 
 /**
  * @author Jan Van den Bergh
@@ -71,6 +80,29 @@ public class SchedulerBean {
 			log.warn("Certificate not found for issuer {0} and serial number {1}.", issuer, serialNumber);
 			return timer;
 		}
+	
+		try {
+			List<X509Certificate> certificatePath = new ArrayList<X509Certificate>();
+			CertificateParser certificateParser = new CertificateParserImpl();
+			
+			CertificateChainCertificate certificateChainCertificate = certificate.getCertificateChainCertificate();
+			if(certificateChainCertificate != null){
+				while(certificateChainCertificate != null){
+					CertificateInfo certificateInfo = certificateParser.parseCertificate(certificateChainCertificate.getCertificateData());
+					certificatePath.add(certificateInfo.getCertificate());
+					certificateChainCertificate = certificateChainCertificate.getIssuer();
+				}
+				TrustValidator createTrustValidator = BelgianTrustValidatorFactory.createTrustValidator();
+				createTrustValidator.isTrusted(certificatePath);
+			}
+		} catch (CertPathValidatorException e) {
+			log.warn("CertificatePath error for this certificate", issuer, serialNumber);
+			return timer;
+		} catch (CryptoException e) {
+			log.warn("Certificate not found for issuer {0} and serial number {1}.", issuer, serialNumber);
+			return timer;
+		}
+		
 		
 		// Get the recipients
 		CertificateDomain certificateDomain = certificate.getCertificateDomain();

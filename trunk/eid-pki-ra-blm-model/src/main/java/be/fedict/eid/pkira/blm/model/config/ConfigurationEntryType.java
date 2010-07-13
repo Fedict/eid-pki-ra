@@ -48,6 +48,13 @@ public enum ConfigurationEntryType {
 		}
 	}, 
 	
+	NUMBER {
+		@Override
+		public boolean isValid(String value) {
+			return NumberUtils.isNumber(value);
+		}
+	}, 
+	
 	URL {
 		@Override
 		public boolean isValid(String value) {
