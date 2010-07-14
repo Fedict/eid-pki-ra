@@ -16,6 +16,7 @@
  */
 package be.fedict.eid.pkira.blm.hibernateutil;
 
+import java.io.File;
 import java.net.URL;
 import java.util.Set;
 
@@ -24,11 +25,11 @@ import javax.persistence.Entity;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.scannotation.AnnotationDB;
-import org.scannotation.ClasspathUrlFinder;
 
 /**
  * Hibernate Schema Generator Code based on
- * http://jandrewthompson.blogspot.com/2009/10/how-to-generate-ddl-scripts-from.html
+ * http://jandrewthompson.blogspot.com/2009
+ * /10/how-to-generate-ddl-scripts-from.html
  */
 public class SchemaGenerator {
 
@@ -36,9 +37,8 @@ public class SchemaGenerator {
 	 * Holds the classnames of hibernate dialects for easy reference.
 	 */
 	private static enum Dialect {
-		HSQL("org.hibernate.dialect.HSQLDialect"), 
-		MYSQL("org.hibernate.dialect.MySQLDialect"), 
-		ORACLE("org.hibernate.dialect.Oracle10gDialect");
+		HSQL("org.hibernate.dialect.HSQLDialect"), MYSQL("org.hibernate.dialect.MySQLDialect"), ORACLE(
+				"org.hibernate.dialect.Oracle10gDialect");
 
 		private String dialectClass;
 
@@ -50,21 +50,32 @@ public class SchemaGenerator {
 			return dialectClass;
 		}
 	}
-	
+
 	private static final String PACKAGE_NAME = "be.fedict.eid.pkira";
 
 	public static void main(String[] args) throws Exception {
-		SchemaGenerator gen = new SchemaGenerator("be.fedict.eid.pkira.blm.model");
+		String workingDir;
+		if (args.length > 0) {
+			workingDir = new File(args[0]).getCanonicalPath();
+		} else {
+			workingDir = new File("target/classes").getCanonicalPath();
+		}
+
+		SchemaGenerator gen = new SchemaGenerator("be.fedict.eid.pkira.blm.model", workingDir);
 		gen.generate(Dialect.MYSQL);
 		gen.generate(Dialect.ORACLE);
 		gen.generate(Dialect.HSQL);
 	}
 
 	private AnnotationConfiguration cfg;
+	private String workingDir;
 
-	public SchemaGenerator(String packageName) throws Exception {
+	public SchemaGenerator(String packageName, String workingDir) throws Exception {
+		this.workingDir = workingDir;
+		
 		// Find entities on the class path
-		URL[] urls = ClasspathUrlFinder.findClassPaths();
+		URL[] urls = new URL[1];
+		urls[0] = new File(workingDir).toURI().toURL();
 		AnnotationDB db = new AnnotationDB();
 		db.scanArchives(urls);
 		Set<String> classNames = db.getAnnotationIndex().get(Entity.class.getName());
@@ -87,11 +98,13 @@ public class SchemaGenerator {
 	 *            to use
 	 */
 	private void generate(Dialect dialect) {
+		new java.io.File(workingDir + "/META-INF/ddl").mkdirs();
+
 		cfg.setProperty("hibernate.dialect", dialect.getDialectClass());
 
 		SchemaExport export = new SchemaExport(cfg);
 		export.setDelimiter(";");
-		export.setOutputFile("ddl_" + dialect.name().toLowerCase() + ".sql");
+		export.setOutputFile(workingDir + "/META-INF/ddl/schema_" + dialect.name().toLowerCase() + ".sql");
 		export.execute(true, false, false, false);
 	}
 }

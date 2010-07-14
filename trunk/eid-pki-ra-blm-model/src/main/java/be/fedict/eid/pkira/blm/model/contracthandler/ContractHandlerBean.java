@@ -132,7 +132,7 @@ public class ContractHandlerBean implements ContractHandler {
 			// Check the authorization
 			Registration registration = getMatchingRegistration(signer, request.getDistinguishedName(), certificate
 					.getCertificateType());
-			
+
 			// Check the legal notice
 			checkLegalNotice(request, registration);
 
@@ -185,7 +185,7 @@ public class ContractHandlerBean implements ContractHandler {
 
 			// Check the legal notice
 			checkLegalNotice(request, registration);
-			
+
 			// Persist the contract
 			CertificateSigningContract contract = saveContract(registration, requestMsg, request, signer,
 					certificateType);
@@ -226,19 +226,18 @@ public class ContractHandlerBean implements ContractHandler {
 					"An error occurred while processing the contract.");
 		}
 
-		
 		CertificateSigningResponseType responseType = responseBuilder.toResponseType(certificateId);
-		return contractParser.marshalResponseMessage(responseType,
-				CertificateSigningResponseType.class);
+		return contractParser.marshalResponseMessage(responseType, CertificateSigningResponseType.class);
 	}
 
 	private void checkLegalNotice(RequestType request, Registration registration) throws ContractHandlerBeanException {
 		String incomingLegalNotice = StringUtils.trimToEmpty(request.getLegalNotice());
-		String expectedLegalNotice = StringUtils.trimToEmpty(registration.getCertificateDomain().getCertificateAuthority().getLegalNotice());
-		
+		String expectedLegalNotice = StringUtils.trimToEmpty(registration.getCertificateDomain()
+				.getCertificateAuthority().getLegalNotice());
+
 		if (!StringUtils.equals(expectedLegalNotice, incomingLegalNotice)) {
 			throw new ContractHandlerBeanException(ResultType.INVALID_MESSAGE, "Invalid legal notice");
-		}		
+		}
 	}
 
 	protected void scheduleNotificationMail(Registration registration, CertificateInfo certificateInfo,
@@ -246,9 +245,14 @@ public class ContractHandlerBean implements ContractHandler {
 		Long intervalParam = Long.valueOf(configurationEntryQuery.findByEntryKey(
 				ConfigurationEntryKey.NOTIFICATION_MAIL_MINUTES).getValue());
 
-		Date when = certificateInfo.getValidityEnd();
-		when.setTime(when.getTime() - intervalParam * 1000 * 60);
-
+		Date when;
+		if (intervalParam > 0) {
+			when = certificateInfo.getValidityEnd();
+			when.setTime(when.getTime() - intervalParam * 1000 * 60);
+		} else {
+			when = new Date();
+			when.setTime(when.getTime() - intervalParam * 1000 * 60);
+		}
 		QuartzTriggerHandle timer = schedulerBean.scheduleNotifcation(when, certificate.getIssuer(), certificate
 				.getSerialNumber());
 		certificate.setTimer(timer);
@@ -258,7 +262,8 @@ public class ContractHandlerBean implements ContractHandler {
 		Certificate certificate;
 		try {
 			CertificateInfo certificateInfo = certificateParser.parseCertificate(request.getCertificate());
-			certificate = contractRepository.findCertificate(certificateInfo.getIssuer(), certificateInfo.getSerialNumber());
+			certificate = contractRepository.findCertificate(certificateInfo.getIssuer(), certificateInfo
+					.getSerialNumber());
 			if (certificate == null) {
 				throw new ContractHandlerBeanException(ResultType.UNKNOWN_CERTIFICATE,
 						"The certificate was not found in our database.");
@@ -316,49 +321,51 @@ public class ContractHandlerBean implements ContractHandler {
 		return contract;
 	}
 
-	private void sendCertificateByMail(Certificate certificate, Registration registration) throws ContractHandlerBeanException {
+	private void sendCertificateByMail(Certificate certificate, Registration registration)
+			throws ContractHandlerBeanException {
 		String templateName = "sendCertificateMail.ftl";
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("certificate", certificate);
 		parameters.put("user", registration.getRequester());
 
- 
-		byte[] attachmentData = null;	
-		ZipOutputStream zip = null;			
+		byte[] attachmentData = null;
+		ZipOutputStream zip = null;
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			zip = new ZipOutputStream(baos);
-			
-				zip.putNextEntry(new ZipEntry("certificate.crt"));
-			
+
+			zip.putNextEntry(new ZipEntry("certificate.crt"));
+
 			zip.write(certificate.getX509().getBytes());
 			zip.closeEntry();
-			
+
 			int i = 0;
 			CertificateChainCertificate chain = certificate.getCertificateChainCertificate();
-			while(chain != null){
-					zip.putNextEntry(new ZipEntry("chain"+ i +".crt"));
-					zip.write(chain.getCertificateData());
-					zip.closeEntry();
-					chain = chain.getIssuer();
+			while (chain != null) {
+				zip.putNextEntry(new ZipEntry("chain" + i + ".crt"));
+				zip.write(chain.getCertificateData());
+				zip.closeEntry();
+				chain = chain.getIssuer();
 			}
-			
+
 			zip.finish();
 			zip.close();
-			
+
 			baos.close();
 
-			String[] recipients = new String[] { registration.getEmail() };
+			String[] recipients = new String[]
+				{ registration.getEmail() };
 			attachmentData = baos.toByteArray();
 			String attachmentContentType = "application/zip";
 			String attachmentFileName = certificate.getSerialNumber() + ".zip";
-			
+
 			mailTemplate.sendTemplatedMail(templateName, parameters, recipients, attachmentData, attachmentContentType,
 					attachmentFileName);
-			
-			} catch (IOException e) {
-				throw new ContractHandlerBeanException(ResultType.BACKEND_ERROR, "Failed to create zip file for certificate chain.");
-			}
+
+		} catch (IOException e) {
+			throw new ContractHandlerBeanException(ResultType.BACKEND_ERROR,
+					"Failed to create zip file for certificate chain.");
+		}
 	}
 
 	/**
