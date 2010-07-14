@@ -48,7 +48,7 @@ public class CertificateChainCertificate implements Serializable, Comparable<Cer
 	@ManyToOne(optional=true)
 	private CertificateChain certificateChain;
 
-	@Column(name = "SERIALNUMBER", nullable = false)
+	@Column(name = "SERIALNUMBER", nullable = false, precision=52, scale=0)
 	private BigInteger serialNumber;
 
 	public byte[] getCertificateData() {
