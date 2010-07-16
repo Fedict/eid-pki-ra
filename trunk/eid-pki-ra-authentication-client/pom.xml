@@ -3,13 +3,13 @@
 	<parent>
 		<artifactId>eid-pki-ra</artifactId>
 		<groupId>be.fedict</groupId>
-		<version>0.0.6-SNAPSHOT</version>
+		<version>0.0.7-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>be.fedict</groupId>
 	<artifactId>eid-pki-ra-authentication-client</artifactId>
 	<name>eid-pki-ra-authentication-client</name>
-	<version>0.0.6-SNAPSHOT</version>
+	<version>0.0.7-SNAPSHOT</version>
 	
 	<dependencies>		
 		<dependency>
