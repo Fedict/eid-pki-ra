@@ -11,7 +11,9 @@ public class Expressions {
 		"c=be,ou=\\*",
 		"c=be,ou=\\*\\,\\\\\\=",
 		"c=be,mail=test@test.be,a=*", 
-		"*ou=*,ou=*"
+		"*ou=*,ou=*",
+		"O=Belgian Federal Government, *OU=*, L=*, C=BE, CN=*",
+		"*OU=*",
 	};
 
 	public static final String[] NORMALIZED_EXPRESSIONS = { 
@@ -23,7 +25,9 @@ public class Expressions {
 		"c=be,ou=\\*",
 		"c=be,ou=\\*\\,\\\\=",
 		"c=be,mail=test@test.be,a=*",  
-		"ou=*,*ou=*"
+		"ou=*,*ou=*",
+		"c=BE,o=Belgian Federal Government,cn=*,l=*,*ou=*",
+		"*ou=*",
 	};
 	
 	public static String[] INVALID_DNS = {
@@ -39,7 +43,9 @@ public class Expressions {
 		{ "c=be,ou=*", "c=be,ou=\\*",  },
 		{ "c=be,ou=*\\,\\\\=", "c=be,ou=\\*\\,\\\\\\=",  },
 		{ "c=be,mail=test@test.be,a=*", },
-		{ "ou=def,ou=abc", "ou=def" }
+		{ "ou=def,ou=abc", "ou=def" },
+		{ "O=Belgian Federal Government, OU=def, L=abc, C=BE, CN=qrs" },
+		{ "ou=abc", "OU=abc,ou=def"},
 	};
 	
 	public static final String[][] UNMATCHING_DNS = {
@@ -51,11 +57,13 @@ public class Expressions {
 		{ "c=be,ou=abc",  },
 		{ "c=be,ou=*",  },
 		{ "c=be,mail=test2@test.be,a=*", },
-		{ "c=be" }
+		{ "c=be" },
+		{ "c=BE" },
+		{ "c=be" },
 	};
 	
 	public static final int[] VALID__SIZES =
-		{ 2,2,4,2,4,2,2,3,2 };
+		{ 2,2,4,2,4,2,2,3,2,5,1 };
 
 	public static final String[] INVALID_EXPRESSIONS =
 		{ "c=b*c", "bla", "null", "x=y,", "c=be,ou=*,ou=**", "c=be,0ou=abc", "x=\\", "c=be,", "c=be\\*\\" };

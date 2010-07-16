@@ -45,7 +45,6 @@ import be.fedict.eid.pkira.blm.model.mail.MailTemplate;
 import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
 import be.fedict.eid.pkira.crypto.CertificateInfo;
 import be.fedict.eid.pkira.crypto.CertificateParser;
-import be.fedict.eid.pkira.crypto.CertificateParserImpl;
 import be.fedict.eid.pkira.crypto.CryptoException;
 import be.fedict.trust.BelgianTrustValidatorFactory;
 import be.fedict.trust.TrustValidator;
@@ -70,6 +69,9 @@ public class SchedulerBean {
 	
 	@Logger
 	private Log log;
+	
+	@In(value=CertificateParser.NAME, create=true)
+	private CertificateParser certificateParser;
 
 	@Asynchronous
 	@Transactional(TransactionPropagationType.REQUIRED)
@@ -83,7 +85,6 @@ public class SchedulerBean {
 	
 		try {
 			List<X509Certificate> certificatePath = new ArrayList<X509Certificate>();
-			CertificateParser certificateParser = new CertificateParserImpl();
 			
 			CertificateChainCertificate certificateChainCertificate = certificate.getCertificateChainCertificate();
 			if(certificateChainCertificate != null){

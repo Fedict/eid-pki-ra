@@ -44,7 +44,7 @@ public class ValidCertificateDomainDnExpressionValidator implements Validator<Va
 			(DistinguishedNameManager) Component.getInstance(DistinguishedNameManager.NAME);
 		// Create the DN
 		try {
-			distinguishedNameManager.createDistinguishedName((String) value);
+			distinguishedNameManager.createDistinguishedNameExpression((String) value);
 		} catch (InvalidDistinguishedNameException e) {
 			return false;
 		}
