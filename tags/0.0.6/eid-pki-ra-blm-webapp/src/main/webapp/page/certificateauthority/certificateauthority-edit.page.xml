@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+	no-conversation-view-id="/page/certificateauthority/certificateauthority-edit.xhml" 
+	login-required="true">
+	
+	<restrict>#{s:hasRole('ADMIN_USER')}</restrict>
+	
+	<param name="certificateAuthorityId" value="#{certificateAuthorityHome.id}" converterId="javax.faces.Integer" />
+	
+	<navigation from-action="#{certificateAuthorityHome.persist}">
+		<rule>
+			<redirect view-id="/page/certificateauthority/certificateauthority-list.xhtml" />	
+		</rule>
+	</navigation>
+	
+	<navigation from-action="#{certificateAuthorityHome.update}">
+		<rule>
+			<redirect view-id="/page/certificateauthority/certificateauthority-list.xhtml" />	
+		</rule>
+	</navigation>
+	
+</page>

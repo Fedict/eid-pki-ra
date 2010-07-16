@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="eID PKI RA" default="usage">
+
+	<property name="version" value="0.0.6-SNAPSHOT" />
+	<property name="jboss.deploy.dir" value="/Java/jboss-5.1.0.GA/server/default/deploy" />
+	<!-- <property name="jboss.deploy.dir" value="C:\java\jboss-6.0.0.M2\server\default\deploy" /> -->
+
+	<target name="usage">
+		<echo>This build file supports the following goals:</echo>
+		<echo>deploy-all, deploy-blm, deploy-portal, deploy-dss-mock</echo>
+		<echo>undeploy-all, undeploy-blm, undeploy-portal, undeploy-dss-mock</echo>
+		<echo>redeploy-all, redeploy-blm, redeploy-portal, redeploy-dss-mock</echo>
+	</target>
+
+	<target name="-deploy">
+		<copy file="${project}/target/${project}-${version}.${type}" todir="${jboss.deploy.dir}" overwrite="false" />
+	</target>
+
+	<target name="deploy-blm">
+		<antcall target="-deploy">
+			<param name="project" value="eid-pki-ra-blm-ear" />
+			<param name="type" value="ear" />
+		</antcall>
+	</target>
+
+	<target name="deploy-portal">
+		<antcall target="-deploy">
+			<param name="project" value="eid-pki-ra-portal-ear" />
+			<param name="type" value="ear" />
+		</antcall>
+	</target>
+
+	<target name="deploy-dss-mock">
+		<antcall target="-deploy">
+			<param name="project" value="eid-pki-ra-mock-dss" />
+			<param name="type" value="war" />
+		</antcall>
+	</target>
+
+	<target name="deploy-xkms-mock">
+		<antcall target="-deploy">
+			<param name="project" value="eid-pki-ra-mock-xkms" />
+			<param name="type" value="war" />
+		</antcall>
+	</target>
+
+	<target name="deploy-all" depends="deploy-blm, deploy-portal, deploy-xkms-mock" />
+
+	<target name="-undeploy">
+		<delete>
+			<fileset dir="${jboss.deploy.dir}" includes="${project}-*.${type}" />
+		</delete>
+	</target>
+
+	<target name="undeploy-blm">
+		<antcall target="-undeploy">
+			<param name="project" value="eid-pki-ra-blm-ear" />
+			<param name="type" value="ear" />
+		</antcall>
+	</target>
+
+	<target name="undeploy-portal">
+		<antcall target="-undeploy">
+			<param name="project" value="eid-pki-ra-portal-ear" />
+			<param name="type" value="ear" />
+		</antcall>
+	</target>
+
+	<target name="undeploy-dss-mock">
+		<antcall target="-undeploy">
+			<param name="project" value="eid-pki-ra-mock-dss" />
+			<param name="type" value="war" />
+		</antcall>
+	</target>
+
+	<target name="undeploy-xkms-mock">
+		<antcall target="-undeploy">
+			<param name="project" value="eid-pki-ra-mock-xkms" />
+			<param name="type" value="war" />
+		</antcall>
+	</target>
+
+	<target name="undeploy-all" depends="undeploy-blm, undeploy-portal, undeploy-xkms-mock" />
+
+	<target name="redeploy-blm" depends="undeploy-blm, deploy-blm" />
+
+	<target name="redeploy-portal" depends="undeploy-portal, deploy-portal" />
+
+	<target name="redeploy-dss-mock" depends="undeploy-dss-mock, deploy-dss-mock" />
+
+	<target name="redeploy-xkms-mock" depends="undeploy-xkms-mock, deploy-xkms-mock" />
+
+	<target name="redeploy-all" depends="undeploy-all, deploy-all" />
+</project>
