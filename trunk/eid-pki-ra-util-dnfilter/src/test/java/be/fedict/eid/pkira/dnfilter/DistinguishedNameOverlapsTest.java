@@ -58,7 +58,13 @@ public class DistinguishedNameOverlapsTest {
 		testOverlap(true, "*ou=*", "ou=abc");
 		testOverlap(true, "*ou=*", "ou=abc,ou=def");
 		testOverlap(true, "*ou=*", "ou=abc,ou=*,ou=def");
-
+		testOverlap(true, "*ou=*", "ou=*");
+		testOverlap(true, "*ou=*", "ou=abc");
+		testOverlap(true, "*ou=*", "*ou=*");
+		testOverlap(true, "cn=*,*ou=*", "ou=*,CN=*");
+		testOverlap(true, "*ou=*,cn=*", "ou=abc,cn=test");
+		testOverlap(true, "*ou=*,cn=abc", "cn=*,*ou=*");
+		
 		testOverlap(true, "cn=Test,ou=a,ou=*,*cn=*,cn=bla", "cn=Test,ou=*,ou=*,cn=test,cn=test,cn=*,cn=*");
 	}
 

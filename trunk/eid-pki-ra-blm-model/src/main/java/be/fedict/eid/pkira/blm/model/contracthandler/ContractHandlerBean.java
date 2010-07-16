@@ -342,7 +342,7 @@ public class ContractHandlerBean implements ContractHandler {
 			int i = 0;
 			CertificateChainCertificate chain = certificate.getCertificateChainCertificate();
 			while (chain != null) {
-				zip.putNextEntry(new ZipEntry("chain" + i + ".crt"));
+				zip.putNextEntry(new ZipEntry("chain" + (i++) + ".crt"));
 				zip.write(chain.getCertificateData());
 				zip.closeEntry();
 				chain = chain.getIssuer();
@@ -363,7 +363,8 @@ public class ContractHandlerBean implements ContractHandler {
 					attachmentFileName);
 
 		} catch (IOException e) {
-			throw new ContractHandlerBeanException(ResultType.BACKEND_ERROR,
+			log.error("Error creating zip file for certificate chain", e);
+			throw new ContractHandlerBeanException(ResultType.GENERAL_FAILURE,
 					"Failed to create zip file for certificate chain.");
 		}
 	}

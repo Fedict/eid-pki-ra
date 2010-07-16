@@ -8,11 +8,11 @@ public class DistinguishedNameParser {}
 
 PARSER_END(DistinguishedNameParser)
 
-<DEFAULT> TOKEN: {	  < #LETTER		: ["a"-"z","A"-"Z"] >	| < #DIGIT		: ["0"-"9"] >	| < #SYMBOL		: "-" | "_" | "." | "@" | "/" | "+" | ":" | "&" | "?" | "#" | "<" | ">" | ";" | "\"" | "=" >	| < #COMMA		: "," >	| < #BACKSLASH	: "\\" >	| < #EQUALS		: "=" >	| < #ASTERISK 	: "*" >	| < #SPACE		: " " >}<EXPR> TOKEN: {	  < EXPR_KEY		: (<LETTER>)+ >	| < EXPR_WC_KEY		: <ASTERISK> <EXPR_KEY> >  	| < EXPR_EQUALITY	: <EQUALS> >			  : EXPRVALUE	| < EXPR_SEPARATOR 	: <COMMA> >}<EXPRVALUE> TOKEN: {	  < EXPR_WILDCARD	: <ASTERISK> >			: EXPR	| < EXPR_VALUE		: ( ( (<BACKSLASH>)? ( <LETTER> | <DIGIT> | <SYMBOL> ) ) | ( <BACKSLASH> ( <BACKSLASH> | <COMMA> | <ASTERISK> ) ) )+ > : EXPR	}<DN> TOKEN: {	  < DN_KEY			: (<LETTER>)+ >	| < DN_EQUALITY		: <EQUALS> >			: DNVALUE	| < DN_SEPARATOR 	: <COMMA> >}<DNVALUE>	TOKEN: {	  < DN_VALUE		: ( ( (<BACKSLASH>)? ( <LETTER> | <DIGIT> | <SYMBOL> | <ASTERISK> ) ) | ( <BACKSLASH> ( <BACKSLASH> | <COMMA> ) ) )+ > : DN}
+<DEFAULT> TOKEN: {	  < #LETTER		: ["a"-"z","A"-"Z"] >	| < #DIGIT		: ["0"-"9"] >	| < #SYMBOL		: "-" | "_" | "." | "@" | "/" | "+" | ":" | "&" | "?" | "#" | "<" | ">" | ";" | "\"" | "=" >	| < #COMMA		: "," >	| < #BACKSLASH	: "\\" >	| < #EQUALS		: "=" >	| < #ASTERISK 	: "*" >	| < #SPACE		: " " >}<EXPR> TOKEN: {	  < EXPR_KEY		: (<LETTER>)+ >	| < EXPR_WC_KEY		: <ASTERISK> <EXPR_KEY> >  	| < EXPR_EQUALITY	: <EQUALS> >			  : EXPRVALUE	| < EXPR_SEPARATOR 	: <COMMA> >}<EXPRVALUE> TOKEN: {	  < EXPR_WILDCARD	: <ASTERISK> >			: EXPR	| < EXPR_VALUE		: ( ( (<BACKSLASH>)? ( <LETTER> | <DIGIT> | <SYMBOL> | <SPACE> ) ) | ( <BACKSLASH> ( <BACKSLASH> | <COMMA> | <ASTERISK> ) ) )+ > : EXPR	}<DN> TOKEN: {	  < DN_KEY			: (<LETTER>)+ >	| < DN_EQUALITY		: <EQUALS> >			: DNVALUE	| < DN_SEPARATOR 	: <COMMA> >}<DNVALUE>	TOKEN: {	  < DN_VALUE		: ( ( (<BACKSLASH>)? ( <LETTER> | <DIGIT> | <SYMBOL> | <ASTERISK> | <SPACE> ) ) | ( <BACKSLASH> ( <BACKSLASH> | <COMMA> ) ) )+ > : DN}
 
-<DEFAULT> SKIP: {
-  <WS: <SPACE> >
-}private void dnExpressionPart(DistinguishedNameParserState state):{  Token key, value;}{   (   	(key=<EXPR_KEY>) <EXPR_EQUALITY> (value=<EXPR_VALUE> | value=<EXPR_WILDCARD>) |   	(key=<EXPR_WC_KEY>) <EXPR_EQUALITY> (value=<EXPR_WILDCARD>)   )    {    String n = key.image.toLowerCase();    String v = value.image;    state.addStateElement(n, v);  }}
+<EXPR> SKIP: {
+  <WS1: <SPACE> >
+}<DN> SKIP: {  <WS2: <SPACE> >}private void dnExpressionPart(DistinguishedNameParserState state):{  Token key, value;}{   (   	(key=<EXPR_KEY>) <EXPR_EQUALITY> (value=<EXPR_VALUE> | value=<EXPR_WILDCARD>) |   	(key=<EXPR_WC_KEY>) <EXPR_EQUALITY> (value=<EXPR_WILDCARD>)   )    {    String n = key.image.toLowerCase().trim();    String v = value.image.trim();    state.addStateElement(n, v);  }}
 private void dnPart(DistinguishedNameParserState state):{
   Token key, value;}
 {
