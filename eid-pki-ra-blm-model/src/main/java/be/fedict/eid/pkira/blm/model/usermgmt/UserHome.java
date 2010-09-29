@@ -18,6 +18,8 @@
 
 package be.fedict.eid.pkira.blm.model.usermgmt;
 
+import javax.persistence.NoResultException;
+
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -58,6 +60,26 @@ public class UserHome extends ValidatingEntityHome<User> {
 	public String grantAdmin() {
 		getInstance().setAdmin(true);
 		return update();
+	}
+	
+	public User findByNationalRegisterNumber(String nationalRegisterNumber) {
+		try {
+			return (User) getEntityManager().createNamedQuery("findByNationalRegisterNumber")
+					.setParameter("nationalRegisterNumber", nationalRegisterNumber)
+					.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+	
+	public User findByCertificateSubject(String certificateSubject) {
+		try {
+			return (User) getEntityManager().createNamedQuery("findByCertificateSubject")
+					.setParameter("certificateSubject", certificateSubject)
+					.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 
 }

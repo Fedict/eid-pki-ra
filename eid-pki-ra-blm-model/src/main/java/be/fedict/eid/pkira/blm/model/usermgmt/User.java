@@ -31,21 +31,22 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.hibernate.validator.NotEmpty;
+
+import be.fedict.eid.pkira.blm.model.usermgmt.validation.UniqueUserCertificateSubject;
+import be.fedict.eid.pkira.blm.model.usermgmt.validation.UniqueUserNationalRegisterNumber;
+import be.fedict.eid.pkira.blm.model.usermgmt.validation.ValidNationalRegisterNumber;
 
 /**
  * @author Bram Baeyens
  */
 @Entity
-@Table(name="USER")
-@NamedQueries(value={
-		@NamedQuery(
-				name = "findByNationalRegisterNumber", 
-				query = "SELECT u FROM User u WHERE u.nationalRegisterNumber = :nationalRegisterNumber"),
-		@NamedQuery(
-				name = "getUserCount",
-				query = "SELECT COUNT(u) FROM User u"
-		)
-})
+@Table(name = "USER")
+@NamedQueries(value =
+	{
+			@NamedQuery(name = "findByNationalRegisterNumber", query = "SELECT u FROM User u WHERE u.nationalRegisterNumber = :nationalRegisterNumber"),
+			@NamedQuery(name = "findByCertificateSubject", query = "SELECT u FROM User u WHERE u.certificateSubject = :certificateSubject"),
+			@NamedQuery(name = "getUserCount", query = "SELECT COUNT(u) FROM User u") })
 public class User implements Serializable {
 
 	private static final long serialVersionUID = -567680538869751475L;
@@ -55,15 +56,21 @@ public class User implements Serializable {
 	@Column(name = "USER_ID")
 	private Integer id;
 	@Column(name = "LAST_NAME", nullable = false)
+	@NotEmpty
 	private String lastName;
 	@Column(name = "FIRST_NAME")
 	private String firstName;
-	@Column(name = "NATIONAL_REGISTER_NUMBER", unique = true, nullable = false)
+	@Column(name = "NATIONAL_REGISTER_NUMBER", unique = true, nullable = true)
+	@UniqueUserNationalRegisterNumber
+	@ValidNationalRegisterNumber
 	private String nationalRegisterNumber;
-	@Column(name = "IS_ADMIN", nullable=false)
+	@Column(name = "CERTIFICATE_SUBJECT", unique = true, nullable = true)
+	@UniqueUserCertificateSubject
+	private String certificateSubject;
+	@Column(name = "IS_ADMIN", nullable = false)
 	private boolean admin;
-	
-	@OneToMany(mappedBy="requester")
+
+	@OneToMany(mappedBy = "requester")
 	private List<Registration> registrations;
 
 	public void setId(Integer id) {
@@ -101,13 +108,21 @@ public class User implements Serializable {
 	public String getName() {
 		return new StringBuilder(firstName).append(' ').append(lastName).toString();
 	}
-	
+
 	public void setAdmin(boolean admin) {
 		this.admin = admin;
 	}
 
 	public boolean isAdmin() {
 		return admin;
+	}
+
+	public String getCertificateSubject() {
+		return certificateSubject;
+	}
+
+	public void setCertificateSubject(String certificateSubject) {
+		this.certificateSubject = certificateSubject;
 	}
 
 	public List<Registration> getRegistrations() {
@@ -133,9 +148,8 @@ public class User implements Serializable {
 
 	@Override
 	public String toString() {
-		return new StringBuilder("User[").append("nationalRegisterNumber=").append(nationalRegisterNumber).append(
-				", lastName=").append(lastName).append(", firstName=").append(firstName).append(']').toString();
+		return new StringBuilder("User[").append("nationalRegisterNumber=").append(nationalRegisterNumber)
+				.append(", lastName=").append(lastName).append(", firstName=").append(firstName).append(']').toString();
 	}
-
 
 }

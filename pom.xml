@@ -13,7 +13,7 @@
 	<artifactId>eid-pki-ra</artifactId>
 	<packaging>pom</packaging>
 	<version>0.0.7-SNAPSHOT</version>
-	<name>eid-pki-ra</name>
+	<name>eid-pki-ra (${environment})</name>
 	<inceptionYear>2010</inceptionYear>
 	<licenses>
 		<license>
@@ -594,8 +594,9 @@
 				<jta.dataSource>java:/DefaultDS</jta.dataSource>
 
 				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.HSQLDBDelegate</quartz.driverDelegateClass>
-				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE
-					LOCK_NAME \= ?</quartz.selectWithLockSql>
+				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ?</quartz.selectWithLockSql>
+			
+				<environment>development</environment>
 			</properties>
 		</profile>
 		<profile>
@@ -621,8 +622,9 @@
 				<jta.dataSource>java:/pkiraDS</jta.dataSource>
 
 				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.StdJDBCDelegate</quartz.driverDelegateClass>
-				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE
-					LOCK_NAME \= ? FOR UPDATE</quartz.selectWithLockSql>
+				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ? FOR UPDATE</quartz.selectWithLockSql>
+			
+				<environment>test</environment>
 			</properties>
 		</profile>
 
@@ -649,8 +651,9 @@
 				<jta.dataSource>java:/pkiraDS</jta.dataSource>
 
 				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.StdJDBCDelegate</quartz.driverDelegateClass>
-				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE
-					LOCK_NAME \= ? FOR UPDATE</quartz.selectWithLockSql>
+				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ? FOR UPDATE</quartz.selectWithLockSql>
+				
+				<environment>production</environment>
 			</properties>
 		</profile>
 	</profiles>

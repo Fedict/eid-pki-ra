@@ -142,7 +142,7 @@ public class RegistrationManagerBean implements RegistrationManager {
 	 */
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public Registration findRegistrationForUserDNAndCertificateType(String userRRN, String distinguishedName, CertificateType type) {
+	public Registration findRegistrationForUserDNAndCertificateType(String userIdentification, String distinguishedName, CertificateType type) {
 		// Parse the DN
 		DistinguishedName theDN = parseDN(distinguishedName);
 		if (theDN==null) {
@@ -150,7 +150,10 @@ public class RegistrationManagerBean implements RegistrationManager {
 		}
 		
 		// Get the certificate domains for the user		
-		User user = userRepository.findByNationalRegisterNumber(userRRN);
+		User user = userRepository.findByNationalRegisterNumber(userIdentification);
+		if (user==null) {
+			user = userRepository.findByCertificateSubject(userIdentification);
+		}
 		if (user==null) {
 			return null;
 		}

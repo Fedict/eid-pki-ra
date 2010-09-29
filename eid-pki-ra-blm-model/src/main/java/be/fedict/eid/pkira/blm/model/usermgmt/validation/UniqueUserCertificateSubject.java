@@ -16,35 +16,27 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.blm.model.usermgmt;
+package be.fedict.eid.pkira.blm.model.usermgmt.validation;
 
-import java.util.List;
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import javax.ejb.Local;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
-
+import org.hibernate.validator.ValidatorClass;
 
 /**
  * @author Bram Baeyens
  *
  */
-@Local
-public interface UserRepository {
-	
-	String NAME = "be.fedict.eid.pkira.blm.userRepository";
-	
-	List<Registration> findActiveUsersByCertificateDomain(CertificateDomain certificateDomain);
-	
-	User findByCertificateSubject(String certificateSubject);
-	
-	User findById(Integer id);
-
-	User findByNationalRegisterNumber(String nationalRegisterNumber);	
-	
-	User getReference(Integer primaryKey);
-
-	int getUserCount();
-
-	void persist(User user);
+@Documented
+@ValidatorClass(UniqueUserCertificateSubjectValidator.class)
+@Target({METHOD, FIELD, ANNOTATION_TYPE})
+@Retention( RUNTIME )
+public @interface UniqueUserCertificateSubject {
+	String message() default "{validation.notUnique.certificateSubject}";
 }

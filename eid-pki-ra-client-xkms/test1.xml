@@ -1,0 +1,63 @@
+<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+	<S:Body>
+		<ns5:BulkRegister xmlns:ns2="http://www.xkms.org/schema/xkms-2001-01-20"
+			xmlns:ns3="http://www.w3.org/2000/09/xmldsig#" xmlns:ns4="http://xkms.og.ubizen.com/schema/xkms-2003-09/"
+			xmlns:ns5="http://www.w3.org/2002/03/xkms-xbulk">
+			<SignedPart Id="signed-part">
+				<ns5:BatchHeader>
+					<BatchID>batch-id-b09242ae-9b89-48f8-960f-2532da7e969d</BatchID>
+					<BatchTime>2010-09-07T08:35:41.577Z</BatchTime>
+					<NumberOfRequests>1</NumberOfRequests>
+				</ns5:BatchHeader>
+				<ns2:Respond>
+					<ns2:string>RetrievalMethod</ns2:string>
+					<ns2:string>X509Cert</ns2:string>
+				</ns2:Respond>
+				<ns5:Requests number="1">
+					<ns5:Request>
+						<ns2:KeyID>key-id-b62ed40b-2c2c-49c9-8385-14961c889050</ns2:KeyID>
+						<ns2:Status>Invalid</ns2:Status>
+						<ns3:KeyInfo>
+							<ns3:KeyName>http://xkms.og.ubizen.com/keyname?buc_id=8047651269&amp;cert_serialnumber=123</ns3:KeyName>
+						</ns3:KeyInfo>
+					</ns5:Request>
+				</ns5:Requests>
+			</SignedPart>
+			<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+				<SignedInfo>
+					<CanonicalizationMethod
+						Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />
+					<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+					<Reference URI="#signed-part">
+						<Transforms>
+							<Transform
+								Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+						</Transforms>
+						<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+						<DigestValue>nvIDewHOfHsVgkcoP0tsSusNN/A=</DigestValue>
+					</Reference>
+				</SignedInfo>
+				<SignatureValue>Lc6WSDPsECtxxqhDzE/vTbVhStFnwi6qKPVkJaEd+pYjAmxM1yVJsOJ0F0WUcvaFPNrxDiiTGmjp
+					HQfmo5oz43rD3UG4oTWnNSSrsNDE4uXkGKjxQGHT7b+fCND7xX+ur9r/FIoblGEWCrYx0Z+ciZqV
+					8pqQMnZ+fYrd5w4OMlE=</SignatureValue>
+				<KeyInfo>
+					<X509Data>
+						<X509SubjectName>CN=Test
+							User,OU=Unknown,O=Test,L=Unknown,ST=Unknown,C=BE</X509SubjectName>
+						<X509Certificate>MIICQzCCAaygAwIBAgIES7w8GTANBgkqhkiG9w0BAQUFADBmMQswCQYDVQQGEwJCRTEQMA4GA1UE
+							CBMHVW5rbm93bjEQMA4GA1UEBxMHVW5rbm93bjENMAsGA1UEChMEVGVzdDEQMA4GA1UECxMHVW5r
+							bm93bjESMBAGA1UEAxMJVGVzdCBVc2VyMB4XDTEwMDQwNzA4MDIzM1oXDTEwMDcwNjA4MDIzM1ow
+							ZjELMAkGA1UEBhMCQkUxEDAOBgNVBAgTB1Vua25vd24xEDAOBgNVBAcTB1Vua25vd24xDTALBgNV
+							BAoTBFRlc3QxEDAOBgNVBAsTB1Vua25vd24xEjAQBgNVBAMTCVRlc3QgVXNlcjCBnzANBgkqhkiG
+							9w0BAQEFAAOBjQAwgYkCgYEAzi24NHmrqpD4Rse4qLJ9eBrxvfglc8Ul31lhOL4huFuqjQsHEYvC
+							0xZazb4IExKgrybvWJGWkzu3NSoOKOyVq7Vfaq0F2Q2cuoxTI7H5PqO6yPRv9bOkYPweZnec10Di
+							TRalK5klI1r+HlG2g+tjn4zaL5BQdy1bMVnqvZuYb4sCAwEAATANBgkqhkiG9w0BAQUFAAOBgQAA
+							p3WILq3q/uABFp4fx3JLlghMSdRlzB1HFWTShTYgsKqKN0MQDfOWm3TgQ1Q0xnAv2anfWN2Q25/o
+							OEcGPR6gwQ9RU6dC4/OuuV61vwJzCnHXePFBcu+JvZuShFYQ3L+DDHII/4OMTG3EMKtQckm/EQFJ
+							+7zH5c8tyPBlrgbhpg==</X509Certificate>
+					</X509Data>
+				</KeyInfo>
+			</Signature>
+		</ns5:BulkRegister>
+	</S:Body>
+</S:Envelope>
