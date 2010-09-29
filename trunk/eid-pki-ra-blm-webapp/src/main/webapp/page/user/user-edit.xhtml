@@ -12,20 +12,33 @@
 				
 				<s:decorate id="lastNameDecoration" template="/layout/edit.xhtml">
 	               	<ui:define name="label">#{messages['user.lastName']}:</ui:define>
-	               	<h:outputText id="lastName" value="#{userHome.instance.lastName}" />
+	               	<h:inputText id="lastName" value="#{userHome.instance.lastName}" required="true" size="40" />
 	           	</s:decorate>
 				
 				<s:decorate id="firstNameDecoration" template="/layout/edit.xhtml">
 	               	<ui:define name="label">#{messages['user.firstName']}:</ui:define>
-	               	<h:outputText id="firstName" value="#{userHome.instance.firstName}" />
+	               	<h:inputText id="firstName" value="#{userHome.instance.firstName}" size="20" />
 	           	</s:decorate>
 				
 				<s:decorate id="nationalRegisterNumberDecoration" template="/layout/edit.xhtml">
 	               	<ui:define name="label">#{messages['user.nationalRegisterNumber']}:</ui:define>
-	               	<h:outputText id="nationalRegisterNumber" value="#{userHome.instance.nationalRegisterNumber}" />
+	               	<h:inputText id="nationalRegisterNumber" value="#{userHome.instance.nationalRegisterNumber}" size="11" />
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="certificateSubjectDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['user.certificateSubject']}:</ui:define>
+	               	<h:inputText id="certificateSubject" value="#{userHome.instance.certificateSubject}" size="40" />
 	           	</s:decorate>
 	           	
 	          	<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
+	          		<h:commandButton id="save" 
+							action="#{userHome.persist}" 
+							value="#{messages['button.save']}"
+							rendered="#{not userHome.managed}" />
+					<h:commandButton  id="update"
+							action="#{userHome.update}" 
+							value="#{messages['button.update']}"
+							rendered="#{userHome.managed}" />
 					<h:commandButton id="grantAdmin"
 							action="#{userHome.grantAdmin}" 
 							value="#{messages['button.grantadmin']}"

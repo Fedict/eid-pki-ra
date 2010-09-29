@@ -32,7 +32,6 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.core.Conversation;
 
 import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 
@@ -78,7 +77,7 @@ public class ConfigurationEntryContainer implements Serializable {
 
 			String returnURL = getRequest().getRequestURL().toString();
 			returnURL = returnURL.replaceFirst("/[^/]*$", "/postLogin.seam");
-			returnURL += "?cid=" + Conversation.instance().getId();
+//			returnURL += "?cid=" + Conversation.instance().getId();
 			String parameter = "SPDestination=" + URLEncoder.encode(returnURL, "UTF-8");
 
 			if (builder.indexOf("?") != -1) {

@@ -63,6 +63,7 @@ public class Saml2RequestDecoder implements AuthenticationRequestDecoder {
 		bootstrapSaml2();
 	}
 
+	@Override
 	public EIdUser decode(HttpServletRequest saml2Request) throws AuthenticationException {
 		LOG.debug(">>> decode(saml2Request[{0}])", saml2Request);
 

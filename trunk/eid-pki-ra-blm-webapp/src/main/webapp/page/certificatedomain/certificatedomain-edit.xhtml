@@ -47,7 +47,7 @@
 	           	
 	          	<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
 					<h:commandButton id="save" 
-							action="#{certificateDomainHome.persist}" 
+							action="#{certificateDomainHome.update}" 
 							value="#{messages['button.save']}"
 							rendered="#{not certificateDomainHome.managed}" />
 					<h:commandButton  id="update"

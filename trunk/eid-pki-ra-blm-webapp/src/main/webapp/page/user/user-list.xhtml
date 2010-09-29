@@ -36,6 +36,13 @@
 						<h:outputText value="#{user.nationalRegisterNumber}" />
 					</rich:column>
 					
+					<rich:column sortBy="#{user.certificateSubject}" filterBy="#{user.certificateSubject}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['user.certificateSubject']}" />
+						</f:facet>
+						<h:outputText value="#{user.certificateSubject}" />
+					</rich:column>
+					
 					<rich:column sortBy="#{user.admin}">
 		                <f:facet name="header">
 							<h:outputText value="#{messages['user.admin']}" />
@@ -54,6 +61,12 @@
 		                		maxPages="#{userQuery.maxPages}" fastStep="#{userQuery.fastStep}" />
 		            </f:facet>
 				</rich:dataTable>
+				
+				<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
+					<s:button view="/page/user/user-edit.xhtml" value="#{messages['button.new']}" id="newUser">
+						<f:param name="userId" />
+					</s:button>
+				</s:decorate>
 			</rich:panel>
 		</h:form>
 	</ui:define>

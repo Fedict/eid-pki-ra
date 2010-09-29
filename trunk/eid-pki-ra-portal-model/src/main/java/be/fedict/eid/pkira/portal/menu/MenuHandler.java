@@ -18,13 +18,18 @@
 
 package be.fedict.eid.pkira.portal.menu;
 
+import java.io.Serializable;
+
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
 @Name(MenuHandler.NAME)
 @Scope(ScopeType.SESSION)
-public class MenuHandler {
+public class MenuHandler implements Serializable {
+
+	private static final long serialVersionUID = 3778075742509845834L;
+
 	public final static String NAME="be.fedict.eid.pkira.portal.menuHandler";
 	//id of the selected Item
 	private String selectedItem = "home";

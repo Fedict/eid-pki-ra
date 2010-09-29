@@ -71,6 +71,16 @@ public class UserRepositoryBean	implements UserRepository {
 			return null;
 		}
 	}
+	
+	@Override
+	public User findByCertificateSubject(String certificateSubject) {
+		try {
+			return (User) entityManager.createNamedQuery("findByCertificateSubject").setParameter(
+					"certificateSubject", certificateSubject).getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
 
 	@Override
 	public User getReference(Integer primaryKey) {
