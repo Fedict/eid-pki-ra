@@ -16,6 +16,7 @@
  */
 package be.fedict.eid.pkira.blm.model.contracthandler.services;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,6 +44,10 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
 @Scope(ScopeType.STATELESS)
 public class SignatureVerifierBean implements SignatureVerifier {
 
+	private static final String ENCODING = "UTF-8";
+
+	public static final String MIME_TYPE = "text/xml";
+
 	@Logger
 	private Log log;
 
@@ -55,11 +60,13 @@ public class SignatureVerifierBean implements SignatureVerifier {
 	 * be.fedict.eid.blm.model.eiddss.SignatureVerification#verifySignature(
 	 * java.lang.String)
 	 */
+	@Override
 	public String verifySignature(String requestMessage) throws ContractHandlerBeanException {
 		DigitalSignatureServiceClient dssClient = webserviceLocator.getDigitalSignatureServiceClient();
 		try {
 			// Call DSS to validate the signature
-			List<SignatureInfo> signatureInfos = dssClient.verifyWithSigners(requestMessage);
+			List<SignatureInfo> signatureInfos = dssClient.verifyWithSigners(requestMessage.getBytes(ENCODING),
+					MIME_TYPE);
 			if (signatureInfos == null || signatureInfos.size() == 0) {
 				throw new ContractHandlerBeanException(ResultType.INVALID_SIGNATURE, "Signature is invalid.");
 			}
@@ -91,6 +98,8 @@ public class SignatureVerifierBean implements SignatureVerifier {
 		} catch (NotParseableXMLDocumentException e) {
 			log.error("Error during call to eid-dss to validate signature.", e);
 			throw new ContractHandlerBeanException(ResultType.INVALID_SIGNATURE, "Error verifying signature", e);
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
