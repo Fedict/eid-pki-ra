@@ -1,0 +1,18 @@
+#
+# Properties required for XKMS integration tests
+#
+
+# Keystore type (P12 / JKS)
+signing.keystore.type=P12
+
+# Url to the keystore
+signing.keystore.url=file:/...
+
+# Passphrase to unlock the keystore
+signing.keystore.password=
+
+# Name of the entry in the keystore
+singing.keystore.entry=
+
+# Password to unlock the entry in the keystore
+signing.keystore.entry.password=

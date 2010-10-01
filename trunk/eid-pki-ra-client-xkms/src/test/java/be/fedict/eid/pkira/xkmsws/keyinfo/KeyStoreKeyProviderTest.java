@@ -25,21 +25,22 @@ import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.xkmsws.XMLSigningException;
 
-public class SigningKeyKeyStoreProviderTest {
+public class KeyStoreKeyProviderTest {
 
-	 @Test
-	 public void testGetCertificateAndPrivateKey() throws XMLSigningException {
-		 SigningKeyKeyStoreProvider info = new SigningKeyKeyStoreProvider();
-		 		 
-		 Map<String, String> parameters = new HashMap<String, String>();		 
-		 String url = SigningKeyKeyStoreProviderTest.class.getResource("/test.jks").toExternalForm();
-		 parameters.put(SigningKeyKeyStoreProvider.PARAMETER_KEYSTORE_URL, url);
-		 parameters.put(SigningKeyKeyStoreProvider.PARAMETER_KEYSTORE_ENTRYNAME, "test");
-		 parameters.put(SigningKeyKeyStoreProvider.PARAMETER_KEYSTORE_PASSWORD, "changeit");
-		 parameters.put(SigningKeyKeyStoreProvider.PARAMETER_KEYSTORE_ENTRY_PASSWORD, "changeit");
-		 info.setParameters(parameters);
-		 
-		 assertNotNull(info.getCertificate());
-		 assertNotNull(info.getPrivateKey());
-	 }
+	@Test
+	public void testGetCertificateAndPrivateKey() throws XMLSigningException {
+		KeyStoreKeyProvider info = new KeyStoreKeyProvider();
+
+		Map<String, String> parameters = new HashMap<String, String>();
+		String url = KeyStoreKeyProviderTest.class.getResource("/test.jks").toExternalForm();
+		parameters.put(KeyStoreKeyProvider.PARAMETER_KEYSTORE_TYPE, "JKS");
+		parameters.put(KeyStoreKeyProvider.PARAMETER_KEYSTORE_URL, url);
+		parameters.put(KeyStoreKeyProvider.PARAMETER_KEYSTORE_ENTRYNAME, "test");
+		parameters.put(KeyStoreKeyProvider.PARAMETER_KEYSTORE_PASSWORD, "changeit");
+		parameters.put(KeyStoreKeyProvider.PARAMETER_KEYSTORE_ENTRY_PASSWORD, "changeit");
+		info.setParameters(parameters);
+
+		assertNotNull(info.getCertificate());
+		assertNotNull(info.getPrivateKey());
+	}
 }

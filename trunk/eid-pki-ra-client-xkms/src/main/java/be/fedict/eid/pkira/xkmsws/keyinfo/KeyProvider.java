@@ -27,7 +27,7 @@ import be.fedict.eid.pkira.xkmsws.XMLSigningException;
  * 
  * @author Jan Van den Bergh
  */
-public interface SigningKeyProvider {
+public interface KeyProvider {
 
 	/**
 	 * Get the X509 certificate that belongs to the key.

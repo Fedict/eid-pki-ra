@@ -21,6 +21,10 @@
 		</dependency>
 		<dependency>
 			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-generated-contracts</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-mock-xkms</artifactId>
 			<scope>test</scope>
 			<classifier>classes</classifier>
@@ -56,6 +60,6 @@
 			<artifactId>commons-lang</artifactId>
 			<type>jar</type>
 			<scope>test</scope>
-		</dependency>		
+		</dependency>
 	</dependencies>
 </project>

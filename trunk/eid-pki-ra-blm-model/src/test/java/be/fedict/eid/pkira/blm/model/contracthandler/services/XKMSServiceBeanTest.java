@@ -26,6 +26,7 @@ import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateRevocationContract;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
+import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 import be.fedict.eid.pkira.blm.model.framework.WebserviceLocator;
 import be.fedict.eid.pkira.blm.model.reporting.ReportManager;
 import be.fedict.eid.pkira.crypto.CSRInfo;
@@ -68,12 +69,12 @@ public class XKMSServiceBeanTest {
 
 	@Mock
 	private ErrorLogger errorLogger;
-	
+
 	@Mock
 	private ReportManager reportManager;
 
-	private CertificateAuthority certificateAuthority = new CertificateAuthority();
-	private CertificateDomain certificateDomain = createCertificateDomain();
+	private final CertificateAuthority certificateAuthority = new CertificateAuthority();
+	private final CertificateDomain certificateDomain = createCertificateDomain();
 
 	@BeforeTest
 	public void setup() throws Exception {
@@ -94,67 +95,67 @@ public class XKMSServiceBeanTest {
 		when(certificateParser.parseCertificate(CERTIFICATE_BYTES)).thenReturn(certificateInfo);
 		when(certificateParser.parseCertificate(CERTIFICATE)).thenReturn(certificateInfo);
 		when(certificateInfo.getPemEncoded()).thenReturn(CERTIFICATE);
-		when(certificateInfo.getSerialNumber()).thenReturn(SERIAL_NUMBER);		
+		when(certificateInfo.getSerialNumber()).thenReturn(SERIAL_NUMBER);
 	}
 
 	@Test
 	public void signTest() throws Exception {
 		try {
-		when(xkmsClient.createCertificate(CSR_BYTES, VALIDITY)).thenReturn(CERTIFICATE_BYTES);
-		
-		CertificateSigningContract contract = createCertificateSigningContract();			
-		String certificate = service.sign(contract);
-		
-		assertEquals(certificate, CERTIFICATE);
-		verify(reportManager).addLineToReport(contract, true);
-		verifyNoMoreInteractions(errorLogger);
+			when(xkmsClient.createCertificate(CSR_BYTES, VALIDITY, "CODE")).thenReturn(CERTIFICATE_BYTES);
+
+			CertificateSigningContract contract = createCertificateSigningContract();
+			String certificate = service.sign(contract);
+
+			assertEquals(certificate, CERTIFICATE);
+			verify(reportManager).addLineToReport(contract, true);
+			verifyNoMoreInteractions(errorLogger);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}
 	}
 
-	@Test(dependsOnMethods="signTest")
+	@Test(dependsOnMethods = "signTest")
 	public void signTestError() throws Exception {
 		XKMSClientException exception = new XKMSClientException("Oops");
-		when(xkmsClient.createCertificate(CSR_BYTES, VALIDITY)).thenThrow(exception);
+		when(xkmsClient.createCertificate(CSR_BYTES, VALIDITY, "CODE")).thenThrow(exception);
 
 		CertificateSigningContract contract = createCertificateSigningContract();
 		try {
-			
+
 			service.sign(contract);
 			fail("Expected exception.");
 		} catch (ContractHandlerBeanException e) {
 			// Ok
 		}
-		
+
 		verify(reportManager).addLineToReport(contract, false);
 		verify(errorLogger).logError(eq(ApplicationComponent.XKMS), anyString(), eq(exception));
 	}
-	
+
 	@Test
-	public void revocationTest() throws Exception  {
+	public void revocationTest() throws Exception {
 		CertificateRevocationContract contract = createCertificateRevocationContract();
-		service.revoke(contract);
-		
-		verify(xkmsClient).revokeCertificate(SERIAL_NUMBER);
+		service.revoke(contract, CertificateType.CODE);
+
+		verify(xkmsClient).revokeCertificate(SERIAL_NUMBER, "CODE");
 		verify(reportManager).addLineToReport(contract, true);
 		verifyNoMoreInteractions(errorLogger);
 	}
-	
+
 	@Test
 	public void revocationTestError() throws Exception {
 		XKMSClientException exception = new XKMSClientException("Oops");
-		doThrow(exception).when(xkmsClient).revokeCertificate(SERIAL_NUMBER);
+		doThrow(exception).when(xkmsClient).revokeCertificate(SERIAL_NUMBER, "CODE");
 
 		CertificateRevocationContract contract = createCertificateRevocationContract();
-		try {			
-			service.revoke(contract);
+		try {
+			service.revoke(contract, CertificateType.CODE);
 			fail("Expected exception.");
 		} catch (ContractHandlerBeanException e) {
 			// Ok
 		}
-		
+
 		verify(reportManager).addLineToReport(contract, false);
 		verify(errorLogger).logError(eq(ApplicationComponent.XKMS), anyString(), eq(exception));
 	}
@@ -164,6 +165,7 @@ public class XKMSServiceBeanTest {
 		contract.setContractDocument(CSR);
 		contract.setCertificateDomain(certificateDomain);
 		contract.setValidityPeriodMonths(VALIDITY);
+		contract.setCertificateType(CertificateType.CODE);
 		return contract;
 	}
 

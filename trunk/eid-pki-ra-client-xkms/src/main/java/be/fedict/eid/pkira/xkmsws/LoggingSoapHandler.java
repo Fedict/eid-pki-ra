@@ -39,21 +39,25 @@ public class LoggingSoapHandler implements SOAPHandler<SOAPMessageContext> {
 
 	private static final Log LOG = LogFactory.getLog(LoggingSoapHandler.class);
 
+	@Override
 	public Set<QName> getHeaders() {
 		return null;
 	}
 
+	@Override
 	public void close(MessageContext context) {
 		LOG.debug("close");
 	}
 
+	@Override
 	public boolean handleFault(SOAPMessageContext context) {
 		return true;
 	}
 
+	@Override
 	public boolean handleMessage(SOAPMessageContext context) {
 		LOG.debug("handle message");
-		
+
 		Boolean outboundProperty = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
 		LOG.debug("outbound message: " + outboundProperty);
 
@@ -64,8 +68,8 @@ public class LoggingSoapHandler implements SOAPHandler<SOAPMessageContext> {
 		} catch (Exception e) {
 			LOG.error("SOAP error: " + e.getMessage());
 		}
-		LOG.debug("SOAP message: " + output.toString());
-		
+		LOG.info("SOAP message: " + output.toString());
+
 		return true;
 	}
 }
