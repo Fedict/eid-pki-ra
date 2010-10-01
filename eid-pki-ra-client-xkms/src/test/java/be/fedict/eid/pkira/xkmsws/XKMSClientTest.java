@@ -41,8 +41,8 @@ import org.w3c.dom.Document;
 import be.fedict.eid.pki.ra.xkms.ws.MockXKMSWebService;
 import be.fedict.eid.pkira.crypto.CSRParser;
 import be.fedict.eid.pkira.crypto.CSRParserImpl;
-import be.fedict.eid.pkira.xkmsws.keyinfo.SigningKeyKeyStoreProvider;
-import be.fedict.eid.pkira.xkmsws.keyinfo.SigningKeyKeyStoreProviderTest;
+import be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProvider;
+import be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProviderTest;
 
 public class XKMSClientTest {
 
@@ -62,7 +62,7 @@ public class XKMSClientTest {
 	private MessageInterceptionHandler messageInterceptionHandler;
 	private XKMSClient xkmsClient;
 
-	private Map<String, String> parameters = new HashMap<String, String>();
+	private final Map<String, String> parameters = new HashMap<String, String>();
 
 	@BeforeSuite
 	public void startTestWebService() {
@@ -77,19 +77,20 @@ public class XKMSClientTest {
 
 	@SuppressWarnings("unchecked")
 	@BeforeMethod
-	public void setup() {		
+	public void setup() {
 		// Instantiate client
-		parameters.put(XKMSClient.PARAMETER_BUC, "8047651269");
-		parameters.put(XKMSSignatureSOAPHandler.PARAMETER_SIGNING_KEY_PROVIDER_CLASS, SigningKeyKeyStoreProvider.class
-				.getName());
-		String url = SigningKeyKeyStoreProviderTest.class.getResource("/test.jks").toExternalForm();
-		parameters.put(SigningKeyKeyStoreProvider.PARAMETER_KEYSTORE_URL, url);
-		parameters.put(SigningKeyKeyStoreProvider.PARAMETER_KEYSTORE_ENTRYNAME, "test");
-		parameters.put(SigningKeyKeyStoreProvider.PARAMETER_KEYSTORE_PASSWORD, "changeit");
-		parameters.put(SigningKeyKeyStoreProvider.PARAMETER_KEYSTORE_ENTRY_PASSWORD, "changeit");
-		
+		parameters.put(XKMSClient.PARAMETER_BUC + ".client", "8047651269");
+		parameters.put(XKMSSignatureSOAPHandler.PARAMETER_SIGNING_KEY_PROVIDER_CLASS,
+				KeyStoreKeyProvider.class.getName());
+		String url = KeyStoreKeyProviderTest.class.getResource("/test.jks").toExternalForm();
+		parameters.put(KeyStoreKeyProvider.PARAMETER_KEYSTORE_TYPE, "JKS");
+		parameters.put(KeyStoreKeyProvider.PARAMETER_KEYSTORE_URL, url);
+		parameters.put(KeyStoreKeyProvider.PARAMETER_KEYSTORE_ENTRYNAME, "test");
+		parameters.put(KeyStoreKeyProvider.PARAMETER_KEYSTORE_PASSWORD, "changeit");
+		parameters.put(KeyStoreKeyProvider.PARAMETER_KEYSTORE_ENTRY_PASSWORD, "changeit");
+
 		messageInterceptionHandler = new MessageInterceptionHandler();
-		
+
 		xkmsClient = new XKMSClient(URL, parameters, messageInterceptionHandler);
 
 		// Configure XML Unit
@@ -104,7 +105,7 @@ public class XKMSClientTest {
 		byte[] csrDer = createCSRParser().parseCSR(csrPem).getDerEncoded();
 
 		// Call the certificate creation
-		byte[] certificate = xkmsClient.createCertificate(csrDer, 15);
+		byte[] certificate = xkmsClient.createCertificate(csrDer, 15, "client");
 		assertNotNull(certificate);
 
 		// Validate the outgoing message
@@ -115,32 +116,32 @@ public class XKMSClientTest {
 
 		XMLAssert.assertXMLIdentical(diff, true);
 	}
-	
+
 	@Test
 	public void testRevokeCertificate() throws Exception {
-		xkmsClient.revokeCertificate(BigInteger.valueOf(123L));
+		xkmsClient.revokeCertificate(BigInteger.valueOf(123L), "CODE");
 	}
-	
+
 	@Test
 	public void testRevokeCertificateAlreadyRevoked() throws Exception {
-		xkmsClient.revokeCertificate(BigInteger.valueOf(1001L));
+		xkmsClient.revokeCertificate(BigInteger.valueOf(1001L), "CODE");
 	}
-	
-	@Test(expectedExceptions=XKMSClientException.class)
+
+	@Test(expectedExceptions = XKMSClientException.class)
 	public void testRevokeCertificateAlreadyError() throws Exception {
-		xkmsClient.revokeCertificate(BigInteger.valueOf(1002L));
+		xkmsClient.revokeCertificate(BigInteger.valueOf(1002L), "CODE");
 	}
 
 	private String readResource(String resourceName) throws IOException {
 		String result = "";
-		
+
 		InputStream inputStream = XKMSClientTest.class.getResourceAsStream(resourceName);
 		byte[] inputBytes = new byte[8192];
-		int read;				
-		while (-1 != (read=inputStream.read(inputBytes))) {
+		int read;
+		while (-1 != (read = inputStream.read(inputBytes))) {
 			result += new String(inputBytes, 0, read);
 		}
-		
+
 		return result;
 	}
 

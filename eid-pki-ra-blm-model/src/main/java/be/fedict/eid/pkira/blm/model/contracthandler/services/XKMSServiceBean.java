@@ -13,6 +13,7 @@ import be.fedict.eid.pkira.blm.errorhandling.ErrorLogger;
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
 import be.fedict.eid.pkira.blm.model.contracts.AbstractContract;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
+import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 import be.fedict.eid.pkira.blm.model.framework.WebserviceLocator;
 import be.fedict.eid.pkira.blm.model.reporting.ReportManager;
 import be.fedict.eid.pkira.crypto.CSRParser;
@@ -50,7 +51,7 @@ public class XKMSServiceBean implements XKMSService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void revoke(AbstractContract contract) throws ContractHandlerBeanException {
+	public void revoke(AbstractContract contract, CertificateType certificateType) throws ContractHandlerBeanException {
 		// Parse the certificate
 		BigInteger serialNumber;
 		try {
@@ -61,7 +62,7 @@ public class XKMSServiceBean implements XKMSService {
 
 			boolean success = false;
 			try {
-				xkmsClient.revokeCertificate(serialNumber);
+				xkmsClient.revokeCertificate(serialNumber, certificateType.toString());
 				success = true;
 			} finally {
 				reportManager.addLineToReport(contract, success);
@@ -93,7 +94,8 @@ public class XKMSServiceBean implements XKMSService {
 			byte[] certificateData;
 			boolean success = false;
 			try {
-				certificateData = xkmsClient.createCertificate(csrData, contract.getValidityPeriodMonths().intValue());
+				certificateData = xkmsClient.createCertificate(csrData, contract.getValidityPeriodMonths().intValue(),
+						contract.getCertificateType().toString());
 				success = true;
 			} finally {
 				reportManager.addLineToReport(contract, success);

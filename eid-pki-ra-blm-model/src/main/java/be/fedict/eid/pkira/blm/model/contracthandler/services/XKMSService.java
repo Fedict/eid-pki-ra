@@ -5,23 +5,31 @@ import javax.ejb.Local;
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
 import be.fedict.eid.pkira.blm.model.contracts.AbstractContract;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
+import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 
 @Local
 public interface XKMSService {
-	
+
 	String NAME = "be.fedict.eid.pkira.blm.xkmsService";
 
 	/**
 	 * Let the CA sign the CSR. If this fails, the error will be logged here.
-	 * @param csr The CSR to sign in PEM format.
-	 * @return the signed certificate in PEM format. 
-	 * @exception ContractHandlerBeanException when an error occurred calling the back-end.
+	 * 
+	 * @param csr
+	 *            The CSR to sign in PEM format.
+	 * @return the signed certificate in PEM format.
+	 * @exception ContractHandlerBeanException
+	 *                when an error occurred calling the back-end.
 	 */
 	public String sign(CertificateSigningContract contract) throws ContractHandlerBeanException;
-	
+
 	/**
 	 * Revoke a certificate, returning if this was succesful.
-	 * @exception ContractHandlerBeanException when an error occurred calling the back-end.
+	 * 
+	 * @exception ContractHandlerBeanException
+	 *                when an error occurred calling the back-end.
+	 * @param certificateType
+	 *            the certificate type to revoke
 	 */
-	public void revoke(AbstractContract contract) throws ContractHandlerBeanException;
+	public void revoke(AbstractContract contract, CertificateType certificateType) throws ContractHandlerBeanException;
 }

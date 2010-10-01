@@ -48,7 +48,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Element;
 
-import be.fedict.eid.pkira.xkmsws.keyinfo.SigningKeyProvider;
+import be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProvider;
 
 public class XKMSSignatureSOAPHandler implements SOAPHandler<SOAPMessageContext> {
 
@@ -113,7 +113,7 @@ public class XKMSSignatureSOAPHandler implements SOAPHandler<SOAPMessageContext>
 						.newSignatureMethod(SignatureMethod.RSA_SHA1, null), Collections.singletonList(reference));
 
 				// Instantiate the SigningKeyProvider
-				SigningKeyProvider signingKeyProvider = instantiateSigningKeyProvider();
+				KeyStoreKeyProvider signingKeyProvider = instantiateSigningKeyProvider();
 				X509Certificate certificate = signingKeyProvider.getCertificate();
 				PrivateKey privateKey = signingKeyProvider.getPrivateKey();
 
@@ -142,11 +142,11 @@ public class XKMSSignatureSOAPHandler implements SOAPHandler<SOAPMessageContext>
 		return true;
 	}
 
-	private SigningKeyProvider instantiateSigningKeyProvider() throws XMLSigningException {
+	private KeyStoreKeyProvider instantiateSigningKeyProvider() throws XMLSigningException {
 		try {
 			String providerClassName = parameters.get(PARAMETER_SIGNING_KEY_PROVIDER_CLASS);
 			Class<?> providerClass = Class.forName(providerClassName);
-			SigningKeyProvider provider = (SigningKeyProvider) providerClass.newInstance();
+			KeyStoreKeyProvider provider = (KeyStoreKeyProvider) providerClass.newInstance();
 			provider.setParameters(parameters);
 
 			return provider;

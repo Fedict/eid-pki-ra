@@ -112,6 +112,7 @@ public class ContractHandlerBean implements ContractHandler {
 	private ConfigurationEntryQuery configurationEntryQuery;
 
 	/** {@inheritDoc} */
+	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public String revokeCertificate(String requestMsg) {
 		CertificateRevocationResponseBuilder responseBuilder = new CertificateRevocationResponseBuilder();
@@ -130,8 +131,8 @@ public class ContractHandlerBean implements ContractHandler {
 			Certificate certificate = findCertificate(request);
 
 			// Check the authorization
-			Registration registration = getMatchingRegistration(signer, request.getDistinguishedName(), certificate
-					.getCertificateType());
+			Registration registration = getMatchingRegistration(signer, request.getDistinguishedName(),
+					certificate.getCertificateType());
 
 			// Check the legal notice
 			checkLegalNotice(request, registration);
@@ -140,7 +141,7 @@ public class ContractHandlerBean implements ContractHandler {
 			AbstractContract contract = saveContract(registration, requestMsg, request, signer);
 
 			// Call XKMS
-			xkmsService.revoke(contract);
+			xkmsService.revoke(contract, certificate.getCertificateType());
 
 			// Delete the certificate
 			contractRepository.removeCertificate(certificate);
@@ -164,6 +165,7 @@ public class ContractHandlerBean implements ContractHandler {
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public String signCertificate(String requestMsg) {
 		CertificateSigningResponseBuilder responseBuilder = new CertificateSigningResponseBuilder();
@@ -253,8 +255,8 @@ public class ContractHandlerBean implements ContractHandler {
 			when = new Date();
 			when.setTime(when.getTime() - intervalParam * 1000 * 60);
 		}
-		QuartzTriggerHandle timer = schedulerBean.scheduleNotifcation(when, certificate.getIssuer(), certificate
-				.getSerialNumber());
+		QuartzTriggerHandle timer = schedulerBean.scheduleNotifcation(when, certificate.getIssuer(),
+				certificate.getSerialNumber());
 		certificate.setTimer(timer);
 	}
 
@@ -262,8 +264,8 @@ public class ContractHandlerBean implements ContractHandler {
 		Certificate certificate;
 		try {
 			CertificateInfo certificateInfo = certificateParser.parseCertificate(request.getCertificate());
-			certificate = contractRepository.findCertificate(certificateInfo.getIssuer(), certificateInfo
-					.getSerialNumber());
+			certificate = contractRepository.findCertificate(certificateInfo.getIssuer(),
+					certificateInfo.getSerialNumber());
 			if (certificate == null) {
 				throw new ContractHandlerBeanException(ResultType.UNKNOWN_CERTIFICATE,
 						"The certificate was not found in our database.");

@@ -52,7 +52,8 @@ public class SignatureVerificationBeanTest {
 
 	@Test
 	public void testVerifySignature() throws ContractHandlerBeanException, NotParseableXMLDocumentException {
-		when(dssClient.verifyWithSigners(eq(DOCUMENT))).thenReturn(Collections.singletonList(createSignatureInfo()));
+		when(dssClient.verifyWithSigners(isA(byte[].class), eq(SignatureVerifierBean.MIME_TYPE))).thenReturn(
+				Collections.singletonList(createSignatureInfo()));
 
 		String identity = bean.verifySignature(DOCUMENT);
 		assertEquals(identity, SUBJECT);
@@ -60,14 +61,15 @@ public class SignatureVerificationBeanTest {
 
 	@Test(expectedExceptions = ContractHandlerBeanException.class)
 	public void testVerifySignatureInvalid() throws ContractHandlerBeanException, NotParseableXMLDocumentException {
-		when(dssClient.verifyWithSigners(eq(DOCUMENT))).thenReturn(null);
+		when(dssClient.verifyWithSigners(isA(byte[].class), eq(SignatureVerifierBean.MIME_TYPE))).thenReturn(null);
 
 		bean.verifySignature(DOCUMENT);
 	}
 
 	@Test
 	public void testVerifySignatureError() throws NotParseableXMLDocumentException {
-		when(dssClient.verifyWithSigners(eq(DOCUMENT))).thenThrow(new NotParseableXMLDocumentException());
+		when(dssClient.verifyWithSigners(isA(byte[].class), eq(SignatureVerifierBean.MIME_TYPE))).thenThrow(
+				new NotParseableXMLDocumentException());
 
 		try {
 			bean.verifySignature(DOCUMENT);

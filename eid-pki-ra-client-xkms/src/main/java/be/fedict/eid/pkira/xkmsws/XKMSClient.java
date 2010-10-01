@@ -45,18 +45,18 @@ import org.w3._2000._09.xmldsig_.X509DataType;
 import org.w3._2002._03.xkms_xbulk.BatchHeaderType;
 import org.w3._2002._03.xkms_xbulk.BulkRegisterResultType;
 import org.w3._2002._03.xkms_xbulk.BulkRegisterType;
+import org.w3._2002._03.xkms_xbulk.BulkRegisterType.SignedPart;
 import org.w3._2002._03.xkms_xbulk.ProcessInfoType;
 import org.w3._2002._03.xkms_xbulk.RequestType;
 import org.w3._2002._03.xkms_xbulk.RequestsType;
-import org.w3._2002._03.xkms_xbulk.BulkRegisterType.SignedPart;
 import org.w3._2002._03.xkms_xbulk_wsdl.XKMSPortType;
 import org.w3._2002._03.xkms_xbulk_wsdl.XKMSService;
 import org.xkms.schema.xkms_2001_01_20.AssertionStatus;
 import org.xkms.schema.xkms_2001_01_20.KeyBindingType;
 import org.xkms.schema.xkms_2001_01_20.RegisterResult;
+import org.xkms.schema.xkms_2001_01_20.RegisterResult.Answer;
 import org.xkms.schema.xkms_2001_01_20.Respond;
 import org.xkms.schema.xkms_2001_01_20.ResultCode;
-import org.xkms.schema.xkms_2001_01_20.RegisterResult.Answer;
 
 import com.ubizen.og.xkms.schema.xkms_2003_09.AttributeCertificate;
 import com.ubizen.og.xkms.schema.xkms_2003_09.ValidityIntervalType;
@@ -64,19 +64,21 @@ import com.ubizen.og.xkms.schema.xkms_2003_09.ValidityIntervalType;
 public class XKMSClient {
 
 	public static final String KEYNAME_REQUEST = "http://xkms.og.ubizen.com/keyname?buc_id={0}";
-	public static final String KEYNAME_REVOKE = "http://xkms.og.ubizen.com/keyname?buc_id={0}&cert_serialnumber={1}";
+	// public static final String KEYNAME_REVOKE =
+	// "http://xkms.og.ubizen.com/keyname?buc_id={0}&cert_serialnumber={1}";
+	public static final String KEYNAME_REVOKE = "http://xkms.og.ubizen.com/keyname?cert_serialnumber={1}";
 	public static final String NAMESPACE_URI = "http://www.w3.org/2002/03/xkms-xbulk#wsdl";
-	public static final String PARAMETER_BUC = "buc";
 	public static final String SERVICE_NAME = "XKMSService";
 	public static final String WSDL_RESOURCE = "/wsdl/xkms2-xbulk.wsdl";
-	
+
 	private static final Log LOG = LogFactory.getLog(XKMSClient.class);
-	
+
 	private static final TimeZone TIMEZONE_GMT = TimeZone.getTimeZone("Z");
+	public static final String PARAMETER_BUC = "buc";
 
 	private final DatatypeFactory datatypeFactory;
 	private final String endpointAddress;
-	private SOAPHandler<SOAPMessageContext>[] extraHandlers;
+	private final SOAPHandler<SOAPMessageContext>[] extraHandlers;
 
 	private final com.ubizen.og.xkms.schema.xkms_2003_09.ObjectFactory ogcmObjectFactory = new com.ubizen.og.xkms.schema.xkms_2003_09.ObjectFactory();
 	private final Map<String, String> parameters;
@@ -91,7 +93,7 @@ public class XKMSClient {
 	public XKMSClient(String endpointAddress, Map<String, String> parameters,
 			SOAPHandler<SOAPMessageContext>... extraHandlers) {
 		LOG.info("Creating XKMSClient to " + endpointAddress);
-		
+
 		this.endpointAddress = endpointAddress;
 		this.parameters = parameters;
 		this.extraHandlers = extraHandlers;
@@ -110,15 +112,18 @@ public class XKMSClient {
 	 *            byte array containing the CSR.
 	 * @param validityInMonths
 	 *            the validity of the certificate (in months)
+	 * @param certificateType
+	 *            the certificate type to generate (client, server, code)
 	 * @return byte array containing the certificate.
 	 * @throws XKMSClientException
 	 *             if an error occurred while communicating to the XKMS service.
 	 */
-	public byte[] createCertificate(byte[] csrData, int validityInMonths) throws XKMSClientException {
+	public byte[] createCertificate(byte[] csrData, int validityInMonths, String certificateType)
+			throws XKMSClientException {
 		LOG.info("Creating certificate");
 
 		// Create the request
-		RequestType request = createCSRRequestElement(csrData, validityInMonths);
+		RequestType request = createCSRRequestElement(csrData, validityInMonths, certificateType);
 
 		// Execute it
 		List<RegisterResult> results = executeRequest(request);
@@ -136,14 +141,16 @@ public class XKMSClient {
 	 * 
 	 * @param serialNumber
 	 *            serial number of the certificate to revoke.
+	 * @param certificateType
+	 *            the certificate type to revoke
 	 * @throws XKMSClientException
 	 *             if an error occurred while communicating to the XKMS service.
 	 */
-	public void revokeCertificate(BigInteger serialNumber) throws XKMSClientException {
+	public void revokeCertificate(BigInteger serialNumber, String certificateType) throws XKMSClientException {
 		LOG.info("Revoking certificate");
-		
+
 		// Create the request
-		RequestType request = createRevocationElement(serialNumber);
+		RequestType request = createRevocationElement(serialNumber, certificateType);
 
 		// Execute it
 		List<RegisterResult> results = executeRequest(request);
@@ -153,7 +160,7 @@ public class XKMSClient {
 		// Parse the result
 		parseRevokeCertificateResult(results.get(0));
 	}
-	
+
 	/**
 	 * Creates a bulk register request containing the specified request objects.
 	 */
@@ -168,6 +175,7 @@ public class XKMSClient {
 		Respond respond = xkmsObjectFactory.createRespond();
 		respond.getString().add("RetrievalMethod");
 		respond.getString().add("X509Cert");
+		// respond.getString().add("X509Chain");
 		signedPart.setRespond(respond);
 
 		// Add the batch header to it
@@ -182,6 +190,7 @@ public class XKMSClient {
 
 		BigInteger numRequests = BigInteger.valueOf(requestObjects.length);
 		batchHeader.getBatchIDAndBatchTimeAndNumberOfRequests().add(numRequests);
+
 		signedPart.setBatchHeader(batchHeader);
 
 		// Add the requests to it
@@ -201,8 +210,10 @@ public class XKMSClient {
 
 	/**
 	 * Creates a bulk XKMS request for a CSR.
+	 * 
+	 * @param certificateType
 	 */
-	private RequestType createCSRRequestElement(byte[] csrData, int validityInMonths) {
+	private RequestType createCSRRequestElement(byte[] csrData, int validityInMonths, String certificateType) {
 		// Create the request
 		RequestType request = xbulkObjectFactory.createRequestType();
 		request.setKeyID("key-id-" + UUID.randomUUID().toString());
@@ -212,7 +223,7 @@ public class XKMSClient {
 		request.setKeyInfo(keyInfo);
 
 		// Add the key name
-		String keyName = MessageFormat.format(KEYNAME_REQUEST, encode(parameters.get(PARAMETER_BUC)));
+		String keyName = MessageFormat.format(KEYNAME_REQUEST, encode(getBuc(certificateType)));
 		keyInfo.getContent().add(xmldsigObjectFactory.createKeyName(keyName));
 
 		// Add the CSR
@@ -223,9 +234,12 @@ public class XKMSClient {
 		ProcessInfoType processInfo = xbulkObjectFactory.createProcessInfoType();
 		request.setProcessInfo(processInfo);
 
+		// Add the publish parameter
+		processInfo.getReasonAndReasonCodeAndPublish().add(Boolean.TRUE);
+
 		// Add the attribute certificate
 		AttributeCertificate attributeCertificate = ogcmObjectFactory.createAttributeCertificate();
-		processInfo.getAttributeCertificate().add(attributeCertificate);
+		processInfo.getReasonAndReasonCodeAndPublish().add(attributeCertificate);
 
 		// Add the validity interval
 		ValidityIntervalType validityInterval = ogcmObjectFactory.createValidityIntervalType();
@@ -236,13 +250,20 @@ public class XKMSClient {
 		validityInterval.setNotAfter(datatypeFactory.newXMLGregorianCalendar(calendar));
 		attributeCertificate.setValidityInterval(validityInterval);
 
+		// Add the status
+		request.setStatus(AssertionStatus.INDETERMINATE);
+
 		return request;
+	}
+
+	private String getBuc(String certificateType) {
+		return parameters.get(PARAMETER_BUC + "." + certificateType.toLowerCase());
 	}
 
 	/**
 	 * Creates a bulk XKMS request for a revocation.
 	 */
-	private RequestType createRevocationElement(BigInteger serialNumber) {
+	private RequestType createRevocationElement(BigInteger serialNumber, String certificateType) {
 		// Create the request
 		RequestType request = xbulkObjectFactory.createRequestType();
 		request.setKeyID("key-id-" + UUID.randomUUID().toString());
@@ -253,7 +274,8 @@ public class XKMSClient {
 		request.setKeyInfo(keyInfo);
 
 		// Add the key name
-		String keyName = MessageFormat.format(KEYNAME_REVOKE, encode(parameters.get(PARAMETER_BUC)),
+		String keyName = MessageFormat.format(KEYNAME_REVOKE,
+				encode(parameters.get(PARAMETER_BUC + "." + certificateType.toLowerCase())),
 				encode(serialNumber.toString()));
 		keyInfo.getContent().add(xmldsigObjectFactory.createKeyName(keyName));
 
@@ -431,13 +453,13 @@ public class XKMSClient {
 	 */
 	private byte[] parseCreateCertificateResult(RegisterResult result) throws XKMSClientException {
 		KeyBindingType keyBinding = getKeyBinding(result);
-		
+
 		// Check the result
 		if (result.getResult() != ResultCode.SUCCESS) {
 			throwXKMSClientExceptionWithReasonCode(keyBinding);
 		}
 
-		// Extract the X509 data		
+		// Extract the X509 data
 		List<Object> content = keyBinding.getKeyInfo().getContent();
 		X509DataType x509Data = getFromList(X509DataType.class, content);
 		if (x509Data == null) {
@@ -451,9 +473,10 @@ public class XKMSClient {
 
 		return certificateData;
 	}
-	
+
 	/**
-	 * Parses the certificate revocation element and extracts the certificate data.
+	 * Parses the certificate revocation element and extracts the certificate
+	 * data.
 	 */
 	private void parseRevokeCertificateResult(RegisterResult result) throws XKMSClientException {
 		// Parse the result
@@ -463,7 +486,7 @@ public class XKMSClient {
 		}
 
 		BigInteger reasonCode = getResultReasonCode(keyBinding);
-		if (reasonCode != null && reasonCode.intValue() == 566 ) {
+		if (reasonCode != null && reasonCode.intValue() == 566) {
 			// already revoked
 			return;
 		}
@@ -475,6 +498,7 @@ public class XKMSClient {
 	 * Throw an exception with reason code and reason.
 	 */
 	private void throwXKMSClientExceptionWithReasonCode(KeyBindingType keyBinding) throws XKMSClientException {
-		throw new XKMSClientException("Error during revocation: reasonCode=" + getResultReasonCode(keyBinding)+ ", reason=" + getResultReason(keyBinding));
+		throw new XKMSClientException("Error during revocation: reasonCode=" + getResultReasonCode(keyBinding)
+				+ ", reason=" + getResultReason(keyBinding));
 	}
 }

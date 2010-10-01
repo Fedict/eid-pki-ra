@@ -21,11 +21,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
-import java.security.PrivateKey;
 import java.security.KeyStore.PasswordProtection;
 import java.security.KeyStore.PrivateKeyEntry;
+import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
-import java.util.Collections;
 import java.util.Map;
 
 import be.fedict.eid.pkira.xkmsws.XMLSigningException;
@@ -33,14 +32,14 @@ import be.fedict.eid.pkira.xkmsws.XMLSigningException;
 /**
  * @author Jan Van den Bergh
  */
-public class SigningKeyKeyStoreProvider implements SigningKeyProvider {
+public class KeyStoreKeyProvider extends KeyProviderBase implements KeyProvider {
 
 	public static final String PARAMETER_KEYSTORE_URL = "signing.keystore.url";
 	public static final String PARAMETER_KEYSTORE_ENTRYNAME = "signing.keystore.entry";
 	public static final String PARAMETER_KEYSTORE_PASSWORD = "signing.keystore.password";
 	public static final String PARAMETER_KEYSTORE_ENTRY_PASSWORD = "signing.keystore.entry.password";
+	public static final String PARAMETER_KEYSTORE_TYPE = "signing.keystore.type";
 
-	private Map<String, String> parameters = Collections.emptyMap();
 	private PrivateKeyEntry entry;
 
 	/**
@@ -59,29 +58,26 @@ public class SigningKeyKeyStoreProvider implements SigningKeyProvider {
 		return getEntry().getPrivateKey();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setParameters(Map<String, String> parameters) {
-		this.parameters = parameters;
-		this.entry = null;
-	}
-
 	private PrivateKeyEntry getEntry() throws XMLSigningException {
 		if (entry == null) {
 			String keystoreUrl = getParameter(PARAMETER_KEYSTORE_URL);
+			// String entryName = getParameter(PARAMETER_KEYSTORE_ENTRYNAME);
+			String keystorePassword = getParameter(PARAMETER_KEYSTORE_PASSWORD);
+			String entryPassword = getParameter(PARAMETER_KEYSTORE_ENTRY_PASSWORD);
+			String keyStoreType = getParameter(PARAMETER_KEYSTORE_TYPE);
+
 			try {
 				URL url = new URL(keystoreUrl);
-				String entryName = getParameter(PARAMETER_KEYSTORE_ENTRYNAME);
-				String keystorePassword = getParameter(PARAMETER_KEYSTORE_PASSWORD);
-				String entryPassword = getParameter(PARAMETER_KEYSTORE_ENTRY_PASSWORD);
-
-				KeyStore keyStore = KeyStore.getInstance("JKS");
+				KeyStore keyStore = KeyStore.getInstance(keyStoreType);
 
 				keyStore.load(url.openStream(), keystorePassword.toCharArray());
 				PasswordProtection passwordProtection = new PasswordProtection(entryPassword.toCharArray());
+
+				String entryName = keyStore.aliases().nextElement();
 				entry = (PrivateKeyEntry) keyStore.getEntry(entryName, passwordProtection);
+				if (entry == null) {
+					throw new XMLSigningException("Entry with name " + entryName + " not found in the keystore.");
+				}
 			} catch (MalformedURLException e) {
 				throw new XMLSigningException("Invalid keystore URL: " + keystoreUrl);
 			} catch (GeneralSecurityException e) {
@@ -94,12 +90,9 @@ public class SigningKeyKeyStoreProvider implements SigningKeyProvider {
 		return entry;
 	}
 
-	private String getParameter(String parameterName) throws XMLSigningException {
-		String result = parameters.get(parameterName);
-		if (result == null) {
-			throw new XMLSigningException("Missing parameter: " + parameterName);
-		}
-		return result;
+	@Override
+	public void setParameters(Map<String, String> parameters) {
+		super.setParameters(parameters);
+		entry = null;
 	}
-
 }

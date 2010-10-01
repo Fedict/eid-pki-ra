@@ -33,7 +33,10 @@
 			<!--  JanVDB workaround for JBoss WS problem       
       		<any namespace="##other"/> 
       		-->
-			<element ref="ogcm:AttributeCertificate" />
+      		<element ref="ogcm:Reason" minOccurs="0" maxOccurs="1"/>
+      		<element ref="ogcm:ReasonCode" minOccurs="0" maxOccurs="1"/>
+			<element ref="ogcm:Publish" minOccurs="0" maxOccurs="1" />
+			<element ref="ogcm:AttributeCertificate" minOccurs="0" maxOccurs="unbounded" />
 		</sequence>
 	</complexType>
 
