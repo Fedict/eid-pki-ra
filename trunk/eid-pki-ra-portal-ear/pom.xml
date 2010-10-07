@@ -68,17 +68,17 @@
 			</exclusions>
 		</dependency>
 
-		<!--		<dependency>-->
-		<!--			<groupId>org.bouncycastle</groupId>-->
-		<!--			<artifactId>bcprov-jdk16</artifactId>-->
-		<!--		</dependency>-->
+		<!-- <dependency> -->
+		<!-- <groupId>org.bouncycastle</groupId> -->
+		<!-- <artifactId>bcprov-jdk16</artifactId> -->
+		<!-- </dependency> -->
 
-		<!--  Application modules -->
+		<!-- Application modules -->
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-portal-webapp</artifactId>
 			<type>war</type>
-			<exclusions>				
+			<exclusions>
 				<exclusion>
 					<groupId>javax.servlet</groupId>
 					<artifactId>servlet-api</artifactId>
@@ -102,7 +102,7 @@
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-authentication-client</artifactId>
-			<exclusions>				
+			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-api</artifactId>
