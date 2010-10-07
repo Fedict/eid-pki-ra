@@ -454,10 +454,15 @@
 			</dependency>
 
 			<!-- Libraries -->
-
 			<dependency>
 				<groupId>be.fedict.eid-dss</groupId>
 				<artifactId>eid-dss-client</artifactId>
+				<version>${eid-dss-version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>be.fedict.eid-dss</groupId>
+				<artifactId>eid-dss-protocol-simple-client</artifactId>
 				<version>${eid-dss-version}</version>
 			</dependency>
 
@@ -595,7 +600,7 @@
 
 				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.HSQLDBDelegate</quartz.driverDelegateClass>
 				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ?</quartz.selectWithLockSql>
-			
+
 				<environment>development</environment>
 			</properties>
 		</profile>
@@ -623,7 +628,7 @@
 
 				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.StdJDBCDelegate</quartz.driverDelegateClass>
 				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ? FOR UPDATE</quartz.selectWithLockSql>
-			
+
 				<environment>test</environment>
 			</properties>
 		</profile>
@@ -652,7 +657,7 @@
 
 				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.StdJDBCDelegate</quartz.driverDelegateClass>
 				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ? FOR UPDATE</quartz.selectWithLockSql>
-				
+
 				<environment>production</environment>
 			</properties>
 		</profile>
