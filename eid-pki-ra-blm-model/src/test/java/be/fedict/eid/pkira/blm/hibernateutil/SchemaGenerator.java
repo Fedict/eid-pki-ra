@@ -67,18 +67,22 @@ public class SchemaGenerator {
 		gen.generate(Dialect.HSQL);
 	}
 
-	private AnnotationConfiguration cfg;
-	private String workingDir;
+	private final AnnotationConfiguration cfg;
+	private final String workingDir;
 
 	public SchemaGenerator(String packageName, String workingDir) throws Exception {
 		this.workingDir = workingDir;
-		
+
 		// Find entities on the class path
 		URL[] urls = new URL[1];
 		urls[0] = new File(workingDir).toURI().toURL();
 		AnnotationDB db = new AnnotationDB();
 		db.scanArchives(urls);
 		Set<String> classNames = db.getAnnotationIndex().get(Entity.class.getName());
+		if (classNames == null || classNames.size() == 0) {
+			throw new Exception("No entity classes found in working directory " + workingDir);
+		}
+		System.out.println("Found " + classNames.size() + " entity classes.");
 
 		// Create hibernate configuration
 		cfg = new AnnotationConfiguration();
