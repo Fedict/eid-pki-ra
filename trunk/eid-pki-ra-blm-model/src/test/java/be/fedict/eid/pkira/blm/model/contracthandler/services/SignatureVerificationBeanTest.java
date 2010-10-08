@@ -86,7 +86,7 @@ public class SignatureVerificationBeanTest {
 
 			CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509", new BouncyCastleProvider());
 			X509Certificate certificate = (X509Certificate) certificateFactory.generateCertificate(input);
-			return new SignatureInfo(certificate, new Date());
+			return new SignatureInfo(certificate, new Date(), "");
 		} catch (Exception e) {
 			fail("Cannot create signature info.", e);
 			return null;
