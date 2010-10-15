@@ -6,7 +6,7 @@
 	<types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema">
 			<import namespace="http://www.w3.org/2002/03/xkms-xbulk" schemaLocation="xkms2-xbulk.xsd" />
-			<import namespace="http://xkms.og.ubizen.com/schema/xkms-2003-09/" schemaLocation="ogcm.xsd" />
+			<import namespace="http://xkms.ubizen.com/kitoshi" schemaLocation="ogcm.xsd" />
 		</schema>
 	</types>
 

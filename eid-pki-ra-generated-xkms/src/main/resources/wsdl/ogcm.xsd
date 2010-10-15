@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xkms.og.ubizen.com/schema/xkms-2003-09/"
-	xmlns:ogcm="http://xkms.og.ubizen.com/schema/xkms-2003-09/" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xkms.ubizen.com/kitoshi"
+	xmlns:ogcm="http://xkms.ubizen.com/kitoshi" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<annotation>
 		<documentation xml:lang="en">Ubizen extension to the XKMS/X-Bulk schema v1.0</documentation>
 	</annotation>

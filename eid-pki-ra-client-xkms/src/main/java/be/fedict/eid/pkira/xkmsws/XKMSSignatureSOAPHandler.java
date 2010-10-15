@@ -58,7 +58,7 @@ public class XKMSSignatureSOAPHandler implements SOAPHandler<SOAPMessageContext>
 
 	private final XMLSignatureFactory signatureFactory = XMLSignatureFactory.getInstance("DOM");
 
-	private Map<String, String> parameters;
+	private final Map<String, String> parameters;
 
 	public XKMSSignatureSOAPHandler(Map<String, String> parameters) {
 		this.parameters = parameters;
@@ -93,7 +93,7 @@ public class XKMSSignatureSOAPHandler implements SOAPHandler<SOAPMessageContext>
 					// JBossWS >< SunWS workaround
 					bulkRegisterElement = (Element) soapRootElement.getElementsByTagNameNS("*", "BulkRegister").item(0);
 				}
-				
+
 				Element signedPartElement = (Element) bulkRegisterElement.getElementsByTagName("SignedPart").item(0);
 				if (signedPartElement == null) {
 					// JBossWS >< SunWS workaround
@@ -103,14 +103,17 @@ public class XKMSSignatureSOAPHandler implements SOAPHandler<SOAPMessageContext>
 				// Create reference with digest method and transforms
 				String referenceUri = "#" + signedPartElement.getAttribute("Id");
 				DigestMethod digestMethod = signatureFactory.newDigestMethod(DigestMethod.SHA1, null);
-				Transform transform = signatureFactory.newTransform(Transform.ENVELOPED, (TransformParameterSpec) null);
+				Transform transform = signatureFactory.newTransform(CanonicalizationMethod.INCLUSIVE,
+						(TransformParameterSpec) null);
 				List<Transform> transforms = Collections.singletonList(transform);
 				Reference reference = signatureFactory.newReference(referenceUri, digestMethod, transforms, null, null);
 
 				// Create signed info
-				SignedInfo signedInfo = signatureFactory.newSignedInfo(signatureFactory.newCanonicalizationMethod(
-						CanonicalizationMethod.INCLUSIVE, (C14NMethodParameterSpec) null), signatureFactory
-						.newSignatureMethod(SignatureMethod.RSA_SHA1, null), Collections.singletonList(reference));
+				CanonicalizationMethod canonicalizationMethod = signatureFactory.newCanonicalizationMethod(
+						CanonicalizationMethod.INCLUSIVE, (C14NMethodParameterSpec) null);
+				SignatureMethod signatureMethod = signatureFactory.newSignatureMethod(SignatureMethod.RSA_SHA1, null);
+				SignedInfo signedInfo = signatureFactory.newSignedInfo(canonicalizationMethod, signatureMethod,
+						Collections.singletonList(reference));
 
 				// Instantiate the SigningKeyProvider
 				KeyStoreKeyProvider signingKeyProvider = instantiateSigningKeyProvider();
@@ -121,7 +124,7 @@ public class XKMSSignatureSOAPHandler implements SOAPHandler<SOAPMessageContext>
 				KeyInfoFactory keyInfoFactory = signatureFactory.getKeyInfoFactory();
 				List<Object> x509Content = new ArrayList<Object>();
 				x509Content.add(certificate.getSubjectX500Principal().getName());
-				x509Content.add(certificate);
+				// x509Content.add(certificate);
 				KeyInfo keyInfo = keyInfoFactory.newKeyInfo(Collections.singletonList(keyInfoFactory
 						.newX509Data(x509Content)));
 
