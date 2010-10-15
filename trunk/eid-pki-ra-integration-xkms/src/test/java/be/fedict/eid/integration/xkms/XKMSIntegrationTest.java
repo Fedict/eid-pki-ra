@@ -35,9 +35,9 @@ import be.fedict.eid.pkira.xkmsws.XKMSClientException;
 
 public class XKMSIntegrationTest {
 
+	private static final String PARAMETER_XKMS_URL = "xkms.url";
 	private static final String PREFIX = "C=be,O=fedict,OU=test,CN=test-";
 	private static final Provider PROVIDER = new BouncyCastleProvider();
-	private static final String ENDPOINT_ADDRESS = "http://localhost:8080/xkms/xkms";
 
 	@Mock
 	private Log log;
@@ -53,7 +53,8 @@ public class XKMSIntegrationTest {
 	}
 
 	@BeforeMethod
-	public void setupTest() throws IOException {
+	public void createMocksAndXkmsClient() throws IOException {
+		// Create the mocks
 		MockitoAnnotations.initMocks(this);
 
 		csrParser = new CSRParserImpl();
@@ -62,16 +63,19 @@ public class XKMSIntegrationTest {
 		certificateParser = new CertificateParserImpl();
 		certificateParser.setLog(log);
 
+		// Load the properties and set them on System
 		Properties properties = new Properties();
 		properties.load(getClass().getClassLoader().getResourceAsStream("xkms-integration.properties"));
+		for (Map.Entry<Object, Object> property : properties.entrySet()) {
+			System.setProperty(property.getKey().toString(), property.getValue().toString());
+		}
 
+		// Create the XKMS client
 		Map<String, String> parameters = new HashMap<String, String>();
-		parameters.put("buc", "8047651269");
-		parameters.put("signing.provider", "be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProvider");
 		for (Map.Entry<Object, Object> entry : properties.entrySet()) {
 			parameters.put((String) entry.getKey(), (String) entry.getValue());
 		}
-		xkmsClient = new XKMSClient(ENDPOINT_ADDRESS, parameters);
+		xkmsClient = new XKMSClient(properties.getProperty(PARAMETER_XKMS_URL), parameters);
 	}
 
 	@Test

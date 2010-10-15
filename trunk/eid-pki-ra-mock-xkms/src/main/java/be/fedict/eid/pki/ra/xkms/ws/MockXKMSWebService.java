@@ -48,8 +48,8 @@ import org.xkms.schema.xkms_2001_01_20.ResultCode;
 
 import be.fedict.eid.pkira.crypto.CSRParserImpl;
 
-import com.ubizen.og.xkms.schema.xkms_2003_09.AttributeCertificate;
-import com.ubizen.og.xkms.schema.xkms_2003_09.ValidityIntervalType;
+import com.ubizen.xkms.kitoshi.AttributeCertificate;
+import com.ubizen.xkms.kitoshi.ValidityIntervalType;
 
 @WebService(endpointInterface = "org.w3._2002._03.xkms_xbulk_wsdl.XKMSPortType")
 public class MockXKMSWebService implements XKMSPortType {
@@ -57,7 +57,7 @@ public class MockXKMSWebService implements XKMSPortType {
 	private final org.w3._2002._03.xkms_xbulk.ObjectFactory xbulkObjectFactory = new org.w3._2002._03.xkms_xbulk.ObjectFactory();
 	private final org.xkms.schema.xkms_2001_01_20.ObjectFactory xkmsObjectFactory = new org.xkms.schema.xkms_2001_01_20.ObjectFactory();
 	private final org.w3._2000._09.xmldsig_.ObjectFactory dsigObjectFactory = new org.w3._2000._09.xmldsig_.ObjectFactory();
-	private final com.ubizen.og.xkms.schema.xkms_2003_09.ObjectFactory ogcmObjectFactory = new com.ubizen.og.xkms.schema.xkms_2003_09.ObjectFactory();
+	private final com.ubizen.xkms.kitoshi.ObjectFactory ogcmObjectFactory = new com.ubizen.xkms.kitoshi.ObjectFactory();
 
 	@Override
 	public BulkRegisterResultType bulkRegister(BulkRegisterType bulkRegister) {

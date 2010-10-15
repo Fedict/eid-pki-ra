@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema targetNamespace="http://www.w3.org/2002/03/xkms-xbulk" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#"
-	xmlns:xkms="http://www.xkms.org/schema/xkms-2001-01-20" xmlns:xbulk="http://www.w3.org/2002/03/xkms-xbulk" xmlns:ogcm="http://xkms.og.ubizen.com/schema/xkms-2003-09/"
-	xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="http://www.w3.org/2002/03/xkms-xbulk"
+	xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:xkms="http://www.xkms.org/schema/xkms-2001-01-20"
+	xmlns:xbulk="http://www.w3.org/2002/03/xkms-xbulk" xmlns:ogcm="http://xkms.ubizen.com/kitoshi"
+	xmlns="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 
-	<import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="xmldsig-core-schema.xsd" />
-	<import namespace="http://www.xkms.org/schema/xkms-2001-01-20" schemaLocation="xkms.xsd" />
-	<import namespace="http://xkms.og.ubizen.com/schema/xkms-2003-09/" schemaLocation="ogcm.xsd" />
+	<import namespace="http://www.w3.org/2000/09/xmldsig#"
+		schemaLocation="xmldsig-core-schema.xsd" />
+	<import namespace="http://www.xkms.org/schema/xkms-2001-01-20"
+		schemaLocation="xkms.xsd" />
+	<import namespace="http://xkms.ubizen.com/kitoshi"
+		schemaLocation="ogcm.xsd" />
 
 	<annotation>
 		<documentation xml:lang="en">
-			XML Schema for X-BULK version 1.1 draft 5
+			XML Schema for X-BULK version
+			1.1 draft 5
     </documentation>
 	</annotation>
 
@@ -30,13 +35,12 @@
 
 	<complexType name="ProcessInfoType">
 		<sequence minOccurs="1" maxOccurs="unbounded">
-			<!--  JanVDB workaround for JBoss WS problem       
-      		<any namespace="##other"/> 
-      		-->
-      		<element ref="ogcm:Reason" minOccurs="0" maxOccurs="1"/>
-      		<element ref="ogcm:ReasonCode" minOccurs="0" maxOccurs="1"/>
+			<!-- JanVDB workaround for JBoss WS problem <any namespace="##other"/> -->
+			<element ref="ogcm:Reason" minOccurs="0" maxOccurs="1" />
+			<element ref="ogcm:ReasonCode" minOccurs="0" maxOccurs="1" />
 			<element ref="ogcm:Publish" minOccurs="0" maxOccurs="1" />
-			<element ref="ogcm:AttributeCertificate" minOccurs="0" maxOccurs="unbounded" />
+			<element ref="ogcm:AttributeCertificate" minOccurs="0"
+				maxOccurs="unbounded" />
 		</sequence>
 	</complexType>
 
@@ -49,13 +53,13 @@
 	<element name="Respond">
 		<complexType>
 			<sequence>
-				<element name="string" type="string" minOccurs="0" maxOccurs="unbounded" />
+				<element name="string" type="string" minOccurs="0"
+					maxOccurs="unbounded" />
 			</sequence>
 		</complexType>
 	</element>
 
 	<!-- Register Stuff -->
-
 	<complexType name="BulkRegisterType">
 		<sequence>
 			<element name="SignedPart">
@@ -85,8 +89,8 @@
 
 	<complexType name="RequestType">
 		<sequence>
-			<element ref="xkms:KeyID" />
 			<element ref="xkms:Status" />
+			<element ref="xkms:KeyID" />
 			<element ref="dsig:KeyInfo" />
 			<element ref="xkms:Respond" minOccurs="0" />
 			<element ref="xbulk:ProcessInfo" minOccurs="0" />

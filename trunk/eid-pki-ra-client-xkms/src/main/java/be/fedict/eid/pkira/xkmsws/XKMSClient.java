@@ -58,8 +58,8 @@ import org.xkms.schema.xkms_2001_01_20.RegisterResult.Answer;
 import org.xkms.schema.xkms_2001_01_20.Respond;
 import org.xkms.schema.xkms_2001_01_20.ResultCode;
 
-import com.ubizen.og.xkms.schema.xkms_2003_09.AttributeCertificate;
-import com.ubizen.og.xkms.schema.xkms_2003_09.ValidityIntervalType;
+import com.ubizen.xkms.kitoshi.AttributeCertificate;
+import com.ubizen.xkms.kitoshi.ValidityIntervalType;
 
 public class XKMSClient {
 
@@ -80,7 +80,7 @@ public class XKMSClient {
 	private final String endpointAddress;
 	private final SOAPHandler<SOAPMessageContext>[] extraHandlers;
 
-	private final com.ubizen.og.xkms.schema.xkms_2003_09.ObjectFactory ogcmObjectFactory = new com.ubizen.og.xkms.schema.xkms_2003_09.ObjectFactory();
+	private final com.ubizen.xkms.kitoshi.ObjectFactory ogcmObjectFactory = new com.ubizen.xkms.kitoshi.ObjectFactory();
 	private final Map<String, String> parameters;
 	private final org.w3._2002._03.xkms_xbulk.ObjectFactory xbulkObjectFactory = new org.w3._2002._03.xkms_xbulk.ObjectFactory();
 	private final org.xkms.schema.xkms_2001_01_20.ObjectFactory xkmsObjectFactory = new org.xkms.schema.xkms_2001_01_20.ObjectFactory();
@@ -166,10 +166,9 @@ public class XKMSClient {
 	 */
 	private BulkRegisterType createBulkRegisterRequest(RequestType... requestObjects) {
 		// Create the signed part
-		SignedPart signedPart1 = xbulkObjectFactory.createBulkRegisterTypeSignedPart();
+		SignedPart signedPart = xbulkObjectFactory.createBulkRegisterTypeSignedPart();
 		String signedPartId = "signed-part";
-		signedPart1.setId(signedPartId);
-		SignedPart signedPart = signedPart1;
+		signedPart.setId(signedPartId);
 
 		// Add the respond element to it
 		Respond respond = xkmsObjectFactory.createRespond();
