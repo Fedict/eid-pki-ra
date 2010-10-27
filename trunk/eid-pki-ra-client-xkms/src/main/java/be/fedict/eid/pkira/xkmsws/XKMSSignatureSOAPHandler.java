@@ -18,6 +18,7 @@
 
 package be.fedict.eid.pkira.xkmsws;
 
+import java.io.File;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -40,17 +41,26 @@ import javax.xml.crypto.dsig.keyinfo.KeyInfoFactory;
 import javax.xml.crypto.dsig.spec.C14NMethodParameterSpec;
 import javax.xml.crypto.dsig.spec.TransformParameterSpec;
 import javax.xml.namespace.QName;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProvider;
 
 public class XKMSSignatureSOAPHandler implements SOAPHandler<SOAPMessageContext> {
+
+	public static final String PARAMETER_LOG_PREFIX = "logPrefix";
 
 	public static final String PARAMETER_SIGNING_KEY_PROVIDER_CLASS = "signing.provider";
 
@@ -87,6 +97,11 @@ public class XKMSSignatureSOAPHandler implements SOAPHandler<SOAPMessageContext>
 		if (outbound) {
 			try {
 				Element soapRootElement = context.getMessage().getSOAPBody();
+
+				// Output the message if requested (integration test only)
+				if (parameters.containsKey(PARAMETER_LOG_PREFIX)) {
+					writeDocument(soapRootElement.getOwnerDocument(), parameters.get(PARAMETER_LOG_PREFIX) + "-unsigned.xml");
+				}
 
 				Element bulkRegisterElement = (Element) soapRootElement.getElementsByTagName("BulkRegister").item(0);
 				if (bulkRegisterElement == null) {
@@ -131,12 +146,18 @@ public class XKMSSignatureSOAPHandler implements SOAPHandler<SOAPMessageContext>
 				// Create a DOMSignContext and specify the RSA PrivateKey and
 				// location of the resulting XMLSignature's parent element.
 				DOMSignContext domSigningContext = new DOMSignContext(privateKey, bulkRegisterElement);
+				domSigningContext.putNamespacePrefix(javax.xml.crypto.dsig.XMLSignature.XMLNS, "ds");
 
 				// Create the XMLSignature, but don't sign it yet.
 				XMLSignature signature = signatureFactory.newXMLSignature(signedInfo, keyInfo);
 
 				// Marshal, generate, and sign the enveloped signature.
 				signature.sign(domSigningContext);
+
+				// Output the message if requested (integration test only)
+				if (parameters.containsKey(PARAMETER_LOG_PREFIX)) {
+					writeDocument(soapRootElement.getOwnerDocument(), parameters.get(PARAMETER_LOG_PREFIX) + "-signed.xml");
+				}
 			} catch (Exception e) {
 				throw new RuntimeException("Error creating xml signature", e);
 			}
@@ -157,4 +178,16 @@ public class XKMSSignatureSOAPHandler implements SOAPHandler<SOAPMessageContext>
 			throw new XMLSigningException("Error creating signing key provider.", e);
 		}
 	}
+
+	private void writeDocument(Document doc, String fileName) throws Exception {
+		// Prepare the DOM document for writing
+		Source source = new DOMSource(doc);
+		// Prepare the output file
+		File file = new File(fileName);
+		Result result = new StreamResult(file);
+		// Write the DOM document to the file
+		Transformer xformer = TransformerFactory.newInstance().newTransformer();
+		xformer.transform(source, result);
+	}
+
 }
