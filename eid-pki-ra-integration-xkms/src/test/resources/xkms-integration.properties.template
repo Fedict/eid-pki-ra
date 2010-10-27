@@ -2,8 +2,11 @@
 # Properties required for XKMS integration tests
 #
 
+# Signing provider
+signing.provider=be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProvider
+
 # Keystore type (P12 / JKS)
-signing.keystore.type=P12
+signing.keystore.type=pkcs12
 
 # Url to the keystore
 signing.keystore.url=file:/...
@@ -11,8 +14,17 @@ signing.keystore.url=file:/...
 # Passphrase to unlock the keystore
 signing.keystore.password=
 
-# Name of the entry in the keystore
-singing.keystore.entry=
-
 # Password to unlock the entry in the keystore
 signing.keystore.entry.password=
+
+# Proxy settings
+#http.proxyHost=localhost
+#http.proxyPort=8008
+
+# URL of the XKMS service
+xkms.url=
+
+# BUCs
+buc.server=
+buc.client=
+buc.code=
