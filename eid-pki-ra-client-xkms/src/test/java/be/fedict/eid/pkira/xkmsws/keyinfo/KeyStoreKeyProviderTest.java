@@ -23,12 +23,12 @@ import java.util.Map;
 
 import org.testng.annotations.Test;
 
-import be.fedict.eid.pkira.xkmsws.XMLSigningException;
+import be.fedict.eid.pkira.xkmsws.XKMSClientException;
 
 public class KeyStoreKeyProviderTest {
 
 	@Test
-	public void testGetCertificateAndPrivateKey() throws XMLSigningException {
+	public void testGetCertificateAndPrivateKey() throws XKMSClientException {
 		KeyStoreKeyProvider info = new KeyStoreKeyProvider();
 
 		Map<String, String> parameters = new HashMap<String, String>();

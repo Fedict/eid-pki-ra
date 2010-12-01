@@ -93,10 +93,10 @@ public class MockXKMSWebService implements XKMSPortType {
 
 		String keyName = getFromList(String.class, request.getKeyInfo().getContent());
 		KeyBindingType keyBinding = registerResult.getAnswer().getKeyBinding().get(0);
-		if (keyName.contains("1002")) {
+		if (keyName.contains("3ea")) {
 			registerResult.setResult(ResultCode.FAILURE);
 			addReasonAndReasonCode(keyBinding, BigInteger.valueOf(123), "Error");
-		} else if (keyName.contains("1001")) {
+		} else if (keyName.contains("3e9")) {
 			registerResult.setResult(ResultCode.FAILURE);
 			addReasonAndReasonCode(keyBinding, BigInteger.valueOf(566), "Already revoked");
 		} else {

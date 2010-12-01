@@ -3,7 +3,7 @@ package be.fedict.eid.pkira.xkmsws.keyinfo;
 import java.util.Collections;
 import java.util.Map;
 
-import be.fedict.eid.pkira.xkmsws.XMLSigningException;
+import be.fedict.eid.pkira.xkmsws.XKMSClientException;
 
 public abstract class KeyProviderBase implements KeyProvider {
 
@@ -17,10 +17,10 @@ public abstract class KeyProviderBase implements KeyProvider {
 		this.parameters = parameters;
 	}
 
-	protected String getParameter(String parameterName) throws XMLSigningException {
+	protected String getParameter(String parameterName, boolean required) throws XKMSClientException {
 		String result = parameters.get(parameterName);
-		if (result == null) {
-			throw new XMLSigningException("Missing parameter: " + parameterName);
+		if (result == null && required) {
+			throw new XKMSClientException("Missing parameter: " + parameterName);
 		}
 		return result;
 	}

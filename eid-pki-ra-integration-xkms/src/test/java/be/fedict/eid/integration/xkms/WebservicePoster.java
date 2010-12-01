@@ -8,11 +8,9 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.io.FileUtils;
-import org.testng.annotations.Test;
 
 public class WebservicePoster {
 
-	@Test
 	public static void main(String[] args) throws Exception {
 		if (args.length != 2) {
 			System.out.println("Arguments: <inputFile> <outputFile>");
@@ -38,7 +36,8 @@ public class WebservicePoster {
 
 		// Post the message
 		String inputMessage = FileUtils.readFileToString(new File(inputFile));
-		PostMethod method = new PostMethod(properties.getProperty("xkms.url"));
+		String url = properties.getProperty("xkms.url");
+		PostMethod method = new PostMethod(url);
 		method.setRequestEntity(new StringRequestEntity(inputMessage, "text/xml", "utf-8"));
 		int result = client.executeMethod(method);
 		System.err.println("Result: " + result);
@@ -46,6 +45,7 @@ public class WebservicePoster {
 		// Write its result
 		byte[] outputMessage = method.getResponseBody();
 		FileUtils.writeByteArrayToFile(new File(outputFile), outputMessage);
-
+		System.out.write(outputMessage);
+		System.out.println();
 	}
 }

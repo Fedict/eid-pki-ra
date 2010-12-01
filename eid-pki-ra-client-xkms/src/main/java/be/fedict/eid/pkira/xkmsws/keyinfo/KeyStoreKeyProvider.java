@@ -27,7 +27,7 @@ import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.Map;
 
-import be.fedict.eid.pkira.xkmsws.XMLSigningException;
+import be.fedict.eid.pkira.xkmsws.XKMSClientException;
 
 /**
  * @author Jan Van den Bergh
@@ -46,7 +46,7 @@ public class KeyStoreKeyProvider extends KeyProviderBase implements KeyProvider 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public X509Certificate getCertificate() throws XMLSigningException {
+	public X509Certificate getCertificate() throws XKMSClientException {
 		return (X509Certificate) getEntry().getCertificate();
 	}
 
@@ -54,17 +54,17 @@ public class KeyStoreKeyProvider extends KeyProviderBase implements KeyProvider 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public PrivateKey getPrivateKey() throws XMLSigningException {
+	public PrivateKey getPrivateKey() throws XKMSClientException {
 		return getEntry().getPrivateKey();
 	}
 
-	private PrivateKeyEntry getEntry() throws XMLSigningException {
+	private PrivateKeyEntry getEntry() throws XKMSClientException {
 		if (entry == null) {
-			String keystoreUrl = getParameter(PARAMETER_KEYSTORE_URL);
-			// String entryName = getParameter(PARAMETER_KEYSTORE_ENTRYNAME);
-			String keystorePassword = getParameter(PARAMETER_KEYSTORE_PASSWORD);
-			String entryPassword = getParameter(PARAMETER_KEYSTORE_ENTRY_PASSWORD);
-			String keyStoreType = getParameter(PARAMETER_KEYSTORE_TYPE);
+			String keystoreUrl = getParameter(PARAMETER_KEYSTORE_URL, true);
+			String entryName = getParameter(PARAMETER_KEYSTORE_ENTRYNAME, false);
+			String keystorePassword = getParameter(PARAMETER_KEYSTORE_PASSWORD, true);
+			String entryPassword = getParameter(PARAMETER_KEYSTORE_ENTRY_PASSWORD, true);
+			String keyStoreType = getParameter(PARAMETER_KEYSTORE_TYPE, true);
 
 			try {
 				URL url = new URL(keystoreUrl);
@@ -73,17 +73,19 @@ public class KeyStoreKeyProvider extends KeyProviderBase implements KeyProvider 
 				keyStore.load(url.openStream(), keystorePassword.toCharArray());
 				PasswordProtection passwordProtection = new PasswordProtection(entryPassword.toCharArray());
 
-				String entryName = keyStore.aliases().nextElement();
+				if (entryName == null) {
+					entryName = keyStore.aliases().nextElement();
+				}
 				entry = (PrivateKeyEntry) keyStore.getEntry(entryName, passwordProtection);
 				if (entry == null) {
-					throw new XMLSigningException("Entry with name " + entryName + " not found in the keystore.");
+					throw new XKMSClientException("Entry with name " + entryName + " not found in the keystore.");
 				}
 			} catch (MalformedURLException e) {
-				throw new XMLSigningException("Invalid keystore URL: " + keystoreUrl);
+				throw new XKMSClientException("Invalid keystore URL: " + keystoreUrl);
 			} catch (GeneralSecurityException e) {
-				throw new XMLSigningException("Security exception while getting private key to sign.", e);
+				throw new XKMSClientException("Security exception while getting private key to sign.", e);
 			} catch (IOException e) {
-				throw new XMLSigningException("Error opening keystore.", e);
+				throw new XKMSClientException("Error opening keystore.", e);
 			}
 		}
 

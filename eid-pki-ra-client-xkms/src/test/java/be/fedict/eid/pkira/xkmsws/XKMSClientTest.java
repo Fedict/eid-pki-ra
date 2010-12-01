@@ -22,10 +22,20 @@ import static org.testng.Assert.assertNotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.Endpoint;
 
 import org.custommonkey.xmlunit.Diff;
@@ -43,6 +53,8 @@ import be.fedict.eid.pkira.crypto.CSRParser;
 import be.fedict.eid.pkira.crypto.CSRParserImpl;
 import be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProvider;
 import be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProviderTest;
+import be.fedict.eid.pkira.xkmsws.signing.XmlDocumentSigner;
+import be.fedict.eid.pkira.xkmsws.util.RequestMessageCreator;
 
 public class XKMSClientTest {
 
@@ -59,7 +71,6 @@ public class XKMSClientTest {
 				"/Envelope[1]/Body[1]/BulkRegister[1]/Signature[1]/SignatureValue[1]/text()[1]", };
 
 	private Endpoint webServiceEndpoint;
-	private MessageInterceptionHandler messageInterceptionHandler;
 	private XKMSClient xkmsClient;
 
 	private final Map<String, String> parameters = new HashMap<String, String>();
@@ -75,13 +86,11 @@ public class XKMSClientTest {
 		webServiceEndpoint.stop();
 	}
 
-	@SuppressWarnings("unchecked")
 	@BeforeMethod
 	public void setup() {
 		// Instantiate client
-		parameters.put(XKMSClient.PARAMETER_BUC + ".client", "8047651269");
-		parameters.put(XKMSSignatureSOAPHandler.PARAMETER_SIGNING_KEY_PROVIDER_CLASS,
-				KeyStoreKeyProvider.class.getName());
+		parameters.put(RequestMessageCreator.PARAMETER_BUC + ".client", "8047651269");
+		parameters.put(XmlDocumentSigner.PARAMETER_SIGNING_KEY_PROVIDER_CLASS, KeyStoreKeyProvider.class.getName());
 		String url = KeyStoreKeyProviderTest.class.getResource("/test.jks").toExternalForm();
 		parameters.put(KeyStoreKeyProvider.PARAMETER_KEYSTORE_TYPE, "JKS");
 		parameters.put(KeyStoreKeyProvider.PARAMETER_KEYSTORE_URL, url);
@@ -89,9 +98,7 @@ public class XKMSClientTest {
 		parameters.put(KeyStoreKeyProvider.PARAMETER_KEYSTORE_PASSWORD, "changeit");
 		parameters.put(KeyStoreKeyProvider.PARAMETER_KEYSTORE_ENTRY_PASSWORD, "changeit");
 
-		messageInterceptionHandler = new MessageInterceptionHandler();
-
-		xkmsClient = new XKMSClient(URL, parameters, messageInterceptionHandler);
+		xkmsClient = new XKMSClient(URL, parameters);
 
 		// Configure XML Unit
 		XMLUnit.setIgnoreWhitespace(true);
@@ -110,11 +117,26 @@ public class XKMSClientTest {
 
 		// Validate the outgoing message
 		Document controlDocument = XMLUnit.buildControlDocument(readResource("/exampleSigningRequest.xml"));
-		Document testDocument = messageInterceptionHandler.getLastOutboundMessage().getOwnerDocument();
+		Document testDocument = xkmsClient.getLastOutboundMessage();
+
+		// Write the document
+		writeXMLDocument(testDocument);
+
 		Diff diff = XMLUnit.compareXML(controlDocument, testDocument);
 		diff = new IgnoreLocationsDifferenceListener(diff, ACCEPTED_DIFFERENCES_CREATE_CERTIFICATE);
 
 		XMLAssert.assertXMLIdentical(diff, true);
+	}
+
+	private void writeXMLDocument(Document testDocument) throws TransformerConfigurationException,
+			TransformerFactoryConfigurationError, TransformerException {
+		Source source = new DOMSource(testDocument);
+		StringWriter writer = new StringWriter();
+		Result result = new StreamResult(writer);
+		Transformer xformer = TransformerFactory.newInstance().newTransformer();
+		xformer.transform(source, result);
+
+		System.err.println(writer.toString());
 	}
 
 	@Test

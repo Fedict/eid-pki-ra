@@ -20,7 +20,7 @@ import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.Map;
 
-import be.fedict.eid.pkira.xkmsws.XMLSigningException;
+import be.fedict.eid.pkira.xkmsws.XKMSClientException;
 
 /**
  * Interface used to get the key / certificate to sign the XKMS message.
@@ -31,16 +31,23 @@ public interface KeyProvider {
 
 	/**
 	 * Get the X509 certificate that belongs to the key.
-	 * @throws XMLSigningException when the certificate could not be retrieved using the specified parameters.
+	 * 
+	 * @throws XMLSigningException
+	 *             when the certificate could not be retrieved using the
+	 *             specified parameters.
+	 * @throws XmlDocumentSignerException
 	 */
-	public X509Certificate getCertificate() throws XMLSigningException;
-	
+	public X509Certificate getCertificate() throws XKMSClientException;
+
 	/**
 	 * Get the private key that belongs to the key.
-	 * @throws XMLSigningException when the key could not be retrieved using the specified parameters.
+	 * 
+	 * @throws XMLSigningException
+	 *             when the key could not be retrieved using the specified
+	 *             parameters.
 	 */
-	public PrivateKey getPrivateKey() throws XMLSigningException;
-	
+	public PrivateKey getPrivateKey() throws XKMSClientException;
+
 	/**
 	 * Returns the parameters used to get the key.
 	 */
