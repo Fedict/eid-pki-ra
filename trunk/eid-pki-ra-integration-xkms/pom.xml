@@ -33,11 +33,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>commons-httpclient</groupId>
-			<artifactId>commons-httpclient</artifactId>
-			<version>3.1</version>
-			<type>jar</type>
-			<scope>compile</scope>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>jaxws-rt</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>
