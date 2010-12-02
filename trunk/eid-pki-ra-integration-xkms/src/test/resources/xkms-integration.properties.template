@@ -24,6 +24,15 @@ signing.keystore.entry.password=
 # URL of the XKMS service
 xkms.url=
 
+# URL of the pki ra public service
+eidpkira.service.public.url=
+
+# Database parameters for pki ra (used to modify some settings of the application)
+eidpkira.jdbc.url=
+eidpkira.jdbc.username=
+eidpkira.jdbc.password=
+
+
 # BUCs
 buc.server=
 buc.client=
