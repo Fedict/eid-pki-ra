@@ -33,8 +33,8 @@ import be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProvider;
 public class XmlDocumentSigner {
 
 	public static final String PARAMETER_SIGNING_KEY_PROVIDER_CLASS = "signing.provider";
-	private static final String ELEMENT_TO_APPEND_TO = "BulkRegister";
-	private static final String ELEMENT_TO_SIGN = "SignedPart";
+	public static final String ELEMENT_TO_APPEND_TO = "BulkRegister";
+	public static final String ELEMENT_TO_SIGN = "SignedPart";
 
 	private final Map<String, String> parameters;
 	private final XMLSignatureFactory signatureFactory = XMLSignatureFactory.getInstance("DOM");
@@ -51,17 +51,17 @@ public class XmlDocumentSigner {
 		PrivateKey privateKey = signingKeyProvider.getPrivateKey();
 
 		// Sign the docuemnt
-		signXKMSDocument(document, certificate, privateKey);
+		signXKMSDocument(document, certificate, privateKey, elementToAppendToName, elementToSignName);
 	}
 
-	public void signXKMSDocument(Document document, X509Certificate certificate, PrivateKey privateKey)
-			throws XKMSClientException {
+	public void signXKMSDocument(Document document, X509Certificate certificate, PrivateKey privateKey,
+			String elementToAppendToName, String elementToSignName) throws XKMSClientException {
 		try {
 			// Bulk register element to work with
-			Element elementToAppendTo = getElementByTagName(document, ELEMENT_TO_APPEND_TO);
+			Element elementToAppendTo = getElementByTagName(document, elementToAppendToName);
 
 			// Create reference with digest method and transforms
-			Element elementToSign = getElementByTagName(document, ELEMENT_TO_SIGN);
+			Element elementToSign = getElementByTagName(document, elementToSignName);
 			String referenceUri = "#" + elementToSign.getAttribute("Id");
 			DigestMethod digestMethod = signatureFactory.newDigestMethod(DigestMethod.SHA1, null);
 			Transform transform = signatureFactory.newTransform(CanonicalizationMethod.INCLUSIVE,

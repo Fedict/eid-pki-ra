@@ -50,7 +50,7 @@ public class DigestTest {
 
 		// Sign the document
 		new XmlDocumentSigner(parameters).signXKMSDocument(document, provider.getCertificate(),
-				provider.getPrivateKey());
+				provider.getPrivateKey(), XmlDocumentSigner.ELEMENT_TO_APPEND_TO, XmlDocumentSigner.ELEMENT_TO_SIGN);
 		writeDocument(document);
 
 		// Extract the digest value

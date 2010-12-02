@@ -28,8 +28,11 @@ import java.io.Writer;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.codec.binary.Base64;
+import org.w3c.dom.Document;
 
 import be.fedict.eid.pkira.generated.contracts.EIDPKIRAContractType;
 
@@ -41,7 +44,7 @@ import be.fedict.eid.pkira.generated.contracts.EIDPKIRAContractType;
 public class EIDPKIRAContractsClient {
 
 	public static final String NAME = "be.fedict.eid.pkira.wsclient.eidPKIRAContractsClient";
-	
+
 	private static final String ENCODING = "UTF8";
 	private static final String NAMESPACE = "urn:be:fedict:eid:pkira:contracts";
 
@@ -103,6 +106,35 @@ public class EIDPKIRAContractsClient {
 	}
 
 	/**
+	 * Marshals the JAXB contract to a DOM document.
+	 * 
+	 * @param contractDocument
+	 *            document to marshal.
+	 * @return the text in the XML.
+	 * @throws XmlMarshallingException
+	 *             when this fails.
+	 */
+	public <T extends EIDPKIRAContractType> Document marshalToDocument(T contractDocument, Class<T> clazz)
+			throws XmlMarshallingException {
+		QName qname = new QName(NAMESPACE, getElementNameForType(clazz));
+		JAXBElement<T> jaxbElement = new JAXBElement<T>(qname, clazz, contractDocument);
+
+		try {
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			dbf.setNamespaceAware(true);
+			Document document = dbf.newDocumentBuilder().newDocument();
+
+			getMarshaller().marshal(jaxbElement, document);
+
+			return document;
+		} catch (JAXBException e) {
+			throw new XmlMarshallingException("Cannot marshal XML object.", e);
+		} catch (ParserConfigurationException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
 	 * Unmarshals an XML from a reader.
 	 * 
 	 * @param <T>
@@ -151,7 +183,7 @@ public class EIDPKIRAContractsClient {
 	 *             when this fails.
 	 */
 	public <T extends EIDPKIRAContractType> T unmarshal(String xml, Class<T> clazz) throws XmlMarshallingException {
-		if (xml==null) {
+		if (xml == null) {
 			throw new XmlMarshallingException("Xml is null.");
 		}
 		StringReader reader = new StringReader(xml);
@@ -173,10 +205,10 @@ public class EIDPKIRAContractsClient {
 	 */
 	public <T extends EIDPKIRAContractType> T unmarshalFromBase64(String base64, Class<T> clazz)
 			throws XmlMarshallingException {
-		if (base64==null) {
+		if (base64 == null) {
 			throw new XmlMarshallingException("Data is null.");
 		}
-		
+
 		String xml;
 		try {
 			xml = new String(Base64.decodeBase64(base64), "UTF8");

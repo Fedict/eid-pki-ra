@@ -6,11 +6,7 @@ import static org.testng.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.PrivateKey;
 import java.security.Provider;
-import java.security.PublicKey;
 import java.security.Security;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,8 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.bouncycastle.asn1.x509.X509Name;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.jboss.seam.log.Log;
 import org.mockito.Mock;
@@ -64,7 +58,6 @@ public class XKMSIntegrationTest {
 	// }
 
 	private static final String PARAMETER_XKMS_URL = "xkms.url";
-	private static final String PREFIX = "C=be,O=fedict,OU=test,CN=test-";
 	private static final Provider PROVIDER = new BouncyCastleProvider();
 
 	private static BigInteger serialNumber;
@@ -117,20 +110,17 @@ public class XKMSIntegrationTest {
 	@Test
 	public void testXKMSCreateCertificate() throws XKMSClientException, CryptoException {
 		// Generate a CSR and validate it
-		byte[] csr = generateCSR();
+		CSRInfo csrInfo = Util.generateCSR();
 
-		assertNotNull(csr);
-		assertTrue(csr.length > 0);
-
-		CSRInfo csrInfo = csrParser.parseCSR(csr);
 		assertNotNull(csrInfo);
-		assertTrue(csrInfo.getSubject().startsWith(PREFIX));
+		assertTrue(csrInfo.getSubject().startsWith(Util.DN_PREFIX));
+		assertTrue(csrInfo.getSubject().endsWith(Util.DN_SUFFIX));
 
 		new File("tests").mkdir();
 		xkmsClientParameters.put(XKMSClient.PARAMETER_LOG_PREFIX, "tests/" + DATE_STR + "certificate-request");
 
 		// Generate the certificate
-		byte[] certificate = xkmsClient.createCertificate(csr, 15, "client");
+		byte[] certificate = xkmsClient.createCertificate(csrInfo.getDerEncoded(), 15, "client");
 		assertNotNull(certificate);
 
 		CertificateInfo certificateInfo = certificateParser.parseCertificate(certificate);
@@ -161,26 +151,6 @@ public class XKMSIntegrationTest {
 	// public void validateXKMSRevokeCertificateSignature() throws Exception {
 	// validateSignature("tests/" + DATE_STR + "revocation-request-signed.xml");
 	// }
-
-	private byte[] generateCSR() {
-		try {
-			// CSR Subject
-			String subject = PREFIX + System.currentTimeMillis();
-			X509Name xname = new X509Name(subject);
-
-			// CSR Key Pair
-			KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA", PROVIDER);
-			KeyPair generateKeyPair = generator.generateKeyPair();
-			PrivateKey priv = generateKeyPair.getPrivate();
-			PublicKey pub = generateKeyPair.getPublic();
-
-			// CSR
-			PKCS10CertificationRequest csr = new PKCS10CertificationRequest("MD5WithRSA", xname, pub, null, priv);
-			return csr.getEncoded();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
 
 	// private void validateSignature(String xmlFileName) throws Exception {
 	// System.err.println("Validating " + xmlFileName + "...");
