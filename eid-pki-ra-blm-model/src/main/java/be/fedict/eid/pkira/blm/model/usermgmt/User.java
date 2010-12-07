@@ -21,10 +21,13 @@ package be.fedict.eid.pkira.blm.model.usermgmt;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -33,9 +36,10 @@ import javax.persistence.Table;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.validator.NotEmpty;
 
-import be.fedict.eid.pkira.blm.model.usermgmt.validation.UniqueUserCertificateSubject;
+import be.fedict.eid.pkira.blm.model.usermgmt.validation.UniqueUserCertificate;
 import be.fedict.eid.pkira.blm.model.usermgmt.validation.UniqueUserNationalRegisterNumber;
 import be.fedict.eid.pkira.blm.model.usermgmt.validation.ValidNationalRegisterNumber;
+import be.fedict.eid.pkira.blm.model.usermgmt.validation.ValidUserCertificate;
 
 /**
  * @author Bram Baeyens
@@ -64,9 +68,14 @@ public class User implements Serializable {
 	@UniqueUserNationalRegisterNumber
 	@ValidNationalRegisterNumber
 	private String nationalRegisterNumber;
-	@Column(name = "CERTIFICATE_SUBJECT", unique = true, nullable = true)
-	@UniqueUserCertificateSubject
+	@Column(name = "CERTIFICATE_SUBJECT", nullable = true)
 	private String certificateSubject;
+	@Lob
+	@Column(name = "CERTIFICATE", nullable = true)
+	@Basic(fetch = FetchType.LAZY)
+	@ValidUserCertificate
+	@UniqueUserCertificate
+	private String certificate;
 	@Column(name = "IS_ADMIN", nullable = false)
 	private boolean admin;
 
@@ -117,11 +126,19 @@ public class User implements Serializable {
 		return admin;
 	}
 
+	public String getCertificate() {
+		return certificate;
+	}
+
+	public void setCertificate(String certificate) {
+		this.certificate = certificate;
+	}
+
 	public String getCertificateSubject() {
 		return certificateSubject;
 	}
 
-	public void setCertificateSubject(String certificateSubject) {
+	void setCertificateSubject(String certificateSubject) {
 		this.certificateSubject = certificateSubject;
 	}
 

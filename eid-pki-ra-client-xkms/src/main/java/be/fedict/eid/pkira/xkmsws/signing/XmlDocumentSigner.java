@@ -64,7 +64,7 @@ public class XmlDocumentSigner {
 			Element elementToSign = getElementByTagName(document, elementToSignName);
 			String referenceUri = "#" + elementToSign.getAttribute("Id");
 			DigestMethod digestMethod = signatureFactory.newDigestMethod(DigestMethod.SHA1, null);
-			Transform transform = signatureFactory.newTransform(CanonicalizationMethod.INCLUSIVE,
+			Transform transform = signatureFactory.newTransform(CanonicalizationMethod.ENVELOPED,
 					(TransformParameterSpec) null);
 			List<Transform> transforms = Collections.singletonList(transform);
 			Reference reference = signatureFactory.newReference(referenceUri, digestMethod, transforms, null, null);
@@ -80,7 +80,7 @@ public class XmlDocumentSigner {
 			KeyInfoFactory keyInfoFactory = signatureFactory.getKeyInfoFactory();
 			List<Object> x509Content = new ArrayList<Object>();
 			x509Content.add(certificate.getSubjectX500Principal().toString());
-			// x509Content.add(certificate);
+			x509Content.add(certificate);
 			KeyInfo keyInfo = keyInfoFactory.newKeyInfo(Collections.singletonList(keyInfoFactory
 					.newX509Data(x509Content)));
 

@@ -18,33 +18,35 @@
 
 package be.fedict.eid.pkira.blm.model.usermgmt.validation;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.Validator;
 import org.jboss.seam.Component;
 
-import be.fedict.eid.pkira.blm.model.usermgmt.User;
-import be.fedict.eid.pkira.blm.model.usermgmt.UserHome;
+import be.fedict.eid.pkira.crypto.CertificateParser;
+import be.fedict.eid.pkira.crypto.CryptoException;
 
 /**
  * @author Bram Baeyens
  */
-public class UniqueUserCertificateSubjectValidator implements Validator<UniqueUserCertificateSubject> {
+public class ValidUserCertificateValidator implements Validator<ValidUserCertificate> {
 
 	@Override
-	public void initialize(UniqueUserCertificateSubject constraintAnnotation) {
+	public void initialize(ValidUserCertificate constraintAnnotation) {
 	}
 
 	@Override
 	public boolean isValid(Object value) {
-		if (StringUtils.isEmpty((String) value)) {
+		if (value == null) {
 			return true;
 		}
-		UserHome userHome = (UserHome) Component.getInstance(UserHome.NAME);
-		User user = userHome.findByCertificateSubject((String) value);
-		if (user == null || user.equals(userHome.getInstance())) {
+
+		String certificate = (String) value;
+		try {
+			CertificateParser certificateParser = (CertificateParser) Component.getInstance(CertificateParser.NAME);
+			certificateParser.parseCertificate(certificate);
 			return true;
+		} catch (CryptoException e) {
+			return false;
 		}
-		return false;
 	}
 
 }

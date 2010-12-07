@@ -19,11 +19,12 @@ package be.fedict.eid.pkira.blm.model.contracthandler.services;
 import javax.ejb.Local;
 
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
+import be.fedict.eid.pkira.generated.contracts.RequestType;
 
 /**
  * Bean that uses DSS to verify a signature and certificate chain.
+ * 
  * @author Jan Van den Bergh
- *
  */
 @Local
 public interface SignatureVerifier {
@@ -36,11 +37,13 @@ public interface SignatureVerifier {
 	 * 
 	 * @param requestMessage
 	 *            the message that is signed.
+	 * @param request
+	 *            TODO
 	 * @return the identity (RRN) of the signer of the document when the
 	 *         signature is valid.
 	 * @throws ContractHandlerBeanException
 	 *             when the signature is invalid.
 	 */
-	String verifySignature(String requestMessage) throws ContractHandlerBeanException;
+	String verifySignature(String requestMessage, RequestType request) throws ContractHandlerBeanException;
 
 }

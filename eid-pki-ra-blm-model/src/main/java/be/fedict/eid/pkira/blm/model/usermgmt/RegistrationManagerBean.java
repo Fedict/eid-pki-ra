@@ -52,14 +52,14 @@ public class RegistrationManagerBean implements RegistrationManager {
 
 	@In(value = RegistrationRepository.NAME, create = true)
 	private RegistrationRepository registrationRepository;
-	
-	@In(value=RegistrationHome.NAME, create=true)
+
+	@In(value = RegistrationHome.NAME, create = true)
 	private RegistrationHome registrationHome;
 
 	@In(value = CertificateDomainHome.NAME, create = true)
 	private CertificateDomainHome certificateDomainHome;
-	
-	@In(value=UserQuery.NAME, create=true)
+
+	@In(value = UserQuery.NAME, create = true)
 	private UserQuery userQuery;
 
 	@In(value = UserRepository.NAME, create = true)
@@ -74,8 +74,9 @@ public class RegistrationManagerBean implements RegistrationManager {
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void registerUser(String userRRN, String userLastName, String userFirstName, Integer domainId,
-			String emailAddress) throws RegistrationException {				
-		// Check if there are already users in the database; if not this one becomes admin
+			String emailAddress) throws RegistrationException {
+		// Check if there are already users in the database; if not this one
+		// becomes admin
 		boolean isAdmin = 0 == userRepository.getUserCount();
 
 		// Lookup or create the user
@@ -91,37 +92,38 @@ public class RegistrationManagerBean implements RegistrationManager {
 			user.setAdmin(isAdmin);
 			userRepository.persist(user);
 		}
-		
+
 		// Check if we have to add him to a certificate domain
-		if (domainId!=null) {			
+		if (domainId != null) {
 			// Lookup the domain
 			certificateDomainHome.setId(domainId);
 			CertificateDomain domain = certificateDomainHome.find();
 			if (domain == null) {
 				throw new RegistrationException("Unknown certificate domain.");
 			}
-	
+
 			// Validate the e-mail address
 			if (StringUtils.isBlank(emailAddress) || !createEmailValidator().isValid(emailAddress)) {
 				throw new RegistrationException("Invalid e-mail address");
 			}
-	
+
 			// Check if the registration is new
 			if (registrationRepository.findRegistration(domain, user) != null) {
 				throw new RegistrationException("User already has a registration for this domain.");
 			}
-	
+
 			// Create the registration
 			Registration registration = new Registration();
 			registration.setCertificateDomain(domain);
 			registration.setRequester(user);
 			registration.setEmail(emailAddress);
 			registration.setStatus(RegistrationStatus.NEW);
-	
+
 			registrationRepository.persist(registration);
 		}
 	}
-	
+
+	@Override
 	public boolean createOrUpdateRegistration(RegistrationWS registrationWS) {
 		registrationHome.setId(registrationWS.getId() != null ? Integer.valueOf(registrationWS.getId()) : null);
 		Registration registration = registrationHome.getInstance();
@@ -134,7 +136,7 @@ public class RegistrationManagerBean implements RegistrationManager {
 		} else {
 			registration.setStatus(RegistrationStatus.NEW);
 			return registrationHome.persist() != null ? true : false;
-		}		
+		}
 	}
 
 	/**
@@ -142,40 +144,41 @@ public class RegistrationManagerBean implements RegistrationManager {
 	 */
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public Registration findRegistrationForUserDNAndCertificateType(String userIdentification, String distinguishedName, CertificateType type) {
+	public Registration findRegistrationForUserDNAndCertificateType(String userIdentification,
+			String distinguishedName, CertificateType type) {
 		// Parse the DN
 		DistinguishedName theDN = parseDN(distinguishedName);
-		if (theDN==null) {
+		if (theDN == null) {
 			return null;
 		}
-		
-		// Get the certificate domains for the user		
+
+		// Get the certificate domains for the user
 		User user = userRepository.findByNationalRegisterNumber(userIdentification);
-		if (user==null) {
+		if (user == null) {
 			user = userRepository.findByCertificateSubject(userIdentification);
 		}
-		if (user==null) {
+		if (user == null) {
 			return null;
 		}
-		
+
 		List<Registration> activeRegistrations = registrationRepository.findApprovedRegistrationsByUser(user);
-		if (activeRegistrations==null || activeRegistrations.size()==0) {
+		if (activeRegistrations == null || activeRegistrations.size() == 0) {
 			return null;
 		}
-		
-		// See if one of them matches the DN		
-		for (Registration registration: activeRegistrations) {			
+
+		// See if one of them matches the DN
+		for (Registration registration : activeRegistrations) {
 			CertificateDomain certificateDomain = registration.getCertificateDomain();
 			if (!certificateDomain.getCertificateTypes().contains(type)) {
 				continue;
 			}
-			
+
 			String dnExpression = certificateDomain.getDnExpression();
 			DistinguishedNameExpression domainDN = parseDNameExpression(dnExpression);
-			if (domainDN==null) {
+			if (domainDN == null) {
 				throw new RuntimeException("Invalid certificate domain in database: " + dnExpression);
 			}
-			
+
 			if (domainDN.matches(theDN)) {
 				return registration;
 			}
@@ -191,18 +194,18 @@ public class RegistrationManagerBean implements RegistrationManager {
 			theDN = distinguishedNameManager.createDistinguishedName(distinguishedName);
 		} catch (InvalidDistinguishedNameException e) {
 			log.warn("Invalid DN given to checkAuthorizationForUserAndDN: {0}", e, distinguishedName);
-			theDN=null;
+			theDN = null;
 		}
 		return theDN;
 	}
-	
+
 	private DistinguishedNameExpression parseDNameExpression(String distinguishedName) {
 		DistinguishedNameExpression theDN;
 		try {
 			theDN = distinguishedNameManager.createDistinguishedNameExpression(distinguishedName);
 		} catch (InvalidDistinguishedNameException e) {
 			log.warn("Invalid DN given to checkAuthorizationForUserAndDN: {0}", e, distinguishedName);
-			theDN=null;
+			theDN = null;
 		}
 		return theDN;
 	}

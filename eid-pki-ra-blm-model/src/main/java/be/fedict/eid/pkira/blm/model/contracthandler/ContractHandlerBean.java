@@ -125,7 +125,7 @@ public class ContractHandlerBean implements ContractHandler {
 			fieldValidator.validateContract(request);
 
 			// Validate the signature
-			String signer = signatureVerifier.verifySignature(requestMsg);
+			String signer = signatureVerifier.verifySignature(requestMsg, request);
 
 			// Lookup the certificate
 			Certificate certificate = findCertificate(request);
@@ -171,6 +171,7 @@ public class ContractHandlerBean implements ContractHandler {
 		CertificateSigningResponseBuilder responseBuilder = new CertificateSigningResponseBuilder();
 		CertificateSigningRequestType request = null;
 		int certificateId = -1;
+		byte[] certificateBytes = null;
 		try {
 			// Parse the request
 			request = contractParser.unmarshalRequestMessage(requestMsg, CertificateSigningRequestType.class);
@@ -179,7 +180,7 @@ public class ContractHandlerBean implements ContractHandler {
 			fieldValidator.validateContract(request);
 
 			// Validate the signature
-			String signer = signatureVerifier.verifySignature(requestMsg);
+			String signer = signatureVerifier.verifySignature(requestMsg, request);
 
 			// Check if the user is authorized
 			CertificateType certificateType = mapCertificateType(request);
@@ -219,6 +220,7 @@ public class ContractHandlerBean implements ContractHandler {
 
 			// All ok
 			certificateId = certificate.getId();
+			certificateBytes = certificateInfo.getDerEncoded();
 			fillResponseFromRequest(responseBuilder, request, ResultType.SUCCESS, "Success");
 		} catch (ContractHandlerBeanException e) {
 			fillResponseFromRequest(responseBuilder, request, e.getResultType(), e.getMessage());
@@ -228,7 +230,7 @@ public class ContractHandlerBean implements ContractHandler {
 					"An error occurred while processing the contract.");
 		}
 
-		CertificateSigningResponseType responseType = responseBuilder.toResponseType(certificateId);
+		CertificateSigningResponseType responseType = responseBuilder.toResponseType(certificateId, certificateBytes);
 		return contractParser.marshalResponseMessage(responseType, CertificateSigningResponseType.class);
 	}
 

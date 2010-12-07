@@ -4,6 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -23,6 +26,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.io.FileUtils;
 import org.w3._2002._03.xkms_xbulk.BulkRegisterResultType;
 import org.w3._2002._03.xkms_xbulk.BulkRegisterType;
 import org.w3c.dom.Document;
@@ -34,9 +38,10 @@ import be.fedict.eid.pkira.xkmsws.XKMSClientException;
 
 public class XMLMarshallingUtil {
 
+	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 	private static final String NAMESPACE_SOAP = "http://schemas.xmlsoap.org/soap/envelope/";
-	private final JAXBContext jaxbContext;
 	private final DocumentBuilder documentBuilder;
+	private final JAXBContext jaxbContext;
 
 	public XMLMarshallingUtil() {
 		// Initialze JAXBContext
@@ -56,33 +61,37 @@ public class XMLMarshallingUtil {
 		}
 	}
 
-	public Document marshalBulkRegisterTypeToDocument(BulkRegisterType bulkRegisterType) throws XKMSClientException {
-		QName qname = new QName("http://www.w3.org/2002/03/xkms-xbulk", "BulkRegister");
-		JAXBElement<BulkRegisterType> jaxbElement = new JAXBElement<BulkRegisterType>(qname, BulkRegisterType.class,
-				bulkRegisterType);
-
-		try {
-			Document doc = documentBuilder.newDocument();
-			Marshaller marshaller = jaxbContext.createMarshaller();
-			marshaller.marshal(jaxbElement, doc);
-
-			return doc;
-		} catch (JAXBException e) {
-			throw new XKMSClientException("Cannot marshal message.", e);
-		}
+	public void addSoapHeaders(Document document) {
+		Element envelope = document.createElementNS(NAMESPACE_SOAP, "Envelope");
+		Element body = document.createElementNS(NAMESPACE_SOAP, "Body");
+		envelope.appendChild(body);
+		body.appendChild(document.getDocumentElement());
+		document.appendChild(envelope);
 	}
 
-	@SuppressWarnings("unchecked")
-	public BulkRegisterResultType unmarshalByteArrayToBulkRegisterResultType(Document response)
-			throws XKMSClientException {
-		try {
-			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-			JAXBElement<BulkRegisterResultType> unmarshalled = (JAXBElement<BulkRegisterResultType>) unmarshaller
-					.unmarshal(response);
+	public String convertDocumentToString(Document requestMessage) {
+		Source source = new DOMSource(requestMessage);
 
-			return unmarshalled.getValue();
-		} catch (JAXBException e) {
-			throw new XKMSClientException("Cannot unmarshal message.", e);
+		StringWriter writer = new StringWriter();
+		StreamResult streamResult = new StreamResult(writer);
+
+		try {
+			Transformer xformer = TransformerFactory.newInstance().newTransformer();
+			xformer.transform(source, streamResult);
+		} catch (TransformerException e) {
+			throw new RuntimeException(e);
+		}
+
+		return writer.toString();
+	}
+
+	public Document convertStringToDocument(byte[] message) throws XKMSClientException {
+		try {
+			return documentBuilder.parse(new ByteArrayInputStream(message));
+		} catch (SAXException e) {
+			throw new XKMSClientException("Error parsing response message.", e);
+		} catch (IOException e) {
+			throw new XKMSClientException("Error parsing response message.", e);
 		}
 	}
 
@@ -142,28 +151,20 @@ public class XMLMarshallingUtil {
 		return null;
 	}
 
-	public String convertDocumentToString(Document requestMessage) {
-		Source source = new DOMSource(requestMessage);
-
-		StringWriter writer = new StringWriter();
-		StreamResult streamResult = new StreamResult(writer);
+	public Document marshalBulkRegisterTypeToDocument(BulkRegisterType bulkRegisterType) throws XKMSClientException {
+		QName qname = new QName("http://www.w3.org/2002/03/xkms-xbulk", "BulkRegister");
+		JAXBElement<BulkRegisterType> jaxbElement = new JAXBElement<BulkRegisterType>(qname, BulkRegisterType.class,
+				bulkRegisterType);
 
 		try {
-			Transformer xformer = TransformerFactory.newInstance().newTransformer();
-			xformer.transform(source, streamResult);
-		} catch (TransformerException e) {
-			throw new RuntimeException(e);
+			Document doc = documentBuilder.newDocument();
+			Marshaller marshaller = jaxbContext.createMarshaller();
+			marshaller.marshal(jaxbElement, doc);
+
+			return doc;
+		} catch (JAXBException e) {
+			throw new XKMSClientException("Cannot marshal message.", e);
 		}
-
-		return writer.toString();
-	}
-
-	public void addSoapHeaders(Document document) {
-		Element envelope = document.createElementNS(NAMESPACE_SOAP, "Envelope");
-		Element body = document.createElementNS(NAMESPACE_SOAP, "Body");
-		envelope.appendChild(body);
-		body.appendChild(document.getDocumentElement());
-		document.appendChild(envelope);
 	}
 
 	public void removeSoapHeaders(Document document) {
@@ -182,12 +183,34 @@ public class XMLMarshallingUtil {
 		}
 	}
 
-	public void writeDocumentToFile(Document doc, String fileName) {
+	@SuppressWarnings("unchecked")
+	public BulkRegisterResultType unmarshalByteArrayToBulkRegisterResultType(Document response)
+			throws XKMSClientException {
+		try {
+			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			JAXBElement<BulkRegisterResultType> unmarshalled = (JAXBElement<BulkRegisterResultType>) unmarshaller
+					.unmarshal(response);
+
+			return unmarshalled.getValue();
+		} catch (JAXBException e) {
+			throw new XKMSClientException("Cannot unmarshal message.", e);
+		}
+	}
+
+	public void writeDocumentToFile(byte[] responseMessage, String prefix, String suffix) {
+		String fileName = createFileName(prefix, suffix);
+		try {
+			FileUtils.writeByteArrayToFile(new File(fileName), responseMessage);
+		} catch (IOException e) {
+			System.err.println("Error writing XML document.");
+			e.printStackTrace();
+		}
+	}
+
+	public void writeDocumentToFile(Document doc, String prefix, String suffix) {
 		// Prepare the DOM document for writing
 		Source source = new DOMSource(doc);
-		// Prepare the output file
-		File file = new File(fileName);
-		Result result = new StreamResult(file);
+		Result result = new StreamResult(new File(createFileName(prefix, suffix)));
 		// Write the DOM document to the file
 		try {
 			Transformer xformer = TransformerFactory.newInstance().newTransformer();
@@ -197,14 +220,8 @@ public class XMLMarshallingUtil {
 		}
 	}
 
-	public Document convertStringToDocument(byte[] message) throws XKMSClientException {
-		try {
-			return documentBuilder.parse(new ByteArrayInputStream(message));
-		} catch (SAXException e) {
-			throw new XKMSClientException("Error parsing response message.", e);
-		} catch (IOException e) {
-			throw new XKMSClientException("Error parsing response message.", e);
-		}
+	private String createFileName(String prefix, String suffix) {
+		return prefix + DATE_FORMAT.format(new Date()) + suffix;
 	}
 
 }

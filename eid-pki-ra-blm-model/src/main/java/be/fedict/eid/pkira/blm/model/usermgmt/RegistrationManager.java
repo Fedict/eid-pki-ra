@@ -36,7 +36,7 @@ public interface RegistrationManager {
 	 */
 	void registerUser(String userRRN, String userLastName, String userFirstName, Integer domainId, String emailAddress)
 			throws RegistrationException;
-	
+
 	boolean createOrUpdateRegistration(RegistrationWS registrationWS);
 
 	/**
@@ -50,6 +50,7 @@ public interface RegistrationManager {
 	 * @return the registration for this user and certificate domain (null if
 	 *         the user is not authorized).
 	 */
-	Registration findRegistrationForUserDNAndCertificateType(String userRRN, String distinguishedName, CertificateType type);
+	Registration findRegistrationForUserDNAndCertificateType(String userRRN, String distinguishedName,
+			CertificateType type);
 
 }

@@ -22,64 +22,105 @@ import javax.persistence.NoResultException;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.blm.model.framework.ValidatingEntityHome;
 import be.fedict.eid.pkira.common.security.EIdUserCredentials;
+import be.fedict.eid.pkira.crypto.CertificateInfo;
+import be.fedict.eid.pkira.crypto.CertificateParser;
+import be.fedict.eid.pkira.crypto.CryptoException;
 
 /**
  * @author Bram Baeyens
- *
  */
 @Name(UserHome.NAME)
 @Scope(ScopeType.CONVERSATION)
 public class UserHome extends ValidatingEntityHome<User> {
 
 	private static final long serialVersionUID = -9041171409557145771L;
-	
+
 	public static final String NAME = "be.fedict.eid.pkira.blm.userHome";
-	
-	@In(required = true)
+
+	@In(required = false)
 	private EIdUserCredentials credentials;
-	
+
+	@In(create = true, value = CertificateParser.NAME)
+	private CertificateParser certificateParser;
+
+	@Logger
+	private Log log;
+
 	@Override
 	protected String getUpdatedMessageKey() {
 		return "user.updated";
 	}
-	
+
+	@Override
+	public String persist() {
+		updateCertificateSubject();
+		return super.persist();
+	}
+
+	@Override
+	public String update() {
+		updateCertificateSubject();
+		return super.update();
+	}
+
 	public boolean isCurrentUser() {
+		if (credentials == null) {
+			return false;
+		}
 		return getInstance().getNationalRegisterNumber().equals(credentials.getUser().getRRN());
 	}
-	
+
 	public String revokeAdmin() {
 		getInstance().setAdmin(false);
 		return update();
 	}
-	
+
 	public String grantAdmin() {
 		getInstance().setAdmin(true);
 		return update();
 	}
-	
+
 	public User findByNationalRegisterNumber(String nationalRegisterNumber) {
 		try {
 			return (User) getEntityManager().createNamedQuery("findByNationalRegisterNumber")
-					.setParameter("nationalRegisterNumber", nationalRegisterNumber)
-					.getSingleResult();
-		} catch (NoResultException e) {
-			return null;
-		}
-	}
-	
-	public User findByCertificateSubject(String certificateSubject) {
-		try {
-			return (User) getEntityManager().createNamedQuery("findByCertificateSubject")
-					.setParameter("certificateSubject", certificateSubject)
-					.getSingleResult();
+					.setParameter("nationalRegisterNumber", nationalRegisterNumber).getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		}
 	}
 
+	public User findByCertificateSubject(String value) {
+		try {
+			return (User) getEntityManager().createNamedQuery("findByCertificateSubject")
+					.setParameter("certificateSubject", value).getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+
+	private void updateCertificateSubject() {
+		User instance = getInstance();
+		String certificate = instance.getCertificate();
+
+		if (certificate == null) {
+			instance.setCertificateSubject(null);
+		} else {
+			try {
+				CertificateInfo certificateInfo = certificateParser.parseCertificate(certificate);
+				instance.setCertificateSubject(certificateInfo.getDistinguishedName());
+			} catch (CryptoException e) {
+				log.error("Cannot parse user certificate. Leaving both set to null.", e);
+				instance.setCertificate(null);
+				instance.setCertificateSubject(null);
+			}
+
+		}
+	}
 }
