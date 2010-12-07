@@ -16,10 +16,23 @@
  */
 package be.fedict.eid.pkira.blm.model.contracthandler.services;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.security.PublicKey;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.xml.bind.JAXBElement;
+import javax.xml.crypto.MarshalException;
+import javax.xml.crypto.dsig.XMLSignature;
+import javax.xml.crypto.dsig.XMLSignatureException;
+import javax.xml.crypto.dsig.XMLSignatureFactory;
+import javax.xml.crypto.dsig.dom.DOMValidateContext;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
@@ -27,13 +40,26 @@ import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.log.Log;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import be.fedict.eid.dss.client.DigitalSignatureServiceClient;
 import be.fedict.eid.dss.client.NotParseableXMLDocumentException;
 import be.fedict.eid.dss.client.SignatureInfo;
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
 import be.fedict.eid.pkira.blm.model.framework.WebserviceLocator;
+import be.fedict.eid.pkira.blm.model.usermgmt.User;
+import be.fedict.eid.pkira.blm.model.usermgmt.UserHome;
+import be.fedict.eid.pkira.crypto.CertificateParser;
+import be.fedict.eid.pkira.crypto.CryptoException;
+import be.fedict.eid.pkira.generated.contracts.CertificateRevocationRequestType;
+import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
+import be.fedict.eid.pkira.generated.contracts.RequestType;
 import be.fedict.eid.pkira.generated.contracts.ResultType;
+import be.fedict.eid.pkira.generated.contracts.SignatureType;
+import be.fedict.eid.pkira.generated.contracts.X509DataType;
 
 /**
  * Bean to verify the signature on a contract.
@@ -54,6 +80,12 @@ public class SignatureVerifierBean implements SignatureVerifier {
 	@In(value = WebserviceLocator.NAME, create = true)
 	private WebserviceLocator webserviceLocator;
 
+	@In(value = CertificateParser.NAME, create = true)
+	private CertificateParser certificateParser;
+
+	@In(value = UserHome.NAME, create = true)
+	private UserHome userHome;
+
 	/*
 	 * (non-Javadoc)
 	 * @see
@@ -61,7 +93,133 @@ public class SignatureVerifierBean implements SignatureVerifier {
 	 * java.lang.String)
 	 */
 	@Override
-	public String verifySignature(String requestMessage) throws ContractHandlerBeanException {
+	public String verifySignature(String requestMessage, RequestType request) throws ContractHandlerBeanException {
+		// First see if we can validate the signature using a certificate in our
+		// database
+		String result = validateAgainstStoredCertificate(request, requestMessage);
+		if (result != null) {
+			return result;
+		}
+
+		// Then try the DSS webservice (for eID)
+		return validateWithDSS(requestMessage);
+	}
+
+	private String validateAgainstStoredCertificate(RequestType request, String requestMessage)
+			throws ContractHandlerBeanException {
+		// TODO Unit test this branch
+		// Get the DN out of the signature
+		String signingDN = null;
+		if (request instanceof CertificateSigningRequestType) {
+			CertificateSigningRequestType signingRequest = (CertificateSigningRequestType) request;
+			if (signingRequest.getSignature() != null) {
+				signingDN = extractSigningDN(signingRequest.getSignature());
+			}
+		}
+		if (request instanceof CertificateRevocationRequestType) {
+			CertificateRevocationRequestType revocationRequest = (CertificateRevocationRequestType) request;
+			if (revocationRequest.getSignature() != null) {
+				signingDN = extractSigningDN(revocationRequest.getSignature());
+			}
+		}
+		if (signingDN == null) {
+			return null;
+		}
+
+		// Look up the user
+		User user = userHome.findByCertificateSubject(signingDN);
+		if (user == null) {
+			return null;
+		}
+
+		// Validate the signature
+		if (!validateSignature(requestMessage, user.getCertificate())) {
+			throw new ContractHandlerBeanException(ResultType.INVALID_SIGNATURE, "The signature could not be verified.");
+		}
+
+		return signingDN;
+	}
+
+	private boolean validateSignature(String requestMessage, String certificate) {
+		// Get the certificate key
+		PublicKey certificateKey;
+		try {
+			certificateKey = certificateParser.parseCertificate(certificate).getCertificate().getPublicKey();
+		} catch (CryptoException e) {
+			throw new RuntimeException("Certificate should be valid.", e);
+		}
+
+		// Validate the signature
+		try {
+
+			// Read the document
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			dbf.setNamespaceAware(true);
+			DocumentBuilder builder = dbf.newDocumentBuilder();
+			Document doc = builder.parse(new InputSource(new StringReader(requestMessage)));
+
+			// Get the signature element
+			NodeList nl = doc.getElementsByTagNameNS(XMLSignature.XMLNS, "Signature");
+			if (nl.getLength() == 0) {
+				return false; // no signature element
+			}
+
+			// Create validation context
+			DOMValidateContext valContext = new DOMValidateContext(new SingletonKeySelector(certificateKey), nl.item(0));
+			// Create signature factory and signature
+			XMLSignatureFactory factory = XMLSignatureFactory.getInstance("DOM");
+			XMLSignature signature = factory.unmarshalXMLSignature(valContext);
+
+			// Check if valid
+			return signature.validate(valContext);
+		} catch (MarshalException e) {
+			log.error("Invalid signature on contract.", e);
+			return false;
+		} catch (XMLSignatureException e) {
+			log.error("Error validating signature on contract.", e);
+			return false;
+		} catch (ParserConfigurationException e) {
+			throw new RuntimeException(e);
+		} catch (SAXException e) {
+			log.error("Cannot parse contract contract.", e);
+			return false;
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private String extractSigningDN(SignatureType signature) throws ContractHandlerBeanException {
+		X509DataType x509DataType = extractFromJAXBElementList(signature.getKeyInfo().getContent(), X509DataType.class);
+		if (x509DataType == null) {
+			return null;
+		}
+
+		byte[] certificateBytes = extractFromJAXBElementList(
+				x509DataType.getX509IssuerSerialOrX509SKIOrX509SubjectName(), byte[].class);
+		if (certificateBytes == null) {
+			return null;
+		}
+
+		try {
+			return certificateParser.parseCertificate(certificateBytes).getDistinguishedName();
+		} catch (CryptoException e) {
+			throw new ContractHandlerBeanException(ResultType.INVALID_SIGNATURE,
+					"Invalid certificate found in the contract.");
+		}
+	}
+
+	private <T> T extractFromJAXBElementList(List<Object> list, Class<T> type) {
+		for (Object item : list) {
+			JAXBElement<?> element = (JAXBElement<?>) item;
+			if (type.isAssignableFrom(element.getDeclaredType())) {
+				return type.cast(element.getValue());
+			}
+		}
+
+		return null;
+	}
+
+	private String validateWithDSS(String requestMessage) throws ContractHandlerBeanException {
 		DigitalSignatureServiceClient dssClient = webserviceLocator.getDigitalSignatureServiceClient();
 		try {
 			// Call DSS to validate the signature

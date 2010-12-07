@@ -41,18 +41,18 @@ public class EIDPKIRAContractsClientTest {
 	private static final String XML_CSR = "CertificateSigningRequest.xml";
 	private static final String XML_INVALID = "InvalidXml.notxml";
 
-	private static final String BASE64_DATA = 
-		"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9I" +
-		"nllcyI/PjxDZXJ0aWZpY2F0ZVNpZ25pbmdSZXF1ZXN0IHhtbG5zOm5zMj0iaHR0cD" +
-		"ovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeG1sbnM9InVybjpiZTpmZWR" +
-		"pY3Q6ZWlkOnBraXJhOmNvbnRyYWN0cyI+PFJlcXVlc3RJZD5yZXF1ZXN0SWQ8L1Jl" +
-		"cXVlc3RJZD48RGVzY3JpcHRpb24+ZGVzY3JpcHRpb248L0Rlc2NyaXB0aW9uPjxPc" +
-		"GVyYXRvcj48TmFtZT5uYW1lPC9OYW1lPjxGdW5jdGlvbj5mdW5jdGlvbjwvRnVuY3" +
-		"Rpb24+PFBob25lPnBob25lPC9QaG9uZT48L09wZXJhdG9yPjxMZWdhbE5vdGljZT5" +
-		"sZWdhbE5vdGljZTwvTGVnYWxOb3RpY2U+PERpc3Rpbmd1aXNoZWROYW1lPmRuPC9E" +
-		"aXN0aW5ndWlzaGVkTmFtZT48Q2VydGlmaWNhdGVUeXBlPkNsaWVudDwvQ2VydGlma" +
-		"WNhdGVUeXBlPjxWYWxpZGl0eVBlcmlvZE1vbnRocz4xNTwvVmFsaWRpdHlQZXJpb2" +
-		"RNb250aHM+PENTUj5jc3I8L0NTUj48L0NlcnRpZmljYXRlU2lnbmluZ1JlcXVlc3Q+";
+	private static final String BASE64_DATA = "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxv"
+			+ "bmU9InllcyI/PjxDZXJ0aWZpY2F0ZVNpZ25pbmdSZXF1ZXN0IHhtbG5zOm5z"
+			+ "Mj0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeG1sbnM9"
+			+ "InVybjpiZTpmZWRpY3Q6ZWlkOnBraXJhOmNvbnRyYWN0cyIgSWQ9InJlcXVl"
+			+ "c3QiPjxSZXF1ZXN0SWQ+cmVxdWVzdElkPC9SZXF1ZXN0SWQ+PERlc2NyaXB0"
+			+ "aW9uPmRlc2NyaXB0aW9uPC9EZXNjcmlwdGlvbj48T3BlcmF0b3I+PE5hbWU+"
+			+ "bmFtZTwvTmFtZT48RnVuY3Rpb24+ZnVuY3Rpb248L0Z1bmN0aW9uPjxQaG9u"
+			+ "ZT5waG9uZTwvUGhvbmU+PC9PcGVyYXRvcj48TGVnYWxOb3RpY2U+bGVnYWxO"
+			+ "b3RpY2U8L0xlZ2FsTm90aWNlPjxEaXN0aW5ndWlzaGVkTmFtZT5kbjwvRGlz"
+			+ "dGluZ3Vpc2hlZE5hbWU+PENlcnRpZmljYXRlVHlwZT5DbGllbnQ8L0NlcnRp"
+			+ "ZmljYXRlVHlwZT48VmFsaWRpdHlQZXJpb2RNb250aHM+MTU8L1ZhbGlkaXR5"
+			+ "UGVyaW9kTW9udGhzPjxDU1I+Y3NyPC9DU1I+PC9DZXJ0aWZpY2F0ZVNpZ25p" + "bmdSZXF1ZXN0Pg==";;
 
 	@BeforeMethod
 	public void setup() {

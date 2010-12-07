@@ -61,6 +61,7 @@ public abstract class AbstractRequestBuilder<T extends AbstractRequestBuilder<T>
 	}
 
 	protected void fillInRequestType(RequestType requestType) {
+		requestType.setId("request");
 		requestType.setDescription(description);
 		requestType.setLegalNotice(legalNotice);
 		requestType.setRequestId(requestId);

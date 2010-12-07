@@ -25,11 +25,14 @@ import be.fedict.eid.dss.client.NotParseableXMLDocumentException;
 import be.fedict.eid.dss.client.SignatureInfo;
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
 import be.fedict.eid.pkira.blm.model.framework.WebserviceLocator;
+import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
+import be.fedict.eid.pkira.generated.contracts.RequestType;
 
 public class SignatureVerificationBeanTest {
 
 	private static final String DOCUMENT = "DOCUMENT";
 	private static final String SUBJECT = "C=BE,OU=Domain Control Validated,O=*.aca-it.be,CN=*.aca-it.be";
+	private static final RequestType REQUEST = new CertificateSigningRequestType();
 
 	private SignatureVerifierBean bean;
 	@Mock
@@ -55,7 +58,7 @@ public class SignatureVerificationBeanTest {
 		when(dssClient.verifyWithSigners(isA(byte[].class), eq(SignatureVerifierBean.MIME_TYPE))).thenReturn(
 				Collections.singletonList(createSignatureInfo()));
 
-		String identity = bean.verifySignature(DOCUMENT);
+		String identity = bean.verifySignature(DOCUMENT, REQUEST);
 		assertEquals(identity, SUBJECT);
 	}
 
@@ -63,7 +66,7 @@ public class SignatureVerificationBeanTest {
 	public void testVerifySignatureInvalid() throws ContractHandlerBeanException, NotParseableXMLDocumentException {
 		when(dssClient.verifyWithSigners(isA(byte[].class), eq(SignatureVerifierBean.MIME_TYPE))).thenReturn(null);
 
-		bean.verifySignature(DOCUMENT);
+		bean.verifySignature(DOCUMENT, REQUEST);
 	}
 
 	@Test
@@ -72,7 +75,7 @@ public class SignatureVerificationBeanTest {
 				new NotParseableXMLDocumentException());
 
 		try {
-			bean.verifySignature(DOCUMENT);
+			bean.verifySignature(DOCUMENT, REQUEST);
 			fail("Expected exception");
 		} catch (ContractHandlerBeanException e) {
 			verify(log).error(isA(String.class), isA(Exception.class));

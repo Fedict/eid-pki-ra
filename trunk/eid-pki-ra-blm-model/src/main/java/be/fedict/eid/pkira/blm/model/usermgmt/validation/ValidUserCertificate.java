@@ -31,12 +31,13 @@ import org.hibernate.validator.ValidatorClass;
 
 /**
  * @author Bram Baeyens
- *
  */
 @Documented
-@ValidatorClass(UniqueUserCertificateSubjectValidator.class)
-@Target({METHOD, FIELD, ANNOTATION_TYPE})
-@Retention( RUNTIME )
-public @interface UniqueUserCertificateSubject {
-	String message() default "{validation.notUnique.certificateSubject}";
+@ValidatorClass(ValidUserCertificateValidator.class)
+@Target(
+	{ METHOD, FIELD, ANNOTATION_TYPE })
+@Retention(RUNTIME)
+public @interface ValidUserCertificate {
+
+	String message() default "{validation.invalid.certificate}";
 }

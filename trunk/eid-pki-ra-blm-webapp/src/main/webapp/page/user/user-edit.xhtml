@@ -25,9 +25,14 @@
 	               	<h:inputText id="nationalRegisterNumber" value="#{userHome.instance.nationalRegisterNumber}" size="11" />
 	           	</s:decorate>
 	           	
+	           	<s:decorate id="certificateDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['user.certificate']}:</ui:define>
+	               	<h:inputTextarea id="certificate" value="#{userHome.instance.certificate}" cols="90" rows="14" />
+	           	</s:decorate>
+	           	
 	           	<s:decorate id="certificateSubjectDecoration" template="/layout/edit.xhtml">
 	               	<ui:define name="label">#{messages['user.certificateSubject']}:</ui:define>
-	               	<h:inputText id="certificateSubject" value="#{userHome.instance.certificateSubject}" size="40" />
+	               	<h:inputText id="certificateSubject" value="#{userHome.instance.certificateSubject}" size="60" disabled="true" />
 	           	</s:decorate>
 	           	
 	          	<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">

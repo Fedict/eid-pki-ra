@@ -18,13 +18,10 @@
 
 package be.fedict.eid.pkira.xkmsws;
 
-import java.io.File;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3._2002._03.xkms_xbulk.BulkRegisterResultType;
@@ -41,7 +38,7 @@ import be.fedict.eid.pkira.xkmsws.util.XMLMarshallingUtil;
 
 public class XKMSClient {
 
-	public static final String PARAMETER_LOG_PREFIX = "logPrefix";
+	public static final String PARAMETER_LOG_PREFIX = "xkms.logPrefix";
 
 	private static final Log LOG = LogFactory.getLog(XKMSClient.class);
 	private final HttpUtil httpUtil;
@@ -144,11 +141,11 @@ public class XKMSClient {
 
 		// Sign it
 		if (parameters.containsKey(PARAMETER_LOG_PREFIX)) {
-			marshallingUtil.writeDocumentToFile(request, parameters.get(PARAMETER_LOG_PREFIX) + "-unsigned.xml");
+			marshallingUtil.writeDocumentToFile(request, parameters.get(PARAMETER_LOG_PREFIX), "-unsigned.xml");
 		}
 		xmlDocumentSigner.signXKMSDocument(request, "BulkRegister", "SignedPart");
 		if (parameters.containsKey(PARAMETER_LOG_PREFIX)) {
-			marshallingUtil.writeDocumentToFile(request, parameters.get(PARAMETER_LOG_PREFIX) + "-signed.xml");
+			marshallingUtil.writeDocumentToFile(request, parameters.get(PARAMETER_LOG_PREFIX), "-signed.xml");
 		}
 
 		// Add soap headers
@@ -160,14 +157,8 @@ public class XKMSClient {
 
 		// Call the XKMS implementation
 		byte[] responseMessage = httpUtil.postMessage(requestMessage);
-
 		if (parameters.containsKey(PARAMETER_LOG_PREFIX)) {
-			try {
-				FileUtils.writeByteArrayToFile(new File(parameters.get(PARAMETER_LOG_PREFIX) + "-response.xml"),
-						responseMessage);
-			} catch (IOException e) {
-				LOG.warn("Error", e);
-			}
+			marshallingUtil.writeDocumentToFile(responseMessage, parameters.get(PARAMETER_LOG_PREFIX), "-response.xml");
 		}
 
 		// Convert string to DOM document

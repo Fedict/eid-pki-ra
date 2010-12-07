@@ -162,7 +162,7 @@ public class ContractHandlerBeanTest {
 	public void testRevokeCertificateHappyFlow() throws Exception {
 		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateRevocationRequestType.class)))
 				.thenReturn(VALID_REVOCATION_REQUEST);
-		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE))).thenReturn(SIGNER);
+		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE), eq(VALID_REVOCATION_REQUEST))).thenReturn(SIGNER);
 		when(certificateParser.parseCertificate(VALID_CERTIFICATE)).thenReturn(certificateInfo);
 		when(certificateInfo.getIssuer()).thenReturn(VALID_ISSUER);
 		when(certificateInfo.getSerialNumber()).thenReturn(VALID_SERIALNUMBER);
@@ -191,7 +191,7 @@ public class ContractHandlerBeanTest {
 	public void testRevokeCertificateSignatureError() throws Exception {
 		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateRevocationRequestType.class)))
 				.thenReturn(VALID_REVOCATION_REQUEST);
-		when(signatureVerifier.verifySignature(REQUEST_MESSAGE)).thenThrow(
+		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE), eq(VALID_REVOCATION_REQUEST))).thenThrow(
 				new ContractHandlerBeanException(ResultType.INVALID_SIGNATURE, ERROR_MSG));
 		when(
 				contractParser.marshalResponseMessage(
@@ -263,7 +263,7 @@ public class ContractHandlerBeanTest {
 				RESPONSE_MESSAGE);
 		when(registrationManager.findRegistrationForUserDNAndCertificateType(SIGNER, VALID_DN, VALID_CERTIFICATETYPE))
 				.thenReturn(VALID_REGISTRATION);
-		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE))).thenReturn(SIGNER);
+		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE), eq(VALID_REVOCATION_REQUEST))).thenReturn(SIGNER);
 
 		// Run it
 		String result = bean.revokeCertificate(REQUEST_MESSAGE);
@@ -280,7 +280,7 @@ public class ContractHandlerBeanTest {
 	public void testSignCertificateHappyFlow() throws Exception {
 		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateSigningRequestType.class)))
 				.thenReturn(VALID_SIGNING_REQUEST);
-		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE))).thenReturn(SIGNER);
+		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE), eq(VALID_SIGNING_REQUEST))).thenReturn(SIGNER);
 		when(xkmsService.sign(isA(CertificateSigningContract.class))).thenReturn(VALID_CERTIFICATE);
 		when(certificateParser.parseCertificate(VALID_CERTIFICATE)).thenReturn(certificateInfo);
 		when(
@@ -291,7 +291,7 @@ public class ContractHandlerBeanTest {
 				RESPONSE_MESSAGE);
 		when(registrationManager.findRegistrationForUserDNAndCertificateType(SIGNER, VALID_DN, VALID_CERTIFICATETYPE))
 				.thenReturn(VALID_REGISTRATION);
-		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE))).thenReturn(SIGNER);
+		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE), eq(VALID_SIGNING_REQUEST))).thenReturn(SIGNER);
 		when(certificateInfo.getValidityEnd()).thenReturn(new Date());
 
 		Answer<?> answer = new Answer<Object>() {
@@ -322,7 +322,7 @@ public class ContractHandlerBeanTest {
 		// Setup test
 		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateSigningRequestType.class)))
 				.thenReturn(VALID_SIGNING_REQUEST);
-		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE))).thenThrow(
+		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE), eq(VALID_SIGNING_REQUEST))).thenThrow(
 				new ContractHandlerBeanException(ResultType.INVALID_SIGNATURE, ERROR_MSG));
 		when(
 				contractParser.marshalResponseMessage(
@@ -390,7 +390,7 @@ public class ContractHandlerBeanTest {
 				RESPONSE_MESSAGE);
 		when(registrationManager.findRegistrationForUserDNAndCertificateType(SIGNER, VALID_DN, VALID_CERTIFICATETYPE))
 				.thenReturn(VALID_REGISTRATION);
-		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE))).thenReturn(SIGNER);
+		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE), eq(VALID_SIGNING_REQUEST))).thenReturn(SIGNER);
 
 		// Run it
 		String result = bean.signCertificate(REQUEST_MESSAGE);
