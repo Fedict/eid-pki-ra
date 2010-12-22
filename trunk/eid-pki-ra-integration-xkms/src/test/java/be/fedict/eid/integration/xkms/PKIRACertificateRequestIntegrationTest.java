@@ -122,14 +122,20 @@ public class PKIRACertificateRequestIntegrationTest {
 		String certificate = FileUtils.readFileToString(new File(getClass().getClassLoader().getResource("my.crt")
 				.getFile()));
 
-		CertificateParserImpl certificateParser = new CertificateParserImpl();
-		certificateParser.setLog(Mockito.mock(Log.class));
-		String certificateSubject = certificateParser.parseCertificate(certificate).getDistinguishedName();
+		// CertificateParserImpl certificateParser = new
+		// CertificateParserImpl();
+		// certificateParser.setLog(Mockito.mock(Log.class));
+		// String certificateSubject =
+		// certificateParser.parseCertificate(certificate).getDistinguishedName();
 
 		try {
 			connection.setAutoCommit(false);
-			executeQuery(connection, "UPDATE USER SET CERTIFICATE=?, CERTIFICATE_SUBJECT=? WHERE USER_ID=?",
-					certificate, certificateSubject, 7001);
+			executeQuery(
+					connection,
+					"UPDATE USER SET CERTIFICATE=?, CERTIFICATE_SUBJECT=? WHERE USER_ID=?",
+					certificate,
+					"c=BE,cn=Jan Van den Bergh,emailaddress=j.vandenbergh@aca-it.be,l=Hasselt,o=ACA-IT Solutions,st=Limburg",
+					7001);
 			connection.commit();
 		} finally {
 			connection.close();
