@@ -54,6 +54,8 @@ import be.fedict.eid.pkira.blm.model.usermgmt.User;
 import be.fedict.eid.pkira.blm.model.usermgmt.UserHome;
 import be.fedict.eid.pkira.crypto.CertificateParser;
 import be.fedict.eid.pkira.crypto.CryptoException;
+import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
+import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;
 import be.fedict.eid.pkira.generated.contracts.CertificateRevocationRequestType;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
 import be.fedict.eid.pkira.generated.contracts.RequestType;
@@ -85,6 +87,9 @@ public class SignatureVerifierBean implements SignatureVerifier {
 
 	@In(value = UserHome.NAME, create = true)
 	private UserHome userHome;
+
+	@In(create = true, value = DistinguishedNameManager.NAME)
+	private DistinguishedNameManager distinguishedNameManager;
 
 	/*
 	 * (non-Javadoc)
@@ -194,18 +199,33 @@ public class SignatureVerifierBean implements SignatureVerifier {
 			return null;
 		}
 
-		byte[] certificateBytes = extractFromJAXBElementList(
-				x509DataType.getX509IssuerSerialOrX509SKIOrX509SubjectName(), byte[].class);
-		if (certificateBytes == null) {
+		try {
+			String certificateSubject = extractFromJAXBElementList(
+					x509DataType.getX509IssuerSerialOrX509SKIOrX509SubjectName(), String.class);
+			if (certificateSubject == null) {
+				return null;
+			}
+
+			return distinguishedNameManager.createDistinguishedName(certificateSubject).toString();
+		} catch (InvalidDistinguishedNameException e) {
+			log.error("Error parsing NND in contract.", e);
 			return null;
 		}
 
-		try {
-			return certificateParser.parseCertificate(certificateBytes).getDistinguishedName();
-		} catch (CryptoException e) {
-			throw new ContractHandlerBeanException(ResultType.INVALID_SIGNATURE,
-					"Invalid certificate found in the contract.");
-		}
+		// byte[] certificateBytes = extractFromJAXBElementList(
+		// x509DataType.getX509IssuerSerialOrX509SKIOrX509SubjectName(),
+		// byte[].class);
+		// if (certificateBytes == null) {
+		// return null;
+		// }
+		//
+		// try {
+		// return
+		// certificateParser.parseCertificate(certificateBytes).getDistinguishedName();
+		// } catch (CryptoException e) {
+		// throw new ContractHandlerBeanException(ResultType.INVALID_SIGNATURE,
+		// "Invalid certificate found in the contract.");
+		// }
 	}
 
 	private <T> T extractFromJAXBElementList(List<Object> list, Class<T> type) {

@@ -25,6 +25,8 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.international.StatusMessage.Severity;
+import org.jboss.seam.international.StatusMessages;
 import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.blm.model.framework.ValidatingEntityHome;
@@ -32,6 +34,8 @@ import be.fedict.eid.pkira.common.security.EIdUserCredentials;
 import be.fedict.eid.pkira.crypto.CertificateInfo;
 import be.fedict.eid.pkira.crypto.CertificateParser;
 import be.fedict.eid.pkira.crypto.CryptoException;
+import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
+import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;
 
 /**
  * @author Bram Baeyens
@@ -49,6 +53,9 @@ public class UserHome extends ValidatingEntityHome<User> {
 
 	@In(create = true, value = CertificateParser.NAME)
 	private CertificateParser certificateParser;
+
+	@In(create = true, value = DistinguishedNameManager.NAME)
+	private DistinguishedNameManager distinguishedNameManager;
 
 	@Logger
 	private Log log;
@@ -114,9 +121,21 @@ public class UserHome extends ValidatingEntityHome<User> {
 		} else {
 			try {
 				CertificateInfo certificateInfo = certificateParser.parseCertificate(certificate);
-				instance.setCertificateSubject(certificateInfo.getDistinguishedName());
+				String distinguishedName = certificateInfo.getDistinguishedName();
+
+				distinguishedName = distinguishedNameManager.createDistinguishedName(distinguishedName).toString();
+
+				instance.setCertificateSubject(distinguishedName);
 			} catch (CryptoException e) {
+				StatusMessages.instance().add(Severity.ERROR, "Cannot parse the certificate.");
 				log.error("Cannot parse user certificate. Leaving both set to null.", e);
+
+				instance.setCertificate(null);
+				instance.setCertificateSubject(null);
+			} catch (InvalidDistinguishedNameException e) {
+				StatusMessages.instance().add(Severity.ERROR, "Cannot parse the DN in the certificate.");
+				log.error("Cannot parse the DN in the certificate. Leaving both set to null.", e);
+
 				instance.setCertificate(null);
 				instance.setCertificateSubject(null);
 			}
