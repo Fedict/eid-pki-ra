@@ -13,7 +13,7 @@ import be.fedict.eid.pkira.crypto.CSRInfo;
 public class Util {
 
 	public static final String DN_PREFIX = "CN=test-";
-	public static final String DN_SUFFIX = ",O=fedict,L=Brussel,ST=Brussel,C=BE";
+	public static final String DN_SUFFIX = ",O=Fedict,L=Brussel,ST=Brussel,C=BE";
 
 	public static CSRInfo generateCSR() {
 		try {
