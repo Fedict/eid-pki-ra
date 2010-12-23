@@ -156,7 +156,6 @@ public class SignatureVerifierBean implements SignatureVerifier {
 
 		// Validate the signature
 		try {
-
 			// Read the document
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			dbf.setNamespaceAware(true);
@@ -200,15 +199,27 @@ public class SignatureVerifierBean implements SignatureVerifier {
 		}
 
 		try {
-			String certificateSubject = extractFromJAXBElementList(
-					x509DataType.getX509IssuerSerialOrX509SKIOrX509SubjectName(), String.class);
+			String certificateSubject;
+
+			byte[] certificate = extractFromJAXBElementList(
+					x509DataType.getX509IssuerSerialOrX509SKIOrX509SubjectName(), byte[].class);
+			if (certificate != null) {
+				certificateSubject = certificateParser.parseCertificate(certificate).getDistinguishedName();
+			} else {
+				certificateSubject = extractFromJAXBElementList(
+						x509DataType.getX509IssuerSerialOrX509SKIOrX509SubjectName(), String.class);
+			}
+
 			if (certificateSubject == null) {
 				return null;
 			}
 
 			return distinguishedNameManager.createDistinguishedName(certificateSubject).toString();
 		} catch (InvalidDistinguishedNameException e) {
-			log.error("Error parsing NND in contract.", e);
+			log.error("Error parsing DN in contract.", e);
+			return null;
+		} catch (CryptoException e) {
+			log.error("Error parsing certificate in contract.", e);
 			return null;
 		}
 

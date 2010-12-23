@@ -27,6 +27,8 @@ import be.fedict.eid.pkira.blm.model.usermgmt.UserHome;
 import be.fedict.eid.pkira.crypto.CertificateInfo;
 import be.fedict.eid.pkira.crypto.CertificateParser;
 import be.fedict.eid.pkira.crypto.CryptoException;
+import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
+import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;
 
 /**
  * @author Bram Baeyens
@@ -52,8 +54,17 @@ public class UniqueUserCertificateValidator implements Validator<UniqueUserCerti
 			return true;
 		}
 
+		DistinguishedNameManager dnManager = (DistinguishedNameManager) Component
+				.getInstance(DistinguishedNameManager.NAME);
+		String dn;
+		try {
+			dn = dnManager.normalizeDistinguishedNameExpression(info.getDistinguishedName());
+		} catch (InvalidDistinguishedNameException e) {
+			return true;
+		}
+
 		UserHome userHome = (UserHome) Component.getInstance(UserHome.NAME);
-		User user = userHome.findByCertificateSubject(info.getDistinguishedName());
+		User user = userHome.findByCertificateSubject(dn);
 		if (user == null || user.equals(userHome.getInstance())) {
 			return true;
 		}
