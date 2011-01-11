@@ -39,6 +39,8 @@ import org.opensaml.saml2.core.Subject;
 import org.opensaml.ws.message.decoder.MessageDecodingException;
 import org.opensaml.ws.transport.http.HttpServletRequestAdapter;
 import org.opensaml.xml.ConfigurationException;
+import org.opensaml.xml.XMLObject;
+import org.opensaml.xml.schema.XSAny;
 import org.opensaml.xml.schema.XSString;
 import org.opensaml.xml.security.SecurityException;
 import org.slf4j.Logger;
@@ -52,11 +54,11 @@ public class Saml2RequestDecoder implements AuthenticationRequestDecoder {
 	/**
 	 * 
 	 */
-	private static final String URN_BE_FEDICT_EID_IDP_FIRST_NAME = "urn:be:fedict:eid:idp:firstName";
+	private static final String URN_BE_FEDICT_EID_IDP_FIRST_NAME = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname";
 	/**
 	 * 
 	 */
-	private static final String URN_BE_FEDICT_EID_IDP_NAME = "urn:be:fedict:eid:idp:name";
+	private static final String URN_BE_FEDICT_EID_IDP_NAME = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname";
 	private static final Logger LOG = LoggerFactory.getLogger(Saml2RequestDecoder.class);
 
 	public Saml2RequestDecoder() {
@@ -111,9 +113,15 @@ public class Saml2RequestDecoder implements AuthenticationRequestDecoder {
 			List<Attribute> attributes = attributeStatement.getAttributes();
 			for (Attribute attribute : attributes) {
 				String attributeName = attribute.getName();
-				XSString attributeValue = (XSString) attribute.getAttributeValues().get(0);
-				String value = attributeValue == null ? null : attributeValue.getValue();
-
+				XMLObject attributeValue = attribute.getAttributeValues().get(0);
+				
+				String value = null;
+				if (attributeValue!=null && attributeValue instanceof XSString) {
+					value =((XSString)attributeValue).getValue();
+				} else  if (attributeValue!=null && attributeValue instanceof XSAny) {
+					value =((XSAny)attributeValue).getTextContent();
+				} 
+				
 				if (URN_BE_FEDICT_EID_IDP_NAME.equals(attributeName)) {
 					lastName = value;
 				}
