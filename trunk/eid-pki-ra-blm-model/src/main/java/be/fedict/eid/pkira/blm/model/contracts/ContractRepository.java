@@ -72,4 +72,10 @@ public interface ContractRepository {
 	 * @param certificate the certificate to remove.
 	 */
 	public void removeCertificate(Certificate certificate);
+
+	/**
+	 * Updates the contract in the database.
+	 * @param contract contract to update. This has to be saved before.
+	 */
+	public void updateContract(AbstractContract contract);
 }

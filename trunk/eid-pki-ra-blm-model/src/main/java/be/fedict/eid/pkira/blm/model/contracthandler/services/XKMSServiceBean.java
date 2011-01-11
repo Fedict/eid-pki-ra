@@ -104,7 +104,7 @@ public class XKMSServiceBean implements XKMSService {
 			return certificateParser.parseCertificate(certificateData).getPemEncoded();
 		} catch (XKMSClientException e) {
 			logError(contract, e);
-			throw new ContractHandlerBeanException(ResultType.BACKEND_ERROR, "Error revoking the certificate: "
+			throw new ContractHandlerBeanException(ResultType.BACKEND_ERROR, "Error signing the certificate: "
 					+ e.getMessage(), e);
 		} catch (CryptoException e) {
 			logError(contract, e);
@@ -112,7 +112,7 @@ public class XKMSServiceBean implements XKMSService {
 					"The created certificate could not be parsed.", e);
 		} catch (Exception e) {
 			logError(contract, e);
-			throw new ContractHandlerBeanException(ResultType.GENERAL_FAILURE, "Error revoking the certificate: "
+			throw new ContractHandlerBeanException(ResultType.GENERAL_FAILURE, "Error signing the certificate: "
 					+ e.getMessage(), e);
 		}
 	}

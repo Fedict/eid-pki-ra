@@ -53,6 +53,7 @@ public class ContractMapperBean implements Serializable, ContractMapper {
 		this.factory = new ObjectFactory();
 	}
 
+	@Override
 	public Collection<ContractWS> map(List<AbstractContract> contracts) {
 		List<ContractWS> contractWSList = new ArrayList<ContractWS>();
 		for (AbstractContract contract : contracts) {
@@ -71,6 +72,8 @@ public class ContractMapperBean implements Serializable, ContractMapper {
 		contractWS.setContractType(deriveContractType(contract));
 		contractWS.setCertificateType(getCertificateType(contract));
 		contractWS.setCertificateId(getCertificateId(contract)); 
+		contractWS.setResult(contract.getResult()!=null ? contract.getResult().value() : null);
+		contractWS.setResultMessage(contract.getResultMessage());
 		return contractWS;
 	}
 

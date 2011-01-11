@@ -44,6 +44,8 @@ public class Contract implements Serializable {
 	private CertificateType certificateType;
 	private ContractType contractType;
 	private Integer certificateId;
+	private String result;
+	private String resultMessage;
 
 	public Integer getId() {
 		return id;
@@ -111,6 +113,25 @@ public class Contract implements Serializable {
 	
 	public boolean isHasCertificate() {
 		return certificateId != null;
+	}
+	
+	public String getResult() {
+		return result;
+	}
+
+	
+	public void setResult(String result) {
+		this.result = result;
+	}
+
+	
+	public String getResultMessage() {
+		return resultMessage;
+	}
+
+	
+	public void setResultMessage(String resultMessage) {
+		this.resultMessage = resultMessage;
 	}
 }
 

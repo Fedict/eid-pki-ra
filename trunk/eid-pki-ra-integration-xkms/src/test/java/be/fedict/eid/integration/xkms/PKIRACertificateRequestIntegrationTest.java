@@ -134,7 +134,7 @@ public class PKIRACertificateRequestIntegrationTest {
 					connection,
 					"UPDATE USER SET CERTIFICATE=?, CERTIFICATE_SUBJECT=? WHERE USER_ID=?",
 					certificate,
-					"c=BE,cn=Jan Van den Bergh,emailaddress=j.vandenbergh@aca-it.be,l=Hasselt,o=ACA-IT Solutions,st=Limburg",
+					"c=BE,cn=Jan Van den Bergh,e=j.vandenbergh@aca-it.be,l=Hasselt,o=ACA-IT Solutions,st=Limburg",
 					7001);
 			connection.commit();
 		} finally {

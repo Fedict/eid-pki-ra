@@ -172,6 +172,8 @@ public class ContractHandlerBean implements ContractHandler {
 		CertificateSigningRequestType request = null;
 		int certificateId = -1;
 		byte[] certificateBytes = null;
+		CertificateSigningContract contract = null;
+		
 		try {
 			// Parse the request
 			request = contractParser.unmarshalRequestMessage(requestMsg, CertificateSigningRequestType.class);
@@ -190,7 +192,7 @@ public class ContractHandlerBean implements ContractHandler {
 			checkLegalNotice(request, registration);
 
 			// Persist the contract
-			CertificateSigningContract contract = saveContract(registration, requestMsg, request, signer,
+			contract = saveContract(registration, requestMsg, request, signer,
 					certificateType);
 
 			// Call XKMS
@@ -222,12 +224,22 @@ public class ContractHandlerBean implements ContractHandler {
 			certificateId = certificate.getId();
 			certificateBytes = certificateInfo.getDerEncoded();
 			fillResponseFromRequest(responseBuilder, request, ResultType.SUCCESS, "Success");
+			
+			updateContract(contract, ResultType.SUCCESS, "Success");
 		} catch (ContractHandlerBeanException e) {
 			fillResponseFromRequest(responseBuilder, request, e.getResultType(), e.getMessage());
+			
+			if (contract!=null) {
+				updateContract(contract, e.getResultType(), e.getMessage());
+			}
 		} catch (RuntimeException e) {
 			log.error("Error while processing the contract", e);
 			fillResponseFromRequest(responseBuilder, request, ResultType.GENERAL_FAILURE,
 					"An error occurred while processing the contract.");
+			
+			if (contract!=null) {
+				updateContract(contract, ResultType.GENERAL_FAILURE, "An error occurred while processing the contract.");
+			}
 		}
 
 		CertificateSigningResponseType responseType = responseBuilder.toResponseType(certificateId, certificateBytes);
@@ -324,6 +336,12 @@ public class ContractHandlerBean implements ContractHandler {
 		contractRepository.persistContract(contract);
 		return contract;
 	}
+	
+	private void updateContract(AbstractContract contract, ResultType result, String resultMessage) {
+		contract.setResult(result);
+		contract.setResultMessage(resultMessage);
+		contractRepository.updateContract(contract);
+	}
 
 	private void sendCertificateByMail(Certificate certificate, Registration registration)
 			throws ContractHandlerBeanException {
@@ -347,7 +365,7 @@ public class ContractHandlerBean implements ContractHandler {
 			CertificateChainCertificate chain = certificate.getCertificateChainCertificate();
 			while (chain != null) {
 				zip.putNextEntry(new ZipEntry("chain" + (i++) + ".crt"));
-				zip.write(chain.getCertificateData());
+				zip.write(chain.getCertificateData().getBytes());
 				zip.closeEntry();
 				chain = chain.getIssuer();
 			}
