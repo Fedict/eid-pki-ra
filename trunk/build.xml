@@ -44,7 +44,7 @@
 		</antcall>
 	</target>
 
-	<target name="deploy-all" depends="deploy-blm, deploy-portal, deploy-xkms-mock" />
+	<target name="deploy-all" depends="deploy-blm, deploy-portal" />
 
 	<target name="-undeploy">
 		<delete>
@@ -80,7 +80,7 @@
 		</antcall>
 	</target>
 
-	<target name="undeploy-all" depends="undeploy-blm, undeploy-portal, undeploy-xkms-mock" />
+	<target name="undeploy-all" depends="undeploy-blm, undeploy-portal" />
 
 	<target name="redeploy-blm" depends="undeploy-blm, deploy-blm" />
 

@@ -173,7 +173,7 @@ public class ContractHandlerBean implements ContractHandler {
 		int certificateId = -1;
 		byte[] certificateBytes = null;
 		CertificateSigningContract contract = null;
-		
+
 		try {
 			// Parse the request
 			request = contractParser.unmarshalRequestMessage(requestMsg, CertificateSigningRequestType.class);
@@ -192,8 +192,7 @@ public class ContractHandlerBean implements ContractHandler {
 			checkLegalNotice(request, registration);
 
 			// Persist the contract
-			contract = saveContract(registration, requestMsg, request, signer,
-					certificateType);
+			contract = saveContract(registration, requestMsg, request, signer, certificateType);
 
 			// Call XKMS
 			String certificateAsPem = xkmsService.sign(contract);
@@ -224,20 +223,20 @@ public class ContractHandlerBean implements ContractHandler {
 			certificateId = certificate.getId();
 			certificateBytes = certificateInfo.getDerEncoded();
 			fillResponseFromRequest(responseBuilder, request, ResultType.SUCCESS, "Success");
-			
+
 			updateContract(contract, ResultType.SUCCESS, "Success");
 		} catch (ContractHandlerBeanException e) {
 			fillResponseFromRequest(responseBuilder, request, e.getResultType(), e.getMessage());
-			
-			if (contract!=null) {
+
+			if (contract != null) {
 				updateContract(contract, e.getResultType(), e.getMessage());
 			}
 		} catch (RuntimeException e) {
 			log.error("Error while processing the contract", e);
 			fillResponseFromRequest(responseBuilder, request, ResultType.GENERAL_FAILURE,
 					"An error occurred while processing the contract.");
-			
-			if (contract!=null) {
+
+			if (contract != null) {
 				updateContract(contract, ResultType.GENERAL_FAILURE, "An error occurred while processing the contract.");
 			}
 		}
@@ -258,20 +257,23 @@ public class ContractHandlerBean implements ContractHandler {
 
 	protected void scheduleNotificationMail(Registration registration, CertificateInfo certificateInfo,
 			Certificate certificate) {
-		Long intervalParam = Long.valueOf(configurationEntryQuery.findByEntryKey(
-				ConfigurationEntryKey.NOTIFICATION_MAIL_MINUTES).getValue());
+		String notificationMailMinutes = configurationEntryQuery.findByEntryKey(
+				ConfigurationEntryKey.NOTIFICATION_MAIL_MINUTES).getValue();
+		for (String notificationMailMinute : notificationMailMinutes.split("\\s*,\\s*")) {
+			Long intervalParam = Long.valueOf(notificationMailMinute);
 
-		Date when;
-		if (intervalParam > 0) {
-			when = certificateInfo.getValidityEnd();
-			when.setTime(when.getTime() - intervalParam * 1000 * 60);
-		} else {
-			when = new Date();
-			when.setTime(when.getTime() - intervalParam * 1000 * 60);
+			Date when;
+			if (intervalParam > 0) {
+				when = certificateInfo.getValidityEnd();
+				when.setTime(when.getTime() - intervalParam * 1000 * 60);
+			} else {
+				when = new Date();
+				when.setTime(when.getTime() - intervalParam * 1000 * 60);
+			}
+			QuartzTriggerHandle timer = schedulerBean.scheduleNotifcation(when, certificate.getIssuer(),
+					certificate.getSerialNumber());
+			certificate.addTimer(timer);
 		}
-		QuartzTriggerHandle timer = schedulerBean.scheduleNotifcation(when, certificate.getIssuer(),
-				certificate.getSerialNumber());
-		certificate.setTimer(timer);
 	}
 
 	private Certificate findCertificate(CertificateRevocationRequestType request) throws ContractHandlerBeanException {
@@ -336,7 +338,7 @@ public class ContractHandlerBean implements ContractHandler {
 		contractRepository.persistContract(contract);
 		return contract;
 	}
-	
+
 	private void updateContract(AbstractContract contract, ResultType result, String resultMessage) {
 		contract.setResult(result);
 		contract.setResultMessage(resultMessage);
