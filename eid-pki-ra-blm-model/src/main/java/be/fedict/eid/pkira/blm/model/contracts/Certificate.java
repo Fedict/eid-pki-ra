@@ -19,6 +19,8 @@ package be.fedict.eid.pkira.blm.model.contracts;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -29,6 +31,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -37,6 +40,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.CollectionOfElements;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.async.QuartzTriggerHandle;
 import org.quartz.SchedulerException;
@@ -60,8 +64,9 @@ public class Certificate implements Serializable {
 
 	private static final long serialVersionUID = -6539022465744360747L;
 
-	@Column(name="TRIGGERHANDLE", nullable=true)
-	private QuartzTriggerHandle timer;
+	@CollectionOfElements(fetch=FetchType.LAZY)
+	@JoinTable(name="TRIGGERHANDLES")
+	private final Set<QuartzTriggerHandle> timers = new HashSet<QuartzTriggerHandle>();
 	
 	@Id
 	@GeneratedValue
@@ -260,19 +265,21 @@ public class Certificate implements Serializable {
 	}
 
 	public void cancelNotificationMail() throws SchedulerException {
-		if(timer != null){
-			timer.cancel();
+		if (getTimers()!=null) {
+			for(QuartzTriggerHandle timer: getTimers()) {
+				timer.cancel();
+			}
 		}
+		timers.clear();
+	}
+
+	public Set<QuartzTriggerHandle> getTimers() {
+		return timers;
 	}
 
 	
-	public QuartzTriggerHandle getTimer() {
-		return timer;
-	}
-
-	
-	public void setTimer(QuartzTriggerHandle timer) {
-		this.timer = timer;
+	public void addTimer(QuartzTriggerHandle timer) {
+		this.timers.add(timer);
 	}
 
 	public void setId(Integer id) {
