@@ -68,6 +68,20 @@
 							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="Europe/Brussels" />
 						</h:outputText>
 					</rich:column>
+					
+					<rich:column sortBy="#{contract.result}" filterBy="#{contract.result}">
+						<f:facet name="header">
+							<h:outputText value="#{messages['contract.result']}" />
+						</f:facet>
+						<h:outputText value="#{contract.result}" />
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages['contract.resultMessage']}" />
+						</f:facet>
+						<h:outputText value="#{contract.resultMessage}" />
+					</rich:column>
 	
 					<rich:column>
 						<s:link id="downloadContractDocument" view="/page/contract/contract-download.xhtml" value="#{messages['link.download']}">

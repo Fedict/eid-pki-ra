@@ -24,6 +24,8 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -41,6 +43,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.validator.NotNull;
 
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
+import be.fedict.eid.pkira.generated.contracts.ResultType;
 
 /**
  * A received contract document.
@@ -91,6 +94,13 @@ public abstract class AbstractContract implements Serializable {
 	@NotNull
 	@Column(name = "CREATION_DATE", nullable = false)
 	private Date creationDate;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "RESULT")
+	private ResultType result;
+	
+	@Column(name="RESULT_MESSAGE", length=255)
+	private String resultMessage;
 
 	public String getContractDocument() {
 		return contractDocument;
@@ -145,6 +155,26 @@ public abstract class AbstractContract implements Serializable {
 
 	public void setCertificateDomain(CertificateDomain certificateDomain) {
 		this.certificateDomain = certificateDomain;
+	}
+
+	
+	public ResultType getResult() {
+		return result;
+	}
+
+	
+	public void setResult(ResultType result) {
+		this.result = result;
+	}
+
+	
+	public String getResultMessage() {
+		return resultMessage;
+	}
+
+	
+	public void setResultMessage(String resultMessage) {
+		this.resultMessage = resultMessage;
 	}
 
 	protected void appendFields(StringBuilder builder) {

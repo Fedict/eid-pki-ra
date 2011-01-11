@@ -146,4 +146,10 @@ public class ContractRepositoryBean implements ContractRepository {
 	protected void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
+
+	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public void updateContract(AbstractContract contract) {
+		entityManager.merge(contract);		
+	}
 }

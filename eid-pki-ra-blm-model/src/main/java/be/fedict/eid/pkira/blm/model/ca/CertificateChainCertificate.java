@@ -35,7 +35,7 @@ public class CertificateChainCertificate implements Serializable, Comparable<Cer
 	@Lob
 	@Column(name = "DATA", nullable = false)
 	@Basic(fetch = FetchType.LAZY)
-	private byte[] certificateData;
+	private String certificateData;
 
 	@Column(name = "SUBJECT", nullable = false)
 	private String subject;
@@ -51,11 +51,11 @@ public class CertificateChainCertificate implements Serializable, Comparable<Cer
 	@Column(name = "SERIALNUMBER", nullable = false, precision=52, scale=0)
 	private BigInteger serialNumber;
 
-	public byte[] getCertificateData() {
+	public String getCertificateData() {
 		return certificateData;
 	}
 
-	public void setCertificateData(byte[] certificateData) {
+	public void setCertificateData(String certificateData) {
 		this.certificateData = certificateData;
 	}
 

@@ -44,7 +44,7 @@ public class CertificateChainHandler implements Serializable {
 	@In
 	private FacesMessages facesMessages;
 
-	private Map<CertificateChainCertificate, CertificateInfo> certificates = new HashMap<CertificateChainCertificate, CertificateInfo>();
+	private final Map<CertificateChainCertificate, CertificateInfo> certificates = new HashMap<CertificateChainCertificate, CertificateInfo>();
 
 	private byte[] certificateData;
 
@@ -115,7 +115,7 @@ public class CertificateChainHandler implements Serializable {
 		// Create certificate object
 		CertificateChainCertificate certificate = new CertificateChainCertificate();
 		certificate.setCertificateChain(certificateChainHome.getInstance());
-		certificate.setCertificateData(certificateData);
+		certificate.setCertificateData(certificateInfo.getPemEncoded());
 		certificate.setSerialNumber(certificateInfo.getSerialNumber());
 		certificate.setSubject(certificateInfo.getDistinguishedName());
 		certificate.setIssuer(issuer);

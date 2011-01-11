@@ -51,6 +51,8 @@ public class ContractMapper implements Serializable {
 		contract.setDnExpression(contractWS.getDnExpression());
 		contract.setCertificateId(contractWS.getCertificateId());
 		contract.setRequesterName(contractWS.getRequesterName());		
+		contract.setResult(contractWS.getResult());
+		contract.setResultMessage(contractWS.getResultMessage());
 		return contract;
 	}
 	

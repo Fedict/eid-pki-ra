@@ -397,6 +397,7 @@ public class ContractHandlerBeanTest {
 
 		// Validate it
 		verify(contractRepository).persistContract(any(AbstractContract.class));
+		verify(contractRepository).updateContract(any(AbstractContract.class));
 		verifyNoMoreInteractions(contractRepository);
 		assertEquals(result, RESPONSE_MESSAGE);
 	}
