@@ -25,12 +25,12 @@
 			<artifactId>eid-pki-ra-generated-privatews</artifactId>
 			<scope>provided</scope>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-blm-model</artifactId>
+			<classifier>${environment}</classifier>
 			<type>ejb</type>
-			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -52,4 +52,15 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<classifier>${environment}</classifier>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
