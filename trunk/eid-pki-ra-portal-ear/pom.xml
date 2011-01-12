@@ -78,6 +78,7 @@
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-portal-webapp</artifactId>
 			<type>war</type>
+			<classifier>${environment}</classifier>
 			<exclusions>
 				<exclusion>
 					<groupId>javax.servlet</groupId>
@@ -90,6 +91,7 @@
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-portal-model</artifactId>
 			<type>ejb</type>
+			<classifier>${environment}</classifier>
 			<exclusions>
 				<exclusion>
 					<groupId>javax.faces</groupId>
@@ -118,6 +120,7 @@
 				<configuration>
 					<version>5</version>
 					<defaultLibBundleDir>lib</defaultLibBundleDir>
+					<classifier>${environment}</classifier>
 					<modules>
 						<webModule>
 							<groupId>be.fedict</groupId>

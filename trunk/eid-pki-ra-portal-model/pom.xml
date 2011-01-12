@@ -21,6 +21,15 @@
 				<filtering>true</filtering>
 			</resource>
 		</resources>
+		
+		<plugins>
+			<plugin>
+				<artifactId>maven-ejb-plugin</artifactId>
+				<configuration>
+					<classifier>${environment}</classifier>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 
 	<dependencies>

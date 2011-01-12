@@ -396,6 +396,7 @@
 				<groupId>be.fedict</groupId>
 				<artifactId>eid-pki-ra-blm-model</artifactId>
 				<version>${project.version}</version>
+				<classifier>${environment}</classifier>
 				<type>ejb</type>
 			</dependency>
 
@@ -403,6 +404,7 @@
 				<groupId>be.fedict</groupId>
 				<artifactId>eid-pki-ra-blm-webapp</artifactId>
 				<version>${project.version}</version>
+				<classifier>${environment}</classifier>
 				<type>war</type>
 			</dependency>
 
@@ -410,6 +412,7 @@
 				<groupId>be.fedict</groupId>
 				<artifactId>eid-pki-ra-blm-ws</artifactId>
 				<version>${project.version}</version>
+				<classifier>${environment}</classifier>
 				<type>war</type>
 			</dependency>
 
@@ -418,12 +421,14 @@
 				<artifactId>eid-pki-ra-portal-model</artifactId>
 				<version>${project.version}</version>
 				<type>ejb</type>
+				<classifier>${environment}</classifier>
 			</dependency>
 
 			<dependency>
 				<groupId>be.fedict</groupId>
 				<artifactId>eid-pki-ra-portal-webapp</artifactId>
 				<version>${project.version}</version>
+				<classifier>${environment}</classifier>
 				<type>war</type>
 			</dependency>
 
@@ -649,7 +654,7 @@
 				<exploded.war.file>true</exploded.war.file>
 
 				<!-- persistence.xml configuration -->
-				<hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>
+				<hibernate.dialect>org.hibernate.dialect.Oracle10gDialect</hibernate.dialect>
 				<hibernate.hbm2ddl.auto>validate</hibernate.hbm2ddl.auto>
 				<hibernate.current_session_context_class>thread</hibernate.current_session_context_class>
 				<hibernate.cache.provider_class>org.hibernate.cache.NoCacheProvider</hibernate.cache.provider_class>

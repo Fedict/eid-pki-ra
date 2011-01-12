@@ -21,6 +21,7 @@
 
 				<version>2.0.2</version>
 				<configuration>
+					<classifier>${environment}</classifier>
 					<webResources>
 						<resource>
 							<!-- this is relative to the pom.xml directory -->
@@ -46,6 +47,7 @@
 			<artifactId>eid-pki-ra-portal-model</artifactId>
 			<scope>provided</scope>
 			<type>ejb</type>
+			<classifier>${environment}</classifier>
 		</dependency>
 
 		<dependency>

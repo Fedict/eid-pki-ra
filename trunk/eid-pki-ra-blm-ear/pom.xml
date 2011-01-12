@@ -16,17 +16,19 @@
 	<name>eid-pki-ra-blm - ear</name>
 
 	<dependencies>
-		<!--  Application modules -->
+		<!-- Application modules -->
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-blm-webapp</artifactId>
 			<type>war</type>
+			<classifier>${environment}</classifier>
 		</dependency>
 
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-blm-ws</artifactId>
 			<type>war</type>
+			<classifier>${environment}</classifier>
 			<scope>compile</scope>
 		</dependency>
 
@@ -34,6 +36,7 @@
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-blm-model</artifactId>
 			<type>ejb</type>
+			<classifier>${environment}</classifier>
 			<exclusions>
 				<exclusion>
 					<groupId>org.hibernate</groupId>
@@ -53,21 +56,21 @@
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-generated-publicws</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-util-crypto</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-generated-privatews</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-authentication-client</artifactId>
-			<exclusions>				
+			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-api</artifactId>
@@ -151,6 +154,7 @@
 			<plugin>
 				<artifactId>maven-ear-plugin</artifactId>
 				<configuration>
+					<classifier>${environment}</classifier>
 					<version>5</version>
 					<defaultLibBundleDir>lib</defaultLibBundleDir>
 					<modules>
@@ -158,10 +162,11 @@
 							<groupId>${project.groupId}</groupId>
 							<artifactId>eid-pki-ra-blm-sar</artifactId>
 						</SarModule>
-						
+
 						<webModule>
 							<groupId>be.fedict</groupId>
 							<artifactId>eid-pki-ra-blm-webapp</artifactId>
+							<classifier>${environment}</classifier>
 							<contextRoot>eid-pki-ra/admin</contextRoot>
 							<unpack>${exploded.war.file}</unpack>
 						</webModule>
@@ -169,11 +174,13 @@
 						<ejbModule>
 							<groupId>be.fedict</groupId>
 							<artifactId>eid-pki-ra-blm-model</artifactId>
+							<classifier>${environment}</classifier>
 						</ejbModule>
 
 						<webModule>
 							<groupId>be.fedict</groupId>
 							<artifactId>eid-pki-ra-blm-ws</artifactId>
+							<classifier>${environment}</classifier>
 							<contextRoot>eid-pki-ra/webservice</contextRoot>
 							<unpack>${exploded.war.file}</unpack>
 						</webModule>
