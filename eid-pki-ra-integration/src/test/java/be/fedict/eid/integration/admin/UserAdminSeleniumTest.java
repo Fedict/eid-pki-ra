@@ -46,7 +46,7 @@ public class UserAdminSeleniumTest extends BaseSeleniumTestCase {
 	public void testRevokeAdmin() {
 		goToUserEditPage(0);
 		validateRegistrationRows(2);
-		Assert.assertTrue(getSelenium().getAllButtons().length == 2);
+		Assert.assertTrue(getSelenium().getAllButtons().length == 3);
 		clickAndWait("userForm:submitButtonBox:revokeAdmin");
 		assertTextPresent("The user has been updated.");
 	}
@@ -55,7 +55,7 @@ public class UserAdminSeleniumTest extends BaseSeleniumTestCase {
 	public void testGrantAdmin() {
 		goToUserEditPage(1);
 		validateRegistrationRows(0);
-		Assert.assertTrue(getSelenium().getAllButtons().length == 2);
+		Assert.assertTrue(getSelenium().getAllButtons().length == 3);
 		clickAndWait("userForm:submitButtonBox:grantAdmin");
 		assertTextPresent("The user has been updated.");
 	}
@@ -64,7 +64,7 @@ public class UserAdminSeleniumTest extends BaseSeleniumTestCase {
 	public void testCurrentUser() {
 		goToUserEditPage(2);
 		validateRegistrationRows(1);
-		Assert.assertTrue(getSelenium().getAllButtons().length == 1);
+		Assert.assertTrue(getSelenium().getAllButtons().length == 2);
 	}	
 	
 //	@Test

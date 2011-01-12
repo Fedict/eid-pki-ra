@@ -54,6 +54,13 @@
 	                </f:facet>
 	                <h:outputText value="#{certificateDomain.codeSigningCertificate ? messages['general.yes'] : messages['general.no']}" />
 	            </rich:column>
+	            
+	            <rich:column sortBy="#{certificateDomain.personalCertificate}">
+	                <f:facet name="header">
+						<h:outputText value="#{messages['certificatedomain.list.personalcertificates']}" />
+	                </f:facet>
+	                <h:outputText value="#{certificateDomain.personalCertificate ? messages['general.yes'] : messages['general.no']}" />
+	            </rich:column>
 
 				<rich:column>
 					<s:link view="/page/certificatedomain/certificatedomain-edit.xhtml" value="#{messages['link.edit']}" id="edit" >

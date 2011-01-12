@@ -51,12 +51,9 @@ import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.crypto.CertificateInfo;
 
 @Entity
-@Table(
-		name="CERTIFICATE", 
-		uniqueConstraints= {
-				@UniqueConstraint(columnNames={ "ISSUER", "SERIAL_NUMBER" })
-		}
-)
+@Table(name = "CERTIFICATE", uniqueConstraints =
+	{ @UniqueConstraint(columnNames =
+		{ "ISSUER", "SERIAL_NUMBER" }) })
 @Name(Certificate.NAME)
 public class Certificate implements Serializable {
 
@@ -64,15 +61,15 @@ public class Certificate implements Serializable {
 
 	private static final long serialVersionUID = -6539022465744360747L;
 
-	@CollectionOfElements(fetch=FetchType.LAZY)
-	@JoinTable(name="TRIGGERHANDLES")
+	@CollectionOfElements(fetch = FetchType.LAZY)
+	@JoinTable(name = "TRIGGERHANDLES")
 	private final Set<QuartzTriggerHandle> timers = new HashSet<QuartzTriggerHandle>();
-	
+
 	@Id
 	@GeneratedValue
 	@Column(name = "CERTIFICATE_ID", nullable = false, unique = true)
 	private Integer id;
-	@Column(name = "SERIAL_NUMBER", nullable = false, precision=52, scale=0)
+	@Column(name = "SERIAL_NUMBER", nullable = false, precision = 52, scale = 0)
 	private BigInteger serialNumber;
 
 	@Lob
@@ -106,12 +103,12 @@ public class Certificate implements Serializable {
 	private CertificateSigningContract contract;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name="CERTIFICATE_DOMAIN_ID", nullable=false)
+	@JoinColumn(name = "CERTIFICATE_DOMAIN_ID", nullable = false)
 	private CertificateDomain certificateDomain;
-	
+
 	@ManyToOne(optional = true)
-	@JoinColumn(name = "CERTIFICATE_CHAIN_CERTIFICATE", nullable=true)
-	private CertificateChainCertificate certificateChainCertificate; 
+	@JoinColumn(name = "CERTIFICATE_CHAIN_CERTIFICATE", nullable = true)
+	private CertificateChainCertificate certificateChainCertificate;
 
 	public Certificate() {
 	}
@@ -128,7 +125,7 @@ public class Certificate implements Serializable {
 		this.requesterName = requesterName;
 		this.contract = contract;
 		this.certificateDomain = contract.getCertificateDomain();
-		
+
 		this.certificateChainCertificate = null;
 		CertificateChain certificateChain = certificateDomain.getCertificateAuthority().getCertificateChain();
 		if (certificateChain != null) {
@@ -137,8 +134,9 @@ public class Certificate implements Serializable {
 			} else if (certificateType == CertificateType.SERVER) {
 				certificateChainCertificate = certificateChain.getServerChain();
 			} else if (certificateType == CertificateType.CODE) {
-				certificateChainCertificate = certificateChain
-						.getCodeSigningChain();
+				certificateChainCertificate = certificateChain.getCodeSigningChain();
+			} else if (certificateType == CertificateType.PERSONAL) {
+				certificateChainCertificate = certificateChain.getPersonalChain();
 			}
 		}
 	}
@@ -254,19 +252,17 @@ public class Certificate implements Serializable {
 		this.certificateType = certificateType;
 	}
 
-	
 	public CertificateDomain getCertificateDomain() {
 		return certificateDomain;
 	}
 
-	
 	public void setCertificateDomain(CertificateDomain certificateDomain) {
 		this.certificateDomain = certificateDomain;
 	}
 
 	public void cancelNotificationMail() throws SchedulerException {
-		if (getTimers()!=null) {
-			for(QuartzTriggerHandle timer: getTimers()) {
+		if (getTimers() != null) {
+			for (QuartzTriggerHandle timer : getTimers()) {
 				timer.cancel();
 			}
 		}
@@ -277,7 +273,6 @@ public class Certificate implements Serializable {
 		return timers;
 	}
 
-	
 	public void addTimer(QuartzTriggerHandle timer) {
 		this.timers.add(timer);
 	}
@@ -286,8 +281,7 @@ public class Certificate implements Serializable {
 		this.id = id;
 	}
 
-	public void setCertificateChainCertificate(
-			CertificateChainCertificate certificateChainCertificate) {
+	public void setCertificateChainCertificate(CertificateChainCertificate certificateChainCertificate) {
 		this.certificateChainCertificate = certificateChainCertificate;
 	}
 
@@ -295,4 +289,3 @@ public class Certificate implements Serializable {
 		return certificateChainCertificate;
 	}
 }
-

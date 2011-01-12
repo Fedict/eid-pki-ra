@@ -40,54 +40,54 @@ public class CertificateDomainCreateSeleniumTest extends BaseSeleniumTestCase {
 
 	@Test
 	public void testCreateFirstCertificateDomain() {
-		createCertificateDomain(NAME1, DNEXPR1, true, false, false);
+		createCertificateDomain(NAME1, DNEXPR1, true, false, false, false);
 		assertTextPresent("The certificate domain has been added to the database");
 	}
 	
 	@Test
 	public void testCreateCertificateDomainInvalidExpression() {
-		createCertificateDomain(NAME3, DNEXPR_INVALID, true, false, false);
+		createCertificateDomain(NAME3, DNEXPR_INVALID, true, false, false, false);
 		assertTextPresent("The distinguished name expression is not valid");
 	}
 	
 	@Test
 	public void testCreateCertificateDomainNothingChecked() {
-		createCertificateDomain(NAME3, DNEXPR2, false, false, false);
+		createCertificateDomain(NAME3, DNEXPR2, false, false, false, false);
 		assertTextPresent("Please select at least one certificate type for this certificate domain");
 	}
 
 	@Test(dependsOnMethods = "testCreateFirstCertificateDomain")
 	public void testCreateCertificateDomainOverlapping() {
-		createCertificateDomain(NAME3, DNEXPR1, true, true, true);
+		createCertificateDomain(NAME3, DNEXPR1, true, true, true, true);
 		assertTextPresent("The distinguished name expression overlaps with an existing certificate domain");
 	}
 
 	@Test
 	public void testCreateCertificateDomainNameNull() {
-		createCertificateDomain("", DNEXPR1, true, true, true);
+		createCertificateDomain("", DNEXPR1, true, true, true, true);
 		assertTextPresent("This field is required!");
 	}
 
 	@Test
 	public void testCreateCertificateDomainDnNull() {
-		createCertificateDomain(NAME3, "", true, true, true);
+		createCertificateDomain(NAME3, "", true, true, true, true);
 		assertTextPresent("This field is required!");
 	}
 
 	@Test(dependsOnMethods = "testCreateFirstCertificateDomain")
 	public void testCreateCertificateDomainSameName() {
-		createCertificateDomain(NAME1, DNEXPR2, true, false, false);
+		createCertificateDomain(NAME1, DNEXPR2, true, false, false, false);
 		assertTextPresent("The name of the certificate domain already exists");
 	}
 
 	@Test(dependsOnMethods = "testCreateFirstCertificateDomain")
 	public void testCreateSecondDomain() {
-		createCertificateDomain(NAME2, DNEXPR1, false, true, true);
+		createCertificateDomain(NAME2, DNEXPR1, false, true, true, true);
 		assertTextPresent("The certificate domain has been added to the database");
 	}
 
 	private void createCertificateDomain(String name, String dnExpr, boolean clientCert, boolean serverCert,
-			boolean codeSigningCert) {
+			boolean codeSigningCert, boolean personalCert) {
 		clickAndWait("header-form:certificatedomains");
 		clickAndWait("certificateDomainListForm:submitButtonBox:newCertificateDomain");
 		assertTextPresent("Create certificate domain");
@@ -102,6 +102,9 @@ public class CertificateDomainCreateSeleniumTest extends BaseSeleniumTestCase {
 		}
 		if (codeSigningCert) {
 			getSelenium().check("certificateDetailForm:codeSigningCertDecoration:codeSigningCert");
+		}
+		if (personalCert) {
+			getSelenium().check("certificateDetailForm:personalCertDecoration:personalCert");
 		}
 		clickAndWait("certificateDetailForm:submitButtonBox:save");
 	}	

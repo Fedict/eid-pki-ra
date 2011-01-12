@@ -104,6 +104,19 @@
 						<s:convertEntity />
 					</h:selectOneMenu>
 				</s:decorate>
+				
+				<s:decorate id="personalCertificateChainDecoration"
+					template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['certificatechain.chains.personal']}:</ui:define>
+					<h:selectOneMenu
+						value="#{certificateChainHome.instance.personalChain}">
+						<s:selectItems
+							value="#{certificateChainHome.instance.certificates}"
+							var="certificate" label="#{certificate.subject}"
+							noSelectionLabel="-" />
+						<s:convertEntity />
+					</h:selectOneMenu>
+				</s:decorate>
 
 				<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
 					<h:commandButton id="update"

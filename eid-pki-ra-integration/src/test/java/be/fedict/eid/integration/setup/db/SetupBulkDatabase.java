@@ -26,6 +26,7 @@ import java.io.IOException;
  */
 public class SetupBulkDatabase extends SetupDatabase {
 
+	@Override
 	protected String readSql(String context) throws IOException {				
 		return generateSQL();
 	}
@@ -53,11 +54,11 @@ public class SetupBulkDatabase extends SetupDatabase {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < 150; i++) {
 			String sequence = addLeadingZero(i);
-			builder.append("INSERT INTO CERTIFICATE_DOMAIN (CERTIFICATE_DOMAIN_NAME, DN_EXPRESSION, CLIENTCERT, SERVERCERT, CODECERT, CA_ID) VALUES ('Name")
+			builder.append("INSERT INTO CERTIFICATE_DOMAIN (CERTIFICATE_DOMAIN_NAME, DN_EXPRESSION, CLIENTCERT, SERVERCERT, CODECERT, PERSONALCERT, CA_ID) VALUES ('Name")
 					.append(sequence)
 					.append("', 'DN")
 					.append(sequence)
-					.append("', 1, 0, 1, ")
+					.append("', 1, 0, 1, 0,")
 					.append(5001 + ");\n");
 		}
 		return builder;
