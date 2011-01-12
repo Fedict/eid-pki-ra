@@ -47,6 +47,10 @@ public class CertificateChain implements Serializable {
 	@JoinColumn(name = "SERVER_CHAIN_ID")
 	@OneToOne(fetch = FetchType.EAGER)
 	private CertificateChainCertificate serverChain;
+	
+	@JoinColumn(name = "PERSONAL_CHAIN_ID")
+	@OneToOne(fetch = FetchType.EAGER)
+	private CertificateChainCertificate personalChain;
 
 	public List<CertificateChainCertificate> getCertificates() {
 		if (certificates == null) {
@@ -81,6 +85,16 @@ public class CertificateChain implements Serializable {
 
 	public void setServerChain(CertificateChainCertificate serverChain) {
 		this.serverChain = serverChain;
+	}
+
+	
+	public CertificateChainCertificate getPersonalChain() {
+		return personalChain;
+	}
+
+	
+	public void setPersonalChain(CertificateChainCertificate personalChain) {
+		this.personalChain = personalChain;
 	}
 
 }

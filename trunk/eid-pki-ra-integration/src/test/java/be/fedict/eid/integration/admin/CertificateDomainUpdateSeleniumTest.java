@@ -37,7 +37,7 @@ public class CertificateDomainUpdateSeleniumTest extends BaseSeleniumTestCase {
 
 	@Test
 	public void testUpdateCertificateDomain() {
-		updateCertificateDomain(0, null, "c=be,ou=test5,uid=*", true, false, true);
+		updateCertificateDomain(0, null, "c=be,ou=test5,uid=*", true, false, true, false);
 		assertTextPresent("The certificate domain has been updated.");
 	}
 
@@ -52,11 +52,12 @@ public class CertificateDomainUpdateSeleniumTest extends BaseSeleniumTestCase {
 	
 	@Test
 	public void testUpdateCertificateDomainNothingChecked() {
-		updateCertificateTypes(0, false, false, false);
+		updateCertificateTypes(0, false, false, false, false);
 		assertTextPresent("Please select at least one certificate type for this certificate domain");
 		getSelenium().check("certificateDetailForm:clientCertDecoration:clientCert");
 		getSelenium().check("certificateDetailForm:serverCertDecoration:serverCert");
 		getSelenium().uncheck("certificateDetailForm:codeSigningCertDecoration:codeSigningCert");
+		getSelenium().uncheck("certificateDetailForm:personalCertDecoration:personalCert");
 		clickAndWait("certificateDetailForm:submitButtonBox:update");
 		assertTextPresent("The certificate domain has been updated.");
 	}
@@ -80,15 +81,15 @@ public class CertificateDomainUpdateSeleniumTest extends BaseSeleniumTestCase {
 	}
 	
 	private void updateDnExpression(int rowToUpdate, String dnExpr) {
-		updateCertificateDomain(rowToUpdate, null, dnExpr, null, null, null);
+		updateCertificateDomain(rowToUpdate, null, dnExpr, null, null, null, null);
 	}
 	
-	private void updateCertificateTypes(int rowToUpdate, Boolean clientCert, Boolean serverCert, Boolean codeSigningCert) {
-		updateCertificateDomain(rowToUpdate, null, null, clientCert, serverCert, codeSigningCert);
+	private void updateCertificateTypes(int rowToUpdate, Boolean clientCert, Boolean serverCert, Boolean codeSigningCert, Boolean personalCert) {
+		updateCertificateDomain(rowToUpdate, null, null, clientCert, serverCert, codeSigningCert, personalCert);
 	}	
 	
 	private void updateCertificateDomain(int rowToUpdate, String name, String dnExpr, Boolean clientCert, Boolean serverCert,
-			Boolean codeSigningCert) {
+			Boolean codeSigningCert, Boolean personalCert) {
 		clickAndWait("header-form:certificatedomains");
 		clickAndWait(deriveEditLinkToClick(rowToUpdate));
 		assertTextPresent("Edit certificate domain");
@@ -113,6 +114,11 @@ public class CertificateDomainUpdateSeleniumTest extends BaseSeleniumTestCase {
 			getSelenium().check("certificateDetailForm:codeSigningCertDecoration:codeSigningCert");
 		} else if (BooleanUtils.isFalse(codeSigningCert)) {
 			getSelenium().uncheck("certificateDetailForm:codeSigningCertDecoration:codeSigningCert");
+		}
+		if (BooleanUtils.isTrue(personalCert)) {
+			getSelenium().check("certificateDetailForm:personalCertDecoration:personalCert");
+		} else if (BooleanUtils.isFalse(personalCert)) {
+			getSelenium().uncheck("certificateDetailForm:personalCertDecoration:personalCert");
 		}
 		clickAndWait("certificateDetailForm:submitButtonBox:update");
 	}

@@ -87,6 +87,8 @@ public class CertificateDomain implements Serializable {
 	private boolean clientCertificate;
 	@Column(name = "CODECERT", nullable = false)
 	private boolean codeSigningCertificate;
+	@Column(name = "PERSONALCERT", nullable = false)
+	private boolean personalCertificate;
 
 	@OneToMany(mappedBy = "certificateDomain")
 	private List<Registration> registrations;
@@ -149,6 +151,14 @@ public class CertificateDomain implements Serializable {
 	public void setClientCertificate(boolean clientCertificate) {
 		this.clientCertificate = clientCertificate;
 	}
+	
+	public boolean isPersonalCertificate() {
+		return personalCertificate;
+	}
+
+	public void setPersonalCertificate(boolean personalCertificate) {
+		this.personalCertificate = personalCertificate;
+	}
 
 	public boolean isCodeSigningCertificate() {
 		return codeSigningCertificate;
@@ -169,6 +179,9 @@ public class CertificateDomain implements Serializable {
 		}
 		if (codeSigningCertificate) {
 			result.add(CertificateType.CODE);
+		}
+		if (personalCertificate) {
+			result.add(CertificateType.PERSONAL);
 		}
 		return result;
 	}

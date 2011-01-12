@@ -26,6 +26,7 @@ public enum CertificateType {
 
 	SERVER,
     CLIENT,
-    CODE;
+    CODE,
+    PERSONAL;
 
 }

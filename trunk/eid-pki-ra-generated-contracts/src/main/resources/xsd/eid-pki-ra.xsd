@@ -114,6 +114,7 @@
 			<enumeration value="Server" />
 			<enumeration value="Client" />
 			<enumeration value="Code" />
+			<enumeration value="Personal" />
 		</restriction>
 	</simpleType>
 

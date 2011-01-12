@@ -45,6 +45,11 @@
 	               	<h:selectBooleanCheckbox id="codeSigningCert" value="#{certificateDomainHome.instance.codeSigningCertificate}" />           	           	           
 	           	</s:decorate>
 	           	
+	           	<s:decorate id="personalCertDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['certificatedomain.edit.personalCertificates']}:</ui:define>
+	               	<h:selectBooleanCheckbox id="personalCert" value="#{certificateDomainHome.instance.personalCertificate}" />
+	           	</s:decorate>
+	           	
 	          	<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
 					<h:commandButton id="save" 
 							action="#{certificateDomainHome.persist}" 

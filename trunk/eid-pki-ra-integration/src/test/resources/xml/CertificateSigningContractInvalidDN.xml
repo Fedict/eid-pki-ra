@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ns2:CertificateSigningRequest xmlns:ns2="urn:be:fedict:eid:pkira:contracts" xmlns="http://www.w3.org/2000/09/xmldsig#">
+<ns2:CertificateSigningRequest xmlns:ns2="urn:be:fedict:eid:pkira:contracts" xmlns="http://www.w3.org/2000/09/xmldsig#" Id="test">
 	<ns2:RequestId>869b81cb-805b-4286-9c44-5350831abf82</ns2:RequestId>
 	<ns2:Description>My new certificate</ns2:Description>
 	<ns2:Operator>

@@ -105,7 +105,7 @@ public class PKIRACertificateRequestIntegrationTest {
 		try {
 			connection.setAutoCommit(false);
 			executeQuery(connection, "DELETE FROM CA_PARAMETERS WHERE CA_CA_ID=?", CA_ID);
-			setCAParameterValues(connection, "buc.client", "buc.code", "buc.server", "signing.provider",
+			setCAParameterValues(connection, "buc.client", "buc.code", "buc.server", "buc.personal", "signing.provider",
 					"signing.keystore.type", "signing.keystore.url", "signing.keystore.entry",
 					"signing.keystore.password", "signing.keystore.entry.password", "xkms.logPrefix");
 			executeQuery(connection, "UPDATE CA SET XKMS_URL=? WHERE CA_ID=?", parameters.get("xkms.url"), 5001);
