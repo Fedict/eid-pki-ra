@@ -57,7 +57,7 @@ public class CertificateDomainUpdateSeleniumTest extends BaseSeleniumTestCase {
 		getSelenium().check("certificateDetailForm:clientCertDecoration:clientCert");
 		getSelenium().check("certificateDetailForm:serverCertDecoration:serverCert");
 		getSelenium().uncheck("certificateDetailForm:codeSigningCertDecoration:codeSigningCert");
-		getSelenium().uncheck("certificateDetailForm:personalCertDecoration:personalCert");
+		getSelenium().uncheck("certificateDetailForm:personsCertDecoration:personsCert");
 		clickAndWait("certificateDetailForm:submitButtonBox:update");
 		assertTextPresent("The certificate domain has been updated.");
 	}
@@ -84,12 +84,12 @@ public class CertificateDomainUpdateSeleniumTest extends BaseSeleniumTestCase {
 		updateCertificateDomain(rowToUpdate, null, dnExpr, null, null, null, null);
 	}
 	
-	private void updateCertificateTypes(int rowToUpdate, Boolean clientCert, Boolean serverCert, Boolean codeSigningCert, Boolean personalCert) {
-		updateCertificateDomain(rowToUpdate, null, null, clientCert, serverCert, codeSigningCert, personalCert);
+	private void updateCertificateTypes(int rowToUpdate, Boolean clientCert, Boolean serverCert, Boolean codeSigningCert, Boolean personsCert) {
+		updateCertificateDomain(rowToUpdate, null, null, clientCert, serverCert, codeSigningCert, personsCert);
 	}	
 	
 	private void updateCertificateDomain(int rowToUpdate, String name, String dnExpr, Boolean clientCert, Boolean serverCert,
-			Boolean codeSigningCert, Boolean personalCert) {
+			Boolean codeSigningCert, Boolean personsCert) {
 		clickAndWait("header-form:certificatedomains");
 		clickAndWait(deriveEditLinkToClick(rowToUpdate));
 		assertTextPresent("Edit certificate domain");
@@ -115,10 +115,10 @@ public class CertificateDomainUpdateSeleniumTest extends BaseSeleniumTestCase {
 		} else if (BooleanUtils.isFalse(codeSigningCert)) {
 			getSelenium().uncheck("certificateDetailForm:codeSigningCertDecoration:codeSigningCert");
 		}
-		if (BooleanUtils.isTrue(personalCert)) {
-			getSelenium().check("certificateDetailForm:personalCertDecoration:personalCert");
-		} else if (BooleanUtils.isFalse(personalCert)) {
-			getSelenium().uncheck("certificateDetailForm:personalCertDecoration:personalCert");
+		if (BooleanUtils.isTrue(personsCert)) {
+			getSelenium().check("certificateDetailForm:personsCertDecoration:personsCert");
+		} else if (BooleanUtils.isFalse(personsCert)) {
+			getSelenium().uncheck("certificateDetailForm:personsCertDecoration:personsCert");
 		}
 		clickAndWait("certificateDetailForm:submitButtonBox:update");
 	}

@@ -87,7 +87,7 @@ public class CertificateDomainCreateSeleniumTest extends BaseSeleniumTestCase {
 	}
 
 	private void createCertificateDomain(String name, String dnExpr, boolean clientCert, boolean serverCert,
-			boolean codeSigningCert, boolean personalCert) {
+			boolean codeSigningCert, boolean personsCert) {
 		clickAndWait("header-form:certificatedomains");
 		clickAndWait("certificateDomainListForm:submitButtonBox:newCertificateDomain");
 		assertTextPresent("Create certificate domain");
@@ -103,8 +103,8 @@ public class CertificateDomainCreateSeleniumTest extends BaseSeleniumTestCase {
 		if (codeSigningCert) {
 			getSelenium().check("certificateDetailForm:codeSigningCertDecoration:codeSigningCert");
 		}
-		if (personalCert) {
-			getSelenium().check("certificateDetailForm:personalCertDecoration:personalCert");
+		if (personsCert) {
+			getSelenium().check("certificateDetailForm:personsCertDecoration:personsCert");
 		}
 		clickAndWait("certificateDetailForm:submitButtonBox:save");
 	}	

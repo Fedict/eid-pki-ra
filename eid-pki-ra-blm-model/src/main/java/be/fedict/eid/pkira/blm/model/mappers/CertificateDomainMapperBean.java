@@ -59,8 +59,8 @@ public class CertificateDomainMapperBean implements CertificateDomainMapper {
 		if (domain.isCodeSigningCertificate()) {
 			result.getCertificateTypes().add(CertificateTypeWS.CODE);
 		}
-		if (domain.isPersonalCertificate()) {
-			result.getCertificateTypes().add(CertificateTypeWS.PERSONAL);
+		if (domain.isPersonsCertificate()) {
+			result.getCertificateTypes().add(CertificateTypeWS.PERSONS);
 		}
 		
 		return result;

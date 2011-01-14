@@ -36,7 +36,7 @@
 			<plugin>
 				<artifactId>maven-ejb-plugin</artifactId>
 				<configuration>
-					<classifier>${environment}</classifier>
+					<classifier>${environment}-${database}</classifier>
 				</configuration>
 			</plugin>
 
@@ -165,6 +165,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>

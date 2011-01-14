@@ -27,7 +27,7 @@ public enum CertificateType {
 	SERVER("Server", "certificate.type.server"), 
 	CLIENT("Client", "certificate.type.client"), 
 	CODE("Code", "certificate.type.code"),
-	PERSONAL("Personal", "certificate.type.personal");
+	PERSONS("Persons", "certificate.type.persons");
 	
 	private final String type;
 	private final String messageKey;

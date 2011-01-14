@@ -22,7 +22,7 @@
 
 				<version>2.0.2</version>
 				<configuration>
-					<classifier>${environment}</classifier>
+					<classifier>${environment}-${database}</classifier>
 					<webResources>
 						<resource>
 							<!-- this is relative to the pom.xml directory -->

@@ -13,7 +13,7 @@
 	<artifactId>eid-pki-ra</artifactId>
 	<packaging>pom</packaging>
 	<version>0.0.7-SNAPSHOT</version>
-	<name>eid-pki-ra (${environment})</name>
+	<name>eid-pki-ra (${environment}-${database})</name>
 	<inceptionYear>2010</inceptionYear>
 	<licenses>
 		<license>
@@ -204,6 +204,7 @@
 			<plugins>
 				<plugin>
 					<artifactId>maven-ear-plugin</artifactId>
+					<version>2.4.2</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-ejb-plugin</artifactId>
@@ -396,7 +397,7 @@
 				<groupId>be.fedict</groupId>
 				<artifactId>eid-pki-ra-blm-model</artifactId>
 				<version>${project.version}</version>
-				<classifier>${environment}</classifier>
+				<classifier>${environment}-${database}</classifier>
 				<type>ejb</type>
 			</dependency>
 
@@ -404,7 +405,7 @@
 				<groupId>be.fedict</groupId>
 				<artifactId>eid-pki-ra-blm-webapp</artifactId>
 				<version>${project.version}</version>
-				<classifier>${environment}</classifier>
+				<classifier>${environment}-${database}</classifier>
 				<type>war</type>
 			</dependency>
 
@@ -412,7 +413,7 @@
 				<groupId>be.fedict</groupId>
 				<artifactId>eid-pki-ra-blm-ws</artifactId>
 				<version>${project.version}</version>
-				<classifier>${environment}</classifier>
+				<classifier>${environment}-${database}</classifier>
 				<type>war</type>
 			</dependency>
 
@@ -597,7 +598,6 @@
 				<exploded.war.file>true</exploded.war.file>
 
 				<!-- persistence.xml configuration -->
-				<hibernate.dialect>org.hibernate.dialect.HSQLDialect</hibernate.dialect>
 				<hibernate.hbm2ddl.auto>create-drop</hibernate.hbm2ddl.auto>
 				<hibernate.current_session_context_class>thread</hibernate.current_session_context_class>
 				<hibernate.cache.provider_class>org.hibernate.cache.NoCacheProvider</hibernate.cache.provider_class>
@@ -606,14 +606,10 @@
 				<hibernate.use_query_cache>false</hibernate.use_query_cache>
 				<hibernate.use_second_level_cache>false</hibernate.use_second_level_cache>
 
-				<jta.dataSource>java:/DefaultDS</jta.dataSource>
-
-				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.HSQLDBDelegate</quartz.driverDelegateClass>
-				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ?</quartz.selectWithLockSql>
-
 				<environment>development</environment>
 			</properties>
 		</profile>
+		
 		<profile>
 			<id>test</id>
 
@@ -625,7 +621,6 @@
 				<exploded.war.file>true</exploded.war.file>
 
 				<!-- persistence.xml configuration -->
-				<hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>
 				<hibernate.hbm2ddl.auto>validate</hibernate.hbm2ddl.auto>
 				<hibernate.current_session_context_class>thread</hibernate.current_session_context_class>
 				<hibernate.cache.provider_class>org.hibernate.cache.NoCacheProvider</hibernate.cache.provider_class>
@@ -633,11 +628,6 @@
 				<hibernate.format_sql>false</hibernate.format_sql>
 				<hibernate.use_query_cache>false</hibernate.use_query_cache>
 				<hibernate.use_second_level_cache>false</hibernate.use_second_level_cache>
-
-				<jta.dataSource>java:/pkiraDS</jta.dataSource>
-
-				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.StdJDBCDelegate</quartz.driverDelegateClass>
-				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ? FOR UPDATE</quartz.selectWithLockSql>
 
 				<environment>test</environment>
 			</properties>
@@ -654,7 +644,6 @@
 				<exploded.war.file>true</exploded.war.file>
 
 				<!-- persistence.xml configuration -->
-				<hibernate.dialect>org.hibernate.dialect.Oracle10gDialect</hibernate.dialect>
 				<hibernate.hbm2ddl.auto>validate</hibernate.hbm2ddl.auto>
 				<hibernate.current_session_context_class>thread</hibernate.current_session_context_class>
 				<hibernate.cache.provider_class>org.hibernate.cache.NoCacheProvider</hibernate.cache.provider_class>
@@ -663,12 +652,53 @@
 				<hibernate.use_query_cache>false</hibernate.use_query_cache>
 				<hibernate.use_second_level_cache>false</hibernate.use_second_level_cache>
 
-				<jta.dataSource>java:/pkiraDS</jta.dataSource>
+				<environment>production</environment>
+			</properties>
+		</profile>
+		
+		<profile>
+			<id>hsql</id>
 
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+
+			<properties>
+				<!-- persistence.xml configuration -->
+				<hibernate.dialect>org.hibernate.dialect.HSQLDialect</hibernate.dialect>
+				<jta.dataSource>java:/DefaultDS</jta.dataSource>
+				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.HSQLDBDelegate</quartz.driverDelegateClass>
+				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ?</quartz.selectWithLockSql>
+				
+				<database>hsql</database>
+			</properties>
+		</profile>
+		
+		<profile>
+			<id>oracle</id>
+
+			<properties>
+				<!-- persistence.xml configuration -->
+				<hibernate.dialect>org.hibernate.dialect.Oracle10gDialect</hibernate.dialect>
+				<jta.dataSource>java:/pkiraDS</jta.dataSource>
 				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.StdJDBCDelegate</quartz.driverDelegateClass>
 				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ? FOR UPDATE</quartz.selectWithLockSql>
+				
+				<database>oracle</database>
+			</properties>
+		</profile>
+		
+		<profile>
+			<id>postgres</id>
 
-				<environment>production</environment>
+			<properties>
+				<!-- persistence.xml configuration -->
+				<hibernate.dialect>org.hibernate.dialect.Oracle10gDialect</hibernate.dialect>
+				<jta.dataSource>java:/pkiraDS</jta.dataSource>
+				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.StdJDBCDelegate</quartz.driverDelegateClass>
+				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ? FOR UPDATE</quartz.selectWithLockSql>
+				
+				<database>postgres</database>
 			</properties>
 		</profile>
 	</profiles>

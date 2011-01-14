@@ -13,12 +13,13 @@
 	</target>
 
 	<target name="-deploy">
-		<copy file="${project}/target/${project}-${version}.${type}" todir="${jboss.deploy.dir}" overwrite="false" />
+		<copy file="${project}/target/${project}-${version}-${env}.${type}" todir="${jboss.deploy.dir}" overwrite="false" />
 	</target>
 
 	<target name="deploy-blm">
 		<antcall target="-deploy">
 			<param name="project" value="eid-pki-ra-blm-ear" />
+			<param name="env" value="development-hsql" />
 			<param name="type" value="ear" />
 		</antcall>
 	</target>
@@ -26,21 +27,8 @@
 	<target name="deploy-portal">
 		<antcall target="-deploy">
 			<param name="project" value="eid-pki-ra-portal-ear" />
+			<param name="env" value="development" />
 			<param name="type" value="ear" />
-		</antcall>
-	</target>
-
-	<target name="deploy-dss-mock">
-		<antcall target="-deploy">
-			<param name="project" value="eid-pki-ra-mock-dss" />
-			<param name="type" value="war" />
-		</antcall>
-	</target>
-
-	<target name="deploy-xkms-mock">
-		<antcall target="-deploy">
-			<param name="project" value="eid-pki-ra-mock-xkms" />
-			<param name="type" value="war" />
 		</antcall>
 	</target>
 
@@ -66,29 +54,11 @@
 		</antcall>
 	</target>
 
-	<target name="undeploy-dss-mock">
-		<antcall target="-undeploy">
-			<param name="project" value="eid-pki-ra-mock-dss" />
-			<param name="type" value="war" />
-		</antcall>
-	</target>
-
-	<target name="undeploy-xkms-mock">
-		<antcall target="-undeploy">
-			<param name="project" value="eid-pki-ra-mock-xkms" />
-			<param name="type" value="war" />
-		</antcall>
-	</target>
-
 	<target name="undeploy-all" depends="undeploy-blm, undeploy-portal" />
 
 	<target name="redeploy-blm" depends="undeploy-blm, deploy-blm" />
 
 	<target name="redeploy-portal" depends="undeploy-portal, deploy-portal" />
-
-	<target name="redeploy-dss-mock" depends="undeploy-dss-mock, deploy-dss-mock" />
-
-	<target name="redeploy-xkms-mock" depends="undeploy-xkms-mock, deploy-xkms-mock" />
 
 	<target name="redeploy-all" depends="undeploy-all, deploy-all" />
 </project>

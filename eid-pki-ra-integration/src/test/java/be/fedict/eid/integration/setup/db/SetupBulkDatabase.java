@@ -54,7 +54,7 @@ public class SetupBulkDatabase extends SetupDatabase {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < 150; i++) {
 			String sequence = addLeadingZero(i);
-			builder.append("INSERT INTO CERTIFICATE_DOMAIN (CERTIFICATE_DOMAIN_NAME, DN_EXPRESSION, CLIENTCERT, SERVERCERT, CODECERT, PERSONALCERT, CA_ID) VALUES ('Name")
+			builder.append("INSERT INTO CERTIFICATE_DOMAIN (CERTIFICATE_DOMAIN_NAME, DN_EXPRESSION, CLIENTCERT, SERVERCERT, CODECERT, PERSONSCERT, CA_ID) VALUES ('Name")
 					.append(sequence)
 					.append("', 'DN")
 					.append(sequence)

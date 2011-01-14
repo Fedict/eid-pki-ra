@@ -74,7 +74,7 @@ public class XKMSClient {
 	 * @param validityInMonths
 	 *            the validity of the certificate (in months)
 	 * @param certificateType
-	 *            the certificate type to generate (client, server, code, personal)
+	 *            the certificate type to generate (client, server, code, persons)
 	 * @return byte array containing the certificate.
 	 * @throws XKMSClientException
 	 *             if an error occurred while communicating to the XKMS service.

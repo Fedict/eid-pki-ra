@@ -173,8 +173,8 @@ public class CertificateChainHandler implements Serializable {
 			certificateChain.setCodeSigningChain(null);
 			certificateChainHome.update();
 		}
-		if (certificateChain.getPersonalChain() == certificate) {
-			certificateChain.setPersonalChain(null);
+		if (certificateChain.getPersonsChain() == certificate) {
+			certificateChain.setPersonsChain(null);
 			certificateChainHome.update();
 		}
 

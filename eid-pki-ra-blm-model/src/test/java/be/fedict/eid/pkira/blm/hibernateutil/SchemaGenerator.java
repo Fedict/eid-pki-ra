@@ -38,7 +38,7 @@ public class SchemaGenerator {
 	 */
 	private static enum Dialect {
 		HSQL("org.hibernate.dialect.HSQLDialect"), MYSQL("org.hibernate.dialect.MySQLDialect"), ORACLE(
-				"org.hibernate.dialect.Oracle10gDialect");
+				"org.hibernate.dialect.Oracle10gDialect"), POSTGRES("org.hibernate.dialect.PostgreSQLDialect");
 
 		private String dialectClass;
 
@@ -58,6 +58,7 @@ public class SchemaGenerator {
 		gen.generate(Dialect.MYSQL);
 		gen.generate(Dialect.ORACLE);
 		gen.generate(Dialect.HSQL);
+		gen.generate(Dialect.POSTGRES);
 	}
 
 	private final AnnotationConfiguration cfg;
