@@ -45,13 +45,16 @@
 				<artifactId>exec-maven-plugin</artifactId>
 				<executions>
 					<execution>
-						<phase>pre-package</phase>
+						<phase>package</phase>
 						<goals>
 							<goal>java</goal>
 						</goals>
 						<configuration>
 							<mainClass>be.fedict.eid.pkira.blm.hibernateutil.SchemaGenerator</mainClass>
 							<classpathScope>test</classpathScope>
+							<arguments>
+								<argument>${project.build.directory}</argument>
+							</arguments>
 						</configuration>
 					</execution>
 				</executions>
@@ -66,6 +69,7 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
+							<archiveBaseDirectory>target/schema</archiveBaseDirectory>
 							<descriptors>
 								<descriptor>src/assemble/schema.xml</descriptor>
 							</descriptors>

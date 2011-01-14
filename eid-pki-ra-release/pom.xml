@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>eid-pki-ra</artifactId>
+		<groupId>be.fedict</groupId>
+		<version>0.0.7-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<groupId>be.fedict</groupId>
+	<artifactId>eid-pki-ra-release</artifactId>
+	<packaging>pom</packaging>
+	<name>eid-pki-ra - release package - ${environment} - ${database.schema}</name>
+	<url>http://maven.apache.org</url>
+
+	<profiles>
+		<profile>
+			<id>fedict-baseline-oracle</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+
+			<properties>
+				<database.schema>oracle</database.schema>
+				<environment>production</environment>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>fedict-baseline-postgres</id>
+
+			<properties>
+				<database.schema>postgres</database.schema>
+				<environment>production</environment>
+			</properties>
+		</profile>
+	</profiles>
+
+	<dependencies>
+		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-blm-ear</artifactId>
+			<classifier>${environment}-${database.schema}</classifier>
+			<version>${project.version}</version>
+			<type>ear</type>
+		</dependency>
+		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-portal-ear</artifactId>
+			<classifier>${environment}</classifier>
+			<version>${project.version}</version>
+			<type>ear</type>
+		</dependency>
+		<dependency>
+			<groupId>be.fedict</groupId>
+			<artifactId>eid-pki-ra-blm-model</artifactId>
+			<classifier>schemas</classifier>
+			<version>${project.version}</version>
+			<type>zip</type>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/schema</directory>
+				<includes>
+					<include>ddl_quartz_${database.schema}.sql</include>
+				</includes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/release</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack-schema</id>
+						<goals>
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/release</outputDirectory>
+							<includeArtifactIds>eid-pki-ra-blm-model</includeArtifactIds>
+							<includes>**/*${database.schema}.sql</includes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-ears</id>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/release</outputDirectory>
+							<includeArtifactIds>eid-pki-ra-blm-ear,eid-pki-ra-portal-ear
+							</includeArtifactIds>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<archiveBaseDirectory>target/release</archiveBaseDirectory>
+							<descriptors>
+								<descriptor>src/assemble/release.xml</descriptor>
+							</descriptors>
+							<appendAssemblyId>false</appendAssemblyId>
+							<classifier>${environment}-${database.schema}</classifier>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

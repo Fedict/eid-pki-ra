@@ -54,7 +54,14 @@ public class SchemaGenerator {
 	private static final String PACKAGE_NAME = "be.fedict.eid.pkira";
 
 	public static void main(String[] args) throws Exception {
-		SchemaGenerator gen = new SchemaGenerator("be.fedict.eid.pkira.blm.model");
+		String workingDir;
+		if (args.length > 0) {
+			workingDir = new File(args[0]).getCanonicalPath();
+		} else {
+			workingDir = new File("target").getCanonicalPath();
+		}
+
+		SchemaGenerator gen = new SchemaGenerator("be.fedict.eid.pkira.blm.model", workingDir);
 		gen.generate(Dialect.MYSQL);
 		gen.generate(Dialect.ORACLE);
 		gen.generate(Dialect.HSQL);
@@ -62,11 +69,14 @@ public class SchemaGenerator {
 	}
 
 	private final AnnotationConfiguration cfg;
+	private final String workingDir;
 
-	public SchemaGenerator(String packageName) throws Exception {
-				// Find entities on the class path
+	public SchemaGenerator(String packageName, String workingDir) throws Exception {
+		this.workingDir = workingDir;
+		
+		// Find entities on the class path
 		URL[] urls = new URL[1];
-		urls[0] = new File("target/classes").getCanonicalFile().toURI().toURL();
+		urls[0] = new File(workingDir + "/classes").getCanonicalFile().toURI().toURL();
 		AnnotationDB db = new AnnotationDB();
 		db.scanArchives(urls);
 		Set<String> classNames = db.getAnnotationIndex().get(Entity.class.getName());
@@ -93,13 +103,13 @@ public class SchemaGenerator {
 	 *            to use
 	 */
 	private void generate(Dialect dialect) {
-		new java.io.File("target/schema").mkdirs();
+		new java.io.File(workingDir + "/schema").mkdirs();
 
 		cfg.setProperty("hibernate.dialect", dialect.getDialectClass());
 
 		SchemaExport export = new SchemaExport(cfg);
 		export.setDelimiter(";");
-		export.setOutputFile("target/schema/" + dialect.name().toLowerCase() + ".sql");
+		export.setOutputFile(workingDir + "/schema/ddl_" + dialect.name().toLowerCase() + ".sql");
 		export.execute(true, false, false, false);
 	}
 }
