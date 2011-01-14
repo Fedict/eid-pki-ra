@@ -29,13 +29,20 @@
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-blm-model</artifactId>
-			<classifier>${environment}</classifier>
+			<classifier>${environment}-${database}</classifier>
 			<type>ejb</type>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>javax.ejb</groupId>
 			<artifactId>ejb-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
@@ -52,13 +59,13 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
-					<classifier>${environment}</classifier>
+					<classifier>${environment}-${database}</classifier>
 				</configuration>
 			</plugin>
 		</plugins>

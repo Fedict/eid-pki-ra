@@ -21,14 +21,14 @@
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-blm-webapp</artifactId>
 			<type>war</type>
-			<classifier>${environment}</classifier>
+			<classifier>${environment}-${database}</classifier>
 		</dependency>
 
 		<dependency>
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-blm-ws</artifactId>
 			<type>war</type>
-			<classifier>${environment}</classifier>
+			<classifier>${environment}-${database}</classifier>
 			<scope>compile</scope>
 		</dependency>
 
@@ -36,11 +36,10 @@
 			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-blm-model</artifactId>
 			<type>ejb</type>
-			<classifier>${environment}</classifier>
+			<classifier>${environment}-${database}</classifier>
 			<exclusions>
 				<exclusion>
 					<groupId>org.hibernate</groupId>
-					<artifactId>hibernate-validator</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -154,7 +153,7 @@
 			<plugin>
 				<artifactId>maven-ear-plugin</artifactId>
 				<configuration>
-					<classifier>${environment}</classifier>
+					<classifier>${environment}-${database}</classifier>
 					<version>5</version>
 					<defaultLibBundleDir>lib</defaultLibBundleDir>
 					<modules>
@@ -166,7 +165,7 @@
 						<webModule>
 							<groupId>be.fedict</groupId>
 							<artifactId>eid-pki-ra-blm-webapp</artifactId>
-							<classifier>${environment}</classifier>
+							<classifier>${environment}-${database}</classifier>
 							<contextRoot>eid-pki-ra/admin</contextRoot>
 							<unpack>${exploded.war.file}</unpack>
 						</webModule>
@@ -174,13 +173,13 @@
 						<ejbModule>
 							<groupId>be.fedict</groupId>
 							<artifactId>eid-pki-ra-blm-model</artifactId>
-							<classifier>${environment}</classifier>
+							<classifier>${environment}-${database}</classifier>
 						</ejbModule>
 
 						<webModule>
 							<groupId>be.fedict</groupId>
 							<artifactId>eid-pki-ra-blm-ws</artifactId>
-							<classifier>${environment}</classifier>
+							<classifier>${environment}-${database}</classifier>
 							<contextRoot>eid-pki-ra/webservice</contextRoot>
 							<unpack>${exploded.war.file}</unpack>
 						</webModule>

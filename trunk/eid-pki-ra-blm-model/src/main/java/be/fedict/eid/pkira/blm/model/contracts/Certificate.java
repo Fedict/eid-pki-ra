@@ -135,8 +135,8 @@ public class Certificate implements Serializable {
 				certificateChainCertificate = certificateChain.getServerChain();
 			} else if (certificateType == CertificateType.CODE) {
 				certificateChainCertificate = certificateChain.getCodeSigningChain();
-			} else if (certificateType == CertificateType.PERSONAL) {
-				certificateChainCertificate = certificateChain.getPersonalChain();
+			} else if (certificateType == CertificateType.PERSONS) {
+				certificateChainCertificate = certificateChain.getPersonsChain();
 			}
 		}
 	}

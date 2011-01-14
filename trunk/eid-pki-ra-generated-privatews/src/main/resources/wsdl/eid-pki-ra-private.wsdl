@@ -285,7 +285,7 @@
 					<xsd:enumeration value="server" />
 					<xsd:enumeration value="client" />
 					<xsd:enumeration value="code" />
-					<xsd:enumeration value="personal" />
+					<xsd:enumeration value="persons" />
 				</xsd:restriction>
 			</xsd:simpleType>
 

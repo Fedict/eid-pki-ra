@@ -25,7 +25,7 @@
 
 	<component name="org.jboss.seam.core.init">
 		<property name="debug">false</property>
-		<property name="jndi-pattern">eid-pki-ra-portal-ear-${version}/#{ejbName}/local</property>
+		<property name="jndi-pattern">eid-pki-ra-portal-ear-${version}-${environment}/#{ejbName}/local</property>
 	</component>
 	
 	<component class="org.jboss.seam.web.MultipartFilter">

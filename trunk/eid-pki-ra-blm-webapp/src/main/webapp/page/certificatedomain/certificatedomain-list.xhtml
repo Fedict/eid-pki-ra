@@ -55,11 +55,11 @@
 	                <h:outputText value="#{certificateDomain.codeSigningCertificate ? messages['general.yes'] : messages['general.no']}" />
 	            </rich:column>
 	            
-	            <rich:column sortBy="#{certificateDomain.personalCertificate}">
+	            <rich:column sortBy="#{certificateDomain.personsCertificate}">
 	                <f:facet name="header">
-						<h:outputText value="#{messages['certificatedomain.list.personalcertificates']}" />
+						<h:outputText value="#{messages['certificatedomain.list.personscertificates']}" />
 	                </f:facet>
-	                <h:outputText value="#{certificateDomain.personalCertificate ? messages['general.yes'] : messages['general.no']}" />
+	                <h:outputText value="#{certificateDomain.personsCertificate ? messages['general.yes'] : messages['general.no']}" />
 	            </rich:column>
 
 				<rich:column>
