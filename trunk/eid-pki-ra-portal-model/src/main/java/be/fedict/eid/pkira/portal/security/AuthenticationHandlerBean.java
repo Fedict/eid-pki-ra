@@ -24,11 +24,12 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Out;
 import org.jboss.seam.security.Identity;
 
-import be.fedict.eid.pkira.authentication.EIdUser;
 import be.fedict.eid.pkira.common.security.AbstractAuthenticationHandlerBean;
 import be.fedict.eid.pkira.common.security.AuthenticationHandler;
+import be.fedict.eid.pkira.common.security.EIdUser;
 import be.fedict.eid.pkira.generated.privatews.UserWS;
 import be.fedict.eid.pkira.portal.framework.Operator;
+import be.fedict.eid.pkira.portal.util.ConfigurationEntryContainer;
 import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 
 /**
@@ -42,6 +43,9 @@ public class AuthenticationHandlerBean extends AbstractAuthenticationHandlerBean
 
 	@In(value = EIDPKIRAPrivateServiceClient.NAME, create = true)
 	protected EIDPKIRAPrivateServiceClient eidPKIRAPrivateServiceClient;
+	
+	@In(value = ConfigurationEntryContainer.NAME, create=true)
+	protected ConfigurationEntryContainer configurationEntryContainer;
 	
 	@In
 	protected Identity identity;
@@ -60,5 +64,10 @@ public class AuthenticationHandlerBean extends AbstractAuthenticationHandlerBean
 		// Create the operator
 		currentOperator = new Operator();
 		currentOperator.setName(eidUser.getFirstName() + " " + eidUser.getLastName());
+	}
+
+	@Override
+	protected String getIDPDestination() {
+		return configurationEntryContainer.getIDPDestination();
 	}
 }

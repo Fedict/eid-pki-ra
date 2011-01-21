@@ -22,13 +22,14 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.security.Identity;
 
-import be.fedict.eid.pkira.authentication.EIdUser;
+import be.fedict.eid.pkira.blm.model.framework.WebserviceLocator;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationException;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationManager;
 import be.fedict.eid.pkira.blm.model.usermgmt.User;
 import be.fedict.eid.pkira.blm.model.usermgmt.UserRepository;
 import be.fedict.eid.pkira.common.security.AbstractAuthenticationHandlerBean;
 import be.fedict.eid.pkira.common.security.AuthenticationHandler;
+import be.fedict.eid.pkira.common.security.EIdUser;
 
 /**
  * @author Bram Baeyens
@@ -42,11 +43,14 @@ public class AuthenticationHandlerBean extends AbstractAuthenticationHandlerBean
 	@In(value = RegistrationManager.NAME, create=true)
 	protected RegistrationManager registrationManager;
 	
+	@In(value=WebserviceLocator.NAME, create=true)
+	protected WebserviceLocator webserviceLocator;
+	
 	@In
 	protected Identity identity;
 
 	@Override
-	public void enrichIdentity(EIdUser eidUser) {		
+	protected void enrichIdentity(EIdUser eidUser) {		
 		// Mark as authenticated
 		identity.addRole(PKIRARole.AUTHENTICATED_USER.name());
 
@@ -66,5 +70,10 @@ public class AuthenticationHandlerBean extends AbstractAuthenticationHandlerBean
 		if (user.isAdmin()) {
 			identity.addRole(PKIRARole.ADMIN_USER.name());
 		}
+	}
+
+	@Override
+	protected String getIDPDestination() {
+		return webserviceLocator.getIDPDestination();
 	}
 }

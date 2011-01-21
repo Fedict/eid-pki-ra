@@ -32,35 +32,38 @@ import org.jboss.seam.log.Logging;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import be.fedict.eid.pkira.authentication.AuthenticationDecoderFactory;
-import be.fedict.eid.pkira.authentication.AuthenticationRequestDecoder;
-import be.fedict.eid.pkira.authentication.AuthenticationType;
-import be.fedict.eid.pkira.authentication.EIdUser;
-
 public class AuthenticationHandlerBeanTest {
 
 	private static class TestAuthenticationHandler extends AbstractAuthenticationHandlerBean {
 		@Override
-		protected void enrichIdentity(EIdUser eidUser) {}		
+		protected void enrichIdentity(EIdUser eidUser) {}
+
+		@Override
+		protected String getIDPDestination() {
+			return "IDPDestination";
+		}
+
+		@Override
+		protected String getSPDestination() {
+			return "SPDestination";
+		}		
 	}
 	
 	private AbstractAuthenticationHandlerBean handler;
 
 	private EIdUserCredentials credentials;
-	private AuthenticationDecoderFactory authenticationDecoderFactory;
 	private AuthenticationRequestDecoder authenticationRequestDecoder;
 	private Log log;
 
 	@BeforeMethod
 	public void setup() {		
 		credentials = new EIdUserCredentials();
-		authenticationDecoderFactory = mock(AuthenticationDecoderFactory.class);
 		authenticationRequestDecoder = mock(AuthenticationRequestDecoder.class);
 		log = Logging.getLog(AbstractAuthenticationHandlerBean.class);
 
 		handler = spy(new TestAuthenticationHandler());
 		handler.setCredentials(credentials);
-		handler.setAuthenticationDecoderFactory(authenticationDecoderFactory);
+		handler.setAuthenticationRequestDecoder(authenticationRequestDecoder);
 		handler.setLog(log);
 	}
 
@@ -70,8 +73,6 @@ public class AuthenticationHandlerBeanTest {
 		HttpServletRequest request = mock(HttpServletRequest.class);
 		
 		doReturn(request).when(handler).getRequest();		
-		when(authenticationDecoderFactory.getAuthenticationRequestDecoder(AuthenticationType.SAML2)).thenReturn(
-				authenticationRequestDecoder);
 		when(authenticationRequestDecoder.decode(request)).thenReturn(eidUser);
 
 		handler.authenticate();

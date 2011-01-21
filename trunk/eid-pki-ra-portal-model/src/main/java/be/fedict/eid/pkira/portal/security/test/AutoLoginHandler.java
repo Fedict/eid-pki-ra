@@ -19,7 +19,7 @@ package be.fedict.eid.pkira.portal.security.test;
 import org.jboss.seam.annotations.Install;
 import org.jboss.seam.annotations.Name;
 
-import be.fedict.eid.pkira.authentication.EIdUser;
+import be.fedict.eid.pkira.common.security.EIdUser;
 import be.fedict.eid.pkira.generated.privatews.UserWS;
 import be.fedict.eid.pkira.portal.security.AuthenticationHandlerBean;
 

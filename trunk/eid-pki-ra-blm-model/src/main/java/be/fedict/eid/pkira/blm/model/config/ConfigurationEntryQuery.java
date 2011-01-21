@@ -3,6 +3,8 @@ package be.fedict.eid.pkira.blm.model.config;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.blm.model.framework.DataTableEntityQuery;
@@ -21,9 +23,31 @@ public class ConfigurationEntryQuery extends DataTableEntityQuery<ConfigurationE
 		return "select configurationEntry from ConfigurationEntry configurationEntry";
 	}
 	
+	@Override
 	public List<ConfigurationEntry> getResultList() {
+		// Get the current entries
 		setOrderColumn("configurationEntry.key");
-		return super.getResultList();
+		List<ConfigurationEntry> entries = super.getResultList();
+		
+		// Add the missing entries
+		nextKey: for(ConfigurationEntryKey key: ConfigurationEntryKey.values()) {
+			for(ConfigurationEntry entry: entries) {
+				if (key.equals(entry.getKey())) {
+					continue nextKey;
+				}
+			}
+			entries.add(addEntry(key));
+		}
+		
+		return entries;
+	}
+
+	private ConfigurationEntry addEntry(ConfigurationEntryKey key) {
+		ConfigurationEntry entry = new ConfigurationEntry();
+		entry.setKey(key);
+		entry.setValue(key.getDefaultValue());
+		getEntityManager().persist(entry);
+		return entry;
 	}
 	
 	public ConfigurationEntry findByEntryKey(ConfigurationEntryKey configurationEntryKey) {
@@ -32,7 +56,18 @@ public class ConfigurationEntryQuery extends DataTableEntityQuery<ConfigurationE
 		setRestrictionExpressionStrings(Arrays.asList(
 				new String[] {
 						"configurationEntry.key = #{configurationEntryQuery.configurationEntry.key}"}));
-		return getSingleResult();
+		
+		ConfigurationEntry result = null;
+		try {
+			result = getSingleResult();
+		} catch (NoResultException e) {
+		}
+		if (result==null) {
+			addEntry(configurationEntryKey);
+			return getSingleResult();
+		}
+		
+		return result;
 	}
 	
 	public ConfigurationEntry getConfigurationEntry() {

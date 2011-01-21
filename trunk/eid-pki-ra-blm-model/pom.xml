@@ -114,11 +114,6 @@
 
 		<dependency>
 			<groupId>be.fedict</groupId>
-			<artifactId>eid-pki-ra-authentication-client</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>be.fedict</groupId>
 			<artifactId>eid-pki-ra-util-dnfilter</artifactId>
 		</dependency>
 

@@ -24,22 +24,26 @@ package be.fedict.eid.pkira.blm.model.config;
  */
 public enum ConfigurationEntryKey {
 	
-	MAIL_SERVER(ConfigurationEntryType.STRING, "configurationEntry.key.mailServer"), 
-	MAIL_PORT(ConfigurationEntryType.DIGITS, "configurationEntry.key.mailPort"), 
+	MAIL_SERVER(ConfigurationEntryType.STRING, "configurationEntry.key.mailServer", "localhost"), 
+	MAIL_PORT(ConfigurationEntryType.DIGITS, "configurationEntry.key.mailPort", "25"),
+	MAIL_USER(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.mailUser", ""),
+	MAIL_PASSWORD(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.mailPassword", ""),
+	MAIL_PROTOCOL(ConfigurationEntryType.STRING, "configurationEntry.key.mailProtocol", "smtp"),
 	//NOTIFICATION_MAIL_DAYS(ConfigurationEntryType.DIGITS, "configurationEntry.key.notificationMailDays"), 
-	NOTIFICATION_MAIL_MINUTES(ConfigurationEntryType.COMMA_SEPARATED_DIGITS, "configurationEntry.key.notificationMailMinutes"), 
-	VALIDITY_PERIODS(ConfigurationEntryType.COMMA_SEPARATED_DIGITS, "configurationEntry.key.validityPeriods"), 
-	DSS_SERVLET(ConfigurationEntryType.URL, "configurationEntry.key.dssServlet"), 
-	DSS_WS_CLIENT(ConfigurationEntryType.URL, "configurationEntry.key.dssWsClient"), 
-	IDP_SERVLET(ConfigurationEntryType.URL, "configurationEntry.key.idpServlet"), 
-	IDP_DESTINATION(ConfigurationEntryType.URL, "configurationEntry.key.idpDestination");
+	NOTIFICATION_MAIL_MINUTES(ConfigurationEntryType.COMMA_SEPARATED_DIGITS, "configurationEntry.key.notificationMailMinutes", "43200"), 
+	VALIDITY_PERIODS(ConfigurationEntryType.COMMA_SEPARATED_DIGITS, "configurationEntry.key.validityPeriods", "15,27"), 
+	DSS_SERVLET(ConfigurationEntryType.URL, "configurationEntry.key.dssServlet", "https://www.e-contract.be/eid-dss/protocol/simple"), 
+	DSS_WS_CLIENT(ConfigurationEntryType.URL, "configurationEntry.key.dssWsClient", "https://www.e-contract.be/eid-dss/dss"), 
+	IDP_DESTINATION(ConfigurationEntryType.URL, "configurationEntry.key.idpDestination", "https://www.e-contract.be/eid-idp/protocol/saml2-auth-ident");
 	
 	private final ConfigurationEntryType type;
 	private final String message;
+	private String defaultValue;
 	
-	private ConfigurationEntryKey(ConfigurationEntryType type, String message) {
+	private ConfigurationEntryKey(ConfigurationEntryType type, String message, String defaultValue) {
 		this.type = type;
 		this.message = message;
+		this.defaultValue = defaultValue;
 	}
 	
 	public ConfigurationEntryType getConfigurationEntryType() {
@@ -48,5 +52,15 @@ public enum ConfigurationEntryKey {
 	
 	public String getMessage() {
 		return message;
+	}
+
+	
+	public ConfigurationEntryType getType() {
+		return type;
+	}
+
+	
+	public String getDefaultValue() {
+		return defaultValue;
 	}
 }

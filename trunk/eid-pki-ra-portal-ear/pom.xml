@@ -97,19 +97,16 @@
 					<groupId>javax.faces</groupId>
 					<artifactId>jsf-api</artifactId>
 				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<!-- Application libraries -->
-		<dependency>
-			<groupId>be.fedict</groupId>
-			<artifactId>eid-pki-ra-authentication-client</artifactId>
-			<exclusions>
 				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -154,6 +151,12 @@
 							<groupId>commons-beanutils</groupId>
 							<artifactId>commons-beanutils</artifactId>
 							<bundleDir>lib</bundleDir>
+						</jarModule>
+						
+						<jarModule>
+							<groupId>javax.servlet</groupId>
+							<artifactId>servlet-api</artifactId>
+							<excluded>true</excluded>
 						</jarModule>
 					</modules>
 

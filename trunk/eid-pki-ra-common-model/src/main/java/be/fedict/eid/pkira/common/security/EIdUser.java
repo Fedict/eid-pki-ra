@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.authentication;
+package be.fedict.eid.pkira.common.security;
 
 import java.io.Serializable;
 

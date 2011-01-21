@@ -319,7 +319,6 @@
 				<xsd:restriction base="xsd:string">
 					<xsd:enumeration value="VALIDITY_PERIODS" />
 					<xsd:enumeration value="DSS_SERVLET" />
-					<xsd:enumeration value="IDP_SERVLET" />
 					<xsd:enumeration value="IDP_DESTINATION" />
 				</xsd:restriction>
 			</xsd:simpleType>

@@ -59,10 +59,6 @@
 			<artifactId>eid-pki-ra-client-publicws</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>be.fedict</groupId>
-			<artifactId>eid-pki-ra-authentication-client</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>be.fedict.eid-dss</groupId>
 			<artifactId>eid-dss-protocol-simple-client</artifactId>
 			<exclusions>
