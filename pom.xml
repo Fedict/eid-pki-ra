@@ -76,7 +76,7 @@
 
 	<properties>
 		<eid-applet.version>1.0.0.GA</eid-applet.version>
-		<eid-dss-version>1.0.0-SNAPSHOT</eid-dss-version>
+		<eid-dss-version>1.0.0.Beta1</eid-dss-version>
 		<eid-idp-version>1.0.0.Beta2</eid-idp-version>
 		<jboss.version>5.1.0</jboss.version>
 		<version.jboss.app>5</version.jboss.app>

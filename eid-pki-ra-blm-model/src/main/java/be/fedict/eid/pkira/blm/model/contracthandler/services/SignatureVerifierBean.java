@@ -277,8 +277,6 @@ public class SignatureVerifierBean implements SignatureVerifier {
 			}
 
 			return subject;
-			// SERIALNUMBER=74081447338, GIVENNAME=Jan Ludo, SURNAME=Van den
-			// Bergh, CN=Jan Van den Bergh (Signature), C=BE
 		} catch (RuntimeException e) {
 			// eid-dss client throws runtime exception when something is wrong,
 			// so let's handle this.
