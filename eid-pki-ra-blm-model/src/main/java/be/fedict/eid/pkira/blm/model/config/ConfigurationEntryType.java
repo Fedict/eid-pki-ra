@@ -30,14 +30,17 @@ import org.apache.commons.lang.math.NumberUtils;
  */
 public enum ConfigurationEntryType {
 	
+	OPTIONAL_STRING {
+		@Override
+		public boolean isValid(String value) {
+			return value!=null;
+		}
+	},
+	
 	STRING {
 		@Override
 		public boolean isValid(String value) {
-			if (StringUtils.isBlank(value)) {
-				return false;
-			} else {
-				return true;
-			}
+			return StringUtils.isNotBlank(value);
 		}
 	}, 
 	

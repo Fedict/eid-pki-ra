@@ -22,7 +22,6 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.security.Credentials;
 
-import be.fedict.eid.pkira.authentication.EIdUser;
 
 /**
  * Credentials used by our application.

@@ -14,6 +14,8 @@
 	</page>
 
 	<!-- Authentication -->
+	<page view-id="/login.xhtml" action="#{be.fedict.eid.pkira.common.authenticationHandler.sendAuthenticationRequest}" />
+	
 	<page view-id="/postLogin.xhtml" action="#{identity.login}">
 		<navigation>
 			<redirect view-id="/home.xhtml" />

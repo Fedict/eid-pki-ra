@@ -19,32 +19,31 @@
 package be.fedict.eid.pkira.common.security;
 
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.log.Log;
 
-import be.fedict.eid.pkira.authentication.AuthenticationDecoderFactory;
-import be.fedict.eid.pkira.authentication.AuthenticationException;
-import be.fedict.eid.pkira.authentication.AuthenticationRequestDecoder;
-import be.fedict.eid.pkira.authentication.AuthenticationType;
-import be.fedict.eid.pkira.authentication.EIdUser;
+import be.fedict.eid.idp.sp.protocol.saml2.AuthenticationRequestUtil;
 
 /**
  * Base class for the authentication handler
  */
 public abstract class AbstractAuthenticationHandlerBean implements AuthenticationHandler {
 
-	@Logger
-	private Log log;
-
-	@In(value = "be.fedict.eid.pkira.auth.authenticationDecoderFactory")
-	private AuthenticationDecoderFactory authenticationDecoderFactory;
+	@In(value = AuthenticationRequestDecoder.NAME, create = true)
+	private AuthenticationRequestDecoder authenticationRequestDecoder;
 
 	@In
 	private EIdUserCredentials credentials;
 
+	@Logger
+	private Log log;
+
+	@Override
 	public boolean authenticate() {
 		log.info(">>> authenticate()");
 
@@ -61,18 +60,33 @@ public abstract class AbstractAuthenticationHandlerBean implements Authenticatio
 		return true;
 	}
 
-	protected abstract void enrichIdentity(EIdUser eidUser);
+	@Override
+	public void sendAuthenticationRequest() {
+		try {
+			String idpDestination = getIDPDestination();
+			String spDestination = getSPDestination();
+
+			HttpServletResponse response = getResponse();
+
+			AuthenticationRequestUtil.sendRequest(idpDestination, spDestination, null, null, response);
+			FacesContext.getCurrentInstance().responseComplete();
+		} catch (ServletException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	protected EIdUser determineLoggedInUser() {
 		HttpServletRequest request = getRequest();
 		try {
-			AuthenticationRequestDecoder decoder = authenticationDecoderFactory
-					.getAuthenticationRequestDecoder(AuthenticationType.SAML2);
-			return decoder.decode(request);
+			return authenticationRequestDecoder.decode(request);
 		} catch (AuthenticationException e) {
 			return null;
 		}
 	}
+
+	protected abstract void enrichIdentity(EIdUser eidUser);
+
+	protected abstract String getIDPDestination();
 
 	protected HttpServletRequest getRequest() {
 		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
@@ -80,15 +94,27 @@ public abstract class AbstractAuthenticationHandlerBean implements Authenticatio
 		return request;
 	}
 
-	protected void setLog(Log log) {
-		this.log = log;
+	protected HttpServletResponse getResponse() {
+		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
+				.getResponse();
+		return response;
 	}
 
-	protected void setAuthenticationDecoderFactory(AuthenticationDecoderFactory authenticationDecoderFactory) {
-		this.authenticationDecoderFactory = authenticationDecoderFactory;
+	protected String getSPDestination() {
+		String returnURL = getRequest().getRequestURL().toString();
+		returnURL = returnURL.replaceFirst("/[^/]*$", "/postLogin.seam");
+		return returnURL;
+	}
+
+	protected void setAuthenticationRequestDecoder(AuthenticationRequestDecoder authenticationRequestDecoder) {
+		this.authenticationRequestDecoder = authenticationRequestDecoder;
 	}
 
 	protected void setCredentials(EIdUserCredentials credentials) {
 		this.credentials = credentials;
+	}
+
+	protected void setLog(Log log) {
+		this.log = log;
 	}
 }

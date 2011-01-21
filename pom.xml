@@ -48,8 +48,6 @@
 		</developerConnection>
 	</scm>
 	<modules>
-		<module>eid-pki-ra-authentication-client</module>
-
 		<module>eid-pki-ra-generated-contracts</module>
 		<module>eid-pki-ra-generated-publicws</module>
 		<module>eid-pki-ra-generated-privatews</module>
@@ -79,7 +77,7 @@
 	<properties>
 		<eid-applet.version>1.0.0.GA</eid-applet.version>
 		<eid-dss-version>1.0.0-SNAPSHOT</eid-dss-version>
-		<eid-idp-version>1.0.0-SNAPSHOT</eid-idp-version>
+		<eid-idp-version>1.0.0.Beta2</eid-idp-version>
 		<jboss.version>5.1.0</jboss.version>
 		<version.jboss.app>5</version.jboss.app>
 		<seam.version>2.2.0.GA</seam.version>
@@ -89,7 +87,7 @@
 		<testng.version>5.11</testng.version>
 		<javax.mail.version>1.4.2</javax.mail.version>
 		<bouncycastle.version>1.45</bouncycastle.version>
-		<opensaml.version>2.3.2</opensaml.version>
+		<opensaml.version>2.4.0</opensaml.version>
 		<selenium-client-driver.version>1.0.2</selenium-client-driver.version>
 		<surefire.version>2.5</surefire.version>
 		<selenium-server.version>1.0.3</selenium-server.version>
@@ -307,6 +305,12 @@
 			</dependency>
 
 			<dependency>
+				<groupId>be.fedict.eid-idp</groupId>
+				<artifactId>eid-idp-sp-protocol-saml2</artifactId>
+				<version>${eid-idp-version}</version>
+			</dependency>
+
+			<dependency>
 				<groupId>org.jboss.seam</groupId>
 				<artifactId>parent</artifactId>
 				<version>2.2.0.GA</version>
@@ -445,12 +449,6 @@
 				<artifactId>eid-pki-ra-integration</artifactId>
 				<version>${project.version}</version>
 				<type>jar</type>
-			</dependency>
-
-			<dependency>
-				<groupId>be.fedict</groupId>
-				<artifactId>eid-pki-ra-authentication-client</artifactId>
-				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
@@ -609,7 +607,7 @@
 				<environment>development</environment>
 			</properties>
 		</profile>
-		
+
 		<profile>
 			<id>test</id>
 
@@ -655,7 +653,7 @@
 				<environment>production</environment>
 			</properties>
 		</profile>
-		
+
 		<profile>
 			<id>hsql</id>
 
@@ -669,11 +667,11 @@
 				<jta.dataSource>java:/DefaultDS</jta.dataSource>
 				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.HSQLDBDelegate</quartz.driverDelegateClass>
 				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ?</quartz.selectWithLockSql>
-				
+
 				<database>hsql</database>
 			</properties>
 		</profile>
-		
+
 		<profile>
 			<id>oracle</id>
 
@@ -683,11 +681,11 @@
 				<jta.dataSource>java:/pkiraDS</jta.dataSource>
 				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.StdJDBCDelegate</quartz.driverDelegateClass>
 				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ? FOR UPDATE</quartz.selectWithLockSql>
-				
+
 				<database>oracle</database>
 			</properties>
 		</profile>
-		
+
 		<profile>
 			<id>postgres</id>
 
@@ -697,7 +695,7 @@
 				<jta.dataSource>java:/pkiraDS</jta.dataSource>
 				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.StdJDBCDelegate</quartz.driverDelegateClass>
 				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ? FOR UPDATE</quartz.selectWithLockSql>
-				
+
 				<database>postgres</database>
 			</properties>
 		</profile>

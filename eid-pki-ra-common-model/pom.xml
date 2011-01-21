@@ -16,11 +16,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>be.fedict</groupId>
-			<artifactId>eid-pki-ra-authentication-client</artifactId>
-		</dependency>
-		
-		<dependency>
 			<groupId>org.jboss.seam</groupId>
 			<artifactId>jboss-seam</artifactId>
 			<scope>provided</scope>
@@ -45,6 +40,54 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>be.fedict.eid-idp</groupId>
+			<artifactId>eid-idp-sp-protocol-saml2</artifactId>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-logging-api</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.opensaml</groupId>
+			<artifactId>opensaml</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.bouncycastle</groupId>
+					<artifactId>bcprov-jdk15</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>log4j-over-slf4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.xerces</groupId>
+					<artifactId>xercesImpl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.xerces</groupId>
+					<artifactId>resolver</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.xerces</groupId>
+					<artifactId>xml-apis</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>jcl-over-slf4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>jul-to-slf4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 </project>

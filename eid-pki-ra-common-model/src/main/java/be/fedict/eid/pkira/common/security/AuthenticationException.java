@@ -16,15 +16,21 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.authentication;
-
-import javax.servlet.http.HttpServletRequest;
+package be.fedict.eid.pkira.common.security;
 
 /**
  * @author Bram Baeyens
  *
  */
-public interface AuthenticationRequestDecoder {
+public class AuthenticationException extends Exception {
+
+	private static final long serialVersionUID = 3465480150040449744L;
 	
-	EIdUser decode(HttpServletRequest request) throws AuthenticationException;
+	public AuthenticationException(String message) {
+		super(message);
+	}
+
+	public AuthenticationException(String message, Throwable t) {
+		super(message, t);
+	}
 }

@@ -28,4 +28,6 @@ public interface AuthenticationHandler {
 	String NAME = "be.fedict.eid.pkira.common.authenticationHandler";
 	
 	boolean authenticate();
+	
+	void sendAuthenticationRequest();
 }

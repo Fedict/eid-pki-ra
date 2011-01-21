@@ -19,14 +19,10 @@
 package be.fedict.eid.pkira.portal.util;
 
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-import javax.servlet.http.HttpServletRequest;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
@@ -49,7 +45,6 @@ public class ConfigurationEntryContainer implements Serializable {
 	
 	private static final String VALIDITY_PERIODS_KEY = "VALIDITY_PERIODS";
 	private static final String DSS_SERVLET_KEY = "DSS_SERVLET";
-	private static final String IDP_SERVLET_KEY = "IDP_SERVLET";
 	private static final String IDP_DESTINATION_KEY = "IDP_DESTINATION";
 	
 	@In(value = EIDPKIRAPrivateServiceClient.NAME, create = true)
@@ -67,34 +62,6 @@ public class ConfigurationEntryContainer implements Serializable {
 	public String getDssServletUrl() {
 		return findConfigurationEntry(DSS_SERVLET_KEY);
 	}
-	
-	public String getAuthenticationLoginURL() {
-		try {
-			StringBuilder builder = new StringBuilder(128)
-					.append(findConfigurationEntry(IDP_SERVLET_KEY))
-					.append("?IdPDestination=")
-					.append(findConfigurationEntry(IDP_DESTINATION_KEY));			
-
-			String returnURL = getRequest().getRequestURL().toString();
-			returnURL = returnURL.replaceFirst("/[^/]*$", "/postLogin.seam");
-//			returnURL += "?cid=" + Conversation.instance().getId();
-			String parameter = "SPDestination=" + URLEncoder.encode(returnURL, "UTF-8");
-
-			if (builder.indexOf("?") != -1) {
-				return builder.append('&').append(parameter).toString();
-			} else {
-				return builder.append('?').append(parameter).toString();
-			}
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	protected HttpServletRequest getRequest() {
-		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
-				.getRequest();
-		return request;
-	}
 
 	private String[] findValidityPeriods() {
 		String periods = findConfigurationEntry(VALIDITY_PERIODS_KEY);
@@ -106,5 +73,9 @@ public class ConfigurationEntryContainer implements Serializable {
 	
 	private String findConfigurationEntry(String entryKey) {
 		return eidpkiraPrivateServiceClient.findConfigurationEntry(entryKey).getEntryValue();
+	}
+
+	public String getIDPDestination() {
+		return findConfigurationEntry(IDP_DESTINATION_KEY);
 	}
 }

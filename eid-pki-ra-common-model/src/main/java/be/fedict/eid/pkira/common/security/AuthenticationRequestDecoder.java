@@ -16,13 +16,17 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.authentication;
+package be.fedict.eid.pkira.common.security;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Bram Baeyens
  *
  */
-public enum AuthenticationType {
+public interface AuthenticationRequestDecoder {
 	
-	SIMPLE, SAML2;
+	public static final String NAME = "be.fedict.eid.pkira.common.AuthenticationRequestDecoder";
+
+	EIdUser decode(HttpServletRequest request) throws AuthenticationException;
 }
