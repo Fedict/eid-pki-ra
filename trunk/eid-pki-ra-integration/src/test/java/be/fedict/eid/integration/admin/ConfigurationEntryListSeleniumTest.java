@@ -39,7 +39,7 @@ public class ConfigurationEntryListSeleniumTest extends BaseSeleniumTestCase {
 	@Test
 	public void testListContent() {
 		clickAndWait("header-form:configurationentries");		
-		validateRows(5);
+		validateRows(10);
 	}
 
 	private void validateRows(Integer numberOfRows) {
