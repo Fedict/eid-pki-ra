@@ -33,7 +33,7 @@ public enum ConfigurationEntryKey {
 	NOTIFICATION_MAIL_MINUTES(ConfigurationEntryType.COMMA_SEPARATED_DIGITS, "configurationEntry.key.notificationMailMinutes", "43200"), 
 	VALIDITY_PERIODS(ConfigurationEntryType.COMMA_SEPARATED_DIGITS, "configurationEntry.key.validityPeriods", "15,27"), 
 	DSS_SERVLET(ConfigurationEntryType.URL, "configurationEntry.key.dssServlet", "https://www.e-contract.be/eid-dss/protocol/simple"), 
-	DSS_WS_CLIENT(ConfigurationEntryType.URL, "configurationEntry.key.dssWsClient", "https://www.e-contract.be/eid-dss/dss"), 
+	DSS_WS_CLIENT(ConfigurationEntryType.URL, "configurationEntry.key.dssWsClient", "https://www.e-contract.be/eid-dss-ws/dss"), 
 	IDP_DESTINATION(ConfigurationEntryType.URL, "configurationEntry.key.idpDestination", "https://www.e-contract.be/eid-idp/protocol/saml2-auth-ident");
 	
 	private final ConfigurationEntryType type;

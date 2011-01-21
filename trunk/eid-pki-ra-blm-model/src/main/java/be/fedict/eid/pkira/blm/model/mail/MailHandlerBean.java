@@ -91,8 +91,7 @@ public class MailHandlerBean implements MessageListener {
 
 			// Create the message
 			MimeMessage msg = new MimeMessage(session);
-			//msg.setFrom(new InternetAddress(mail.getSender()));
-			msg.setFrom(new InternetAddress("jan.vdbergh@gmail.com")); // TODO remove me again
+			msg.setFrom(new InternetAddress(mail.getSender()));
 			for (String recipient : mail.getRecipients()) {
 				msg.addRecipient(RecipientType.TO, new InternetAddress(recipient));
 			}
