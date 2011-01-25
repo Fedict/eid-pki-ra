@@ -78,10 +78,10 @@
 		<eid-applet.version>1.0.0.GA</eid-applet.version>
 		<eid-dss-version>1.0.0.Beta1</eid-dss-version>
 		<eid-idp-version>1.0.0.Beta2</eid-idp-version>
-		<jboss.version>5.1.0</jboss.version>
+		<jboss.version>5.1.0.GA</jboss.version>
 		<version.jboss.app>5</version.jboss.app>
 		<seam.version>2.2.0.GA</seam.version>
-		<richfaces.version>3.3.1.GA</richfaces.version>
+		<richfaces.version>3.3.3.Final</richfaces.version>
 		<xmlunit.version>1.3</xmlunit.version>
 		<mockito.version>1.8.5</mockito.version>
 		<testng.version>5.11</testng.version>
@@ -93,7 +93,7 @@
 		<selenium-server.version>1.0.3</selenium-server.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<quartz-version>1.7.3</quartz-version>
+		<quartz-version>1.8.4</quartz-version>
 		<jaxws-maven-plugin-version>1.12</jaxws-maven-plugin-version>
 	</properties>
 
@@ -101,7 +101,7 @@
 		<repository>
 			<id>repository.jboss.org</id>
 			<name>JBoss Maven Repository</name>
-			<url>http://repository.jboss.org/maven2</url>
+			<url>http://repository.jboss.org/nexus/content/groups/public-jboss</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -548,6 +548,12 @@
 				<artifactId>commons-httpclient</artifactId>
 				<version>3.1</version>
 			</dependency>
+			<dependency>
+				<groupId>org.jboss.jbossas</groupId>
+				<artifactId>jboss-as-distribution</artifactId>
+				<version>${jboss.version}</version>
+				<type>zip</type>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -666,7 +672,8 @@
 				<hibernate.dialect>org.hibernate.dialect.HSQLDialect</hibernate.dialect>
 				<jta.dataSource>java:/DefaultDS</jta.dataSource>
 				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.HSQLDBDelegate</quartz.driverDelegateClass>
-				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ?</quartz.selectWithLockSql>
+				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE
+					LOCK_NAME = ?</quartz.selectWithLockSql>
 
 				<database>hsql</database>
 			</properties>
@@ -680,7 +687,8 @@
 				<hibernate.dialect>org.hibernate.dialect.Oracle10gDialect</hibernate.dialect>
 				<jta.dataSource>java:/pkiraDS</jta.dataSource>
 				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.StdJDBCDelegate</quartz.driverDelegateClass>
-				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ? FOR UPDATE</quartz.selectWithLockSql>
+				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE
+					LOCK_NAME = ? FOR UPDATE</quartz.selectWithLockSql>
 
 				<database>oracle</database>
 			</properties>
@@ -694,7 +702,8 @@
 				<hibernate.dialect>org.hibernate.dialect.Oracle10gDialect</hibernate.dialect>
 				<jta.dataSource>java:/pkiraDS</jta.dataSource>
 				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.StdJDBCDelegate</quartz.driverDelegateClass>
-				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ? FOR UPDATE</quartz.selectWithLockSql>
+				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE
+					LOCK_NAME = ? FOR UPDATE</quartz.selectWithLockSql>
 
 				<database>postgres</database>
 			</properties>

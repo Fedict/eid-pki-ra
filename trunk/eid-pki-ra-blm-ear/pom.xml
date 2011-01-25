@@ -135,10 +135,15 @@
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.transaction</groupId>
+			<artifactId>jta</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -206,10 +211,16 @@
 							<artifactId>eid-pki-ra-generated-publicws</artifactId>
 							<bundleDir>lib</bundleDir>
 						</jarModule>
-						
+
 						<jarModule>
 							<groupId>javax.servlet</groupId>
 							<artifactId>servlet-api</artifactId>
+							<excluded>true</excluded>
+						</jarModule>
+
+						<jarModule>
+							<groupId>javax.transaction</groupId>
+							<artifactId>jta</artifactId>
 							<excluded>true</excluded>
 						</jarModule>
 					</modules>
