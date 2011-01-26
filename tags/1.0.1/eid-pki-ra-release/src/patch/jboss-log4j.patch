@@ -1,0 +1,43 @@
+--- server/default/conf/jboss-log4j.orig.xml	2011-01-25 11:11:40.000000000 +0100
++++ server/default/conf/jboss-log4j.xml	2011-01-25 11:14:32.000000000 +0100
+@@ -12,7 +12,7 @@
+ <!--
+    | For more configuration information and examples see the Jakarta Log4j
+    | owebsite: http://jakarta.apache.org/log4j
+- -->
++ -->1
+ 
+ <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+ 
+@@ -48,6 +48,21 @@
+       </layout>
+    </appender>
+ 
++   <appender name="ERRORFILE" class="org.jboss.logging.appender.DailyRollingFileAppender">
++      <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler" />
++      <param name="File" value="${jboss.server.log.dir}/errors.log" />
++      <param name="Append" value="true" />
++      <param name="threshold" value="warn" />
++
++      <!-- Rollover at midnight each day -->
++      <param name="DatePattern" value="'.'yyyy-MM-dd" />
++
++      <layout class="org.apache.log4j.PatternLayout">
++         <!-- The default pattern: Date Priority [Category] (Thread) Message\n -->
++         <param name="ConversionPattern" value="%d %-5p [%c] (%t) %m%n" />
++      </layout>
++   </appender>
++
+    <!-- A size based file rolling appender
+    <appender name="FILE" class="org.jboss.logging.appender.RollingFileAppender">
+      <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
+@@ -373,4 +388,9 @@
+       <appender-ref ref="FILE"/>
+    </root>
+ 
++   <category name="ErrorLog">
++      <priority value="WARN" />
++      <appender-ref ref="ERRORFILE" />
++   </category>
++
+ </log4j:configuration>

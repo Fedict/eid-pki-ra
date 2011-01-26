@@ -1,0 +1,11 @@
+--- server/default/deploy/eid-pki-ra-ds.xml.orig	2011-01-25 13:00:05.000000000 +0100
++++ server/default/deploy/eid-pki-ra-ds.xml	2011-01-25 13:00:32.000000000 +0100
+@@ -15,7 +15,7 @@
+ 
+ <datasources>
+   <local-tx-datasource>
+-    <jndi-name>PostgresDS</jndi-name>
++    <jndi-name>pkiraDS</jndi-name>
+     <connection-url>jdbc:postgresql://[servername]:[port]/[database name]</connection-url>
+     <driver-class>org.postgresql.Driver</driver-class>
+     <user-name>x</user-name>
