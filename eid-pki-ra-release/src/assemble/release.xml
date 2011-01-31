@@ -18,6 +18,7 @@
 				<exclude>server/jbossweb-standalone/**</exclude>
 				<exclude>server/osgi/**</exclude>
 				<exclude>server/default/deploy/admin-console.war/**</exclude>
+				<exclude>server/default/deploy/management/**</exclude>
 				<exclude>server/all/deploy/admin-console.war/**</exclude>
 				<exclude>common/deploy/admin-console.war/**</exclude>
 				<!-- chmod+x on the UNIX scripts -->
