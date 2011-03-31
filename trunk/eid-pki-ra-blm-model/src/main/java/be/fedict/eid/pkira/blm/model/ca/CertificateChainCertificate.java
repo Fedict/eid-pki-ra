@@ -29,7 +29,7 @@ public class CertificateChainCertificate implements Serializable, Comparable<Cer
 
 	@Id
 	@GeneratedValue
-	@Column(name = "CHAIN_CERT_ID", nullable = false, unique = true)
+	@Column(name = "CHAIN_CERT_ID", nullable = false)
 	private Integer id;
 
 	@Lob
@@ -48,7 +48,7 @@ public class CertificateChainCertificate implements Serializable, Comparable<Cer
 	@ManyToOne(optional=true)
 	private CertificateChain certificateChain;
 
-	@Column(name = "SERIALNUMBER", nullable = false, precision=52, scale=0)
+	@Column(name = "SERIALNUMBER", nullable = false, precision=38, scale=0)
 	private BigInteger serialNumber;
 
 	public String getCertificateData() {

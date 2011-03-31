@@ -66,7 +66,7 @@ public class CertificateAuthority implements Serializable {
 
 	@Id
 	@GeneratedValue
-	@Column(name = "CA_ID", nullable = false, unique = true)
+	@Column(name = "CA_ID", nullable = false)
 	private Integer id;
 
 	@Lob

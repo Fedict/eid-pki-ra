@@ -62,7 +62,7 @@ public class ReportEntry {
 
 	@Id
 	@GeneratedValue
-	@Column(name = "REPORT_ENTRY_ID", nullable = false, unique = true, updatable = false)
+	@Column(name = "REPORT_ENTRY_ID", nullable = false, updatable = false)
 	private Integer id;
 
 	@Temporal(TemporalType.TIMESTAMP)
