@@ -67,9 +67,9 @@ public class Certificate implements Serializable {
 
 	@Id
 	@GeneratedValue
-	@Column(name = "CERTIFICATE_ID", nullable = false, unique = true)
+	@Column(name = "CERTIFICATE_ID", nullable = false)
 	private Integer id;
-	@Column(name = "SERIAL_NUMBER", nullable = false, precision = 52, scale = 0)
+	@Column(name = "SERIAL_NUMBER", nullable = false, precision = 38, scale = 0)
 	private BigInteger serialNumber;
 
 	@Lob

@@ -37,8 +37,10 @@ public class SchemaGenerator {
 	 * Holds the classnames of hibernate dialects for easy reference.
 	 */
 	private static enum Dialect {
-		HSQL("org.hibernate.dialect.HSQLDialect"), MYSQL("org.hibernate.dialect.MySQLDialect"), ORACLE(
-				"org.hibernate.dialect.Oracle10gDialect"), POSTGRES("org.hibernate.dialect.PostgreSQLDialect");
+		HSQL("org.hibernate.dialect.HSQLDialect"), 
+		MYSQL("org.hibernate.dialect.MySQLDialect"), 
+		ORACLE("org.hibernate.dialect.Oracle10gDialect"), 
+		POSTGRES("org.hibernate.dialect.PostgreSQLDialect");
 
 		private String dialectClass;
 

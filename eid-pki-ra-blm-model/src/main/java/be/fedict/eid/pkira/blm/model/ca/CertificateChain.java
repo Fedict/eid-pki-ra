@@ -41,7 +41,7 @@ public class CertificateChain implements Serializable {
 
 	@Id
 	@GeneratedValue
-	@Column(name = "CERTIFICATE_CHAIN_ID", nullable = false, unique = true)
+	@Column(name = "CERTIFICATE_CHAIN_ID", nullable = false)
 	private Integer id;
 
 	@JoinColumn(name = "SERVER_CHAIN_ID")

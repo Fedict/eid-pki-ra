@@ -45,7 +45,7 @@ import be.fedict.eid.pkira.blm.model.usermgmt.validation.ValidUserCertificate;
  * @author Bram Baeyens
  */
 @Entity
-@Table(name = "USER")
+@Table(name = "PKIRAUSER")
 @NamedQueries(value =
 	{
 			@NamedQuery(name = "findByNationalRegisterNumber", query = "SELECT u FROM User u WHERE u.nationalRegisterNumber = :nationalRegisterNumber"),
