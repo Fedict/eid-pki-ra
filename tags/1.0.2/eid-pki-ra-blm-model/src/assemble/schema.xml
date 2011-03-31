@@ -1,0 +1,15 @@
+<assembly>
+	<id>schemas</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<fileSets>
+		<fileSet>
+			<directory>.</directory>
+			<includes>
+				<include>*.sql</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+</assembly>

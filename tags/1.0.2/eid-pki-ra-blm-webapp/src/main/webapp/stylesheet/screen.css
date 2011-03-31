@@ -1,0 +1,186 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: small;
+	background-color: white;
+}
+
+h1 {
+	color: gray;
+}
+
+h2 {
+	color: #FF9000;
+	font-size: large;
+	font-family: Arial;
+}
+
+h3 {
+	color: #FF9000;
+	font-size: medium;
+	font-family: Arial;
+	font-style: italic;
+}
+
+#fed {
+	font-size: 25px;
+	font-weight: bold;
+	float: left;
+	color: black;
+}
+
+#ictegov {
+	font-size: 25px;
+	font-weight: bold;
+	float: left;
+	background-color: #d9d9d9;
+	color: #FF9000;
+	margin-right: 30px;
+}
+
+#ict {
+	float: left;
+}
+
+#egov {
+	float: left;
+	background-color: #d9d9d9;
+	color: gray;
+	padding-left: 5px;
+	padding-right: 10px;
+	padding-bottom: 17px;
+	font-size: 10px;
+	padding-right: 10px;
+}
+
+.rich-toolbar,.dr-toolbar-ext {
+	background-color: #E0E0E0;
+	height: 44px;
+	margin: 0 auto;
+	background-image: none;
+	border: 0 none;
+}
+
+a {
+	color: #000000;
+	font-family: Arial, Helvetica, sans-serif;
+	margin-left: 3px;
+	margin-right: 3px;
+	padding: 5px 20px 7px;
+	display: block;
+	text-decoration: none;
+}
+
+a:hover,.itemSelected {
+	display: block;
+	background: none repeat scroll 0 0 #FF9000;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.rich-page-content {
+	margin: 0 auto;
+}
+
+.dr-pnl {
+	border-style: solid;
+}
+
+.dr-table {
+	border-collapse: collapse;
+	border-spacing: 0px;
+	border-left: none;
+}
+
+.dr-table-cell,.rich-table-cell {
+	border-bottom: 1px #FF9000 dotted;
+	border-right: none;
+	text-align: left;
+	font-family: Verdana, sans-serif, Arial;
+	font-weight: normal;
+	padding: 4px 0 4px 8px;
+}
+
+.logo {
+	padding: 25px;
+	padding-right: 50px;
+}
+
+.dr-table-subheader,.dr-table-headercell,.rich-table-headercell {
+	background-color: #E0E0E0;
+	vertical-align: baseline;
+	border-right: none;
+}
+
+.dr-pnl-h,.rich-panel-header {
+	color: #FF9000;
+	font-family: Arial;
+	font-size: large;
+	background-image: none;
+	background-color: white;
+	border: 0px;
+}
+
+.dr-table-footercell {
+	padding: 0px;
+	background-color: white;
+	border-right: none;
+	border-bottom: none;
+	border-left: none;
+}
+
+.selected {
+	background: none repeat scroll 0 0 #FF9000;
+}
+
+#content {
+	color: #303030;
+	margin: 0 auto;
+}
+
+.required {
+	color: #ff0000;
+}
+
+.error-label,.errors {
+	color: #ff0000;
+}
+
+.info,.success,.warning,.errorMessage,.validation {
+	border: 1px solid;
+	margin: 10px 0px;
+	padding: 15px 10px 15px 50px;
+	background-repeat: no-repeat;
+	background-position: 10px center;
+}
+
+.info {
+	color: #00529B;
+	background-color: #BDE5F8;
+}
+
+.success {
+	color: #4F8A10;
+	background-color: #DFF2BF;
+}
+
+.warning {
+	color: #9F6000;
+	background-color: #FEEFB3;
+}
+
+.errorMessage {
+	color: #D8000C;
+	background-color: #FFBABA;
+}
+
+.rich-messages {
+	width: 80%;
+}
+
+label{
+	font-weight: bolder
+}
+
+.dr-table-cell, .rich-table-cell{
+	font-family:sans-serif;
+}
