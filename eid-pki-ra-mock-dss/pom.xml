@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>eid-pki-ra</artifactId>
 		<groupId>be.fedict</groupId>
-		<version>1.0.2-SNAPSHOT</version>
+		<version>1.0.2</version>
 	</parent>
 	<groupId>be.fedict</groupId>
 	<artifactId>eid-pki-ra-mock-dss</artifactId>
