@@ -2,7 +2,7 @@ mvn clean install -Pproduction,oracle
 mvn clean install -Pproduction,postgres
 
 cd eid-pki-ra-release
-mvn clean install -Pfedict-baseline-oracle
+mvn clean install -Poracle
 cp target/eid-pki-ra-release-*.zip ..
-mvn clean install -f eid-pki-ra-release/pom.xml -Pfedict-baseline-postgres
+mvn clean install -Ppostgres
 cp target/eid-pki-ra-release-*.zip ..
