@@ -202,7 +202,7 @@
 			<plugins>
 				<plugin>
 					<artifactId>maven-ear-plugin</artifactId>
-					<version>2.4.2</version>
+					<version>2.5</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-ejb-plugin</artifactId>
@@ -642,7 +642,7 @@
 
 			<properties>
 				<!-- test mode (disable in production) -->
-				<seam.debug>false</seam.debug>
+				<seam.debug>true</seam.debug>
 
 				<!-- package exploded war file -->
 				<exploded.war.file>true</exploded.war.file>
@@ -672,8 +672,7 @@
 				<hibernate.dialect>org.hibernate.dialect.HSQLDialect</hibernate.dialect>
 				<jta.dataSource>java:/DefaultDS</jta.dataSource>
 				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.HSQLDBDelegate</quartz.driverDelegateClass>
-				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE
-					LOCK_NAME = ?</quartz.selectWithLockSql>
+				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ?</quartz.selectWithLockSql>
 
 				<database>hsql</database>
 			</properties>
@@ -687,8 +686,7 @@
 				<hibernate.dialect>org.hibernate.dialect.Oracle10gDialect</hibernate.dialect>
 				<jta.dataSource>java:/pkiraDS</jta.dataSource>
 				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.StdJDBCDelegate</quartz.driverDelegateClass>
-				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE
-					LOCK_NAME = ? FOR UPDATE</quartz.selectWithLockSql>
+				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ? FOR UPDATE</quartz.selectWithLockSql>
 
 				<database>oracle</database>
 			</properties>
@@ -702,8 +700,7 @@
 				<hibernate.dialect>org.hibernate.dialect.Oracle10gDialect</hibernate.dialect>
 				<jta.dataSource>java:/pkiraDS</jta.dataSource>
 				<quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.StdJDBCDelegate</quartz.driverDelegateClass>
-				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE
-					LOCK_NAME = ? FOR UPDATE</quartz.selectWithLockSql>
+				<quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ? FOR UPDATE</quartz.selectWithLockSql>
 
 				<database>postgres</database>
 			</properties>

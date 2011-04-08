@@ -9,7 +9,7 @@
 		<fileSet>
 			<directory>target/dependency/jboss-${jboss.version}</directory>
 			<outputDirectory>/</outputDirectory>
-			<excludes>
+			<excludes><!-- 
 				<exclude>client/**</exclude>
 				<exclude>docs/**</exclude>
 				<exclude>server/minimal/**</exclude>
@@ -21,6 +21,7 @@
 				<exclude>server/default/deploy/management/**</exclude>
 				<exclude>server/all/deploy/admin-console.war/**</exclude>
 				<exclude>common/deploy/admin-console.war/**</exclude>
+				 -->
 				<!-- chmod+x on the UNIX scripts -->
 				<exclude>bin/run.sh</exclude>
 				<exclude>bin/shutdown.sh</exclude>
