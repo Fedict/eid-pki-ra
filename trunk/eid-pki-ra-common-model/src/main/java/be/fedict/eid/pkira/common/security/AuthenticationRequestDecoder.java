@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 public interface AuthenticationRequestDecoder {
 	
 	public static final String NAME = "be.fedict.eid.pkira.common.AuthenticationRequestDecoder";
+	public static final String NAME_REQUEST_ID = "saml2RequestId";
 
 	EIdUser decode(HttpServletRequest request) throws AuthenticationException;
 }

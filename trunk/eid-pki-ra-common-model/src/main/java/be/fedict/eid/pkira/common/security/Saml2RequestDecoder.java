@@ -22,14 +22,13 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.log.Log;
 
-import be.fedict.eid.idp.sp.protocol.saml2.AuthenticationResponseProcessor;
+import be.fedict.eid.idp.common.saml2.AuthenticationResponse;
 import be.fedict.eid.idp.sp.protocol.saml2.AuthenticationResponseProcessorException;
-import be.fedict.eid.idp.sp.protocol.saml2.spi.AuthenticationResponse;
+import be.fedict.eid.idp.sp.protocol.saml2.post.AuthenticationResponseProcessor;
 
 /**
  * @author Bram Baeyens
@@ -37,21 +36,25 @@ import be.fedict.eid.idp.sp.protocol.saml2.spi.AuthenticationResponse;
 @Name(AuthenticationRequestDecoder.NAME)
 public class Saml2RequestDecoder implements AuthenticationRequestDecoder {
 
+	public static final String NAME_REQUEST_ID = "saml2RequestId";
+	
 	private static final String URN_BE_FEDICT_EID_IDP_FIRST_NAME = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname";
 	private static final String URN_BE_FEDICT_EID_IDP_NAME = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname";
-	
+
 	@Logger
 	private static Log log;
-	
-	@In(value="be.fedict.eid.pkira.common.authenticationResponseProcessor")
-	private AuthenticationResponseProcessor authenticationResponseProcessor;
+
+	private final AuthenticationResponseProcessor authenticationResponseProcessor = new AuthenticationResponseProcessor(null);
 
 	@Override
 	public EIdUser decode(HttpServletRequest saml2Request) throws AuthenticationException {
+		String requestId = (String) saml2Request.getSession().getAttribute(NAME_REQUEST_ID);
+		String issuer = AbstractAuthenticationHandlerBean.getIssuer(saml2Request);
+		
 		log.debug(">>> decode(saml2Request[{0}])", saml2Request);
 		try {
-			AuthenticationResponse authenticationResponse = this.authenticationResponseProcessor.process(null,
-					saml2Request);
+			AuthenticationResponse authenticationResponse = this.authenticationResponseProcessor.process(requestId, issuer,
+					saml2Request.getRequestURL().toString(), null, true, saml2Request);
 
 			Map<String, Object> attributeMap = authenticationResponse.getAttributeMap();
 			return new EIdUser(authenticationResponse.getIdentifier(),
@@ -61,9 +64,5 @@ public class Saml2RequestDecoder implements AuthenticationRequestDecoder {
 			log.error("Error decoding SAML request.", e);
 			throw new AuthenticationException("Cannot decode SAML response", e);
 		}
-	}
-
-	public void setAuthenticationResponseProcessor(AuthenticationResponseProcessor authenticationResponseProcessor) {
-		this.authenticationResponseProcessor = authenticationResponseProcessor;
 	}
 }
