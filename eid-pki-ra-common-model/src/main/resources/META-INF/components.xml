@@ -15,7 +15,4 @@
 			http://jboss.com/products/seam/jms http://jboss.com/products/seam/jms-2.2.xsd
 			http://jboss.com/products/seam/web http://jboss.com/products/seam/web-2.2.xsd">
 
-	<component name="be.fedict.eid.pkira.common.authenticationResponseProcessor" scope="application" auto-create="true"
-		class="be.fedict.eid.idp.sp.protocol.saml2.AuthenticationResponseProcessor" />
-
 </components>

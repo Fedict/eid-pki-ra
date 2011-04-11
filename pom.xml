@@ -77,7 +77,7 @@
 	<properties>
 		<eid-applet.version>1.0.0.GA</eid-applet.version>
 		<eid-dss-version>1.0.0.Beta1</eid-dss-version>
-		<eid-idp-version>1.0.0.Beta2</eid-idp-version>
+		<eid-idp-version>1.0.0.RC1</eid-idp-version>
 		<jboss.version>5.1.0.GA</jboss.version>
 		<version.jboss.app>5</version.jboss.app>
 		<seam.version>2.2.0.GA</seam.version>
@@ -93,7 +93,7 @@
 		<selenium-server.version>1.0.3</selenium-server.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<quartz-version>1.8.4</quartz-version>
+		<quartz-version>1.7.3</quartz-version>
 		<jaxws-maven-plugin-version>1.12</jaxws-maven-plugin-version>
 	</properties>
 

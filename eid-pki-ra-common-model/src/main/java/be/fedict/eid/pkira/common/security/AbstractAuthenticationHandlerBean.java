@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.log.Log;
+import org.opensaml.saml2.core.AuthnRequest;
 
 import be.fedict.eid.idp.sp.protocol.saml2.AuthenticationRequestUtil;
 
@@ -65,14 +66,37 @@ public abstract class AbstractAuthenticationHandlerBean implements Authenticatio
 		try {
 			String idpDestination = getIDPDestination();
 			String spDestination = getSPDestination();
+			String issuer = getIssuer(getRequest());
 
 			HttpServletResponse response = getResponse();
 
-			AuthenticationRequestUtil.sendRequest(idpDestination, spDestination, null, null, response);
+			AuthnRequest authnRequest = AuthenticationRequestUtil.sendRequest(issuer, idpDestination, spDestination, null, null, response, "en");
+			String requestId = authnRequest.getID();
+			// FIXME use Seam @Out
+			getRequest().getSession().setAttribute(AuthenticationRequestDecoder.NAME_REQUEST_ID, requestId);
+			
 			FacesContext.getCurrentInstance().responseComplete();
 		} catch (ServletException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public static final String getIssuer(HttpServletRequest request) {
+		StringBuilder url = new StringBuilder();
+		String scheme = request.getScheme();
+		String hostName = request.getServerName();
+		int port = request.getServerPort();
+
+		url.append(scheme);
+		url.append("://");
+		url.append(hostName);
+		if (port > 0
+				&& ((scheme.equalsIgnoreCase("http") && port != 80) || (scheme.equalsIgnoreCase("https") && port != 443))) {
+			url.append(':');
+			url.append(port);
+		}
+
+		return url.toString();
 	}
 
 	protected EIdUser determineLoggedInUser() {
