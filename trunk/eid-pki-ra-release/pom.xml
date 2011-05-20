@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>eid-pki-ra</artifactId>
 		<groupId>be.fedict</groupId>
-		<version>1.0.3-SNAPSHOT</version>
+		<version>1.0.3</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<groupId>be.fedict</groupId>
@@ -107,7 +107,7 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<includeArtifactIds>${database-artifact}</includeArtifactIds>
+							<includeArtifactIds>${database.artifact}</includeArtifactIds>
 							<outputDirectory>target/dependency/jboss-${jboss.version}/server/default/lib</outputDirectory>
 						</configuration>
 					</execution>

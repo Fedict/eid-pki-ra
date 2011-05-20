@@ -88,7 +88,7 @@
 		</navigation>
 	</page>
 
-	<exception class="be.fedict.eid.pkira.authentication.AuthenticationException">
+	<exception class="be.fedict.eid.pkira.common.security.AuthenticationException">
 		<redirect view-id="/login.xhtml">
 			<message>#{messages['validator.invalid.authentication']}</message>
 		</redirect>

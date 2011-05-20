@@ -95,7 +95,7 @@ public class ContractRepositoryBean implements ContractRepository {
 	 */
 	@Override
 	public Certificate findCertificate(String issuer, BigInteger serialNumber) {
-		Query query = entityManager.createQuery("SELECT distinct c from Certificate c WHERE serialNumber=?");
+		Query query = entityManager.createQuery("SELECT c from Certificate c WHERE serialNumber=?");
 		query.setParameter(1, serialNumber);
 		
 		try {
@@ -114,7 +114,7 @@ public class ContractRepositoryBean implements ContractRepository {
 	 */
 	@Override
 	public Certificate findCertificate(int certificateID) {
-		Query query = entityManager.createQuery("SELECT distinct c from Certificate c WHERE id=?");
+		Query query = entityManager.createQuery("SELECT c from Certificate c WHERE id=?");
 		//query.setParameter(1, issuer);
 		query.setParameter(1, certificateID);
 		
