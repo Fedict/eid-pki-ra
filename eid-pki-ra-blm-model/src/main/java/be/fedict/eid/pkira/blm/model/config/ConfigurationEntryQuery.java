@@ -63,8 +63,7 @@ public class ConfigurationEntryQuery extends DataTableEntityQuery<ConfigurationE
 		} catch (NoResultException e) {
 		}
 		if (result==null) {
-			addEntry(configurationEntryKey);
-			return getSingleResult();
+			return addEntry(configurationEntryKey);
 		}
 		
 		return result;
