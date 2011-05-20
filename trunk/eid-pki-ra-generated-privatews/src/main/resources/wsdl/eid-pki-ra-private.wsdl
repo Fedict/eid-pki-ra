@@ -320,6 +320,8 @@
 					<xsd:enumeration value="VALIDITY_PERIODS" />
 					<xsd:enumeration value="DSS_SERVLET" />
 					<xsd:enumeration value="IDP_DESTINATION" />
+					<xsd:enumeration value="IDP_FINGERPRINT" />
+					<xsd:enumeration value="IDP_MAXTIMEOFFSET" />
 				</xsd:restriction>
 			</xsd:simpleType>
 

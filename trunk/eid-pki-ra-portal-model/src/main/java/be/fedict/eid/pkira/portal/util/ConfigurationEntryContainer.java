@@ -46,6 +46,9 @@ public class ConfigurationEntryContainer implements Serializable {
 	private static final String VALIDITY_PERIODS_KEY = "VALIDITY_PERIODS";
 	private static final String DSS_SERVLET_KEY = "DSS_SERVLET";
 	private static final String IDP_DESTINATION_KEY = "IDP_DESTINATION";
+	private static final String IDP_FINGERPRINT_KEY = "IDP_FINGERPRINT";
+	private static final String IDP_MAXTIMEOFFSET_KEY = "IDP_MAXTIMEOFFSET";
+	
 	
 	@In(value = EIDPKIRAPrivateServiceClient.NAME, create = true)
 	private EIDPKIRAPrivateServiceClient eidpkiraPrivateServiceClient;
@@ -77,5 +80,13 @@ public class ConfigurationEntryContainer implements Serializable {
 
 	public String getIDPDestination() {
 		return findConfigurationEntry(IDP_DESTINATION_KEY);
+	}
+
+	public String getFingerprint() {
+		return findConfigurationEntry(IDP_FINGERPRINT_KEY);
+	}
+	
+	public int getMaxTimeOffset(){
+		return Integer.parseInt(findConfigurationEntry(IDP_MAXTIMEOFFSET_KEY));
 	}
 }

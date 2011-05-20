@@ -70,4 +70,9 @@ public class AuthenticationHandlerBean extends AbstractAuthenticationHandlerBean
 	protected String getIDPDestination() {
 		return configurationEntryContainer.getIDPDestination();
 	}
+
+	@Override
+	protected String getIDPFingerprint() {
+		return configurationEntryContainer.getFingerprint();
+	}
 }

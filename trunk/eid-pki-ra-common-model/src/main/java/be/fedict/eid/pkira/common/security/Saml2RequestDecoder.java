@@ -22,6 +22,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.log.Log;
@@ -41,10 +42,13 @@ public class Saml2RequestDecoder implements AuthenticationRequestDecoder {
 	private static final String URN_BE_FEDICT_EID_IDP_FIRST_NAME = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname";
 	private static final String URN_BE_FEDICT_EID_IDP_NAME = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname";
 
+	@In(value = AbstractPkiRaAuthenticationResponseService.NAME, create = true)
+	AbstractPkiRaAuthenticationResponseService pkiRaAuthenticationResponseService;
+	
 	@Logger
 	private static Log log;
 
-	private final AuthenticationResponseProcessor authenticationResponseProcessor = new AuthenticationResponseProcessor(null);
+	private AuthenticationResponseProcessor authenticationResponseProcessor;
 
 	@Override
 	public EIdUser decode(HttpServletRequest saml2Request) throws AuthenticationException {
@@ -53,6 +57,8 @@ public class Saml2RequestDecoder implements AuthenticationRequestDecoder {
 		
 		log.debug(">>> decode(saml2Request[{0}])", saml2Request);
 		try {
+			
+			authenticationResponseProcessor = new AuthenticationResponseProcessor(pkiRaAuthenticationResponseService);
 			AuthenticationResponse authenticationResponse = this.authenticationResponseProcessor.process(requestId, issuer,
 					saml2Request.getRequestURL().toString(), null, true, saml2Request);
 

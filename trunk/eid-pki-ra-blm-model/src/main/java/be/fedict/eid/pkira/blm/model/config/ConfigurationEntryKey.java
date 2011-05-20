@@ -34,7 +34,9 @@ public enum ConfigurationEntryKey {
 	VALIDITY_PERIODS(ConfigurationEntryType.COMMA_SEPARATED_DIGITS, "configurationEntry.key.validityPeriods", "15,27"), 
 	DSS_SERVLET(ConfigurationEntryType.URL, "configurationEntry.key.dssServlet", "https://www.e-contract.be/eid-dss/protocol/simple"), 
 	DSS_WS_CLIENT(ConfigurationEntryType.URL, "configurationEntry.key.dssWsClient", "https://www.e-contract.be/eid-dss-ws/dss"), 
-	IDP_DESTINATION(ConfigurationEntryType.URL, "configurationEntry.key.idpDestination", "https://www.e-contract.be/eid-idp/protocol/saml2/post/auth-ident");
+	IDP_DESTINATION(ConfigurationEntryType.URL, "configurationEntry.key.idpDestination", "https://www.e-contract.be/eid-idp/protocol/saml2/post/auth-ident"),
+	IDP_FINGERPRINT(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.idpFingerprint", "d838f129659ef5d2f3ea974221e0d8ae1bb5206b"),
+	IDP_MAXTIMEOFFSET(ConfigurationEntryType.STRING, "configurationEntry.key.idpMaxTimeOffset", "60");
 	
 	private final ConfigurationEntryType type;
 	private final String message;
