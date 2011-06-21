@@ -116,7 +116,7 @@ public class CertificateChainHandler implements Serializable {
 		CertificateChainCertificate certificate = new CertificateChainCertificate();
 		certificate.setCertificateChain(certificateChainHome.getInstance());
 		certificate.setCertificateData(certificateInfo.getPemEncoded());
-		certificate.setSerialNumber(certificateInfo.getSerialNumber());
+		certificate.setSerialNumber(certificateInfo.getSerialNumber().toString());
 		certificate.setSubject(certificateInfo.getDistinguishedName());
 		certificate.setIssuer(issuer);
 

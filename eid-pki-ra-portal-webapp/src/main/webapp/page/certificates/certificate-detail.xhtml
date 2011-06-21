@@ -49,7 +49,7 @@
 
 			<s:decorate id="x509Decoration" template="/layout/edit.xhtml">
 				<ui:define name="label">#{messages['certificate.x509']}:</ui:define>
-				<h:inputTextarea id="csr" value="#{certificateWSHome.instance.x509}" disabled="true" cols="90" rows="14" />
+				<h:inputTextarea id="csr" value="#{certificateWSHome.instance.x509}" readonly="true" cols="90" rows="14" />
 			</s:decorate>
 
 		</rich:panel>
