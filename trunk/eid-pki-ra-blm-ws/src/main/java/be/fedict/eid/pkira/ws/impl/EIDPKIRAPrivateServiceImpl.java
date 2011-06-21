@@ -176,7 +176,7 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 		boolean result;
 		try {
 			getRegistrationManager().registerUser(request.getUserRRN(), request.getUserLastName(),
-					request.getUserFirstName(), Integer.parseInt(request.getCertificateDomainId()),
+					request.getUserFirstName(), request.getCertificateDomainId() != null ? Integer.parseInt(request.getCertificateDomainId()) : null,
 					request.getUserEmail());
 			result = true;
 		} catch (RegistrationException e) {
@@ -365,5 +365,4 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	private ContractRepository getContractRepository() {
 		return (ContractRepository) Component.getInstance(ContractRepository.NAME, true);
 	}
-
 }

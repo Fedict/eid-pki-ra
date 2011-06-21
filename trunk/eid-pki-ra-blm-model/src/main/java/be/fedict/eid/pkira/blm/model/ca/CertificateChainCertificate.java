@@ -48,8 +48,17 @@ public class CertificateChainCertificate implements Serializable, Comparable<Cer
 	@ManyToOne(optional=true)
 	private CertificateChain certificateChain;
 
-	@Column(name = "SERIALNUMBER", nullable = false, precision=38, scale=0)
-	private BigInteger serialNumber;
+	@Column(name = "SERIALNUMBER", nullable = false)
+	@Basic(fetch = FetchType.LAZY)
+	private String serialNumber;
+
+	public String getSerialNumber() {
+		return serialNumber;
+	}
+
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
+	}
 
 	public String getCertificateData() {
 		return certificateData;
@@ -73,14 +82,6 @@ public class CertificateChainCertificate implements Serializable, Comparable<Cer
 
 	public void setIssuer(CertificateChainCertificate issuer) {
 		this.issuer = issuer;
-	}
-
-	public BigInteger getSerialNumber() {
-		return serialNumber;
-	}
-
-	public void setSerialNumber(BigInteger serialNumber) {
-		this.serialNumber = serialNumber;
 	}
 
 	public Integer getId() {

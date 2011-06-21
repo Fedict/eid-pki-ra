@@ -57,6 +57,7 @@ public class AuthenticationHandlerBean extends AbstractAuthenticationHandlerBean
 		if (backendUser != null && backendUser.isWithRegistrations()) {
 			identity.addRole(PKIRARole.REGISTERED_USER.name());
 		} else {
+			eidPKIRAPrivateServiceClient.createRegistrationForUser(eidUser.getRRN(), eidUser.getFirstName(), eidUser.getFirstName(), null, null);
 			identity.addRole(PKIRARole.UNREGISTERED_USER.name());
 		}
 		identity.addRole(PKIRARole.AUTHENTICATED_USER.name());
