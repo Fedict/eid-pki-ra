@@ -1,0 +1,113 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j" template="/layout/template.xhtml"
+	login-required="true">
+
+	<ui:define name="center">
+		<h:form id="bulkApprovalForm">
+			<rich:panel id="panel">
+				<f:facet name="header">#{messages['registrations.bulk.title']}</f:facet>
+				<rich:dataTable id="registrationsTable" var="registration" value="#{registrationQuery.resultList}"
+					rendered="#{not empty registrationQuery.resultList}" reRender="registrationsTableDataScroller"
+					width="75%" rows="#{registrationQuery.rows}">
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{messages['registrations.bulk.selected']}" />
+						</f:facet>
+						<h:selectBooleanCheckbox value="#{bulkApprovalHandler.selectedRegistrations[registration.id]}" rendered="#{registration.new}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{registration.requester.nationalRegisterNumber}" filterBy="#{registration.requester.nationalRegisterNumber}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['user.nationalRegisterNumber']}" />
+						</f:facet>
+						<h:outputText value="#{registration.requester.nationalRegisterNumber}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{registration.requester.firstName}" filterBy="#{registration.requester.firstName}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['user.firstName']}" />
+						</f:facet>
+						<h:outputText value="#{registration.requester.firstName}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{registration.requester.lastName}" filterBy="#{registration.requester.lastName}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['user.lastName']}" />
+						</f:facet>
+						<h:outputText value="#{registration.requester.lastName}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{registration.certificateDomain.name}" filterBy="#{registration.certificateDomain.name}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['registrations.bulk.certificateDomainName']}" />
+						</f:facet>
+						<h:outputText value="#{registration.certificateDomain.name}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{registration.certificateDomain.dnExpression}" filterBy="#{registration.certificateDomain.dnExpression}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['registrations.bulk.certificateDomainDnExpression']}" />
+						</f:facet>
+						<h:outputText value="#{registration.certificateDomain.dnExpression}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{registration.email}" filterBy="#{registration.email}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['registrations.bulk.email']}" />
+						</f:facet>
+						<h:outputText value="#{registration.email}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{messages[registration.status.messageKey]}" filterBy="#{messages[registration.status.messageKey]}" filterEvent="onkeyup">
+						<f:facet name="header" id="statusHeader">
+							<h:outputText value="#{messages['registrations.bulk.status']}" />
+						</f:facet>
+						<h:outputText value="#{messages[registration.status.messageKey]}" />
+					</rich:column>
+
+					<rich:column>
+					    <h:outputLink id="detailItem" value="registrationDetails.seam">
+							<h:outputText value="#{messages['link.detail']}"/>
+							<f:param name="registrationId" value="#{registration.id}"/>
+					    </h:outputLink>
+					    <h:outputText value=" " />						
+					   	<s:link value="#{messages['link.delete']}" id="delete" action="#{registrationHome.remove}" 
+								onclick="return confirm('#{messages['registration.confirm.delete']}');" rendered="#{registration.approved}"
+								reRender="registrationsTable">
+							<f:param name="registrationToDeleteId" value="#{registration.id}" />
+						</s:link>
+					</rich:column>
+
+					<f:facet name="footer">
+						<rich:datascroller id="registrationsTableDataScroller" for="registrationsTable" renderIfSinglePage="false" 
+								maxPages="#{registrationQuery.maxPages}" fastStep="#{registrationQuery.fastStep}" />
+					</f:facet>
+				</rich:dataTable>
+
+				<s:decorate id="reasonDecoration" template="/layout/edit.xhtml" rendered="#{registrationQuery.containsNewRegistrations}">
+					<ui:define name="label">#{messages['registrations.bulk.reason']}:</ui:define>
+					<h:inputText id="reason" value="#{bulkApprovalHandler.reason}" />
+				</s:decorate>
+
+				<h:outputText
+					value="#{messages['registrations.bulk.noregistrations']}"
+					rendered="#{empty registrationQuery.resultList}" />
+
+				<h:commandButton
+					action="#{bulkApprovalHandler.approveRegistrations}"
+					value="#{messages['registrations.bulk.approve']}" id="approve"
+					rendered="#{registrationQuery.containsNewRegistrations}" reRender="registrationsTable" />
+				<h:commandButton
+					action="#{bulkApprovalHandler.disapproveRegistrations}"
+					value="#{messages['registrations.bulk.disapprove']}" id="disapprove"
+					rendered="#{registrationQuery.containsNewRegistrations}" reRender="registrationsTable" />
+			</rich:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
