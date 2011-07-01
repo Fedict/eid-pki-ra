@@ -1,5 +1,6 @@
 package be.fedict.eid.pkira.portal.certificaterequest;
 
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.mock;
@@ -83,8 +84,8 @@ public class RequestContractDssSigningHandlerTest extends
 	@Test
 	public void successfullRequest() throws Exception {
 		when(request.getParameter(SIGNATURE_STATUS_PARAMETER)).thenReturn("OK");
-		when(signatureRequestProcessor.process(isA(HttpServletRequest.class), eq(TARGET), eq(BASE64_REQUEST)))
-				.thenReturn(new SignatureResponse(new byte[0], certificate));
+		when(signatureRequestProcessor.process(isA(HttpServletRequest.class), eq(TARGET), eq(BASE64_REQUEST), anyString(), anyString()))
+				.thenReturn(new SignatureResponse(new byte[0], null,certificate));
 		when(certificateResponse.getResult()).thenReturn(ResultType.SUCCESS);
 		// when(certificateWSHome.getInstance()).thenReturn("success");
 		String outcome = handler.handleDssRequest();
@@ -94,7 +95,7 @@ public class RequestContractDssSigningHandlerTest extends
 	@Test
 	public void signatureNotOk() throws Exception {
 		when(request.getParameter(SIGNATURE_STATUS_PARAMETER)).thenReturn("NOT_OK");
-		when(signatureRequestProcessor.process(isA(HttpServletRequest.class), eq(TARGET), eq(BASE64_REQUEST)))
+		when(signatureRequestProcessor.process(isA(HttpServletRequest.class), eq(TARGET), eq(BASE64_REQUEST), anyString(), anyString()))
 				.thenThrow(new SignatureResponseProcessorException("ERROR"));
 		String outcome = handler.handleDssRequest();
 		Assert.assertEquals(outcome, "error");
@@ -103,8 +104,8 @@ public class RequestContractDssSigningHandlerTest extends
 	@Test
 	public void backendError() throws Exception {
 		when(request.getParameter(SIGNATURE_STATUS_PARAMETER)).thenReturn("OK");
-		when(signatureRequestProcessor.process(isA(HttpServletRequest.class), eq(TARGET), eq(BASE64_REQUEST)))
-				.thenReturn(new SignatureResponse(new byte[0], certificate));
+		when(signatureRequestProcessor.process(isA(HttpServletRequest.class), eq(TARGET), eq(BASE64_REQUEST), anyString(), anyString()))
+				.thenReturn(new SignatureResponse(new byte[0], null, certificate));
 		when(certificateResponse.getResult()).thenReturn(ResultType.BACKEND_ERROR);
 		String outcome = handler.handleDssRequest();
 		Assert.assertEquals(outcome, "error");
