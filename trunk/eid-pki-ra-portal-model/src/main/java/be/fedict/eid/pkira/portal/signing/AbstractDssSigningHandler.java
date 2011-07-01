@@ -36,8 +36,11 @@ public abstract class AbstractDssSigningHandler<T extends ResponseType> {
 		String redirectStatus = null;
 		T serviceClientResponse = null;
 		try {
+			String signatureRequestId = "request-" + java.util.UUID.randomUUID().toString();
+			String relayState = "relaystate-" + java.util.UUID.randomUUID().toString();
 			SignatureResponse signatureResponse = signatureResponseProcessor.process(getRequest(), getTarget(),
-					getBase64encodedSignatureRequest());
+			
+					getBase64encodedSignatureRequest(), signatureRequestId, relayState);
 			byte[] contract = signatureResponse.getDecodedSignatureResponse();
 
 			String result = invokeServiceClient(new String(contract));
