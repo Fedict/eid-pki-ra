@@ -26,8 +26,8 @@ public enum ConfigurationEntryKey {
 	
 	MAIL_SERVER(ConfigurationEntryType.STRING, "configurationEntry.key.mailServer", "localhost"), 
 	MAIL_PORT(ConfigurationEntryType.DIGITS, "configurationEntry.key.mailPort", "25"),
-	MAIL_USER(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.mailUser", ""),
-	MAIL_PASSWORD(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.mailPassword", ""),
+	MAIL_USER(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.mailUser", "changeme"),
+	MAIL_PASSWORD(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.mailPassword", "changeme"),
 	MAIL_PROTOCOL(ConfigurationEntryType.STRING, "configurationEntry.key.mailProtocol", "smtp"),
 	//NOTIFICATION_MAIL_DAYS(ConfigurationEntryType.DIGITS, "configurationEntry.key.notificationMailDays"), 
 	NOTIFICATION_MAIL_MINUTES(ConfigurationEntryType.COMMA_SEPARATED_DIGITS, "configurationEntry.key.notificationMailMinutes", "43200"), 
