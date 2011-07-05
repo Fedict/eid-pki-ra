@@ -47,6 +47,8 @@ public class ConfigurationEntryQuery extends DataTableEntityQuery<ConfigurationE
 		entry.setKey(key);
 		entry.setValue(key.getDefaultValue());
 		getEntityManager().persist(entry);
+		getEntityManager().flush();
+		getEntityManager().clear();
 		return entry;
 	}
 	
