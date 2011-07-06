@@ -44,7 +44,7 @@ public class ConfigurationEntry {
 	@Enumerated(EnumType.STRING)
 	@Column(name="ENTRY_KEY", nullable=false, unique=true)
 	private ConfigurationEntryKey key;
-	@Column(name="ENTRY_VALUE", nullable=false)
+	@Column(name="ENTRY_VALUE", nullable=true)
 	private String value;
 
 	public ConfigurationEntryKey getKey() {
