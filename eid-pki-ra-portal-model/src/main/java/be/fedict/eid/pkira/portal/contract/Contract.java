@@ -21,6 +21,8 @@ package be.fedict.eid.pkira.portal.contract;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Lob;
+
 import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.portal.certificate.CertificateType;
@@ -45,6 +47,8 @@ public class Contract implements Serializable {
 	private ContractType contractType;
 	private Integer certificateId;
 	private String result;
+	
+	@Lob
 	private String resultMessage;
 
 	public Integer getId() {
