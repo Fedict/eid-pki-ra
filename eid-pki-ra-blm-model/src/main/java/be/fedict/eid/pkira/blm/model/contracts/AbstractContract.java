@@ -99,7 +99,8 @@ public abstract class AbstractContract implements Serializable {
 	@Column(name = "RESULT")
 	private ResultType result;
 	
-	@Column(name="RESULT_MESSAGE", length=255)
+	@Column(name="RESULT_MESSAGE")
+	@Lob
 	private String resultMessage;
 
 	public String getContractDocument() {
