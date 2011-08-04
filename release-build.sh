@@ -1,8 +1,8 @@
-mvn clean install -Pproduction,oracle
-mvn clean install -Pproduction,postgres
+/opt/maven/apache-maven-2.2.1/bin/mvn clean install -Pproduction,oracle
+/opt/maven/apache-maven-2.2.1/bin/mvn clean install -Pproduction,postgres
 
 cd eid-pki-ra-release
-mvn clean install -Poracle
+/opt/maven/apache-maven-2.2.1/bin/mvn clean install -Poracle
 cp target/eid-pki-ra-release-*.zip ..
-mvn clean install -Ppostgres
+/opt/maven/apache-maven-2.2.1/bin/mvn clean install -Ppostgres
 cp target/eid-pki-ra-release-*.zip ..
