@@ -1,0 +1,69 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib"
+		xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich"
+		xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:form id="certificateDetailForm">
+			<rich:panel id="panel">
+				<f:facet name="header">
+					#{certificateDomainHome.managed ? messages['certificatedomain.edit.title'] : messages['certificatedomain.create.title']}
+				</f:facet>
+				
+				<s:decorate id="nameDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['certificatedomain.edit.name']}:</ui:define>
+	               	<h:inputText id="nameEdit" value="#{certificateDomainHome.instance.name}" rendered="#{not certificateDomainHome.managed}" required="true" size="30" />
+	               	<h:outputText id="nameView" value="#{certificateDomainHome.instance.name}" rendered="#{certificateDomainHome.managed}" />
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="dnPatternDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['certificatedomain.edit.dnExpression']}:</ui:define>
+	               	<h:inputText id="dnPattern" value="#{certificateDomainHome.instance.dnExpression}" required="true" size="40" />
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="CertificateAuthorityDecoration" template="/layout/edit.xhtml">
+	           		<ui:define name="label">#{messages['certificatedomain.edit.certificateAuthority']}:</ui:define>
+	           		<h:selectOneMenu value="#{certificateDomainHome.instance.certificateAuthority}" required="true">
+   						<s:selectItems value="#{certificateAuthorityQuery.resultList}" var="ca" 
+                  						label="#{ca.name}"/>
+   						<s:convertEntity />
+					</h:selectOneMenu>    
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="serverCertDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['certificatedomain.edit.serverCertificates']}:</ui:define>
+	               	<h:selectBooleanCheckbox id="serverCert" value="#{certificateDomainHome.instance.serverCertificate}" />
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="clientCertDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['certificatedomain.edit.clientCertificates']}:</ui:define>
+	               	<h:selectBooleanCheckbox id="clientCert" value="#{certificateDomainHome.instance.clientCertificate}" />           
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="codeSigningCertDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['certificatedomain.edit.codeSigningCertificates']}:</ui:define>
+	               	<h:selectBooleanCheckbox id="codeSigningCert" value="#{certificateDomainHome.instance.codeSigningCertificate}" />           	           	           
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="personsCertDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['certificatedomain.edit.personsCertificates']}:</ui:define>
+	               	<h:selectBooleanCheckbox id="personsCert" value="#{certificateDomainHome.instance.personsCertificate}" />
+	           	</s:decorate>
+	           	
+	          	<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
+					<h:commandButton id="save" 
+							action="#{certificateDomainHome.persist}" 
+							value="#{messages['button.save']}"
+							rendered="#{not certificateDomainHome.managed}" />
+					<h:commandButton  id="update"
+							action="#{certificateDomainHome.update}" 
+							value="#{messages['button.update']}"
+							rendered="#{certificateDomainHome.managed}" />
+					<s:button id="back" 
+							value="#{messages['button.back']}" 
+							view="/page/certificatedomain/certificatedomain-list.xhtml" />
+				</s:decorate> 
+			</rich:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
