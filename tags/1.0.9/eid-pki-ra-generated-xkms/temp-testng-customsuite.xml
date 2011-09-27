@@ -1,8 +1,0 @@
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="eid-pki-ra-generated-xkms">
-  <test verbose="2" name="be.fedict.eid.pki.ra.xkms.ws.XKMSServiceFactoryTest" annotations="JDK">
-    <classes>
-      <class name="be.fedict.eid.pki.ra.xkms.ws.XKMSServiceFactoryTest"/>
-    </classes>
-  </test>
-</suite>
