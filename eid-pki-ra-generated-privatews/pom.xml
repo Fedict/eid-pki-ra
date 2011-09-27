@@ -9,7 +9,6 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>	
 	
-	<groupId>be.fedict</groupId>
 	<artifactId>eid-pki-ra-generated-privatews</artifactId>
 	<name>eid-pki-ra-generated - privatews</name>
 

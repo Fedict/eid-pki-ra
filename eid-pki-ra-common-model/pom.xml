@@ -8,7 +8,6 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>be.fedict</groupId>
 	<artifactId>eid-pki-ra-common-model</artifactId>
 	<name>eid-pki-ra - common model</name>
 

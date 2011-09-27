@@ -246,7 +246,6 @@
 		<dependency>
 			<groupId>net.sf.scannotation</groupId>
 			<artifactId>scannotation</artifactId>
-			<version>1.0.2</version>
 			<type>jar</type>
 			<scope>test</scope>
 		</dependency>

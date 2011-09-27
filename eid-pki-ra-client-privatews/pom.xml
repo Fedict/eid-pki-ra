@@ -7,7 +7,6 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>be.fedict</groupId>
 	<artifactId>eid-pki-ra-client-privatews</artifactId>
 	<name>eid-pki-ra-client - private-ws</name>
 	<dependencies>
