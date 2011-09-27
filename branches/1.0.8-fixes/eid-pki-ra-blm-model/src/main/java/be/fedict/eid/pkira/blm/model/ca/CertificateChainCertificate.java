@@ -1,7 +1,6 @@
 package be.fedict.eid.pkira.blm.model.ca;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
