@@ -5,10 +5,11 @@
 	<parent>
 		<artifactId>eid-pki-ra</artifactId>
 		<groupId>be.fedict</groupId>
-		<version>1.0.9-SNAPSHOT</version>
+		<version>1.0.8</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>	
 	
+	<groupId>be.fedict</groupId>
 	<artifactId>eid-pki-ra-generated-privatews</artifactId>
 	<name>eid-pki-ra-generated - privatews</name>
 

@@ -3,10 +3,11 @@
 	<parent>
 		<artifactId>eid-pki-ra</artifactId>
 		<groupId>be.fedict</groupId>
-		<version>1.0.9-SNAPSHOT</version>
+		<version>1.0.8</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
+	<groupId>be.fedict</groupId>
 	<artifactId>eid-pki-ra-client-publicws</artifactId>
 	<name>eid-pki-ra-client - public-ws</name>
 	<dependencies>

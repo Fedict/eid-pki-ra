@@ -6,10 +6,11 @@
 	<parent>
 		<groupId>be.fedict</groupId>
 		<artifactId>eid-pki-ra</artifactId>
-		<version>1.0.9-SNAPSHOT</version>
+		<version>1.0.8</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
+	<groupId>be.fedict</groupId>
 	<artifactId>eid-pki-ra-portal-ear</artifactId>
 	<packaging>ear</packaging>
 	<name>eid-pki-ra-portal - ear</name>
@@ -19,6 +20,7 @@
 		<dependency>
 			<groupId>org.jboss.seam</groupId>
 			<artifactId>jboss-seam</artifactId>
+			<version>${seam.version}</version>
 			<type>ejb</type>
 			<exclusions>
 				<exclusion>
@@ -46,6 +48,7 @@
 		<dependency>
 			<groupId>org.richfaces.framework</groupId>
 			<artifactId>richfaces-api</artifactId>
+			<version>${version.richfaces}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>commons-collections</groupId>

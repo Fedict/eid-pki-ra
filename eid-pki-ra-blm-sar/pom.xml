@@ -5,9 +5,10 @@
 	<parent>
 		<artifactId>eid-pki-ra</artifactId>
 		<groupId>be.fedict</groupId>
-		<version>1.0.9-SNAPSHOT</version>		
+		<version>1.0.8</version>		
 		<relativePath>../pom.xml</relativePath>
 	</parent>
+	<groupId>be.fedict</groupId>
 	<artifactId>eid-pki-ra-blm-sar</artifactId>
 	<packaging>jboss-sar</packaging>
 	<name>eid-pki-ra-blm - sar</name>
@@ -17,7 +18,8 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jboss-packaging-maven-plugin</artifactId>
-				</plugin>
+				<version>2.1.1</version>
+			</plugin>
 		</plugins>
 	</build>
 </project>

@@ -3,11 +3,12 @@
 	<parent>
 		<artifactId>eid-pki-ra</artifactId>
 		<groupId>be.fedict</groupId>
-		<version>1.0.9-SNAPSHOT</version>
+		<version>1.0.8</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 
+	<groupId>be.fedict</groupId>
 	<artifactId>eid-pki-ra-common-model</artifactId>
 	<name>eid-pki-ra - common model</name>
 

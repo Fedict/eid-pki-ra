@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="eID PKI RA" default="usage">
 
-	<property name="version" value="1.0.9-SNAPSHOT" />
-	<!-- <property name="jboss.deploy.dir" value="/Java/jboss-5.1.0.GA/server/default/deploy" /> -->
-	<property name="jboss.deploy.dir" value="/Java/jboss-6.1.0.Final/server/default/deploy" />
+	<property name="version" value="1.0.3-SNAPSHOT" />
+	<property name="jboss.deploy.dir" value="/Java/jboss-5.1.0.GA/server/default/deploy" />
 	<!-- <property name="jboss.deploy.dir" value="C:\java\jboss-6.0.0.M2\server\default\deploy" /> -->
 
 	<target name="usage">

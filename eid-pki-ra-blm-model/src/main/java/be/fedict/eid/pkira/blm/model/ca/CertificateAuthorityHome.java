@@ -21,6 +21,8 @@ package be.fedict.eid.pkira.blm.model.ca;
 import javax.persistence.NoResultException;
 
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.core.Expressions;
+import org.jboss.seam.core.Expressions.ValueExpression;
 
 import be.fedict.eid.pkira.blm.model.framework.ValidatingEntityHome;
 
@@ -47,6 +49,11 @@ public class CertificateAuthorityHome extends ValidatingEntityHome<CertificateAu
 	@Override
 	protected String getDeletedMessageKey() {
 		return "certificateauthority.deleted";
+	}	
+
+	@Override
+	public ValueExpression<?> getUpdatedMessage() {
+		return Expressions.instance().createValueExpression(null);
 	}
 	
 	public CertificateAuthority findByName(String name) {
