@@ -1,0 +1,66 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<rich:panel id="certificateDetail">
+			<f:facet name="header">
+				<h:outputText value="#{messages['certificate.detail.title']}" />
+			</f:facet>
+
+			<s:decorate id="serialNumberDecoration" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['certificate.serialNumber']}:</ui:define>
+				<h:outputText value="#{certificateWSHome.instance.serialNumber}" />
+			</s:decorate>
+			
+			<s:decorate id="distinguishedNameDecoration" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['certificate.distinguishedName']}:</ui:define>
+				<h:outputText value="#{certificateWSHome.instance.distinguishedName}" />
+			</s:decorate>
+
+			<s:decorate id="validityStartDecoration" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['certificate.validityStart']}:</ui:define>
+				<h:outputText value="#{certificateWSHome.instance.validityStart}" />
+			</s:decorate>
+
+			<s:decorate id="validityEndDecoration" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['certificate.validityEnd']}:</ui:define>
+				<h:outputText value="#{certificateWSHome.instance.validityEnd}" />
+			</s:decorate>
+
+			<s:decorate id="requesterNameDecoration" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['certificate.requesterName']}:</ui:define>
+				<h:outputText value="#{certificateWSHome.instance.requesterName}" />
+			</s:decorate>
+
+			<s:decorate id="issuerDecoration" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['certificate.issuer']}:</ui:define>
+				<h:outputText value="#{certificateWSHome.instance.issuer}" />
+			</s:decorate>
+
+			<s:decorate id="typeDecoration" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['certificate.type']}:</ui:define>
+				<h:outputText value="#{certificateWSHome.instance.type}" />
+			</s:decorate>
+
+			<s:decorate id="x509Decoration" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['certificate.x509']}:</ui:define>
+				<h:inputTextarea id="csr" value="#{certificateWSHome.instance.x509}" readonly="true" cols="90" rows="14" />
+			</s:decorate>
+
+		</rich:panel>
+		
+		<s:decorate template="/layout/buttonbox.xhtml" id="downloadButtonBox">
+			<s:button id="downloadCertificate" view="/page/certificates/certificate-download.xhtml" value="#{messages['certificate.download']}">
+				<f:param name="certificateId" value="#{certificateWSHome.instance.id}" />
+			</s:button>
+			<s:button id="revokeCertificate" action="#{certificateHandler.prepareRevocation(certificateWSHome.instance.id)}" value="#{messages['link.revoke']}" />
+			<s:button id="backButton"  value="#{messages['general.list']}" view="/page/certificates/certificate-list.xhtml"/>
+		</s:decorate>
+		
+	</ui:define>
+</ui:composition>
