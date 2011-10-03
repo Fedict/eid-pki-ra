@@ -16,11 +16,15 @@
  */
 package be.fedict.eid.pkira.dnfilter;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
-import be.fedict.eid.pkira.dnfilter.DistinguishedNameParserState.StateElement;
+import be.fedict.eid.pkira.dnfilter.DistinguishedName.DistinguishedNameElement;
 
 /**
  * A filter used for filtering distinguished names.
@@ -29,80 +33,180 @@ import be.fedict.eid.pkira.dnfilter.DistinguishedNameParserState.StateElement;
  */
 public class DistinguishedNameExpression {
 
-	/**
-	 * State of the DistinguishedName is stored as a map of lists. The map
-	 * should be sorted, so a SortedMap
-	 */
-	private final DistinguishedNameParserState data;
+	static class DistinguishedNameExpressionElement implements Comparable<DistinguishedNameExpressionElement> {
+
+		private final WildcardValue name;
+		private final SortedSet<WildcardValue> values;
+
+		public DistinguishedNameExpressionElement(String name, List<String> values) {
+			this.name = new WildcardValue(name);
+			this.values = new TreeSet<WildcardValue>();
+			for (String value : values) {
+				this.values.add(new WildcardValue(value));
+			}
+		}
+
+		@Override
+		public int compareTo(DistinguishedNameExpressionElement other) {
+			if (other == null) {
+				return 1;
+			}
+			if (other == this) {
+				return 0;
+			}
+
+			// Wildcards at end
+			if (isNameWildcard() && !other.isNameWildcard()) {
+				return 1;
+			}
+			if (!isNameWildcard() && other.isNameWildcard()) {
+				return -1;
+			}
+			if (isValueWildcard() && !other.isValueWildcard()) {
+				return 1;
+			}
+			if (!isValueWildcard() && other.isValueWildcard()) {
+				return -1;
+			}
+
+			// compare names
+			int x = name.getValue().compareTo(other.name.getValue());
+			if (x != 0) {
+				return x;
+			}
+
+			// compare values
+			if (values.size() < other.values.size()) {
+				return -1;
+			}
+			if (values.size() > other.values.size()) {
+				return 1;
+			}
+			for (Iterator<WildcardValue> it1 = values.iterator(), it2 = other.values.iterator(); it1.hasNext();) {
+				x = it1.next().compareTo(it2.next());
+				if (x != 0) {
+					return x;
+				}
+			}
+
+			return -1; // never equal!
+		}
+
+		public WildcardValue getName() {
+			return name;
+		}
+
+		public Set<WildcardValue> getValues() {
+			return values;
+		}
+
+		public boolean isNameWildcard() {
+			return name.isWildcard();
+		}
+
+		public boolean isValueWildcard() {
+			for (WildcardValue value : values) {
+				if (value.isWildcard()) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public boolean matches(DistinguishedNameElement dnElement) {
+			// check names
+			if (!name.matches(dnElement.getName())) {
+				return false;
+			}
+
+			// check values
+			for (WildcardValue value : values) {
+				if (value.matches(dnElement.getValue())) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		public boolean overlaps(DistinguishedNameExpressionElement otherElement) {
+			// check the name
+			if (!name.overlaps(otherElement.name)) {
+				return false;
+			}
+
+			// check the values
+			for (WildcardValue value : values) {
+				for (WildcardValue otherValue : otherElement.values) {
+					if (value.overlaps(otherValue)) {
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
+		@Override
+		public String toString() {
+			StringBuilder result = new StringBuilder();
+			result.append(name).append('=');
+
+			if (values.size() != 1) {
+				result.append('(');
+			}
+
+			boolean first = true;
+			for (WildcardValue value : values) {
+				if (!first) {
+					result.append('|');
+				}
+				first = false;
+				result.append(value);
+			}
+
+			if (values.size() != 1) {
+				result.append(')');
+			}
+
+			return result.toString();
+		}
+	}
+
+	private final SortedSet<DistinguishedNameExpressionElement> elements = new TreeSet<DistinguishedNameExpressionElement>();
 
 	/**
 	 * Package protected constructor (called from DNFilterManagerImpl).
 	 */
-	DistinguishedNameExpression(DistinguishedNameParserState data) {
-		this.data = data;
+	DistinguishedNameExpression() {
+	}
+
+	public void addElement(String name, List<String> values) {
+		elements.add(new DistinguishedNameExpressionElement(name, values));
+	}
+
+	public void addElement(String name, String value) {
+		addElement(name, Collections.singletonList(value));
+	}
+
+	public int getSize() {
+		return elements.size();
 	}
 
 	/**
 	 * Checks if this DN matches another one.
 	 */
-	public boolean matches(DistinguishedName otherDN) {
-		// // Keep track of matched expression elements
-		// Set<StateElement> otherElements = new
-		// TreeSet<StateElement>(otherDN.getData().getElements());
-		//
-		// // Build map of matching expressions for each element of the dn
-		// Map<StateElement, Set<StateElement>> matchingElements = new
-		// HashMap<StateElement, Set<StateElement>>();
-		// for (StateElement otherElement : otherElements) {
-		// TreeSet<StateElement> theSet = new TreeSet<StateElement>();
-		// matchingElements.put(otherElement, theSet);
-		// for (StateElement element : data.getElements()) {
-		// if (element.matches(otherElement)) {
-		// theSet.add(element);
-		// }
-		// }
-		// }
-		//
-		// // Clean up the map
-		// while (!matchingElements.isEmpty()) {
-		// // Look for elements with 1 or 0 matching expressions and handle
-		// // them
-		// StateElement key = null;
-		// StateElement value = null;
-		// for (Map.Entry<StateElement, Set<StateElement>> entry :
-		// matchingElements.entrySet()) {
-		// if (entry.getValue().size() == 0) {
-		// return false;
-		// }
-		// if (entry.getValue().size() == 1) {
-		// key = entry.getKey();
-		// value = entry.getValue().iterator().next();
-		// break;
-		// }
-		// }
-		//
-		// // Remove the element
-		// if (key != null) {
-		// if (!value.isNameWildcard()) {
-		// for (Set<StateElement> set : matchingElements.values()) {
-		// set.remove(value);
-		// }
-		// }
-		// matchingElements.remove(key);
-		// } else {
-		// throw new RuntimeException("Inconclusive");
-		// }
-		// }
-		//
-		// return true;
+	public boolean matches(DistinguishedName dn) {
+		Set<DistinguishedNameExpressionElement> elementsToMatch = new TreeSet<DistinguishedNameExpressionElement>(
+				elements);
 
-		Set<StateElement> elementsToMatch = new TreeSet<StateElement>(data.getElements());
 		// For each element in the other DN...
-		otherElement: for (StateElement otherElement : otherDN.getData().getElements()) {
+		otherElement: for (DistinguishedNameElement otherElement : dn.getElements()) {
 			// ...look for a matching element here...
-			for (StateElement element : elementsToMatch) {
-				if (element.getName().equals(otherElement.getName())
-						&& (element.isValueWildcard() || element.getValue().equals(otherElement.getValue()))) {
+			// Note: because of the sorting, this works from more specific to
+			// less specific (wildcard)
+			for (DistinguishedNameExpressionElement element : elementsToMatch) {
+				if (element.matches(otherElement)) {
 					// ...and remove it from the elements to match if it was
 					// found and is no wildcard...
 					if (!element.isNameWildcard()) {
@@ -120,7 +224,7 @@ public class DistinguishedNameExpression {
 
 		// If only name wildcards are left (they are not removed from the
 		// collection), we are successful!
-		for (StateElement element : elementsToMatch) {
+		for (DistinguishedNameExpressionElement element : elementsToMatch) {
 			if (!element.isNameWildcard()) {
 				return false;
 			}
@@ -129,130 +233,47 @@ public class DistinguishedNameExpression {
 	}
 
 	public boolean overlaps(DistinguishedNameExpression other) {
-		Set<StateElement> myElements = new TreeSet<StateElement>(data.getElements());
-		Set<StateElement> otherElements = new TreeSet<StateElement>(other.data.getElements());
+		// Go through our elements one by one (is from more specific to less
+		// specific)
+		// See if matching other element and remove it there if it is not a name
+		// wildcard.
+		// Check if anything remains.
 
-		// Remove identical non-wildcard expressions
-		removeIdenticalNonWildcardExpressions(myElements, otherElements);
+		// TODO check if arguments can be switched.
 
-		// Remove non-wildcard expressions using value wildcard expressions
-		removeNonWildcardWithValueWildcardExpressions(myElements, otherElements);
-		removeNonWildcardWithValueWildcardExpressions(otherElements, myElements);
-
-		// Remove value wildcard expressions against eachother
-		removeIdenticalValueWildcardExpressions(myElements, otherElements);
-
-		// Remove remaining non-wildcard expressions against name wildcard
-		// expressions
-		removeNotWildcardWithNameWildcardExpressions(myElements, otherElements);
-		removeNotWildcardWithNameWildcardExpressions(otherElements, myElements);
-
-		// Remove remaining value wildcard expressions against name-value
-		// wildcard expressions
-		removeValueWildcardWithNameValueWildcardExpressions(myElements, otherElements);
-		removeValueWildcardWithNameValueWildcardExpressions(otherElements, myElements);
-
-		// Remove remaining name wildcard expressions
-		removeNameWildcardExpressions(myElements);
-		removeNameWildcardExpressions(otherElements);
-
-		return myElements.isEmpty() && otherElements.isEmpty();
-	}
-
-	private void removeNameWildcardExpressions(Set<StateElement> elements) {
-		Set<StateElement> toRemove = new HashSet<StateElement>();
-		for (StateElement element : elements) {
-			if (element.isNameWildcard()) {
-				toRemove.add(element);
-			}
-		}
-		elements.removeAll(toRemove);
-	}
-
-	private void removeValueWildcardWithNameValueWildcardExpressions(Set<StateElement> myElements,
-			Set<StateElement> otherElements) {
-		Set<StateElement> toRemove = new HashSet<StateElement>();
-		for (StateElement element : myElements) {
-			if (!element.isNameWildcard() && element.isValueWildcard()) {
-				for (StateElement otherElement : otherElements) {
-					if (otherElement.isNameWildcard() && element.getName().equals(otherElement.getName())) {
-						toRemove.add(element);
+		SortedSet<DistinguishedNameExpressionElement> remainingOtherElements = new TreeSet<DistinguishedNameExpressionElement>(
+				other.elements);
+		for (DistinguishedNameExpressionElement element : elements) {
+			boolean matched = element.isNameWildcard();
+			
+			Set<DistinguishedNameExpressionElement> othersToRemove = new HashSet<DistinguishedNameExpression.DistinguishedNameExpressionElement>();
+			for (DistinguishedNameExpressionElement otherElement : remainingOtherElements) {
+				if (element.overlaps(otherElement)) {
+					matched = true;
+					if (!otherElement.isNameWildcard()) {
+						othersToRemove.add(otherElement);
+					}
+					if (!element.isNameWildcard()) {
 						break;
 					}
 				}
 			}
-		}
-		myElements.removeAll(toRemove);
-	}
+			remainingOtherElements.removeAll(othersToRemove);
 
-	private void removeNotWildcardWithNameWildcardExpressions(Set<StateElement> myElements,
-			Set<StateElement> otherElements) {
-		Set<StateElement> toRemove = new HashSet<StateElement>();
-		for (StateElement element : myElements) {
-			if (!element.isNameWildcard() && !element.isValueWildcard()) {
-				for (StateElement otherElement : otherElements) {
-					if (otherElement.isNameWildcard()
-							&& element.getName().equals(otherElement.getName())) {
-						toRemove.add(element);
-						break;
-					}
-				}
+			// no match found if not name wildcard
+			if (!matched) {
+				return false;
 			}
 		}
-		myElements.removeAll(toRemove);
-	}
 
-	private void removeIdenticalValueWildcardExpressions(Set<StateElement> myElements, Set<StateElement> otherElements) {
-		Set<StateElement> toRemove = new HashSet<StateElement>();
-		for (StateElement element : myElements) {
-			if (!element.isNameWildcard() && element.isValueWildcard()) {
-				for (StateElement otherElement : otherElements) {
-					if (!otherElement.isNameWildcard() && otherElement.isValueWildcard()
-							&& element.getName().equals(otherElement.getName())) {
-						otherElements.remove(otherElement);
-						toRemove.add(element);
-						break;
-					}
-				}
+		// If non name-wildcard elements remain, there is no overlap
+		for (DistinguishedNameExpressionElement otherElement : remainingOtherElements) {
+			if (!otherElement.isNameWildcard()) {
+				return false;
 			}
 		}
-		myElements.removeAll(toRemove);
-	}
-
-	private void removeNonWildcardWithValueWildcardExpressions(Set<StateElement> myElements,
-			Set<StateElement> otherElements) {
-		Set<StateElement> toRemove = new HashSet<StateElement>();
-		for (StateElement element : myElements) {
-			if (!element.isNameWildcard() && !element.isValueWildcard()) {
-				for (StateElement otherElement : otherElements) {
-					if (!otherElement.isNameWildcard() && otherElement.isValueWildcard()
-							&& element.getName().equals(otherElement.getName())) {
-						otherElements.remove(otherElement);
-						toRemove.add(element);
-						break;
-					}
-				}
-			}
-		}
-		myElements.removeAll(toRemove);
-	}
-
-	private void removeIdenticalNonWildcardExpressions(Set<StateElement> myElements, Set<StateElement> otherElements) {
-		Set<StateElement> toRemove = new HashSet<StateElement>();
-		for (StateElement element : myElements) {
-			if (!element.isNameWildcard() && !element.isValueWildcard()) {
-				for (StateElement otherElement : otherElements) {
-					if (!otherElement.isNameWildcard() && !otherElement.isValueWildcard()
-							&& element.getName().equals(otherElement.getName())
-							&& element.getValue().equals(otherElement.getValue())) {
-						otherElements.remove(otherElement);
-						toRemove.add(element);
-						break;
-					}
-				}
-			}
-		}
-		myElements.removeAll(toRemove);
+		
+		return true;
 	}
 
 	/**
@@ -260,11 +281,20 @@ public class DistinguishedNameExpression {
 	 */
 	@Override
 	public String toString() {
-		return data.toString();
+		StringBuilder builder = new StringBuilder();
+
+		for (DistinguishedNameExpressionElement element : elements) {
+			if (builder.length() != 0) {
+				builder.append(',');
+			}
+			builder.append(element.toString());
+		}
+
+		return builder.toString();
 	}
 
-	public int getSize() {
-		return data.getElements().size();
+	Set<DistinguishedNameExpressionElement> getElements() {
+		return elements;
 	}
 
 }

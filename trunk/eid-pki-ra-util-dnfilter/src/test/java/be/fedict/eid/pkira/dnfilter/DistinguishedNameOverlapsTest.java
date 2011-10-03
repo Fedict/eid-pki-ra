@@ -17,6 +17,7 @@
 package be.fedict.eid.pkira.dnfilter;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.Test;
 
@@ -66,6 +67,11 @@ public class DistinguishedNameOverlapsTest {
 		testOverlap(true, "*ou=*,cn=abc", "cn=*,*ou=*");
 		
 		testOverlap(true, "cn=Test,ou=a,ou=*,*cn=*,cn=bla", "cn=Test,ou=*,ou=*,cn=test,cn=test,cn=*,cn=*");
+		
+		testOverlap(true, "cn=(fedict.be|*.fedict.be)", "cn=fedict.be");
+		testOverlap(true, "cn=(fedict.be|*.fedict.be)", "cn=www.fedict.be");
+		testOverlap(true, "cn=(fedict.be|*.fedict.be)", "cn=(fedict.be|www.fedict.be)");
+		testOverlap(false, "cn=(www.fedict.be|abc.fedict.be)", "cn=fedict.be");
 	}
 
 	private void testOverlap(boolean expectedOverlap, String firstDN, String otherDN)
@@ -73,6 +79,8 @@ public class DistinguishedNameOverlapsTest {
 		DistinguishedNameExpression expr1 = manager.createDistinguishedNameExpression(firstDN);
 		DistinguishedNameExpression expr2 = manager.createDistinguishedNameExpression(otherDN);
 
+		assertTrue(expr1.overlaps(expr1), firstDN + "/" + firstDN);
+		assertTrue(expr2.overlaps(expr2), otherDN + "/" + otherDN);
 		assertEquals(expr1.overlaps(expr2), expectedOverlap, firstDN + "/" + otherDN);
 		assertEquals(expr2.overlaps(expr1), expectedOverlap, otherDN + "/" + firstDN);
 	}

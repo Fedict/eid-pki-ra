@@ -16,7 +16,9 @@
  */
 package be.fedict.eid.pkira.dnfilter;
 
-import be.fedict.eid.pkira.dnfilter.DistinguishedNameParserState.StateElement;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * A distinguished names. It doesn't contain any wildcards.
@@ -25,21 +27,63 @@ import be.fedict.eid.pkira.dnfilter.DistinguishedNameParserState.StateElement;
  */
 public class DistinguishedName {
 
-	/**
-	 * State of the DistinguishedName is stored as a map of lists. The map
-	 * should be sorted, so a SortedMap
-	 */
-	private final DistinguishedNameParserState data;
+	static class DistinguishedNameElement implements Comparable<DistinguishedNameElement> {
+
+		private final String name;
+		private final String value;
+
+		public DistinguishedNameElement(String name, String value) {
+			this.name = name;
+			this.value = Util.unescape(value);
+		}
+
+		@Override
+		public int compareTo(DistinguishedNameElement other) {
+			if (other == null) {
+				return 1;
+			}
+			if (other == this) {
+				return 0;
+			}
+
+			// compare names
+			int x = name.compareTo(other.name);
+			if (x != 0) {
+				return x;
+			}
+
+			x = value.compareTo(other.value);
+			return x!=0 ? x : 0; // never equal
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		@Override
+		public String toString() {
+			return name + "=" + Util.escape(value, "\\,");
+		}
+	}
+
+	private final SortedSet<DistinguishedNameElement> elements = new TreeSet<DistinguishedNameElement>();
 
 	/**
 	 * Package protected constructor (called from DNFilterManagerImpl).
 	 */
-	DistinguishedName(DistinguishedNameParserState data) {
-		this.data = data;
+	DistinguishedName() {
 	}
-	
-	DistinguishedNameParserState getData() {
-		return data;
+
+	Set<DistinguishedNameElement> getElements() {
+		return elements;
+	}
+
+	int getSize() {
+		return elements.size();
 	}
 
 	/**
@@ -49,21 +93,18 @@ public class DistinguishedName {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 
-		for (StateElement element : data.getElements()) {
+		for (DistinguishedNameElement element : elements) {
 			if (builder.length() != 0) {
 				builder.append(',');
 			}
-			builder.append(element.getName());
-			builder.append('=');
-			builder.append(element.getValue());
-
+			builder.append(element);
 		}
 
 		return builder.toString();
 	}
 
-	public int getSize() {
-		return data.getElements().size();
+	void addElement(String name, String value) {
+		elements.add(new DistinguishedNameElement(name, value));
 	}
 
 }

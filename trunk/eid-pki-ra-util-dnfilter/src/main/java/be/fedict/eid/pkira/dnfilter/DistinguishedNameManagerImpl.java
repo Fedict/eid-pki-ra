@@ -26,19 +26,15 @@ public class DistinguishedNameManagerImpl implements DistinguishedNameManager {
 		}
 
 		// Parse the filter
-		DistinguishedNameParserState data;
 		try {
 			// Parse the data
 			DistinguishedNameParser distinguishedNameParser = new DistinguishedNameParser(new StringReader(dn));
-			data = distinguishedNameParser.distinguishedName();
+			return distinguishedNameParser.distinguishedName();
 		} catch (ParseException e) {
-			throw new InvalidDistinguishedNameException("Invalid filter expression: " + dn, e);
+			throw new InvalidDistinguishedNameException("Invalid dn: " + dn, e);
 		} catch (TokenMgrError e) {
-			throw new InvalidDistinguishedNameException("Invalid filter expression: " + dn, e);
+			throw new InvalidDistinguishedNameException("Invalid dn: " + dn, e);
 		}
-
-		// Create the DistinguishedName
-		return new DistinguishedName(data);
 	}
 
 	/**
@@ -53,19 +49,15 @@ public class DistinguishedNameManagerImpl implements DistinguishedNameManager {
 		}
 
 		// Parse the filter
-		DistinguishedNameParserState data;
 		try {
 			// Parse the data
 			DistinguishedNameParser distinguishedNameParser = new DistinguishedNameParser(new StringReader(expression));
-			data = distinguishedNameParser.distinguishedNameExpression();
+			return distinguishedNameParser.distinguishedNameExpression();
 		} catch (ParseException e) {
 			throw new InvalidDistinguishedNameException("Invalid filter expression: " + expression, e);
 		} catch (TokenMgrError e) {
 			throw new InvalidDistinguishedNameException("Invalid filter expression: " + expression, e);
 		}
-
-		// Create the DistinguishedName
-		return new DistinguishedNameExpression(data);
 	}
 
 	/**
