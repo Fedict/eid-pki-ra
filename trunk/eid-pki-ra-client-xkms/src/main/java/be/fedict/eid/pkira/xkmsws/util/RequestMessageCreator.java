@@ -96,7 +96,7 @@ public class RequestMessageCreator {
 		attributeCertificate.setValidityInterval(validityInterval);
 
 		// Add the status
-		request.setStatus(AssertionStatus.INDETERMINATE);
+		request.setStatus(AssertionStatus.VALID);
 
 		return request;
 	}
