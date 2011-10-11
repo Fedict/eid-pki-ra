@@ -34,6 +34,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.hibernate.validator.Email;
 import org.hibernate.validator.NotEmpty;
 
 import be.fedict.eid.pkira.blm.model.usermgmt.validation.UniqueUserCertificate;
@@ -50,7 +51,8 @@ import be.fedict.eid.pkira.blm.model.usermgmt.validation.ValidUserCertificate;
 	{
 			@NamedQuery(name = "findByNationalRegisterNumber", query = "SELECT u FROM User u WHERE u.nationalRegisterNumber = :nationalRegisterNumber"),
 			@NamedQuery(name = "findByCertificateSubject", query = "SELECT u FROM User u WHERE u.certificateSubject = :certificateSubject"),
-			@NamedQuery(name = "getUserCount", query = "SELECT COUNT(u) FROM User u") })
+			@NamedQuery(name = "getUserCount", query = "SELECT COUNT(u) FROM User u"),
+			@NamedQuery(name = "getAdminUsersWithEmail", query = "SELECT u FROM User u WHERE u.admin=true AND u.adminEmail IS NOT NULL") })
 public class User implements Serializable {
 
 	private static final long serialVersionUID = -567680538869751475L;
@@ -78,6 +80,11 @@ public class User implements Serializable {
 	private String certificate;
 	@Column(name = "IS_ADMIN", nullable = false)
 	private boolean admin;
+	@Column(name = "ADMIN_EMAIL", nullable = true)
+	@Email(message="{validator.email}")
+	private String adminEmail;
+	@Column(name="ADMIN_EMAIL_REGISTRATION")
+	private Boolean sendRegistrationMail = true;
 
 	@OneToMany(mappedBy = "requester")
 	private List<Registration> registrations;
@@ -140,6 +147,23 @@ public class User implements Serializable {
 
 	void setCertificateSubject(String certificateSubject) {
 		this.certificateSubject = certificateSubject;
+	}
+
+	public String getAdminEmail() {
+		return adminEmail;
+	}
+
+	public void setAdminEmail(String adminEmail) {
+		this.adminEmail = adminEmail;
+	}
+	
+	
+	public boolean isSendRegistrationMail() {
+		return sendRegistrationMail !=null ? sendRegistrationMail : true;
+	}
+	
+	public void setSendRegistrationMail(boolean sendRegistrationMail) {
+		this.sendRegistrationMail = sendRegistrationMail;
 	}
 
 	public List<Registration> getRegistrations() {

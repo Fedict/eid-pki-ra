@@ -35,6 +35,16 @@
 	               	<h:inputText id="certificateSubject" value="#{userHome.instance.certificateSubject}" size="60" disabled="true" />
 	           	</s:decorate>
 	           	
+	           	<s:decorate id="adminEmailDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['user.adminEmail']}:</ui:define>
+	               	<h:inputText id="adminEmail" value="#{userHome.instance.adminEmail}" size="60" />
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="sendRegistrationMailDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['user.sendRegistrationMail']}:</ui:define>
+	               	<h:selectBooleanCheckbox id="sendRegistrationMail" value="#{userHome.instance.sendRegistrationMail}" />
+	           	</s:decorate>
+	           	
 	          	<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
 	          		<h:commandButton id="save" 
 							action="#{userHome.persist}" 

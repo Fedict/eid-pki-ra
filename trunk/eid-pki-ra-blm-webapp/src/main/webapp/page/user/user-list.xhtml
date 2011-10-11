@@ -49,6 +49,13 @@
 		                </f:facet>
 		                <h:outputText value="#{user.admin ? messages['general.yes'] : messages['general.no']}" />
 		            </rich:column>
+		            
+		            <rich:column sortBy="#{user.adminEmail}">
+		                <f:facet name="header">
+							<h:outputText value="#{messages['user.adminEmail']}" />
+		                </f:facet>
+		                <h:outputText value="#{user.adminEmail}" />
+		            </rich:column>
 					
 					<rich:column>
 						<s:link view="/page/user/user-edit.xhtml" value="#{messages['link.detail']}" id="edit" >
