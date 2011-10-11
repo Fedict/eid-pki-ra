@@ -43,6 +43,8 @@ public interface UserRepository {
 	User findByNationalRegisterNumber(String nationalRegisterNumber);	
 	
 	User getReference(Integer primaryKey);
+	
+	List<User> getAdminUsersWithEmail();
 
 	int getUserCount();
 

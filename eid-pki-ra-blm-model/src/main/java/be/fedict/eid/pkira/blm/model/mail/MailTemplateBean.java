@@ -86,6 +86,10 @@ public class MailTemplateBean implements MailTemplate {
 	@Override
 	public void sendTemplatedMail(String templateName, Map<String, Object> parameters, String[] recipients,
 			byte[] attachmentData, String attachmentContentType, String attachmentFileName) {
+		if (recipients==null || recipients.length==0) {
+			return;
+		}
+		
 		try {
 			// Create the message
 			String processedTemplate = createMailMessage(templateName, parameters);

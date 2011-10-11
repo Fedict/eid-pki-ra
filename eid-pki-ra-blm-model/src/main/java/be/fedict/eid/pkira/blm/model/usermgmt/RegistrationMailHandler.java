@@ -19,7 +19,9 @@
 package be.fedict.eid.pkira.blm.model.usermgmt;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jboss.seam.annotations.In;
@@ -35,21 +37,43 @@ import be.fedict.eid.pkira.blm.model.mail.MailTemplate;
 @Name(RegistrationMailHandler.NAME)
 public class RegistrationMailHandler implements Serializable {
 
+	public static final String REGISTRATION_DISAPPROVED = "be.fedict.eid.pkira.blm.registrationHome.disapproved";
+
+	public static final String REGISTRATION_APPROVED = "be.fedict.eid.pkira.blm.registrationHome.approved";
+
 	private static final long serialVersionUID = -6295254696596001136L;
 	
 	public static final String NAME = "be.fedict.eid.pkira.blm.registrationMailHandler";
+
+	public static final String REGISTRATION_CREATED = "be.fedict.eid.pkira.blm.registration.created";
 	
 	@In(value = MailTemplate.NAME, create = true)
 	private MailTemplate mailTemplate;
+	
+	@In(value=UserRepository.NAME, create=true)
+	private UserRepository userRepository;
+	
+	@Observer(REGISTRATION_CREATED)
+	public void sendCreated(Registration registration) {
+		List<String> recipients = new ArrayList<String>();
+		for(User user: userRepository.getAdminUsersWithEmail()) {
+			if (user.isSendRegistrationMail()) {
+				recipients.add(user.getAdminEmail());
+			}
+		}
+		
+		Map<String, Object> parameters = createMapForRegistrationMail(registration, null);
+		mailTemplate.sendTemplatedMail("adminNewRegistration.ftl", parameters, recipients.toArray(new String[0]));
+	}
 
-	@Observer("be.fedict.eid.pkira.blm.registrationHome.approved")
+	@Observer(REGISTRATION_APPROVED)
 	public void sendApproved(Registration registration, String reason) {
 		String[] recipients = new String[] { registration.getEmail() };
 		Map<String, Object> parameters = createMapForRegistrationMail(registration, reason);
 		mailTemplate.sendTemplatedMail("registrationApproved.ftl", parameters, recipients);
 	}
 	
-	@Observer("be.fedict.eid.pkira.blm.registrationHome.disapproved")
+	@Observer(REGISTRATION_DISAPPROVED)
 	public void sendDisapproved(Registration registration, String reason) {
 		String[] recipients = new String[]
 			{ registration.getEmail() };

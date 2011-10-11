@@ -27,6 +27,7 @@ import org.hibernate.validator.EmailValidator;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.core.Events;
 import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
@@ -120,6 +121,10 @@ public class RegistrationManagerBean implements RegistrationManager {
 			registration.setStatus(RegistrationStatus.NEW);
 
 			registrationRepository.persist(registration);
+		
+			if (Events.exists()) {
+				Events.instance().raiseEvent(RegistrationMailHandler.REGISTRATION_CREATED, registration);
+			}
 		}
 	}
 
@@ -135,7 +140,11 @@ public class RegistrationManagerBean implements RegistrationManager {
 			return registrationHome.update() != null ? true : false;
 		} else {
 			registration.setStatus(RegistrationStatus.NEW);
-			return registrationHome.persist() != null ? true : false;
+			boolean result = registrationHome.persist() != null;
+			if (Events.exists()) {
+				Events.instance().raiseEvent(RegistrationMailHandler.REGISTRATION_CREATED, registration);
+			}
+			return result;
 		}
 	}
 

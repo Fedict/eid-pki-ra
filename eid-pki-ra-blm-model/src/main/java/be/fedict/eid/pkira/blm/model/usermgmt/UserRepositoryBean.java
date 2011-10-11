@@ -94,7 +94,7 @@ public class UserRepositoryBean	implements UserRepository {
 		Query namedQuery = entityManager.createNamedQuery("findRegistrationsByCertificateDomain");
 		namedQuery.setParameter("certificateDomain", certificateDomain.getId());
 		
-		List<Registration> requestors = (List<Registration>) namedQuery.getResultList();
+		List<Registration> requestors = namedQuery.getResultList();
 		
 		return requestors;
 	}
@@ -105,5 +105,15 @@ public class UserRepositoryBean	implements UserRepository {
 		Long result = (Long) namedQuery.getSingleResult();
 		return result.intValue();
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<User> getAdminUsersWithEmail() {
+		Query namedQuery = entityManager.createNamedQuery("getAdminUsersWithEmail");
+		List<User> result = namedQuery.getResultList();
+		return result;
+	}
+	
+	
 
 }
