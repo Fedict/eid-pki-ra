@@ -333,6 +333,7 @@
 					<xsd:element name="userRRN" type="xsd:string" />
 					<xsd:element name="certificateDomainName" type="xsd:string" />
 					<xsd:element name="certificateDomainId" type="xsd:string" />
+                    <xsd:element name="certificateDomainExpression" type="xsd:string" />
 				</xsd:sequence>
 			</xsd:complexType>
 

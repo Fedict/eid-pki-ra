@@ -27,6 +27,13 @@
 					</rich:column>
 					
 					<rich:column>
+						<f:facet name="header" id="certificateDomainExpressionHeader">
+							<h:outputText value="#{messages['registration.certificatedomainexpr']}" />
+						</f:facet>
+						<h:outputText value="#{registration.certificateDomainExpression}" />
+					</rich:column>
+					
+					<rich:column>
 						<f:facet name="header" id="emailHeader">
 							<h:outputText value="#{messages['registration.email']}" />
 						</f:facet>
