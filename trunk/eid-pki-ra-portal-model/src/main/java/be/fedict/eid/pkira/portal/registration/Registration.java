@@ -26,6 +26,7 @@ import org.jboss.seam.annotations.Name;
  * @author Jan Van den Bergh
  */
 @Name(Registration.NAME)
+@RegistrationEmailVerification
 public class Registration implements Serializable {
 
 	private static final long serialVersionUID = 6787261553475188888L;
@@ -43,6 +44,9 @@ public class Registration implements Serializable {
 	@NotEmpty(message="{registration.email.required}") 
 	@Email(message="{registration.email.invalid}")
 	private String emailAddress;
+	
+	@NotEmpty(message="{registration.email.required}") 
+	private String emailAddressVerification;
 	
 	public String getId() {
 		return id;
@@ -92,6 +96,16 @@ public class Registration implements Serializable {
 
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
+	}
+
+	
+	public String getEmailAddressVerification() {
+		return emailAddressVerification;
+	}
+
+	
+	public void setEmailAddressVerification(String emailAddressVerification) {
+		this.emailAddressVerification = emailAddressVerification;
 	}
 
 }

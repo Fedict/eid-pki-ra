@@ -49,6 +49,7 @@ public class RegistrationMapper implements Serializable {
 		registration.setId(registrationWS.getId());
 		registration.setStatus(Enum.valueOf(RegistrationStatus.class, registrationWS.getStatus().name()));		
 		registration.setEmailAddress(registrationWS.getUserEmail());
+		registration.setEmailAddressVerification(registrationWS.getUserEmail());
 		registration.setCertificateDomainId(registrationWS.getCertificateDomainId());
 		registration.setCertificateDomainName(registrationWS.getCertificateDomainName());
 		registration.setCertificateDomainExpression(registrationWS.getCertificateDomainExpression());
