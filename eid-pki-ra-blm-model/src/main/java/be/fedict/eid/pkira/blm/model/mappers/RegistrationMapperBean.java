@@ -25,6 +25,7 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
+import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
 import be.fedict.eid.pkira.generated.privatews.ObjectFactory;
 import be.fedict.eid.pkira.generated.privatews.RegistrationStatusWS;
@@ -53,13 +54,18 @@ public class RegistrationMapperBean implements RegistrationMapper {
 		return registrationWSList;
 	}
 
+	@Override
 	public RegistrationWS map(Registration registration) {
 		RegistrationWS registrationWS = factory.createRegistrationWS();
 		registrationWS.setId(registration.getId().toString());
 		registrationWS.setStatus(Enum.valueOf(RegistrationStatusWS.class, registration.getStatus().name()));
 		registrationWS.setUserEmail(registration.getEmail());
-		registrationWS.setCertificateDomainName(registration.getCertificateDomain().getName());
-		registrationWS.setCertificateDomainId(registration.getCertificateDomain().getId().toString());
+		
+		CertificateDomain certificateDomain = registration.getCertificateDomain();
+		registrationWS.setCertificateDomainName(certificateDomain.getName());
+		registrationWS.setCertificateDomainId(certificateDomain.getId().toString());
+		registrationWS.setCertificateDomainExpression(certificateDomain.getDnExpression());
+		
 		return registrationWS;
 	}
 

@@ -35,6 +35,7 @@ public class Registration implements Serializable {
 	private String id;
 	private RegistrationStatus status;
 	private String certificateDomainName;
+	private String certificateDomainExpression;
 	
 	@NotEmpty(message="{registration.certificateDomain.required}")
 	private String certificateDomainId;
@@ -73,6 +74,16 @@ public class Registration implements Serializable {
 
 	public void setCertificateDomainId(String certificateDomainId) {
 		this.certificateDomainId = certificateDomainId;
+	}
+
+	
+	public String getCertificateDomainExpression() {
+		return certificateDomainExpression;
+	}
+
+	
+	public void setCertificateDomainExpression(String certificateDomainExpression) {
+		this.certificateDomainExpression = certificateDomainExpression;
 	}
 
 	public String getEmailAddress() {
