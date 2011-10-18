@@ -53,6 +53,7 @@ public class RegistrationMapper implements Serializable {
 		registration.setCertificateDomainId(registrationWS.getCertificateDomainId());
 		registration.setCertificateDomainName(registrationWS.getCertificateDomainName());
 		registration.setCertificateDomainExpression(registrationWS.getCertificateDomainExpression());
+		registration.setRegistrants(registrationWS.getRegistrants());
 		return registration;
 	}
 

@@ -49,7 +49,7 @@ import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
  * @author Bram Baeyens
  */
 @Entity
-@Table(name="CERTIFICATE_DOMAIN")
+@Table(name = "CERTIFICATE_DOMAIN")
 @NamedQueries(
 	{
 			@NamedQuery(name = "findCertificateDomainByName", query = "FROM CertificateDomain WHERE name = :name"),
@@ -97,6 +97,10 @@ public class CertificateDomain implements Serializable {
 		return id;
 	}
 
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -132,8 +136,8 @@ public class CertificateDomain implements Serializable {
 
 	@Override
 	public String toString() {
-		return new StringBuilder("CertificateDomain[").append("name=").append(name).append(", dnExpression=").append(
-				dnExpression).append(']').toString();
+		return new StringBuilder("CertificateDomain[").append("name=").append(name).append(", dnExpression=")
+				.append(dnExpression).append(']').toString();
 	}
 
 	public boolean isServerCertificate() {
@@ -151,7 +155,7 @@ public class CertificateDomain implements Serializable {
 	public void setClientCertificate(boolean clientCertificate) {
 		this.clientCertificate = clientCertificate;
 	}
-	
+
 	public boolean isPersonsCertificate() {
 		return personsCertificate;
 	}

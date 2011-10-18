@@ -17,10 +17,13 @@
 package be.fedict.eid.pkira.portal.registration;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.hibernate.validator.Email;
 import org.hibernate.validator.NotEmpty;
 import org.jboss.seam.annotations.Name;
+
+import be.fedict.eid.pkira.generated.privatews.RegistrantWS;
 
 /**
  * @author Jan Van den Bergh
@@ -47,6 +50,8 @@ public class Registration implements Serializable {
 	
 	@NotEmpty(message="{registration.email.required}") 
 	private String emailAddressVerification;
+	
+	private List<RegistrantWS> registrants;
 	
 	public String getId() {
 		return id;
@@ -106,6 +111,16 @@ public class Registration implements Serializable {
 	
 	public void setEmailAddressVerification(String emailAddressVerification) {
 		this.emailAddressVerification = emailAddressVerification;
+	}
+
+	
+	public List<RegistrantWS> getRegistrants() {
+		return registrants;
+	}
+
+	
+	public void setRegistrants(List<RegistrantWS> registrants) {
+		this.registrants = registrants;
 	}
 
 }
