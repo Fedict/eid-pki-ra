@@ -184,3 +184,7 @@ label{
 .dr-table-cell, .rich-table-cell{
 	font-family:sans-serif;
 }
+
+.nowrap {
+	white-space: nowrap;
+}
