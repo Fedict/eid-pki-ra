@@ -71,6 +71,11 @@ public class CertificateSigningContract extends AbstractContract {
 	public void setCertificate(Certificate certificate) {
 		this.certificate = certificate;
 	}
+	
+	@Override
+	public String getType() {
+		return "signing";
+	}
 
 	@Override
 	protected void appendFields(StringBuilder builder) {

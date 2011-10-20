@@ -21,8 +21,8 @@ package be.fedict.eid.pkira.portal.contract;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 
-import be.fedict.eid.pkira.portal.download.Document;
-import be.fedict.eid.pkira.portal.download.DownloadManager;
+import be.fedict.eid.pkira.common.download.Document;
+import be.fedict.eid.pkira.common.download.DownloadManager;
 import be.fedict.eid.pkira.portal.framework.WSHome;
 
 /**

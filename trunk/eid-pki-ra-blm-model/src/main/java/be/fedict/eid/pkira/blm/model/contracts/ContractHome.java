@@ -18,8 +18,12 @@
 
 package be.fedict.eid.pkira.blm.model.contracts;
 
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.framework.EntityHome;
+
+import be.fedict.eid.pkira.common.download.Document;
+import be.fedict.eid.pkira.common.download.DownloadManager;
 
 /**
  * @author Bram Baeyens
@@ -32,4 +36,14 @@ public class ContractHome extends EntityHome<AbstractContract> {
 	
 	public static final String NAME = "be.fedict.eid.pkira.blm.contractHome";
 
+	@In(value=DownloadManager.NAME, create=true)
+	private DownloadManager downloadManager;
+	
+	public void download(){
+		AbstractContract instance = getInstance();
+		downloadManager.download(new Document(
+				"contract-" + instance.getId() + ".xml", 
+				"text/xml", 
+				instance.getContractDocument().getBytes()));
+	}
 }

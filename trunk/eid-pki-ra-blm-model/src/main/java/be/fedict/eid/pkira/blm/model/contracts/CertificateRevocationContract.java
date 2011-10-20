@@ -39,24 +39,34 @@ public class CertificateRevocationContract extends AbstractContract {
 	public static final String NAME = "be.fedict.eid.pkira.blm.certificateRevocationContract";
 
 	@Column(name = "START_DATE")
-	private Date startDate;    
+	private Date startDate;
 	@Column(name = "END_DATE")
 	private Date endDate;
-	
+
 	public Date getStartDate() {
 		return startDate;
 	}
-	
+
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-	
+
 	public Date getEndDate() {
 		return endDate;
 	}
-	
+
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+	@Override
+	public String getType() {
+		return "revocation";
+	}
+
+	@Override
+	public CertificateType getCertificateType() {
+		return null;
 	}
 
 	@Override
@@ -64,5 +74,5 @@ public class CertificateRevocationContract extends AbstractContract {
 		super.appendFields(builder);
 		appendField(builder, "Start date", getStartDate());
 		appendField(builder, "End date", getEndDate());
-	}	
+	}
 }

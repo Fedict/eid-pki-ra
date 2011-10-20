@@ -18,9 +18,12 @@
 
 package be.fedict.eid.pkira.blm.model.contracts;
 
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.blm.model.framework.ValidatingEntityHome;
+import be.fedict.eid.pkira.common.download.Document;
+import be.fedict.eid.pkira.common.download.DownloadManager;
 
 /**
  * @author Bram Baeyens
@@ -33,4 +36,14 @@ public class CertificateHome extends ValidatingEntityHome<Certificate> {
 	
 	public static final String NAME = "be.fedict.eid.pkira.blm.certificateHome";
 
+	@In(value=DownloadManager.NAME, create=true)
+	private DownloadManager downloadManager;
+	
+	public void download(){
+		Certificate instance = getInstance();
+		downloadManager.download(new Document(
+				instance.getSerialNumber() + ".crt", 
+				"application/x-pem-file", 
+				instance.getX509().getBytes()));
+	}
 }
