@@ -14,7 +14,7 @@
 				<p>#{messages['revocation.sign.subtitle']}</p>
 				<input type="hidden" name="SignatureRequest" value="#{revocationContractSigningWrapper.base64CsrXml}" />
 				<input type="hidden" name="target" value="#{revocationContractSigningWrapper.dssSigningHandlerViewID}" />
-				<input type="hidden" name="language" value="en" />
+				<input type="hidden" name="language" value="#{org.jboss.seam.international.localeSelector.language}" />
 				<input type="submit" value="#{messages['button.send']}" />
 				<script type="text/javascript">
 					document.getElementById('dssRequestForm').submit();
