@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
+import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.log.Log;
 import org.opensaml.saml2.core.AuthnRequest;
 
@@ -41,6 +42,9 @@ public abstract class AbstractAuthenticationHandlerBean implements Authenticatio
 	@In
 	private EIdUserCredentials credentials;
 
+	@In(value="org.jboss.seam.international.localeSelector", create=true)
+	private LocaleSelector localeSelector;
+	
 	@Logger
 	private Log log;
 
@@ -70,7 +74,7 @@ public abstract class AbstractAuthenticationHandlerBean implements Authenticatio
 
 			HttpServletResponse response = getResponse();
 
-			AuthnRequest authnRequest = AuthenticationRequestUtil.sendRequest(issuer, idpDestination, spDestination, null, null, response, "en");
+			AuthnRequest authnRequest = AuthenticationRequestUtil.sendRequest(issuer, idpDestination, spDestination, null, null, response, localeSelector.getLanguage());
 			String requestId = authnRequest.getID();
 			// FIXME use Seam @Out
 			getRequest().getSession().setAttribute(AuthenticationRequestDecoder.NAME_REQUEST_ID, requestId);
