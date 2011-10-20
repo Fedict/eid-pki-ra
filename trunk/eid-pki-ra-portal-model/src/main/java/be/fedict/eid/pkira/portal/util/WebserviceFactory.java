@@ -33,11 +33,12 @@ import be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient;
 @Scope(ScopeType.APPLICATION)
 public class WebserviceFactory {
 
+	private static final String BLM_SERVICE_URL_PARAMETER = "be.fedict.eid.pkira.blm.services";
 	public static final String NAME = "be.fedict.eid.pkira.portal.webserviceFactory";
 
 	@Factory(value = EIDPKIRAServiceClient.NAME, scope = ScopeType.APPLICATION)
 	public EIDPKIRAServiceClient getPublicServiceClient() {
-		String url = getServiceUrlFromServletContext() + "/EIDPKIRAService";
+		String url = getServiceUrl() + "/EIDPKIRAService";
 		
 		EIDPKIRAServiceClient result = new EIDPKIRAServiceClient();		
 		result.setServiceUrl(url);
@@ -46,7 +47,7 @@ public class WebserviceFactory {
 	
 	@Factory(value = EIDPKIRAPrivateServiceClient.NAME, scope = ScopeType.APPLICATION)
 	public EIDPKIRAPrivateServiceClient getPrivateServiceClient() {
-		String url = getServiceUrlFromServletContext() + "/EIDPKIRAPrivateService";
+		String url = getServiceUrl() + "/EIDPKIRAPrivateService";
 		
 		EIDPKIRAPrivateServiceClient result = new EIDPKIRAPrivateServiceClient();		
 		result.setServiceUrl(url);
@@ -57,8 +58,19 @@ public class WebserviceFactory {
 	public EIDPKIRAContractsClient getContractsClient() {
 		return new EIDPKIRAContractsClient();
 	}
+	
+	private String getServiceUrl() {
+		if (getServiceUrlFromSystemProperties()!=null) {
+			return getServiceUrlFromSystemProperties();
+		}
+		return getServiceUrlFromServletContext();
+	}
 
 	private String getServiceUrlFromServletContext() {
-		return ServletLifecycle.getServletContext().getInitParameter("be.fedict.eid.pkira.blm.services");
+		return ServletLifecycle.getServletContext().getInitParameter(BLM_SERVICE_URL_PARAMETER);
+	}
+	
+	private String getServiceUrlFromSystemProperties() {
+		return System.getProperty(BLM_SERVICE_URL_PARAMETER);
 	}
 }

@@ -30,7 +30,7 @@
 		<param-value>${seam.debug}</param-value>
 	</context-param>
 	
-	<!--  Location of the BLM -->
+	<!-- Default Location of the BLM (can be overridden setting -Dbe.fedict.eid.pkira.blm.services)-->
 	<context-param>
 		<param-name>be.fedict.eid.pkira.blm.services</param-name>
 		<param-value>http://localhost:8080/eid-pki-ra/webservice</param-value>
