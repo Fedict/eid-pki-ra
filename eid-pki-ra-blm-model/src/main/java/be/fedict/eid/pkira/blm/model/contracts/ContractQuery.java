@@ -18,6 +18,7 @@
 
 package be.fedict.eid.pkira.blm.model.contracts;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -46,6 +47,7 @@ public class ContractQuery extends EntityQuery<AbstractContract> {
 	@In(value = CertificateDomainHome.NAME, create = true)
 	private CertificateDomainHome certificateDomainHome;
 	
+	@Override
 	public String getEjbql() {
 		return "select contract from AbstractContract contract";
 	}
@@ -59,6 +61,17 @@ public class ContractQuery extends EntityQuery<AbstractContract> {
 			query.setParameter("certificateDomainId", certificateDomainId);
 		}
 		return query.getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<AbstractContract> getFindContracts(Integer certificateDomainId) {
+		if (certificateDomainId==null) {
+			return Collections.emptyList();
+		}
+		
+		return getEntityManager().createNamedQuery(AbstractContract.NQ_FIND_CONTRACTS_BY_CERTIFICATE_DOMAIN_ID)
+				.setParameter("certificateDomainId", certificateDomainId)
+				.getResultList();
 	}
 	
 	private String getNamedQuery(Integer certificateDomainId) {

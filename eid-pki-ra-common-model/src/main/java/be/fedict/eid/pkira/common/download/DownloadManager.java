@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.portal.download;
+package be.fedict.eid.pkira.common.download;
 
 import java.io.Serializable;
 
@@ -42,7 +42,7 @@ public class DownloadManager implements Serializable {
 
 	private static final long serialVersionUID = -3602220524378795120L;
 	
-	public static final String NAME = "be.fedict.eid.pkira.portal.downloadManager";
+	public static final String NAME = "be.fedict.eid.pkira.common.downloadManager";
 	
 	@In(value="#{facesContext}")
 	private FacesContext facesContext;

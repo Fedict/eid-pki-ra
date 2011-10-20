@@ -34,6 +34,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -55,10 +57,18 @@ import be.fedict.eid.pkira.crypto.CertificateInfo;
 	{ @UniqueConstraint(columnNames =
 		{ "ISSUER", "SERIAL_NUMBER" }) })
 @Name(Certificate.NAME)
+@NamedQueries(
+		{
+			@NamedQuery(name = Certificate.NQ_FIND_CERTIFICATES_BY_CERTIFICATE_DOMAIN_ID, 
+					query = "SELECT c FROM Certificate c WHERE c.certificateDomain.id=:certificateDomainId ORDER BY c.validityStart DESC")
+		}
+	)
 public class Certificate implements Serializable {
 
 	public static final String NAME = "be.fedict.eid.pkira.blm.certificate";
 
+	public static final String NQ_FIND_CERTIFICATES_BY_CERTIFICATE_DOMAIN_ID = "findCertificatesByCertificateDomainId";
+	
 	private static final long serialVersionUID = -6539022465744360747L;
 
 	@CollectionOfElements(fetch = FetchType.LAZY)

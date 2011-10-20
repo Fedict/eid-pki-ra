@@ -38,6 +38,22 @@
 		action="#{menuHandler.selectItem('registrations')}"
 		styleClass="#{menuHandler.styleIfSelected('registrations')}"
 		/>
+	<s:link value="#{messages['menu.certificates']}" 
+		view="/page/certificates/certificate-list.xhtml" 
+		id="certificates" 
+		rendered="#{s:hasRole('ADMIN_USER')}" 
+		propagation="none" 
+		action="#{menuHandler.selectItem('certificates')}"
+		styleClass="#{menuHandler.styleIfSelected('certificates')}"
+		/>
+	<s:link value="#{messages['menu.contracts']}" 
+		view="/page/contracts/contract-list.xhtml" 
+		id="contracts" 
+		rendered="#{s:hasRole('ADMIN_USER')}" 
+		propagation="none" 
+		action="#{menuHandler.selectItem('contracts')}"
+		styleClass="#{menuHandler.styleIfSelected('contracts')}"
+		/>
 	<s:link value="#{messages['menu.configurationentries']}" 
 		view="/page/configurationentry/configurationentry-list.xhtml" 
 		id="configurationentries" 

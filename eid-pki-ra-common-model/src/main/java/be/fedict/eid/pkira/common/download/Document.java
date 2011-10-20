@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/. 
  */
 
-package be.fedict.eid.pkira.portal.download;
+package be.fedict.eid.pkira.common.download;
 
 import java.io.Serializable;
 

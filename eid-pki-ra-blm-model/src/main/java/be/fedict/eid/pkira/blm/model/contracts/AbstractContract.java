@@ -59,7 +59,9 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
 		@NamedQuery(name = AbstractContract.NQ_FIND_CONTRACTS_BY_USER_RRN, 
 				query = "SELECT contract FROM AbstractContract contract, Registration registration WHERE registration.requester.nationalRegisterNumber = :nationalRegisterNumber AND registration.status = :registrationStatus AND registration.certificateDomain = contract.certificateDomain ORDER BY contract.creationDate DESC"),
 		@NamedQuery(name = AbstractContract.NQ_FIND_CONTRACTS_BY_USER_RRN_AND_CERTIFICATE_DOMAIN_ID, 
-				query = "SELECT contract FROM AbstractContract contract, Registration registration WHERE registration.requester.nationalRegisterNumber = :nationalRegisterNumber AND registration.status = :registrationStatus AND registration.certificateDomain = contract.certificateDomain AND contract.certificateDomain.id = :certificateDomainId ORDER BY contract.creationDate DESC")
+				query = "SELECT contract FROM AbstractContract contract, Registration registration WHERE registration.requester.nationalRegisterNumber = :nationalRegisterNumber AND registration.status = :registrationStatus AND registration.certificateDomain = contract.certificateDomain AND contract.certificateDomain.id = :certificateDomainId ORDER BY contract.creationDate DESC"),
+		@NamedQuery(name = AbstractContract.NQ_FIND_CONTRACTS_BY_CERTIFICATE_DOMAIN_ID, 
+				query = "SELECT contract FROM AbstractContract contract WHERE contract.certificateDomain.id = :certificateDomainId ORDER BY contract.creationDate DESC")
 	}
 )
 public abstract class AbstractContract implements Serializable {
@@ -69,6 +71,8 @@ public abstract class AbstractContract implements Serializable {
 	public static final String NQ_FIND_CONTRACTS_BY_USER_RRN = "findContractsByUserRrn";
 
 	public static final String NQ_FIND_CONTRACTS_BY_USER_RRN_AND_CERTIFICATE_DOMAIN_ID = "findContractsByUserRrnAndCertificateDomainId";
+	
+	public static final String NQ_FIND_CONTRACTS_BY_CERTIFICATE_DOMAIN_ID = "findContractsByDomainId";
 
 	@Id
 	@GeneratedValue
@@ -177,6 +181,10 @@ public abstract class AbstractContract implements Serializable {
 	public void setResultMessage(String resultMessage) {
 		this.resultMessage = resultMessage;
 	}
+	
+	public abstract String getType();
+	
+	public abstract CertificateType getCertificateType();
 
 	protected void appendFields(StringBuilder builder) {
 		appendField(builder, "Id", getId());
