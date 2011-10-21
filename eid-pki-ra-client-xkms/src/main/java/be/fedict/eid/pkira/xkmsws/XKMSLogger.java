@@ -1,14 +1,20 @@
 package be.fedict.eid.pkira.xkmsws;
 
-
 /**
  * Interface used by the XKMS client to log things that happened.
+ * 
  * @author jan
  */
 public interface XKMSLogger {
 
-	void logError(String type, String requestMessage, byte[] responseMessage, Throwable t);
+	public enum XKMSMessageType {
+		REQUEST, REVOCATION
+	}
 
-	void logSuccesfulInteraction(String type, String requestMessage, byte[] responseMessage);
+	String NAME = "be.fedict.eid.pkira.xkms.xkmsLogger";
+
+	void logError(XKMSMessageType messageType, String requestMessage, byte[] responseMessage, Throwable t);
+
+	void logSuccesfulInteraction(XKMSMessageType messageType, String requestMessage, byte[] responseMessage);
 
 }

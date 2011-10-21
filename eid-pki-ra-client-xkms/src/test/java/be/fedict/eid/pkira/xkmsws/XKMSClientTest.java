@@ -56,6 +56,7 @@ import org.w3c.dom.Document;
 import be.fedict.eid.pki.ra.xkms.ws.MockXKMSWebService;
 import be.fedict.eid.pkira.crypto.CSRParser;
 import be.fedict.eid.pkira.crypto.CSRParserImpl;
+import be.fedict.eid.pkira.xkmsws.XKMSLogger.XKMSMessageType;
 import be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProvider;
 import be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProviderTest;
 import be.fedict.eid.pkira.xkmsws.signing.XmlDocumentSigner;
@@ -138,7 +139,7 @@ public class XKMSClientTest {
 
 		XMLAssert.assertXMLIdentical(diff, true);
 		
-		verify(xkmsLogger).logSuccesfulInteraction(eq("certificate"), isA(String.class), isA(byte[].class));
+		verify(xkmsLogger).logSuccesfulInteraction(eq(XKMSMessageType.REQUEST), isA(String.class), isA(byte[].class));
 	}
 
 	private void writeXMLDocument(Document testDocument) throws TransformerConfigurationException,
@@ -155,19 +156,19 @@ public class XKMSClientTest {
 	@Test
 	public void testRevokeCertificate() throws Exception {
 		xkmsClient.revokeCertificate(BigInteger.valueOf(123L), "CODE");
-		verify(xkmsLogger).logSuccesfulInteraction(eq("revocation"), isA(String.class), isA(byte[].class));
+		verify(xkmsLogger).logSuccesfulInteraction(eq(XKMSMessageType.REVOCATION), isA(String.class), isA(byte[].class));
 	}
 
 	@Test
 	public void testRevokeCertificateAlreadyRevoked() throws Exception {
 		xkmsClient.revokeCertificate(BigInteger.valueOf(1001L), "CODE");
-		verify(xkmsLogger).logSuccesfulInteraction(eq("revocation"), isA(String.class), isA(byte[].class));
+		verify(xkmsLogger).logSuccesfulInteraction(eq(XKMSMessageType.REVOCATION), isA(String.class), isA(byte[].class));
 	}
 
 	@Test(expectedExceptions = XKMSClientException.class)
 	public void testRevokeCertificateAlreadyError() throws Exception {
 		xkmsClient.revokeCertificate(BigInteger.valueOf(1002L), "CODE");
-		verify(xkmsLogger).logError(eq("revocation"), isA(String.class), isA(byte[].class), isA(XKMSClientException.class));
+		verify(xkmsLogger).logError(eq(XKMSMessageType.REVOCATION), isA(String.class), isA(byte[].class), isA(XKMSClientException.class));
 	}
 
 	private String readResource(String resourceName) throws IOException {

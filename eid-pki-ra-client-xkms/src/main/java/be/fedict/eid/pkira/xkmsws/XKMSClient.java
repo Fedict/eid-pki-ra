@@ -30,6 +30,7 @@ import org.w3._2002._03.xkms_xbulk.RequestType;
 import org.w3c.dom.Document;
 import org.xkms.schema.xkms_2001_01_20.RegisterResult;
 
+import be.fedict.eid.pkira.xkmsws.XKMSLogger.XKMSMessageType;
 import be.fedict.eid.pkira.xkmsws.signing.XmlDocumentSigner;
 import be.fedict.eid.pkira.xkmsws.util.HttpUtil;
 import be.fedict.eid.pkira.xkmsws.util.RequestMessageCreator;
@@ -94,7 +95,7 @@ public class XKMSClient {
 		RequestType request = requestMessageCreator.createCSRRequestElement(csrData, validityInMonths, certificateType);
 
 		// Execute it
-		return executeRequest("certificate", request, new RegisterResultParser<byte[]>() {
+		return executeRequest(XKMSMessageType.REQUEST, request, new RegisterResultParser<byte[]>() {
 			@Override
 			public byte[] parseResponse(RegisterResult registerResult) throws XKMSClientException {
 				return responseMessageParser.parseCreateCertificateResult(registerResult);
@@ -123,7 +124,7 @@ public class XKMSClient {
 		RequestType request = requestMessageCreator.createRevocationElement(serialNumber, certificateType);
 
 		// Execute it
-		executeRequest("revocation", request, new RegisterResultParser<Object>() {
+		executeRequest(XKMSMessageType.REVOCATION, request, new RegisterResultParser<Object>() {
 			@Override
 			public byte[] parseResponse(RegisterResult registerResult) throws XKMSClientException {
 				responseMessageParser.parseRevokeCertificateResult(registerResult);
@@ -139,7 +140,7 @@ public class XKMSClient {
 	 *            request objects.
 	 * @return the result objects.
 	 */
-	private <OutputType> OutputType executeRequest(String type, RequestType requestObject, RegisterResultParser<OutputType> parser) throws XKMSClientException {
+	private <OutputType> OutputType executeRequest(XKMSMessageType messageType, RequestType requestObject, RegisterResultParser<OutputType> parser) throws XKMSClientException {
 		String requestMessage = null;
 		byte[] responseMessage = null;
 		try {
@@ -187,18 +188,18 @@ public class XKMSClient {
 			OutputType output = parser.parseResponse(results.get(0));
 			
 			if (xkmsLogger != null) {
-				xkmsLogger.logSuccesfulInteraction(type, requestMessage, responseMessage);
+				xkmsLogger.logSuccesfulInteraction(messageType, requestMessage, responseMessage);
 			}
 			
 			return output;
 		} catch (XKMSClientException e) {
 			if (xkmsLogger != null) {
-				xkmsLogger.logError(type, requestMessage, responseMessage, e);
+				xkmsLogger.logError(messageType, requestMessage, responseMessage, e);
 			}
 			throw e;
 		} catch (Throwable t) {
 			if (xkmsLogger != null) {
-				xkmsLogger.logError(type, requestMessage, responseMessage, t);
+				xkmsLogger.logError(messageType, requestMessage, responseMessage, t);
 			}
 			throw new XKMSClientException("Unexpected error.", t);
 		}

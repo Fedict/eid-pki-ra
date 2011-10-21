@@ -10,6 +10,7 @@ import be.fedict.eid.pkira.blm.model.ca.CertificateAuthority;
 import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryKey;
 import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
 import be.fedict.eid.pkira.xkmsws.XKMSClient;
+import be.fedict.eid.pkira.xkmsws.XKMSLogger;
 
 @Name(WebserviceLocator.NAME)
 @Scope(ScopeType.STATELESS)
@@ -19,13 +20,18 @@ public class WebserviceLocator {
 
 	@In(value = ConfigurationEntryQuery.NAME, create = true)
 	private ConfigurationEntryQuery configurationEntryQuery;
+	
+	@In(value=XKMSLogger.NAME, create=true)
+	private XKMSLogger xkmsLogger;
 
 	public DigitalSignatureServiceClient getDigitalSignatureServiceClient() {
 		return new DigitalSignatureServiceClient(findWebserviceUrl(ConfigurationEntryKey.DSS_WS_CLIENT));
 	}
 
 	public XKMSClient getXKMSClient(CertificateAuthority ca) {
-		return new XKMSClient(ca.getXkmsUrl(), ca.getParametersAsMap());
+		XKMSClient xkmsClient = new XKMSClient(ca.getXkmsUrl(), ca.getParametersAsMap());
+		xkmsClient.setXkmsLogger(xkmsLogger);
+		return xkmsClient;
 	}
 
 	private String findWebserviceUrl(ConfigurationEntryKey configurationEntryKey) {
