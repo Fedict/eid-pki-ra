@@ -78,6 +78,14 @@
 		action="#{menuHandler.selectItem('reports')}"
 		styleClass="#{menuHandler.styleIfSelected('reports')}"
 		/>
+	<s:link value="#{messages['menu.xkmslog']}" 
+		view="/page/xkmslog/xkms-log-list.xhtml" 
+		id="xmkslog" 
+		rendered="#{s:hasRole('ADMIN_USER')}" 
+		propagation="none" 
+		action="#{menuHandler.selectItem('xkmslog')}"
+		styleClass="#{menuHandler.styleIfSelected('xkmslog')}"
+		/>
 	<rich:toolBarGroup location="right" id="tool-bar-group-right">
 		<s:link value="#{messages['menu.login']}" 
 			view="/login.xhtml" 

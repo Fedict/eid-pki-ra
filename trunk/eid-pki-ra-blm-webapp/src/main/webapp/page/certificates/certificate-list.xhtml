@@ -46,7 +46,9 @@
 							<f:facet name="header">
 								<h:outputText value="#{messages['certificate.validityStart']}" />
 							</f:facet>
-							<h:outputText value="#{cer.validityStart}" />
+							<h:outputText value="#{cer.validityStart}">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="Europe/Brussels" />
+							</h:outputText>
 						</rich:column>
 
 						<rich:column sortBy="#{cer.validityEnd}"
@@ -54,7 +56,9 @@
 							<f:facet name="header">
 								<h:outputText value="#{messages['certificate.validityEnd']}" />
 							</f:facet>
-							<h:outputText value="#{cer.validityEnd}" />
+							<h:outputText value="#{cer.validityEnd}">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="Europe/Brussels" />
+							</h:outputText>
 						</rich:column>
 
 						<rich:column sortBy="#{cer.issuer}" filterBy="#{cer.issuer}"
