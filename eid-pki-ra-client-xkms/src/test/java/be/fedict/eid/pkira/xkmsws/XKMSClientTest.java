@@ -18,6 +18,9 @@
 
 package be.fedict.eid.pkira.xkmsws;
 
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.verify;
 import static org.testng.Assert.assertNotNull;
 
 import java.io.IOException;
@@ -42,6 +45,8 @@ import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.jboss.seam.log.Logging;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
@@ -55,7 +60,6 @@ import be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProvider;
 import be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProviderTest;
 import be.fedict.eid.pkira.xkmsws.signing.XmlDocumentSigner;
 import be.fedict.eid.pkira.xkmsws.util.RequestMessageCreator;
-
 public class XKMSClientTest {
 
 	public static final String URL = "http://localhost:33333/xkms";
@@ -72,6 +76,9 @@ public class XKMSClientTest {
 
 	private Endpoint webServiceEndpoint;
 	private XKMSClient xkmsClient;
+	
+	@Mock
+	private XKMSLogger xkmsLogger;
 
 	private final Map<String, String> parameters = new HashMap<String, String>();
 
@@ -103,6 +110,10 @@ public class XKMSClientTest {
 		// Configure XML Unit
 		XMLUnit.setIgnoreWhitespace(true);
 		XMLUnit.setNormalizeWhitespace(true);
+		
+		// Init mocks
+		MockitoAnnotations.initMocks(this);
+		xkmsClient.setXkmsLogger(xkmsLogger);
 	}
 
 	@Test
@@ -126,6 +137,8 @@ public class XKMSClientTest {
 		diff = new IgnoreLocationsDifferenceListener(diff, ACCEPTED_DIFFERENCES_CREATE_CERTIFICATE);
 
 		XMLAssert.assertXMLIdentical(diff, true);
+		
+		verify(xkmsLogger).logSuccesfulInteraction(eq("certificate"), isA(String.class), isA(byte[].class));
 	}
 
 	private void writeXMLDocument(Document testDocument) throws TransformerConfigurationException,
@@ -142,16 +155,19 @@ public class XKMSClientTest {
 	@Test
 	public void testRevokeCertificate() throws Exception {
 		xkmsClient.revokeCertificate(BigInteger.valueOf(123L), "CODE");
+		verify(xkmsLogger).logSuccesfulInteraction(eq("revocation"), isA(String.class), isA(byte[].class));
 	}
 
 	@Test
 	public void testRevokeCertificateAlreadyRevoked() throws Exception {
 		xkmsClient.revokeCertificate(BigInteger.valueOf(1001L), "CODE");
+		verify(xkmsLogger).logSuccesfulInteraction(eq("revocation"), isA(String.class), isA(byte[].class));
 	}
 
 	@Test(expectedExceptions = XKMSClientException.class)
 	public void testRevokeCertificateAlreadyError() throws Exception {
 		xkmsClient.revokeCertificate(BigInteger.valueOf(1002L), "CODE");
+		verify(xkmsLogger).logError(eq("revocation"), isA(String.class), isA(byte[].class), isA(XKMSClientException.class));
 	}
 
 	private String readResource(String resourceName) throws IOException {
