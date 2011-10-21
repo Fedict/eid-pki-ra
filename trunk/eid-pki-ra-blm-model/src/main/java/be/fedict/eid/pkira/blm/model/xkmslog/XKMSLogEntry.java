@@ -21,10 +21,12 @@ package be.fedict.eid.pkira.blm.model.xkmslog;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
@@ -67,10 +69,12 @@ public class XKMSLogEntry implements Serializable {
 	private Date creationDate;
 
 	@Column(name = "REQUEST_MSG", nullable = true)
+	@Basic(fetch = FetchType.LAZY)
 	@Lob
 	private String requestMessage;
 
 	@Column(name = "RESPONSE_MSG", nullable = true)
+	@Basic(fetch = FetchType.LAZY)
 	@Lob
 	private String responseMessage;
 
