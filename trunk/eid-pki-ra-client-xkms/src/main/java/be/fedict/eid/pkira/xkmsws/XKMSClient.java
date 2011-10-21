@@ -38,6 +38,10 @@ import be.fedict.eid.pkira.xkmsws.util.XMLMarshallingUtil;
 
 public class XKMSClient {
 
+	private static interface RegisterResultParser<OutputType> {
+		OutputType parseResponse(RegisterResult registerResult) throws XKMSClientException;
+	}
+
 	public static final String PARAMETER_LOG_PREFIX = "xkms.logPrefix";
 
 	private static final Log LOG = LogFactory.getLog(XKMSClient.class);
@@ -50,6 +54,8 @@ public class XKMSClient {
 	private final ResponseMessageParser responseMessageParser;
 
 	private final XmlDocumentSigner xmlDocumentSigner;
+
+	private XKMSLogger xkmsLogger;
 
 	/**
 	 * Creates an XKMSClient for the specific endpoint address using the
@@ -74,7 +80,8 @@ public class XKMSClient {
 	 * @param validityInMonths
 	 *            the validity of the certificate (in months)
 	 * @param certificateType
-	 *            the certificate type to generate (client, server, code, persons)
+	 *            the certificate type to generate (client, server, code,
+	 *            persons)
 	 * @return byte array containing the certificate.
 	 * @throws XKMSClientException
 	 *             if an error occurred while communicating to the XKMS service.
@@ -87,14 +94,12 @@ public class XKMSClient {
 		RequestType request = requestMessageCreator.createCSRRequestElement(csrData, validityInMonths, certificateType);
 
 		// Execute it
-		List<RegisterResult> results = executeRequest(request);
-		if (results.size() != 1) {
-			throw new XKMSClientException("Expected one result from the XKMS service, but got " + results.size());
-		}
-		RegisterResult result = results.get(0);
-
-		// Parse the result
-		return responseMessageParser.parseCreateCertificateResult(result);
+		return executeRequest("certificate", request, new RegisterResultParser<byte[]>() {
+			@Override
+			public byte[] parseResponse(RegisterResult registerResult) throws XKMSClientException {
+				return responseMessageParser.parseCreateCertificateResult(registerResult);
+			}
+		});
 	}
 
 	public Document getLastOutboundMessage() {
@@ -118,13 +123,13 @@ public class XKMSClient {
 		RequestType request = requestMessageCreator.createRevocationElement(serialNumber, certificateType);
 
 		// Execute it
-		List<RegisterResult> results = executeRequest(request);
-		if (results.size() != 1) {
-			throw new XKMSClientException("Expected one result from the XKMS service, but got " + results.size());
-		}
-
-		// Parse the result
-		responseMessageParser.parseRevokeCertificateResult(results.get(0));
+		executeRequest("revocation", request, new RegisterResultParser<Object>() {
+			@Override
+			public byte[] parseResponse(RegisterResult registerResult) throws XKMSClientException {
+				responseMessageParser.parseRevokeCertificateResult(registerResult);
+				return null;
+			}
+		});
 	}
 
 	/**
@@ -134,41 +139,72 @@ public class XKMSClient {
 	 *            request objects.
 	 * @return the result objects.
 	 */
-	private List<RegisterResult> executeRequest(RequestType... requestObjects) throws XKMSClientException {
-		// Create and marshal the document
-		BulkRegisterType registerRequest = requestMessageCreator.createBulkRegisterRequest(requestObjects);
-		Document request = marshallingUtil.marshalBulkRegisterTypeToDocument(registerRequest);
+	private <OutputType> OutputType executeRequest(String type, RequestType requestObject, RegisterResultParser<OutputType> parser) throws XKMSClientException {
+		String requestMessage = null;
+		byte[] responseMessage = null;
+		try {
+			// Create and marshal the document
+			BulkRegisterType registerRequest = requestMessageCreator.createBulkRegisterRequest(requestObject);
+			Document request = marshallingUtil.marshalBulkRegisterTypeToDocument(registerRequest);
 
-		// Sign it
-		if (parameters.containsKey(PARAMETER_LOG_PREFIX)) {
-			marshallingUtil.writeDocumentToFile(request, parameters.get(PARAMETER_LOG_PREFIX), "-unsigned.xml");
+			// Sign it
+			if (parameters.containsKey(PARAMETER_LOG_PREFIX)) {
+				marshallingUtil.writeDocumentToFile(request, parameters.get(PARAMETER_LOG_PREFIX), "-unsigned.xml");
+			}
+			xmlDocumentSigner.signXKMSDocument(request, "BulkRegister", "SignedPart");
+			if (parameters.containsKey(PARAMETER_LOG_PREFIX)) {
+				marshallingUtil.writeDocumentToFile(request, parameters.get(PARAMETER_LOG_PREFIX), "-signed.xml");
+			}
+
+			// Add soap headers
+			marshallingUtil.addSoapHeaders(request);
+
+			// Convert it to a string
+			lastOutboundMessage = request;
+			requestMessage = marshallingUtil.convertDocumentToString(request);
+
+			// Call the XKMS implementation
+			responseMessage = httpUtil.postMessage(requestMessage);
+			if (parameters.containsKey(PARAMETER_LOG_PREFIX)) {
+				marshallingUtil.writeDocumentToFile(responseMessage, parameters.get(PARAMETER_LOG_PREFIX),
+						"-response.xml");
+			}
+
+			// Convert string to DOM document
+			Document response = marshallingUtil.convertStringToDocument(responseMessage);
+
+			// Remove SOAP headers
+			marshallingUtil.removeSoapHeaders(response);
+
+			// Parse the result
+			BulkRegisterResultType result = marshallingUtil.unmarshalByteArrayToBulkRegisterResultType(response);
+
+			List<RegisterResult> results = result.getSignedPart().getRegisterResults().getRegisterResult();
+			if (results.size() != 1) {
+				throw new XKMSClientException("Expected one result from the XKMS service, but got " + results.size());
+			}
+
+			OutputType output = parser.parseResponse(results.get(0));
+			
+			if (xkmsLogger != null) {
+				xkmsLogger.logSuccesfulInteraction(type, requestMessage, responseMessage);
+			}
+			
+			return output;
+		} catch (XKMSClientException e) {
+			if (xkmsLogger != null) {
+				xkmsLogger.logError(type, requestMessage, responseMessage, e);
+			}
+			throw e;
+		} catch (Throwable t) {
+			if (xkmsLogger != null) {
+				xkmsLogger.logError(type, requestMessage, responseMessage, t);
+			}
+			throw new XKMSClientException("Unexpected error.", t);
 		}
-		xmlDocumentSigner.signXKMSDocument(request, "BulkRegister", "SignedPart");
-		if (parameters.containsKey(PARAMETER_LOG_PREFIX)) {
-			marshallingUtil.writeDocumentToFile(request, parameters.get(PARAMETER_LOG_PREFIX), "-signed.xml");
-		}
+	}
 
-		// Add soap headers
-		marshallingUtil.addSoapHeaders(request);
-
-		// Convert it to a string
-		lastOutboundMessage = request;
-		String requestMessage = marshallingUtil.convertDocumentToString(request);
-
-		// Call the XKMS implementation
-		byte[] responseMessage = httpUtil.postMessage(requestMessage);
-		if (parameters.containsKey(PARAMETER_LOG_PREFIX)) {
-			marshallingUtil.writeDocumentToFile(responseMessage, parameters.get(PARAMETER_LOG_PREFIX), "-response.xml");
-		}
-
-		// Convert string to DOM document
-		Document response = marshallingUtil.convertStringToDocument(responseMessage);
-
-		// Remove SOAP headers
-		marshallingUtil.removeSoapHeaders(response);
-
-		// Parse the result
-		BulkRegisterResultType result = marshallingUtil.unmarshalByteArrayToBulkRegisterResultType(response);
-		return result.getSignedPart().getRegisterResults().getRegisterResult();
+	public void setXkmsLogger(XKMSLogger xkmsLogger) {
+		this.xkmsLogger = xkmsLogger;
 	}
 }
