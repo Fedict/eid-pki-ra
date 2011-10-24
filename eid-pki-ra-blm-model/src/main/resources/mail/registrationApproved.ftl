@@ -19,4 +19,8 @@ You can start using this domain immediately.
 <p>
 Best regards,<br/>
 Fedict.
-</p>  
+</p>
+
+<p>
+Visit eID PKI RAA at <a href="${configuration.HOMEPAGE_URL}">${configuration.HOMEPAGE_URL}</a>.
+</p>

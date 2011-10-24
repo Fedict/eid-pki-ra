@@ -19,3 +19,7 @@ Unfortunately, this request has been disapproved by our administrators.
 Best regards,<br/>
 Fedict.
 </p>  
+
+<p>
+Visit eID PKI RAA at <a href="${configuration.HOMEPAGE_URL}">${configuration.HOMEPAGE_URL}</a>.
+</p>

@@ -12,7 +12,8 @@ It was requested for the certificate domain "${certificate.certificateDomain.nam
 </p>
 
 <p>
-If you want to renew your certificate, please use the Fedict eID PKI RA application.
+If you want to renew your certificate, please use the Fedict eID PKI RAA application at <a href="${configuration.HOMEPAGE_URL}">${configuration.HOMEPAGE_URL}</a>.
+</p>.
 </p>
 
 <p>

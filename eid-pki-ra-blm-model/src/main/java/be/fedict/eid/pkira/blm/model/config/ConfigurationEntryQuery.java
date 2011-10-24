@@ -1,7 +1,9 @@
 package be.fedict.eid.pkira.blm.model.config;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.NoResultException;
 
@@ -69,6 +71,25 @@ public class ConfigurationEntryQuery extends DataTableEntityQuery<ConfigurationE
 		}
 		if (result==null) {
 			return addEntry(configurationEntryKey);
+		}
+		
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Map<String, String> getAsMap() {
+		List<Object[]> allValues = this.getEntityManager().createNamedQuery(ConfigurationEntry.NQ_SELECT_ALL).getResultList();
+		
+		Map<String, String> result = new HashMap<String, String>();
+		for(Object[] value: allValues) {
+			result.put(((ConfigurationEntryKey) value[0]).name(), (String) value[1]);
+		}
+		
+		for(ConfigurationEntryKey key: ConfigurationEntryKey.values()) {
+			String name = key.name();
+			if (!result.containsKey(name)) {
+				result.put(name, key.getDefaultValue());
+			}
 		}
 		
 		return result;

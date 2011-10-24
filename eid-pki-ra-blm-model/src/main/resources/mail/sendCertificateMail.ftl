@@ -24,3 +24,7 @@ Please find attached the certificate you requested earlier.
 Best regards,<br/>
 Fedict
 </p>
+
+<p>
+Visit eID PKI RAA at <a href="${configuration.HOMEPAGE_URL}">${configuration.HOMEPAGE_URL}</a>.
+</p>

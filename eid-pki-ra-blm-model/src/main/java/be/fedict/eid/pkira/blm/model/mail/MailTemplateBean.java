@@ -29,6 +29,7 @@ import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.blm.errorhandling.ApplicationComponent;
 import be.fedict.eid.pkira.blm.errorhandling.ErrorLogger;
+import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
@@ -45,6 +46,9 @@ public class MailTemplateBean implements MailTemplate {
 
 	@In(value = MailSender.NAME, create = true)
 	private MailSender mailSender;
+	
+	@In(value=ConfigurationEntryQuery.NAME, create=true)
+	private ConfigurationEntryQuery configurationEntryQuery;
 	
 	@In(value=ErrorLogger.NAME, create=true)
 	private ErrorLogger errorLogger;
@@ -64,6 +68,8 @@ public class MailTemplateBean implements MailTemplate {
 	 */
 	@Override
 	public String createMailMessage(String templateName, Map<String, Object> parameters) {
+		parameters.put("configuration", configurationEntryQuery.getAsMap());
+		
 		try {
 			Writer out = new StringWriter();
 			Template temp = configuration.getTemplate(templateName);
@@ -127,6 +133,11 @@ public class MailTemplateBean implements MailTemplate {
 
 	protected void setMailSender(MailSender mailSender) {
 		this.mailSender = mailSender;
+	}
+
+	
+	public void setConfigurationEntryQuery(ConfigurationEntryQuery configurationEntryQuery) {
+		this.configurationEntryQuery = configurationEntryQuery;
 	}
 
 }

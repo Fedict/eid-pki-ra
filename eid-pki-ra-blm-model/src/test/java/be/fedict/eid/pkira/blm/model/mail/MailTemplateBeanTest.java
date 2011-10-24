@@ -30,42 +30,45 @@ import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
 import be.fedict.eid.pkira.blm.model.contracts.Certificate;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 import be.fedict.eid.pkira.blm.model.usermgmt.User;
 
-
 /**
  * @author Jan Van den Bergh
- *
  */
 public class MailTemplateBeanTest {
-	
+
 	@Mock
 	private MailSender mailSender;
 
 	private MailTemplateBean bean;
 	
+	@Mock
+	private ConfigurationEntryQuery configurationEntryQuery;
+
 	@BeforeMethod
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		
-		bean = new MailTemplateBean();
-		
 
+		bean = new MailTemplateBean();
+
+		bean.setConfigurationEntryQuery(configurationEntryQuery);
 		bean.setMailSender(mailSender);
 		bean.initialize();
 	}
 
 	@Test
-	public void testSendTemplatedMail() throws IOException {		
+	public void testSendTemplatedMail() throws IOException {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("certificate", createCertificate());
 		parameters.put("user", createUser());
-		
-		String[] recipients = new String[]{"test@example.com"};
+
+		String[] recipients = new String[]
+			{ "test@example.com" };
 		bean.sendTemplatedMail("sendCertificateMail.ftl", parameters, recipients, new byte[0], "test", "test");
-		
+
 		verify(mailSender).sendMail(isA(Mail.class));
 	}
 
@@ -77,7 +80,7 @@ public class MailTemplateBeanTest {
 		user.setFirstName("First");
 		user.setLastName("Last");
 		user.setNationalRegisterNumber("123");
-		
+
 		return user;
 	}
 
