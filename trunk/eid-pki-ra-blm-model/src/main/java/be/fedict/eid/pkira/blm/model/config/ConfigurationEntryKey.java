@@ -39,7 +39,8 @@ public enum ConfigurationEntryKey {
 	IDP_FINGERPRINT_ROLLOVER(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.idpFingerprint2", ""),
 	IDP_MAXTIMEOFFSET(ConfigurationEntryType.STRING, "configurationEntry.key.idpMaxTimeOffset", "60"),
 	SP_RETURN_URL_PORTAL(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.spReturnURLPortal", ""),
-	SP_RETURN_URL_ADMIN(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.spReturnURLAdmin", "");
+	SP_RETURN_URL_ADMIN(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.spReturnURLAdmin", ""),
+	HOMEPAGE_URL(ConfigurationEntryType.STRING, "configurqtionEntry.key,homePageUrl", "http://tobeconfigured/");
 	
 	private final ConfigurationEntryType type;
 	private final String message;

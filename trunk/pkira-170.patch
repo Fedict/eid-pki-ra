@@ -1,0 +1,30 @@
+### Eclipse Workspace Patch 1.0
+#P eid-pki-ra
+Index: eid-pki-ra-blm-webapp/src/main/resources/messages.properties
+===================================================================
+--- eid-pki-ra-blm-webapp/src/main/resources/messages.properties	(revision 389)
++++ eid-pki-ra-blm-webapp/src/main/resources/messages.properties	(working copy)
+@@ -175,6 +175,8 @@
+ configurationEntry.key.dssServlet=DSS servlet location
+ configurationEntry.key.dssWsClient=DSS webservice client
+ configurationEntry.key.mailProtocol=Mail server protocol
++configurationEntry.key.dssFingerprint=DSS fingerprint
++configurationEntry.key.dssFingerprint2=DSS fingerprint (rollover)
+ 
+ configurationentry.list.key=Key
+ configurationentry.list.value=Value
+Index: eid-pki-ra-blm-model/src/main/java/be/fedict/eid/pkira/blm/model/config/ConfigurationEntryKey.java
+===================================================================
+--- eid-pki-ra-blm-model/src/main/java/be/fedict/eid/pkira/blm/model/config/ConfigurationEntryKey.java	(revision 389)
++++ eid-pki-ra-blm-model/src/main/java/be/fedict/eid/pkira/blm/model/config/ConfigurationEntryKey.java	(working copy)
+@@ -39,7 +39,9 @@
+ 	IDP_FINGERPRINT_ROLLOVER(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.idpFingerprint2", ""),
+ 	IDP_MAXTIMEOFFSET(ConfigurationEntryType.STRING, "configurationEntry.key.idpMaxTimeOffset", "60"),
+ 	SP_RETURN_URL_PORTAL(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.spReturnURLPortal", ""),
+-	SP_RETURN_URL_ADMIN(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.spReturnURLAdmin", "");
++	SP_RETURN_URL_ADMIN(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.spReturnURLAdmin", ""),
++	DSS_FINGERPRINT(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.dssFingerprint", ""),
++	DSS_FINGERPRINT_ROLLOVER(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.dssFingerprint2", "");
+ 	
+ 	private final ConfigurationEntryType type;
+ 	private final String message;
