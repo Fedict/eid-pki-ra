@@ -115,8 +115,6 @@ public abstract class AbstractAuthenticationHandlerBean implements Authenticatio
 	protected abstract void enrichIdentity(EIdUser eidUser);
 
 	protected abstract String getIDPDestination();
-	
-	protected abstract String getIDPFingerprint();
 
 	protected HttpServletRequest getRequest() {
 		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()

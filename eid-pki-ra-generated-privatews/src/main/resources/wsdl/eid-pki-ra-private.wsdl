@@ -321,6 +321,7 @@
                     <xsd:enumeration value="DSS_SERVLET" />
                     <xsd:enumeration value="IDP_DESTINATION" />
                     <xsd:enumeration value="IDP_FINGERPRINT" />
+                    <xsd:enumeration value="IDP_FINGERPRINT_ROLLOVER" />
                     <xsd:enumeration value="IDP_MAXTIMEOFFSET" />
                 </xsd:restriction>
             </xsd:simpleType>
