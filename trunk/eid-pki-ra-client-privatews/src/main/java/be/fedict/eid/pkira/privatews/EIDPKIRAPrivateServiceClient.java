@@ -156,9 +156,9 @@ public class EIDPKIRAPrivateServiceClient {
 		return response.isSuccess();
 	}
 	
-	public ConfigurationEntryWS findConfigurationEntry(String configurationEntryKey) {
+	public ConfigurationEntryWS findConfigurationEntry(ConfigurationEntryKeyWS configurationEntryKey) {
 		FindConfigurationEntryRequest request = factory.createFindConfigurationEntryRequest();
-		request.setEntryKey(Enum.valueOf(ConfigurationEntryKeyWS.class, configurationEntryKey));
+		request.setEntryKey(configurationEntryKey);
 		
 		FindConfigurationEntryResponse response = getWebservicePort().findConfigurationEntry(request);
 		return response.getConfigurationEntry();

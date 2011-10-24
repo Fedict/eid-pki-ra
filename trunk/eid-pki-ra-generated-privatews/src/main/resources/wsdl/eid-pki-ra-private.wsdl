@@ -323,6 +323,7 @@
                     <xsd:enumeration value="IDP_FINGERPRINT" />
                     <xsd:enumeration value="IDP_FINGERPRINT_ROLLOVER" />
                     <xsd:enumeration value="IDP_MAXTIMEOFFSET" />
+                    <xsd:enumeration value="SP_RETURN_URL_PORTAL" />
                 </xsd:restriction>
             </xsd:simpleType>
 

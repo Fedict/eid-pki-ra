@@ -30,6 +30,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
+import be.fedict.eid.pkira.generated.privatews.ConfigurationEntryKeyWS;
 import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 
 /**
@@ -42,13 +43,6 @@ public class ConfigurationEntryContainer implements Serializable {
 	private static final long serialVersionUID = 2931481314588085666L;
 
 	public static final String NAME = "be.fedict.eid.pkira.portal.configurationEntryContainer";
-
-	private static final String VALIDITY_PERIODS_KEY = "VALIDITY_PERIODS";
-	private static final String DSS_SERVLET_KEY = "DSS_SERVLET";
-	private static final String IDP_DESTINATION_KEY = "IDP_DESTINATION";
-	private static final String IDP_FINGERPRINT_KEY = "IDP_FINGERPRINT";
-	private static final String IDP_FINGERPRINT_ROLLOVER_KEY = "IDP_FINGERPRINT_ROLLOVER";
-	private static final String IDP_MAXTIMEOFFSET_KEY = "IDP_MAXTIMEOFFSET";
 
 	@In(value = EIDPKIRAPrivateServiceClient.NAME, create = true)
 	private EIDPKIRAPrivateServiceClient eidpkiraPrivateServiceClient;
@@ -63,28 +57,28 @@ public class ConfigurationEntryContainer implements Serializable {
 	}
 
 	public String getDssServletUrl() {
-		return findConfigurationEntry(DSS_SERVLET_KEY);
+		return findConfigurationEntry(ConfigurationEntryKeyWS.DSS_SERVLET);
 	}
 
 	private String[] findValidityPeriods() {
-		String periods = findConfigurationEntry(VALIDITY_PERIODS_KEY);
+		String periods = findConfigurationEntry(ConfigurationEntryKeyWS.VALIDITY_PERIODS);
 		if (periods != null) {
 			return periods.split(",");
 		}
 		return null;
 	}
 
-	private String findConfigurationEntry(String entryKey) {
+	private String findConfigurationEntry(ConfigurationEntryKeyWS entryKey) {
 		return eidpkiraPrivateServiceClient.findConfigurationEntry(entryKey).getEntryValue();
 	}
 
 	public String getIDPDestination() {
-		return findConfigurationEntry(IDP_DESTINATION_KEY);
+		return findConfigurationEntry(ConfigurationEntryKeyWS.IDP_DESTINATION);
 	}
 
 	public String[] getFingerprints() {
-		String fingerprint1 = findConfigurationEntry(IDP_FINGERPRINT_KEY);
-		String fingerprint2 = findConfigurationEntry(IDP_FINGERPRINT_ROLLOVER_KEY);
+		String fingerprint1 = findConfigurationEntry(ConfigurationEntryKeyWS.IDP_FINGERPRINT);
+		String fingerprint2 = findConfigurationEntry(ConfigurationEntryKeyWS.IDP_FINGERPRINT_ROLLOVER);
 
 		if (StringUtils.isBlank(fingerprint1) && StringUtils.isBlank(fingerprint2)) {
 			return new String[0];
@@ -103,6 +97,10 @@ public class ConfigurationEntryContainer implements Serializable {
 	}
 
 	public int getMaxTimeOffset() {
-		return Integer.parseInt(findConfigurationEntry(IDP_MAXTIMEOFFSET_KEY));
+		return Integer.parseInt(findConfigurationEntry(ConfigurationEntryKeyWS.IDP_MAXTIMEOFFSET));
+	}
+
+	public String getSPReturnUrl() {
+		return findConfigurationEntry(ConfigurationEntryKeyWS.SP_RETURN_URL_PORTAL);
 	}
 }

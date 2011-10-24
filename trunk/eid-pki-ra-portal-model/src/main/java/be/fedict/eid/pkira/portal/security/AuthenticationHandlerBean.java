@@ -71,4 +71,9 @@ public class AuthenticationHandlerBean extends AbstractAuthenticationHandlerBean
 	protected String getIDPDestination() {
 		return configurationEntryContainer.getIDPDestination();
 	}
+
+	@Override
+	protected String getSPReturnUrl() {
+		return configurationEntryContainer.getSPReturnUrl();
+	}
 }
