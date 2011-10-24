@@ -16,32 +16,17 @@ public class CertificateChainHome extends EntityHome<CertificateChain> {
 	public static final String NAME = "be.fedict.eid.pkira.blm.certificateChainHome";
 
 	@Override
-	protected String getUpdatedMessageKey() {
-		return null;
-	}
-
-	@Override
-	protected String getCreatedMessageKey() {
-		return null;
-	}
-
-	@Override
-	protected String getDeletedMessageKey() {
-		return null;
-	}
-
-	@Override
 	public ValueExpression<?> getCreatedMessage() {
-		return Expressions.instance().createValueExpression(null);
+		return Expressions.instance().createValueExpression("");
 	}
 
 	@Override
 	public ValueExpression<?> getDeletedMessage() {
-		return Expressions.instance().createValueExpression(null);
+		return Expressions.instance().createValueExpression("");
 	}
 
 	@Override
 	public ValueExpression<?> getUpdatedMessage() {
-		return Expressions.instance().createValueExpression(null);
+		return Expressions.instance().createValueExpression("");
 	}
 }

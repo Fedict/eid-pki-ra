@@ -86,6 +86,11 @@ public class MailTemplateBean implements MailTemplate {
 		}
 	}
 
+	
+	public void setErrorLogger(ErrorLogger errorLogger) {
+		this.errorLogger = errorLogger;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
