@@ -16,11 +16,12 @@
  */
 package be.fedict.eid.pkira.blm.model.mail;
 
-import static org.mockito.Matchers.isA;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +31,7 @@ import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import be.fedict.eid.pkira.blm.errorhandling.ErrorLogger;
 import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
 import be.fedict.eid.pkira.blm.model.contracts.Certificate;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
@@ -44,9 +46,12 @@ public class MailTemplateBeanTest {
 	private MailSender mailSender;
 
 	private MailTemplateBean bean;
-	
+
 	@Mock
 	private ConfigurationEntryQuery configurationEntryQuery;
+
+	@Mock
+	private ErrorLogger errorLogger;
 
 	@BeforeMethod
 	public void setup() {
@@ -56,7 +61,10 @@ public class MailTemplateBeanTest {
 
 		bean.setConfigurationEntryQuery(configurationEntryQuery);
 		bean.setMailSender(mailSender);
+		bean.setErrorLogger(errorLogger);
 		bean.initialize();
+		
+		when(configurationEntryQuery.getAsMap()).thenReturn(Collections.singletonMap("HOMEPAGE_URL", "{URL}"));
 	}
 
 	@Test
