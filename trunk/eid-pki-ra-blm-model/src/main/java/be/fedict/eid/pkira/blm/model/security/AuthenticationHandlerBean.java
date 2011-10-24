@@ -22,8 +22,6 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.security.Identity;
 
-import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryKey;
-import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
 import be.fedict.eid.pkira.blm.model.framework.WebserviceLocator;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationException;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationManager;
@@ -47,9 +45,6 @@ public class AuthenticationHandlerBean extends AbstractAuthenticationHandlerBean
 	
 	@In(value=WebserviceLocator.NAME, create=true)
 	protected WebserviceLocator webserviceLocator;
-	
-	@In(value = ConfigurationEntryQuery.NAME, create = true)
-	private ConfigurationEntryQuery configurationEntryQuery;
 	
 	@In
 	protected Identity identity;
@@ -80,10 +75,5 @@ public class AuthenticationHandlerBean extends AbstractAuthenticationHandlerBean
 	@Override
 	protected String getIDPDestination() {
 		return webserviceLocator.getIDPDestination();
-	}
-	
-	@Override
-	protected String getIDPFingerprint() {
-		return configurationEntryQuery.findByEntryKey(ConfigurationEntryKey.IDP_FINGERPRINT).getValue();
 	}
 }

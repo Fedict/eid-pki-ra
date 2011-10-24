@@ -36,6 +36,7 @@ public enum ConfigurationEntryKey {
 	DSS_WS_CLIENT(ConfigurationEntryType.URL, "configurationEntry.key.dssWsClient", "https://www.e-contract.be/eid-dss-ws/dss"), 
 	IDP_DESTINATION(ConfigurationEntryType.URL, "configurationEntry.key.idpDestination", "https://www.e-contract.be/eid-idp/protocol/saml2/post/auth-ident"),
 	IDP_FINGERPRINT(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.idpFingerprint", "d838f129659ef5d2f3ea974221e0d8ae1bb5206b"),
+	IDP_FINGERPRINT_ROLLOVER(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.idpFingerprint2", ""),
 	IDP_MAXTIMEOFFSET(ConfigurationEntryType.STRING, "configurationEntry.key.idpMaxTimeOffset", "60");
 	
 	private final ConfigurationEntryType type;

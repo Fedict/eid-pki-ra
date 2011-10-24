@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.NoResultException;
 
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.TransactionPropagationType;
+import org.jboss.seam.annotations.Transactional;
 
 import be.fedict.eid.pkira.blm.model.framework.DataTableEntityQuery;
 
@@ -52,6 +54,7 @@ public class ConfigurationEntryQuery extends DataTableEntityQuery<ConfigurationE
 		return entry;
 	}
 	
+	@Transactional(TransactionPropagationType.REQUIRED)
 	public ConfigurationEntry findByEntryKey(ConfigurationEntryKey configurationEntryKey) {
 		configurationEntry = new ConfigurationEntry();
 		configurationEntry.setKey(configurationEntryKey);

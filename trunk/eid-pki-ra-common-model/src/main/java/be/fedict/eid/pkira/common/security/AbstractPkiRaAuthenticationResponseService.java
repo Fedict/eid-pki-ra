@@ -45,17 +45,21 @@ public abstract class AbstractPkiRaAuthenticationResponseService implements Auth
 			md.update(certificate.getEncoded());
 			byte[] fp = md.digest();
 			
-			String fingerprintConfig = getFingerprint();
+			String[] fingerprintConfig = getFingerprints();
 			
-			if(fingerprintConfig == null || "".equals(fingerprintConfig)){
+			if(fingerprintConfig == null || fingerprintConfig.length==0){
 				log.warn("No fingerprint given");
 				return;
 			}
 			
+			boolean ok = false;
 			Hex hex = new Hex();
-			byte[] fpConfig = (byte[]) hex.decode(fingerprintConfig);
+			for(String fingerprint: fingerprintConfig) {
+				byte[] fpConfig = (byte[]) hex.decode(fingerprint);
+				ok |= java.util.Arrays.equals(fp, fpConfig);
+			}
 			
-			if(!java.util.Arrays.equals(fp, fpConfig)){
+			if(!ok){
 				log.error("Signatures not correct.");
 				throw new SecurityException("Signatures not correct.");
 			}
@@ -68,7 +72,10 @@ public abstract class AbstractPkiRaAuthenticationResponseService implements Auth
 		} catch (DecoderException e) {
 			log.error("Fingerprint decode problem", e);
 			throw new SecurityException(e.getMessage());
-		}	
+		}catch (Throwable e) {
+			log.error("Exception during service certificate validation", e);
+			throw new SecurityException(e.getMessage());
+		}	 
 	}
 
 	@Override
@@ -84,5 +91,5 @@ public abstract class AbstractPkiRaAuthenticationResponseService implements Auth
 	@Override
 	public abstract int getMaximumTimeOffset();
 	
-	public abstract String getFingerprint();
+	public abstract String[] getFingerprints();
 }

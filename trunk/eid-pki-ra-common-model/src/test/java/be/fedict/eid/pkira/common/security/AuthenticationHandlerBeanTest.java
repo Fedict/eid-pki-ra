@@ -47,11 +47,6 @@ public class AuthenticationHandlerBeanTest {
 		protected String getSPDestination() {
 			return "SPDestination";
 		}
-
-		@Override
-		protected String getIDPFingerprint() {
-			return "IDPFingerprint";
-		}		
 	}
 	
 	private AbstractAuthenticationHandlerBean handler;
