@@ -23,6 +23,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.international.LocaleSelector;
@@ -42,9 +43,9 @@ public abstract class AbstractAuthenticationHandlerBean implements Authenticatio
 	@In
 	private EIdUserCredentials credentials;
 
-	@In(value="org.jboss.seam.international.localeSelector", create=true)
+	@In(value = "org.jboss.seam.international.localeSelector", create = true)
 	private LocaleSelector localeSelector;
-	
+
 	@Logger
 	private Log log;
 
@@ -74,11 +75,12 @@ public abstract class AbstractAuthenticationHandlerBean implements Authenticatio
 
 			HttpServletResponse response = getResponse();
 
-			AuthnRequest authnRequest = AuthenticationRequestUtil.sendRequest(issuer, idpDestination, spDestination, null, null, response, localeSelector.getLanguage());
+			AuthnRequest authnRequest = AuthenticationRequestUtil.sendRequest(issuer, idpDestination, spDestination,
+					null, null, response, localeSelector.getLanguage());
 			String requestId = authnRequest.getID();
 			// FIXME use Seam @Out
 			getRequest().getSession().setAttribute(AuthenticationRequestDecoder.NAME_REQUEST_ID, requestId);
-			
+
 			FacesContext.getCurrentInstance().responseComplete();
 		} catch (ServletException e) {
 			throw new RuntimeException(e);
@@ -116,6 +118,8 @@ public abstract class AbstractAuthenticationHandlerBean implements Authenticatio
 
 	protected abstract String getIDPDestination();
 
+	protected abstract String getSPReturnUrl();
+
 	protected HttpServletRequest getRequest() {
 		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
 				.getRequest();
@@ -129,7 +133,13 @@ public abstract class AbstractAuthenticationHandlerBean implements Authenticatio
 	}
 
 	protected String getSPDestination() {
-		String returnURL = getRequest().getRequestURL().toString();
+		String returnURL = getSPReturnUrl();
+		if (StringUtils.isBlank(returnURL)) {
+			returnURL = getRequest().getRequestURL().toString();
+		} else if (!returnURL.endsWith("/")) {
+			returnURL += "/";
+		}
+		
 		returnURL = returnURL.replaceFirst("/[^/]*$", "/postLogin.seam");
 		return returnURL;
 	}

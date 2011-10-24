@@ -76,4 +76,9 @@ public class AuthenticationHandlerBean extends AbstractAuthenticationHandlerBean
 	protected String getIDPDestination() {
 		return webserviceLocator.getIDPDestination();
 	}
+
+	@Override
+	protected String getSPReturnUrl() {
+		return webserviceLocator.getSPReturnURL();
+	}
 }

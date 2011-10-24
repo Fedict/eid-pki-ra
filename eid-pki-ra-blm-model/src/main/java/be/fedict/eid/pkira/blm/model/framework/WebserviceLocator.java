@@ -41,4 +41,8 @@ public class WebserviceLocator {
 	public String getIDPDestination() {
 		return findWebserviceUrl(ConfigurationEntryKey.IDP_DESTINATION);
 	}
+
+	public String getSPReturnURL() {
+		return findWebserviceUrl(ConfigurationEntryKey.SP_RETURN_URL_ADMIN);
+	}
 }
