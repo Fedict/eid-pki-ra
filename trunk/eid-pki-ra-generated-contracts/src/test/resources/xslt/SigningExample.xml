@@ -9,6 +9,8 @@
 	</contract:Operator>
 	<contract:LegalNotice>testLegalNotice</contract:LegalNotice>
 	<contract:DistinguishedName>C=BE,ST=Limburg,L=Hasselt,O=ACA IT-Solutions,CN=Jan Van den Bergh</contract:DistinguishedName>
+    <contract:AlternativeName>C=BE,ST=Limburg,L=Hasselt,O=ACA IT-Solutions,CN=Test</contract:AlternativeName>
+    <contract:AlternativeName>C=BE,ST=Limburg,L=Hasselt,O=ACA IT-Solutions,CN=Test2</contract:AlternativeName>
 	<contract:CertificateType>Server</contract:CertificateType>
 	<contract:ValidityPeriodMonths>15</contract:ValidityPeriodMonths>
 	<contract:CSR>-----BEGIN CERTIFICATE REQUEST-----

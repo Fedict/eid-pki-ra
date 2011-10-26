@@ -16,6 +16,9 @@
  */
 package be.fedict.eid.pkira.blm.model.usermgmt;
 
+import java.util.List;
+
+import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 import be.fedict.eid.pkira.generated.privatews.RegistrationWS;
 
@@ -45,12 +48,23 @@ public interface RegistrationManager {
 	 * 
 	 * @param userRRN
 	 *            the RRN of the user to check.
-	 * @param distinguishedName
+	 * @param dn TODO
+	 * @param names
 	 *            the DN to check.
 	 * @return the registration for this user and certificate domain (null if
 	 *         the user is not authorized).
 	 */
-	Registration findRegistrationForUserDNAndCertificateType(String userRRN, String distinguishedName,
-			CertificateType type);
+	Registration findRegistrationForUserDNAndCertificateType(String userRRN, String dn, List<String> names, CertificateType type);
+
+	/**
+	 * Checks if a user is allowed to change certificates for this certificate domain.
+	 * 
+	 * @param userRRN
+	 *            the RRN of the user to check.
+	 * @param certificateDomain the certificate domain to check.
+	 * @return the registration for this user and certificate domain (null if
+	 *         the user is not authorized).
+	 */
+	Registration findRegistrationForUserAndCertificateDomain(String signer, CertificateDomain certificateDomain);
 
 }

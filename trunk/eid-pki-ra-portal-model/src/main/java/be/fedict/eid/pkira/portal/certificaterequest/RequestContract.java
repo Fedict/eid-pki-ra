@@ -18,6 +18,8 @@
 
 package be.fedict.eid.pkira.portal.certificaterequest;
 
+import java.util.List;
+
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
@@ -38,6 +40,7 @@ public class RequestContract extends AbstractContract {
 	public static final String NAME = "be.fedict.eid.pkira.portal.requestContract";
 	
 	private String distinguishedName;
+	private List<String> alternativeNames;
 	private String base64Csr;
 	private int validityPeriod = 15;	
 	private CertificateType certificateType;
@@ -78,6 +81,28 @@ public class RequestContract extends AbstractContract {
 	 */
 	public CertificateType getCertificateType() {
 		return certificateType;
+	}
+
+	
+	public List<String> getAlternativeNames() {
+		return alternativeNames;
+	}
+
+	
+	public void setAlternativeNames(List<String> alternativeNames) {
+		this.alternativeNames = alternativeNames;
+	}
+	
+	public String getAlternativeNamesAsString() {
+		StringBuilder builder = new StringBuilder();
+		for(String alternativeName: alternativeNames) {
+			if (builder.length()!=0) {
+				builder.append(" / ");
+			}
+			builder.append(alternativeName);
+		}
+		
+		return builder.toString();
 	}
 
 	@Override

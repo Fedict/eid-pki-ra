@@ -47,6 +47,12 @@ public class CSRParserImplTest {
 		assertNotNull(csrInfo.getPemEncoded());
 	}
 	
+	@Test
+	public void testParseCRSWithSAN() throws CryptoException {
+		CSRInfo csrInfo = csrParser.parseCSR(TestConstants.VALID_CSR_WITH_SAN);
+		assertEquals(2, csrInfo.getSubjectAlternativeNames().size());
+	}
+	
 	@Test(expectedExceptions = CryptoException.class)
 	public void testParseCSRInvalidSignature() throws CryptoException {
 		csrParser.parseCSR(TestConstants.INVALID_CSR);

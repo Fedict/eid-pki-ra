@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.zip.ZipEntry;
@@ -131,8 +132,7 @@ public class ContractHandlerBean implements ContractHandler {
 			Certificate certificate = findCertificate(request);
 
 			// Check the authorization
-			Registration registration = getMatchingRegistration(signer, request.getDistinguishedName(),
-					certificate.getCertificateType());
+			Registration registration = getMatchingRegistration(signer, certificate);
 
 			// Check the legal notice
 			checkLegalNotice(request, registration);
@@ -141,7 +141,7 @@ public class ContractHandlerBean implements ContractHandler {
 			AbstractContract contract = saveContract(registration, requestMsg, request, signer);
 
 			// Call XKMS
-			xkmsService.revoke(contract, certificate.getCertificateType());
+			xkmsService.revoke(contract, certificate.getCertificateType(), request.getCertificate());
 
 			// Delete the certificate
 			contractRepository.removeCertificate(certificate);
@@ -162,6 +162,17 @@ public class ContractHandlerBean implements ContractHandler {
 
 		return contractParser.marshalResponseMessage(responseBuilder.toResponseType(),
 				CertificateRevocationResponseType.class);
+	}
+
+	private Registration getMatchingRegistration(String signer, Certificate certificate)
+			throws ContractHandlerBeanException {
+		Registration registration = registrationManager.findRegistrationForUserAndCertificateDomain(signer,
+				certificate.getCertificateDomain());
+		if (registration == null) {
+			throw new ContractHandlerBeanException(ResultType.NOT_AUTHORIZED,
+					"User is not authorized for the DN in the contract");
+		}
+		return registration;
 	}
 
 	/** {@inheritDoc} */
@@ -186,7 +197,8 @@ public class ContractHandlerBean implements ContractHandler {
 
 			// Check if the user is authorized
 			CertificateType certificateType = mapCertificateType(request);
-			Registration registration = getMatchingRegistration(signer, request.getDistinguishedName(), certificateType);
+			Registration registration = getMatchingRegistration(signer, request.getDistinguishedName(),
+					request.getAlternativeName(), certificateType);
 
 			// Check the legal notice
 			checkLegalNotice(request, registration);
@@ -195,7 +207,7 @@ public class ContractHandlerBean implements ContractHandler {
 			contract = saveContract(registration, requestMsg, request, signer, certificateType);
 
 			// Call XKMS
-			String certificateAsPem = xkmsService.sign(contract);
+			String certificateAsPem = xkmsService.sign(contract, request.getCSR());
 			if (certificateAsPem == null) {
 				throw new ContractHandlerBeanException(ResultType.BACKEND_ERROR,
 						"Error contacting the backend service.");
@@ -294,10 +306,10 @@ public class ContractHandlerBean implements ContractHandler {
 		return certificate;
 	}
 
-	private Registration getMatchingRegistration(String signer, String distinguishedName, CertificateType type)
-			throws ContractHandlerBeanException {
-		Registration registration = registrationManager.findRegistrationForUserDNAndCertificateType(signer,
-				distinguishedName, type);
+	private Registration getMatchingRegistration(String signer, String distinguishedName,
+			List<String> alternativeNames, CertificateType type) throws ContractHandlerBeanException {
+		Registration registration = registrationManager
+				.findRegistrationForUserDNAndCertificateType(signer, distinguishedName, alternativeNames, type);
 		if (registration == null) {
 			throw new ContractHandlerBeanException(ResultType.NOT_AUTHORIZED,
 					"User is not authorized for the DN in the contract");

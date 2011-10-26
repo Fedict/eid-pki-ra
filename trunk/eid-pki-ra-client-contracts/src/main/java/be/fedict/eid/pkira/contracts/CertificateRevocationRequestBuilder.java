@@ -30,7 +30,7 @@ import be.fedict.eid.pkira.generated.contracts.CertificateRevocationRequestType;
  */
 public class CertificateRevocationRequestBuilder extends AbstractRequestBuilder<CertificateRevocationRequestBuilder> {
 
-	private String certificate;	
+	private String certificate;
 	private String distinguishedName;
 	private Date validityEnd;
 	private Date validityStart;
@@ -43,7 +43,8 @@ public class CertificateRevocationRequestBuilder extends AbstractRequestBuilder<
 	}
 
 	/**
-	 * Creates a certificate revocation request builder setting the specified request id.
+	 * Creates a certificate revocation request builder setting the specified
+	 * request id.
 	 */
 	public CertificateRevocationRequestBuilder(String requestId) {
 		super(requestId);
@@ -53,6 +54,7 @@ public class CertificateRevocationRequestBuilder extends AbstractRequestBuilder<
 		this.certificate = certificate;
 		return this;
 	}
+
 
 	public CertificateRevocationRequestBuilder setDistinguishedName(String distinguishedName) {
 		this.distinguishedName = distinguishedName;
@@ -70,14 +72,14 @@ public class CertificateRevocationRequestBuilder extends AbstractRequestBuilder<
 	}
 
 	public CertificateRevocationRequestType toRequestType() {
-		CertificateRevocationRequestType requestType = getObjectFactory().createCertificateRevocationRequestType();		
+		CertificateRevocationRequestType requestType = getObjectFactory().createCertificateRevocationRequestType();
 		super.fillInRequestType(requestType);
-		
+
 		requestType.setCertificate(certificate);
 		requestType.setDistinguishedName(distinguishedName);
 		requestType.setValidityEnd(createXmlGregorianCalendar(validityEnd));
 		requestType.setValidityStart(createXmlGregorianCalendar(validityStart));
 
 		return requestType;
-	}	
+	}
 }

@@ -18,6 +18,11 @@
                 	<h:outputText id="distinguishedName" value="#{requestContract.distinguishedName}" />
             	</s:decorate>
             	
+				<s:decorate id="alternativeNameDecoration" template="/layout/edit.xhtml">
+                	<ui:define name="label">#{messages['contract.request.san']}:</ui:define>
+                	<h:outputText id="alternativeNames" value="#{requestContract.alternativeNamesAsString}" />
+            	</s:decorate>
+            	
             	<s:decorate id="certificateTypeDecoration" template="/layout/edit.xhtml">
                 	<ui:define name="label">#{messages['certificate.type']}:</ui:define> 
                 	<h:selectOneRadio id="certificateTypeRadioList" layout="lineDirection"

@@ -39,6 +39,17 @@
 			<span class="key">Subject: </span>
 			<span class="value"><xsl:value-of select="contract:DistinguishedName" /></span>
 		</p>
+        <p>
+            <span class="key">Subject Alternative Names: </span>
+            <span class="value">
+                <xsl:for-each select="contract:AlternativeName">
+                    <xsl:value-of select="."/>
+                    <xsl:if test="position() != last()">
+                        <xsl:text> / </xsl:text>
+                    </xsl:if>
+                </xsl:for-each>
+            </span>
+        </p>
 		<p>
 			<span class="key">Certificate type: </span>
 			<span class="value"><xsl:value-of select="contract:CertificateType" /></span>

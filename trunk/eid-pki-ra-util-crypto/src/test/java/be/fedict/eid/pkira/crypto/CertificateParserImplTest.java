@@ -48,6 +48,14 @@ public class CertificateParserImplTest {
 		assertEquals(certificateInfo.getValidityEnd(), TestConstants.CERTIFICATE_END_DATE);
 		assertEquals(certificateInfo.getSerialNumber(), TestConstants.SERIAL_NUMBER);
 	}
+	
+	@Test
+	public void testParseCertificateWithSAN() throws CryptoException {
+		CertificateInfo certificateInfo = certificateParser.parseCertificate(TestConstants.VALID_CERTIFICATE_WITH_SAN);
+
+		assertNotNull(certificateInfo);
+		assertEquals(2, certificateInfo.getAlternativeNames().size());
+	}
 
 	@Test(expectedExceptions = CryptoException.class)
 	public void testParseIncompleteCertificate() throws CryptoException {

@@ -132,7 +132,7 @@ public class RegistrationManagerBeanTest {
 		when(distinguishedNameManager.createDistinguishedNameExpression(TEST_DN2)).thenReturn(dn2);
 		when(dn2.matches(eq(dn1))).thenReturn(true);
 		
-		Registration theRegistration = bean.findRegistrationForUserDNAndCertificateType(TEST_RRN, TEST_DN1, CertificateType.CLIENT);
+		Registration theRegistration = bean.findRegistrationForUserDNAndCertificateType(TEST_RRN, TEST_DN1, Collections.<String>emptyList(), CertificateType.CLIENT);
 		assertEquals(theRegistration, registration);
 	}
 	
@@ -155,7 +155,7 @@ public class RegistrationManagerBeanTest {
 		when(distinguishedNameManager.createDistinguishedNameExpression(TEST_DN2)).thenReturn(dn2);
 		when(dn2.matches(eq(dn1))).thenReturn(true);
 		
-		Registration theRegistration = bean.findRegistrationForUserDNAndCertificateType(TEST_RRN, TEST_DN1, CertificateType.SERVER);
+		Registration theRegistration = bean.findRegistrationForUserDNAndCertificateType(TEST_RRN, TEST_DN1, Collections.<String>emptyList(), CertificateType.SERVER);
 		assertNull(theRegistration);
 	}
 	
@@ -178,7 +178,7 @@ public class RegistrationManagerBeanTest {
 		when(distinguishedNameManager.createDistinguishedNameExpression(TEST_DN2)).thenReturn(dn2);
 		when(dn2.matches(eq(dn1))).thenReturn(false);
 		
-		Registration theRegistration = bean.findRegistrationForUserDNAndCertificateType(TEST_RRN, TEST_DN1, CertificateType.CLIENT);
+		Registration theRegistration = bean.findRegistrationForUserDNAndCertificateType(TEST_RRN, TEST_DN1, Collections.<String>emptyList(), CertificateType.CLIENT);
 		assertNull(theRegistration);
 	}
 	
@@ -190,7 +190,7 @@ public class RegistrationManagerBeanTest {
 		List<Registration> emptyList = Collections.emptyList();
 		when(registrationRepository.findApprovedRegistrationsByUser(eq(user))).thenReturn(emptyList);		
 		
-		Registration theRegistration = bean.findRegistrationForUserDNAndCertificateType(TEST_RRN, TEST_DN1, CertificateType.CLIENT);
+		Registration theRegistration = bean.findRegistrationForUserDNAndCertificateType(TEST_RRN, TEST_DN1, Collections.<String>emptyList(), CertificateType.CLIENT);
 		assertNull(theRegistration);
 	}
 }

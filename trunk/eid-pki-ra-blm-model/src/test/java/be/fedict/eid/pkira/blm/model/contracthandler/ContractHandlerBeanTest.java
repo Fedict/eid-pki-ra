@@ -34,6 +34,7 @@ import static org.testng.Assert.assertNotNull;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.jboss.seam.log.Logging;
 import org.mockito.Mock;
@@ -94,12 +95,14 @@ public class ContractHandlerBeanTest {
 	private static final Date VALID_START = new GregorianCalendar(2010, 0, 1).getTime();
 	private static final int VALID_VALIDITYPERIOD = 15;
 
+	private static final CertificateDomain THE_CERTIFICATE_DOMAIN = createCertificateDomain();
 	private static final Certificate THE_CERTIFICATE = createValidCertificate();
 
 	private static final Registration VALID_REGISTRATION = createValidRegistration();
 	private static final CertificateRevocationRequestType VALID_REVOCATION_REQUEST = createMinimalRevocationRequest();
 	private static final CertificateSigningRequestType VALID_SIGNING_REQUEST = createMinimalSigningRequest();
 	private static final String VALID_LEGAL_NOTICE = "LegalNotice";
+	
 
 	private ContractHandlerBean bean;
 
@@ -172,15 +175,15 @@ public class ContractHandlerBeanTest {
 						argThat(responseType(CertificateRevocationResponseType.class, VALID_REQUEST_ID,
 								ResultType.SUCCESS)), eq(CertificateRevocationResponseType.class))).thenReturn(
 				RESPONSE_MESSAGE);
-		when(registrationManager.findRegistrationForUserDNAndCertificateType(SIGNER, VALID_DN, VALID_CERTIFICATETYPE))
-				.thenReturn(VALID_REGISTRATION);
+		when(
+				registrationManager.findRegistrationForUserAndCertificateDomain(SIGNER, THE_CERTIFICATE_DOMAIN)).thenReturn(VALID_REGISTRATION);
 
 		// Run it
 		String result = bean.revokeCertificate(REQUEST_MESSAGE);
 
 		// Validate it
 		assertEquals(result, RESPONSE_MESSAGE);
-		verify(xkmsService).revoke(isA(CertificateRevocationContract.class), eq(CertificateType.CLIENT));
+		verify(xkmsService).revoke(isA(CertificateRevocationContract.class), eq(CertificateType.CLIENT), eq(VALID_CERTIFICATE));
 		verify(contractRepository).findCertificate(VALID_ISSUER, VALID_SERIALNUMBER);
 		verify(contractRepository).persistContract(isA(CertificateRevocationContract.class));
 		verify(contractRepository).removeCertificate(THE_CERTIFICATE);
@@ -255,14 +258,14 @@ public class ContractHandlerBeanTest {
 		when(certificateInfo.getIssuer()).thenReturn(VALID_ISSUER);
 		when(certificateInfo.getSerialNumber()).thenReturn(VALID_SERIALNUMBER);
 		doThrow(new ContractHandlerBeanException(ResultType.BACKEND_ERROR, ERROR_MSG)).when(xkmsService).revoke(
-				isA(CertificateRevocationContract.class), eq(CertificateType.CLIENT));
+				isA(CertificateRevocationContract.class), eq(CertificateType.CLIENT), eq(VALID_CERTIFICATE));
 		when(
 				contractParser.marshalResponseMessage(
 						argThat(responseType(CertificateRevocationResponseType.class, VALID_REQUEST_ID,
 								ResultType.BACKEND_ERROR)), eq(CertificateRevocationResponseType.class))).thenReturn(
 				RESPONSE_MESSAGE);
-		when(registrationManager.findRegistrationForUserDNAndCertificateType(SIGNER, VALID_DN, VALID_CERTIFICATETYPE))
-				.thenReturn(VALID_REGISTRATION);
+		when(
+				registrationManager.findRegistrationForUserAndCertificateDomain(SIGNER, THE_CERTIFICATE_DOMAIN)).thenReturn(VALID_REGISTRATION);
 		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE), eq(VALID_REVOCATION_REQUEST))).thenReturn(SIGNER);
 
 		// Run it
@@ -281,7 +284,7 @@ public class ContractHandlerBeanTest {
 		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateSigningRequestType.class)))
 				.thenReturn(VALID_SIGNING_REQUEST);
 		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE), eq(VALID_SIGNING_REQUEST))).thenReturn(SIGNER);
-		when(xkmsService.sign(isA(CertificateSigningContract.class))).thenReturn(VALID_CERTIFICATE);
+		when(xkmsService.sign(isA(CertificateSigningContract.class), eq(VALID_CSR))).thenReturn(VALID_CERTIFICATE);
 		when(certificateParser.parseCertificate(VALID_CERTIFICATE)).thenReturn(certificateInfo);
 		when(
 				contractParser
@@ -289,8 +292,9 @@ public class ContractHandlerBeanTest {
 								argThat(responseType(CertificateSigningResponseType.class, VALID_REQUEST_ID,
 										ResultType.SUCCESS)), eq(CertificateSigningResponseType.class))).thenReturn(
 				RESPONSE_MESSAGE);
-		when(registrationManager.findRegistrationForUserDNAndCertificateType(SIGNER, VALID_DN, VALID_CERTIFICATETYPE))
-				.thenReturn(VALID_REGISTRATION);
+		when(
+				registrationManager.findRegistrationForUserDNAndCertificateType(eq(SIGNER), eq(VALID_DN), isA(List.class),
+						eq(VALID_CERTIFICATETYPE))).thenReturn(VALID_REGISTRATION);
 		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE), eq(VALID_SIGNING_REQUEST))).thenReturn(SIGNER);
 		when(certificateInfo.getValidityEnd()).thenReturn(new Date());
 
@@ -377,19 +381,21 @@ public class ContractHandlerBeanTest {
 		assertEquals(result, RESPONSE_MESSAGE);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testSignCertificateXKMSFailure() throws ContractHandlerBeanException {
 		// Setup test
 		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateSigningRequestType.class)))
 				.thenReturn(VALID_SIGNING_REQUEST);
-		when(xkmsService.sign(isA(CertificateSigningContract.class))).thenReturn(null);
+		when(xkmsService.sign(isA(CertificateSigningContract.class), eq(VALID_CSR))).thenReturn(null);
 		when(
 				contractParser.marshalResponseMessage(
 						argThat(responseType(CertificateSigningResponseType.class, VALID_REQUEST_ID,
 								ResultType.BACKEND_ERROR)), eq(CertificateSigningResponseType.class))).thenReturn(
 				RESPONSE_MESSAGE);
-		when(registrationManager.findRegistrationForUserDNAndCertificateType(SIGNER, VALID_DN, VALID_CERTIFICATETYPE))
-				.thenReturn(VALID_REGISTRATION);
+		when(
+				registrationManager.findRegistrationForUserDNAndCertificateType(eq(SIGNER), eq(VALID_DN), isA(List.class),
+						eq(VALID_CERTIFICATETYPE))).thenReturn(VALID_REGISTRATION);
 		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE), eq(VALID_SIGNING_REQUEST))).thenReturn(SIGNER);
 
 		// Run it
@@ -417,6 +423,12 @@ public class ContractHandlerBeanTest {
 	private static Certificate createValidCertificate() {
 		Certificate result = new Certificate();
 		result.setCertificateType(VALID_CERTIFICATETYPE);
+		result.setCertificateDomain(THE_CERTIFICATE_DOMAIN);
+		return result;
+	}
+	
+	private static CertificateDomain createCertificateDomain(){
+		CertificateDomain result = new CertificateDomain();
 		return result;
 	}
 

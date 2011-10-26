@@ -18,6 +18,9 @@
 
 package be.fedict.eid.pkira.portal.certificaterequest;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -52,19 +55,23 @@ public class RequestContractPreSigningHandlerBean extends AbstractPreSigningHand
 
 	private CertificateSigningRequestBuilder initBuilder(RequestContract contract) {
 		String distinguishedName = contract.getDistinguishedName();
+		List<String> alternativeNames = contract.getAlternativeNames();
+		if (alternativeNames == null) {
+			alternativeNames = Collections.emptyList();
+		}
 		CertificateTypeWS certificateTypeWS = CertificateTypeWS.fromValue(contract.getCertificateType().name()
 				.toLowerCase());
 		String userRRN = credentials.getUser().getRRN();
-		
-		String legalNotice = privateServiceClient.getLegalNoticeByDN(distinguishedName, certificateTypeWS, userRRN);		
-		if (legalNotice==null) {
+
+		String legalNotice = privateServiceClient.getLegalNoticeByDN(distinguishedName, alternativeNames, certificateTypeWS, userRRN);
+		if (legalNotice == null) {
 			return null;
 		}
 
 		return new CertificateSigningRequestBuilder().setOperator(initBuilder(contract.getOperator()).toEntityType())
 				.setLegalNotice(contract.getLegalNotice()).setDistinguishedName(contract.getDistinguishedName())
-				.setCsr(contract.getBase64Csr()).setCertificateType(
-						Enum.valueOf(CertificateTypeType.class, contract.getCertificateType().name()))
+				.setAlternativeNames(alternativeNames).setCsr(contract.getBase64Csr())
+				.setCertificateType(Enum.valueOf(CertificateTypeType.class, contract.getCertificateType().name()))
 				.setValidityPeriodMonths(contract.getValidityPeriod()).setDescription(contract.getDescription())
 				.setLegalNotice(legalNotice);
 	}
@@ -77,10 +84,10 @@ public class RequestContractPreSigningHandlerBean extends AbstractPreSigningHand
 	@Override
 	protected String marshalBase64CsrXml(AbstractContract contract) throws XmlMarshallingException {
 		CertificateSigningRequestBuilder builder = initBuilder((RequestContract) contract);
-		if (builder==null) {
+		if (builder == null) {
 			return null;
 		}
-		
+
 		CertificateSigningRequestType requestType = builder.toRequestType();
 		String base64Xml = getContractsClientPortal().marshalToBase64(requestType, CertificateSigningRequestType.class);
 		return base64Xml;

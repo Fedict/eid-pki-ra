@@ -192,6 +192,7 @@
                             <xsd:complexType>
                                 <xsd:sequence>
                                     <xsd:element name="certificateDN" type="xsd:string" />
+                                    <xsd:element name="alternativeName" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
                                     <xsd:element name="userRRN" type="xsd:string" />
                                     <xsd:element name="certificateType" type="types:certificateTypeWS" />
                                 </xsd:sequence>
@@ -271,6 +272,7 @@
                     <xsd:element name="certificateId" type="xsd:int" nillable="true" />
                     <xsd:element name="serialNumber" type="xsd:string" />
                     <xsd:element name="distinguishedName" type="xsd:string" />
+                    <xsd:element name="alternativeName" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
                     <xsd:element name="validityStart" type="xsd:dateTime" />
                     <xsd:element name="validityEnd" type="xsd:dateTime" />
                     <xsd:element name="requesterName" type="xsd:string" />
