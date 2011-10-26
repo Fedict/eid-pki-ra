@@ -121,7 +121,7 @@ public class RegistrationManagerBean implements RegistrationManager {
 			registration.setStatus(RegistrationStatus.NEW);
 
 			registrationRepository.persist(registration);
-		
+
 			if (Events.exists()) {
 				Events.instance().raiseEvent(RegistrationMailHandler.REGISTRATION_CREATED, registration);
 			}
@@ -153,15 +153,15 @@ public class RegistrationManagerBean implements RegistrationManager {
 	 */
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public Registration findRegistrationForUserDNAndCertificateType(String userIdentification,
-			String distinguishedName, CertificateType type) {
+	public Registration findRegistrationForUserDNAndCertificateType(String userIdentification, String dn,
+			List<String> names, CertificateType type) {
 		// Parse the DN
-		DistinguishedName theDN = parseDN(distinguishedName);
+		DistinguishedName theDN = parseDN(dn);
 		if (theDN == null) {
 			return null;
 		}
 
-		// Get the certificate domains for the user
+		// Get the user and his registrations
 		User user = userRepository.findByNationalRegisterNumber(userIdentification);
 		if (user == null) {
 			user = userRepository.findByCertificateSubject(userIdentification);
@@ -175,7 +175,33 @@ public class RegistrationManagerBean implements RegistrationManager {
 			return null;
 		}
 
-		// See if one of them matches the DN
+		// See if the first DN matches a registration
+		Registration registration = findRegistrationForDN(type, theDN, activeRegistrations);
+		if (registration != null) {
+			return registration;
+		}
+
+		// Check the alternative names
+		for (String name : names) {
+			DistinguishedName otherDN = theDN.replacePart("cn", name);
+			registration = findRegistrationForDN(type, otherDN, activeRegistrations);
+			if (registration != null) {
+				return registration;
+			}
+		}
+
+		// Nothing found
+		return null;
+	}
+
+	@Override
+	public Registration findRegistrationForUserAndCertificateDomain(String signer, CertificateDomain certificateDomain) {
+		User user = userRepository.findByNationalRegisterNumber(signer);
+		return registrationRepository.findRegistration(certificateDomain, user);
+	}
+
+	private Registration findRegistrationForDN(CertificateType type, DistinguishedName theDN,
+			List<Registration> activeRegistrations) {
 		for (Registration registration : activeRegistrations) {
 			CertificateDomain certificateDomain = registration.getCertificateDomain();
 			if (!certificateDomain.getCertificateTypes().contains(type)) {
@@ -193,7 +219,6 @@ public class RegistrationManagerBean implements RegistrationManager {
 			}
 		}
 
-		// Nothing found
 		return null;
 	}
 

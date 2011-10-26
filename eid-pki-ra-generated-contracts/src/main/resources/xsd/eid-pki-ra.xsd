@@ -61,6 +61,7 @@
 			<extension base="tns:requestType">
 				<sequence>
 					<element name="DistinguishedName" type="tns:distinguishedNameType" />
+                    <element name="AlternativeName" type="tns:distinguishedNameType" minOccurs="0" maxOccurs="unbounded" />
 					<element name="CertificateType" type="tns:certificateTypeType" />
 					<element name="ValidityPeriodMonths" type="tns:validityPeriodMonthsType" />
 					<element name="CSR" type="tns:pemEncodedType" />

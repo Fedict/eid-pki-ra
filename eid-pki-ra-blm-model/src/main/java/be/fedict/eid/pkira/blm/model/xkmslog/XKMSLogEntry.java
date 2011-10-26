@@ -38,7 +38,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.validator.NotNull;
 import org.jboss.seam.annotations.Name;
 
-import be.fedict.eid.pkira.blm.model.certificatedomain.validation.UniqueCertificateDomain;
 import be.fedict.eid.pkira.xkmsws.XKMSLogger.XKMSMessageType;
 
 /**
@@ -47,7 +46,6 @@ import be.fedict.eid.pkira.xkmsws.XKMSLogger.XKMSMessageType;
 @Entity
 @Table(name = "XKMS_LOG")
 @Name(XKMSLogEntry.NAME)
-@UniqueCertificateDomain
 public class XKMSLogEntry implements Serializable {
 
 	private static final long serialVersionUID = -4193917177011312256L;

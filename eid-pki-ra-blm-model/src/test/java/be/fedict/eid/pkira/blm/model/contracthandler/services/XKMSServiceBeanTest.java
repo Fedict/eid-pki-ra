@@ -104,7 +104,7 @@ public class XKMSServiceBeanTest {
 			when(xkmsClient.createCertificate(CSR_BYTES, VALIDITY, "CODE")).thenReturn(CERTIFICATE_BYTES);
 
 			CertificateSigningContract contract = createCertificateSigningContract();
-			String certificate = service.sign(contract);
+			String certificate = service.sign(contract, CSR);
 
 			assertEquals(certificate, CERTIFICATE);
 			verify(reportManager).addLineToReport(contract, true);
@@ -123,7 +123,7 @@ public class XKMSServiceBeanTest {
 		CertificateSigningContract contract = createCertificateSigningContract();
 		try {
 
-			service.sign(contract);
+			service.sign(contract, CSR);
 			fail("Expected exception.");
 		} catch (ContractHandlerBeanException e) {
 			// Ok
@@ -136,7 +136,7 @@ public class XKMSServiceBeanTest {
 	@Test
 	public void revocationTest() throws Exception {
 		CertificateRevocationContract contract = createCertificateRevocationContract();
-		service.revoke(contract, CertificateType.CODE);
+		service.revoke(contract, CertificateType.CODE, CERTIFICATE);
 
 		verify(xkmsClient).revokeCertificate(SERIAL_NUMBER, "CODE");
 		verify(reportManager).addLineToReport(contract, true);
@@ -150,7 +150,7 @@ public class XKMSServiceBeanTest {
 
 		CertificateRevocationContract contract = createCertificateRevocationContract();
 		try {
-			service.revoke(contract, CertificateType.CODE);
+			service.revoke(contract, CertificateType.CODE, CERTIFICATE);
 			fail("Expected exception.");
 		} catch (ContractHandlerBeanException e) {
 			// Ok

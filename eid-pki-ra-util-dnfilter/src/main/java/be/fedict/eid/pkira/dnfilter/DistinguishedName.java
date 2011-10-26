@@ -16,6 +16,7 @@
  */
 package be.fedict.eid.pkira.dnfilter;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -77,6 +78,10 @@ public class DistinguishedName {
 	 */
 	DistinguishedName() {
 	}
+	
+	DistinguishedName(DistinguishedName other) {
+		elements.addAll(other.elements);
+	}
 
 	Set<DistinguishedNameElement> getElements() {
 		return elements;
@@ -105,6 +110,19 @@ public class DistinguishedName {
 
 	void addElement(String name, String value) {
 		elements.add(new DistinguishedNameElement(name, value));
+	}
+
+	public DistinguishedName replacePart(String name, String value) {
+		DistinguishedName result = new DistinguishedName(this);
+		Set<DistinguishedNameElement> elementsToRemove = new HashSet<DistinguishedName.DistinguishedNameElement>();
+		for(DistinguishedNameElement element: result.elements) {
+			if (element.name.equals(name)) { elementsToRemove.add(element); }
+		}
+		result.elements.removeAll(elementsToRemove);
+		
+		result.elements.add(new DistinguishedNameElement(name, value));
+		
+		return result;
 	}
 
 }

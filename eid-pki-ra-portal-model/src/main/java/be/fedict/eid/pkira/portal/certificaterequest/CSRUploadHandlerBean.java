@@ -30,6 +30,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.log.Log;
 
+import be.fedict.eid.pkira.crypto.CSRInfo;
 import be.fedict.eid.pkira.crypto.CryptoException;
 import be.fedict.eid.pkira.portal.framework.Operator;
 
@@ -64,7 +65,9 @@ public class CSRUploadHandlerBean implements CSRUploadHandler, Serializable {
 		log.debug(">>> uploadCertificateSigningRequest(csrUpload=[{0}])", csrUpload);
 		requestContract.setOperator(currentOperator);
 		try {
-			requestContract.setDistinguishedName(csrUpload.extractCsrInfo().getSubject());
+			CSRInfo csrInfo = csrUpload.extractCsrInfo();
+			requestContract.setDistinguishedName(csrInfo.getSubject());
+			requestContract.setAlternativeNames(csrInfo.getSubjectAlternativeNames());
 			requestContract.setBase64Csr(csrUpload.getBase64Csr());
 		} catch (CryptoException e) {
 			log.info("<<< uploadCertificateSigningRequest: invalid CSR", e);

@@ -51,11 +51,11 @@ public class XKMSServiceBean implements XKMSService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void revoke(AbstractContract contract, CertificateType certificateType) throws ContractHandlerBeanException {
+	public void revoke(AbstractContract contract, CertificateType certificateType, String certificateStr) throws ContractHandlerBeanException {
 		// Parse the certificate
 		BigInteger serialNumber;
 		try {
-			serialNumber = certificateParser.parseCertificate(contract.getContractDocument()).getSerialNumber();
+			serialNumber = certificateParser.parseCertificate(certificateStr).getSerialNumber();
 
 			XKMSClient xkmsClient = webserviceLocator.getXKMSClient(contract.getCertificateDomain()
 					.getCertificateAuthority());
@@ -82,11 +82,11 @@ public class XKMSServiceBean implements XKMSService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String sign(CertificateSigningContract contract) throws ContractHandlerBeanException {
+	public String sign(CertificateSigningContract contract, String csr) throws ContractHandlerBeanException {
 		// Convert the CSR to DER format
 		byte[] csrData;
 		try {
-			csrData = csrParser.parseCSR(contract.getContractDocument()).getDerEncoded();
+			csrData = csrParser.parseCSR(csr).getDerEncoded();
 
 			XKMSClient xkmsClient = webserviceLocator.getXKMSClient(contract.getCertificateDomain()
 					.getCertificateAuthority());

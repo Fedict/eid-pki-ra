@@ -19,6 +19,7 @@ package be.fedict.eid.pkira.contracts;
 import static be.fedict.eid.pkira.contracts.util.JAXBUtil.getObjectFactory;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
 import be.fedict.eid.pkira.generated.contracts.CertificateTypeType;
@@ -34,6 +35,7 @@ public class CertificateSigningRequestBuilder extends AbstractRequestBuilder<Cer
 	public String csr;
 	public String distinguishedName;
 	public int validityPeriodMonths;
+	private List<String> alternativeNames;
 
 	/**
 	 * Creates a certificate revocation request builder setting a random id.
@@ -70,6 +72,11 @@ public class CertificateSigningRequestBuilder extends AbstractRequestBuilder<Cer
 		return this;
 	}
 
+	public CertificateSigningRequestBuilder setAlternativeNames(List<String> alternativeNames) {
+		this.alternativeNames = alternativeNames;
+		return this;
+	}
+
 	/**
 	 * Builds the request type.
 	 */
@@ -80,8 +87,12 @@ public class CertificateSigningRequestBuilder extends AbstractRequestBuilder<Cer
 		requestType.setCertificateType(certificateType);
 		requestType.setCSR(csr);
 		requestType.setDistinguishedName(distinguishedName);
+		if (alternativeNames != null) {
+			requestType.getAlternativeName().addAll(alternativeNames);
+		}
 		requestType.setValidityPeriodMonths(BigInteger.valueOf(validityPeriodMonths));
 
 		return requestType;
 	}
+
 }

@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 import javax.ejb.Stateless;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -102,7 +103,7 @@ public class FieldValidatorBean implements FieldValidator {
 		List<String> messages = new ArrayList<String>();
 		validateNotNull("contract", contract, messages);
 		if (contract != null) {
-			validateCSR(contract.getCSR(), contract.getDistinguishedName(), messages);
+			validateCSR(contract.getCSR(), contract.getDistinguishedName(), contract.getAlternativeName(), messages);
 			validateNotEmpty("description", contract.getDescription(), messages);
 			validateNotEmpty("distinguished name", contract.getDistinguishedName(), messages);
 			validateNotEmpty("legal notice", contract.getLegalNotice(), messages);
@@ -155,13 +156,16 @@ public class FieldValidatorBean implements FieldValidator {
 		}
 	}
 
-	protected void validateCSR(String csr, String distinguishedName, List<String> messages) {
+	protected void validateCSR(String csr, String distinguishedName, List<String> alternativeNames, List<String> messages) {
 		validateNotEmpty("CSR", csr, messages);
 		if (StringUtils.isNotEmpty(csr)) {
 			try {
 				CSRInfo csrInfo = csrParser.parseCSR(csr);
 				if (!StringUtils.equals(distinguishedName, csrInfo.getSubject())) {
 					messages.add("distinguished name does not match csr");
+				}
+				if (!ObjectUtils.equals(alternativeNames, csrInfo.getSubjectAlternativeNames())) {
+					messages.add("alternative names do not match csr");
 				}
 			} catch (CryptoException e) {
 				messages.add("invalid csr: " + e.getMessage());

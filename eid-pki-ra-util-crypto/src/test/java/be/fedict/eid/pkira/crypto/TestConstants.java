@@ -54,6 +54,24 @@ public class TestConstants {
 		+ "hkjOOAQDBQADLwAwLAIUcQtBbLV6WliL6xr6yXg5IMYMjfsCFB4D9BUGyFYRNvHFms7ySKKdg+Md\r\n"
 		+ "-----END NEW CERTIFICATE REQUEST-----";
 	
+	public static final String VALID_CSR_WITH_SAN = "-----BEGIN CERTIFICATE REQUEST-----\r\n"
+		+ "MIICrTCCAZUCAQAwNTELMAkGA1UEBhMCQkUxDzANBgNVBAoTBkZlZGljdDEVMBMG\r\n"
+		+ "A1UEAxMMdGVzdC50ZXN0LmJlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC\r\n"
+		+ "AQEAz0eHwFS+91hcVQkmPO1ExDlp1WIQpjuGSfFMQlsnAue/oBEMJl4trRqb9cIc\r\n"
+		+ "8l32TYoN+HFi1B3+xTwBIoWOQf8GmpsFyA27nQVj/FH+K0nh3o9RuoBbbIJgbBMF\r\n"
+		+ "HVWz8lpoFFgYwsPIVsANTy5xEv0cUQGCHqzYTmRu4aqgNogMHEZjPzIRzksZ0dak\r\n"
+		+ "umt9yS4B/Dd28vqzx6dzkh06uzq+33OiWtmuVPlw820kRUNcWLHiuC2Q3bp6ivK2\r\n"
+		+ "dZW09AzK4i4h+T8Fpu7whKcNLkPr56fSTOTPaxptrJbo8jBHEC2uPsBrifO5DxVF\r\n"
+		+ "XMF8/CaDipfGf5EC1/44V+PJDQIDAQABoDMwMQYJKoZIhvcNAQkOMSQwIjAgBgNV\r\n"
+		+ "HREEGTAXggxhbHQxLnRlc3QuYmWCB3Rlc3QuYmUwDQYJKoZIhvcNAQEFBQADggEB\r\n"
+		+ "AFx2+OtMHPYRiB/Ka1DD3alrNX7185myMrHwi6eWDePj2b1m+B7/WB8WQ2aFvC7f\r\n"
+		+ "UBwfmjVFkZfNtObEp5pD+MApvbUk36v9VI19KWSHyxPOxuj/ms+qWWe/Bqv5rdIB\r\n"
+		+ "M+OsdXrMjGO74y1FFUciwVnDxQMeOVMHpXtaGQpvKDE7ya8O7Hcped9Y+aJoGYws\r\n"
+		+ "RJZnqxHP+JnCk06897rI1XxN/RxPnIyhPHYTEATV/o0R7O8yfktferWyAiRFKy78\r\n"
+		+ "xeO8TBlb4nHj2SBEjcB15Ec/wikMjdpOj0KFxc7FCoIwYmGNxUY9kUYjwCcGcPZ1\r\n"
+		+ "7WObH1abpFPS0H9lccj/Qx0=\r\n"
+		+ "-----END CERTIFICATE REQUEST-----";
+	
 	public static final String VALID_CERTIFICATE = "-----BEGIN CERTIFICATE-----\r\n"
 	+ "MIIE5zCCA8+gAwIBAgILAQAAAAABJZRviPgwDQYJKoZIhvcNAQEFBQAwcTELMAkG\r\n"
 	+ "A1UEBhMCQkUxHTAbBgNVBAsTFERvbWFpbiBWYWxpZGF0aW9uIENBMRkwFwYDVQQK\r\n"
@@ -84,6 +102,26 @@ public class TestConstants {
 	+ "dRFMtvQw9DXFiNs=\r\n"
 	+ "-----END CERTIFICATE-----";
 	
+	public static final String VALID_CERTIFICATE_WITH_SAN = "-----BEGIN CERTIFICATE-----\r\n"
+	+ "MIIDETCCAfmgAwIBAgIJAPjpopzCKqV3MA0GCSqGSIb3DQEBBQUAMDUxCzAJBgNV\r\n"
+	+ "BAYTAkJFMQ8wDQYDVQQKEwZGZWRpY3QxFTATBgNVBAMTDHRlc3QudGVzdC5iZTAe\r\n"
+	+ "Fw0xMTEwMjUxMTUwMjFaFw0xMjEwMjQxMTUwMjFaMDUxCzAJBgNVBAYTAkJFMQ8w\r\n"
+	+ "DQYDVQQKEwZGZWRpY3QxFTATBgNVBAMTDHRlc3QudGVzdC5iZTCCASIwDQYJKoZI\r\n"
+	+ "hvcNAQEBBQADggEPADCCAQoCggEBAM9Hh8BUvvdYXFUJJjztRMQ5adViEKY7hknx\r\n"
+	+ "TEJbJwLnv6ARDCZeLa0am/XCHPJd9k2KDfhxYtQd/sU8ASKFjkH/BpqbBcgNu50F\r\n"
+	+ "Y/xR/itJ4d6PUbqAW2yCYGwTBR1Vs/JaaBRYGMLDyFbADU8ucRL9HFEBgh6s2E5k\r\n"
+	+ "buGqoDaIDBxGYz8yEc5LGdHWpLprfckuAfw3dvL6s8enc5IdOrs6vt9zolrZrlT5\r\n"
+	+ "cPNtJEVDXFix4rgtkN26eorytnWVtPQMyuIuIfk/Babu8ISnDS5D6+en0kzkz2sa\r\n"
+	+ "bayW6PIwRxAtrj7Aa4nzuQ8VRVzBfPwmg4qXxn+RAtf+OFfjyQ0CAwEAAaMkMCIw\r\n"
+	+ "IAYDVR0RBBkwF4IMYWx0MS50ZXN0LmJlggd0ZXN0LmJlMA0GCSqGSIb3DQEBBQUA\r\n"
+	+ "A4IBAQAqYFRM5523rj0s3uvjMIonY7AB51QnA13kDeAnDMEU3rZPVR5mOh//0yRK\r\n"
+	+ "u9ej1tNiPJfctmzAa4+4vi0Fjkh/zxq6fEya9gTV5/ImKyIqvasLjAWrO8XaVFaT\r\n"
+	+ "fdImQkj8lQLtxx6qLlGQ9AGoZFEYoQYYwcUOEdgW2Fvf+6YwsiS+HJp53icNFe5Z\r\n"
+	+ "5tna5SLDL8HTiE/HL2e8BHvkzPTzQ0hEBNHPi0qb5bUzHha3aNisujj0W2ecOKF4\r\n"
+	+ "vwURDIRLhrFRJTdGmzptF2PXVuXOD+sLdwMTtTlG6h6vGTnb9fT06IdkK6nLuyDA\r\n"
+	+ "/6gk3Nl1n2kUS1WAufRh+b3ckvcf\r\n"
+	+ "-----END CERTIFICATE-----\r\n";
+	
 	public static final String CSR_SUBJECT = "C=BE,ST=Limburg,L=Hasselt,O=ACA,OU=test,CN=Jan Van den Bergh";
 	
 	public static final String CERTIFICATE_DN = "C=BE,OU=Domain Control Validated,O=*.aca-it.be,CN=*.aca-it.be";
@@ -95,5 +133,7 @@ public class TestConstants {
 	public static final Date CERTIFICATE_END_DATE = new Date(1418679256000L);
 
 	public static final BigInteger SERIAL_NUMBER =  new BigInteger("1208925819615890090461432");
+
+	public static final String CERTIFICATE_DN_SAN = "C=BE,O=Fedict,CN=test.test.be";
 
 }

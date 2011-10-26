@@ -67,7 +67,7 @@ public class XSLTransformTest {
 		StringWriter writer = new StringWriter();
 		transformer.transform(xmlSource, new StreamResult(writer));
 		String html = writer.toString();
-		System.out.println(html);
+		//System.out.println(html);
 
 		Document testDocument = readHtmlDocument(new StringReader(html));
 

@@ -172,10 +172,10 @@ public class EIDPKIRAPrivateServiceClient {
 		return response.getContracts();
 	}
 	
-	public String getLegalNoticeByDN(String certificateDN, CertificateTypeWS certificateType, String userRRN) {
+	public String getLegalNoticeByDN(String certificateDN, List<String> alternativeNames, CertificateTypeWS certificateType, String userRRN) {
 		GetLegalNoticeRequest request = factory.createGetLegalNoticeRequest();
 		request.setByDN(factory.createGetLegalNoticeRequestByDN());
-		
+		request.getByDN().getAlternativeName().addAll(alternativeNames);
 		request.getByDN().setCertificateDN(certificateDN);
 		request.getByDN().setCertificateType(certificateType);
 		request.getByDN().setUserRRN(userRRN);
