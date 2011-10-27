@@ -73,6 +73,8 @@ public class CSRInfo {
 					for (GeneralName name : names.getNames()) {
 						if (name.getTagNo()==GeneralName.dNSName) {
 							result.add(name.getName().toString());
+						} else {
+							throw new CryptoException("Only Subject Alternative Name of type SAN is allowed in the CSR.");
 						}
 					}
 				} catch (IOException e) {
