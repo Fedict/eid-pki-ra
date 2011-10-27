@@ -30,4 +30,6 @@ public interface CertificateHandler extends Serializable {
 	String prepareRevocation(Integer certificateId);
 
 	List<Certificate> findCertificateList();
+	
+	boolean filterByDN(Object current);
 }

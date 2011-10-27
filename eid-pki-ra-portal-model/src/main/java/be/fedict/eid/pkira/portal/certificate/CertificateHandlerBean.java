@@ -20,6 +20,7 @@ package be.fedict.eid.pkira.portal.certificate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Begin;
@@ -35,6 +36,7 @@ import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.common.security.EIdUserCredentials;
+import be.fedict.eid.pkira.common.util.ExpressionMatcher;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 import be.fedict.eid.pkira.portal.certificatedomain.CertificateDomainWSHome;
 import be.fedict.eid.pkira.portal.signing.AbstractDssSigningHandler;
@@ -43,71 +45,86 @@ import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 @Name(CertificateHandler.NAME)
 @Scope(ScopeType.CONVERSATION)
 public class CertificateHandlerBean implements CertificateHandler {
-	
+
 	private static final long serialVersionUID = -5017092109045531172L;
 
 	private static final String CERTIFICATES_NAME = "certificates";
 
-	@Out(value=Certificate.NAME, scope=ScopeType.CONVERSATION, required=false)
+	@Out(value = Certificate.NAME, scope = ScopeType.CONVERSATION, required = false)
 	private Certificate certificate;
 
 	@In
 	private EIdUserCredentials credentials;
-	
+
 	@In(value = EIDPKIRAPrivateServiceClient.NAME, create = true)
 	private EIDPKIRAPrivateServiceClient eidpkiraPrivateServiceClient;
 
 	@Logger
 	private Log log;
-	
+
 	@DataModel
 	private List<Certificate> certificates;
-	
-	@In(value=CertificateMapper.NAME, create=true)
+
+	@In(value = CertificateMapper.NAME, create = true)
 	private CertificateMapper certificateMapper;
-	
+
 	private String certificateDomainWSID;
-	
-	@In(value=CertificateWSHome.NAME, create=true)
+
+	@In(value = CertificateWSHome.NAME, create = true)
 	private CertificateWSHome certificateWSHome;
-	
-	@In(value=CertificateDomainWSHome.NAME, create=true)
+
+	@In(value = CertificateDomainWSHome.NAME, create = true)
 	private CertificateDomainWSHome certificateDomainWSHome;
-	
+
+	@In(value = ExpressionMatcher.NAME, create = true)
+	private ExpressionMatcher expressionMatcher;
+
+	private String dnFilterValue;
+
 	@Override
-	public List<Certificate> findCertificateList(){
+	public List<Certificate> findCertificateList() {
 		return findCertificateList(credentials.getUser().getRRN());
 	}
-	
-	@Override 
+
+	@Override
 	public List<Certificate> findCertificateList(String userRRN) {
-		List<CertificateWS> listCertificates = eidpkiraPrivateServiceClient.listCertificates(userRRN, getCertificateDomainWSID());
+		List<CertificateWS> listCertificates = eidpkiraPrivateServiceClient.listCertificates(userRRN,
+				getCertificateDomainWSID());
 		certificates = new ArrayList<Certificate>();
 		for (CertificateWS certificatews : listCertificates) {
 			certificates.add(certificateMapper.map(certificatews));
 		}
 		return certificates;
 	}
-	 
+
 	@Factory(CERTIFICATES_NAME)
-	public void initCertificateList(){
+	public void initCertificateList() {
 		findCertificateList(credentials.getUser().getRRN());
 	}
-	
-	@Observer(AbstractDssSigningHandler.EVENT_CERTIFICATE_LIST_CHANGED) 
+
+	@Observer(AbstractDssSigningHandler.EVENT_CERTIFICATE_LIST_CHANGED)
 	public void onCertificateListChanged() {
 		Contexts.getConversationContext().remove(CERTIFICATES_NAME);
 		Component.getInstance(CERTIFICATES_NAME);
 	}
-	
+
 	@Override
-	@Begin(join=true)
+	@Begin(join = true)
 	public String prepareRevocation(Integer certificateId) {
 		log.info(">>> preprareRevocation(certificateId[{0}])", certificateId);
 		certificateWSHome.setId(certificateId);
 		certificate = certificateWSHome.getInstance();
 		log.info("<<< preprareRevocation: {0})", certificate);
 		return "revokeContract";
+	}
+
+	@Override
+	public boolean filterByDN(Object current) {
+		if (StringUtils.isBlank(dnFilterValue)) {
+			return true;
+		}
+		Certificate certificate = (Certificate) current;
+		return expressionMatcher.matchWildcardExpression(dnFilterValue + "*", certificate.getDistinguishedName());
 	}
 
 	protected void setEidpkiraPrivateServiceClient(EIDPKIRAPrivateServiceClient eidpkiraPrivateServiceClient) {
@@ -117,10 +134,10 @@ public class CertificateHandlerBean implements CertificateHandler {
 	public void setCertificateDomainId(String certificateDomainId) {
 		this.setCertificateDomainWSID(certificateDomainId);
 	}
-	
+
 	public CertificateDomainWSHome getCertificateDomainWSHome() {
 		if (getCertificateDomainWSID() != null) {
-			certificateDomainWSHome.setId(Integer.parseInt(getCertificateDomainWSID()));		
+			certificateDomainWSHome.setId(Integer.parseInt(getCertificateDomainWSID()));
 		}
 		return certificateDomainWSHome;
 	}
@@ -131,6 +148,14 @@ public class CertificateHandlerBean implements CertificateHandler {
 
 	public void setCertificateDomainWSID(String certificateDomainWSID) {
 		this.certificateDomainWSID = certificateDomainWSID;
+	}
+
+	public String getDnFilterValue() {
+		return dnFilterValue;
+	}
+
+	public void setDnFilterValue(String dnFilterValue) {
+		this.dnFilterValue = dnFilterValue;
 	}
 
 }

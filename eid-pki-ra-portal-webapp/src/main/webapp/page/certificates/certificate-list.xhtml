@@ -13,7 +13,6 @@
 				<h:outputText value="#{messages['certificates.title']}" />
 			</f:facet>
 			
-
 			<s:decorate id="CertificateDomainDecorator" template="/layout/edit.xhtml">
            		<ui:define name="label">#{messages['certificate.domain.selection.label']}:</ui:define>
 				
@@ -70,9 +69,15 @@
 					<h:outputText value="#{cer.type}" />
 				</rich:column>
 
-				<rich:column sortBy="#{cer.distinguishedName}" filterBy="#{cer.distinguishedName}" filterEvent="onkeyup">
+				<rich:column filterMethod="#{certificateHandler.filterByDN}">
 					<f:facet name="header">
-						<h:outputText value="#{messages['certificate.dn']}" />
+	     				<h:panelGroup>
+	        				<h:outputText value="#{messages['certificate.dn']}" />
+							<br />
+							<h:inputText value="#{certificateHandler.dnFilterValue}" id="dnFilterInput">
+			   					<a:support event="onkeyup" ignoreDupResponses="true" reRender="cerList" />
+							</h:inputText>
+		     			</h:panelGroup>
 					</f:facet>
 					<h:outputText value="#{cer.distinguishedName}" />
 				</rich:column>
