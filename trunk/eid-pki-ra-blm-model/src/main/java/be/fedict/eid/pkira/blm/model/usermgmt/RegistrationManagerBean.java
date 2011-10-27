@@ -177,21 +177,21 @@ public class RegistrationManagerBean implements RegistrationManager {
 
 		// See if the first DN matches a registration
 		Registration registration = findRegistrationForDN(type, theDN, activeRegistrations);
-		if (registration != null) {
-			return registration;
+		if (registration==null) {
+			return null;
 		}
 
 		// Check the alternative names
+		DistinguishedNameExpression dnExpr = parseDNameExpression(registration.getCertificateDomain().getDnExpression());
 		for (String name : names) {
 			DistinguishedName otherDN = theDN.replacePart("cn", name);
-			registration = findRegistrationForDN(type, otherDN, activeRegistrations);
-			if (registration != null) {
-				return registration;
+			if (!dnExpr.matches(otherDN)) {
+				return null;
 			}
 		}
 
 		// Nothing found
-		return null;
+		return registration;
 	}
 
 	@Override
