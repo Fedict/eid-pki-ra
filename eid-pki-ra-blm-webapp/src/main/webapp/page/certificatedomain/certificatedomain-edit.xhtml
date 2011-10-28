@@ -20,6 +20,10 @@
 	               	<ui:define name="label">#{messages['certificatedomain.edit.dnExpression']}:</ui:define>
 	               	<h:inputText id="dnPattern" value="#{certificateDomainHome.instance.dnExpression}" required="true" size="40" />
 	               	<rich:toolTip for="dnPattern">
+	               		<h4>Expression syntax:</h4>
+	               		<p>
+	               			Example: <code>c=be,o=fedict,*ou=*,cn=(fedict.be|*.fedict.be)</code>
+	               		</p>
 	               		<p>
 							An <b>expression</b> is a comma-separated list of parts.<br/>
 							<code>expression ::= expressionPart ("," expressionPart)*</code>
