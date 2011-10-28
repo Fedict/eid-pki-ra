@@ -17,10 +17,21 @@
 
 				<executions>
 					<execution>
+                        <id>javacc</id>
 						<goals>
 							<goal>javacc</goal>
 						</goals>
 					</execution>
+                    <execution>
+                        <id>jjdoc</id>
+                        <goals>
+                            <goal>jjdoc</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <outputDirectory>target/classes</outputDirectory>
+                        </configuration>
+                    </execution>
 				</executions>
 			</plugin>
 			<plugin>

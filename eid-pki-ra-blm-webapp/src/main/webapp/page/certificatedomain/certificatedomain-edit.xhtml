@@ -19,6 +19,28 @@
 	           	<s:decorate id="dnPatternDecoration" template="/layout/edit.xhtml">
 	               	<ui:define name="label">#{messages['certificatedomain.edit.dnExpression']}:</ui:define>
 	               	<h:inputText id="dnPattern" value="#{certificateDomainHome.instance.dnExpression}" required="true" size="40" />
+	               	<rich:toolTip for="dnPattern">
+	               		<p>
+							An <b>expression</b> is a comma-separated list of parts.<br/>
+							<code>expression ::= expressionPart ("," expressionPart)*</code>
+							</p><p>
+							Each <b>expression part</b> is either in the form key=value or *key=*<br/>
+							<code>expressionPart ::= (key "=" values)  |  ("*"key = "*)</code>
+						</p><p>
+							A <b>key</b> contains a number of letters:<br/>
+							<code>key ::= (LETTER)+</code>
+						</p><p>
+							The <b>values</b> contain a number of values, separated by a pipe symbol and in parentheses<br/>
+							<code>values ::= "(" value ( "|" value )* ")"</code>
+						</p><p>
+							A <b>value</b> consists of letters, numbers, spaces and symbols. It can start with an asterisk to indicate a wildcard.<br/>
+							<code>value ::= ("*")? LETTER|DIGIT|symbol</code>
+						</p><p>
+							A <b>symbol</b> can be the most common symbols. However, backslash, comma, asterisk, pipes and parentheses have to be escaped with a backslash.<br/>
+							<code>symbol ::= "-" | "_" | "." | "@" | "/" | "+" | ":" | "&amp;" | "?" | "#" | "&lt;" | "&gt;" | ";" | """ | "'" | "=" | specialSymbol</code><br/>
+							<code>specialSymbol ::= "\" ("\" | "," | "*" | "|" | "(" | ")")</code>
+							</p>
+					</rich:toolTip>
 	           	</s:decorate>
 	           	
 	           	<s:decorate id="CertificateAuthorityDecoration" template="/layout/edit.xhtml">
