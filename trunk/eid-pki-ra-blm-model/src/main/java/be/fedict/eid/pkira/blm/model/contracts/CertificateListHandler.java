@@ -25,4 +25,10 @@ public interface CertificateListHandler extends Serializable {
 	String NAME = "be.fedict.eid.pkira.blm.certificateListHandler";
 
 	List<Certificate> findCertificateList();
+
+	boolean filterByDN(Object current);
+
+	boolean filterByStartDate(Object current);
+
+	boolean filterByEndDate(Object current);
 }
