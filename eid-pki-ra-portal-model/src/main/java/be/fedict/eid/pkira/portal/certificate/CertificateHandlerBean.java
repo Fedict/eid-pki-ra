@@ -18,6 +18,7 @@
 package be.fedict.eid.pkira.portal.certificate;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -36,7 +37,7 @@ import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.common.security.EIdUserCredentials;
-import be.fedict.eid.pkira.common.util.ExpressionMatcher;
+import be.fedict.eid.pkira.common.util.FilterHelper;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 import be.fedict.eid.pkira.portal.certificatedomain.CertificateDomainWSHome;
 import be.fedict.eid.pkira.portal.signing.AbstractDssSigningHandler;
@@ -62,7 +63,7 @@ public class CertificateHandlerBean implements CertificateHandler {
 	@Logger
 	private Log log;
 
-	@DataModel
+	@DataModel(scope=ScopeType.PAGE)
 	private List<Certificate> certificates;
 
 	@In(value = CertificateMapper.NAME, create = true)
@@ -76,10 +77,11 @@ public class CertificateHandlerBean implements CertificateHandler {
 	@In(value = CertificateDomainWSHome.NAME, create = true)
 	private CertificateDomainWSHome certificateDomainWSHome;
 
-	@In(value = ExpressionMatcher.NAME, create = true)
-	private ExpressionMatcher expressionMatcher;
+	@In(value = FilterHelper.NAME, create = true)
+	private FilterHelper filterHelper;
 
 	private String dnFilterValue;
+	private Date startDateFrom, startDateTo, endDateFrom, endDateTo;
 
 	@Override
 	public List<Certificate> findCertificateList() {
@@ -124,7 +126,21 @@ public class CertificateHandlerBean implements CertificateHandler {
 			return true;
 		}
 		Certificate certificate = (Certificate) current;
-		return expressionMatcher.matchWildcardExpression(dnFilterValue + "*", certificate.getDistinguishedName());
+		return filterHelper.matchWildcardExpression(dnFilterValue + "*", certificate.getDistinguishedName());
+	}
+	
+	@Override
+	public boolean filterByStartDate(Object current) {
+		certificate = (Certificate) current;
+
+		return filterHelper.filterByDate(certificate.getValidityStart(), startDateFrom, startDateTo);
+	}
+	
+	@Override
+	public boolean filterByEndDate(Object current) {
+		Certificate certificate = (Certificate) current;
+
+		return filterHelper.filterByDate(certificate.getValidityEnd(), endDateFrom, endDateTo);
 	}
 
 	protected void setEidpkiraPrivateServiceClient(EIDPKIRAPrivateServiceClient eidpkiraPrivateServiceClient) {
@@ -133,6 +149,7 @@ public class CertificateHandlerBean implements CertificateHandler {
 
 	public void setCertificateDomainId(String certificateDomainId) {
 		this.setCertificateDomainWSID(certificateDomainId);
+		initCertificateList();
 	}
 
 	public CertificateDomainWSHome getCertificateDomainWSHome() {
@@ -156,6 +173,51 @@ public class CertificateHandlerBean implements CertificateHandler {
 
 	public void setDnFilterValue(String dnFilterValue) {
 		this.dnFilterValue = dnFilterValue;
+	}
+
+	
+	public Date getStartDateFrom() {
+		return startDateFrom;
+	}
+
+	
+	public void setStartDateFrom(Date startDateFrom) {
+		this.startDateFrom = startDateFrom;
+	}
+
+	
+	public Date getStartDateTo() {
+		return startDateTo;
+	}
+
+	
+	public void setStartDateTo(Date startDateTo) {
+		this.startDateTo = startDateTo;
+	}
+
+	
+	public Date getEndDateFrom() {
+		return endDateFrom;
+	}
+
+	
+	public void setEndDateFrom(Date endDateFrom) {
+		this.endDateFrom = endDateFrom;
+	}
+
+	
+	public Date getEndDateTo() {
+		return endDateTo;
+	}
+
+	
+	public void setEndDateTo(Date endDateTo) {
+		this.endDateTo = endDateTo;
+	}
+
+	
+	public void setFilterHelper(FilterHelper filterHelper) {
+		this.filterHelper = filterHelper;
 	}
 
 }

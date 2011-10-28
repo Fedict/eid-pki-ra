@@ -32,4 +32,8 @@ public interface CertificateHandler extends Serializable {
 	List<Certificate> findCertificateList();
 	
 	boolean filterByDN(Object current);
+
+	boolean filterByStartDate(Object current);
+	
+	boolean filterByEndDate(Object current);
 }
