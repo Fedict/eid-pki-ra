@@ -20,6 +20,7 @@ package be.fedict.eid.pkira.portal.contract;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.Length;
 import org.jboss.seam.annotations.In;
 
 import be.fedict.eid.pkira.portal.framework.Operator;
@@ -39,6 +40,7 @@ public abstract class AbstractContract implements Serializable {
 	private String description;
 	private String legalNotice = "testLegalNotice";
 
+	@Length(max=512, message="{validator.length}")
 	public String getDescription() {
 		return description;
 	}

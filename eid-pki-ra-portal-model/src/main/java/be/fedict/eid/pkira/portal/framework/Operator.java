@@ -20,6 +20,7 @@ package be.fedict.eid.pkira.portal.framework;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.Length;
 import org.hibernate.validator.Pattern;
 import org.jboss.seam.annotations.Name;
 
@@ -36,10 +37,9 @@ public class Operator implements Serializable {
 
 	private String name;
 	private String function;
-	
-	
 	private String phone;
 	
+	@Length(max=64, message="{validator.length}")
 	public String getName() {
 		return name;
 	}
@@ -48,6 +48,7 @@ public class Operator implements Serializable {
 		this.name = name;
 	}
 	
+	@Length(max=64, message="{validator.length}")
 	public String getFunction() {
 		return function;
 	}
@@ -56,7 +57,8 @@ public class Operator implements Serializable {
 		this.function = function;
 	}
 
-	@Pattern(regex="(\\+|0)[-0-9 \\./]+", message="Invalid phone number")
+	@Pattern(regex="(\\+|0)[-0-9 \\./]+", message="{validator.phone.invalid}")
+	@Length(max=32, message="{validator.length}")
 	public String getPhone() {
 		return phone;
 	}
@@ -65,6 +67,7 @@ public class Operator implements Serializable {
 		this.phone = phone;
 	}
 	
+	@Override
 	public String toString() {
 		return new StringBuilder("Operator[")
 				.append("name=").append(name)
