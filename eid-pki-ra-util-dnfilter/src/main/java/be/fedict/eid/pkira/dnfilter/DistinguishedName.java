@@ -16,6 +16,7 @@
  */
 package be.fedict.eid.pkira.dnfilter;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
@@ -89,6 +90,25 @@ public class DistinguishedName {
 
 	int getSize() {
 		return elements.size();
+	}
+	
+	/**
+	 * Returns a list of all the parts with this name.
+	 */
+	public Set<String> getPart(String name) {
+		if (name==null) {
+			return Collections.emptySet();
+		}
+		
+		Set<String> result = new HashSet<String>();
+		name = name.toLowerCase();
+		for(DistinguishedNameElement element: elements) {
+			if (element.getName().equals(name)) {
+				result.add(element.getValue());
+			}
+		}
+		
+		return result;
 	}
 
 	/**

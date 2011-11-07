@@ -32,6 +32,7 @@ import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.crypto.CSRInfo;
 import be.fedict.eid.pkira.crypto.CryptoException;
+import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
 
 
 /**
@@ -40,22 +41,24 @@ import be.fedict.eid.pkira.crypto.CryptoException;
  */
 public class CSRUploadHandlerBeanTest {
 
-	private static final CSRUploadHandlerBean HANDLER = new CSRUploadHandlerBean();
+	private final CSRUploadHandlerBean handler = new CSRUploadHandlerBean();
 	
 	@Mock private Log log;
 	@Mock private CSRUpload csrUpload;
 	@Mock private FacesMessages facesMessages;
 	@Mock private CSRInfo csrInfo;
+	@Mock private DistinguishedNameManager distinguishedNameManager;
 	private RequestContract contract;
 	
 	@BeforeMethod
 	protected void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		HANDLER.setLog(log);
-		HANDLER.setCsrUpload(csrUpload);
+		handler.setLog(log);
+		handler.setCsrUpload(csrUpload);
 		contract = new RequestContract();
-		HANDLER.setRequestContract(contract);
-		HANDLER.setFacesMessages(facesMessages);
+		handler.setRequestContract(contract);
+		handler.setFacesMessages(facesMessages);
+		handler.setDistinguishedNameManager(distinguishedNameManager);
 	}	
 	
 	@Test
@@ -64,7 +67,7 @@ public class CSRUploadHandlerBeanTest {
 		when(csrInfo.getSubject()).thenReturn("testDN");
 		when(csrUpload.getBase64Csr()).thenReturn("testBase64CSR");
 		
-		String result = HANDLER.uploadCertificateSigningRequest();
+		String result = handler.uploadCertificateSigningRequest();
 		assertEquals("success", result);
 		assertEquals("testDN", contract.getDistinguishedName());	
 		assertEquals("testBase64CSR", contract.getBase64Csr());
@@ -74,7 +77,7 @@ public class CSRUploadHandlerBeanTest {
 	public void uploadCertificateSigningRequestInvalid() throws Exception {
 		when(csrUpload.extractCsrInfo()).thenThrow(new CryptoException("Invalid CSR"));
 		
-		String result = HANDLER.uploadCertificateSigningRequest();
+		String result = handler.uploadCertificateSigningRequest();
 		assertNull(result);
 		verify(facesMessages).addFromResourceBundle("validator.invalid.csr");
 	}

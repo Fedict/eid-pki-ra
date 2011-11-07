@@ -42,6 +42,7 @@ import be.fedict.eid.pkira.crypto.CSRParser;
 import be.fedict.eid.pkira.crypto.CertificateInfo;
 import be.fedict.eid.pkira.crypto.CertificateParser;
 import be.fedict.eid.pkira.crypto.CryptoException;
+import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
 import be.fedict.eid.pkira.generated.contracts.CertificateRevocationRequestType;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
 import be.fedict.eid.pkira.generated.contracts.CertificateTypeType;
@@ -84,6 +85,8 @@ public class FieldValidatorBeanTest {
 	private CSRInfo csrInfo;
 	@Mock
 	private ConfigurationEntryQuery configurationEntryQuery;
+	@Mock
+	private DistinguishedNameManager distinguishedNameManager;
 	private List<String> messages;
 
 	@BeforeMethod
@@ -108,6 +111,7 @@ public class FieldValidatorBeanTest {
 		bean.setCSRParser(csrParser);
 		bean.setCertificateParser(certificateParser);
 		bean.setConfigurationEntryQuery(configurationEntryQuery);
+		bean.setDistinguishedNameManager(distinguishedNameManager);
 		
 		messages = new ArrayList<String>();
 	}
