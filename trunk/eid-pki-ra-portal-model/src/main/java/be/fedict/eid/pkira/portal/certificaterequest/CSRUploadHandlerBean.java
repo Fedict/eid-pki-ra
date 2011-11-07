@@ -19,6 +19,7 @@
 package be.fedict.eid.pkira.portal.certificaterequest;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Begin;
@@ -32,6 +33,9 @@ import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.crypto.CSRInfo;
 import be.fedict.eid.pkira.crypto.CryptoException;
+import be.fedict.eid.pkira.dnfilter.DistinguishedName;
+import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
+import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;
 import be.fedict.eid.pkira.portal.framework.Operator;
 
 /**
@@ -51,6 +55,9 @@ public class CSRUploadHandlerBean implements CSRUploadHandler, Serializable {
 
 	@In(create = true)
 	private FacesMessages facesMessages;
+	
+	@In(create=true, value=DistinguishedNameManager.NAME)
+	private DistinguishedNameManager distinguishedNameManager;
 
 	@Logger
 	private Log log;
@@ -60,22 +67,66 @@ public class CSRUploadHandlerBean implements CSRUploadHandler, Serializable {
 	private RequestContract requestContract;
 
 	@Override
-	@Begin(join=true)
+	@Begin(join = true)
 	public String uploadCertificateSigningRequest() {
 		log.debug(">>> uploadCertificateSigningRequest(csrUpload=[{0}])", csrUpload);
 		requestContract.setOperator(currentOperator);
+		CSRInfo csrInfo;
 		try {
-			CSRInfo csrInfo = csrUpload.extractCsrInfo();
-			requestContract.setDistinguishedName(csrInfo.getSubject());
-			requestContract.setAlternativeNames(csrInfo.getSubjectAlternativeNames());
-			requestContract.setBase64Csr(csrUpload.getBase64Csr());
+			csrInfo = csrUpload.extractCsrInfo();
 		} catch (CryptoException e) {
 			log.info("<<< uploadCertificateSigningRequest: invalid CSR", e);
-			facesMessages.addFromResourceBundle("validator.invalid.csr");
+			addInvalidCSRMessage();
 			return null;
 		}
+
+		if (!validateCsrAndPopulateContract(csrInfo)) {
+			addInvalidCSRMessage();
+			return null;
+		}
+
 		log.debug("<<< uploadCertificateSigningRequest: {0}", requestContract);
 		return "success";
+	}
+
+	/**
+	 * Validates the CSR.
+	 */
+	private boolean validateCsrAndPopulateContract(CSRInfo csrInfo) {
+		// Extract the SANs
+		List<String> subjectAlternativeNames;
+		try {
+			subjectAlternativeNames = csrInfo.getSubjectAlternativeNames();
+		} catch (CryptoException e) {
+			// Invalid SAN detected
+			return false;
+		}
+		
+		// Parse the DN
+		DistinguishedName distinguishedName;
+		try {
+			distinguishedName = distinguishedNameManager.createDistinguishedName(csrInfo.getSubject());
+		} catch (InvalidDistinguishedNameException e) {
+			// Invalid DN in CSR
+			return false;
+		}
+		
+		// When there are SANs, the cn of the distinguished name should be one of them
+		if (!subjectAlternativeNames.isEmpty()) {
+			if (!subjectAlternativeNames.containsAll(distinguishedName.getPart("cn"))) {
+				return false;
+			}
+		}
+		
+		// Fill the contract
+		requestContract.setDistinguishedName(csrInfo.getSubject());
+		requestContract.setAlternativeNames(subjectAlternativeNames);
+		requestContract.setBase64Csr(csrUpload.getBase64Csr());	
+		return true;
+	}
+
+	private void addInvalidCSRMessage() {
+		facesMessages.addFromResourceBundle("validator.invalid.csr");
 	}
 
 	protected void setCsrUpload(CSRUpload csrUpload) {
@@ -96,5 +147,10 @@ public class CSRUploadHandlerBean implements CSRUploadHandler, Serializable {
 
 	protected void setRequestContract(RequestContract requestContract) {
 		this.requestContract = requestContract;
+	}
+
+	
+	public void setDistinguishedNameManager(DistinguishedNameManager distinguishedNameManager) {
+		this.distinguishedNameManager = distinguishedNameManager;
 	}
 }

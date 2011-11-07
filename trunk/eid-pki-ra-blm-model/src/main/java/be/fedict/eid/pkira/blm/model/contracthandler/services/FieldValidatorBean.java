@@ -37,6 +37,9 @@ import be.fedict.eid.pkira.crypto.CSRParser;
 import be.fedict.eid.pkira.crypto.CertificateInfo;
 import be.fedict.eid.pkira.crypto.CertificateParser;
 import be.fedict.eid.pkira.crypto.CryptoException;
+import be.fedict.eid.pkira.dnfilter.DistinguishedName;
+import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
+import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;
 import be.fedict.eid.pkira.generated.contracts.CertificateRevocationRequestType;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
 import be.fedict.eid.pkira.generated.contracts.EntityType;
@@ -61,6 +64,9 @@ public class FieldValidatorBean implements FieldValidator {
 
 	@In(value = ConfigurationEntryQuery.NAME, create = true)
 	private ConfigurationEntryQuery configurationEntryQuery;
+
+	@In(value = DistinguishedNameManager.NAME, create = true)
+	private DistinguishedNameManager distinguishedNameManager;
 
 	/*
 	 * (non-Javadoc)
@@ -113,10 +119,26 @@ public class FieldValidatorBean implements FieldValidator {
 			validateNotNull("validity period in months", contract.getValidityPeriodMonths(), messages);
 			validateValidityPeriod(contract.getValidityPeriodMonths(), messages);
 			validateOperator(contract.getOperator(), messages);
+			validateDNAgainsSANs(contract.getDistinguishedName(), contract.getAlternativeName(), messages);
 		}
 
 		if (messages.size() != 0) {
 			throw new ContractHandlerBeanException(ResultType.INVALID_MESSAGE, messages);
+		}
+	}
+
+	private void validateDNAgainsSANs(String distinguishedName, List<String> alternativeNames, List<String> messages) {
+		DistinguishedName distinguisedName = null;
+		try {
+			distinguisedName = distinguishedNameManager.createDistinguishedName(distinguishedName);
+		} catch (InvalidDistinguishedNameException e) {
+			messages.add("invalid distinguished name");
+		}
+
+		if (distinguisedName != null && !alternativeNames.isEmpty()) {
+			if (!alternativeNames.containsAll(distinguisedName.getPart("cn"))) {
+				messages.add("subject alternative names do not contain the CN in the distinguished name.");
+			}
 		}
 	}
 
@@ -156,7 +178,8 @@ public class FieldValidatorBean implements FieldValidator {
 		}
 	}
 
-	protected void validateCSR(String csr, String distinguishedName, List<String> alternativeNames, List<String> messages) {
+	protected void validateCSR(String csr, String distinguishedName, List<String> alternativeNames,
+			List<String> messages) {
 		validateNotEmpty("CSR", csr, messages);
 		if (StringUtils.isNotEmpty(csr)) {
 			try {
@@ -227,5 +250,9 @@ public class FieldValidatorBean implements FieldValidator {
 
 	protected void setConfigurationEntryQuery(ConfigurationEntryQuery configurationEntryQuery) {
 		this.configurationEntryQuery = configurationEntryQuery;
+	}
+
+	protected void setDistinguishedNameManager(DistinguishedNameManager distinguishedNameManager) {
+		this.distinguishedNameManager = distinguishedNameManager;
 	}
 }
