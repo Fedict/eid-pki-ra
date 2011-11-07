@@ -20,6 +20,7 @@ package be.fedict.eid.pkira.portal.certificaterequest;
 
 import java.util.List;
 
+import org.hibernate.validator.Length;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
@@ -53,6 +54,7 @@ public class RequestContract extends AbstractContract {
 		this.distinguishedName = distinguishedName;
 	}
 
+	@Length(max=2048, message="{validator.length}")
 	public String getBase64Csr() {
 		return base64Csr;
 	}
