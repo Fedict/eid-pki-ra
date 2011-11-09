@@ -86,6 +86,14 @@
 		action="#{menuHandler.selectItem('reportlist')}"
 		styleClass="#{menuHandler.styleIfSelected('reportlist')}"
 		/>
+	<s:link value="#{messages['menu.stats']}" 
+		view="/page/stats/statistics.xhtml" 
+		id="stats" 
+		rendered="#{s:hasRole('ADMIN_USER')}" 
+		propagation="none" 
+		action="#{menuHandler.selectItem('stats')}"
+		styleClass="#{menuHandler.styleIfSelected('stats')}"
+		/>
 	<s:link value="#{messages['menu.xkmslog']}" 
 		view="/page/xkmslog/xkms-log-list.xhtml" 
 		id="xmkslog" 
