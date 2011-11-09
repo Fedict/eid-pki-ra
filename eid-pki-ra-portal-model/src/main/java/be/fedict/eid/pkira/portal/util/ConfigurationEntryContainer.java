@@ -76,24 +76,30 @@ public class ConfigurationEntryContainer implements Serializable {
 		return findConfigurationEntry(ConfigurationEntryKeyWS.IDP_DESTINATION);
 	}
 
-	public String[] getFingerprints() {
+	public String[] getIdpFingerprints() {
 		String fingerprint1 = findConfigurationEntry(ConfigurationEntryKeyWS.IDP_FINGERPRINT);
 		String fingerprint2 = findConfigurationEntry(ConfigurationEntryKeyWS.IDP_FINGERPRINT_ROLLOVER);
 
-		if (StringUtils.isBlank(fingerprint1) && StringUtils.isBlank(fingerprint2)) {
-			return new String[0];
-		}
+		return selectNotEmptyValues(fingerprint1, fingerprint2);
+	}
+	
+	public String[] getDssFingerprints() {
+		String fingerprint1 = findConfigurationEntry(ConfigurationEntryKeyWS.DSS_FINGERPRINT);
+		String fingerprint2 = findConfigurationEntry(ConfigurationEntryKeyWS.DSS_FINGERPRINT_ROLLOVER);
 
-		if (StringUtils.isBlank(fingerprint1)) {
-			return new String[]
-				{ fingerprint2 };
+		return selectNotEmptyValues(fingerprint1, fingerprint2);
+	}
+
+	private String[] selectNotEmptyValues(String... fingerPrints) {
+		List<String> values = new ArrayList<String>();
+		
+		for(String fingerPrint: fingerPrints) {
+			if (!StringUtils.isBlank(fingerPrint)) {
+				values.add(fingerPrint);
+			}
 		}
-		if (StringUtils.isBlank(fingerprint2)) {
-			return new String[]
-				{ fingerprint1 };
-		}
-		return new String[]
-			{ fingerprint1, fingerprint2 };
+		
+		return values.toArray(new String[0]);
 	}
 
 	public int getMaxTimeOffset() {

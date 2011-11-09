@@ -4,6 +4,8 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
@@ -18,6 +20,7 @@ import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
 import be.fedict.eid.pkira.contracts.XmlMarshallingException;
 import be.fedict.eid.pkira.generated.contracts.ResponseType;
 import be.fedict.eid.pkira.generated.contracts.ResultType;
+import be.fedict.eid.pkira.portal.util.ConfigurationEntryContainer;
 import be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient;
 
 public abstract class AbstractDssSigningHandler<T extends ResponseType> {
@@ -28,6 +31,9 @@ public abstract class AbstractDssSigningHandler<T extends ResponseType> {
 	@In(value = "be.fedict.eid.pkira.portal.signatureResponseProcessor", create = true)
 	private SignatureResponseProcessor signatureResponseProcessor;
 
+	@In(value = "be.fedict.eid.pkira.portal.configurationEntryContainer", create = true)
+	private ConfigurationEntryContainer configurationEntryContainer;
+
 	private static final String SUCCESSFUL_REDIRECT = "success";
 
 	public static final String EVENT_CERTIFICATE_LIST_CHANGED = "CertificateListChanged";
@@ -36,16 +42,43 @@ public abstract class AbstractDssSigningHandler<T extends ResponseType> {
 		String redirectStatus = null;
 		T serviceClientResponse = null;
 		try {
+			// Extract the signature response
 			String signatureRequestId = "request-" + java.util.UUID.randomUUID().toString();
-			
 			SignatureResponse signatureResponse = signatureResponseProcessor.process(getRequest(), getTarget(),
-			
 					getBase64encodedSignatureRequest(), signatureRequestId, null);
-			byte[] contract = signatureResponse.getDecodedSignatureResponse();
 
+			// Get dssCertificate digest and allowed fingerprints
+			byte[] actualServiceFingerprint = null;
+			if (signatureResponse.getSignatureCertificate() != null) {
+				actualServiceFingerprint = DigestUtils.sha(signatureResponse.getSignatureCertificate().getEncoded());
+			}
+			String[] fingerprintConfig = configurationEntryContainer.getDssFingerprints();
+			if (fingerprintConfig == null || fingerprintConfig.length == 0) {
+				log.warn("No DSS fingerprints configured");
+			} else {
+				if (actualServiceFingerprint==null) {
+					log.warn("No dssCertificate in DSS response");
+					throw new SecurityException("Missing dssCertificate in DSS response");
+				}
+				// Check the fingerprints (reimplemented here since DSS only
+				// supports one fingerprint)
+				boolean ok = false;
+				Hex hex = new Hex();
+				for (String fingerprint : fingerprintConfig) {
+					byte[] fpConfig = (byte[]) hex.decode(fingerprint);
+					ok |= java.util.Arrays.equals(actualServiceFingerprint, fpConfig);
+				}
+	
+				if (!ok) {
+					log.error("Signatures not correct.");
+					throw new SecurityException("Signatures not correct.");
+				}
+			}
+
+			// Call the contract service
+			byte[] contract = signatureResponse.getDecodedSignatureResponse();
 			String result = invokeServiceClient(new String(contract));
 			serviceClientResponse = unmarshall(result);
-
 			getFacesMessages().addFromResourceBundle("contract.status." + serviceClientResponse.getResult().name(),
 					serviceClientResponse.getResultMessage());
 
@@ -130,5 +163,9 @@ public abstract class AbstractDssSigningHandler<T extends ResponseType> {
 
 	public void setSignatureResponseProcessor(SignatureResponseProcessor signatureResponseProcessor) {
 		this.signatureResponseProcessor = signatureResponseProcessor;
+	}
+	
+	public void setConfigurationEntryContainer(ConfigurationEntryContainer configurationEntryContainer) {
+		this.configurationEntryContainer = configurationEntryContainer;	
 	}
 }

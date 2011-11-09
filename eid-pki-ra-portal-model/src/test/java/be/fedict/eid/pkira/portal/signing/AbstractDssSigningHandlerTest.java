@@ -14,6 +14,7 @@ import org.testng.annotations.BeforeMethod;
 import be.fedict.eid.dss.protocol.simple.client.SignatureResponseProcessor;
 import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
 import be.fedict.eid.pkira.portal.certificate.CertificateWSHome;
+import be.fedict.eid.pkira.portal.util.ConfigurationEntryContainer;
 import be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient;
 
 public abstract class AbstractDssSigningHandlerTest<S, T> {
@@ -39,7 +40,9 @@ public abstract class AbstractDssSigningHandlerTest<S, T> {
 	protected SignatureResponseProcessor signatureRequestProcessor;
 	protected T certificateResponse;
 	@Mock
-	protected X509Certificate certificate;
+	protected X509Certificate dssCertificate;
+	@Mock
+	protected ConfigurationEntryContainer configurationEntryContainer;
 
 	@BeforeMethod
 	protected void setUp() throws Exception {
@@ -53,5 +56,6 @@ public abstract class AbstractDssSigningHandlerTest<S, T> {
 		MockitoAnnotations.initMocks(this);
 		when(request.getContextPath()).thenReturn("");
 		when(request.getParameter(SIGNATURE_RESPONSE_PARAMETER)).thenReturn("");
+		when(dssCertificate.getEncoded()).thenReturn(new byte[0]);
 	}
 }
