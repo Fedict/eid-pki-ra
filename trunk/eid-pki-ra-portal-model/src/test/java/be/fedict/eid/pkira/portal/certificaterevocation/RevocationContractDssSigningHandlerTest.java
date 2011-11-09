@@ -6,7 +6,6 @@ import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.jboss.seam.faces.FacesMessages;
@@ -67,6 +66,7 @@ public class RevocationContractDssSigningHandlerTest extends
 
 		handler.setLog(mock(Log.class));
 		handler.setSignatureResponseProcessor(signatureRequestProcessor);
+		handler.setConfigurationEntryContainer(configurationEntryContainer);
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public class RevocationContractDssSigningHandlerTest extends
 	public void successfulRequest() throws Exception {
 		when(request.getParameter(SIGNATURE_STATUS_PARAMETER)).thenReturn("OK");
 		when(signatureRequestProcessor.process(isA(HttpServletRequest.class), eq(TARGET), eq(BASE64_REQUEST), anyString(), anyString()))
-				.thenReturn(new SignatureResponse(new byte[0], null, certificate));
+				.thenReturn(new SignatureResponse(new byte[0], null, dssCertificate));
 		when(certificateResponse.getResult()).thenReturn(ResultType.SUCCESS);
 		String outcome = handler.handleDssRequest();
 		Assert.assertEquals(outcome, "success");
@@ -98,7 +98,7 @@ public class RevocationContractDssSigningHandlerTest extends
 	public void backendError() throws Exception {
 		when(request.getParameter(SIGNATURE_STATUS_PARAMETER)).thenReturn("OK");
 		when(signatureRequestProcessor.process(isA(HttpServletRequest.class), eq(TARGET), eq(BASE64_REQUEST), anyString(), anyString()))
-				.thenReturn(new SignatureResponse(new byte[0], null, certificate));
+				.thenReturn(new SignatureResponse(new byte[0], null, dssCertificate));
 		when(certificateResponse.getResult()).thenReturn(ResultType.BACKEND_ERROR);
 		String outcome = handler.handleDssRequest();
 		Assert.assertEquals(outcome, "error");

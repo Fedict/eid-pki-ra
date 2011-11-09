@@ -73,6 +73,7 @@ public class RequestContractDssSigningHandlerTest extends
 
 		handler.setLog(mock(Log.class));
 		handler.setSignatureResponseProcessor(signatureRequestProcessor);
+		handler.setConfigurationEntryContainer(configurationEntryContainer);
 	}
 
 	@Override
@@ -85,7 +86,7 @@ public class RequestContractDssSigningHandlerTest extends
 	public void successfullRequest() throws Exception {
 		when(request.getParameter(SIGNATURE_STATUS_PARAMETER)).thenReturn("OK");
 		when(signatureRequestProcessor.process(isA(HttpServletRequest.class), eq(TARGET), eq(BASE64_REQUEST), anyString(), anyString()))
-				.thenReturn(new SignatureResponse(new byte[0], null,certificate));
+				.thenReturn(new SignatureResponse(new byte[0], null,dssCertificate));
 		when(certificateResponse.getResult()).thenReturn(ResultType.SUCCESS);
 		// when(certificateWSHome.getInstance()).thenReturn("success");
 		String outcome = handler.handleDssRequest();
@@ -105,7 +106,7 @@ public class RequestContractDssSigningHandlerTest extends
 	public void backendError() throws Exception {
 		when(request.getParameter(SIGNATURE_STATUS_PARAMETER)).thenReturn("OK");
 		when(signatureRequestProcessor.process(isA(HttpServletRequest.class), eq(TARGET), eq(BASE64_REQUEST), anyString(), anyString()))
-				.thenReturn(new SignatureResponse(new byte[0], null, certificate));
+				.thenReturn(new SignatureResponse(new byte[0], null, dssCertificate));
 		when(certificateResponse.getResult()).thenReturn(ResultType.BACKEND_ERROR);
 		String outcome = handler.handleDssRequest();
 		Assert.assertEquals(outcome, "error");

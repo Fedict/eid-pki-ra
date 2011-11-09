@@ -24,10 +24,10 @@ package be.fedict.eid.pkira.portal.certificate;
  */
 public enum CertificateType {
 	
-	SERVER("Server", "certificate.type.server"), 
-	CLIENT("Client", "certificate.type.client"), 
-	CODE("Code", "certificate.type.code"),
-	PERSONS("Persons", "certificate.type.persons");
+	SERVER("Server", "dssCertificate.type.server"), 
+	CLIENT("Client", "dssCertificate.type.client"), 
+	CODE("Code", "dssCertificate.type.code"),
+	PERSONS("Persons", "dssCertificate.type.persons");
 	
 	private final String type;
 	private final String messageKey;

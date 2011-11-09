@@ -14,7 +14,7 @@ public class PkiRaAuthenticationResponseService extends AbstractPkiRaAuthenticat
 	
 	@Override
 	public String[] getFingerprints() {
-		return configurationEntryContainer.getFingerprints();
+		return configurationEntryContainer.getIdpFingerprints();
 	}
 
 	@Override
