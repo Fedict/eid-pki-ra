@@ -18,7 +18,7 @@ import org.jboss.seam.contexts.Contexts;
  * @author jan
  */
 @Name(StatisticsBean.NAME)
-@Scope(ScopeType.CONVERSATION)
+@Scope(ScopeType.SESSION)
 public class StatisticsBean {
 
 	public static final String NAME = "be.fedict.eid.pkira.blm.statistics";

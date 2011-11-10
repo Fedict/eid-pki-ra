@@ -1,8 +1,7 @@
 package be.fedict.eid.pkira.blm.model.stats;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -21,7 +20,7 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
 @Name(CertificatesPerDayReportGenerator.NAME)
 @Stateless
 @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-public class CertificatesPerDayReportGenerator extends DateToLongReportGenerator implements StatisticsReportGenerator {
+public class CertificatesPerDayReportGenerator extends ReportGeneratorHelper implements StatisticsReportGenerator {
 
 	public static final String NAME = "be.fedict.eid.pkira.blm.certificatesPerDayReportGenerator";
 
@@ -31,40 +30,27 @@ public class CertificatesPerDayReportGenerator extends DateToLongReportGenerator
 	}
 
 	@Override
-	protected ReportColumn getValueColumn() {
-		return new ReportColumn(ReportColumnType.LONG, "stats.numberOfCertificates");
-	}
-
-	@Override
-	protected ReportColumn getKeyColumn() {
-		return new ReportColumn(ReportColumnType.DATE, "stats.month");
-	}
-
-	@Override
-	protected Long getValueFromDataRow(Object[] theItem) {
-		return (Long) theItem[3];
-	}
-
-	@Override
-	protected Date getKeyFromDataRow(Object[] theItem) {
-		int day = (Integer) theItem[0];
-		int month = (Integer) theItem[1];
-		int year = (Integer) theItem[2];
-		return new GregorianCalendar(year, month - 1, day).getTime();
-	}
-
-	@Override
 	protected void setQueryParameters(Query query) {
 		query.setParameter("result", ResultType.SUCCESS);
 	}
 
 	@Override
 	protected String getQueryString() {
-		return "SELECT day(creationDate),month(creationDate),year(creationDate), COUNT(*) FROM CertificateSigningContract WHERE result=:result GROUP BY day(creationDate),month(creationDate),year(creationDate)";
+		return "SELECT year(creationDate),month(creationDate),day(creationDate), COUNT(*)" +
+				" FROM CertificateSigningContract" +
+				" WHERE result=:result" +
+				" GROUP BY year(creationDate),month(creationDate),day(creationDate)" +
+				" ORDER BY year(creationDate) DESC,month(creationDate) DESC,day(creationDate) DESC";
 	}
 
 	@Override
-	protected void decrementIteratorDate(Calendar current) {
-		current.add(Calendar.DATE, -1);
+	protected List<Object> getValuesFromDataRow(Object[] items) {
+		return Arrays.asList(getDayFromStartOfDataRow(items), items[3]);
+	}
+
+	@Override
+	public List<ReportColumn> getReportColumns() {
+		return Arrays.asList(new ReportColumn(ReportColumnType.DATE, "stats.date", "dd/MM/yyyy"), new ReportColumn(
+				ReportColumnType.LONG, "stats.numberOfCertificates"));
 	}
 }
