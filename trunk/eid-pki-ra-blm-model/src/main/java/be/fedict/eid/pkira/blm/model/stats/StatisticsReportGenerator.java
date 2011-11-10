@@ -19,7 +19,8 @@ public interface StatisticsReportGenerator {
 	}
 
 	/**
-	 * Column in a report.
+	 * Column in a report. Note: formats are only supported for date or datetime
+	 * types right now.
 	 */
 	class ReportColumn {
 
@@ -83,6 +84,12 @@ public interface StatisticsReportGenerator {
 		public ReportColumn getColumn() {
 			return column;
 		}
+
+		@Override
+		public String toString() {
+			return column.getName() + "=" + value;
+		}
+
 	}
 
 	/**
@@ -106,8 +113,14 @@ public interface StatisticsReportGenerator {
 
 		@Override
 		public String toString() {
-			// TODO Auto-generated method stub
-			return super.toString();
+			StringBuilder builder = new StringBuilder();
+			for (ReportValue value : values) {
+				if (builder.length() != 0) {
+					builder.append(", ");
+				}
+				builder.append(value);
+			}
+			return builder.toString();
 		}
 
 	}

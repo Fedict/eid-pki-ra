@@ -23,17 +23,26 @@
 				</h:selectOneMenu>
 			</s:decorate>
 
-			<s:decorate id="statisticsTableDecorator" template="/layout/edit.xhtml">
+			<s:decorate id="statisticsTableDecorator"
+				template="/layout/edit.xhtml">
 				<rich:dataTable id="statisticsTable" var="row"
 					value="#{statistics.reportGenerator.report}"
-					rendered="#{not empty statistics.reportGenerator}">
+					rendered="#{not empty statistics.reportGenerator}" rows="25">
+					
 					<rich:columns value="#{statistics.reportGenerator.reportColumns}"
 						var="reportColumn" index="index">
 						<f:facet name="header">
 							<h:outputText value="#{messages[reportColumn.name]}" />
 						</f:facet>
-						<h:outputText value="#{row.values[index].value}" />
+						<h:outputText value="#{row.values[index].value}" rendered="#{empty reportColumn.format}" id="reportnf-#{index}"/>
+						<h:outputText value="#{row.values[index].value}" rendered="#{not empty reportColumn.format}" id="reportf-#{index}">
+							<f:convertDateTime pattern="#{reportColumn.format}" timeZone="UTC" />
+						</h:outputText>
 					</rich:columns>
+					
+					<f:facet name="footer">
+						<rich:datascroller maxPages="10" renderIfSinglePage="false" />
+					</f:facet>
 				</rich:dataTable>
 			</s:decorate>
 		</h:form>

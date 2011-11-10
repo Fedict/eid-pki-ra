@@ -1,8 +1,7 @@
 package be.fedict.eid.pkira.blm.model.stats;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -21,7 +20,7 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
 @Name(CertificatesPerYearReportGenerator.NAME)
 @Stateless
 @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-public class CertificatesPerYearReportGenerator extends DateToLongReportGenerator implements StatisticsReportGenerator {
+public class CertificatesPerYearReportGenerator extends ReportGeneratorHelper implements StatisticsReportGenerator {
 
 	public static final String NAME = "be.fedict.eid.pkira.blm.certificatesPerYearReportGenerator";
 
@@ -32,38 +31,26 @@ public class CertificatesPerYearReportGenerator extends DateToLongReportGenerato
 
 	@Override
 	protected String getQueryString() {
-		return "SELECT year(creationDate), COUNT(*) FROM CertificateSigningContract WHERE result=:result GROUP BY year(creationDate)";
+		return "SELECT year(creationDate), COUNT(*)" +
+				" FROM CertificateSigningContract" +
+				" WHERE result=:result" +
+				" GROUP BY year(creationDate)" +
+				" ORDER BY year(creationDate) DESC";
 	}
 
 	@Override
 	protected void setQueryParameters(Query query) {
 		query.setParameter("result", ResultType.SUCCESS);
-
 	}
 
 	@Override
-	protected Date getKeyFromDataRow(Object[] theItem) {
-		int year = (Integer) theItem[0];
-		return new GregorianCalendar(year, 0, 1).getTime();
+	protected List<Object> getValuesFromDataRow(Object[] items) {
+		return Arrays.asList(getYearFromStartOfDataRow(items), items[1]);
 	}
 
 	@Override
-	protected Long getValueFromDataRow(Object[] theItem) {
-		return (Long) theItem[1];
-	}
-
-	@Override
-	protected ReportColumn getKeyColumn() {
-		return new ReportColumn(ReportColumnType.DATE, "stats.year");
-	}
-
-	@Override
-	protected ReportColumn getValueColumn() {
-		return new ReportColumn(ReportColumnType.LONG, "stats.numberOfCertificates");
-	}
-
-	@Override
-	protected void decrementIteratorDate(Calendar current) {
-		current.add(Calendar.YEAR, -1);
+	public List<ReportColumn> getReportColumns() {
+		return Arrays.asList(new ReportColumn(ReportColumnType.DATE, "stats.year", "yyyy"), new ReportColumn(
+				ReportColumnType.LONG, "stats.numberOfCertificates"));
 	}
 }
