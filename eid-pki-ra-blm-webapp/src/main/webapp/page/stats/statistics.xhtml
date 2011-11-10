@@ -26,7 +26,7 @@
 			<s:decorate id="statisticsTableDecorator" template="/layout/edit.xhtml">
 				<rich:dataTable id="statisticsTable" var="row"
 					value="#{statistics.reportGenerator.report}"
-					rendered="#{not empty statistics.reportGenerator}" width="75%">
+					rendered="#{not empty statistics.reportGenerator}">
 					<rich:columns value="#{statistics.reportGenerator.reportColumns}"
 						var="reportColumn" index="index">
 						<f:facet name="header">

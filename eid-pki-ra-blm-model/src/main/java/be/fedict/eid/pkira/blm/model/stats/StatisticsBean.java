@@ -1,4 +1,4 @@
-package be.fedict.eid.pkira.blm.stats;
+package be.fedict.eid.pkira.blm.model.stats;
 
 import java.util.ArrayList;
 import java.util.Collections;
