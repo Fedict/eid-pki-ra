@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>be.fedict</groupId>
+        <artifactId>eid-pki-ra</artifactId>
+        <version>1.0.9</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>eid-pki-ra-client-xkms</artifactId>
+    <packaging>jar</packaging>
+    <name>eid-pki-ra-client - xkms</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>be.fedict</groupId>
+            <artifactId>eid-pki-ra-generated-xkms</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>be.fedict</groupId>
+            <artifactId>eid-pki-ra-generated-contracts</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>be.fedict</groupId>
+            <artifactId>eid-pki-ra-mock-xkms</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+            <classifier>classes</classifier>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <classifier>jdk15</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <type>jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>xmlunit</groupId>
+            <artifactId>xmlunit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <type>jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+        </dependency>
+    </dependencies>
+</project>
