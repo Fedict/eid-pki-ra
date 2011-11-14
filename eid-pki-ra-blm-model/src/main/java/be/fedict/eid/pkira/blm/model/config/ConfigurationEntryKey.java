@@ -42,7 +42,8 @@ public enum ConfigurationEntryKey {
 	IDP_MAXTIMEOFFSET(ConfigurationEntryType.STRING, "configurationEntry.key.idpMaxTimeOffset", "60"),
 	SP_RETURN_URL_PORTAL(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.spReturnURLPortal", ""),
 	SP_RETURN_URL_ADMIN(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.spReturnURLAdmin", ""),
-	HOMEPAGE_URL(ConfigurationEntryType.STRING, "configurqtionEntry.key,homePageUrl", "http://tobeconfigured/");
+	HOMEPAGE_URL(ConfigurationEntryType.STRING, "configurationEntry.key.homePageUrl", "http://tobeconfigured/"),
+	CSV_EXPORT_FIELD_SEPARATOR(ConfigurationEntryType.STRING, "configurationEntry.key.csvExportFieldSeparator", ";");
 	
 	private final ConfigurationEntryType type;
 	private final String message;
