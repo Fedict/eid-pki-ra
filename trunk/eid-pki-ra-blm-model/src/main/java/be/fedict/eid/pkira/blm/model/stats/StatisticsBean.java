@@ -17,6 +17,8 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.contexts.Context;
 import org.jboss.seam.contexts.Contexts;
 
+import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryKey;
+import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
 import be.fedict.eid.pkira.blm.model.stats.StatisticsReportGenerator.ReportColumn;
 import be.fedict.eid.pkira.blm.model.stats.StatisticsReportGenerator.ReportRow;
 import be.fedict.eid.pkira.blm.model.stats.StatisticsReportGenerator.ReportValue;
@@ -34,7 +36,6 @@ public class StatisticsBean {
 
 	private static final String LINE_SEPARATOR = "\r\n";
 	private static final String FIELD_QUOTE_SYMBOL = "\"";
-	private static final String FIELD_SEPARATOR = ";";
 
 	public static final String NAME = "be.fedict.eid.pkira.blm.statistics";
 
@@ -43,6 +44,9 @@ public class StatisticsBean {
 	
 	@In 
 	private Map<String, String> messages;
+	
+	@In(value=ConfigurationEntryQuery.NAME, create=true)
+	private ConfigurationEntryQuery configurationEntryQuery;
 
 	private List<StatisticsReportGenerator> reportGenerators;
 	private String reportGeneratorName;
@@ -107,12 +111,13 @@ public class StatisticsBean {
 		}
 
 		StringBuilder csv = new StringBuilder();
+		String fieldSeparator = configurationEntryQuery.findByEntryKey(ConfigurationEntryKey.CSV_EXPORT_FIELD_SEPARATOR).getValue();
 
 		// add column headers
 		boolean first = true;
 		for (ReportColumn column : reportGenerator.getReportColumns()) {
 			if (!first) {
-				csv.append(FIELD_SEPARATOR);
+				csv.append(fieldSeparator);
 			}
 			csv.append(FIELD_QUOTE_SYMBOL);
 			if (messages.containsKey(column.getName())) {
@@ -130,7 +135,7 @@ public class StatisticsBean {
 			first = true;
 			for (ReportValue value : row.getValues()) {
 				if (!first) {
-					csv.append(FIELD_SEPARATOR);
+					csv.append(fieldSeparator);
 				}
 
 				csv.append(FIELD_QUOTE_SYMBOL);
