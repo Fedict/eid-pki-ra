@@ -13,7 +13,7 @@
 				<h:outputText value="#{messages['certificates.title']}" rendered="#{empty certificates}"/>
 			</f:facet>
 			
-			<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBoxTop" rendered="#{certificates.size == 0}">
+			<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBoxTop">
 				<s:button 	id="requestCertificateTop"
 							action="requestCertificate"
 							value="#{messages['button.csr']}"
