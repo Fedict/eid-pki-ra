@@ -152,14 +152,12 @@
 				</f:facet>
 			</rich:dataTable>
 			</s:decorate>
-			
-			<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBoxBottom" rendered="#{certificates.size > 0}">
-			
-				<s:button 	id="requestCertificateBottom"
-							action="requestCertificate"
-							value="#{messages['button.csr']}"
-							/>
-			</s:decorate>
+
+				<s:decorate template="/layout/buttonbox.xhtml"
+					id="submitButtonBoxBottom" rendered="#{certificates.size > 0}">
+					<s:button id="requestCertificateBottom" action="requestCertificate"
+						value="#{messages['button.csr']}" />
+				</s:decorate>
 			</rich:panel>
 		</h:form>
 	</ui:define>

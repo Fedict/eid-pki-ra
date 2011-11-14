@@ -19,7 +19,7 @@
 						noSelectionLabel="#{messages['general.noselectionlabel']}" />
 					<a4j:support event="onchange"
 						action="#{statistics.selectReportType()}"
-						reRender="reportType,statisticsTableDecorator" />
+						reRender="reportType,statisticsTableDecorator,csvExportDecorator" />
 				</h:selectOneMenu>
 			</s:decorate>
 
@@ -28,22 +28,31 @@
 				<rich:dataTable id="statisticsTable" var="row"
 					value="#{statistics.reportGenerator.report}"
 					rendered="#{not empty statistics.reportGenerator}" rows="25">
-					
+
 					<rich:columns value="#{statistics.reportGenerator.reportColumns}"
 						var="reportColumn" index="index">
 						<f:facet name="header">
 							<h:outputText value="#{messages[reportColumn.name]}" />
 						</f:facet>
-						<h:outputText value="#{row.values[index].value}" rendered="#{empty reportColumn.format}" id="reportnf-#{index}"/>
-						<h:outputText value="#{row.values[index].value}" rendered="#{not empty reportColumn.format}" id="reportf-#{index}">
-							<f:convertDateTime pattern="#{reportColumn.format}" timeZone="UTC" />
+						<h:outputText value="#{row.values[index].value}"
+							rendered="#{empty reportColumn.format}" id="reportnf-#{index}" />
+						<h:outputText value="#{row.values[index].value}"
+							rendered="#{not empty reportColumn.format}" id="reportf-#{index}">
+							<f:convertDateTime pattern="#{reportColumn.format}"
+								timeZone="UTC" />
 						</h:outputText>
 					</rich:columns>
-					
+
 					<f:facet name="footer">
 						<rich:datascroller maxPages="10" renderIfSinglePage="false" />
 					</f:facet>
 				</rich:dataTable>
+			</s:decorate>
+
+			<s:decorate template="/layout/buttonbox.xhtml"
+				id="csvExportDecorator">
+				<h:commandButton id="csvExport" action="#{statistics.csvExport}"
+					value="#{messages['stats.csvExport']}" rendered="#{not empty statistics.reportGenerator}"/>
 			</s:decorate>
 		</h:form>
 	</ui:define>
