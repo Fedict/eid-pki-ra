@@ -4,6 +4,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.jboss.seam.Component;
@@ -48,27 +49,31 @@ public abstract class AbstractDssSigningHandler<T extends ResponseType> {
 					getBase64encodedSignatureRequest(), signatureRequestId, null);
 
 			// Get dssCertificate digest and allowed fingerprints
-			byte[] actualServiceFingerprint = null;
-			if (signatureResponse.getSignatureCertificate() != null) {
-				actualServiceFingerprint = DigestUtils.sha(signatureResponse.getSignatureCertificate().getEncoded());
+			String actualServiceFingerprint = null;
+			String serviceCertificate = getRequest().getParameter(
+					SignatureResponseProcessor.SERVICE_CERTIFICATE_PARAMETER_PREFIX + "1");
+			if (serviceCertificate != null) {
+				byte[] certificateData = Base64.decodeBase64(serviceCertificate);
+				byte[] certificateFingerPrint = DigestUtils.sha(certificateData);
+				actualServiceFingerprint = Hex.encodeHexString(certificateFingerPrint);
 			}
+			log.info("Actual service fingerprint: " + actualServiceFingerprint);
+
 			String[] fingerprintConfig = configurationEntryContainer.getDssFingerprints();
 			if (fingerprintConfig == null || fingerprintConfig.length == 0) {
 				log.warn("No DSS fingerprints configured");
 			} else {
-				if (actualServiceFingerprint==null) {
+				if (actualServiceFingerprint == null) {
 					log.warn("No dssCertificate in DSS response");
 					throw new SecurityException("Missing dssCertificate in DSS response");
 				}
-				// Check the fingerprints (reimplemented here since DSS only
-				// supports one fingerprint)
+
 				boolean ok = false;
-				Hex hex = new Hex();
 				for (String fingerprint : fingerprintConfig) {
-					byte[] fpConfig = (byte[]) hex.decode(fingerprint);
-					ok |= java.util.Arrays.equals(actualServiceFingerprint, fpConfig);
+					log.info("Allowed service fingerprint: " + fingerprint);
+					ok |= fingerprint != null && fingerprint.equalsIgnoreCase(actualServiceFingerprint);
 				}
-	
+
 				if (!ok) {
 					log.error("Signatures not correct.");
 					throw new SecurityException("Signatures not correct.");
@@ -164,8 +169,8 @@ public abstract class AbstractDssSigningHandler<T extends ResponseType> {
 	public void setSignatureResponseProcessor(SignatureResponseProcessor signatureResponseProcessor) {
 		this.signatureResponseProcessor = signatureResponseProcessor;
 	}
-	
+
 	public void setConfigurationEntryContainer(ConfigurationEntryContainer configurationEntryContainer) {
-		this.configurationEntryContainer = configurationEntryContainer;	
+		this.configurationEntryContainer = configurationEntryContainer;
 	}
 }

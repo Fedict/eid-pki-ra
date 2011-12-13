@@ -40,7 +40,7 @@ public abstract class AbstractContract implements Serializable {
 	private String description;
 	private String legalNotice = "testLegalNotice";
 
-	@Length(max=512, message="{validator.length}")
+	@Length(max=512, message="#{messages['validator.length']}")
 	public String getDescription() {
 		return description;
 	}

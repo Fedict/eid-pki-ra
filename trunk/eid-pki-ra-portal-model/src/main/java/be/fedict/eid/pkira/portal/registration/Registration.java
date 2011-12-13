@@ -41,14 +41,14 @@ public class Registration implements Serializable {
 	private String certificateDomainName;
 	private String certificateDomainExpression;
 	
-	@NotEmpty(message="{registration.certificateDomain.required}")
+	@NotEmpty(message="#{messages['registration.certificateDomain.required']}")
 	private String certificateDomainId;
 	
-	@NotEmpty(message="{registration.email.required}") 
-	@Email(message="{registration.email.invalid}")
+	@NotEmpty(message="#{messages['registration.email.required']}") 
+	@Email(message="#{messages['registration.email.invalid}")
 	private String emailAddress;
 	
-	@NotEmpty(message="{registration.email.required}") 
+	@NotEmpty(message="#{messages['registration.email.required']}") 
 	private String emailAddressVerification;
 	
 	private List<RegistrantWS> registrants;
