@@ -39,7 +39,7 @@ public class Operator implements Serializable {
 	private String function;
 	private String phone;
 	
-	@Length(max=64, message="{validator.length}")
+	@Length(max=64, message="#{messages['validator.length']}")
 	public String getName() {
 		return name;
 	}
@@ -48,7 +48,7 @@ public class Operator implements Serializable {
 		this.name = name;
 	}
 	
-	@Length(max=64, message="{validator.length}")
+	@Length(max=64, message="#{messages['validator.length']}")
 	public String getFunction() {
 		return function;
 	}
@@ -57,8 +57,8 @@ public class Operator implements Serializable {
 		this.function = function;
 	}
 
-	@Pattern(regex="(\\+|0)[-0-9 \\./]+", message="{validator.phone.invalid}")
-	@Length(max=32, message="{validator.length}")
+	@Pattern(regex="(\\+|0)[-0-9 \\./]+", message="#{messages['validator.phone.invalid']}")
+	@Length(max=32, message="#{messages['validator.length']}")
 	public String getPhone() {
 		return phone;
 	}

@@ -37,7 +37,7 @@ public enum ConfigurationEntryKey {
 	IDP_DESTINATION(ConfigurationEntryType.URL, "configurationEntry.key.idpDestination", "https://www.e-contract.be/eid-idp/protocol/saml2/post/auth-ident"),
 	IDP_FINGERPRINT(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.idpFingerprint", "d838f129659ef5d2f3ea974221e0d8ae1bb5206b"),
 	IDP_FINGERPRINT_ROLLOVER(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.idpFingerprint2", ""),
-	DSS_FINGERPRINT(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.dssFingerprint", "4a41bc8cb3479631762caeed89087eef5187f5b9"),
+	DSS_FINGERPRINT(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.dssFingerprint", "33016c4f55593730dc79acfc4286e39ee4ea0582"),
 	DSS_FINGERPRINT_ROLLOVER(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.dssFingerprint2", ""),
 	IDP_MAXTIMEOFFSET(ConfigurationEntryType.STRING, "configurationEntry.key.idpMaxTimeOffset", "60"),
 	SP_RETURN_URL_PORTAL(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.spReturnURLPortal", ""),

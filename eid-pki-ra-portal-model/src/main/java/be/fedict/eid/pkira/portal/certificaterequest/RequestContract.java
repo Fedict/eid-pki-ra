@@ -54,7 +54,7 @@ public class RequestContract extends AbstractContract {
 		this.distinguishedName = distinguishedName;
 	}
 
-	@Length(max=2048, message="{validator.length}")
+	@Length(max=2048, message="#{messages['validator.length']}")
 	public String getBase64Csr() {
 		return base64Csr;
 	}
