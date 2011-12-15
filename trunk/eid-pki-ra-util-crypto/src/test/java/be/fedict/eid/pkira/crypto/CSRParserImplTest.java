@@ -50,6 +50,12 @@ public class CSRParserImplTest {
 	@Test
 	public void testParseCRSWithSAN() throws CryptoException {
 		CSRInfo csrInfo = csrParser.parseCSR(TestConstants.VALID_CSR_WITH_SAN);
+		csrInfo.getSubjectAlternativeNames();
+	}
+	
+	@Test(expectedExceptions = CryptoException.class)
+	public void testParseCRSWithWildcardInSAN() throws CryptoException {
+		CSRInfo csrInfo = csrParser.parseCSR(TestConstants.INVALID_CSR_WILDCARD_IN_SAN);
 		assertEquals(2, csrInfo.getSubjectAlternativeNames().size());
 	}
 	

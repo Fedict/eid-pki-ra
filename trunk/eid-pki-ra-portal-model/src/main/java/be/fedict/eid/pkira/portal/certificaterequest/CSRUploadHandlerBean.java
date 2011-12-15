@@ -99,6 +99,7 @@ public class CSRUploadHandlerBean implements CSRUploadHandler, Serializable {
 			subjectAlternativeNames = csrInfo.getSubjectAlternativeNames();
 		} catch (CryptoException e) {
 			// Invalid SAN detected
+			log.warn("Invalid CSR detected", e);
 			return false;
 		}
 		

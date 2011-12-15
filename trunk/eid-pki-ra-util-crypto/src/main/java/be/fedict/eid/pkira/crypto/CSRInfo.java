@@ -72,7 +72,11 @@ public class CSRInfo {
 					GeneralNames names = GeneralNames.getInstance(bytes);
 					for (GeneralName name : names.getNames()) {
 						if (name.getTagNo()==GeneralName.dNSName) {
-							result.add(name.getName().toString());
+							String theName = name.getName().toString();
+							if (theName.indexOf('*')!=-1) {
+								throw new CryptoException("Subject Alternative Names are not allowed to contain wildcards.");
+							}
+							result.add(theName);
 						} else {
 							throw new CryptoException("Only Subject Alternative Name of type SAN is allowed in the CSR.");
 						}
