@@ -125,7 +125,7 @@
 			        				<h:outputText value="#{messages['certificate.dn']}" />
 									<br />
 									<h:inputText value="#{certificateListHandler.dnFilterValue}" id="dnFilterInput">
-					   					<a:support event="onkeyup" ignoreDupResponses="true" reRender="cerList,certificateDomainName" />
+					   					<a:support event="onkeyup" ignoreDupResponses="true" reRender="cerList,certificateDomainName" requestDelay="1000" oncomplete="var x=$('certificatesListForm:cerListDecorator:cerList:dnFilterInput');x.focus();x.selectionStart=x.selectionEnd" />
 									</h:inputText>
 				     			</h:panelGroup>
 							</f:facet>

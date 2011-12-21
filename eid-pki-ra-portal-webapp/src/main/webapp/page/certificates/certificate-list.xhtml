@@ -124,14 +124,13 @@
 					<h:outputText value="#{cer.type}" />
 				</rich:column>
 
-
 				<rich:column filterMethod="#{certificateHandler.filterByDN}">
 					<f:facet name="header">
 	     				<h:panelGroup>
 	        				<h:outputText value="#{messages['certificate.dn']}" />
 							<br />
 							<h:inputText value="#{certificateHandler.dnFilterValue}" id="dnFilterInput">
-			   					<a:support event="onkeyup" ignoreDupResponses="true" reRender="cerList" />
+			   					<a:support event="onkeyup" ignoreDupResponses="true" reRender="cerList" requestDelay="1000" oncomplete="var x=$('certificatesListForm:cerListDecorator:cerList:dnFilterInput');x.focus();x.selectionStart=x.selectionEnd" />
 							</h:inputText>
 		     			</h:panelGroup>
 					</f:facet>
