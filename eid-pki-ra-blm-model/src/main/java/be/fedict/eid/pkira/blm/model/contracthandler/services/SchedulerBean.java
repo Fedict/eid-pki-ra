@@ -104,20 +104,15 @@ public class SchedulerBean {
 			return timer;
 		}
 		
-		
-		// Get the recipients
-		CertificateDomain certificateDomain = certificate.getCertificateDomain();
-		List<String> emailsList = new ArrayList<String>();
-		for(Registration registration: certificateDomain.getRegistrations()) {
-			emailsList.add(registration.getEmail());
-		}
-		String[] emails = emailsList.toArray(new String[0]);
-		
-		// Create the parameter map 
+		// Parameters
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("certificate", certificate);
-
-		mailTemplate.sendTemplatedMail("certificateNearlyExpired.ftl", parameters, emails);
+		
+		// Send individual mails
+		CertificateDomain certificateDomain = certificate.getCertificateDomain();
+		for(Registration registration: certificateDomain.getRegistrations()) {
+			mailTemplate.sendTemplatedMail("certificateNearlyExpired.ftl", parameters, new String[] { registration.getEmail() }, registration.getRequester().getLocale());
+		}		
 
 		return timer;
 	}

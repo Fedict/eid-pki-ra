@@ -26,6 +26,7 @@ import javax.xml.ws.BindingProvider;
 import be.fedict.eid.pkira.generated.privatews.CertificateDomainWS;
 import be.fedict.eid.pkira.generated.privatews.CertificateTypeWS;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
+import be.fedict.eid.pkira.generated.privatews.ChangeLocaleRequest;
 import be.fedict.eid.pkira.generated.privatews.ConfigurationEntryKeyWS;
 import be.fedict.eid.pkira.generated.privatews.ConfigurationEntryWS;
 import be.fedict.eid.pkira.generated.privatews.ContractWS;
@@ -123,13 +124,14 @@ public class EIDPKIRAPrivateServiceClient {
 		return response.getCertificateDomains();
 	}
 	
-	public boolean createRegistrationForUser(String userRRN, String userLastName, String userFirstName, String domainId, String userEmail) {
+	public boolean createRegistrationForUser(String userRRN, String userLastName, String userFirstName, String domainId, String userEmail, String locale) {
 		CreateRegistrationForUserRequest request = factory.createCreateRegistrationForUserRequest();
 		request.setCertificateDomainId(domainId);
 		request.setUserRRN(userRRN);
 		request.setUserLastName(userLastName);
 		request.setUserFirstName(userFirstName);
 		request.setUserEmail(userEmail);
+		request.setLocale(locale);
 		
 		CreateRegistrationForUserResponse response = getWebservicePort().createRegistrationForUser(request);
 		return response.isSuccess();
@@ -208,6 +210,13 @@ public class EIDPKIRAPrivateServiceClient {
 		FindContractDocumentResponse response = getWebservicePort().findContractDocument(request);
 		return response.getContractDocument();
 	}
+	
+	public void changeLocale(String userRRN, String locale) {
+		ChangeLocaleRequest request = factory.createChangeLocaleRequest();
+		request.setUserRrn(userRRN);
+		request.setLocale(locale);
+		getWebservicePort().changeLocale(request);
+	}
 
 	/**
 	 * Creates the web service port.
@@ -252,5 +261,7 @@ public class EIDPKIRAPrivateServiceClient {
 	public void setServiceUrl(String serviceUrl) {
 		this.serviceUrl = serviceUrl;
 	}
+	
+	
 
 }

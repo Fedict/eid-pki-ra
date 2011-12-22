@@ -37,7 +37,7 @@ public interface RegistrationManager {
 	 * @throws RegistrationException
 	 *             if this fails.
 	 */
-	void registerUser(String userRRN, String userLastName, String userFirstName, Integer domainId, String emailAddress)
+	void registerUser(String userRRN, String userLastName, String userFirstName, Integer domainId, String emailAddress, String locale)
 			throws RegistrationException;
 
 	boolean createOrUpdateRegistration(RegistrationWS registrationWS);
@@ -66,5 +66,10 @@ public interface RegistrationManager {
 	 *         the user is not authorized).
 	 */
 	Registration findRegistrationForUserAndCertificateDomain(String signer, CertificateDomain certificateDomain);
+	
+	/**
+	 * Change the locale of the user.
+	 */
+	void changeLocale(String userRRN, String locale);
 
 }

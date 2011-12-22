@@ -63,10 +63,10 @@ public class UserRepositoryBeanTest extends DatabaseTest {
 		fail("PersistenceException expected");
 	}
 	
-	@Test
+	@Test(dependsOnMethods="persist")
 	public void findByNationalRegisterNumber() throws Exception {
 		User user = repository.findByNationalRegisterNumber(NRN);
-		assertEquals(valid, user);
+		assertEquals(user, valid);
 	}	
 	
 	@Test(dependsOnMethods="persist")
@@ -79,6 +79,7 @@ public class UserRepositoryBeanTest extends DatabaseTest {
 		user.setNationalRegisterNumber(nationalRegisterNumber);
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
+		user.setLocale("en");
 		return user;
 	}
 }

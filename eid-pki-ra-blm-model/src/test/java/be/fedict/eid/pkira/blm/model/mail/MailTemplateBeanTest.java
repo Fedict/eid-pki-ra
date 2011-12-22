@@ -16,8 +16,9 @@
  */
 package be.fedict.eid.pkira.blm.model.mail;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -75,7 +76,7 @@ public class MailTemplateBeanTest {
 
 		String[] recipients = new String[]
 			{ "test@example.com" };
-		bean.sendTemplatedMail("sendCertificateMail.ftl", parameters, recipients, new byte[0], "test", "test");
+		bean.sendTemplatedMail("sendCertificateMail.ftl", parameters, recipients, new byte[0], "test", "test", "en");
 
 		verify(mailSender).sendMail(isA(Mail.class));
 	}

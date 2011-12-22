@@ -21,8 +21,13 @@ package be.fedict.eid.pkira.portal.menu;
 import java.io.Serializable;
 
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
+
+import be.fedict.eid.pkira.common.security.EIdUserCredentials;
+import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 
 @Name(MenuHandler.NAME)
 @Scope(ScopeType.SESSION)
@@ -30,28 +35,41 @@ public class MenuHandler implements Serializable {
 
 	private static final long serialVersionUID = 3778075742509845834L;
 
-	public final static String NAME="be.fedict.eid.pkira.portal.menuHandler";
-	//id of the selected Item
+	public final static String NAME = "be.fedict.eid.pkira.portal.menuHandler";
+	// id of the selected Item
 	private String selectedItem = "home";
 
-	public void selectItem(String item){
+	@In(value = EIDPKIRAPrivateServiceClient.NAME, create = true)
+	private EIDPKIRAPrivateServiceClient eidpkiraPrivateServiceClient;
+
+	@In
+	private EIdUserCredentials credentials;
+
+	public void selectItem(String item) {
 		this.selectedItem = item;
 	}
-	
-	public boolean isSelected(String item){
-		if(selectedItem.equals(item)){
+
+	@Observer("org.jboss.seam.localeSelected")
+	public void localeChanged(String locale) {
+		if (credentials!=null) {
+			eidpkiraPrivateServiceClient.changeLocale(credentials.getUser().getRRN(), locale);
+		}
+	}
+
+	public boolean isSelected(String item) {
+		if (selectedItem.equals(item)) {
 			return true;
 		}
 		return false;
 	}
-	
-	public String styleIfSelected(String item){
-		if(isSelected(item) == true){ 
+
+	public String styleIfSelected(String item) {
+		if (isSelected(item) == true) {
 			return "itemSelected";
 		}
 		return "itemNotSelected";
 	}
-	
+
 	public void setSelectedItem(String selectedItem) {
 		this.selectedItem = selectedItem;
 	}
@@ -59,4 +77,13 @@ public class MenuHandler implements Serializable {
 	public String getSelectedItem() {
 		return selectedItem;
 	}
+
+	public void setEidpkiraPrivateServiceClient(EIDPKIRAPrivateServiceClient eidpkiraPrivateServiceClient) {
+		this.eidpkiraPrivateServiceClient = eidpkiraPrivateServiceClient;
+	}
+
+	public void setCredentials(EIdUserCredentials credentials) {
+		this.credentials = credentials;
+	}
+
 }

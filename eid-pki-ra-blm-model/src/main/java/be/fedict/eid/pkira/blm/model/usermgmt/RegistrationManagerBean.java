@@ -69,13 +69,16 @@ public class RegistrationManagerBean implements RegistrationManager {
 	@In(value = DistinguishedNameManager.NAME, create = true)
 	private DistinguishedNameManager distinguishedNameManager;
 
+	@In(value = UserHome.NAME, create = true)
+	private UserHome userHome;
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void registerUser(String userRRN, String userLastName, String userFirstName, Integer domainId,
-			String emailAddress) throws RegistrationException {
+			String emailAddress, String locale) throws RegistrationException {
 		// Check if there are already users in the database; if not this one
 		// becomes admin
 		boolean isAdmin = 0 == userRepository.getUserCount();
@@ -91,7 +94,12 @@ public class RegistrationManagerBean implements RegistrationManager {
 			user.setLastName(userLastName);
 			user.setNationalRegisterNumber(userRRN);
 			user.setAdmin(isAdmin);
+			user.setLocale(locale != null ? locale : "en");
 			userRepository.persist(user);
+		} else {
+			userHome.setInstance(user);
+			userHome.getInstance().setLocale(locale);
+			userHome.update();
 		}
 
 		// Check if we have to add him to a certificate domain
@@ -177,7 +185,7 @@ public class RegistrationManagerBean implements RegistrationManager {
 
 		// See if the first DN matches a registration
 		Registration registration = findRegistrationForDN(type, theDN, activeRegistrations);
-		if (registration==null) {
+		if (registration == null) {
 			return null;
 		}
 
@@ -198,6 +206,15 @@ public class RegistrationManagerBean implements RegistrationManager {
 	public Registration findRegistrationForUserAndCertificateDomain(String signer, CertificateDomain certificateDomain) {
 		User user = userRepository.findByNationalRegisterNumber(signer);
 		return registrationRepository.findRegistration(certificateDomain, user);
+	}
+
+	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public void changeLocale(String userRRN, String locale) {
+		User user = userHome.findByNationalRegisterNumber(userRRN);
+		userHome.setInstance(user);
+		userHome.getInstance().setLocale(locale);
+		userHome.update();
 	}
 
 	private Registration findRegistrationForDN(CertificateType type, DistinguishedName theDN,
@@ -269,4 +286,17 @@ public class RegistrationManagerBean implements RegistrationManager {
 	protected void setDistinguishedNameManager(DistinguishedNameManager distinguishedNameManager) {
 		this.distinguishedNameManager = distinguishedNameManager;
 	}
+
+	protected void setRegistrationHome(RegistrationHome registrationHome) {
+		this.registrationHome = registrationHome;
+	}
+
+	protected void setUserQuery(UserQuery userQuery) {
+		this.userQuery = userQuery;
+	}
+
+	protected void setUserHome(UserHome userHome) {
+		this.userHome = userHome;
+	}
+
 }

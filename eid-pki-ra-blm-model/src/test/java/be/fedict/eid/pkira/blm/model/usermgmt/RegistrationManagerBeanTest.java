@@ -57,6 +57,7 @@ public class RegistrationManagerBeanTest {
 
 	private static final CertificateDomain DOMAIN = new CertificateDomain();
 	private static final User USER = new User();
+	private static final String LOCALE = "en";
 
 	private RegistrationManagerBean bean;
 	@Mock
@@ -69,6 +70,8 @@ public class RegistrationManagerBeanTest {
 	private Log log;
 	@Mock
 	private DistinguishedNameManager distinguishedNameManager;
+	@Mock
+	private UserHome userHome;
 
 	@BeforeMethod
 	public void setup() {
@@ -80,6 +83,7 @@ public class RegistrationManagerBeanTest {
 		bean.setUserRepository(userRepository);
 		bean.setLog(log);
 		bean.setDistinguishedNameManager(distinguishedNameManager);
+		bean.setUserHome(userHome);
 	}
 
 	@Test
@@ -87,7 +91,7 @@ public class RegistrationManagerBeanTest {
 		when(userRepository.findByNationalRegisterNumber(RRN)).thenReturn(null);
 		when(certificateDomainHome.find()).thenReturn(DOMAIN);
 
-		bean.registerUser(RRN, LAST_NAME, FIRST_NAME, DOMAIN_ID, EMAIL_ADDRESS);
+		bean.registerUser(RRN, LAST_NAME, FIRST_NAME, DOMAIN_ID, EMAIL_ADDRESS, LOCALE);
 
 		verify(userRepository).findByNationalRegisterNumber(RRN);
 		verify(userRepository).persist(isA(User.class));
@@ -95,22 +99,25 @@ public class RegistrationManagerBeanTest {
 		verify(certificateDomainHome).setId(DOMAIN_ID);
 		verify(certificateDomainHome).find();
 		verify(registrationRepository).persist(isA(Registration.class));
-		verifyNoMoreInteractions(userRepository, certificateDomainHome);
+		verifyNoMoreInteractions(userRepository, certificateDomainHome, userHome);
 	}
 
 	@Test
 	public void testRegisterExistingUser() throws RegistrationException {
 		when(userRepository.findByNationalRegisterNumber(RRN)).thenReturn(USER);
 		when(certificateDomainHome.find()).thenReturn(DOMAIN);
+		when(userHome.getInstance()).thenReturn(USER);
 
-		bean.registerUser(RRN, LAST_NAME, FIRST_NAME, DOMAIN_ID, EMAIL_ADDRESS);
+		bean.registerUser(RRN, LAST_NAME, FIRST_NAME, DOMAIN_ID, EMAIL_ADDRESS, LOCALE);
 
 		verify(userRepository).findByNationalRegisterNumber(RRN);
 		verify(userRepository).getUserCount();
 		verify(certificateDomainHome).setId(DOMAIN_ID);
 		verify(certificateDomainHome).find();
-		verify(registrationRepository).persist(isA(Registration.class));
-		verifyNoMoreInteractions(userRepository, certificateDomainHome);
+		verify(userHome).setInstance(USER);
+		verify(userHome).getInstance();
+		verify(userHome).update();
+		verifyNoMoreInteractions(userRepository, certificateDomainHome, userHome);
 	}
 
 	@Test
