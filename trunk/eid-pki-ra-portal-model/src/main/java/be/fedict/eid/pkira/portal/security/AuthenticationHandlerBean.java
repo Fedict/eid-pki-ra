@@ -18,10 +18,12 @@
 
 package be.fedict.eid.pkira.portal.security;
 
+import org.apache.commons.lang.StringUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Out;
+import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.security.Identity;
 
 import be.fedict.eid.pkira.common.security.AbstractAuthenticationHandlerBean;
@@ -47,6 +49,9 @@ public class AuthenticationHandlerBean extends AbstractAuthenticationHandlerBean
 	@In(value = ConfigurationEntryContainer.NAME, create=true)
 	protected ConfigurationEntryContainer configurationEntryContainer;
 	
+	@In(value = "org.jboss.seam.international.localeSelector", create = true)
+	private LocaleSelector localeSelector;
+	
 	@In
 	protected Identity identity;
 
@@ -57,7 +62,11 @@ public class AuthenticationHandlerBean extends AbstractAuthenticationHandlerBean
 		if (backendUser != null && backendUser.isWithRegistrations()) {
 			identity.addRole(PKIRARole.REGISTERED_USER.name());
 		} else {
-			eidPKIRAPrivateServiceClient.createRegistrationForUser(eidUser.getRRN(), eidUser.getLastName(), eidUser.getFirstName(), null, null);
+			String localeString = localeSelector.getLocaleString();
+			if (StringUtils.isEmpty(localeString)) {
+				localeString = "en";
+			}
+			eidPKIRAPrivateServiceClient.createRegistrationForUser(eidUser.getRRN(), eidUser.getLastName(), eidUser.getFirstName(), null, null, localeString);
 			identity.addRole(PKIRARole.UNREGISTERED_USER.name());
 		}
 		identity.addRole(PKIRARole.AUTHENTICATED_USER.name());

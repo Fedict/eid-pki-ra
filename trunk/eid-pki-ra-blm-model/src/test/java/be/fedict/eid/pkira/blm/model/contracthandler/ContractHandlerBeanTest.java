@@ -318,7 +318,7 @@ public class ContractHandlerBeanTest {
 		verify(contractRepository).persistContract(isA(CertificateSigningContract.class));
 		verify(contractRepository).persistCertificate(isA(Certificate.class));
 		verify(mailTemplate).sendTemplatedMail(anyString(), anyMap(), any(String[].class), any(byte[].class),
-				anyString(), anyString());
+				anyString(), anyString(), anyString());
 	}
 
 	@Test

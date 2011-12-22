@@ -48,6 +48,7 @@ public class UserMapperBean implements UserMapper {
 		result.setLastName(user.getLastName());
 		result.setNationalRegisterNumber(user.getNationalRegisterNumber());
 		result.setWithRegistrations(hasApprovedRegistrations);
+		result.setLocale(user.getLocale());
 
 		return result;
 	}

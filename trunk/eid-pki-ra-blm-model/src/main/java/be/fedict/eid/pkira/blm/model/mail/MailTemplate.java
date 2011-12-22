@@ -36,7 +36,7 @@ public interface MailTemplate {
 	 *            parameters to replace in the certificate.
 	 * @return the mail.
 	 */
-	String createMailMessage(String templateName, Map<String, Object> parameters);
+	String createMailMessage(String templateName, Map<String, Object> parameters, String locale);
 
 	/**
 	 * Sends a mail created from a template.
@@ -48,7 +48,7 @@ public interface MailTemplate {
 	 * @param recipients
 	 *            recipients of the mail.
 	 */
-	void sendTemplatedMail(String templateName, Map<String, Object> parameters, String[] recipients);
+	void sendTemplatedMail(String templateName, Map<String, Object> parameters, String[] recipients, String locale);
 	
 	/**
 	 * Sends a mail created from a template.
@@ -60,5 +60,5 @@ public interface MailTemplate {
 	 * @param recipients
 	 *            recipients of the mail.
 	 */
-	void sendTemplatedMail(String templateName, Map<String, Object> parameters, String[] recipients, byte[] attachmentData, String attachmentContentType, String attachmentFileName);
+	void sendTemplatedMail(String templateName, Map<String, Object> parameters, String[] recipients, byte[] attachmentData, String attachmentContentType, String attachmentFileName, String locale);
 }

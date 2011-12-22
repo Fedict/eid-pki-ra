@@ -81,10 +81,12 @@ public class User implements Serializable {
 	@Column(name = "IS_ADMIN", nullable = false)
 	private boolean admin;
 	@Column(name = "ADMIN_EMAIL", nullable = true)
-	@Email(message="{validator.email}")
+	@Email(message = "{validator.email}")
 	private String adminEmail;
-	@Column(name="ADMIN_EMAIL_REGISTRATION")
+	@Column(name = "ADMIN_EMAIL_REGISTRATION")
 	private Boolean sendRegistrationMail = true;
+	@Column(name = "LOCALE", nullable = true)
+	private String locale = "en";
 
 	@OneToMany(mappedBy = "requester")
 	private List<Registration> registrations;
@@ -156,12 +158,11 @@ public class User implements Serializable {
 	public void setAdminEmail(String adminEmail) {
 		this.adminEmail = adminEmail;
 	}
-	
-	
+
 	public boolean isSendRegistrationMail() {
-		return sendRegistrationMail !=null ? sendRegistrationMail : true;
+		return sendRegistrationMail != null ? sendRegistrationMail : true;
 	}
-	
+
 	public void setSendRegistrationMail(boolean sendRegistrationMail) {
 		this.sendRegistrationMail = sendRegistrationMail;
 	}
@@ -191,6 +192,14 @@ public class User implements Serializable {
 	public String toString() {
 		return new StringBuilder("User[").append("nationalRegisterNumber=").append(nationalRegisterNumber)
 				.append(", lastName=").append(lastName).append(", firstName=").append(firstName).append(']').toString();
+	}
+
+	public String getLocale() {
+		return locale;
+	}
+
+	public void setLocale(String locale) {
+		this.locale = locale;
 	}
 
 }

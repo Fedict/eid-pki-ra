@@ -58,7 +58,7 @@ public class AuthenticationHandlerBean extends AbstractAuthenticationHandlerBean
 		User user = userRepository.findByNationalRegisterNumber(eidUser.getRRN());
 		if (user == null) {
 			try {
-				registrationManager.registerUser(eidUser.getRRN(), eidUser.getLastName(), eidUser.getFirstName(), null, null);
+				registrationManager.registerUser(eidUser.getRRN(), eidUser.getLastName(), eidUser.getFirstName(), null, null, null);
 			} catch (RegistrationException e) {
 				throw new RuntimeException(e);
 			}

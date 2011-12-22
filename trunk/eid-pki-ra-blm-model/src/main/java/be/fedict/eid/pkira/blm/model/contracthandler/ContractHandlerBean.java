@@ -391,12 +391,13 @@ public class ContractHandlerBean implements ContractHandler {
 
 			String[] recipients = new String[]
 				{ registration.getEmail() };
+			String locale = registration.getRequester().getLocale();
 			attachmentData = baos.toByteArray();
 			String attachmentContentType = "application/zip";
 			String attachmentFileName = certificate.getSerialNumber() + ".zip";
 
 			mailTemplate.sendTemplatedMail(templateName, parameters, recipients, attachmentData, attachmentContentType,
-					attachmentFileName);
+					attachmentFileName, locale);
 
 		} catch (IOException e) {
 			log.error("Error creating zip file for certificate chain", e);

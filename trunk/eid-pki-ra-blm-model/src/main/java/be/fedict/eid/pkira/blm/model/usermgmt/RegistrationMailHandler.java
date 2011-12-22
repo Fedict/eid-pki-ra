@@ -19,9 +19,7 @@
 package be.fedict.eid.pkira.blm.model.usermgmt;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.jboss.seam.annotations.In;
@@ -55,22 +53,22 @@ public class RegistrationMailHandler implements Serializable {
 	
 	@Observer(REGISTRATION_CREATED)
 	public void sendCreated(Registration registration) {
-		List<String> recipients = new ArrayList<String>();
+		Map<String, Object> parameters = createMapForRegistrationMail(registration, null);
 		for(User user: userRepository.getAdminUsersWithEmail()) {
 			if (user.isSendRegistrationMail()) {
-				recipients.add(user.getAdminEmail());
+				mailTemplate.sendTemplatedMail("adminNewRegistration.ftl", parameters, new String[] { user.getAdminEmail() }, user.getLocale());
 			}
 		}
 		
-		Map<String, Object> parameters = createMapForRegistrationMail(registration, null);
-		mailTemplate.sendTemplatedMail("adminNewRegistration.ftl", parameters, recipients.toArray(new String[0]));
+		
+		
 	}
 
 	@Observer(REGISTRATION_APPROVED)
 	public void sendApproved(Registration registration, String reason) {
 		String[] recipients = new String[] { registration.getEmail() };
 		Map<String, Object> parameters = createMapForRegistrationMail(registration, reason);
-		mailTemplate.sendTemplatedMail("registrationApproved.ftl", parameters, recipients);
+		mailTemplate.sendTemplatedMail("registrationApproved.ftl", parameters, recipients, registration.getRequester().getLocale());
 	}
 	
 	@Observer(REGISTRATION_DISAPPROVED)
@@ -78,7 +76,7 @@ public class RegistrationMailHandler implements Serializable {
 		String[] recipients = new String[]
 			{ registration.getEmail() };
 		Map<String, Object> parameters = createMapForRegistrationMail(registration, reason);
-		mailTemplate.sendTemplatedMail("registrationDisapproved.ftl", parameters, recipients);
+		mailTemplate.sendTemplatedMail("registrationDisapproved.ftl", parameters, recipients, registration.getRequester().getLocale());
 	}
 	
 	private Map<String, Object> createMapForRegistrationMail(Registration registration, String reasonText) {

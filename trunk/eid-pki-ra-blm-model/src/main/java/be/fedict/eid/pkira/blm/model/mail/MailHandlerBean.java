@@ -95,7 +95,7 @@ public class MailHandlerBean implements MessageListener {
 			for (String recipient : mail.getRecipients()) {
 				msg.addRecipient(RecipientType.TO, new InternetAddress(recipient));
 			}
-			msg.setSubject(mail.getSubject());
+			msg.setSubject(mail.getSubject(), "UTF-8");
 
 			Multipart multipart = new MimeMultipart();
 			msg.setContent(multipart);

@@ -57,6 +57,8 @@ import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationRepository;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationStatus;
 import be.fedict.eid.pkira.blm.model.usermgmt.User;
 import be.fedict.eid.pkira.blm.model.usermgmt.UserRepository;
+import be.fedict.eid.pkira.generated.privatews.ChangeLocaleRequest;
+import be.fedict.eid.pkira.generated.privatews.ChangeLocaleResponse;
 import be.fedict.eid.pkira.generated.privatews.CreateOrUpdateRegistrationRequest;
 import be.fedict.eid.pkira.generated.privatews.CreateOrUpdateRegistrationResponse;
 import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserRequest;
@@ -180,7 +182,8 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 					request.getUserLastName(),
 					request.getUserFirstName(),
 					request.getCertificateDomainId() != null ? Integer.parseInt(request.getCertificateDomainId())
-							: null, request.getUserEmail());
+							: null, request.getUserEmail(), 
+					request.getLocale());
 			result = true;
 		} catch (RegistrationException e) {
 			log.error("Error creating registration", e);
@@ -290,6 +293,13 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 		certificateDomainHome.setId(request.getCertificateDomainId());
 		response.setCertificateDomain(getCertificateDomainMapper().map(certificateDomainHome.getInstance()));
 		return response;
+	}
+
+	@Override
+	public ChangeLocaleResponse changeLocale(ChangeLocaleRequest request) {
+		getRegistrationManager().changeLocale(request.getUserRrn(), request.getLocale());
+		
+		return new ChangeLocaleResponse();
 	}
 
 	private ContractRepository getDomainRepository() {
