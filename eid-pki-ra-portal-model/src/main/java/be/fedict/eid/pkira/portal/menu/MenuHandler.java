@@ -51,7 +51,7 @@ public class MenuHandler implements Serializable {
 
 	@Observer("org.jboss.seam.localeSelected")
 	public void localeChanged(String locale) {
-		if (credentials!=null) {
+		if (credentials!=null && credentials.getUser()!=null) {
 			eidpkiraPrivateServiceClient.changeLocale(credentials.getUser().getRRN(), locale);
 		}
 	}
