@@ -83,7 +83,7 @@ public class SchemaGenerator {
 		db.scanArchives(urls);
 		Set<String> classNames = db.getAnnotationIndex().get(Entity.class.getName());
 		if (classNames == null || classNames.size() == 0) {
-			throw new Exception("No entity classes found in classes directory");
+			throw new Exception("No entity classes found in classes directory: " + urls[0]);
 		}
 		System.out.println("Found " + classNames.size() + " entity classes.");
 
