@@ -17,14 +17,15 @@
 package be.fedict.eid.pkira.blm.hibernateutil;
 
 import java.io.File;
-import java.net.URL;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Set;
 
 import javax.persistence.Entity;
 
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
-import org.scannotation.AnnotationDB;
 
 /**
  * Hibernate Schema Generator Code based on
@@ -37,10 +38,8 @@ public class SchemaGenerator {
 	 * Holds the classnames of hibernate dialects for easy reference.
 	 */
 	private static enum Dialect {
-		HSQL("org.hibernate.dialect.HSQLDialect"), 
-		MYSQL("org.hibernate.dialect.MySQLDialect"), 
-		ORACLE("org.hibernate.dialect.Oracle10gDialect"), 
-		POSTGRES("org.hibernate.dialect.PostgreSQLDialect");
+		HSQL("org.hibernate.dialect.HSQLDialect"), MYSQL("org.hibernate.dialect.MySQLDialect"), ORACLE(
+				"org.hibernate.dialect.Oracle10gDialect"), POSTGRES("org.hibernate.dialect.PostgreSQLDialect");
 
 		private String dialectClass;
 
@@ -52,8 +51,6 @@ public class SchemaGenerator {
 			return dialectClass;
 		}
 	}
-
-	private static final String PACKAGE_NAME = "be.fedict.eid.pkira";
 
 	public static void main(String[] args) throws Exception {
 		String workingDir;
@@ -75,28 +72,52 @@ public class SchemaGenerator {
 
 	public SchemaGenerator(String packageName, String workingDir) throws Exception {
 		this.workingDir = workingDir;
-		
+
 		// Find entities on the class path
-		URL[] urls = new URL[1];
-		urls[0] = new File(workingDir + "/classes").getCanonicalFile().toURI().toURL();
-		AnnotationDB db = new AnnotationDB();
-		db.scanArchives(urls);
-		System.out.println(db.getAnnotationIndex().keySet());
-		Set<String> classNames = db.getAnnotationIndex().get(Entity.class.getName());
-		if (classNames == null || classNames.size() == 0) {
-			throw new Exception("No entity classes found in classes directory: " + urls[0]);
+		Set<String> classNames = enumerateClasses(workingDir + "/classes");
+		Set<Class<?>> entityClasses = new HashSet<Class<?>>();
+		for (String className : classNames) {
+			Class<?> clazz = Class.forName(className);
+			if (clazz.getAnnotation(Entity.class) != null) {
+				entityClasses.add(clazz);
+			}
 		}
-		System.out.println("Found " + classNames.size() + " entity classes.");
+
+		if (entityClasses.size() == 0) {
+			throw new Exception("No entity classes found in classes directory: " + workingDir + "/classes");
+		}
+		System.out.println("Found " + entityClasses.size() + " entity classes.");
 
 		// Create hibernate configuration
 		cfg = new AnnotationConfiguration();
 		cfg.setProperty("hibernate.hbm2ddl.auto", "create");
-		for (String className : classNames) {
-			if (className.startsWith(PACKAGE_NAME)) {
-				Class<?> clazz = Class.forName(className);
-				cfg.addAnnotatedClass(clazz);
+		for (Class<?> entityClass : entityClasses) {
+			cfg.addAnnotatedClass(entityClass);
+		}
+	}
+
+	private Set<String> enumerateClasses(String path) {
+		Set<String> result = new HashSet<String>();
+		Queue<String> todo = new LinkedList<String>();
+		todo.add("");
+
+		while (!todo.isEmpty()) {
+			String relativePath = todo.poll();
+			String thePath = path + relativePath;
+
+			for (File entry : new File(thePath).listFiles()) {
+				if (entry.isDirectory()) {
+					todo.add(relativePath + '/' + entry.getName());
+				} else if (entry.isFile() && entry.getName().endsWith(".class")) {
+					String file = relativePath + '/' + entry.getName();
+					file = file.substring(1, file.length() - 6);
+					file = file.replaceAll("/", ".");
+					result.add(file);
+				}
 			}
 		}
+
+		return result;
 	}
 
 	/**
