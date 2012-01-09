@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<CertificateSigningRequest xmlns:ns2="http://www.w3.org/2000/09/xmldsig#" xmlns="urn:be:fedict:eid:pkira:contracts">
+	<RequestId>requestId</RequestId>
+	<Description>description</Description>
+	<Operator>
