@@ -64,7 +64,7 @@ public class MailTemplateBeanTest {
 		bean.setMailSender(mailSender);
 		bean.setErrorLogger(errorLogger);
 		bean.initialize();
-
+		
 		when(configurationEntryQuery.getAsMap()).thenReturn(Collections.singletonMap("HOMEPAGE_URL", "{URL}"));
 	}
 
@@ -79,13 +79,6 @@ public class MailTemplateBeanTest {
 		bean.sendTemplatedMail("sendCertificateMail.ftl", parameters, recipients, new byte[0], "test", "test", "en");
 
 		verify(mailSender).sendMail(isA(Mail.class));
-	}
-
-	@Test
-	public void unescapeHTML() {
-		for (String[] item : MailTemplateBean.htmlEscape) {
-			System.out.println(item[0] + " -> " + item[1]);
-		}
 	}
 
 	/**
