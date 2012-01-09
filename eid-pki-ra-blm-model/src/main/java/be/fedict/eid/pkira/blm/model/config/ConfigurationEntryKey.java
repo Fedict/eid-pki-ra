@@ -38,7 +38,7 @@ public enum ConfigurationEntryKey {
 	IDP_FINGERPRINT(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.idpFingerprint", "d838f129659ef5d2f3ea974221e0d8ae1bb5206b"),
 	IDP_FINGERPRINT_ROLLOVER(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.idpFingerprint2", "6ce7a376a1394a1be3585536685d7fdc7da19fb6"),
 	DSS_FINGERPRINT(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.dssFingerprint", "33016c4f55593730dc79acfc4286e39ee4ea0582"),
-	DSS_FINGERPRINT_ROLLOVER(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.dssFingerprint2", ""),
+	DSS_FINGERPRINT_ROLLOVER(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.dssFingerprint2", "6ce7a376a1394a1be3585536685d7fdc7da19fb6"),
 	IDP_MAXTIMEOFFSET(ConfigurationEntryType.STRING, "configurationEntry.key.idpMaxTimeOffset", "60"),
 	SP_RETURN_URL_PORTAL(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.spReturnURLPortal", ""),
 	SP_RETURN_URL_ADMIN(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.spReturnURLAdmin", ""),

@@ -20,6 +20,12 @@ Anbei finden Sie das von Ihnen beantragte Zertifikat.
 </ul>
 </p>
 
+<p>Ihr Zertifikat und die Zertifikatskette:
+<#list certificateChain as certificate>
+<ul>${certificate}</ul>
+</#list>
+</p>
+
 <p>
 Mit freundlichen Gr&uuml;&szlig;en<br/>
 Fedict

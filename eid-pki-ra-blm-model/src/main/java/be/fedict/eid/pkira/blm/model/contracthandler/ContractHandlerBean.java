@@ -16,15 +16,12 @@
  */
 package be.fedict.eid.pkira.blm.model.contracthandler;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -308,8 +305,8 @@ public class ContractHandlerBean implements ContractHandler {
 
 	private Registration getMatchingRegistration(String signer, String distinguishedName,
 			List<String> alternativeNames, CertificateType type) throws ContractHandlerBeanException {
-		Registration registration = registrationManager
-				.findRegistrationForUserDNAndCertificateType(signer, distinguishedName, alternativeNames, type);
+		Registration registration = registrationManager.findRegistrationForUserDNAndCertificateType(signer,
+				distinguishedName, alternativeNames, type);
 		if (registration == null) {
 			throw new ContractHandlerBeanException(ResultType.NOT_AUTHORIZED,
 					"User is not authorized for the DN in the contract");
@@ -364,46 +361,24 @@ public class ContractHandlerBean implements ContractHandler {
 		parameters.put("certificate", certificate);
 		parameters.put("user", registration.getRequester());
 
-		byte[] attachmentData = null;
-		ZipOutputStream zip = null;
-		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			zip = new ZipOutputStream(baos);
-
-			zip.putNextEntry(new ZipEntry("certificate.crt"));
-
-			zip.write(certificate.getX509().getBytes());
-			zip.closeEntry();
-
-			int i = 0;
-			CertificateChainCertificate chain = certificate.getCertificateChainCertificate();
-			while (chain != null) {
-				zip.putNextEntry(new ZipEntry("chain" + (i++) + ".crt"));
-				zip.write(chain.getCertificateData().getBytes());
-				zip.closeEntry();
-				chain = chain.getIssuer();
-			}
-
-			zip.finish();
-			zip.close();
-
-			baos.close();
-
-			String[] recipients = new String[]
-				{ registration.getEmail() };
-			String locale = registration.getRequester().getLocale();
-			attachmentData = baos.toByteArray();
-			String attachmentContentType = "application/zip";
-			String attachmentFileName = certificate.getSerialNumber() + ".zip";
-
-			mailTemplate.sendTemplatedMail(templateName, parameters, recipients, attachmentData, attachmentContentType,
-					attachmentFileName, locale);
-
-		} catch (IOException e) {
-			log.error("Error creating zip file for certificate chain", e);
-			throw new ContractHandlerBeanException(ResultType.GENERAL_FAILURE,
-					"Failed to create zip file for certificate chain.");
+		List<String> base64EncodedCertificates = new ArrayList<String>();
+		base64EncodedCertificates.add(htmlEncodeCertificate(certificate.getX509()));
+		for (CertificateChainCertificate chain = certificate.getCertificateChainCertificate(); chain != null; chain = chain
+				.getIssuer()) {
+			base64EncodedCertificates.add(htmlEncodeCertificate(chain.getCertificateData()));
 		}
+		parameters.put("certificateChain", base64EncodedCertificates);
+
+		String[] recipients = new String[] { registration.getEmail() };
+		String locale = registration.getRequester().getLocale();
+		mailTemplate.sendTemplatedMail(templateName, parameters, recipients, null, null, null, locale);
+	}
+
+	protected String htmlEncodeCertificate(String x509) {
+		// CertificateInfo certificateInfo =
+		// certificateParser.parseCertificate(x509);
+		// String encoded = certificateInfo.getPemEncoded();
+		return x509.replaceAll("\\r?\\n", "<br/>");
 	}
 
 	/**
