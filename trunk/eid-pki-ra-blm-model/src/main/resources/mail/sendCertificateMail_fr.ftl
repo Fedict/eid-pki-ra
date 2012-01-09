@@ -20,6 +20,12 @@ Vous trouverez en pi&egrave;ce jointe le certificat que vous avez demand&eacute.
 </ul>
 </p>
 
+<p>Votre certificat et la cha&icirc;ne des certificats:
+<#list certificateChain as certificate>
+<ul>${certificate}</ul>
+</#list>
+</p>
+
 <p>
 Avec nos salutations les meilleures,<br/>
 Fedict

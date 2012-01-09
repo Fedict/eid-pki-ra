@@ -22,6 +22,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -73,6 +74,7 @@ public class MailTemplateBeanTest {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("certificate", createCertificate());
 		parameters.put("user", createUser());
+		parameters.put("certificateChain", Arrays.asList("cert1", "cert2", "cert3"));
 
 		String[] recipients = new String[]
 			{ "test@example.com" };

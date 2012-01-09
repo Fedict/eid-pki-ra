@@ -20,6 +20,12 @@ Please find attached the certificate you requested earlier.
 </ul>
 </p>
 
+<p>Your certificate and the certificate chain:
+<#list certificateChain as certificate>
+<ul>${certificate}</ul>
+</#list>
+</p>
+
 <p>
 Best regards,<br/>
 Fedict

@@ -20,6 +20,12 @@ Bijgevoegd vindt u het certificaat dat u hebt aangevraagd.
 </ul>
 </p>
 
+<p>Uw certificaat en de certificaatketen:
+<#list certificateChain as certificate>
+<ul>${certificate}</ul>
+</#list>
+</p>
+
 <p>
 Met vriendelijke groeten,<br/>
 Fedict
