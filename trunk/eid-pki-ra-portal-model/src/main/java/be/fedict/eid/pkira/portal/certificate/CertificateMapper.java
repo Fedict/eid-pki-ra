@@ -51,8 +51,9 @@ public class CertificateMapper implements Serializable {
 		certificate.setType(map(certificateWS.getCertificateType()));
 		certificate.setValidityStart(map(certificateWS.getValidityStart()));
 		certificate.setValidityEnd(map(certificateWS.getValidityEnd()));
-		certificate.setX509(certificateWS.getX509());
+		certificate.setZippedCertificates(certificateWS.getCertificateZip());
 		certificate.setRequesterName(certificateWS.getRequesterName());		
+		certificate.setX509(certificateWS.getX509());
 		return certificate;
 	}
 

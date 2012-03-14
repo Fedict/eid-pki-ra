@@ -33,101 +33,26 @@ import org.jboss.seam.annotations.Scope;
 @Scope(ScopeType.CONVERSATION)
 public class Certificate implements Serializable {
 
-	private static final long serialVersionUID = 5429725347686453892L;
-
 	public static final String NAME = "be.fedict.eid.pkira.portal.certificate";
 
+	private static final long serialVersionUID = 5429725347686453892L;
+
+	private List<String> alternativeNames;
+	private String distinguishedName;
 	private Integer id;
-	private String serialNumber;
-	private CertificateType type;
-	private Date validityStart;
-	private Date validityEnd;
-	private String x509;
 	private String issuer;
 	private String requesterName;
-	private String distinguishedName;
-	private List<String> alternativeNames;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getSerialNumber() {
-		return serialNumber;
-	}
-
-	public void setSerialNumber(String serialNumber) {
-		this.serialNumber = serialNumber;
-	}
-
-	public CertificateType getType() {
-		return type;
-	}
-
-	public void setType(CertificateType type) {
-		this.type = type;
-	}
-
-	public Date getValidityStart() {
-		return validityStart;
-	}
-
-	public void setValidityStart(Date validityStart) {
-		this.validityStart = validityStart;
-	}
-
-	public Date getValidityEnd() {
-		return validityEnd;
-	}
-
-	public void setValidityEnd(Date validityEnd) {
-		this.validityEnd = validityEnd;
-	}
-
-	public String getX509() {
-		return x509;
-	}
-
-	public void setX509(String x509) {
-		this.x509 = x509;
-	}
-
-	public String getDistinguishedName() {
-		return distinguishedName;
-	}
-
-	public void setDistinguishedName(String distinguishedName) {
-		this.distinguishedName = distinguishedName;
-	}
-
-	public String getIssuer() {
-		return issuer;
-	}
-
-	public void setIssuer(String issuer) {
-		this.issuer = issuer;
-	}
-
-	public String getRequesterName() {
-		return requesterName;
-	}
-
-	public void setRequesterName(String requesterName) {
-		this.requesterName = requesterName;
-	}
+	private String serialNumber;
+	private CertificateType type;
+	private Date validityEnd;
+	private Date validityStart;
+	private String x509;
+	private byte[] zippedCertificates;
 
 	public List<String> getAlternativeNames() {
 		return alternativeNames;
 	}
 
-	public void setAlternativeNames(List<String> alternativeNames) {
-		this.alternativeNames = alternativeNames;
-	}
-	
 	public String getAlternativeNamesAsString() {
 		StringBuilder builder = new StringBuilder();
 		for(String alternativeName: alternativeNames) {
@@ -140,6 +65,92 @@ public class Certificate implements Serializable {
 		return builder.toString();
 	}
 
+	public String getDistinguishedName() {
+		return distinguishedName;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public String getIssuer() {
+		return issuer;
+	}
+
+	public String getRequesterName() {
+		return requesterName;
+	}
+
+	public String getSerialNumber() {
+		return serialNumber;
+	}
+
+	public CertificateType getType() {
+		return type;
+	}
+
+	public Date getValidityEnd() {
+		return validityEnd;
+	}
+
+	public Date getValidityStart() {
+		return validityStart;
+	}
+
+	public String getX509() {
+		return x509;
+	}
+
+	public byte[] getZippedCertificates() {
+		return zippedCertificates;
+	}
+
+	public void setAlternativeNames(List<String> alternativeNames) {
+		this.alternativeNames = alternativeNames;
+	}
+
+	public void setDistinguishedName(String distinguishedName) {
+		this.distinguishedName = distinguishedName;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public void setIssuer(String issuer) {
+		this.issuer = issuer;
+	}
+
+	public void setRequesterName(String requesterName) {
+		this.requesterName = requesterName;
+	}
+
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
+	}
+
+	public void setType(CertificateType type) {
+		this.type = type;
+	}
+
+	public void setValidityEnd(Date validityEnd) {
+		this.validityEnd = validityEnd;
+	}
+	
+	public void setValidityStart(Date validityStart) {
+		this.validityStart = validityStart;
+	}
+
+	public void setX509(String x509) {
+		this.x509 = x509;
+	}
+
+	
+	public void setZippedCertificates(byte[] zip) {
+		this.zippedCertificates = zip;
+	}
+
+	
 	@Override
 	public String toString() {
 		return new StringBuilder("Certificate[").append("id=").append(id).append(", number=").append(serialNumber)

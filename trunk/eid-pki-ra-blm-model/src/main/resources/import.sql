@@ -15,7 +15,7 @@ INSERT INTO CA_PARAMETERS(CA_CA_ID, mapkey, element) VALUES (5001, 'buc.server',
 INSERT INTO CA_PARAMETERS(CA_CA_ID, mapkey, element) VALUES (5001, 'buc.persons', '8047651269');
 INSERT INTO CA_PARAMETERS(CA_CA_ID, mapkey, element) VALUES (5001, 'signing.provider', 'be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProvider');
 INSERT INTO CA_PARAMETERS(CA_CA_ID, mapkey, element) VALUES (5001, 'signing.keystore.type', 'JKS');
-INSERT INTO CA_PARAMETERS(CA_CA_ID, mapkey, element) VALUES (5001, 'signing.keystore.url', 'file:/Users/hans/aca-it/projects/Fedict/eid-pki-ra/dev/workspace/eid-pki-ra/eid-pki-ra-client-xkms/target/test-classes/test.jks'); -- Dev
+INSERT INTO CA_PARAMETERS(CA_CA_ID, mapkey, element) VALUES (5001, 'signing.keystore.url', 'file:/Users/jan/Projects/Fedict/eid-pki-ra/eid-pki-ra/eid-pki-ra-client-xkms/src/test/resources/test.jks'); -- Dev
 --INSERT INTO CA_PARAMETERS(CA_CA_ID, mapkey, element) VALUES (5001, 'signing.keystore.url', 'file:/opt/jboss/current/test.jks'); -- Test
 INSERT INTO CA_PARAMETERS(CA_CA_ID, mapkey, element) VALUES (5001, 'signing.keystore.entry', 'test');
 INSERT INTO CA_PARAMETERS(CA_CA_ID, mapkey, element) VALUES (5001, 'signing.keystore.password', 'changeit');

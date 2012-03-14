@@ -295,6 +295,7 @@
                     <xsd:element name="issuer" type="xsd:string" />
                     <xsd:element name="certificateType" type="types:certificateTypeWS" />
                     <xsd:element name="x509" type="xsd:string" />
+                    <xsd:element name="certificateZip" type="xsd:base64Binary" />
                 </xsd:sequence>
             </xsd:complexType>
 

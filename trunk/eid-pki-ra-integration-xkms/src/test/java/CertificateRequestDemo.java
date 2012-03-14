@@ -94,7 +94,7 @@ public class CertificateRequestDemo {
 			System.out.println("Result code: " + response.getResult());
 			System.out.println("Result message: " + response.getResultMessage());
 		} else {
-			CertificateInfo info = certificateParser.parseCertificate(response.getCertificate());
+			CertificateInfo info = certificateParser.parseCertificate(response.getCertificatePEM().get(0));
 			System.out.println("Certificate DN: " + info.getDistinguishedName());
 			System.out.println("Certificate serial: " + info.getSerialNumber());
 			System.out.println("Certificate issuer: " + info.getIssuer());

@@ -41,30 +41,6 @@ public class CertificateMapperBean implements CertificateMapper {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public CertificateTypeWS map(CertificateType certificateType) {
-		if (certificateType==null) {
-			return null;
-		}
-		
-		return Enum.valueOf(CertificateTypeWS.class, certificateType.name());		
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public CertificateType map(CertificateTypeWS certificateType) {
-		if (certificateType==null) {
-			return null;
-		}
-		
-		return Enum.valueOf(CertificateType.class, certificateType.name());	
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public CertificateWS map(Certificate certificate, boolean includeX509) {
 		if (certificate == null) {
 			return null;
@@ -81,9 +57,34 @@ public class CertificateMapperBean implements CertificateMapper {
 		result.setSerialNumber(mapToString(certificate.getSerialNumber()));
 		if (includeX509) {
 			result.setX509(certificate.getX509());
+			result.setCertificateZip(certificate.getCertificateZip());
 		}
 
 		return result;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public CertificateTypeWS map(CertificateType certificateType) {
+		if (certificateType == null) {
+			return null;
+		}
+
+		return Enum.valueOf(CertificateTypeWS.class, certificateType.name());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public CertificateType map(CertificateTypeWS certificateType) {
+		if (certificateType == null) {
+			return null;
+		}
+
+		return Enum.valueOf(CertificateType.class, certificateType.name());
 	}
 
 	private String mapToString(Object object) {

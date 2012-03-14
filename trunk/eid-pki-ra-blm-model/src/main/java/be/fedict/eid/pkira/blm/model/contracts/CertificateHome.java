@@ -42,8 +42,8 @@ public class CertificateHome extends ValidatingEntityHome<Certificate> {
 	public void download(){
 		Certificate instance = getInstance();
 		downloadManager.download(new Document(
-				instance.getSerialNumber() + ".crt", 
-				"application/x-pem-file", 
-				instance.getX509().getBytes()));
+				instance.getSerialNumber() + ".zip", 
+				"application/zip", 
+				instance.getCertificateZip()));
 	}
 }

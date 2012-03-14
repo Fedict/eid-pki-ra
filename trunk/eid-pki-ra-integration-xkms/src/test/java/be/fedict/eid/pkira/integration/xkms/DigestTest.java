@@ -1,4 +1,4 @@
-package be.fedict.eid.integration.xkms;
+package be.fedict.eid.pkira.integration.xkms;
 
 import static org.testng.Assert.assertEquals;
 

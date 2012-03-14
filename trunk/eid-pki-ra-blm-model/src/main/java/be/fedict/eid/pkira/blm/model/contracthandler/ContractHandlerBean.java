@@ -179,7 +179,7 @@ public class ContractHandlerBean implements ContractHandler {
 		CertificateSigningResponseBuilder responseBuilder = new CertificateSigningResponseBuilder();
 		CertificateSigningRequestType request = null;
 		int certificateId = -1;
-		byte[] certificateBytes = null;
+		List<String> certificates = new ArrayList<String>();
 		CertificateSigningContract contract = null;
 
 		try {
@@ -228,11 +228,16 @@ public class ContractHandlerBean implements ContractHandler {
 			// Send the mail
 			sendCertificateByMail(certificate, registration);
 
-			// All ok
+			// All ok: build result
 			certificateId = certificate.getId();
-			certificateBytes = certificateInfo.getDerEncoded();
+			
+			certificates.add(certificateInfo.getPemEncoded());
+			for (CertificateChainCertificate chain = certificate.getCertificateChainCertificate(); chain != null; chain = chain
+					.getIssuer()) {
+				certificates.add(chain.getCertificateData());
+			}
+			
 			fillResponseFromRequest(responseBuilder, request, ResultType.SUCCESS, "Success");
-
 			updateContract(contract, ResultType.SUCCESS, "Success");
 		} catch (ContractHandlerBeanException e) {
 			fillResponseFromRequest(responseBuilder, request, e.getResultType(), e.getMessage());
@@ -249,8 +254,8 @@ public class ContractHandlerBean implements ContractHandler {
 				updateContract(contract, ResultType.GENERAL_FAILURE, "An error occurred while processing the contract.");
 			}
 		}
-
-		CertificateSigningResponseType responseType = responseBuilder.toResponseType(certificateId, certificateBytes);
+		
+		CertificateSigningResponseType responseType = responseBuilder.toResponseType(certificateId, certificates);
 		return contractParser.marshalResponseMessage(responseType, CertificateSigningResponseType.class);
 	}
 

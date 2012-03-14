@@ -51,6 +51,7 @@ import be.fedict.eid.pkira.crypto.CSRParserImpl;
 import com.ubizen.xkms.kitoshi.AttributeCertificate;
 import com.ubizen.xkms.kitoshi.ValidityIntervalType;
 
+@SuppressWarnings("deprecation")
 @WebService(endpointInterface = "org.w3._2002._03.xkms_xbulk_wsdl.XKMSPortType")
 public class MockXKMSWebService implements XKMSPortType {
 

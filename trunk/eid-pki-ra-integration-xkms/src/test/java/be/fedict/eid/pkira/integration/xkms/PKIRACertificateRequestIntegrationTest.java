@@ -1,4 +1,4 @@
-package be.fedict.eid.integration.xkms;
+package be.fedict.eid.pkira.integration.xkms;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -163,9 +163,9 @@ public class PKIRACertificateRequestIntegrationTest {
 
 		CertificateSigningResponseType response = parseResponse(responseMessage);
 		assertEquals(response.getResult(), ResultType.SUCCESS);
-		assertNotNull(response.getCertificate());
+		assertNotNull(response.getCertificatePEM());
 
-		CertificateInfo info = certificateParser.parseCertificate(response.getCertificate());
+		CertificateInfo info = certificateParser.parseCertificate(response.getCertificatePEM().get(0));
 		System.out.println("Certificate DN: " + info.getDistinguishedName());
 		System.out.println("Certificate serial: " + info.getSerialNumber());
 		System.out.println("Certificate issuer: " + info.getIssuer());

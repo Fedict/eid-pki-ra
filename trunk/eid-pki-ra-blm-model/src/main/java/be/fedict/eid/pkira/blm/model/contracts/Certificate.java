@@ -16,11 +16,15 @@
  */
 package be.fedict.eid.pkira.blm.model.contracts;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -58,17 +62,13 @@ import be.fedict.eid.pkira.crypto.CertificateInfo;
 		{ "ISSUER", "SERIAL_NUMBER" }) })
 @Name(Certificate.NAME)
 @NamedQueries(
-		{
-			@NamedQuery(name = Certificate.NQ_FIND_CERTIFICATES_BY_CERTIFICATE_DOMAIN_ID, 
-					query = "SELECT c FROM Certificate c WHERE c.certificateDomain.id=:certificateDomainId ORDER BY c.validityStart DESC")
-		}
-	)
+	{ @NamedQuery(name = Certificate.NQ_FIND_CERTIFICATES_BY_CERTIFICATE_DOMAIN_ID, query = "SELECT c FROM Certificate c WHERE c.certificateDomain.id=:certificateDomainId ORDER BY c.validityStart DESC") })
 public class Certificate implements Serializable {
 
 	public static final String NAME = "be.fedict.eid.pkira.blm.certificate";
 
 	public static final String NQ_FIND_CERTIFICATES_BY_CERTIFICATE_DOMAIN_ID = "findCertificatesByCertificateDomainId";
-	
+
 	private static final long serialVersionUID = -6539022465744360747L;
 
 	@CollectionOfElements(fetch = FetchType.LAZY)
@@ -149,6 +149,34 @@ public class Certificate implements Serializable {
 				certificateChainCertificate = certificateChain.getPersonsChain();
 			}
 		}
+	}
+
+	/**
+	 * Creates a zip file containing the certificate and its chain.
+	 */
+	public byte[] getCertificateZip() {
+		ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+		try {
+			ZipOutputStream zipOutput = new ZipOutputStream(byteOutput);
+
+			// Add the certificate itself
+			String fileName = "certificate.crt";
+			String x509 = getX509();
+			addEntryToZip(zipOutput, fileName, x509);
+
+			// Add the certificates in the certificate chain
+			int number = 1;
+			for (CertificateChainCertificate chain = getCertificateChainCertificate(); chain != null; chain = chain
+					.getIssuer()) {
+				addEntryToZip(zipOutput, "chain" + (number++) + ".crt", chain.getCertificateData());
+			}
+
+			zipOutput.close();
+		} catch (IOException e) {
+			// Unexpected!
+			throw new RuntimeException(e);
+		}
+		return byteOutput.toByteArray();
 	}
 
 	public BigInteger getSerialNumber() {
@@ -297,5 +325,12 @@ public class Certificate implements Serializable {
 
 	public CertificateChainCertificate getCertificateChainCertificate() {
 		return certificateChainCertificate;
+	}
+	
+	private void addEntryToZip(ZipOutputStream zipOutput, String fileName, String x509) throws IOException {
+		ZipEntry zipEntry = new ZipEntry(fileName);
+		zipOutput.putNextEntry(zipEntry);
+		zipOutput.write(x509.getBytes());
+		zipOutput.closeEntry();
 	}
 }
