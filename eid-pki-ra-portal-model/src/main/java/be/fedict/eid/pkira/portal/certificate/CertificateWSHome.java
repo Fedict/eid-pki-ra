@@ -49,9 +49,9 @@ public class CertificateWSHome extends WSHome<Certificate> {
 	
 	public void download(){
 		downloadManager.download(new Document(
-				getInstance().getSerialNumber() + ".crt", 
-				"application/x-pem-file", 
-				getInstance().getX509().getBytes()));
+				getInstance().getSerialNumber() + ".zip", 
+				"application/zip", 
+				getInstance().getZippedCertificates()));
 	}
 
 }

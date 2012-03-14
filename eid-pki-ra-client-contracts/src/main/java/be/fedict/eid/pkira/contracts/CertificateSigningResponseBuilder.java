@@ -17,6 +17,9 @@
 package be.fedict.eid.pkira.contracts;
 
 import static be.fedict.eid.pkira.contracts.util.JAXBUtil.getObjectFactory;
+
+import java.util.List;
+
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningResponseType;
 
 /**
@@ -46,14 +49,14 @@ public class CertificateSigningResponseBuilder extends AbstractResponseBuilder<C
 		return response;
 	}
 
-	public CertificateSigningResponseType toResponseType(int certificateId, byte[] certificateBytes) {
+	public CertificateSigningResponseType toResponseType(int certificateId, List<String> certificatesAsPEM) {
 		CertificateSigningResponseType response = getObjectFactory().createCertificateSigningResponseType();
 		fillInResponseType(response);
 		if (certificateId >= 0) {
 			response.setCertificateID(certificateId);
 		}
-		if (certificateBytes != null) {
-			response.setCertificate(certificateBytes);
+		if (certificatesAsPEM != null) {
+			response.getCertificatePEM().addAll(certificatesAsPEM);
 		}
 		return response;
 	}

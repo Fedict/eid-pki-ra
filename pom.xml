@@ -593,6 +593,8 @@
                 <groupId>be.fedict</groupId>
                 <artifactId>eid-pki-ra-mock-xkms</artifactId>
                 <version>${project.version}</version>
+                <scope>test</scope>
+                <classifier>classes</classifier>
             </dependency>
 
             <!-- Libraries -->

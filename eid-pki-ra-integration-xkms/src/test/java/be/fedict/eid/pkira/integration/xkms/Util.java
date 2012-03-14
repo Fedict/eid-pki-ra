@@ -1,4 +1,4 @@
-package be.fedict.eid.integration.xkms;
+package be.fedict.eid.pkira.integration.xkms;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -10,6 +10,7 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
 
 import be.fedict.eid.pkira.crypto.CSRInfo;
 
+@SuppressWarnings("deprecation")
 public class Util {
 
 	public static final String DN_PREFIX = "CN=test-";
