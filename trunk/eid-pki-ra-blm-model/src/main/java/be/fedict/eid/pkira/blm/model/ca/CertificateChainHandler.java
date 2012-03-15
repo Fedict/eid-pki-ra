@@ -16,9 +16,9 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.StatusMessage.Severity;
 
-import be.fedict.eid.pkira.crypto.CertificateInfo;
-import be.fedict.eid.pkira.crypto.CertificateParser;
-import be.fedict.eid.pkira.crypto.CryptoException;
+import be.fedict.eid.pkira.crypto.certificate.CertificateInfo;
+import be.fedict.eid.pkira.crypto.certificate.CertificateParser;
+import be.fedict.eid.pkira.crypto.exception.CryptoException;
 
 @Name(CertificateChainHandler.NAME)
 @Scope(ScopeType.CONVERSATION)

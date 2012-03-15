@@ -15,18 +15,15 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.jboss.seam.log.Log;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import be.fedict.eid.pkira.crypto.CSRInfo;
-import be.fedict.eid.pkira.crypto.CSRParserImpl;
-import be.fedict.eid.pkira.crypto.CertificateInfo;
-import be.fedict.eid.pkira.crypto.CertificateParserImpl;
-import be.fedict.eid.pkira.crypto.CryptoException;
+import be.fedict.eid.pkira.crypto.certificate.CertificateInfo;
+import be.fedict.eid.pkira.crypto.certificate.CertificateParserImpl;
+import be.fedict.eid.pkira.crypto.csr.CSRInfo;
+import be.fedict.eid.pkira.crypto.exception.CryptoException;
 import be.fedict.eid.pkira.xkmsws.XKMSClient;
 import be.fedict.eid.pkira.xkmsws.XKMSClientException;
 
@@ -64,9 +61,6 @@ public class XKMSIntegrationTest {
 	private static String DATE_STR = new SimpleDateFormat("yyyyMMdd-HHmmss-").format(new Date());
 
 	private CertificateParserImpl certificateParser;
-	private CSRParserImpl csrParser;
-	@Mock
-	private Log log;
 	private XKMSClient xkmsClient;
 	private Map<String, String> xkmsClientParameters;
 
@@ -81,11 +75,7 @@ public class XKMSIntegrationTest {
 		MockitoAnnotations.initMocks(this);
 
 		// Create parsers
-		csrParser = new CSRParserImpl();
-		csrParser.setLog(log);
-
 		certificateParser = new CertificateParserImpl();
-		certificateParser.setLog(log);
 
 		// Load the properties
 		Properties properties = new Properties();

@@ -43,9 +43,9 @@ import be.fedict.eid.pkira.blm.model.contracts.Certificate;
 import be.fedict.eid.pkira.blm.model.contracts.ContractRepository;
 import be.fedict.eid.pkira.blm.model.mail.MailTemplate;
 import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
-import be.fedict.eid.pkira.crypto.CertificateInfo;
-import be.fedict.eid.pkira.crypto.CertificateParser;
-import be.fedict.eid.pkira.crypto.CryptoException;
+import be.fedict.eid.pkira.crypto.certificate.CertificateInfo;
+import be.fedict.eid.pkira.crypto.certificate.CertificateParser;
+import be.fedict.eid.pkira.crypto.exception.CryptoException;
 import be.fedict.trust.BelgianTrustValidatorFactory;
 import be.fedict.trust.TrustValidator;
 

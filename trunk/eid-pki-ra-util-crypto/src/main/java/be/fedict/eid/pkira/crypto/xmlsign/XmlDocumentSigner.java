@@ -1,4 +1,4 @@
-package be.fedict.eid.pkira.xkmsws.signing;
+package be.fedict.eid.pkira.crypto.xmlsign;
 
 import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
@@ -6,7 +6,6 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.crypto.MarshalException;
 import javax.xml.crypto.dsig.CanonicalizationMethod;
@@ -27,8 +26,7 @@ import javax.xml.crypto.dsig.spec.TransformParameterSpec;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import be.fedict.eid.pkira.xkmsws.XKMSClientException;
-import be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProvider;
+import be.fedict.eid.pkira.crypto.exception.CryptoException;
 
 public class XmlDocumentSigner {
 
@@ -36,32 +34,11 @@ public class XmlDocumentSigner {
 	public static final String ELEMENT_TO_APPEND_TO = "BulkRegister";
 	public static final String ELEMENT_TO_SIGN = "SignedPart";
 
-	private final Map<String, String> parameters;
 	private final XMLSignatureFactory signatureFactory = XMLSignatureFactory.getInstance("DOM");
 
-	public XmlDocumentSigner(Map<String, String> parameters) {
-		this.parameters = parameters;
-	}
-
-	public void signXKMSDocument(Document document, String elementToAppendToName, String elementToSignName)
-			throws XKMSClientException {
-		// Instantiate the SigningKeyProvider
-		KeyStoreKeyProvider signingKeyProvider = instantiateSigningKeyProvider();
-		X509Certificate certificate = signingKeyProvider.getCertificate();
-		PrivateKey privateKey = signingKeyProvider.getPrivateKey();
-
-		// Sign the docuemnt
-		signXKMSDocument(document, certificate, privateKey, elementToAppendToName, elementToSignName);
-	}
-
-	public void signXKMSDocument(Document document, X509Certificate certificate, PrivateKey privateKey,
-			String elementToAppendToName, String elementToSignName) throws XKMSClientException {
+	public void signXMLDocument(Document document, X509Certificate certificate, PrivateKey privateKey,
+			Element elementToAppendTo, Element elementToSign) throws CryptoException {
 		try {
-			// Bulk register element to work with
-			Element elementToAppendTo = getElementByTagName(document, elementToAppendToName);
-
-			// Create reference with digest method and transforms
-			Element elementToSign = getElementByTagName(document, elementToSignName);
 			String referenceUri = "#" + elementToSign.getAttribute("Id");
 			DigestMethod digestMethod = signatureFactory.newDigestMethod(DigestMethod.SHA1, null);
 			Transform transform = signatureFactory.newTransform(CanonicalizationMethod.ENVELOPED,
@@ -95,13 +72,22 @@ public class XmlDocumentSigner {
 			// Marshal, generate, and sign the enveloped signature.
 			xmlSignature.sign(domSigningContext);
 		} catch (GeneralSecurityException e) {
-			throw new XKMSClientException("Error signing XKMS document.", e);
+			throw new CryptoException("Error signing XKMS document.", e);
 		} catch (MarshalException e) {
-			throw new XKMSClientException("Error signing XKMS document.", e);
+			throw new CryptoException("Error signing XKMS document.", e);
 		} catch (XMLSignatureException e) {
-			throw new XKMSClientException("Error signing XKMS document.", e);
+			throw new CryptoException("Error signing XKMS document.", e);
 		}
+	}
 
+	public void signXMLDocument(Document document, X509Certificate certificate, PrivateKey privateKey,
+			String elementToAppendToName, String elementToSignName) throws CryptoException {
+		// Look up elements by name
+		Element elementToAppendTo = getElementByTagName(document, elementToAppendToName);
+		Element elementToSign = getElementByTagName(document, elementToSignName);
+
+		// Sign it
+		signXMLDocument(document, certificate, privateKey, elementToAppendTo, elementToSign);
 	}
 
 	private Element getElementByTagName(Document parentElement, String tagName) {
@@ -111,19 +97,6 @@ public class XmlDocumentSigner {
 			signature = (Element) parentElement.getElementsByTagNameNS("*", tagName).item(0);
 		}
 		return signature;
-	}
-
-	private KeyStoreKeyProvider instantiateSigningKeyProvider() throws XKMSClientException {
-		try {
-			String providerClassName = parameters.get(PARAMETER_SIGNING_KEY_PROVIDER_CLASS);
-			Class<?> providerClass = Class.forName(providerClassName);
-			KeyStoreKeyProvider provider = (KeyStoreKeyProvider) providerClass.newInstance();
-			provider.setParameters(parameters);
-
-			return provider;
-		} catch (Exception e) {
-			throw new XKMSClientException("Error creating signing key provider.", e);
-		}
 	}
 
 }

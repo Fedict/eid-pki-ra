@@ -25,9 +25,9 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
-import be.fedict.eid.pkira.crypto.CSRInfo;
-import be.fedict.eid.pkira.crypto.CSRParser;
-import be.fedict.eid.pkira.crypto.CryptoException;
+import be.fedict.eid.pkira.crypto.csr.CSRInfo;
+import be.fedict.eid.pkira.crypto.csr.CSRParser;
+import be.fedict.eid.pkira.crypto.exception.CryptoException;
 
 /**
  * @author Bram Baeyens

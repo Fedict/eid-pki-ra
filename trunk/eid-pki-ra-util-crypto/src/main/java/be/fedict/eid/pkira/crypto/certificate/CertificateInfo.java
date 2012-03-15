@@ -14,7 +14,7 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.pkira.crypto;
+package be.fedict.eid.pkira.crypto.certificate;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -34,6 +34,8 @@ import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.X509Extension;
 import org.bouncycastle.openssl.PEMWriter;
+
+import be.fedict.eid.pkira.crypto.exception.CryptoException;
 
 /**
  * Information extracted from a certificate.

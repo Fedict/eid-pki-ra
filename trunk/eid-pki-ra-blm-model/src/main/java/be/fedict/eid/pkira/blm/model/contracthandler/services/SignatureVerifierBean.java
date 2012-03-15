@@ -52,8 +52,8 @@ import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanExceptio
 import be.fedict.eid.pkira.blm.model.framework.WebserviceLocator;
 import be.fedict.eid.pkira.blm.model.usermgmt.User;
 import be.fedict.eid.pkira.blm.model.usermgmt.UserHome;
-import be.fedict.eid.pkira.crypto.CertificateParser;
-import be.fedict.eid.pkira.crypto.CryptoException;
+import be.fedict.eid.pkira.crypto.certificate.CertificateParser;
+import be.fedict.eid.pkira.crypto.exception.CryptoException;
 import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
 import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;
 import be.fedict.eid.pkira.generated.contracts.CertificateRevocationRequestType;

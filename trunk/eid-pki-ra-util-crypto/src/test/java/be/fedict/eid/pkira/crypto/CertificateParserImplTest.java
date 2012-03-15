@@ -16,13 +16,15 @@
  */
 package be.fedict.eid.pkira.crypto;
 
-import static org.mockito.Mockito.mock;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
-import org.jboss.seam.log.Log;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import be.fedict.eid.pkira.crypto.certificate.CertificateInfo;
+import be.fedict.eid.pkira.crypto.certificate.CertificateParserImpl;
+import be.fedict.eid.pkira.crypto.exception.CryptoException;
 
 /**
  * @author Jan Van den Bergh
@@ -34,7 +36,6 @@ public class CertificateParserImplTest {
 	@BeforeMethod
 	public void setup() {
 		certificateParser = new CertificateParserImpl();
-		certificateParser.setLog(mock(Log.class));
 	}
 	
 	@Test

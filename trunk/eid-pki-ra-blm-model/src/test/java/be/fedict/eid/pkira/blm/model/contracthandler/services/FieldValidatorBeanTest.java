@@ -37,11 +37,11 @@ import be.fedict.eid.pkira.contracts.CertificateRevocationRequestBuilder;
 import be.fedict.eid.pkira.contracts.CertificateSigningRequestBuilder;
 import be.fedict.eid.pkira.contracts.EntityBuilder;
 import be.fedict.eid.pkira.contracts.util.JAXBUtil;
-import be.fedict.eid.pkira.crypto.CSRInfo;
-import be.fedict.eid.pkira.crypto.CSRParser;
-import be.fedict.eid.pkira.crypto.CertificateInfo;
-import be.fedict.eid.pkira.crypto.CertificateParser;
-import be.fedict.eid.pkira.crypto.CryptoException;
+import be.fedict.eid.pkira.crypto.certificate.CertificateInfo;
+import be.fedict.eid.pkira.crypto.certificate.CertificateParser;
+import be.fedict.eid.pkira.crypto.csr.CSRInfo;
+import be.fedict.eid.pkira.crypto.csr.CSRParser;
+import be.fedict.eid.pkira.crypto.exception.CryptoException;
 import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
 import be.fedict.eid.pkira.generated.contracts.CertificateRevocationRequestType;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
@@ -180,7 +180,7 @@ public class FieldValidatorBeanTest {
 			bean.validateContract(createInvalidCertificateRevocationRequest());
 			fail("Expected an exception");
 		} catch (ContractHandlerBeanException e) {
-			assertMessages(10, e.getMessages());
+			assertMessages(9, e.getMessages());
 		}
 	}
 

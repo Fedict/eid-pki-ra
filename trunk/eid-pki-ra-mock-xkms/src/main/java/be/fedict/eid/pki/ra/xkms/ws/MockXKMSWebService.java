@@ -30,7 +30,6 @@ import javax.xml.bind.JAXBElement;
 
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.x509.X509V1CertificateGenerator;
-import org.jboss.seam.log.Logging;
 import org.w3._2000._09.xmldsig_.KeyInfoType;
 import org.w3._2000._09.xmldsig_.X509DataType;
 import org.w3._2002._03.xkms_xbulk.BulkRegisterResultType;
@@ -46,7 +45,7 @@ import org.xkms.schema.xkms_2001_01_20.RegisterResult;
 import org.xkms.schema.xkms_2001_01_20.RegisterResult.Answer;
 import org.xkms.schema.xkms_2001_01_20.ResultCode;
 
-import be.fedict.eid.pkira.crypto.CSRParserImpl;
+import be.fedict.eid.pkira.crypto.csr.CSRParserImpl;
 
 import com.ubizen.xkms.kitoshi.AttributeCertificate;
 import com.ubizen.xkms.kitoshi.ValidityIntervalType;
@@ -166,7 +165,7 @@ public class MockXKMSWebService implements XKMSPortType {
 
 	private byte[] createCertificate(byte[] csr, ValidityIntervalType validityInterval) {
 		try {
-			CSRParserImpl csrParserImpl = createCSRParser();
+			CSRParserImpl csrParserImpl = new CSRParserImpl();
 			String dn = csrParserImpl.parseCSR(csr).getSubject();
 
 			Date startDate = validityInterval.getNotBefore().toGregorianCalendar().getTime();
@@ -193,12 +192,6 @@ public class MockXKMSWebService implements XKMSPortType {
 		} catch (Exception e) {
 			throw new RuntimeException("Error creating self-signed demo certificate", e);
 		}
-	}
-
-	private CSRParserImpl createCSRParser() {
-		CSRParserImpl csrParserImpl = new CSRParserImpl();
-		csrParserImpl.setLog(Logging.getLog(MockXKMSWebService.class));
-		return csrParserImpl;
 	}
 
 	/**

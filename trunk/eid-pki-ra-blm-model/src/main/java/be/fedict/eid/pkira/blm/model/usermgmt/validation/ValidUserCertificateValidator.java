@@ -21,8 +21,8 @@ package be.fedict.eid.pkira.blm.model.usermgmt.validation;
 import org.hibernate.validator.Validator;
 import org.jboss.seam.Component;
 
-import be.fedict.eid.pkira.crypto.CertificateParser;
-import be.fedict.eid.pkira.crypto.CryptoException;
+import be.fedict.eid.pkira.crypto.certificate.CertificateParser;
+import be.fedict.eid.pkira.crypto.exception.CryptoException;
 
 /**
  * @author Bram Baeyens

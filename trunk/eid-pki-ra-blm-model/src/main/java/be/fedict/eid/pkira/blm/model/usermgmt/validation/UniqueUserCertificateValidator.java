@@ -24,9 +24,9 @@ import org.jboss.seam.Component;
 
 import be.fedict.eid.pkira.blm.model.usermgmt.User;
 import be.fedict.eid.pkira.blm.model.usermgmt.UserHome;
-import be.fedict.eid.pkira.crypto.CertificateInfo;
-import be.fedict.eid.pkira.crypto.CertificateParser;
-import be.fedict.eid.pkira.crypto.CryptoException;
+import be.fedict.eid.pkira.crypto.certificate.CertificateInfo;
+import be.fedict.eid.pkira.crypto.certificate.CertificateParser;
+import be.fedict.eid.pkira.crypto.exception.CryptoException;
 import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
 import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;
 

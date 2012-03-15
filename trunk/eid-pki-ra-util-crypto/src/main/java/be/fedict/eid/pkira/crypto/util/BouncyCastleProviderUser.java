@@ -14,31 +14,24 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.pkira.crypto;
+package be.fedict.eid.pkira.crypto.util;
+
+import java.security.Security;
+
 
 /**
- * Exception thrown when a crypto error occurred.
- * 
  * @author Jan Van den Bergh
+ *
  */
-public class CryptoException extends Exception {
+public class BouncyCastleProviderUser {
 
-	private static final long serialVersionUID = 1L;
+	static {
+		// Clean up old traces (in case of redeployment)
+		Security.removeProvider("BC"); 
 
-	public CryptoException() {
-		super();		
+		// Make sure BC provider is known.
+		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider()); 
 	}
-
-	public CryptoException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public CryptoException(String message) {
-		super(message);
-	}
-
-	public CryptoException(Throwable cause) {
-		super(cause);
-	}
+	
 	
 }

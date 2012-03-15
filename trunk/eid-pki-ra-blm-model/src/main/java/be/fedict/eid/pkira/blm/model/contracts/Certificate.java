@@ -54,7 +54,7 @@ import org.quartz.SchedulerException;
 import be.fedict.eid.pkira.blm.model.ca.CertificateChain;
 import be.fedict.eid.pkira.blm.model.ca.CertificateChainCertificate;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
-import be.fedict.eid.pkira.crypto.CertificateInfo;
+import be.fedict.eid.pkira.crypto.certificate.CertificateInfo;
 
 @Entity
 @Table(name = "CERTIFICATE", uniqueConstraints =

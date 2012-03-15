@@ -31,8 +31,8 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.log.Log;
 
-import be.fedict.eid.pkira.crypto.CSRInfo;
-import be.fedict.eid.pkira.crypto.CryptoException;
+import be.fedict.eid.pkira.crypto.csr.CSRInfo;
+import be.fedict.eid.pkira.crypto.exception.CryptoException;
 import be.fedict.eid.pkira.dnfilter.DistinguishedName;
 import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
 import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;

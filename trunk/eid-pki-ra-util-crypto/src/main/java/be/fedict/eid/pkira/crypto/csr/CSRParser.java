@@ -14,7 +14,9 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.pkira.crypto;
+package be.fedict.eid.pkira.crypto.csr;
+
+import be.fedict.eid.pkira.crypto.exception.CryptoException;
 
 /**
  * CSR Parser to parse and validate CSRs.
@@ -23,7 +25,7 @@ package be.fedict.eid.pkira.crypto;
  */
 public interface CSRParser {
 
-	String NAME = "be.fedict.eid.pkira.crypto.csrParser";
+	String NAME = "be.fedict.eid.pkira.crypto.csr.csrParser";
 
 	/**
 	 * Parse and verify a CSR and return information extracted from it.
