@@ -9,7 +9,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>be.fedict</groupId>
+    <groupId>be.fedict.eid-pki-ra</groupId>
     <artifactId>eid-pki-ra</artifactId>
     <packaging>pom</packaging>
     <version>1.0.11-SNAPSHOT</version>
@@ -70,6 +70,7 @@
         <module>eid-pki-ra-portal-ear</module>
         <module>eid-pki-ra-blm-sar</module>
         <module>eid-pki-ra-mock-xkms</module>
+        <module>eid-pki-ra-client</module>
 
         <!-- <module>eid-pki-ra-integration</module> -->
     </modules>
@@ -458,85 +459,85 @@
 
             <!-- Module versions -->
             <dependency>
-                <groupId>be.fedict</groupId>
+                <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-generated-contracts</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>be.fedict</groupId>
+                <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-generated-publicws</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>be.fedict</groupId>
+                <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-generated-privatews</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>be.fedict</groupId>
+                <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-generated-xkms</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>be.fedict</groupId>
+                <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-generated-reports</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>be.fedict</groupId>
+                <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-client-publicws</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>be.fedict</groupId>
+                <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-client-privatews</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>be.fedict</groupId>
+                <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-client-xkms</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>be.fedict</groupId>
+                <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-client-contracts</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>be.fedict</groupId>
+                <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-common-model</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>be.fedict</groupId>
+                <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-client-reports</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>be.fedict</groupId>
+                <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-util-crypto</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>be.fedict</groupId>
+                <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-util-dnfilter</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>be.fedict</groupId>
+                <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-blm-model</artifactId>
                 <version>${project.version}</version>
                 <classifier>${environment}-${database}</classifier>
@@ -544,7 +545,7 @@
             </dependency>
 
             <dependency>
-                <groupId>be.fedict</groupId>
+                <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-blm-webapp</artifactId>
                 <version>${project.version}</version>
                 <classifier>${environment}-${database}</classifier>
@@ -552,7 +553,7 @@
             </dependency>
 
             <dependency>
-                <groupId>be.fedict</groupId>
+                <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-blm-ws</artifactId>
                 <version>${project.version}</version>
                 <classifier>${environment}-${database}</classifier>
@@ -560,7 +561,7 @@
             </dependency>
 
             <dependency>
-                <groupId>be.fedict</groupId>
+                <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-portal-model</artifactId>
                 <version>${project.version}</version>
                 <type>ejb</type>
@@ -568,7 +569,7 @@
             </dependency>
 
             <dependency>
-                <groupId>be.fedict</groupId>
+                <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-portal-webapp</artifactId>
                 <version>${project.version}</version>
                 <classifier>${environment}</classifier>
@@ -576,21 +577,21 @@
             </dependency>
 
             <dependency>
-                <groupId>be.fedict</groupId>
+                <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-blm-sar</artifactId>
                 <version>${project.version}</version>
                 <type>sar</type>
             </dependency>
 
             <dependency>
-                <groupId>be.fedict</groupId>
+                <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-integration</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
             </dependency>
 
             <dependency>
-                <groupId>be.fedict</groupId>
+                <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-mock-xkms</artifactId>
                 <version>${project.version}</version>
                 <scope>test</scope>

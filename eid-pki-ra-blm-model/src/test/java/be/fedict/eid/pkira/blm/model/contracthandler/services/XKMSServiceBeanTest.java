@@ -29,10 +29,10 @@ import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 import be.fedict.eid.pkira.blm.model.framework.WebserviceLocator;
 import be.fedict.eid.pkira.blm.model.reporting.ReportManager;
-import be.fedict.eid.pkira.crypto.CSRInfo;
-import be.fedict.eid.pkira.crypto.CSRParser;
-import be.fedict.eid.pkira.crypto.CertificateInfo;
-import be.fedict.eid.pkira.crypto.CertificateParser;
+import be.fedict.eid.pkira.crypto.certificate.CertificateInfo;
+import be.fedict.eid.pkira.crypto.certificate.CertificateParser;
+import be.fedict.eid.pkira.crypto.csr.CSRInfo;
+import be.fedict.eid.pkira.crypto.csr.CSRParser;
 import be.fedict.eid.pkira.xkmsws.XKMSClient;
 import be.fedict.eid.pkira.xkmsws.XKMSClientException;
 

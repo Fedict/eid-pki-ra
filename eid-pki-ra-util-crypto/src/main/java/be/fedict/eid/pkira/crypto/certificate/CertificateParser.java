@@ -14,7 +14,9 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.pkira.crypto;
+package be.fedict.eid.pkira.crypto.certificate;
+
+import be.fedict.eid.pkira.crypto.exception.CryptoException;
 
 /**
  * Parser to parse the certificate.
@@ -23,7 +25,7 @@ package be.fedict.eid.pkira.crypto;
  */
 public interface CertificateParser {
 
-	public final static String NAME = "be.fedict.eid.pkira.crypto.certificateParser";
+	public final static String NAME = "be.fedict.eid.pkira.crypto.certificate.certificateParser";
 	
 	/**
 	 * Parses the certificate and returns a list of fields in it.

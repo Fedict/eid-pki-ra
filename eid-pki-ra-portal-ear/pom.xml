@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>be.fedict</groupId>
+		<groupId>be.fedict.eid-pki-ra</groupId>
 		<artifactId>eid-pki-ra</artifactId>
 		<version>1.0.11-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
@@ -72,7 +72,7 @@
 
 		<!-- Application modules -->
 		<dependency>
-			<groupId>be.fedict</groupId>
+			<groupId>be.fedict.eid-pki-ra</groupId>
 			<artifactId>eid-pki-ra-portal-webapp</artifactId>
 			<type>war</type>
 			<classifier>${environment}</classifier>
@@ -85,7 +85,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>be.fedict</groupId>
+			<groupId>be.fedict.eid-pki-ra</groupId>
 			<artifactId>eid-pki-ra-portal-model</artifactId>
 			<type>ejb</type>
 			<classifier>${environment}</classifier>
@@ -117,13 +117,13 @@
 					<classifier>${environment}</classifier>
 					<modules>
 						<webModule>
-							<groupId>be.fedict</groupId>
+							<groupId>be.fedict.eid-pki-ra</groupId>
 							<artifactId>eid-pki-ra-portal-webapp</artifactId>
 							<contextRoot>eid-pki-ra/portal</contextRoot>
 						</webModule>
 
 						<ejbModule>
-							<groupId>be.fedict</groupId>
+							<groupId>be.fedict.eid-pki-ra</groupId>
 							<artifactId>eid-pki-ra-portal-model</artifactId>
 						</ejbModule>
 

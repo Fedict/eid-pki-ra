@@ -16,8 +16,6 @@ import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.jboss.seam.log.Log;
-import org.mockito.Mockito;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -27,10 +25,11 @@ import be.fedict.eid.pkira.contracts.CertificateSigningRequestBuilder;
 import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
 import be.fedict.eid.pkira.contracts.EntityBuilder;
 import be.fedict.eid.pkira.contracts.XmlMarshallingException;
-import be.fedict.eid.pkira.crypto.CSRInfo;
-import be.fedict.eid.pkira.crypto.CertificateInfo;
-import be.fedict.eid.pkira.crypto.CertificateParserImpl;
-import be.fedict.eid.pkira.crypto.CryptoException;
+import be.fedict.eid.pkira.crypto.certificate.CertificateInfo;
+import be.fedict.eid.pkira.crypto.certificate.CertificateParserImpl;
+import be.fedict.eid.pkira.crypto.csr.CSRInfo;
+import be.fedict.eid.pkira.crypto.exception.CryptoException;
+import be.fedict.eid.pkira.crypto.xmlsign.XmlDocumentSigner;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningResponseType;
 import be.fedict.eid.pkira.generated.contracts.CertificateTypeType;
@@ -39,7 +38,6 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
 import be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient;
 import be.fedict.eid.pkira.xkmsws.XKMSClientException;
 import be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProvider;
-import be.fedict.eid.pkira.xkmsws.signing.XmlDocumentSigner;
 import be.fedict.eid.pkira.xkmsws.util.XMLMarshallingUtil;
 
 /**
@@ -95,7 +93,6 @@ public class PKIRACertificateRequestIntegrationTest {
 		eidPKIRAServiceClient.setServiceUrl(parameters.get("eidpkira.service.public.url"));
 
 		certificateParser = new CertificateParserImpl();
-		certificateParser.setLog(Mockito.mock(Log.class));
 	}
 
 	@BeforeMethod(dependsOnMethods = "readParameters")
@@ -177,7 +174,7 @@ public class PKIRACertificateRequestIntegrationTest {
 		return eidPKIRAContractsClient.unmarshal(responseMessage, CertificateSigningResponseType.class);
 	}
 
-	private void signRequestDocument(Document requestDocument) throws XKMSClientException {
+	private void signRequestDocument(Document requestDocument) throws XKMSClientException, CryptoException {
 		Map<String, String> signingKeyParameters = new HashMap<String, String>();
 		signingKeyParameters.put(KeyStoreKeyProvider.PARAMETER_KEYSTORE_TYPE, "pkcs12");
 		signingKeyParameters.put(KeyStoreKeyProvider.PARAMETER_KEYSTORE_URL,
@@ -188,7 +185,7 @@ public class PKIRACertificateRequestIntegrationTest {
 		KeyStoreKeyProvider keyProvider = new KeyStoreKeyProvider();
 		keyProvider.setParameters(signingKeyParameters);
 
-		new XmlDocumentSigner(parameters).signXKMSDocument(requestDocument, keyProvider.getCertificate(),
+		new XmlDocumentSigner().signXMLDocument(requestDocument, keyProvider.getCertificate(),
 				keyProvider.getPrivateKey(), "CertificateSigningRequest", "CertificateSigningRequest");
 	}
 

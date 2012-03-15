@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<artifactId>eid-pki-ra</artifactId>
-		<groupId>be.fedict</groupId>
+		<groupId>be.fedict.eid-pki-ra</groupId>
 		<version>1.0.11-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
@@ -11,7 +11,7 @@
 	<name>eid-pki-ra-client - reports</name>
 	<dependencies>
 		<dependency>
-			<groupId>be.fedict</groupId>
+			<groupId>be.fedict.eid-pki-ra</groupId>
 			<artifactId>eid-pki-ra-generated-reports</artifactId>
 		</dependency>
 		

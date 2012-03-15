@@ -39,7 +39,11 @@ public abstract class AbstractRequestBuilder<T extends AbstractRequestBuilder<T>
 	}
 
 	protected AbstractRequestBuilder(String requestId) {
-		this.requestId = requestId;
+		if (requestId == null) {
+			this.requestId = UUID.randomUUID().toString();
+		} else {
+			this.requestId = requestId;
+		}
 	}
 
 	@SuppressWarnings("unchecked")

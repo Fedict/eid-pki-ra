@@ -19,8 +19,9 @@ import javax.xml.transform.stream.StreamResult;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
 
+import be.fedict.eid.pkira.crypto.xmlsign.XmlDocumentSigner;
 import be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProvider;
-import be.fedict.eid.pkira.xkmsws.signing.XmlDocumentSigner;
+import be.fedict.eid.pkira.xkmsws.signing.XkmsXmlDocumentSigner;
 
 /**
  * Class to test the digest algorithm.
@@ -49,8 +50,8 @@ public class DigestTest {
 		provider.setParameters(parameters);
 
 		// Sign the document
-		new XmlDocumentSigner(parameters).signXKMSDocument(document, provider.getCertificate(),
-				provider.getPrivateKey(), XmlDocumentSigner.ELEMENT_TO_APPEND_TO, XmlDocumentSigner.ELEMENT_TO_SIGN);
+		new XmlDocumentSigner().signXMLDocument(document, provider.getCertificate(),
+				provider.getPrivateKey(), XkmsXmlDocumentSigner.ELEMENT_TO_APPEND_TO, XkmsXmlDocumentSigner.ELEMENT_TO_SIGN);
 		writeDocument(document);
 
 		// Extract the digest value

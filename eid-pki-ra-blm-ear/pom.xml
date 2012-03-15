@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>be.fedict</groupId>
+        <groupId>be.fedict.eid-pki-ra</groupId>
         <artifactId>eid-pki-ra</artifactId>
         <version>1.0.11-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -17,14 +17,14 @@
     <dependencies>
         <!-- Application modules -->
         <dependency>
-            <groupId>be.fedict</groupId>
+            <groupId>be.fedict.eid-pki-ra</groupId>
             <artifactId>eid-pki-ra-blm-webapp</artifactId>
             <type>war</type>
             <classifier>${environment}-${database}</classifier>
         </dependency>
 
         <dependency>
-            <groupId>be.fedict</groupId>
+            <groupId>be.fedict.eid-pki-ra</groupId>
             <artifactId>eid-pki-ra-blm-ws</artifactId>
             <type>war</type>
             <classifier>${environment}-${database}</classifier>
@@ -32,7 +32,7 @@
         </dependency>
 
         <dependency>
-            <groupId>be.fedict</groupId>
+            <groupId>be.fedict.eid-pki-ra</groupId>
             <artifactId>eid-pki-ra-blm-model</artifactId>
             <type>ejb</type>
             <classifier>${environment}-${database}</classifier>
@@ -44,24 +44,24 @@
         </dependency>
 
         <dependency>
-            <groupId>be.fedict</groupId>
+            <groupId>be.fedict.eid-pki-ra</groupId>
             <artifactId>eid-pki-ra-blm-sar</artifactId>
             <type>sar</type>
         </dependency>
 
         <!-- Application libraries -->
         <dependency>
-            <groupId>be.fedict</groupId>
+            <groupId>be.fedict.eid-pki-ra</groupId>
             <artifactId>eid-pki-ra-generated-publicws</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>be.fedict</groupId>
+            <groupId>be.fedict.eid-pki-ra</groupId>
             <artifactId>eid-pki-ra-util-crypto</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>be.fedict</groupId>
+            <groupId>be.fedict.eid-pki-ra</groupId>
             <artifactId>eid-pki-ra-generated-privatews</artifactId>
         </dependency>
 
@@ -160,7 +160,7 @@
                         </SarModule>
 
                         <webModule>
-                            <groupId>be.fedict</groupId>
+                            <groupId>be.fedict.eid-pki-ra</groupId>
                             <artifactId>eid-pki-ra-blm-webapp</artifactId>
                             <classifier>${environment}-${database}</classifier>
                             <contextRoot>eid-pki-ra/admin</contextRoot>
@@ -168,13 +168,13 @@
                         </webModule>
 
                         <ejbModule>
-                            <groupId>be.fedict</groupId>
+                            <groupId>be.fedict.eid-pki-ra</groupId>
                             <artifactId>eid-pki-ra-blm-model</artifactId>
                             <classifier>${environment}-${database}</classifier>
                         </ejbModule>
 
                         <webModule>
-                            <groupId>be.fedict</groupId>
+                            <groupId>be.fedict.eid-pki-ra</groupId>
                             <artifactId>eid-pki-ra-blm-ws</artifactId>
                             <classifier>${environment}-${database}</classifier>
                             <contextRoot>eid-pki-ra/webservice</contextRoot>
@@ -205,7 +205,7 @@
                         </jarModule>
 
                         <jarModule>
-                            <groupId>be.fedict</groupId>
+                            <groupId>be.fedict.eid-pki-ra</groupId>
                             <artifactId>eid-pki-ra-generated-publicws</artifactId>
                             <bundleDir>lib</bundleDir>
                         </jarModule>

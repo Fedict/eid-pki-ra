@@ -31,7 +31,7 @@ import org.w3c.dom.Document;
 import org.xkms.schema.xkms_2001_01_20.RegisterResult;
 
 import be.fedict.eid.pkira.xkmsws.XKMSLogger.XKMSMessageType;
-import be.fedict.eid.pkira.xkmsws.signing.XmlDocumentSigner;
+import be.fedict.eid.pkira.xkmsws.signing.XkmsXmlDocumentSigner;
 import be.fedict.eid.pkira.xkmsws.util.HttpUtil;
 import be.fedict.eid.pkira.xkmsws.util.RequestMessageCreator;
 import be.fedict.eid.pkira.xkmsws.util.ResponseMessageParser;
@@ -54,7 +54,7 @@ public class XKMSClient {
 
 	private final ResponseMessageParser responseMessageParser;
 
-	private final XmlDocumentSigner xmlDocumentSigner;
+	private final XkmsXmlDocumentSigner xmlDocumentSigner;
 
 	private XKMSLogger xkmsLogger;
 
@@ -68,7 +68,7 @@ public class XKMSClient {
 		this.parameters = parameters;
 		this.httpUtil = new HttpUtil(endpointAddress, parameters);
 		this.marshallingUtil = new XMLMarshallingUtil();
-		this.xmlDocumentSigner = new XmlDocumentSigner(parameters);
+		this.xmlDocumentSigner = new XkmsXmlDocumentSigner(parameters);
 		this.requestMessageCreator = new RequestMessageCreator(parameters);
 		this.responseMessageParser = new ResponseMessageParser(marshallingUtil);
 	}

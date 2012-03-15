@@ -104,5 +104,6 @@ public class EIDPKIRAServiceClient {
 	 */
 	public void setServiceUrl(String serviceUrl) {
 		this.serviceUrl = serviceUrl;
+		this.port = null;
 	}
 }

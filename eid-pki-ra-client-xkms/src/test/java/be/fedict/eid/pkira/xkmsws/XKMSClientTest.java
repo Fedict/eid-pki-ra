@@ -44,7 +44,6 @@ import javax.xml.ws.Endpoint;
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
-import org.jboss.seam.log.Logging;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.AfterSuite;
@@ -54,12 +53,11 @@ import org.testng.annotations.Test;
 import org.w3c.dom.Document;
 
 import be.fedict.eid.pki.ra.xkms.ws.MockXKMSWebService;
-import be.fedict.eid.pkira.crypto.CSRParser;
-import be.fedict.eid.pkira.crypto.CSRParserImpl;
+import be.fedict.eid.pkira.crypto.csr.CSRParserImpl;
 import be.fedict.eid.pkira.xkmsws.XKMSLogger.XKMSMessageType;
 import be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProvider;
 import be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProviderTest;
-import be.fedict.eid.pkira.xkmsws.signing.XmlDocumentSigner;
+import be.fedict.eid.pkira.xkmsws.signing.XkmsXmlDocumentSigner;
 import be.fedict.eid.pkira.xkmsws.util.RequestMessageCreator;
 public class XKMSClientTest {
 
@@ -98,7 +96,7 @@ public class XKMSClientTest {
 	public void setup() {
 		// Instantiate client
 		parameters.put(RequestMessageCreator.PARAMETER_BUC + ".client", "8047651269");
-		parameters.put(XmlDocumentSigner.PARAMETER_SIGNING_KEY_PROVIDER_CLASS, KeyStoreKeyProvider.class.getName());
+		parameters.put(XkmsXmlDocumentSigner.PARAMETER_SIGNING_KEY_PROVIDER_CLASS, KeyStoreKeyProvider.class.getName());
 		String url = KeyStoreKeyProviderTest.class.getResource("/test.jks").toExternalForm();
 		parameters.put(KeyStoreKeyProvider.PARAMETER_KEYSTORE_TYPE, "JKS");
 		parameters.put(KeyStoreKeyProvider.PARAMETER_KEYSTORE_URL, url);
@@ -121,7 +119,7 @@ public class XKMSClientTest {
 	public void testCreateCertificate() throws Exception {
 		// Create CSR der to use
 		String csrPem = readResource("/valid.csr");
-		byte[] csrDer = createCSRParser().parseCSR(csrPem).getDerEncoded();
+		byte[] csrDer = new CSRParserImpl().parseCSR(csrPem).getDerEncoded();
 
 		// Call the certificate creation
 		byte[] certificate = xkmsClient.createCertificate(csrDer, 15, "client");
@@ -182,11 +180,5 @@ public class XKMSClientTest {
 		}
 
 		return result;
-	}
-
-	private CSRParser createCSRParser() {
-		CSRParserImpl csrParser = new CSRParserImpl();
-		csrParser.setLog(Logging.getLog(XKMSClientTest.class));
-		return csrParser;
 	}
 }

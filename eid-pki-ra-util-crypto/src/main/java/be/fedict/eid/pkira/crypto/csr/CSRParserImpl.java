@@ -14,34 +14,28 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package be.fedict.eid.pkira.crypto;
+package be.fedict.eid.pkira.crypto.csr;
 
 import java.io.IOException;
 import java.io.StringReader;
 
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.openssl.PEMReader;
-import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Logger;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.log.Log;
+
+import be.fedict.eid.pkira.crypto.exception.CryptoException;
+import be.fedict.eid.pkira.crypto.util.BouncyCastleProviderUser;
 
 /**
  * Class used to parse a CSR and extract the required fields.
  * 
  * @author Jan Van den Bergh
  */
-@Name(CSRParser.NAME)
-@Scope(ScopeType.APPLICATION)
 public class CSRParserImpl extends BouncyCastleProviderUser implements CSRParser {
-
-	@Logger
-	private Log log;
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public CSRInfo parseCSR(byte[] csr) throws CryptoException {
 		return extractCSRInfo(new PKCS10CertificationRequest(csr));
 	}
@@ -49,15 +43,13 @@ public class CSRParserImpl extends BouncyCastleProviderUser implements CSRParser
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public CSRInfo parseCSR(String csr) throws CryptoException {
-		log.debug(">>> parseCSR(csr[{0}])", csr);
-
 		PEMReader reader = new PEMReader(new StringReader(csr));
 		Object pemObject;
 		try {
 			pemObject = reader.readObject();
 		} catch (IOException e) {
-			log.info("<<< parseCSR: Could not read CSR from string: ", e);
 			throw new CryptoException("Could not read CSR from string: " + e.getMessage(), e);
 		}
 
@@ -66,28 +58,21 @@ public class CSRParserImpl extends BouncyCastleProviderUser implements CSRParser
 			return extractCSRInfo(certificationRequest);
 		}
 
-		log.info("<<< parseCSR: No CSR found.");
 		throw new CryptoException("No CSR found.");
 	}
 
 	private CSRInfo extractCSRInfo(PKCS10CertificationRequest certificationRequest) throws CryptoException {
 		try {
 			if (!certificationRequest.verify()) {
-				log.info("<<< parseCSR: CSR signature is not correct.");
 				throw new CryptoException("CSR signature is not correct.");
 			}
 		} catch (Exception e) {
-			log.info("<<< parseCSR: Cannot verify CSR signature: ", e);
 			throw new CryptoException("Cannot verify CSR signature: " + e.getMessage(), e);
 		}
 
 		CSRInfo csrInfo = new CSRInfo(certificationRequest);
 
-		log.debug("<<< parseCSR: {0}", csrInfo);
 		return csrInfo;
 	}
 
-	public void setLog(Log log) {
-		this.log = log;
-	}
 }

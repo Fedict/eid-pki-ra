@@ -16,13 +16,15 @@
  */
 package be.fedict.eid.pkira.crypto;
 
-import static org.mockito.Mockito.mock;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
-import org.jboss.seam.log.Log;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import be.fedict.eid.pkira.crypto.csr.CSRInfo;
+import be.fedict.eid.pkira.crypto.csr.CSRParserImpl;
+import be.fedict.eid.pkira.crypto.exception.CryptoException;
 
 /**
  * @author Jan Van den Bergh
@@ -34,7 +36,6 @@ public class CSRParserImplTest {
 	@BeforeMethod
 	public void setup() {
 		csrParser = new CSRParserImpl();
-		csrParser.setLog(mock(Log.class));
 	}
 	
 	@Test
