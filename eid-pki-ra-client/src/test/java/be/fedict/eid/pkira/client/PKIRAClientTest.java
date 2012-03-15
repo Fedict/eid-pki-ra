@@ -60,7 +60,7 @@ public class PKIRAClientTest {
 	
 	private static final String DUMMY_CONTRACT = "Contract";
 
-	private final PKIRAClient client = new PKIRAClient();
+	private final PKIRAClientImpl client = new PKIRAClientImpl();
 	@Mock
 	private EIDPKIRAServiceClient pkiraServiceClient;
 	
@@ -114,7 +114,7 @@ public class PKIRAClientTest {
 		doReturn(CERTIFICATE_SIGNING_RESPONSE).when(pkiraServiceClient).signCertificate(DUMMY_CONTRACT);
 		
 		CertificateSigningResponseType response = client.sendCertificateSigningRequest(DUMMY_CONTRACT);
-		assertTrue(client.responseContainsError(response));
+		assertTrue(client.responseContainsErrors(response));
 	}
 	
 	@Test
@@ -122,7 +122,7 @@ public class PKIRAClientTest {
 		doReturn(CERTIFICATE_REVOCATION_RESPONSE).when(pkiraServiceClient).revokeCertificate(DUMMY_CONTRACT);
 		
 		CertificateRevocationResponseType response = client.sendCertificateRevocationRequest(DUMMY_CONTRACT);
-		assertTrue(client.responseContainsError(response));
+		assertTrue(client.responseContainsErrors(response));
 	}
 
 	private void validateSignature(String signedContract, final Key certificateKey) throws Exception {
