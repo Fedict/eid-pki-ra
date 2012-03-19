@@ -9,7 +9,7 @@
 	<name>eid-pki-ra Dev Guide</name>
 	<description>Developers' Guide for the eID PKI RA.</description>
 	<artifactId>eid-pki-ra-dev-guide</artifactId>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 	<build>
 		<plugins>
 			<plugin>
