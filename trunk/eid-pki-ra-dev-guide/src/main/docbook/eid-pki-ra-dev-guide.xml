@@ -117,7 +117,11 @@ client.setServiceUrl("<<the url>>");]]></programlisting>
                 <varlistentry>
                     <term>operatorPhone</term>
                     <listitem>
-                        <para>phone number of the operator requesting the certificate. This field has to contains a valid phone number.</para>
+                        <para>phone number of the operator requesting the certificate. 
+                        This field has to contain a valid phone number, starting with a plus sign or a zero and 
+                        containing only numbers and separator characters (dash, dot, slash, space).
+                        The regular expression used to validate the field is: <code>(\+|0)[-0-9 \./]+</code>.
+                        </para>
                     </listitem>
                 </varlistentry>
                 <varlistentry>
@@ -184,7 +188,11 @@ client.setServiceUrl("<<the url>>");]]></programlisting>
                 <varlistentry>
                     <term>operatorPhone</term>
                     <listitem>
-                        <para>phone number of the operator requesting the certificate. This field has to contains a valid phone number.</para>
+                        <para>phone number of the operator requesting the certificate. 
+                        This field has to contain a valid phone number, starting with a plus sign or a zero and 
+                        containing only numbers and separator characters (dash, dot, slash, space).
+                        The regular expression used to validate the field is: <code>(\+|0)[-0-9 \./]+</code>.
+                        </para>
                     </listitem>
                 </varlistentry>
                 <varlistentry>
