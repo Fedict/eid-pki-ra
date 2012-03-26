@@ -1,0 +1,107 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib"
+		xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich"
+		xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:form id="userForm">
+			<rich:panel id="userEditPanel">
+				<f:facet name="header">
+					#{messages['user.edit.title']}
+				</f:facet>
+				
+				<s:decorate id="lastNameDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['user.lastName']}:</ui:define>
+	               	<h:inputText id="lastName" value="#{userHome.instance.lastName}" required="true" size="40" />
+	           	</s:decorate>
+				
+				<s:decorate id="firstNameDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['user.firstName']}:</ui:define>
+	               	<h:inputText id="firstName" value="#{userHome.instance.firstName}" size="20" />
+	           	</s:decorate>
+				
+				<s:decorate id="nationalRegisterNumberDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['user.nationalRegisterNumber']}:</ui:define>
+	               	<h:inputText id="nationalRegisterNumber" value="#{userHome.instance.nationalRegisterNumber}" size="11" />
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="certificateDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['user.certificate']}:</ui:define>
+	               	<h:inputTextarea id="certificate" value="#{userHome.instance.certificate}" cols="90" rows="14" />
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="certificateSubjectDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['user.certificateSubject']}:</ui:define>
+	               	<h:inputText id="certificateSubject" value="#{userHome.instance.certificateSubject}" size="60" disabled="true" />
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="adminEmailDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['user.adminEmail']}:</ui:define>
+	               	<h:inputText id="adminEmail" value="#{userHome.instance.adminEmail}" size="60" />
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="sendRegistrationMailDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['user.sendRegistrationMail']}:</ui:define>
+	               	<h:selectBooleanCheckbox id="sendRegistrationMail" value="#{userHome.instance.sendRegistrationMail}" />
+	           	</s:decorate>
+	           	
+	          	<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
+	          		<h:commandButton id="save" 
+							action="#{userHome.persist}" 
+							value="#{messages['button.save']}"
+							rendered="#{not userHome.managed}" />
+					<h:commandButton  id="update"
+							action="#{userHome.update}" 
+							value="#{messages['button.update']}"
+							rendered="#{userHome.managed}" />
+					<h:commandButton id="grantAdmin"
+							action="#{userHome.grantAdmin}" 
+							value="#{messages['button.grantadmin']}"
+							rendered="#{not userHome.instance.admin}" />
+					<h:commandButton id="revokeAdmin"
+							action="#{userHome.revokeAdmin}" 
+							value="#{messages['button.revokeadmin']}"
+							rendered="#{userHome.instance.admin and not userHome.currentUser}" />
+					<s:button id="cancel" 
+							value="#{messages['button.back']}" 
+							view="/page/user/user-list.xhtml" />
+				</s:decorate> 
+			</rich:panel>
+			<rich:panel id="userRegistrationsPanel">
+				<f:facet name="header">
+					#{messages['user.registrations.title']}
+				</f:facet>
+				<h:outputText value="#{messages['user.registrations.empty']}" 
+						rendered="#{empty userHome.instance.registrations}" />
+				<rich:dataTable id="userRegistrations" var="registration" rows="10" 
+						value="#{userHome.instance.registrations}" 
+						rendered="#{not empty userHome.instance.registrations}" width="50%">					
+					<rich:column>
+						<f:facet name="header" id="certificateDomainNameHeader">
+							<h:outputText value="#{messages['registrations.certificateDomain']}" />
+						</f:facet>
+						<h:outputText value="#{registration.certificateDomain.name}" />
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header" id="emailHeader">
+							<h:outputText value="#{messages['registrations.email']}" />
+						</f:facet>
+						<h:outputText value="#{registration.email}" />
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header" id="statusHeader">
+							<h:outputText value="#{messages['registrations.status']}" />
+						</f:facet>
+						<h:outputText value="#{messages[registration.status.messageKey]}" />
+					</rich:column>
+	
+					<f:facet name="footer">
+						<rich:datascroller maxPages="10" fastStep="5" for="userRegistrations" renderIfSinglePage="false"/>
+					</f:facet>
+				</rich:dataTable>
+			</rich:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
