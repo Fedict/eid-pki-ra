@@ -71,9 +71,11 @@
         <module>eid-pki-ra-blm-sar</module>
         <module>eid-pki-ra-mock-xkms</module>
         <module>eid-pki-ra-client</module>
+        <!--
+          Removed from build since the JBoss repository is buggy.
+          Getting all required dependencies is tricky!
         <module>eid-pki-ra-dev-guide</module>
-
-        <!-- <module>eid-pki-ra-integration</module> -->
+        -->
     </modules>
 
     <properties>
