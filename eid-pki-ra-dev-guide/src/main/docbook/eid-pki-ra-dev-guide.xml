@@ -40,25 +40,70 @@
     <section>
         <title>Using the eID PKI RA client</title>
         <para>
-            The eID PKI RA client is available in the FedICT Maven repository at {TODO}. To use it, add the following dependency to your Maven
-            pom.xml:
+            The eID PKI RA client can be used in Maven projects.
+            Before doing that, the client has to be compiled from source, as it is not yet in a public Maven repository.
+            The source code can be found on Google Code: <ulink url="http://code.google.com/p/eid-pki-ra/">http://code.google.com/p/eid-pki-ra/</ulink>.
         </para>
+        <para>
+            In order to retrieve and compile the code, you will need the following tools: a Subversion client, 
+            Maven (preferably version 3) and the Java 6 SDK.
+        </para> 
+        <section>
+            <title>Downloading the source code</title>
+            <para>
+                Source code for the eID PKI RA client can be downloaded using Subversion.                
+                To do that, execute the following command:
+            </para>
+            <code>svn checkout http://eid-pki-ra.googlecode.com/svn/tags/1.0.11 eid-pki-ra</code>
+            <para>
+                This downloads the code from the Google subversion repository and puts in in the subdirectory 
+                <code>eid-pki-ra</code>.
+            </para>
+            <para>
+                If you already have a version of the source code, enter the directory that contains the code and
+                use the following command to get the latest version:
+            </para>
+            <code>svn switch http://eid-pki-ra.googlecode.com/svn/tags/1.0.11</code>
+            <para>
+                Of course, it is also possible to get a copy of the code using another Subversion client, for
+                instance TortoiseSVN.
+            </para>
+        </section>
+        <section>
+            <title>Building the code</title>
+            <para>
+                The eID PKI RA client library can be build using Maven (preferably version 3 or later), using the
+                following command in the directory containing the source code.
+            </para>
+            <code>mvn clean install</code>
+            <para>
+                This command compiles both the client and server libraries and puts them in your local Maven repository.
+                To use the client, you will only need <code>eid-pki-ra-client</code> and its dependencies.
+            </para>
+        </section>
+        <section>
+            <title>Adding the dependencies</title>
+            <para>
+                Add the following dependency to your Maven project to use the client libraries. 
+                This will make sure that the library and its dependencies are available.
+            </para>
             <programlisting role="XML"><![CDATA[<dependency>
     <groupId>be.fedict.eid-pki-ra</groupId>
     <artifactId>eid-pki-ra-client</artifactId>
     <version>1.0.11</version>
 </dependency>]]></programlisting>
-        <para>
-            This will make the client and its dependencies available.
-        </para>
-        <para>
-            All methods required to contact the PKI RA web service are available in the interface <code>be.fedict.eid.pkira.client.PKIRAClient</code>
-            (using an interface makes it easier to use dependency injection frameworks and to create unit tests). 
-            Simply instantiate <code>be.fedict.eid.pkira.client.PKIRAClientImpl</code> to get an implementation.
-            Don't forget to inject the location of the eID PKI RA web service.
-            <programlisting role="Java"><![CDATA[PKIRAClient pkiraClient = new PKIRAClientImpl();
+            <para>
+                This will make the client and its dependencies available.
+            </para>
+            <para>
+                All methods required to contact the PKI RA web service are available in the interface <code>be.fedict.eid.pkira.client.PKIRAClient</code>
+                (using an interface makes it easier to use dependency injection frameworks and to create unit tests). 
+                Simply instantiate <code>be.fedict.eid.pkira.client.PKIRAClientImpl</code> to get an implementation.
+                Don't forget to inject the location of the eID PKI RA web service.
+                <programlisting role="Java"><![CDATA[PKIRAClient pkiraClient = new PKIRAClientImpl();
 client.setServiceUrl("<<the url>>");]]></programlisting>
-        </para>
+            </para>
+        </section>
     </section>
     <section>
         <title>Creating certificate request and revocation contracts</title>
