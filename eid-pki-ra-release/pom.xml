@@ -172,6 +172,7 @@
 							<patches>
 								<patch>jboss-log4j.patch</patch>
 								<patch>${database.template}.patch</patch>
+                                <patch>jboss-jbossws-deployer.patch</patch>
 							</patches>
 						</configuration>
 					</execution>
