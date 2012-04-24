@@ -38,6 +38,10 @@ public class TestConstants {
 			+ "hkjOOAQDBQADLwAwLAIUcQtBbLV6WliL6xr6yFg5IMYMjfsCFB4D9BUGyFYRNvHFms7ySKKdg+Md\r\n"
 			+ "-----END NEW CERTIFICATE REQUEST-----";
 
+	public static final String VALID_CSR_NO_ATTRIBUTES = "-----BEGIN CERTIFICATE REQUEST-----\r\n"
+			+ "MIIC4zCCAcsCAQAwgZ8xCzAJBgNVBAYTAkJFMRswGQYDVQQKExJGZWRlcmFsIEdvdmVybm1lbnQxGTAXBgNVBAsTEFNTSU49NzMxMjA1MjUzNTAxGjAYBgNVBAsTEUpFUk9FTiBIT1VURVZFTFRTMSEwHwYDVQQLExhlSGVhbHRoLXBsYXRmb3JtIEJlbGdpdW0xGTAXBgNVBAMTEFNTSU49NzMxMjA1MjUzNTAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCyfkOueWwZm0mcA1LTHebd0PamEygsNNwLmePodMdwy8l8CZCMJ4D/PkMQrFCVyahX/wN4QpczR0vwfoZtSxZBmoh8YHQX+nKcYGPN1KK0Hktv2oIPXaCqNOgv1WdDWBbd0FFbJDxlG3pxojJ/0AOKZb+h5ZjrW9F1c1vDZadW3PiaCCVf+nOKRKIR/Evq9ip1ub1vDP6rL+TY8WHeaZYmtQLquH+Skg9OWSSiL/sh+uU6iXWapB12rdNA/71nMtIyVfuZq7YnNy7vf6grXp+fxSIAk0TiFLnMyOY3lr3ZS0werIo+tgjIXVvDCWGh6ZO4g7ke6JFDwFSx/0xAshVhAgMBAAEwDQYJKoZIhvcNAQEFBQADggEBAFN9E/OJ+6tHnbomoCSNKUAVLegWJBsiKCdDd4XjwwN8bku6qhr1irq9Hdmbb2lsu9vPNMolbObBzD1/H20hmYAjPHblYQpr/lKfiiYCSc7yU+rGELzOsytInldzYTYvCgY5e0312rxeFAYv+jmGwmgqYnb7D4EY697TJ85zRhPJ0xcVW79a6G/nc3z/vVdvH4TLR2t5yC4T40la5fHhXW4g6RTVaX5dKrnktwXUfjY4CINH7y/1ayDRwYF7RJKsZjG7PiT5VdPtaO4gnbRIIdiIdi7zqaLk46vIF67K2Mp1inNUXmnT7Y0TJEoxbUhnQfPne4qjIFVgj4oZa6kWo48=\r\n"
+			+ "-----END CERTIFICATE REQUEST-----";
+	
 	public static final String INVALID_CSR = "-----BEGIN NEW CERTIFICATE REQUEST-----\r\n"
 			+ "MIICbzCCAi0CAQAwajELMAkGA1UEBhMCQkUxEDAOBgNVBAgTB0xpbWJ1cmcxEDAOBgNVBAcTB0hh\r\n"
 			+ "c3NlbHQxDDAKBgNVBAoTA0FDQTENMAsGA1UECxMEdGVzdDEaMBgGA1UEAxMRSmFuIFZhbiBkZW4g\r\n"
@@ -135,6 +139,8 @@ public class TestConstants {
 			+ "/6gk3Nl1n2kUS1WAufRh+b3ckvcf\r\n" + "-----END CERTIFICATE-----\r\n";
 
 	public static final String CSR_SUBJECT = "C=BE,ST=Limburg,L=Hasselt,O=ACA,OU=test,CN=Jan Van den Bergh";
+	
+	public static final String CSR_SUBJECT2 = "C=BE,O=Federal Government,OU=SSIN\\=73120525350,OU=JEROEN HOUTEVELTS,OU=eHealth-platform Belgium,CN=SSIN\\=73120525350";
 
 	public static final String CERTIFICATE_DN = "C=BE,OU=Domain Control Validated,O=*.aca-it.be,CN=*.aca-it.be";
 

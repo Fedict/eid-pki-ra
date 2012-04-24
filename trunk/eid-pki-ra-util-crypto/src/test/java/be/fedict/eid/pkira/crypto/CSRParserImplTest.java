@@ -49,6 +49,18 @@ public class CSRParserImplTest {
 	}
 	
 	@Test
+	public void testParseCSRNoAttributes() throws CryptoException {
+		CSRInfo csrInfo = csrParser.parseCSR(TestConstants.VALID_CSR_NO_ATTRIBUTES);
+
+		assertNotNull(csrInfo);
+		assertEquals(csrInfo.getSubject(), TestConstants.CSR_SUBJECT2);
+		assertNotNull(csrInfo.getDerEncoded());
+		assertNotNull(csrInfo.getPemEncoded());
+		assertNotNull(csrInfo.getSubjectAlternativeNames());
+		assertEquals(0, csrInfo.getSubjectAlternativeNames().size());
+	}
+	
+	@Test
 	public void testParseCRSWithSAN() throws CryptoException {
 		CSRInfo csrInfo = csrParser.parseCSR(TestConstants.VALID_CSR_WITH_SAN);
 		csrInfo.getSubjectAlternativeNames();

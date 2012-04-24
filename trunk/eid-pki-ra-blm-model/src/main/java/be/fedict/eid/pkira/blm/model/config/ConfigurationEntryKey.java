@@ -43,7 +43,8 @@ public enum ConfigurationEntryKey {
 	SP_RETURN_URL_PORTAL(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.spReturnURLPortal", ""),
 	SP_RETURN_URL_ADMIN(ConfigurationEntryType.OPTIONAL_STRING, "configurationEntry.key.spReturnURLAdmin", ""),
 	HOMEPAGE_URL(ConfigurationEntryType.STRING, "configurationEntry.key.homePageUrl", "http://tobeconfigured/"),
-	CSV_EXPORT_FIELD_SEPARATOR(ConfigurationEntryType.STRING, "configurationEntry.key.csvExportFieldSeparator", ";");
+	CSV_EXPORT_FIELD_SEPARATOR(ConfigurationEntryType.STRING, "configurationEntry.key.csvExportFieldSeparator", ";"),
+	NOT_BEFORE_TIMESHIFT_SECOND(ConfigurationEntryType.DIGITS, "configurationEntry.key.notBeforeTimeshiftSeconds", "300");
 	
 	private final ConfigurationEntryType type;
 	private final String message;

@@ -83,16 +83,17 @@ public class XKMSClient {
 	 * @param certificateType
 	 *            the certificate type to generate (client, server, code,
 	 *            persons)
+	 * @param timeShiftSeconds 
 	 * @return byte array containing the certificate.
 	 * @throws XKMSClientException
 	 *             if an error occurred while communicating to the XKMS service.
 	 */
-	public byte[] createCertificate(byte[] csrData, int validityInMonths, String certificateType)
+	public byte[] createCertificate(byte[] csrData, int validityInMonths, String certificateType, int timeShiftSeconds)
 			throws XKMSClientException {
 		LOG.info("Creating certificate");
 
 		// Create the request
-		RequestType request = requestMessageCreator.createCSRRequestElement(csrData, validityInMonths, certificateType);
+		RequestType request = requestMessageCreator.createCSRRequestElement(csrData, validityInMonths, certificateType, timeShiftSeconds);
 
 		// Execute it
 		return executeRequest(XKMSMessageType.REQUEST, request, new RegisterResultParser<byte[]>() {

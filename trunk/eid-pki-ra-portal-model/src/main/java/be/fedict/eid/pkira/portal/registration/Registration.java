@@ -33,26 +33,26 @@ import be.fedict.eid.pkira.generated.privatews.RegistrantWS;
 public class Registration implements Serializable {
 
 	private static final long serialVersionUID = 6787261553475188888L;
-	
+
 	public static final String NAME = "be.fedict.pkira.portal.registration";
 
 	private String id;
 	private RegistrationStatus status;
 	private String certificateDomainName;
 	private String certificateDomainExpression;
-	
-	@NotEmpty(message="#{messages['registration.certificateDomain.required']}")
+
+	@NotEmpty(message = "#{messages['registration.certificateDomain.required']}")
 	private String certificateDomainId;
-	
-	@NotEmpty(message="#{messages['registration.email.required']}") 
-	@Email(message="#{messages['registration.email.invalid}")
+
+	@NotEmpty(message = "#{messages['registration.email.required']}")
+	@Email(message = "#{messages['registration.email.invalid}")
 	private String emailAddress;
-	
-	@NotEmpty(message="#{messages['registration.email.required']}") 
+
+	@NotEmpty(message = "#{messages['registration.email.required']}")
 	private String emailAddressVerification;
-	
+
 	private List<RegistrantWS> registrants;
-	
+
 	public String getId() {
 		return id;
 	}
@@ -76,7 +76,7 @@ public class Registration implements Serializable {
 	public void setCertificateDomainName(String certificateDomainName) {
 		this.certificateDomainName = certificateDomainName;
 	}
-	
+
 	public String getCertificateDomainId() {
 		return certificateDomainId;
 	}
@@ -85,12 +85,13 @@ public class Registration implements Serializable {
 		this.certificateDomainId = certificateDomainId;
 	}
 
-	
 	public String getCertificateDomainExpression() {
-		return certificateDomainExpression;
+		if (status == RegistrationStatus.APPROVED) {
+			return certificateDomainExpression;
+		}
+		return "---";
 	}
 
-	
 	public void setCertificateDomainExpression(String certificateDomainExpression) {
 		this.certificateDomainExpression = certificateDomainExpression;
 	}
@@ -103,22 +104,18 @@ public class Registration implements Serializable {
 		this.emailAddress = emailAddress;
 	}
 
-	
 	public String getEmailAddressVerification() {
 		return emailAddressVerification;
 	}
 
-	
 	public void setEmailAddressVerification(String emailAddressVerification) {
 		this.emailAddressVerification = emailAddressVerification;
 	}
 
-	
 	public List<RegistrantWS> getRegistrants() {
 		return registrants;
 	}
 
-	
 	public void setRegistrants(List<RegistrantWS> registrants) {
 		this.registrants = registrants;
 	}

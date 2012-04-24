@@ -122,7 +122,7 @@ public class XKMSClientTest {
 		byte[] csrDer = new CSRParserImpl().parseCSR(csrPem).getDerEncoded();
 
 		// Call the certificate creation
-		byte[] certificate = xkmsClient.createCertificate(csrDer, 15, "client");
+		byte[] certificate = xkmsClient.createCertificate(csrDer, 15, "client", 300);
 		assertNotNull(certificate);
 
 		// Validate the outgoing message

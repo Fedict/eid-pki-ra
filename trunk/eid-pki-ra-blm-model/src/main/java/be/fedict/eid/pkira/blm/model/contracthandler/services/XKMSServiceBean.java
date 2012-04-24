@@ -10,6 +10,9 @@ import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.blm.errorhandling.ApplicationComponent;
 import be.fedict.eid.pkira.blm.errorhandling.ErrorLogger;
+import be.fedict.eid.pkira.blm.model.config.ConfigurationEntry;
+import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryKey;
+import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
 import be.fedict.eid.pkira.blm.model.contracts.AbstractContract;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
@@ -46,6 +49,9 @@ public class XKMSServiceBean implements XKMSService {
 
 	@In(value = ReportManager.NAME, create = true)
 	private ReportManager reportManager;
+	
+	@In(value = ConfigurationEntryQuery.NAME, create=true)
+	private ConfigurationEntryQuery configurationEntryQuery;
 
 	/**
 	 * {@inheritDoc}
@@ -83,19 +89,25 @@ public class XKMSServiceBean implements XKMSService {
 	 */
 	@Override
 	public String sign(CertificateSigningContract contract, String csr) throws ContractHandlerBeanException {
-		// Convert the CSR to DER format
 		byte[] csrData;
 		try {
+			// Convert the CSR to DER format
 			csrData = csrParser.parseCSR(csr).getDerEncoded();
 
+			// Create the client
 			XKMSClient xkmsClient = webserviceLocator.getXKMSClient(contract.getCertificateDomain()
 					.getCertificateAuthority());
-
+			
+			// Get timeshift
+			ConfigurationEntry configurationEntry = configurationEntryQuery.findByEntryKey(ConfigurationEntryKey.NOT_BEFORE_TIMESHIFT_SECOND);
+			int timeShift = Integer.parseInt(configurationEntry.getValue());
+			
+			// Request the certificate
 			byte[] certificateData;
 			boolean success = false;
 			try {
 				certificateData = xkmsClient.createCertificate(csrData, contract.getValidityPeriodMonths().intValue(),
-						contract.getCertificateType().toString());
+						contract.getCertificateType().toString(), timeShift);
 				success = true;
 			} finally {
 				reportManager.addLineToReport(contract, success);
@@ -141,6 +153,10 @@ public class XKMSServiceBean implements XKMSService {
 
 	protected void setReportManager(ReportManager reportManager) {
 		this.reportManager = reportManager;
+	}
+	
+	protected void setConfigurationEntryQuery(ConfigurationEntryQuery configurationEntryQuery) {
+		this.configurationEntryQuery = configurationEntryQuery;
 	}
 
 }

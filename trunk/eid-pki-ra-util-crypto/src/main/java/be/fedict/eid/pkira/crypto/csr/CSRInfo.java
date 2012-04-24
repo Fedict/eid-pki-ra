@@ -73,14 +73,16 @@ public class CSRInfo {
 					ASN1Object bytes = ASN1Object.fromByteArray(extensionValue.getOctets());
 					GeneralNames names = GeneralNames.getInstance(bytes);
 					for (GeneralName name : names.getNames()) {
-						if (name.getTagNo()==GeneralName.dNSName) {
+						if (name.getTagNo() == GeneralName.dNSName) {
 							String theName = name.getName().toString();
-							if (theName.indexOf('*')!=-1) {
-								throw new CryptoException("Subject Alternative Names are not allowed to contain wildcards.");
+							if (theName.indexOf('*') != -1) {
+								throw new CryptoException(
+										"Subject Alternative Names are not allowed to contain wildcards.");
 							}
 							result.add(theName);
 						} else {
-							throw new CryptoException("Only Subject Alternative Name of type SAN is allowed in the CSR.");
+							throw new CryptoException(
+									"Only Subject Alternative Name of type SAN is allowed in the CSR.");
 						}
 					}
 				} catch (IOException e) {
@@ -95,17 +97,19 @@ public class CSRInfo {
 	public static <T> List<T> getElementsFromASN1Set(ASN1Set set, ASN1ObjectIdentifier requiredObjectIdentifier,
 			Class<T> expectedClass) {
 		List<T> result = new ArrayList<T>();
-		for (int i = 0; i < set.size(); i++) {
-			DERSequence sequence = (DERSequence) set.getObjectAt(i);
-			DEREncodable object = sequence.getObjectAt(0);
-			while (object instanceof DERSequence) {
-				sequence = (DERSequence) object;
-				object = sequence.getObjectAt(0);
-			}
+		if (set != null) {
+			for (int i = 0; i < set.size(); i++) {
+				DERSequence sequence = (DERSequence) set.getObjectAt(i);
+				DEREncodable object = sequence.getObjectAt(0);
+				while (object instanceof DERSequence) {
+					sequence = (DERSequence) object;
+					object = sequence.getObjectAt(0);
+				}
 
-			ASN1ObjectIdentifier identifier = (ASN1ObjectIdentifier) object;
-			if (identifier.equals(requiredObjectIdentifier)) {
-				result.add(expectedClass.cast(sequence.getObjectAt(1)));
+				ASN1ObjectIdentifier identifier = (ASN1ObjectIdentifier) object;
+				if (identifier.equals(requiredObjectIdentifier)) {
+					result.add(expectedClass.cast(sequence.getObjectAt(1)));
+				}
 			}
 		}
 
