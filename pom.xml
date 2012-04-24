@@ -12,7 +12,7 @@
     <groupId>be.fedict.eid-pki-ra</groupId>
     <artifactId>eid-pki-ra</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.12-SNAPSHOT</version>
+    <version>1.0.13-SNAPSHOT</version>
     <name>eid-pki-ra (${environment}-${database})</name>
     <inceptionYear>2010</inceptionYear>
     <licenses>
