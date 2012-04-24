@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>eid-pki-ra</artifactId>
 		<groupId>be.fedict.eid-pki-ra</groupId>
-		<version>1.0.12-SNAPSHOT</version>
+		<version>1.0.12</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>eid-pki-ra-util-dnfilter</artifactId>
