@@ -56,7 +56,7 @@ public class RequestMessageCreator {
 	 * 
 	 * @param certificateType
 	 */
-	public RequestType createCSRRequestElement(byte[] csrData, int validityInMonths, String certificateType) {
+	public RequestType createCSRRequestElement(byte[] csrData, int validityInMonths, String certificateType, int timeShiftSeconds) {
 		// Create the request
 		RequestType request = xbulkObjectFactory.createRequestType();
 		request.setKeyID("key-id-" + UUID.randomUUID().toString());
@@ -89,7 +89,7 @@ public class RequestMessageCreator {
 		ValidityIntervalType validityInterval = ogcmObjectFactory.createValidityIntervalType();
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTimeZone(TIMEZONE_GMT);
-		calendar.add(Calendar.MINUTE, 5);
+		calendar.add(Calendar.SECOND, timeShiftSeconds);
 		validityInterval.setNotBefore(datatypeFactory.newXMLGregorianCalendar(calendar));
 		calendar.add(Calendar.MONTH, validityInMonths);
 		validityInterval.setNotAfter(datatypeFactory.newXMLGregorianCalendar(calendar));

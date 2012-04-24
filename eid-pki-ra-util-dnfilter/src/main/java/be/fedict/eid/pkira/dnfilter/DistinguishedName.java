@@ -68,7 +68,7 @@ public class DistinguishedName {
 
 		@Override
 		public String toString() {
-			return name + "=" + Util.escape(value, "\\,");
+			return name + "=" + Util.escape(value, "\\,=");
 		}
 	}
 

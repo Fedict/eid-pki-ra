@@ -49,7 +49,7 @@ class WildcardValue implements Comparable<WildcardValue> {
 
 	@Override
 	public String toString() {
-		return (wildcard ? "*" : "") + Util.escape(value, "()|*,\\");
+		return (wildcard ? "*" : "") + Util.escape(value, "()|*,\\=");
 	}
 
 	public boolean matches(String value) {

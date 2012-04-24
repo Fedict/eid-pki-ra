@@ -23,6 +23,9 @@ import be.fedict.eid.pkira.blm.errorhandling.ApplicationComponent;
 import be.fedict.eid.pkira.blm.errorhandling.ErrorLogger;
 import be.fedict.eid.pkira.blm.model.ca.CertificateAuthority;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
+import be.fedict.eid.pkira.blm.model.config.ConfigurationEntry;
+import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryKey;
+import be.fedict.eid.pkira.blm.model.config.ConfigurationEntryQuery;
 import be.fedict.eid.pkira.blm.model.contracthandler.ContractHandlerBeanException;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateRevocationContract;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
@@ -72,6 +75,9 @@ public class XKMSServiceBeanTest {
 
 	@Mock
 	private ReportManager reportManager;
+	
+	@Mock
+	private ConfigurationEntryQuery configurationEntryQuery;
 
 	private final CertificateAuthority certificateAuthority = new CertificateAuthority();
 	private final CertificateDomain certificateDomain = createCertificateDomain();
@@ -88,6 +94,7 @@ public class XKMSServiceBeanTest {
 		service.setCertificateParser(certificateParser);
 		service.setErrorLogger(errorLogger);
 		service.setReportManager(reportManager);
+		service.setConfigurationEntryQuery(configurationEntryQuery);
 
 		when(csrParser.parseCSR(CSR)).thenReturn(csrInfo);
 		when(csrInfo.getDerEncoded()).thenReturn(CSR_BYTES);
@@ -101,7 +108,11 @@ public class XKMSServiceBeanTest {
 	@Test
 	public void signTest() throws Exception {
 		try {
-			when(xkmsClient.createCertificate(CSR_BYTES, VALIDITY, "CODE")).thenReturn(CERTIFICATE_BYTES);
+			ConfigurationEntry value = new ConfigurationEntry();
+			value.setKey(ConfigurationEntryKey.NOT_BEFORE_TIMESHIFT_SECOND);
+			value.setValue("300");
+			when(configurationEntryQuery.findByEntryKey(ConfigurationEntryKey.NOT_BEFORE_TIMESHIFT_SECOND)).thenReturn(value );
+			when(xkmsClient.createCertificate(CSR_BYTES, VALIDITY, "CODE", 300)).thenReturn(CERTIFICATE_BYTES);
 
 			CertificateSigningContract contract = createCertificateSigningContract();
 			String certificate = service.sign(contract, CSR);
@@ -118,7 +129,7 @@ public class XKMSServiceBeanTest {
 	@Test(dependsOnMethods = "signTest")
 	public void signTestError() throws Exception {
 		XKMSClientException exception = new XKMSClientException("Oops");
-		when(xkmsClient.createCertificate(CSR_BYTES, VALIDITY, "CODE")).thenThrow(exception);
+		when(xkmsClient.createCertificate(CSR_BYTES, VALIDITY, "CODE", 300)).thenThrow(exception);
 
 		CertificateSigningContract contract = createCertificateSigningContract();
 		try {
