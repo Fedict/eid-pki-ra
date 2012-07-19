@@ -18,7 +18,7 @@
 						value="#{xkmsLogEntries}" rendered="#{not empty xkmsLogEntries}"
 						width="75%">
 						<rich:column sortBy="#{xkmsLogEntry.creationDate}"
-							filterBy="#{xkmsLogEntry.creationDate}" filterEvent="onkeyup">
+							filterBy="#{xkmsLogEntry.creationDate}" filterEvent="onkeyup" sortOrder="DESCENDING">
 							<f:facet name="header">
 								<h:outputText value="#{messages['xmkslog.creationDate']}" />
 							</f:facet>
