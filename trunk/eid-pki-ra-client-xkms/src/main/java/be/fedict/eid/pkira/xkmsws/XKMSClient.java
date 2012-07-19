@@ -180,7 +180,19 @@ public class XKMSClient {
 
 			// Parse the result
 			BulkRegisterResultType result = marshallingUtil.unmarshalByteArrayToBulkRegisterResultType(response);
-
+			if (result==null) {
+				throw new XKMSClientException("No result received.");
+			}
+			if (result.getSignedPart()==null) {
+				throw new XKMSClientException("No signed part in result.");
+			}
+			if (result.getSignedPart().getRegisterResults()==null) {
+				throw new XKMSClientException("No register results in signed part in result.");
+			}
+			if (result.getSignedPart().getRegisterResults().getRegisterResult()==null) {
+				throw new XKMSClientException("No result in register results in signed part in result.");
+			}
+			
 			List<RegisterResult> results = result.getSignedPart().getRegisterResults().getRegisterResult();
 			if (results.size() != 1) {
 				throw new XKMSClientException("Expected one result from the XKMS service, but got " + results.size());
