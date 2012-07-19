@@ -63,8 +63,8 @@
         <module>eid-pki-ra-blm-ear</module>
         <module>eid-pki-ra-portal-model</module>
         <module>eid-pki-ra-portal-webapp</module>
-        <module>eid-pki-ra-portal-ear</module>
         <module>eid-pki-ra-blm-sar</module>
+        <module>eid-pki-ra-portal-ear</module>
         <module>eid-pki-ra-mock-xkms</module>
         <module>eid-pki-ra-client</module>
         <!--
