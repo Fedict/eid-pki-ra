@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <groupId>org.jboss.seam</groupId>
         <artifactId>parent</artifactId>
         <version>2.2.2.Final</version>
     </parent>
-
     <modelVersion>4.0.0</modelVersion>
     <groupId>be.fedict.eid-pki-ra</groupId>
     <artifactId>eid-pki-ra</artifactId>
@@ -26,7 +23,6 @@
         <url>http://www.aca-it.be/</url>
     </organization>
     <url>http://code.google.com/p/eid-pki-ra/</url>
-
     <developers>
         <developer>
             <name>Jan Van den Bergh</name>
@@ -72,12 +68,11 @@
         <module>eid-pki-ra-mock-xkms</module>
         <module>eid-pki-ra-client</module>
         <!--
-          Removed from build since the JBoss repository is buggy.
-          Getting all required dependencies is tricky!
-        <module>eid-pki-ra-dev-guide</module>
+            Removed from build since the JBoss repository is buggy.
+            Getting all required dependencies is tricky!
+            <module>eid-pki-ra-dev-guide</module>
         -->
     </modules>
-
     <properties>
         <eid-applet.version>1.0.3.GA</eid-applet.version>
         <eid-dss-version>1.0.0.RC6</eid-dss-version>
@@ -100,7 +95,6 @@
         <quartz-version>1.7.3</quartz-version>
         <jaxws-maven-plugin-version>1.12</jaxws-maven-plugin-version>
     </properties>
-
     <repositories>
         <repository>
             <id>repository.jboss.org</id>
@@ -113,18 +107,17 @@
                 <enabled>true</enabled>
             </releases>
         </repository>
-	<repository>
-		<id>repository.jboss.org-public</id>
-		<name>JBoss.org Maven repository</name>
-		<url>https://repository.jboss.org/nexus/content/groups/public</url>
+        <repository>
+            <id>repository.jboss.org-public</id>
+            <name>JBoss.org Maven repository</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
             <releases>
                 <enabled>true</enabled>
             </releases>
-	</repository>
-
+        </repository>
         <repository>
             <id>fedict</id>
             <name>FedICT repository</name>
@@ -136,7 +129,6 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-
         <repository>
             <id>shibboleth-release</id>
             <name>Internet2 Releases</name>
@@ -146,7 +138,6 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-
         <repository>
             <id>openqa-releases</id>
             <name>Openqa Release Repository</name>
@@ -159,7 +150,6 @@
                 <enabled>true</enabled>
             </releases>
         </repository>
-
         <repository>
             <id>java.net</id>
             <name>java.net</name>
@@ -173,20 +163,18 @@
             </releases>
         </repository>
     </repositories>
-
     <pluginRepositories>
         <pluginRepository>
             <id>maven2-repository.dev.java.net</id>
             <name>Java.net Maven 2 Repository</name>
             <url>http://download.java.net/maven/2/</url>
         </pluginRepository>
-	<pluginRepository>
+        <pluginRepository>
             <id>repository.jboss.org</id>
             <name>JBoss Maven Repository</name>
             <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
-         </pluginRepository>
+        </pluginRepository>
     </pluginRepositories>
-
     <distributionManagement>
         <repository>
             <id>internal.releases</id>
@@ -200,7 +188,6 @@
             <url>https://repository.aca-it.be/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
-
     <build>
         <plugins>
             <plugin>
@@ -253,7 +240,6 @@
                 </executions>
             </plugin>
         </plugins>
-
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -284,42 +270,6 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <!-- <configuration> -->
-                    <!-- <skip>true</skip> -->
-                    <!-- use this instead of excludes and includes <suiteXmlFiles> <suiteXmlFile>testng.xml</suiteXmlFile> 
-                        </suiteXmlFiles> or <groups>functest,perftest</groups> -->
-                    <!-- </configuration> -->
-                    <!-- <executions> -->
-                    <!-- <execution> -->
-                    <!-- <id>test-phase-execution</id> -->
-                    <!-- <phase>test</phase> -->
-                    <!-- <goals> -->
-                    <!-- <goal>test</goal> -->
-                    <!-- </goals> -->
-                    <!-- <configuration> -->
-                    <!-- <skip>false</skip> -->
-                    <!-- <includes> -->
-                    <!-- <include>**/*Test.java</include> -->
-                    <!-- </includes> -->
-                    <!-- <excludes> -->
-                    <!-- <exclude>**/*IntegrationTest.java</exclude> -->
-                    <!-- </excludes> -->
-                    <!-- </configuration> -->
-                    <!-- </execution> -->
-                    <!-- <execution> -->
-                    <!-- <id>integration-tests-execution</id> -->
-                    <!-- <phase>integration-test</phase> -->
-                    <!-- <goals> -->
-                    <!-- <goal>test</goal> -->
-                    <!-- </goals> -->
-                    <!-- <configuration> -->
-                    <!-- <skip>false</skip> -->
-                    <!-- <includes> -->
-                    <!-- <include>**/*IntegrationTest.java</include> -->
-                    <!-- </includes> -->
-                    <!-- </configuration> -->
-                    <!-- </execution> -->
-                    <!-- </executions> -->
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -346,8 +296,7 @@
                     <artifactId>jaxws-maven-plugin</artifactId>
                     <version>${jaxws-maven-plugin-version}</version>
                 </plugin>
-                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven 
-                    build itself. -->
+                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself. -->
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
                     <artifactId>lifecycle-mapping</artifactId>
@@ -355,45 +304,6 @@
                     <configuration>
                         <lifecycleMappingMetadata>
                             <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.apache.maven.plugins</groupId>
-                                        <artifactId>maven-antrun-plugin</artifactId>
-                                        <versionRange>[1.3,)</versionRange>
-                                        <goals>
-                                            <goal>run</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore />
-                                    </action>
-                                </pluginExecution>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.apache.maven.plugins</groupId>
-                                        <artifactId>maven-ear-plugin</artifactId>
-                                        <versionRange>[2.5,)</versionRange>
-                                        <goals>
-                                            <goal>generate-application-xml</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore />
-                                    </action>
-                                </pluginExecution>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.codehaus.mojo</groupId>
-                                        <artifactId>javacc-maven-plugin</artifactId>
-                                        <versionRange>[2.6,)</versionRange>
-                                        <goals>
-                                            <goal>javacc</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <execute />
-                                    </action>
-                                </pluginExecution>
                                 <pluginExecution>
                                     <pluginExecutionFilter>
                                         <groupId>org.codehaus.mojo</groupId>
@@ -427,6 +337,20 @@
                                         <versionRange>[2.6,)</versionRange>
                                         <goals>
                                             <goal>jjdoc</goal>
+                                            <goal>javacc</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <execute />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-ear-plugin</artifactId>
+                                        <versionRange>[2.5,)</versionRange>
+                                        <goals>
+                                            <goal>generate-application-xml</goal>
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
@@ -440,7 +364,6 @@
             </plugins>
         </pluginManagement>
     </build>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -450,13 +373,11 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-idp</groupId>
                 <artifactId>eid-idp-sp-protocol-saml2</artifactId>
                 <version>${eid-idp-version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.jboss.seam</groupId>
                 <artifactId>parent</artifactId>
@@ -464,86 +385,72 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
             <!-- Module versions -->
             <dependency>
                 <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-generated-contracts</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-generated-publicws</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-generated-privatews</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-generated-xkms</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-generated-reports</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-client-publicws</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-client-privatews</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-client-xkms</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-client-contracts</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-common-model</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-client-reports</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-util-crypto</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-util-dnfilter</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-blm-model</artifactId>
@@ -551,7 +458,6 @@
                 <classifier>${environment}-${database}</classifier>
                 <type>ejb</type>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-blm-webapp</artifactId>
@@ -559,7 +465,6 @@
                 <classifier>${environment}-${database}</classifier>
                 <type>war</type>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-blm-ws</artifactId>
@@ -567,7 +472,6 @@
                 <classifier>${environment}-${database}</classifier>
                 <type>war</type>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-portal-model</artifactId>
@@ -575,7 +479,6 @@
                 <type>ejb</type>
                 <classifier>${environment}</classifier>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-portal-webapp</artifactId>
@@ -583,21 +486,18 @@
                 <classifier>${environment}</classifier>
                 <type>war</type>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-blm-sar</artifactId>
                 <version>${project.version}</version>
                 <type>sar</type>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-integration</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-pki-ra</groupId>
                 <artifactId>eid-pki-ra-mock-xkms</artifactId>
@@ -605,20 +505,17 @@
                 <scope>test</scope>
                 <classifier>classes</classifier>
             </dependency>
-
             <!-- Libraries -->
             <dependency>
                 <groupId>be.fedict.eid-dss</groupId>
                 <artifactId>eid-dss-client</artifactId>
                 <version>${eid-dss-version}</version>
             </dependency>
-
             <dependency>
                 <groupId>be.fedict.eid-dss</groupId>
                 <artifactId>eid-dss-protocol-simple-client</artifactId>
                 <version>${eid-dss-version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.testng</groupId>
                 <artifactId>testng</artifactId>
@@ -626,14 +523,12 @@
                 <scope>test</scope>
                 <classifier>jdk15</classifier>
             </dependency>
-
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-all</artifactId>
                 <version>${mockito.version}</version>
                 <scope>test</scope>
             </dependency>
-
             <dependency>
                 <groupId>xmlunit</groupId>
                 <artifactId>xmlunit</artifactId>
@@ -641,27 +536,23 @@
                 <type>jar</type>
                 <scope>test</scope>
             </dependency>
-
             <dependency>
                 <groupId>org.jboss.seam</groupId>
                 <artifactId>jboss-seam</artifactId>
                 <version>${seam.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>javax.mail</groupId>
                 <artifactId>mail</artifactId>
                 <version>${javax.mail.version}</version>
                 <type>jar</type>
             </dependency>
-
             <dependency>
                 <groupId>org.bouncycastle</groupId>
                 <artifactId>bcprov-jdk16</artifactId>
                 <version>${bouncycastle.version}</version>
                 <type>jar</type>
             </dependency>
-
             <dependency>
                 <groupId>org.seleniumhq.selenium.client-drivers</groupId>
                 <artifactId>selenium-java-client-driver</artifactId>
@@ -710,9 +601,8 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <!-- Can be used to generate reports about lines of code not covered by tests http://cobertura.sourceforge.net <reporting> 
-        <plugins> <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>cobertura-maven-plugin</artifactId> <version>2.2</version> 
+    <!-- Can be used to generate reports about lines of code not covered by tests http://cobertura.sourceforge.net <reporting>
+        <plugins> <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>cobertura-maven-plugin</artifactId> <version>2.2</version>
         </plugin> </plugins> </reporting> -->
     <reporting>
         <plugins>
@@ -733,26 +623,21 @@
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
                 </configuration>
             </plugin>
-            <!-- Can be used to generate reports about lines of code not covered by tests http://cobertura.sourceforge.net 
+            <!-- Can be used to generate reports about lines of code not covered by tests http://cobertura.sourceforge.net
                 <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>cobertura-maven-plugin</artifactId> <version>2.2</version> </plugin> -->
         </plugins>
     </reporting>
-
     <profiles>
         <profile>
             <id>development</id>
-
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-
             <properties>
                 <!-- development mode (disable in production) -->
                 <seam.debug>true</seam.debug>
-
                 <!-- package exploded war file -->
                 <exploded.war.file>true</exploded.war.file>
-
                 <!-- persistence.xml configuration -->
                 <hibernate.hbm2ddl.auto>create-drop</hibernate.hbm2ddl.auto>
                 <hibernate.current_session_context_class>thread</hibernate.current_session_context_class>
@@ -761,21 +646,16 @@
                 <hibernate.format_sql>true</hibernate.format_sql>
                 <hibernate.use_query_cache>false</hibernate.use_query_cache>
                 <hibernate.use_second_level_cache>false</hibernate.use_second_level_cache>
-
                 <environment>development</environment>
             </properties>
         </profile>
-
         <profile>
             <id>test</id>
-
             <properties>
                 <!-- test mode (disable in production) -->
                 <seam.debug>true</seam.debug>
-
                 <!-- package exploded war file -->
                 <exploded.war.file>true</exploded.war.file>
-
                 <!-- persistence.xml configuration -->
                 <hibernate.hbm2ddl.auto>validate</hibernate.hbm2ddl.auto>
                 <hibernate.current_session_context_class>thread</hibernate.current_session_context_class>
@@ -784,21 +664,16 @@
                 <hibernate.format_sql>false</hibernate.format_sql>
                 <hibernate.use_query_cache>false</hibernate.use_query_cache>
                 <hibernate.use_second_level_cache>false</hibernate.use_second_level_cache>
-
                 <environment>test</environment>
             </properties>
         </profile>
-
         <profile>
             <id>production</id>
-
             <properties>
                 <!-- test mode (disable in production) -->
                 <seam.debug>true</seam.debug>
-
                 <!-- package exploded war file -->
                 <exploded.war.file>true</exploded.war.file>
-
                 <!-- persistence.xml configuration -->
                 <hibernate.hbm2ddl.auto>validate</hibernate.hbm2ddl.auto>
                 <hibernate.current_session_context_class>thread</hibernate.current_session_context_class>
@@ -807,53 +682,42 @@
                 <hibernate.format_sql>false</hibernate.format_sql>
                 <hibernate.use_query_cache>false</hibernate.use_query_cache>
                 <hibernate.use_second_level_cache>false</hibernate.use_second_level_cache>
-
                 <environment>production</environment>
             </properties>
         </profile>
-
         <profile>
             <id>hsql</id>
-
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-
             <properties>
                 <!-- persistence.xml configuration -->
                 <hibernate.dialect>org.hibernate.dialect.HSQLDialect</hibernate.dialect>
                 <jta.dataSource>java:/DefaultDS</jta.dataSource>
                 <quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.HSQLDBDelegate</quartz.driverDelegateClass>
                 <quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ?</quartz.selectWithLockSql>
-
                 <database>hsql</database>
             </properties>
         </profile>
-
         <profile>
             <id>oracle</id>
-
             <properties>
                 <!-- persistence.xml configuration -->
                 <hibernate.dialect>org.hibernate.dialect.Oracle10gDialect</hibernate.dialect>
                 <jta.dataSource>java:/pkiraDS</jta.dataSource>
                 <quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.StdJDBCDelegate</quartz.driverDelegateClass>
                 <quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ? FOR UPDATE</quartz.selectWithLockSql>
-
                 <database>oracle</database>
             </properties>
         </profile>
-
         <profile>
             <id>postgres</id>
-
             <properties>
                 <!-- persistence.xml configuration -->
                 <hibernate.dialect>org.hibernate.dialect.Oracle10gDialect</hibernate.dialect>
                 <jta.dataSource>java:/pkiraDS</jta.dataSource>
                 <quartz.driverDelegateClass>org.quartz.impl.jdbcjobstore.StdJDBCDelegate</quartz.driverDelegateClass>
                 <quartz.selectWithLockSql>SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ? FOR UPDATE</quartz.selectWithLockSql>
-
                 <database>postgres</database>
             </properties>
         </profile>
