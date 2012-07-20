@@ -40,33 +40,40 @@ public interface RegistrationManager {
 	void registerUser(String userRRN, String userLastName, String userFirstName, Integer domainId, String emailAddress, String locale)
 			throws RegistrationException;
 
+	/**
+	 * Creates a registration based on an incoming web service call.
+	 */
 	boolean createOrUpdateRegistration(RegistrationWS registrationWS);
 
 	/**
 	 * Checks if a user is allowed to register or revoke certificates with the
 	 * given DN.
 	 * 
-	 * @param userRRN
-	 *            the RRN of the user to check.
+	 * @param userIdentification
+	 *            the id (rrn or dn) of the user to check.
 	 * @param dn TODO
-	 * @param names
-	 *            the DN to check.
+	 * @param alternativeNames
+	 *            alternative DN to check.
+	 * @param type
+	 *            certificate type to consider (null for all).
 	 * @return the registration for this user and certificate domain (null if
 	 *         the user is not authorized).
 	 */
-	Registration findRegistrationForUserDNAndCertificateType(String userRRN, String dn, List<String> names, CertificateType type);
+	List<Registration> findRegistrationForUserDNAndCertificateType(String userIdentification, String dn, List<String> alternativeNames, CertificateType type);
 
 	/**
-	 * Checks if a user is allowed to change certificates for this certificate domain.
+	 * Checks if a user is allowed to change certificates for this certificate
+	 * domain.
 	 * 
 	 * @param userRRN
 	 *            the RRN of the user to check.
-	 * @param certificateDomain the certificate domain to check.
+	 * @param certificateDomain
+	 *            the certificate domain to check.
 	 * @return the registration for this user and certificate domain (null if
 	 *         the user is not authorized).
 	 */
 	Registration findRegistrationForUserAndCertificateDomain(String signer, CertificateDomain certificateDomain);
-	
+
 	/**
 	 * Change the locale of the user.
 	 */

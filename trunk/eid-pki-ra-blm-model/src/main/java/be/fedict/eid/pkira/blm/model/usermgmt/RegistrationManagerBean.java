@@ -16,6 +16,8 @@
  */
 package be.fedict.eid.pkira.blm.model.usermgmt;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -77,8 +79,8 @@ public class RegistrationManagerBean implements RegistrationManager {
 	 */
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void registerUser(String userRRN, String userLastName, String userFirstName, Integer domainId,
-			String emailAddress, String locale) throws RegistrationException {
+	public void registerUser(String userRRN, String userLastName, String userFirstName, Integer domainId, String emailAddress, String locale)
+			throws RegistrationException {
 		// Check if there are already users in the database; if not this one
 		// becomes admin
 		boolean isAdmin = 0 == userRepository.getUserCount();
@@ -161,45 +163,44 @@ public class RegistrationManagerBean implements RegistrationManager {
 	 */
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public Registration findRegistrationForUserDNAndCertificateType(String userIdentification, String dn,
-			List<String> names, CertificateType type) {
-		// Parse the DN
-		DistinguishedName theDN = parseDN(dn);
-		if (theDN == null) {
-			return null;
+	public List<Registration> findRegistrationForUserDNAndCertificateType(String userIdentification, String dn,
+			List<String> alternativeNames, CertificateType certificateType) {
+		// Parse the DNs
+		List<DistinguishedName> theDNs = parseDNs(dn, alternativeNames);
+		if (theDNs.size() == 0) {
+			return Collections.emptyList();
 		}
 
-		// Get the user and his registrations
-		User user = userRepository.findByNationalRegisterNumber(userIdentification);
-		if (user == null) {
-			user = userRepository.findByCertificateSubject(userIdentification);
-		}
-		if (user == null) {
-			return null;
-		}
+		// Get all registrations for the user
+		List<Registration> allRegistrations = findApprovedRegistrationsByUser(userIdentification);
 
-		List<Registration> activeRegistrations = registrationRepository.findApprovedRegistrationsByUser(user);
-		if (activeRegistrations == null || activeRegistrations.size() == 0) {
-			return null;
-		}
+		// Filter the registrations
+		List<Registration> validRegistrations = new ArrayList<Registration>();
+		nextRegistration: for (Registration registration : allRegistrations) {
+			CertificateDomain certificateDomain = registration.getCertificateDomain();
 
-		// See if the first DN matches a registration
-		Registration registration = findRegistrationForDN(type, theDN, activeRegistrations);
-		if (registration == null) {
-			return null;
-		}
-
-		// Check the alternative names
-		DistinguishedNameExpression dnExpr = parseDNameExpression(registration.getCertificateDomain().getDnExpression());
-		for (String name : names) {
-			DistinguishedName otherDN = theDN.replacePart("cn", name);
-			if (!dnExpr.matches(otherDN)) {
-				return null;
+			// Check certificate types
+			if (certificateType != null && !certificateDomain.getCertificateTypes().contains(certificateType)) {
+				continue nextRegistration;
 			}
+
+			// Check DNs
+			DistinguishedNameExpression dnExpression = parseDNExpression(certificateDomain.getDnExpression());
+			if (dnExpression == null) {
+				continue nextRegistration;
+			}
+			for (DistinguishedName theDN : theDNs) {
+				if (!dnExpression.matches(theDN)) {
+					continue nextRegistration;
+				}
+			}
+
+			// All ok
+			validRegistrations.add(registration);
 		}
 
-		// Nothing found
-		return registration;
+		// Return the result
+		return validRegistrations;
 	}
 
 	@Override
@@ -217,26 +218,21 @@ public class RegistrationManagerBean implements RegistrationManager {
 		userHome.update();
 	}
 
-	private Registration findRegistrationForDN(CertificateType type, DistinguishedName theDN,
-			List<Registration> activeRegistrations) {
-		for (Registration registration : activeRegistrations) {
-			CertificateDomain certificateDomain = registration.getCertificateDomain();
-			if (!certificateDomain.getCertificateTypes().contains(type)) {
-				continue;
-			}
-
-			String dnExpression = certificateDomain.getDnExpression();
-			DistinguishedNameExpression domainDN = parseDNameExpression(dnExpression);
-			if (domainDN == null) {
-				throw new RuntimeException("Invalid certificate domain in database: " + dnExpression);
-			}
-
-			if (domainDN.matches(theDN)) {
-				return registration;
-			}
+	private List<Registration> findApprovedRegistrationsByUser(String userIdentification) {
+		User user = findUser(userIdentification);
+		if (user == null) {
+			return Collections.emptyList();
 		}
 
-		return null;
+		return registrationRepository.findApprovedRegistrationsByUser(user);
+	}
+
+	private User findUser(String userIdentification) {
+		User user = userRepository.findByNationalRegisterNumber(userIdentification);
+		if (user == null) {
+			user = userRepository.findByCertificateSubject(userIdentification);
+		}
+		return user;
 	}
 
 	private DistinguishedName parseDN(String distinguishedName) {
@@ -249,13 +245,32 @@ public class RegistrationManagerBean implements RegistrationManager {
 		}
 		return theDN;
 	}
+	
+	private List<DistinguishedName> parseDNs(String dn, List<String> alternativeNames) {
+		List<DistinguishedName> theDNs = new ArrayList<DistinguishedName>();
 
-	private DistinguishedNameExpression parseDNameExpression(String distinguishedName) {
+		// Parse the first DN
+		DistinguishedName firstDN = parseDN(dn);
+		if (firstDN == null) {
+			return theDNs;
+		}
+		theDNs.add(firstDN);
+
+		// Handle the alternative names
+		for (String alternativeName : alternativeNames) {
+			DistinguishedName theDN = firstDN.replacePart("cn", alternativeName);
+			theDNs.add(theDN);
+		}
+
+		return theDNs;
+	}
+
+	private DistinguishedNameExpression parseDNExpression(String dnExpression) {
 		DistinguishedNameExpression theDN;
 		try {
-			theDN = distinguishedNameManager.createDistinguishedNameExpression(distinguishedName);
+			theDN = distinguishedNameManager.createDistinguishedNameExpression(dnExpression);
 		} catch (InvalidDistinguishedNameException e) {
-			log.warn("Invalid DN given to checkAuthorizationForUserAndDN: {0}", e, distinguishedName);
+			log.warn("Invalid DN expression: {0}", e, dnExpression);
 			theDN = null;
 		}
 		return theDN;

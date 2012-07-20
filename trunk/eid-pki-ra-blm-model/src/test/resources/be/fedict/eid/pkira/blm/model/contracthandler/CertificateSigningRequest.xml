@@ -7,8 +7,8 @@
 	<tns:Operator>
 		<tns:Name>Jan</tns:Name>
 		<tns:Function>Tester</tns:Function>
-		<tns:Email>j.vandenbergh@aca-it.be</tns:Email>
 		<tns:Phone>1234</tns:Phone>
+        <tns:Email>j.vandenbergh@aca-it.be</tns:Email>
 	</tns:Operator>
 	<tns:LegalNotice>Legal notice</tns:LegalNotice>
 	<tns:DistinguishedName>C=BE,ST=Limburg,L=Hasselt,O=ACA,OU=test,CN=Jan Van den Bergh</tns:DistinguishedName>

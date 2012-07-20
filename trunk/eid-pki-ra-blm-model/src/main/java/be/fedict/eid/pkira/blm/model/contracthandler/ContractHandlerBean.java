@@ -310,13 +310,13 @@ public class ContractHandlerBean implements ContractHandler {
 
 	private Registration getMatchingRegistration(String signer, String distinguishedName,
 			List<String> alternativeNames, CertificateType type) throws ContractHandlerBeanException {
-		Registration registration = registrationManager.findRegistrationForUserDNAndCertificateType(signer,
+		List<Registration> registrations = registrationManager.findRegistrationForUserDNAndCertificateType(signer,
 				distinguishedName, alternativeNames, type);
-		if (registration == null) {
+		if (registrations.size()==0) {
 			throw new ContractHandlerBeanException(ResultType.NOT_AUTHORIZED,
 					"User is not authorized for the DN in the contract");
 		}
-		return registration;
+		return registrations.get(0);
 	}
 
 	private CertificateType mapCertificateType(CertificateSigningRequestType request) {

@@ -16,6 +16,8 @@
  */
 package be.fedict.eid.pkira.blm.model.mappers;
 
+import java.util.Collection;
+
 import be.fedict.eid.pkira.blm.model.contracts.Certificate;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 import be.fedict.eid.pkira.generated.privatews.CertificateTypeWS;
@@ -34,6 +36,11 @@ public interface CertificateMapper {
 	 * Maps a certificate type to the WS version.
 	 */
 	CertificateTypeWS map(CertificateType certificateType);
+	
+	/**
+	 * Maps a collections of certificate types.
+	 */
+	void map(Iterable<CertificateType> source, Collection<CertificateTypeWS> result);
 	
 	/**
 	 * Maps a certificate type from the WS version.
