@@ -28,10 +28,7 @@
                 	<h:selectOneRadio id="certificateTypeRadioList" layout="lineDirection"
                   			value="#{requestContract.certificateType}" required="true">
   						<s:convertEnum />
-						<s:enumItem enumValue="SERVER" label="#{messages['certificate.type.server']}" />
-						<s:enumItem enumValue="CLIENT" label="#{messages['certificate.type.client']}" />
-						<s:enumItem enumValue="CODE" label="#{messages['certificate.type.code']}" />
-						<s:enumItem enumValue="PERSONS" label="#{messages['certificate.type.persons']}" />
+  						<f:selectItems value="#{requestContract.allowedCertificateTypes}" var="item" label="#{messages[item.label]}"/>  						
 					</h:selectOneRadio>               	
             	</s:decorate>
 				

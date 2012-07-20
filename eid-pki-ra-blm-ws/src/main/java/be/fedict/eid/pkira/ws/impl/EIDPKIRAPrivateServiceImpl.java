@@ -19,7 +19,9 @@
 package be.fedict.eid.pkira.ws.impl;
 
 import java.math.BigInteger;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.jws.HandlerChain;
@@ -84,7 +86,10 @@ import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsFo
 import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.FindUserRequest;
 import be.fedict.eid.pkira.generated.privatews.FindUserResponse;
+import be.fedict.eid.pkira.generated.privatews.GetAllowedCertificateTypesRequest;
+import be.fedict.eid.pkira.generated.privatews.GetAllowedCertificateTypesResponse;
 import be.fedict.eid.pkira.generated.privatews.GetLegalNoticeRequest;
+import be.fedict.eid.pkira.generated.privatews.GetLegalNoticeRequest.ByDN;
 import be.fedict.eid.pkira.generated.privatews.GetLegalNoticeResponse;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesRequest;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesResponse;
@@ -133,8 +138,8 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	@Override
 	public FindUserResponse findUser(FindUserRequest request) {
 		User user = getUserRepository().findByNationalRegisterNumber(request.getUserRRN());
-		int numberOfApprovedRegistrations = getRegistrationRepository().getNumberOfRegistrationsForForUserInStatus(
-				user, RegistrationStatus.APPROVED);
+		int numberOfApprovedRegistrations = getRegistrationRepository().getNumberOfRegistrationsForForUserInStatus(user,
+				RegistrationStatus.APPROVED);
 
 		FindUserResponse response = new ObjectFactory().createFindUserResponse();
 		response.setUser(getUserMapper().map(user, numberOfApprovedRegistrations > 0));
@@ -177,13 +182,9 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	public CreateRegistrationForUserResponse createRegistrationForUser(CreateRegistrationForUserRequest request) {
 		boolean result;
 		try {
-			getRegistrationManager().registerUser(
-					request.getUserRRN(),
-					request.getUserLastName(),
-					request.getUserFirstName(),
-					request.getCertificateDomainId() != null ? Integer.parseInt(request.getCertificateDomainId())
-							: null, request.getUserEmail(), 
-					request.getLocale());
+			getRegistrationManager().registerUser(request.getUserRRN(), request.getUserLastName(), request.getUserFirstName(),
+					request.getCertificateDomainId() != null ? Integer.parseInt(request.getCertificateDomainId()) : null,
+					request.getUserEmail(), request.getLocale());
 			result = true;
 		} catch (RegistrationException e) {
 			log.error("Error creating registration", e);
@@ -242,14 +243,13 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	public GetLegalNoticeResponse getLegalNotice(GetLegalNoticeRequest request) {
 		String legalNotice = null;
 
-		if (request.getByDN() != null) {
-			String userRRN = request.getByDN().getUserRRN();
-			CertificateType certificateType = getCertificateMapper().map(request.getByDN().getCertificateType());
-
-			Registration registration = getRegistrationManager().findRegistrationForUserDNAndCertificateType(userRRN,
-					request.getByDN().getCertificateDN(), request.getByDN().getAlternativeName(), certificateType);
-			if (registration != null) {
-				legalNotice = registration.getCertificateDomain().getCertificateAuthority().getLegalNotice();
+		ByDN byDN = request.getByDN();
+		if (byDN != null) {
+			CertificateType certificateType = getCertificateMapper().map(byDN.getCertificateType());
+			List<Registration> registrations = getRegistrationManager().findRegistrationForUserDNAndCertificateType(byDN.getUserRRN(),
+					byDN.getCertificateDN(), byDN.getAlternativeName(), certificateType);
+			if (registrations.size() != 0) {
+				legalNotice = registrations.get(0).getCertificateDomain().getCertificateAuthority().getLegalNotice();
 			}
 		}
 
@@ -270,8 +270,7 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 
 	@Override
 	public FindContractsResponse findContracts(FindContractsRequest request) {
-		List<AbstractContract> contracts = getContractQuery().getFindContracts(request.getCertificateDomainId(),
-				request.getUserRrn());
+		List<AbstractContract> contracts = getContractQuery().getFindContracts(request.getCertificateDomainId(), request.getUserRrn());
 		FindContractsResponse response = new ObjectFactory().createFindContractsResponse();
 		response.getContracts().addAll(getContractMapper().map(contracts));
 		return response;
@@ -298,8 +297,23 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	@Override
 	public ChangeLocaleResponse changeLocale(ChangeLocaleRequest request) {
 		getRegistrationManager().changeLocale(request.getUserRrn(), request.getLocale());
-		
+
 		return new ChangeLocaleResponse();
+	}
+
+	@Override
+	public GetAllowedCertificateTypesResponse getAllowedCertificateTypes(GetAllowedCertificateTypesRequest request) {
+		String userRRN = request.getUserRRN();
+
+		List<Registration> registrations = getRegistrationManager().findRegistrationForUserDNAndCertificateType(userRRN, request.getCertificateDN(), request.getAlternativeName(), null);
+		Set<CertificateType> certificateTypes = new HashSet<CertificateType>();
+		for(Registration registration: registrations) {
+			certificateTypes.addAll(registration.getCertificateDomain().getCertificateTypes());
+		}
+		
+		GetAllowedCertificateTypesResponse response = new GetAllowedCertificateTypesResponse();
+		getCertificateMapper().map(certificateTypes, response.getCertificateType());
+		return response;
 	}
 
 	private ContractRepository getDomainRepository() {

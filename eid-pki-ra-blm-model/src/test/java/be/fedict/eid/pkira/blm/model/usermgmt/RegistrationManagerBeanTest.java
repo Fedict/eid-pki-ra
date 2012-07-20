@@ -23,7 +23,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -139,8 +138,8 @@ public class RegistrationManagerBeanTest {
 		when(distinguishedNameManager.createDistinguishedNameExpression(TEST_DN2)).thenReturn(dn2);
 		when(dn2.matches(eq(dn1))).thenReturn(true);
 		
-		Registration theRegistration = bean.findRegistrationForUserDNAndCertificateType(TEST_RRN, TEST_DN1, Collections.<String>emptyList(), CertificateType.CLIENT);
-		assertEquals(theRegistration, registration);
+		List<Registration> theRegistrations = bean.findRegistrationForUserDNAndCertificateType(TEST_RRN, TEST_DN1, Collections.<String>emptyList(), CertificateType.CLIENT);
+		assertEquals(theRegistrations, Collections.singletonList(registration));
 	}
 	
 	@Test
@@ -162,8 +161,8 @@ public class RegistrationManagerBeanTest {
 		when(distinguishedNameManager.createDistinguishedNameExpression(TEST_DN2)).thenReturn(dn2);
 		when(dn2.matches(eq(dn1))).thenReturn(true);
 		
-		Registration theRegistration = bean.findRegistrationForUserDNAndCertificateType(TEST_RRN, TEST_DN1, Collections.<String>emptyList(), CertificateType.SERVER);
-		assertNull(theRegistration);
+		List<Registration> theRegistrations = bean.findRegistrationForUserDNAndCertificateType(TEST_RRN, TEST_DN1, Collections.<String>emptyList(), CertificateType.SERVER);
+		assertEquals(theRegistrations.size(), 0);
 	}
 	
 	@Test
@@ -185,8 +184,8 @@ public class RegistrationManagerBeanTest {
 		when(distinguishedNameManager.createDistinguishedNameExpression(TEST_DN2)).thenReturn(dn2);
 		when(dn2.matches(eq(dn1))).thenReturn(false);
 		
-		Registration theRegistration = bean.findRegistrationForUserDNAndCertificateType(TEST_RRN, TEST_DN1, Collections.<String>emptyList(), CertificateType.CLIENT);
-		assertNull(theRegistration);
+		List<Registration> theRegistrations = bean.findRegistrationForUserDNAndCertificateType(TEST_RRN, TEST_DN1, Collections.<String>emptyList(), CertificateType.CLIENT);
+		assertEquals(theRegistrations.size(), 0);
 	}
 	
 	@Test
@@ -197,7 +196,7 @@ public class RegistrationManagerBeanTest {
 		List<Registration> emptyList = Collections.emptyList();
 		when(registrationRepository.findApprovedRegistrationsByUser(eq(user))).thenReturn(emptyList);		
 		
-		Registration theRegistration = bean.findRegistrationForUserDNAndCertificateType(TEST_RRN, TEST_DN1, Collections.<String>emptyList(), CertificateType.CLIENT);
-		assertNull(theRegistration);
+		List<Registration> theRegistrations = bean.findRegistrationForUserDNAndCertificateType(TEST_RRN, TEST_DN1, Collections.<String>emptyList(), CertificateType.CLIENT);
+		assertEquals(theRegistrations.size(), 0);
 	}
 }

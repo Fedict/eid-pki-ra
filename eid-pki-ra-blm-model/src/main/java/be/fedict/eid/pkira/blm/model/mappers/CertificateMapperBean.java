@@ -18,6 +18,8 @@ package be.fedict.eid.pkira.blm.model.mappers;
 
 import static be.fedict.eid.pkira.contracts.util.JAXBUtil.createXmlGregorianCalendar;
 
+import java.util.Collection;
+
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
@@ -73,6 +75,19 @@ public class CertificateMapperBean implements CertificateMapper {
 		}
 
 		return Enum.valueOf(CertificateTypeWS.class, certificateType.name());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void map(Iterable<CertificateType> source, Collection<CertificateTypeWS> result) {
+		for (CertificateType type : source) {
+			CertificateTypeWS mapped = map(type);
+			if (mapped != null) {
+				result.add(mapped);
+			}
+		}
 	}
 
 	/**

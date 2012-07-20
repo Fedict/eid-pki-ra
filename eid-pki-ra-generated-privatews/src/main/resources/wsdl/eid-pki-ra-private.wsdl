@@ -211,11 +211,30 @@
                     </xsd:choice>
                 </xsd:complexType>
             </xsd:element>
-
+            
+            
             <xsd:element name="GetLegalNoticeResponse">
                 <xsd:complexType>
                     <xsd:sequence>
                         <xsd:element name="legalNotice" type="xsd:string" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            
+            <xsd:element name="GetAllowedCertificateTypesRequest">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="certificateDN" type="xsd:string" />
+                        <xsd:element name="alternativeName" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+                        <xsd:element name="userRRN" type="xsd:string" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>        
+
+            <xsd:element name="GetAllowedCertificateTypesResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="certificateType" type="types:certificateTypeWS" minOccurs="0" maxOccurs="unbounded" />
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
@@ -487,6 +506,14 @@
     <wsdl:message name="GetLegalNoticeResponse">
         <wsdl:part name="request" element="types:GetLegalNoticeResponse" />
     </wsdl:message>
+    
+        <wsdl:message name="GetAllowedCertificateTypesRequest">
+        <wsdl:part name="request" element="types:GetAllowedCertificateTypesRequest" />
+    </wsdl:message>
+
+    <wsdl:message name="GetAllowedCertificateTypesResponse">
+        <wsdl:part name="request" element="types:GetAllowedCertificateTypesResponse" />
+    </wsdl:message>
 
     <wsdl:message name="FindContractsRequest">
         <wsdl:part name="request" element="types:FindContractsRequest" />
@@ -564,6 +591,10 @@
         <wsdl:operation name="GetLegalNotice">
             <wsdl:input message="tns:GetLegalNoticeRequest" />
             <wsdl:output message="tns:GetLegalNoticeResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="GetAllowedCertificateTypes">
+            <wsdl:input message="tns:GetAllowedCertificateTypesRequest" />
+            <wsdl:output message="tns:GetAllowedCertificateTypesResponse" />
         </wsdl:operation>
         <wsdl:operation name="FindContracts">
             <wsdl:input message="tns:FindContractsRequest" />
@@ -681,6 +712,15 @@
                 <soap:body use="literal" />
             </wsdl:input>
             <wsdl:output message="tns:GetLegalNoticeResponse">
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetAllowedCertificateTypes">
+            <soap:operation />
+            <wsdl:input message="tns:GetAllowedCertificateTypesRequest">
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output message="tns:GetAllowedCertificateTypesResponse">
                 <soap:body use="literal" />
             </wsdl:output>
         </wsdl:operation>

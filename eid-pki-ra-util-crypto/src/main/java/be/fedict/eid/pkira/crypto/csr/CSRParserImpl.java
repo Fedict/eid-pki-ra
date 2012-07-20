@@ -49,6 +49,7 @@ public class CSRParserImpl extends BouncyCastleProviderUser implements CSRParser
 		Object pemObject;
 		try {
 			pemObject = reader.readObject();
+			reader.close();
 		} catch (IOException e) {
 			throw new CryptoException("Could not read CSR from string: " + e.getMessage(), e);
 		}

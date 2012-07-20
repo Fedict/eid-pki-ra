@@ -32,6 +32,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -99,6 +100,7 @@ public class ContractHandlerBeanTest {
 	private static final Certificate THE_CERTIFICATE = createValidCertificate();
 
 	private static final Registration VALID_REGISTRATION = createValidRegistration();
+	private static final List<Registration> VALID_REGISTRATIONS = Collections.singletonList(VALID_REGISTRATION);
 	private static final CertificateRevocationRequestType VALID_REVOCATION_REQUEST = createMinimalRevocationRequest();
 	private static final CertificateSigningRequestType VALID_SIGNING_REQUEST = createMinimalSigningRequest();
 	private static final String VALID_LEGAL_NOTICE = "LegalNotice";
@@ -294,7 +296,7 @@ public class ContractHandlerBeanTest {
 				RESPONSE_MESSAGE);
 		when(
 				registrationManager.findRegistrationForUserDNAndCertificateType(eq(SIGNER), eq(VALID_DN), isA(List.class),
-						eq(VALID_CERTIFICATETYPE))).thenReturn(VALID_REGISTRATION);
+						eq(VALID_CERTIFICATETYPE))).thenReturn(VALID_REGISTRATIONS);
 		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE), eq(VALID_SIGNING_REQUEST))).thenReturn(SIGNER);
 		when(certificateInfo.getValidityEnd()).thenReturn(new Date());
 
@@ -395,7 +397,7 @@ public class ContractHandlerBeanTest {
 				RESPONSE_MESSAGE);
 		when(
 				registrationManager.findRegistrationForUserDNAndCertificateType(eq(SIGNER), eq(VALID_DN), isA(List.class),
-						eq(VALID_CERTIFICATETYPE))).thenReturn(VALID_REGISTRATION);
+						eq(VALID_CERTIFICATETYPE))).thenReturn(VALID_REGISTRATIONS);
 		when(signatureVerifier.verifySignature(eq(REQUEST_MESSAGE), eq(VALID_SIGNING_REQUEST))).thenReturn(SIGNER);
 
 		// Run it

@@ -18,10 +18,15 @@
 
 package be.fedict.eid.pkira.portal.certificaterequest;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import javax.faces.model.SelectItem;
 
 import org.hibernate.validator.Length;
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
@@ -30,22 +35,25 @@ import be.fedict.eid.pkira.portal.contract.AbstractContract;
 
 /**
  * @author Bram Baeyens
- *
  */
 @Name(RequestContract.NAME)
 @Scope(ScopeType.CONVERSATION)
 public class RequestContract extends AbstractContract {
-	
+
 	private static final long serialVersionUID = 8678222804344884153L;
 
 	public static final String NAME = "be.fedict.eid.pkira.portal.requestContract";
-	
+
+	@In 
+	private Map<String, String> messages;
+
 	private String distinguishedName;
 	private List<String> alternativeNames;
 	private String base64Csr;
-	private int validityPeriod = 15;	
+	private int validityPeriod = 15;
 	private CertificateType certificateType;
-	
+	private List<CertificateType> allowedCertificateTypes;
+
 	public String getDistinguishedName() {
 		return distinguishedName;
 	}
@@ -54,7 +62,7 @@ public class RequestContract extends AbstractContract {
 		this.distinguishedName = distinguishedName;
 	}
 
-	@Length(max=2048, message="#{messages['validator.length']}")
+	@Length(max = 2048, message = "#{messages['validator.length']}")
 	public String getBase64Csr() {
 		return base64Csr;
 	}
@@ -70,9 +78,10 @@ public class RequestContract extends AbstractContract {
 	public void setValidityPeriod(int validityPeriod) {
 		this.validityPeriod = validityPeriod;
 	}
-	
+
 	/**
-	 * @param certificateType the certificateType to set
+	 * @param certificateType
+	 *            the certificateType to set
 	 */
 	public void setCertificateType(CertificateType certificateType) {
 		this.certificateType = certificateType;
@@ -85,34 +94,47 @@ public class RequestContract extends AbstractContract {
 		return certificateType;
 	}
 
-	
 	public List<String> getAlternativeNames() {
 		return alternativeNames;
 	}
 
-	
 	public void setAlternativeNames(List<String> alternativeNames) {
 		this.alternativeNames = alternativeNames;
 	}
-	
+
 	public String getAlternativeNamesAsString() {
 		StringBuilder builder = new StringBuilder();
-		for(String alternativeName: alternativeNames) {
-			if (builder.length()!=0) {
+		for (String alternativeName : alternativeNames) {
+			if (builder.length() != 0) {
 				builder.append(" / ");
 			}
 			builder.append(alternativeName);
 		}
-		
+
 		return builder.toString();
 	}
 
 	@Override
 	public String toString() {
-		return new StringBuilder("RequestContract[")
-				.append(super.toString())
-				.append(", distinguishedName").append(distinguishedName)
-				.append(", validityPeriod").append(validityPeriod)
-				.append(']').toString();				
-	}	
+		return new StringBuilder("RequestContract[").append(super.toString()).append(", distinguishedName").append(distinguishedName)
+				.append(", validityPeriod").append(validityPeriod).append(']').toString();
+	}
+
+	public List<SelectItem> getAllowedCertificateTypes() {
+		List<SelectItem> items = new ArrayList<SelectItem>();
+
+		for (CertificateType type : allowedCertificateTypes) {
+			String label = messages.get(type.getMessageKey());
+			items.add(new SelectItem(type, label));
+		}
+		return items;
+	}
+
+	public void setAllowedCertificateTypes(List<CertificateType> allowedCertificateTypes) {
+		this.allowedCertificateTypes = allowedCertificateTypes;
+	}
+
+	protected void setMessages(Map<String, String> messages) {
+		this.messages = messages;
+	}
 }

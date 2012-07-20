@@ -17,6 +17,7 @@
 package be.fedict.eid.pkira.privatews;
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -56,6 +57,8 @@ import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsFo
 import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsForUserResponse;
 import be.fedict.eid.pkira.generated.privatews.FindUserRequest;
 import be.fedict.eid.pkira.generated.privatews.FindUserResponse;
+import be.fedict.eid.pkira.generated.privatews.GetAllowedCertificateTypesRequest;
+import be.fedict.eid.pkira.generated.privatews.GetAllowedCertificateTypesResponse;
 import be.fedict.eid.pkira.generated.privatews.GetLegalNoticeRequest;
 import be.fedict.eid.pkira.generated.privatews.GetLegalNoticeResponse;
 import be.fedict.eid.pkira.generated.privatews.ListCertificatesRequest;
@@ -216,6 +219,17 @@ public class EIDPKIRAPrivateServiceClient {
 		request.setUserRrn(userRRN);
 		request.setLocale(locale);
 		getWebservicePort().changeLocale(request);
+	}
+	
+	public List<CertificateTypeWS> getAllowedCertificateTypes(String userRRN, String dn, Collection<String> alternativeNames) {
+		GetAllowedCertificateTypesRequest request = factory.createGetAllowedCertificateTypesRequest();
+		request.setUserRRN(userRRN);
+		request.setCertificateDN(dn);
+		request.getAlternativeName().addAll(alternativeNames);
+		
+		GetAllowedCertificateTypesResponse response = getWebservicePort().getAllowedCertificateTypes(request);
+		
+		return response.getCertificateType();
 	}
 
 	/**
