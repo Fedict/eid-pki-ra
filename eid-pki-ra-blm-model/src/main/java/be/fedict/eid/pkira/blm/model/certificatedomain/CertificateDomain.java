@@ -77,7 +77,7 @@ public class CertificateDomain implements Serializable {
 	@JoinColumn(name = "CA_ID", nullable = false)
 	private CertificateAuthority certificateAuthority;
 
-	@Column(name = "DN_EXPRESSION", nullable = false)
+	@Column(name = "DN_EXPRESSION", nullable = false, length=4095)
 	@NotEmpty(message = "{validation.empty.dnExpression}")
 	@ValidCertificateDomainDnExpression
 	private String dnExpression;
