@@ -20,11 +20,11 @@
 					<h:outputText value="#{certificateDomain.name}" />
 				</rich:column>
 
-				<rich:column sortBy="#{certificateDomain.dnExpression}" filterBy="#{certificateDomain.dnExpression}" filterEvent="onkeyup">
+				<rich:column sortBy="#{certificateDomain.dnExpression}" filterBy="#{certificateDomain.dnExpression}" filterEvent="onkeyup" width="300px">
 					<f:facet name="header">
 						<h:outputText value="#{messages['certificatedomain.list.dnexpression']}" />
 					</f:facet>
-					<h:outputText value="#{certificateDomain.dnExpression}" />
+					<h:outputText value='#{certificateDomain.dnExpression.replaceAll("([^ ]{60})", "$1 ")}' />
 				</rich:column>
 
 				<rich:column sortBy="#{certificateDomain.certificateAuthority.name}" filterBy="#{certificateDomain.certificateAuthority.name}" filterEvent="onkeyup">
