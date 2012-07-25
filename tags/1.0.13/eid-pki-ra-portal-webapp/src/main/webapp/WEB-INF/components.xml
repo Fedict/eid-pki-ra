@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://jboss.com/products/seam/components" xmlns:bpm="http://jboss.com/products/seam/bpm"
+    xmlns:core="http://jboss.com/products/seam/core" xmlns:jms="http://jboss.com/products/seam/jms" xmlns:mail="http://jboss.com/products/seam/mail"
+    xmlns:persistence="http://jboss.com/products/seam/persistence" xmlns:security="http://jboss.com/products/seam/security"
+    xmlns:transaction="http://jboss.com/products/seam/transaction" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:web="http://jboss.com/products/seam/web" xmlns:international="http://jboss.com/products/seam/international"
+    xsi:schemaLocation="http://jboss.com/products/seam/transaction http://jboss.com/products/seam/transaction-2.2.xsd 
+			http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.2.xsd                   
+			http://jboss.com/products/seam/persistence http://jboss.com/products/seam/persistence-2.2.xsd                   
+			http://jboss.com/products/seam/drools http://jboss.com/products/seam/drools-2.2.xsd                  
+			http://jboss.com/products/seam/bpm http://jboss.com/products/seam/bpm-2.2.xsd                  
+			http://jboss.com/products/seam/security http://jboss.com/products/seam/security-2.2.xsd                  
+			http://jboss.com/products/seam/mail http://jboss.com/products/seam/mail-2.2.xsd                  
+			http://jboss.com/products/seam/components http://jboss.com/products/seam/components-2.2.xsd 
+			http://jboss.com/products/seam/jms http://jboss.com/products/seam/jms-2.2.xsd
+			http://jboss.com/products/seam/web http://jboss.com/products/seam/web-2.2.xsd
+            http://jboss.com/products/seam/international http://jboss.com/products/seam/international-2.1.xsd">
+
+    <import>be.fedict.eid.pkira.portal</import>
+    <import>be.fedict.eid.pkira.common</import>
+
+    <component name="org.jboss.seam.core.init">
+        <property name="debug">false</property>
+        <property name="jndi-pattern">eid-pki-ra-portal-ear-${version}-${environment}/#{ejbName}/local</property>
+    </component>
+
+    <component class="org.jboss.seam.web.MultipartFilter">
+        <property name="createTempFiles">false</property>
+        <property name="maxRequestSize">1000000</property>
+    </component>
+
+    <core:manager concurrent-request-timeout="500" conversation-id-parameter="cid" conversation-timeout="120000" />
+
+    <web:multipart-filter create-temp-files="false" max-request-size="1000000" url-pattern="*.seam" />
+
+    <international:locale-selector cookie-enabled="true" />
+
+    <security:identity authenticate-method="#{authenticationHandler.authenticate}" />
+
+    <event type="org.jboss.seam.security.notLoggedIn">
+        <action execute="#{redirect.captureCurrentView}" />
+    </event>
+    <event type="org.jboss.seam.security.loginSuccessful">
+        <action execute="#{redirect.returnToCapturedView}" />
+    </event>
+</components>

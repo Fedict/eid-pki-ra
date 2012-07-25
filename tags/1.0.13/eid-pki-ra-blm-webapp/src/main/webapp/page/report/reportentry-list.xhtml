@@ -1,0 +1,87 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:form id="certificateRequestListForm">
+
+			<s:decorate id="reportDateDecorator"
+				template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['reportentry.list.selection.label']}:</ui:define>
+				<rich:calendar id="reportDate"
+					value="#{reportEntryListQuery.reportDate}" datePattern="dd/MM/yyyy">
+					<a4j:support event="onchanged" ignoreDupResponses="true"
+						action="#{reportEntryListQuery.reportDateChanged()}"
+						reRender="reportDateDecorator,reportEntryListTable" />
+				</rich:calendar>
+			</s:decorate>
+
+			<rich:panel id="panel">
+				<f:facet name="header">#{messages['certificaterequest.list.title']}</f:facet>
+				<rich:dataTable id="reportEntryListTable" var="reportEntry"	rows="50" value="#{reportEntryListQuery.resultList}" width="100%" reRender="reportEntryListTableDataScroller">
+					<rich:column sortBy="#{reportEntry.logTime}">
+						<f:facet name="header">
+							<h:outputText value="#{messages['reportentry.list.logTime']}" />
+						</f:facet>
+						<h:outputText value="#{reportEntry.logTime}">
+							<f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
+						</h:outputText>
+					</rich:column>
+				
+					<rich:column sortBy="#{reportEntry.certificateAuthorityName}">
+						<f:facet name="header">
+							<h:outputText value="#{messages['reportentry.list.certificateAuthorityName']}" />
+						</f:facet>
+						<h:outputText value="#{reportEntry.certificateAuthorityName}" />
+					</rich:column>
+
+					<rich:column sortBy="#{reportEntry.certificateDomainName}">
+						<f:facet name="header">
+							<h:outputText value="#{messages['reportentry.list.certificateDomainName']}" />
+						</f:facet>
+						<h:outputText value="#{reportEntry.certificateDomainName}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{reportEntry.contractType}">
+						<f:facet name="header">
+							<h:outputText value="#{messages['reportentry.list.contractType']}" />
+						</f:facet>
+						<h:outputText value="#{reportEntry.contractType}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{reportEntry.requester}">
+						<f:facet name="header">
+							<h:outputText value="#{messages['reportentry.list.requester']}" />
+						</f:facet>
+						<h:outputText value="#{reportEntry.requester}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{reportEntry.subject}">
+						<f:facet name="header">
+							<h:outputText value="#{messages['reportentry.list.subject']}" />
+						</f:facet>
+						<h:outputText value="#{reportEntry.subject}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{reportEntry.success}">
+						<f:facet name="header">
+							<h:outputText value="#{messages['reportentry.list.success']}" />
+						</f:facet>
+						<h:outputText value="#{messages['reportentry.list.success.'.concat(reportEntry.success)]}" />
+					</rich:column>
+
+					<f:facet name="footer">
+						<rich:datascroller id="reportEntryListTableDataScroller"
+							for="reportEntryListTable" renderIfSinglePage="false"
+							maxPages="#{certificateRequestQuery.maxPages}"
+							fastStep="#{certificateRequestQuery.fastStep}" />
+					</f:facet>
+				</rich:dataTable>
+			</rich:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

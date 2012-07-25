@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC
+	"-//OASIS//DTD DocBook XML V4.5//EN"
+	"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<article lang="en">
+    <articleinfo>
+        <title>FedICT eID PKI Registration Authority Developer's Guide</title>
+        <subtitle> Integrating eID PKI RA in your applications.
+        </subtitle>
+        <copyright>
+            <year>2010-2012</year>
+            <holder>FedICT</holder>
+        </copyright>
+        <releaseinfo>16 March 2012</releaseinfo>
+        <authorgroup>
+            <author>
+                <firstname>Jan</firstname>
+                <surname>Van den Bergh</surname>
+                <email>j.vandenbergh@aca-it.be</email>
+            </author>
+        </authorgroup>
+        <abstract>
+            <para>
+                This developer's guide serves as an entry point for integrating the eID PKI Registration Authority in your certificate request and
+                revocation workflows. The target audience are Java developers and Java application architects.
+            </para>
+        </abstract>
+    </articleinfo>
+    
+    <section>
+        <title>Introduction</title>
+        <para>
+            The FedICT eID PKI Registration Authority is a web service that can be used to request and revoke certificates. 
+            This service accepts requests in the form of signed contracts which are validated before being sent to the certificate authority.  
+            This document describes (1) how certificate request and revocation contracts can be created, (2) how they can be signed and (3) how they can be sent
+            to the eID PKI RA web service.
+        </para>
+    </section>
+    
+    <section>
+        <title>Using the eID PKI RA client</title>
+        <para>
+            The eID PKI RA client can be used in Maven projects.
+            Before doing that, the client has to be compiled from source, as it is not yet in a public Maven repository.
+            The source code can be found on Google Code: <ulink url="http://code.google.com/p/eid-pki-ra/">http://code.google.com/p/eid-pki-ra/</ulink>.
+        </para>
+        <para>
+            In order to retrieve and compile the code, you will need the following tools: a Subversion client, 
+            Maven (preferably version 3) and the Java 6 SDK.
+        </para> 
+        <section>
+            <title>Downloading the source code</title>
+            <para>
+                Source code for the eID PKI RA client can be downloaded using Subversion.                
+                To do that, execute the following command:
+            </para>
+            <code>svn checkout http://eid-pki-ra.googlecode.com/svn/tags/1.0.13 eid-pki-ra</code>
+            <para>
+                This downloads the code from the Google subversion repository and puts in in the subdirectory 
+                <code>eid-pki-ra</code>.
+            </para>
+            <para>
+                If you already have a version of the source code, enter the directory that contains the code and
+                use the following command to get the latest version:
+            </para>
+            <code>svn switch http://eid-pki-ra.googlecode.com/svn/tags/1.0.13</code>
+            <para>
+                Of course, it is also possible to get a copy of the code using another Subversion client, for
+                instance TortoiseSVN.
+            </para>
+        </section>
+        <section>
+            <title>Building the code</title>
+            <para>
+                The eID PKI RA client library can be build using Maven (preferably version 3 or later), using the
+                following command in the directory containing the source code.
+            </para>
+            <code>mvn clean install</code>
+            <para>
+                This command compiles both the client and server libraries and puts them in your local Maven repository.
+                To use the client, you will only need <code>eid-pki-ra-client</code> and its dependencies.
+            </para>
+        </section>
+        <section>
+            <title>Adding the dependencies</title>
+            <para>
+                Add the following dependency to your Maven project to use the client libraries. 
+                This will make sure that the library and its dependencies are available.
+            </para>
+            <programlisting role="XML"><![CDATA[<dependency>
+    <groupId>be.fedict.eid-pki-ra</groupId>
+    <artifactId>eid-pki-ra-client</artifactId>
+    <version>1.0.13</version>
+</dependency>]]></programlisting>
+            <para>
+                This will make the client and its dependencies available.
+            </para>
+            <para>
+                All methods required to contact the PKI RA web service are available in the interface <code>be.fedict.eid.pkira.client.PKIRAClient</code>
+                (using an interface makes it easier to use dependency injection frameworks and to create unit tests). 
+                Simply instantiate <code>be.fedict.eid.pkira.client.PKIRAClientImpl</code> to get an implementation.
+                Don't forget to inject the location of the eID PKI RA web service.
+                <programlisting role="Java"><![CDATA[PKIRAClient pkiraClient = new PKIRAClientImpl();
+client.setServiceUrl("<<the url>>");]]></programlisting>
+            </para>
+        </section>
+    </section>
+    <section>
+        <title>Creating certificate request and revocation contracts</title>
+        <para>
+            The eID PKI RA web service only accepts signed contracts in XML format. This section describes how to create a contract. Later in the
+            document the different methods to add a signature are explained.
+        </para>
+        <para>
+            <emphasis>Note</emphasis>: there is an XML schema (xsd) available for the contract document as well. 
+            It can be found in <code>eid-pki-ra-generated-contracts.jar</code> which is a dependency of <code>eid-pki-ra-client</code>.
+            However, its description is beyond the scope of this document.
+        </para>
+        <section>
+            <title>Creating a certificate request contract</title>
+            <para> 
+                The next code block shows how to create the contract.
+            </para>
+            <programlisting role="Java"><![CDATA[String contract = client.createCertificateSigningRequestContract(
+    requestId, csr, certificateType, 
+    operatorName, operatorFunction, operatorPhone, 
+    validityPeriodMonths, description, legalNotice);]]></programlisting>
+            <para> 
+                When creating a contract, the following parameters have to be given. All of these are mandatory, unless explicitly mentioned.
+            </para>
+            <variablelist>
+                <varlistentry>
+                    <term>requestId</term>
+                    <listitem>
+                        <para>Optional id to give to the request. PKIRA will return this request id in its response.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>csr</term>
+                    <listitem>
+                        <para>certificate signing request (CSR) (in PEM format).</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>certificateType</term>
+                    <listitem>
+                        <para>type of certificate to generate.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>operatorName</term>
+                    <listitem>
+                        <para>name of the operator requesting the certificate.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>operatorFunction</term>
+                    <listitem>
+                        <para>function of the operator requesting the certificate.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>operatorPhone</term>
+                    <listitem>
+                        <para>phone number of the operator requesting the certificate. 
+                        This field has to contain a valid phone number, starting with a plus sign or a zero and 
+                        containing only numbers and separator characters (dash, dot, slash, space).
+                        The regular expression used to validate the field is: <code>(\+|0)[-0-9 \./]+</code>.
+                        </para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>validityPeriodMonths</term>
+                    <listitem>
+                        <para>validity period in months. Contact Fedict to the allowed values.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>description</term>
+                    <listitem>
+                        <para>additional description to be added to the contract.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>legalNotice</term>
+                    <listitem>
+                        <para>legal notice to be added to the contract. Contact Fedict to get the allowed value.</para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+            <para>
+                The result of this method is the unsigned certificate signing contract as an XML document. 
+                When the contract could not be generated, a PKIRAClientException will be thrown. 
+                This usually indicates an error in one of the inputs.
+            </para>
+        </section>
+        <section>
+            <title>Creating a certificate revocation contract</title>
+            <para> The next code block shows how to create the contract.
+            </para>
+            <programlisting role="Java"><![CDATA[String contract = client.createCertificateRevocationRequestContract(
+    requestId, certificate,
+    operatorName, operatorFunction, operatorPhone,
+    description, legalNotice);]]></programlisting>
+            <para> 
+                When creating a contract, the following parameters have to be given. All of these are mandatory, unless explicitly mentioned.
+            </para>
+            <variablelist>
+                <varlistentry>
+                    <term>requestId</term>
+                    <listitem>
+                        <para>Optional id to give to the request. PKIRA will return this request id in its response.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>certificate</term>
+                    <listitem>
+                        <para>certificate to be revoked (in PEM format).</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>operatorName</term>
+                    <listitem>
+                        <para>name of the operator requesting the certificate.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>operatorFunction</term>
+                    <listitem>
+                        <para>function of the operator requesting the certificate.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>operatorPhone</term>
+                    <listitem>
+                        <para>phone number of the operator requesting the certificate. 
+                        This field has to contain a valid phone number, starting with a plus sign or a zero and 
+                        containing only numbers and separator characters (dash, dot, slash, space).
+                        The regular expression used to validate the field is: <code>(\+|0)[-0-9 \./]+</code>.
+                        </para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>description</term>
+                    <listitem>
+                        <para>additional description to be added to the contract.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>legalNotice</term>
+                    <listitem>
+                        <para>legal notice to be added to the contract. Contact Fedict to get the allowed value.</para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+            <para>
+                The result of this method is the unsigned certificate revocation contract as an XML document.
+                When the contract could not be generated, a PKIRAClientException will be thrown. 
+                This usually indicates an error in one of the inputs.
+            </para>
+        </section>
+    </section>
+    
+    <section>
+        <title>Signing contracts for the eID PKI RA web service</title>
+        <para>
+            The eID PKI RA web service only accepts contracts that are properly signed.
+            There are two ways to do this: (1) by signing the XML contract with your eID card (for instance using the eID DSS web application);
+            (2) by adding an signature programmatically, using a stored private key and X509 certificate. 
+            The certificate can be self-signed, but has to be communicated to FedICT so it can be linked to your user account. 
+        </para>
+        <para>
+            Since this document is about sending contracts automatically, the first method will not be described any further.
+            Below we will explain how contracts can be signed programmatically.
+        </para>
+        <section>
+            <title>Loading the private key and matching certificate</title>
+            <para>
+                Before singing the contract, the private key and X509 certificate have to be loaded from a keystore that is supported by Java. 
+                The code below shows how this can be done from a standard JKS keystore.
+            </para>
+            <programlisting role="Java"><![CDATA[// Load the keystore and get the private key
+KeyStore keyStore = KeyStore.getInstance("jks");
+keyStore.load(new FileInputStream("<<keystore.jks>>"), "<<jks password>>");
+PrivateKeyEntry privateKeyEntry = (PrivateKeyEntry) keyStore.getEntry("test", 
+    new PasswordProtection("<<key password>>"));]]></programlisting>
+        </section>
+        <section>
+            <title>Signing a contract</title>
+            <para>
+                The loaded <code>PrivateKeyEntry</code> (or a separate private key and X509 certificate) can now be used to sign the contract.
+            </para>
+            <programlisting role="Java"><![CDATA[// Sign the document
+String signedContract = client.signRequestContract(contract, privateKeyEntry);]]></programlisting>
+        </section>
+    </section>
+    
+    <section>
+        <title>Calling the eID PKI RA web service</title>
+        <para>
+            After a signed contract has been obtained, it can be sent to the eID PKI RA web service, using one of the send methods.
+            The result of this call is a response document that has already been unmarshalled.
+            With this document, it is possible to check that the operation was succesful. 
+            The certificate chain can be retrieved from it as well. 
+            The first certificate in the list is the newly generated certificate (in PEM format).
+            The other certificates are the certificate(s) used to sign the new certificate, up to the root certificate.
+        </para>
+        <section>
+            <title>Sending a certificate signing request</title>
+            <programlisting role="Java"><![CDATA[// Send the request
+CertificateSigningResponseType response = client.sendCertificateSigningRequest(contract);
+
+// Check the outcome
+if (client.responseContainsErrors(response)) {
+    // handle error
+    throw new Exception("...");
+}
+
+// Return the list of certificates in the chain
+return response.getCertificatePEM();
+            ]]></programlisting>
+        </section>
+        <section>
+            <title>Sending a certificate revocation request</title>
+            <programlisting role="Java"><![CDATA[// Send the request
+CertificateSigningResponseType response = client.sendCertificateRevocationRequest(contract);
+
+// Check the outcome
+if (client.responseContainsErrors(response)) {
+    // handle error
+    throw new Exception("...");
+}
+// All OK.
+            ]]></programlisting>
+        </section>
+    </section>
+    
+    <appendix>
+        <title>eID PKI RA Developer's Guide License</title>
+        <para>
+            <mediaobject>
+                <imageobject>
+                    <imagedata format="PNG" fileref="cc.logo.large.png" scale="100" />
+                </imageobject>
+            </mediaobject>
+            This document has been released under the Creative Commons license.
+            <mediaobject>
+                <imageobject>
+                    <imagedata format="PNG" fileref="share.large.png" scale="20" />
+                </imageobject>
+            </mediaobject>
+            You are free to Share — to copy, distribute and transmit the work.
+            <mediaobject>
+                <imageobject>
+                    <imagedata format="PNG" fileref="by.large.png" scale="20" />
+                </imageobject>
+            </mediaobject>
+            You must attribute the work in the manner specified by the author or licensor (but not in any way that suggests that they endorse you or
+            your use of the work).
+            <mediaobject>
+                <imageobject>
+                    <imagedata format="PNG" fileref="nc.large.png" scale="20" />
+                </imageobject>
+            </mediaobject>
+            You may not use this work for commercial purposes.
+            <mediaobject>
+                <imageobject>
+                    <imagedata format="PNG" fileref="nd.large.png" scale="20" />
+                </imageobject>
+            </mediaobject>
+            You may not alter, transform, or build upon this work.
+        </para>
+        <para>
+            More information about the Creative Commons license conditions can be found at
+            <ulink url="http://creativecommons.org/">Creative Commons organization</ulink>
+            .
+        </para>
+    </appendix>
+    <appendix>
+        <title>eID PKI RA License</title>
+        <para> The eID PKI RA source code has been released under the GNU LGPL version 3.0.
+        </para>
+        <para>
+            <code> This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License version
+                3.0 as published by the Free Software Foundation.
+            </code>
+        </para>
+        <para>
+            <code> This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+            </code>
+        </para>
+        <para>
+            <code> You should have received a copy of the GNU Lesser General Public License along with this software; if not, see
+                http://www.gnu.org/licenses/.
+            </code>
+        </para>
+    </appendix>
+    <appendix>
+        <title>Revision history</title>
+        <table>
+            <title>Revision history</title>
+            <tgroup cols="2">
+                <colspec colwidth="1*" />
+                <colspec colwidth="1*" />
+                <colspec colwidth="2*" />
+                <thead>
+                    <row>
+                        <entry>Author</entry>
+                        <entry>Description</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>16 Mar 2012</entry>
+                        <entry>Jan Van den Bergh</entry>
+                        <entry>Initial version.</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+    </appendix>
+</article>
