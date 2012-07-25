@@ -33,7 +33,7 @@
 							<h:outputText
 								value="#{messages['registration.certificatedomainexpr']}" />
 						</f:facet>
-						<h:outputText value="#{registration.certificateDomainExpression}" />
+						<h:outputText value='#{registration.certificateDomainExpression.replaceAll("([^ ]{60})", "$1 ")}' />
 					</rich:column>
 
 					<rich:column>

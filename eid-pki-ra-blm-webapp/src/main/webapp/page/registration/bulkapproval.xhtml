@@ -54,7 +54,7 @@
 						<f:facet name="header">
 							<h:outputText value="#{messages['registrations.bulk.certificateDomainDnExpression']}" />
 						</f:facet>
-						<h:outputText value="#{registration.certificateDomain.dnExpression}" />
+						<h:outputText value='#{registration.certificateDomain.dnExpression.replaceAll("([^ ]{60})", "$1 ")}' />
 					</rich:column>
 					
 					<rich:column sortBy="#{registration.email}" filterBy="#{registration.email}" filterEvent="onkeyup">

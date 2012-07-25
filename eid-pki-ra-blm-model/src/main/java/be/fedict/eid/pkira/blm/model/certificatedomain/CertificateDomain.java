@@ -28,6 +28,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -77,7 +78,8 @@ public class CertificateDomain implements Serializable {
 	@JoinColumn(name = "CA_ID", nullable = false)
 	private CertificateAuthority certificateAuthority;
 
-	@Column(name = "DN_EXPRESSION", nullable = false, length=4095)
+	@Column(name = "DN_EXPRESSION", nullable = false)
+	@Lob
 	@NotEmpty(message = "{validation.empty.dnExpression}")
 	@ValidCertificateDomainDnExpression
 	private String dnExpression;
