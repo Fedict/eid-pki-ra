@@ -140,7 +140,7 @@ public class TestConstants {
 
 	public static final String CSR_SUBJECT = "C=BE,ST=Limburg,L=Hasselt,O=ACA,OU=test,CN=Jan Van den Bergh";
 	
-	public static final String CSR_SUBJECT2 = "C=BE,O=Federal Government,OU=SSIN\\=73120525350,OU=JEROEN HOUTEVELTS,OU=eHealth-platform Belgium,CN=SSIN\\=73120525350";
+	public static final String CSR_SUBJECT2 = "C=BE,O=Federal Government,OU=SSIN\\=73122525352,OU=DORIEN VANHOUT,OU=eHealth-platform Belgium,CN=SSIN\\=73122525352";
 
 	public static final String CERTIFICATE_DN = "C=BE,OU=Domain Control Validated,O=*.aca-it.be,CN=*.aca-it.be";
 
