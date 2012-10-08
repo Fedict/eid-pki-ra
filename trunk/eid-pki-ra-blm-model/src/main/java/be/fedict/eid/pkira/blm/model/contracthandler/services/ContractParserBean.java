@@ -51,6 +51,7 @@ public class ContractParserBean implements ContractParser {
 	 * be.fedict.eid.blm.model.ContractParser#marshalResponseMessage(javax.xml
 	 * .bind.JAXBElement)
 	 */
+	@Override
 	public <T extends ResponseType> String marshalResponseMessage(T response, Class<T> responseClazz) {
 		try {
 			return contractsClient.marshal(response, responseClazz);
@@ -66,11 +67,13 @@ public class ContractParserBean implements ContractParser {
 	 * be.fedict.eid.blm.model.ContractParser#unmarshalRequestMessage(java.lang
 	 * .String, java.lang.Class)
 	 */
+	@Override
 	public <T extends RequestType> T unmarshalRequestMessage(String requestMsg, Class<T> requestClass)
 			throws ContractHandlerBeanException {
 		try {
 			return contractsClient.unmarshal(requestMsg, requestClass);
 		} catch (XmlMarshallingException e) {
+			log.error("Error unmarshalling incoming message.", e);
 			throw new ContractHandlerBeanException(ResultType.INVALID_MESSAGE, e.getMessage());
 		}
 	}
