@@ -86,7 +86,7 @@
         <testng.version>5.11</testng.version>
         <javax.mail.version>1.4.2</javax.mail.version>
         <bouncycastle.version>1.46</bouncycastle.version>
-        <opensaml.version>2.4.0</opensaml.version>
+        <opensaml.version>2.5.3</opensaml.version>
         <selenium-client-driver.version>1.0.2</selenium-client-driver.version>
         <surefire.version>2.5</surefire.version>
         <selenium-server.version>1.0.3</selenium-server.version>
