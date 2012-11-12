@@ -31,10 +31,10 @@ public class CertificatesPerCertificateDomainPerDayReportGenerator extends Repor
 
 	@Override
 	protected String getQueryString() {
-		return "SELECT year(c.creationDate),month(c.creationDate),day(c.creationDate),c.certificateDomain.name,c.certificateDomain.dnExpression, COUNT(*)" +
+		return "SELECT year(c.creationDate),month(c.creationDate),day(c.creationDate),c.certificateDomain.name,str(c.certificateDomain.dnExpression), COUNT(*)" +
 				" FROM CertificateSigningContract c" +
 				" WHERE c.result=:result" +
-				" GROUP BY year(c.creationDate),month(creationDate),day(c.creationDate),c.certificateDomain.name, c.certificateDomain.dnExpression" +
+				" GROUP BY year(c.creationDate),month(creationDate),day(c.creationDate),c.certificateDomain.name, str(c.certificateDomain.dnExpression)" +
 				" ORDER BY year(c.creationDate) DESC,month(creationDate) DESC,day(c.creationDate) DESC,c.certificateDomain.name ASC";
 	}
 
