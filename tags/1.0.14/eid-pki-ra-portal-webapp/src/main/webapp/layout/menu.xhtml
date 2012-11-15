@@ -1,0 +1,53 @@
+<rich:toolBar xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" id="tool-bar" style="height:25px;">
+
+	<rich:toolBarGroup location="left" id="tool-bar-group-left">
+		<s:link view="/home.xhtml" value="#{messages['menu.home']}"
+			action="#{menuHandler.selectItem('home')}"
+			styleClass="#{menuHandler.styleIfSelected('home')}" />
+	</rich:toolBarGroup>
+
+	<s:link value="#{messages['menu.registrations']}"
+		view="/page/registration/registration-list.xhtml" id="registrations"
+		rendered="#{s:hasRole('AUTHENTICATED_USER')}" propagation="none"
+		action="#{menuHandler.selectItem('registrations')}"
+		styleClass="#{menuHandler.styleIfSelected('registrations')}" />
+	<s:link value="#{messages['menu.certificates']}"
+		view="/page/certificates/certificate-list.xhtml" id="certificates"
+		rendered="#{s:hasRole('REGISTERED_USER')}" propagation="none"
+		action="#{menuHandler.selectItem('certificates')}"
+		styleClass="#{menuHandler.styleIfSelected('certificates')}" />
+	<s:link value="#{messages['menu.contracts']}"
+		view="/page/contract/contract-list.xhtml" id="contracts"
+		rendered="#{s:hasRole('REGISTERED_USER')}" propagation="none"
+		action="#{menuHandler.selectItem('contracts')}"
+		styleClass="#{menuHandler.styleIfSelected('contracts')}" />
+
+	<rich:toolBarGroup location="right" id="tool-bar-group-right">
+		<s:decorate id="CertificateDomainDecorator"
+			template="/layout/edit.xhtml">
+			<ui:define name="label">#{messages['general.language']}:</ui:define>
+			<h:selectOneMenu value="#{localeSelector.localeString}">
+				<f:selectItem itemLabel="English" itemValue="en" />
+				<f:selectItem itemLabel="Nederlands" itemValue="nl" />
+				<f:selectItem itemLabel="Fran&#231;ais" itemValue="fr" />
+				<f:selectItem itemLabel="Deutsch" itemValue="de" />
+			</h:selectOneMenu>
+			<h:commandButton action="#{localeSelector.select}"
+				value="#{messages['general.changeLanguage']}" />
+		</s:decorate>
+
+		<s:link value="#{messages['menu.login']}" view="/login.xhtml"
+			id="login" rendered="#{not s:hasRole('AUTHENTICATED_USER')}" />
+		<s:link value="#{messages['menu.logout']} #{credentials.fullName}"
+			view="/home.xhtml" action="#{identity.logout}"
+			rendered="#{s:hasRole('AUTHENTICATED_USER')}" />
+	</rich:toolBarGroup>
+</rich:toolBar>
+
+
