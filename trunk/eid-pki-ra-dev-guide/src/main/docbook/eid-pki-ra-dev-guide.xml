@@ -54,7 +54,7 @@
                 Source code for the eID PKI RA client can be downloaded using Subversion.                
                 To do that, execute the following command:
             </para>
-            <code>svn checkout http://eid-pki-ra.googlecode.com/svn/tags/1.0.14-SNAPSHOT eid-pki-ra</code>
+            <code>svn checkout http://eid-pki-ra.googlecode.com/svn/tags/1.0.15-SNAPSHOT eid-pki-ra</code>
             <para>
                 This downloads the code from the Google subversion repository and puts in in the subdirectory 
                 <code>eid-pki-ra</code>.
@@ -63,7 +63,7 @@
                 If you already have a version of the source code, enter the directory that contains the code and
                 use the following command to get the latest version:
             </para>
-            <code>svn switch http://eid-pki-ra.googlecode.com/svn/tags/1.0.14-SNAPSHOT</code>
+            <code>svn switch http://eid-pki-ra.googlecode.com/svn/tags/1.0.15-SNAPSHOT</code>
             <para>
                 Of course, it is also possible to get a copy of the code using another Subversion client, for
                 instance TortoiseSVN.
@@ -90,7 +90,7 @@
             <programlisting role="XML"><![CDATA[<dependency>
     <groupId>be.fedict.eid-pki-ra</groupId>
     <artifactId>eid-pki-ra-client</artifactId>
-    <version>1.0.14-SNAPSHOT</version>
+    <version>1.0.15-SNAPSHOT</version>
 </dependency>]]></programlisting>
             <para>
                 This will make the client and its dependencies available.
