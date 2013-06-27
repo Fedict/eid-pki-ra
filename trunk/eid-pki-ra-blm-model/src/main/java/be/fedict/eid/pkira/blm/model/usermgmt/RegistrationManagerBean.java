@@ -204,8 +204,8 @@ public class RegistrationManagerBean implements RegistrationManager {
 	}
 
 	@Override
-	public Registration findRegistrationForUserAndCertificateDomain(String signer, CertificateDomain certificateDomain) {
-		User user = userRepository.findByNationalRegisterNumber(signer);
+	public Registration findRegistrationForUserAndCertificateDomain(String userIdentification, CertificateDomain certificateDomain) {
+		User user = findUser(userIdentification);
 		return registrationRepository.findRegistration(certificateDomain, user);
 	}
 
@@ -230,7 +230,7 @@ public class RegistrationManagerBean implements RegistrationManager {
 	private User findUser(String userIdentification) {
 		User user = userRepository.findByNationalRegisterNumber(userIdentification);
 		if (user == null) {
-			user = userRepository.findByCertificateSubject(userIdentification);
+ 			user = userRepository.findByCertificateSubject(userIdentification);
 		}
 		return user;
 	}
