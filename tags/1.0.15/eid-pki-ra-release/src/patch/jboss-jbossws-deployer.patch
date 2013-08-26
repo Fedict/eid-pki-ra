@@ -1,0 +1,20 @@
+--- server/default/deployers/jbossws.deployer/META-INF/jboss-beans.orig.xml	2009-05-22 16:37:46.000000000 +0200
++++ server/default/deployers/jbossws.deployer/META-INF/jboss-beans.xml	2012-03-27 08:53:32.000000000 +0200
+@@ -12,7 +12,7 @@
+ 
+       If 'webServiceHost' is not set, JBossWS uses requesters protocol host when rewriting the <soap:address>.
+     -->
+-    <property name="webServiceHost">${jboss.bind.address}</property>
++    <property name="webServiceHost">jboss.undefined.host</property>
+     <property name="modifySOAPAddress">true</property>
+ 
+     <!--
+@@ -22,6 +22,8 @@
+       <property name="webServiceSecurePort">8443</property>
+       <property name="webServicePort">8080</property>
+     -->
++    <property name="webServiceSecurePort">443</property>
++    <property name="webServicePort">80</property>
+   </bean>
+ 
+   <!-- The registry for web service endpoints -->

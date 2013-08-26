@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:form id="contractsListForm">
+			<rich:panel id="panel">
+				<f:facet name="header">
+					<h:outputText value="#{messages['xkmslog.title']}" />
+				</f:facet>
+
+				<s:decorate id="contractListDecorator" template="/layout/edit.xhtml">
+					<rich:dataTable id="contractList" var="xkmsLogEntry"
+						value="#{xkmsLogEntries}" rendered="#{not empty xkmsLogEntries}"
+						width="75%">
+						<rich:column sortBy="#{xkmsLogEntry.creationDate}"
+							filterBy="#{xkmsLogEntry.creationDate}" filterEvent="onkeyup" sortOrder="DESCENDING">
+							<f:facet name="header">
+								<h:outputText value="#{messages['xmkslog.creationDate']}" />
+							</f:facet>
+							<h:outputText value="#{xkmsLogEntry.creationDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="Europe/Brussels" />
+							</h:outputText>
+						</rich:column>
+
+						<rich:column sortBy="#{xkmsLogEntry.messageType}"
+							filterBy="#{xkmsLogEntry.messageType}" filterEvent="onkeyup">
+							<f:facet name="header">
+								<h:outputText value="#{messages['xmkslog.messageType']}" />
+							</f:facet>
+							<h:outputText value="#{xkmsLogEntry.messageType}" />
+						</rich:column>
+
+						<rich:column sortBy="#{xkmsLogEntry.status}"
+							filterBy="#{xkmsLogEntry.status}" filterEvent="onkeyup">
+							<f:facet name="header">
+								<h:outputText value="#{messages['xmkslog.status']}" />
+							</f:facet>
+							<h:outputText value="#{xkmsLogEntry.status}" />
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="#{messages['xmkslog.errorMessage']}" />
+							</f:facet>
+							<h:outputText value="#{xkmsLogEntry.errorMessage}" />
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="#{messages['xmkslog.requestMessage']}" />
+							</f:facet>
+							<s:link id="downloadRequest"
+								action="#{xkmsLogListHandler.downloadRequest(xkmsLogEntry.id)}"
+								value="#{messages['link.download']}" rendered="#{not empty xkmsLogEntry.requestMessage}"/>
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="#{messages['xmkslog.responseMessage']}" />
+							</f:facet>
+							<s:link id="downloadResponse"
+								action="#{xkmsLogListHandler.downloadResponse(xkmsLogEntry.id)}"
+								value="#{messages['link.download']}" rendered="#{not empty xkmsLogEntry.responseMessage}"/>
+						</rich:column>
+
+						<f:facet name="footer">
+							<rich:datascroller maxPages="10" rows="10"
+								renderIfSinglePage="false" />
+						</f:facet>
+					</rich:dataTable>
+				</s:decorate>
+			</rich:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
