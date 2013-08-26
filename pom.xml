@@ -32,16 +32,9 @@
             <name>Hans Vandenbroeck</name>
             <email>h.vandenbroeck@aca-it.be</email>
         </developer>
-        <developer>
-            <name>Bram Baeyens</name>
-            <email>b.baeyens@aca-it.be</email>
-            <roles>
-            </roles>
-        </developer>
     </developers>
     <scm>
-        <developerConnection>scm:svn:https://eid-pki-ra.googlecode.com/svn/trunk
-		</developerConnection>
+        <developerConnection>scm:svn:https://eid-pki-ra.googlecode.com/svn/trunk</developerConnection>
     </scm>
     <modules>
         <module>eid-pki-ra-generated-contracts</module>
