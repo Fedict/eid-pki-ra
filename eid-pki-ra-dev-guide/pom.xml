@@ -3,7 +3,7 @@
 <parent>
         <artifactId>eid-pki-ra</artifactId>
         <groupId>be.fedict.eid-pki-ra</groupId>
-        <version>1.0.15-SNAPSHOT</version>
+        <version>1.0.15</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 	<name>eid-pki-ra Dev Guide</name>
