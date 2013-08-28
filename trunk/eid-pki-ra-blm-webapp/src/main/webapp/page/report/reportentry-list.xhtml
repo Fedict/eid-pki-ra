@@ -10,13 +10,13 @@
 		<h:form id="certificateRequestListForm">
 
 			<s:decorate id="reportDateDecorator"
-				template="/layout/edit.xhtml">
+				        template="/layout/edit.xhtml">
 				<ui:define name="label">#{messages['reportentry.list.selection.label']}:</ui:define>
 				<rich:calendar id="reportDate"
-					value="#{reportEntryListQuery.reportDate}" datePattern="dd/MM/yyyy">
+					           value="#{reportEntryListQuery.reportDate}" datePattern="dd/MM/yyyy">
 					<a4j:support event="onchanged" ignoreDupResponses="true"
-						action="#{reportEntryListQuery.reportDateChanged()}"
-						reRender="reportDateDecorator,reportEntryListTable" />
+						         action="#{reportEntryListQuery.reportDateChanged()}"
+						         reRender="reportDateDecorator,reportEntryListTable" />
 				</rich:calendar>
 			</s:decorate>
 

@@ -18,8 +18,10 @@
 
 package be.fedict.eid.pkira.blm.model.xkmslog;
 
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.framework.EntityHome;
 
 import be.fedict.eid.pkira.common.download.Document;
@@ -30,6 +32,7 @@ import be.fedict.eid.pkira.common.download.DownloadManager;
  *
  */
 @Name(XKMSLogEntryHome.NAME)
+@Scope(ScopeType.CONVERSATION)
 public class XKMSLogEntryHome extends EntityHome<XKMSLogEntry> {
 
 	private static final long serialVersionUID = 4867309070918612476L;
@@ -42,7 +45,7 @@ public class XKMSLogEntryHome extends EntityHome<XKMSLogEntry> {
 	public void downloadRequest(){
 		XKMSLogEntry instance = getInstance();
 		downloadManager.download(new Document(
-				"contract-" + instance.getId() + ".xml", 
+				"xkms-request-" + instance.getId() + ".xml",
 				"text/xml", 
 				instance.getRequestMessage().getBytes()));
 	}
@@ -50,7 +53,7 @@ public class XKMSLogEntryHome extends EntityHome<XKMSLogEntry> {
 	public void downloadResponse(){
 		XKMSLogEntry instance = getInstance();
 		downloadManager.download(new Document(
-				"contract-" + instance.getId() + ".xml", 
+				"xkms-response-" + instance.getId() + ".xml",
 				"text/xml", 
 				instance.getResponseMessage().getBytes()));
 	}
