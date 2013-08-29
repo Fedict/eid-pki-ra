@@ -1,0 +1,20 @@
+options{  STATIC = false;  JDK_VERSION = "1.6";}
+
+PARSER_BEGIN(DistinguishedNameParser)
+package be.fedict.eid.pkira.dnfilter;
+
+import java.util.ArrayList;import java.util.List;import java.util.SortedMap;import java.util.TreeMap;
+public class DistinguishedNameParser {}
+
+PARSER_END(DistinguishedNameParser)
+
+<DEFAULT> TOKEN: {	  < #LETTER		: ["a"-"z","A"-"Z"] >	| < #DIGIT		: ["0"-"9"] >	| < #SYMBOL		: "-" | "_" | "." | "@" | "/" | "+" | ":" | "&" | "?" | "#" | "<" | ">" | ";" | "\"" | "'" >	| < #COMMA		: "," >	| < #BACKSLASH	: "\\" >	| < #EQUALS		: "=" >	| < #ASTERISK 	: "*" >	| < #SPACE		: " " >	| < #LPAREN		: "(" >	| < #RPAREN		: ")" >	| < #PIPE		: "|" >}<EXPR> TOKEN: {	  < EXPR_KEY		: (<LETTER>)+ >	| < EXPR_WC_KEY		: <ASTERISK> <EXPR_KEY> >  	| < EXPR_EQUALITY	: <EQUALS> >			  : EXPRVALUE	| < EXPR_SEPARATOR 	: <COMMA> >}<EXPRVALUE> TOKEN: {	  < EXPR_WILDCARD	: <ASTERISK> >		| < EXPR_VALUE		: (<ASTERISK>)? ( ( <LETTER> | <DIGIT> | <SYMBOL> | <SPACE> ) | ( <BACKSLASH> ( <BACKSLASH> | <COMMA> | <ASTERISK> | <LPAREN> | <RPAREN> | <PIPE> | <EQUALS> ) ) )+ >	| < LPAREN_EXPR     : <LPAREN> >	| < RPAREN_EXPR     : <RPAREN> >	| < PIPE_EXPR		: <PIPE> >}<DN> TOKEN: {	  < DN_KEY			: (<LETTER>)+ >	| < DN_EQUALITY		: <EQUALS> >			: DNVALUE	| < DN_SEPARATOR 	: <COMMA> >}<DNVALUE>	TOKEN: {	  < DN_VALUE		: ( ( <LETTER> | <DIGIT> | <SYMBOL> | <ASTERISK> | <SPACE> | <LPAREN> | <RPAREN> | <PIPE> ) | ( <BACKSLASH> ( <BACKSLASH> | <COMMA> | <EQUALS> ) ) )+ > : DN}
+
+<EXPR> SKIP: {
+  <WS1: <SPACE> >
+}<DN> SKIP: {  <WS2: <SPACE> >}private List<String> expressionValues():{  List<String> result = new ArrayList<String>();  String value;}{  (    <LPAREN_EXPR>    value=expressionValue()  { result.add(value); }    ( <PIPE_EXPR> value=expressionValue()  { result.add(value); } )*    <RPAREN_EXPR>  |    value=expressionValue()  { result.add(value); }  )    {     return result;  } }private String expressionValue():{  Token value;}{  value = <EXPR_VALUE> { return value.image; }  |   value = <EXPR_WILDCARD> { return value.image; }}private void dnExpressionPart(DistinguishedNameExpression expression):{  Token key, singleValue;  List<String> multiValue;}{ (    (key=<EXPR_KEY>) <EXPR_EQUALITY> (multiValue=expressionValues())    {  	  expression.addElement(key.image.toLowerCase().trim(), multiValue);    }    |     (key=<EXPR_WC_KEY>) <EXPR_EQUALITY> (singleValue=<EXPR_WILDCARD>)    {      expression.addElement(key.image.toLowerCase().trim(), singleValue.image.trim());    }  )  {    token_source.SwitchTo(EXPR);  }}
+private void dnPart(DistinguishedName result):{
+  Token key, value;}
+{
+   (key=<DN_KEY>) <DN_EQUALITY> (value=<DN_VALUE>)  
+  {    String n = key.image.toLowerCase();    String v = value.image;    result.addElement(n, v);  }}DistinguishedName distinguishedName():{  DistinguishedName result = new DistinguishedName();}{  {    token_source.SwitchTo(DN);  }    dnPart(result) ( <DN_SEPARATOR> dnPart(result) )* <EOF>    {        return result;  }}DistinguishedNameExpression distinguishedNameExpression():{  DistinguishedNameExpression result = new DistinguishedNameExpression();}{  {    token_source.SwitchTo(EXPR);  }    dnExpressionPart(result) ( <EXPR_SEPARATOR> dnExpressionPart(result) )* <EOF>    {        return result;  }}

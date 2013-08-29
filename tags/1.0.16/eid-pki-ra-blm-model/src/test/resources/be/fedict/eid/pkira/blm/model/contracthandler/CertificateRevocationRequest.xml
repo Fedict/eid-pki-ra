@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:CertificateRevocationRequest xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+	xmlns:tns="urn:be:fedict:eid:pkira:contracts" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<tns:RequestId>REQUEST-123</tns:RequestId>
+	<tns:Description>Sample</tns:Description>
+	<tns:Operator>
+		<tns:Name>Pietje Puk</tns:Name>
+		<tns:Function>Administrator</tns:Function>
+		<tns:Email>pietje.puk@mail.com</tns:Email>
+		<tns:Phone>12346789</tns:Phone>
+	</tns:Operator>
+	<tns:LegalNotice>LegalNotice</tns:LegalNotice>
+	<tns:DistinguishedName>testDN</tns:DistinguishedName>
+	<tns:StartDate>2010-01-01</tns:StartDate>
+	<tns:EndDate>2011-12-31</tns:EndDate>
+	<tns:Certificate>CERTIFICATE_DATA</tns:Certificate>
+</tns:CertificateRevocationRequest>

@@ -1,0 +1,88 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:form id="contractsListForm">
+            <s:decorate id="reportDateDecorator"
+                        template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages['xmkslog.creationDate']}:</ui:define>
+                <rich:calendar id="reportDate"
+                               value="#{xkmsLogEntryQuery.reportDate}" datePattern="dd/MM/yyyy">
+                    <a4j:support event="onchanged" ignoreDupResponses="true"
+                                 action="#{xkmsLogEntryQuery.reportDateChanged()}"
+                                 reRender="reportDateDecorator,xmksLogTable" />
+                </rich:calendar>
+            </s:decorate>
+
+			<rich:panel id="panel">
+				<f:facet name="header">#{messages['xkmslog.title']}</f:facet>
+
+                <rich:dataTable id="xmksLogTable" var="xkmsLogEntry" value="#{xkmsLogEntryQuery.resultList}"
+                    width="75%">
+                    <rich:column sortBy="#{xkmsLogEntry.creationDate}"
+                        filterBy="#{xkmsLogEntry.creationDate}" filterEvent="onkeyup" sortOrder="DESCENDING">
+                        <f:facet name="header">
+                            <h:outputText value="#{messages['xmkslog.creationDate']}" />
+                        </f:facet>
+                        <h:outputText value="#{xkmsLogEntry.creationDate}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="Europe/Brussels" />
+                        </h:outputText>
+                    </rich:column>
+
+                    <rich:column sortBy="#{xkmsLogEntry.messageType}"
+                        filterBy="#{xkmsLogEntry.messageType}" filterEvent="onkeyup">
+                        <f:facet name="header">
+                            <h:outputText value="#{messages['xmkslog.messageType']}" />
+                        </f:facet>
+                        <h:outputText value="#{xkmsLogEntry.messageType}" />
+                    </rich:column>
+
+                    <rich:column sortBy="#{xkmsLogEntry.status}"
+                        filterBy="#{xkmsLogEntry.status}" filterEvent="onkeyup">
+                        <f:facet name="header">
+                            <h:outputText value="#{messages['xmkslog.status']}" />
+                        </f:facet>
+                        <h:outputText value="#{xkmsLogEntry.status}" />
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{messages['xmkslog.errorMessage']}" />
+                        </f:facet>
+                        <h:outputText value="#{xkmsLogEntry.errorMessage}" />
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{messages['xmkslog.requestMessage']}" />
+                        </f:facet>
+                        <s:link id="downloadRequest"
+                                view="/page/xkmslog/xkms-log-download-request.xhtml"
+                                value="#{messages['link.download']}"
+                                rendered="#{not empty xkmsLogEntry.requestMessage}">
+                            <f:param name="id" value="#{xkmsLogEntry.id}" />
+                        </s:link>
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{messages['xmkslog.responseMessage']}" />
+                        </f:facet>
+                        <s:link id="downloadResponse"
+                                view="/page/xkmslog/xkms-log-download-response.xhtml"
+                                value="#{messages['link.download']}"
+                                rendered="#{not empty xkmsLogEntry.responseMessage}">
+                            <f:param name="id" value="#{xkmsLogEntry.id}" />
+                        </s:link>
+                    </rich:column>
+
+                </rich:dataTable>
+			</rich:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
