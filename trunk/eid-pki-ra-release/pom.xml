@@ -71,6 +71,7 @@
 			<groupId>org.jboss.jbossas</groupId>
 			<artifactId>jboss-as-distribution</artifactId>
 			<type>zip</type>
+			<classifier>jdk6</classifier>
 		</dependency>
 	</dependencies>
 	<build>
