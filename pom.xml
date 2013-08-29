@@ -535,6 +535,7 @@
                 <groupId>org.jboss.jbossas</groupId>
                 <artifactId>jboss-as-distribution</artifactId>
                 <version>${jboss.version}</version>
+		<classifier>jdk6</classifier>
                 <type>zip</type>
             </dependency>
             <dependency>
