@@ -64,6 +64,7 @@ public class XmlDocumentSigner {
 			// Create a DOMSignContext and specify the RSA PrivateKey and
 			// location of the resulting XMLSignature's parent element.
 			DOMSignContext domSigningContext = new DOMSignContext(privateKey, elementToAppendTo);
+            domSigningContext.setIdAttributeNS(elementToSign, null, "Id");
 			domSigningContext.putNamespacePrefix(javax.xml.crypto.dsig.XMLSignature.XMLNS, "ds");
 
 			// Create the XMLSignature, but don't sign it yet.

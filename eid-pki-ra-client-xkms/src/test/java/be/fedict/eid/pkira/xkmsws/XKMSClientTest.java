@@ -59,6 +59,7 @@ import be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProvider;
 import be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProviderTest;
 import be.fedict.eid.pkira.xkmsws.signing.XkmsXmlDocumentSigner;
 import be.fedict.eid.pkira.xkmsws.util.RequestMessageCreator;
+
 public class XKMSClientTest {
 
 	public static final String URL = "http://localhost:33333/xkms";

@@ -98,10 +98,8 @@ public class XMLMarshallingUtil {
 	/**
 	 * Extracts the first element from the list matching the type.
 	 * 
-	 * @param <T>
-	 *            expected type.
-	 * @param clazz
-	 *            expected type.
+	 * @param name
+	 *            name of the element to get.
 	 * @param list
 	 *            list with either this type of a JAXBElement with this type.
 	 * @return the first matching element.
