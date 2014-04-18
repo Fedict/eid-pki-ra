@@ -150,6 +150,7 @@ public class PKIRAClientTest {
 			}
 		};
 		DOMValidateContext valContext = new DOMValidateContext(keySelector, nl.item(0));
+        valContext.setIdAttributeNS(doc.getDocumentElement(), null, "Id");
 		
 		// Create signature factory and signature
 		XMLSignatureFactory factory = XMLSignatureFactory.getInstance("DOM");

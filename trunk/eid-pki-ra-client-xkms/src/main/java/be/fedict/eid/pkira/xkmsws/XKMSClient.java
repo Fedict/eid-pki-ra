@@ -136,10 +136,6 @@ public class XKMSClient {
 
 	/**
 	 * Executes a bulk register requests for the specified request objects.
-	 * 
-	 * @param requestObjects
-	 *            request objects.
-	 * @return the result objects.
 	 */
 	private <OutputType> OutputType executeRequest(XKMSMessageType messageType, RequestType requestObject, RegisterResultParser<OutputType> parser) throws XKMSClientException {
 		String requestMessage = null;
