@@ -38,6 +38,7 @@ import org.jboss.seam.log.Log;
 
 import be.fedict.eid.pkira.common.security.EIdUserCredentials;
 import be.fedict.eid.pkira.common.util.FilterHelper;
+import be.fedict.eid.pkira.common.util.StringShortener;
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 import be.fedict.eid.pkira.portal.certificatedomain.CertificateDomainWSHome;
 import be.fedict.eid.pkira.portal.signing.AbstractDssSigningHandler;
@@ -219,5 +220,13 @@ public class CertificateHandlerBean implements CertificateHandler {
 	public void setFilterHelper(FilterHelper filterHelper) {
 		this.filterHelper = filterHelper;
 	}
+
+    public String getCertificateDomainExpressionShortened() {
+        return StringShortener.shorten(getCertificateDomainExpression(), 120);
+    }
+
+    public String getCertificateDomainExpression() {
+        return getCertificateDomainWSHome().getInstance().getDnExpression();
+    }
 
 }

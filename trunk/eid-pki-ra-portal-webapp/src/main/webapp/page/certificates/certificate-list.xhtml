@@ -36,7 +36,7 @@
 			
 			<s:decorate id="distinguishedNameDecorator" template="/layout/edit.xhtml">
 				<ui:define name="label">#{messages['certificatedomain.dnExpression']}:</ui:define>
-				<h:outputText  id="certificateDomainName" value="#{certificateHandler.certificateDomainWSHome.instance.dnExpression}" />
+				<h:outputText  id="certificateDomainName" value="#{certificateHandler.certificateDomainExpressionShortened}" title="#{certificateHandler.certificateDomainExpression}" />
 			</s:decorate>
 			
 			<s:decorate id="cerListDecorator" template="/layout/edit.xhtml">

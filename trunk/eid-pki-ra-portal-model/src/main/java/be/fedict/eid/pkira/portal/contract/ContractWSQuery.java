@@ -25,6 +25,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.common.security.EIdUserCredentials;
+import be.fedict.eid.pkira.common.util.StringShortener;
 import be.fedict.eid.pkira.generated.privatews.ContractWS;
 import be.fedict.eid.pkira.portal.certificatedomain.CertificateDomainWSHome;
 import be.fedict.eid.pkira.portal.framework.DataTableWSQuery;
@@ -78,5 +79,13 @@ public class ContractWSQuery extends DataTableWSQuery {
 		}
 		return certificateDomainWSHome;
 	}
+
+    public String getCertificateDomainExpressionShortened() {
+        return StringShortener.shorten(getCertificateDomainExpression(), 120);
+    }
+
+    public String getCertificateDomainExpression() {
+        return getCertificateDomainWSHome().getInstance().getDnExpression();
+    }
 
 }

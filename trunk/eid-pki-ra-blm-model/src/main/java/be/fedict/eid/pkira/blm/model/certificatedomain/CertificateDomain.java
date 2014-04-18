@@ -23,17 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.validator.NotEmpty;
@@ -45,6 +35,7 @@ import be.fedict.eid.pkira.blm.model.certificatedomain.validation.UniqueCertific
 import be.fedict.eid.pkira.blm.model.certificatedomain.validation.ValidCertificateDomainDnExpression;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
+import be.fedict.eid.pkira.common.util.StringShortener;
 
 /**
  * @author Bram Baeyens
@@ -113,6 +104,10 @@ public class CertificateDomain implements Serializable {
 
 	public String getDnExpression() {
 		return dnExpression;
+	}
+
+	public String getDnExpressionShortened() {
+		return StringShortener.shorten(dnExpression, 120);
 	}
 
 	public void setDnExpression(String dnExpression) {

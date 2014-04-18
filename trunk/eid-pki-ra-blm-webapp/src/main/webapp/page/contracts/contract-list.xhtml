@@ -21,7 +21,7 @@
 						value="#{contractListHandler.certificateDomainId}">
 						<s:selectItems value="#{certificateDomainQuery.resultList}"
 							var="certificateDomain"
-							label="#{certificateDomain.name} (#{certificateDomain.dnExpression})"
+							label="#{certificateDomain.name} (#{certificateDomain.dnExpressionShortened})"
 							itemValue="#{certificateDomain.id}"
 							noSelectionLabel="#{messages['general.noselectionlabel']}" />
 						<a:support event="onchange"
