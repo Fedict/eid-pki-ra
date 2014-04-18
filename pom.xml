@@ -579,9 +579,6 @@
     <profiles>
         <profile>
             <id>development</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <properties>
                 <!-- development mode (disable in production) -->
                 <seam.debug>true</seam.debug>
@@ -600,6 +597,9 @@
         </profile>
         <profile>
             <id>test</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <properties>
                 <!-- test mode (disable in production) -->
                 <seam.debug>true</seam.debug>
@@ -636,9 +636,6 @@
         </profile>
         <profile>
             <id>hsql</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <properties>
                 <!-- persistence.xml configuration -->
                 <hibernate.dialect>org.hibernate.dialect.HSQLDialect</hibernate.dialect>
@@ -650,6 +647,9 @@
         </profile>
         <profile>
             <id>oracle</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <properties>
                 <!-- persistence.xml configuration -->
                 <hibernate.dialect>org.hibernate.dialect.Oracle10gDialect</hibernate.dialect>
