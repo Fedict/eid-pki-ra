@@ -161,7 +161,7 @@
 
 	<simpleType name="pemEncodedType">
 		<restriction base="string">
-			<maxLength value="2048" />
+			<maxLength value="65536" />
 		</restriction>
 	</simpleType>
 
