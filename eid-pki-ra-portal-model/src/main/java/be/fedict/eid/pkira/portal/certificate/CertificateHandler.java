@@ -14,7 +14,8 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
- */.fedict.eid.pkira.portal.certificate;
+ */
+package be.fedict.eid.pkira.portal.certificate;
 
 import java.io.Serializable;
 import java.util.List;
