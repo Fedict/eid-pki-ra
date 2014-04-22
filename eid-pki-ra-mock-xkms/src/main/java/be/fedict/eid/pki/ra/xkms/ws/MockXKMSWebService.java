@@ -1,6 +1,6 @@
 /*
  * eID PKI RA Project.
- * Copyright (C) 2010-2012 FedICT.
+ * Copyright (C) 2010-2014 FedICT.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -46,7 +46,6 @@ import org.xkms.schema.xkms_2001_01_20.RegisterResult.Answer;
 import org.xkms.schema.xkms_2001_01_20.ResultCode;
 
 import be.fedict.eid.pkira.crypto.csr.CSRParserImpl;
-
 import com.ubizen.xkms.kitoshi.AttributeCertificate;
 import com.ubizen.xkms.kitoshi.ValidityIntervalType;
 

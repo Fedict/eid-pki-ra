@@ -1,35 +1,21 @@
-/*	  
+/*
  * eID PKI RA Project.
- * Copyright (C) 2010-2012 FedICT.
- * 
+ * Copyright (C) 2010-2014 FedICT.
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
  * 3.0 as published by the Free Software Foundation.
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
 package be.fedict.eid.pkira.blm.model.contracthandler;
-
-import static be.fedict.eid.pkira.blm.model.contracthandler.util.ResponseTypeMatcher.responseType;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyMap;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isA;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
 
 import java.math.BigInteger;
 import java.util.Collections;
@@ -72,6 +58,17 @@ import be.fedict.eid.pkira.generated.contracts.CertificateSigningRequestType;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningResponseType;
 import be.fedict.eid.pkira.generated.contracts.CertificateTypeType;
 import be.fedict.eid.pkira.generated.contracts.ResultType;
+
+import static be.fedict.eid.pkira.blm.model.contracthandler.util.ResponseTypeMatcher.responseType;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyMap;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 
 /**
  * Test for the Contract Parser.

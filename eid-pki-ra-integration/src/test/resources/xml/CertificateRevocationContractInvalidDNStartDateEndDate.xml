@@ -1,4 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?><ns2:CertificateRevocationRequest xmlns:ns2="urn:be:fedict:eid:pkira:contracts" xmlns="http://www.w3.org/2000/09/xmldsig#" Id="test"><ns2:RequestId>d8b6a3c9-6961-4113-a14a-e2ac00349068</ns2:RequestId><ns2:Description>Description</ns2:Description><ns2:Operator><ns2:Name>Name</ns2:Name><ns2:Function>Function</ns2:Function><ns2:Phone>02123456</ns2:Phone></ns2:Operator><ns2:LegalNotice>LegalNotice</ns2:LegalNotice><ns2:DistinguishedName>DN</ns2:DistinguishedName><ns2:ValidityStart>2010-12-18T00:00:00.000Z</ns2:ValidityStart><ns2:ValidityEnd>2010-12-18T23:59:59.000Z</ns2:ValidityEnd><ns2:Certificate>-----BEGIN CERTIFICATE-----
+<?xml version="1.0" encoding="UTF-8"?><!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+
+<ns2:CertificateRevocationRequest xmlns:ns2="urn:be:fedict:eid:pkira:contracts" xmlns="http://www.w3.org/2000/09/xmldsig#" Id="test"><ns2:RequestId>d8b6a3c9-6961-4113-a14a-e2ac00349068</ns2:RequestId><ns2:Description>Description</ns2:Description><ns2:Operator><ns2:Name>Name</ns2:Name><ns2:Function>Function</ns2:Function><ns2:Phone>02123456</ns2:Phone></ns2:Operator><ns2:LegalNotice>LegalNotice</ns2:LegalNotice><ns2:DistinguishedName>DN</ns2:DistinguishedName><ns2:ValidityStart>2010-12-18T00:00:00.000Z</ns2:ValidityStart><ns2:ValidityEnd>2010-12-18T23:59:59.000Z</ns2:ValidityEnd><ns2:Certificate>-----BEGIN CERTIFICATE-----
 MIIDITCCAoqgAwIBAgIQL9+89q6RUm0PmqPfQDQ+mjANBgkqhkiG9w0BAQUFADBMMQswCQYDVQQGEwJaQTElMCMGA1UEChMcVGhhd3RlIENvbnN1bHRpbmcgKFB0eSkgTHRkLjEWMBQGA1UEAxMNVGhhd3RlIFNHQyBDQTAeFw0wOTEyMTgwMDAwMDBaFw0xMTEyMTgyMzU5NTlaMGgxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHFA1Nb3VudGFpbiBWaWV3MRMwEQYDVQQKFApHb29nbGUgSW5jMRcwFQYDVQQDFA53d3cuZ29vZ2xlLmNvbTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA6PmGD5D6htffvXImttdEAoN4c9kCKO+IRTn7EOh8rqk41XXGOOsKFQebg+jNgtXj9xVoRaELGYW84u+E593y17iYwqG7tcFR39SDAqc9BkJb4SLD3muFXxzW2k6L05vuuWciKh0R73mkszeK9P4Y/bz5RiNQl/Os/CRGK1w7t0UCAwEAAaOB5zCB5DAMBgNVHRMBAf8EAjAAMDYGA1UdHwQvMC0wK6ApoCeGJWh0dHA6Ly9jcmwudGhhd3RlLmNvbS9UaGF3dGVTR0NDQS5jcmwwKAYDVR0lBCEwHwYIKwYBBQUHAwEGCCsGAQUFBwMCBglghkgBhvhCBAEwcgYIKwYBBQUHAQEEZjBkMCIGCCsGAQUFBzABhhZodHRwOi8vb2NzcC50aGF3dGUuY29tMD4GCCsGAQUFBzAChjJodHRwOi8vd3d3LnRoYXd0ZS5jb20vcmVwb3NpdG9yeS9UaGF3dGVfU0dDX0NBLmNydDANBgkqhkiG9w0BAQUFAAOBgQCfQ89bxFApsb/isJr/aiEdLRLDLE5a+RLizrmCUi3nHX4adpaQedEkUjh5u2ONgJd8IyAPkU0Wueru9G2Jysa9zCRo1kNbzipYvzwY4OA8Ys+WAi0oR1A04Se6z5nRUP8pJcA2NhUzUnC+MY+f6H/nEQyNv4SgQhqAibAxWEEHXw==
 -----END CERTIFICATE-----</ns2:Certificate><Signature Id="xmldsig-3b6084d4-fbd9-464d-a0d2-4eab5efd0a72" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>K1Pw5riT2EyCOPqjHxupDjEVxjo=</DigestValue></Reference><Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xmldsig-3b6084d4-fbd9-464d-a0d2-4eab5efd0a72-xades"><Transforms><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>2MQfPykEoxE9ZLI36tSB/HPZF50=</DigestValue></Reference></SignedInfo><SignatureValue Id="xmldsig-3b6084d4-fbd9-464d-a0d2-4eab5efd0a72-signature-value">VFiB7OLUjvYgKDhfDyk5Fy7e+b0Eo612exVXM03szePZAAPaPQW2mUG1vDqD/LpGBJDV/BfihkfW
 stLqNsdXStxsHk3LcfZ0B/l3xBfIshutN8s2JLxabDBRHNtIJdz17AZQOvw6cZnTQZAFV8XTnTsK

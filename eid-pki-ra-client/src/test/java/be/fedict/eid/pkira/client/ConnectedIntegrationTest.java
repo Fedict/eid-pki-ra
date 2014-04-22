@@ -1,17 +1,27 @@
+/*
+ * eID PKI RA Project.
+ * Copyright (C) 2010-2014 FedICT.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version
+ * 3.0 as published by the Free Software Foundation.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, see
+ * http://www.gnu.org/licenses/.
+ */
+
 package be.fedict.eid.pkira.client;
 
-import static be.fedict.eid.pkira.client.TestConstants.CERTIFICATE;
-import static be.fedict.eid.pkira.client.TestConstants.CERTIFICATE_TYPE;
-import static be.fedict.eid.pkira.client.TestConstants.CSR;
-import static be.fedict.eid.pkira.client.TestConstants.DESCRIPTION;
-import static be.fedict.eid.pkira.client.TestConstants.LEGAL_NOTICE;
-import static be.fedict.eid.pkira.client.TestConstants.OPERATOR_FUNCTION;
-import static be.fedict.eid.pkira.client.TestConstants.OPERATOR_NAME;
-import static be.fedict.eid.pkira.client.TestConstants.OPERATOR_PHONE;
-import static be.fedict.eid.pkira.client.TestConstants.REQUEST_ID;
-import static be.fedict.eid.pkira.client.TestConstants.VALIDITY_PERIOD;
 import be.fedict.eid.pkira.generated.contracts.CertificateRevocationResponseType;
 import be.fedict.eid.pkira.generated.contracts.CertificateSigningResponseType;
+
+import static be.fedict.eid.pkira.client.TestConstants.*;
 
 public class ConnectedIntegrationTest {
 

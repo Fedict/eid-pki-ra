@@ -1,30 +1,27 @@
 /*
  * eID PKI RA Project.
- * Copyright (C) 2010-2012 FedICT.
- * 
+ * Copyright (C) 2010-2014 FedICT.
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
  * 3.0 as published by the Free Software Foundation.
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
 package be.fedict.eid.pkira.dnfilter;
 
-import static be.fedict.eid.pkira.dnfilter.Expressions.INVALID_DNS;
-import static be.fedict.eid.pkira.dnfilter.Expressions.INVALID_EXPRESSIONS;
-import static be.fedict.eid.pkira.dnfilter.Expressions.NORMALIZED_EXPRESSIONS;
-import static be.fedict.eid.pkira.dnfilter.Expressions.VALID_EXPRESSIONS;
-import static be.fedict.eid.pkira.dnfilter.Expressions.VALID__SIZES;
+import org.testng.annotations.Test;
+
+import static be.fedict.eid.pkira.dnfilter.Expressions.*;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.fail;
-
-import org.testng.annotations.Test;
 
 /**
  * @author Jan Van den Bergh

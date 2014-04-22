@@ -7,10 +7,10 @@ Votre certificat
 <p> Cher, Ch&egrave;re ${user.name},</p>
 
 <p>
-Vous trouverez en pi&egrave;ce jointe le certificat que vous avez demand&eacute.
+Vous trouverez en pi&egrave;ce jointe le certificat que vous avez demand&eacute;.
 </p>
 
-<p>DÈtails du certificat:
+<p>D&eacute;tails du certificat:
 <ul>
 <li><b>Type de certificat</b>: ${certificate.certificateType}<br/></li>
 <li><b>Objet</b>: ${certificate.distinguishedName}<br/></li>

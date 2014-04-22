@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<contract:CertificateRevocationRequest xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
-	xmlns:contract="urn:be:fedict:eid:pkira:contracts" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="urn:be:fedict:eid:pkira:contracts ../../../main/resources/xsd/eid-pki-ra.xsd ">
+<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+
+<contract:CertificateRevocationRequest
+        xmlns:contract="urn:be:fedict:eid:pkira:contracts" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="urn:be:fedict:eid:pkira:contracts ../../../main/resources/xsd/eid-pki-ra.xsd ">
 	<contract:RequestId>86e3ba17-661d-4504-87d6-d2d28a76d19c</contract:RequestId>
 	<contract:Description>Test</contract:Description>
 	<contract:Operator>

@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:contract="urn:be:fedict:eid:pkira:contracts" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
 	<xsl:output method="html" omit-xml-declaration="yes" indent="no" encoding="UTF-8" doctype-public="-//W3C//DTD HTML 4.0//EN"/>
 	
@@ -67,8 +85,8 @@
 		<xsl:apply-templates select="contract:LegalNotice" />			
 		<xsl:apply-templates select="dsig:Signature" />	
 	</xsl:template>
-	
-	<xsl:template mode="body" match="/contract:CertificateRevocationRequest"  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xsl:template mode="body" match="/contract:CertificateRevocationRequest">
 		<h1>Certificate Revocation Request</h1>
 		
 		<h2>Certificate</h2>

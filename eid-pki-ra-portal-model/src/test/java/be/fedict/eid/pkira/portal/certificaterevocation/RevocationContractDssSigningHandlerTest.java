@@ -1,10 +1,22 @@
-package be.fedict.eid.pkira.portal.certificaterevocation;
+/*
+ * eID PKI RA Project.
+ * Copyright (C) 2010-2014 FedICT.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version
+ * 3.0 as published by the Free Software Foundation.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, see
+ * http://www.gnu.org/licenses/.
+ */
 
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isA;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+package be.fedict.eid.pkira.portal.certificaterevocation;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,6 +32,10 @@ import be.fedict.eid.pkira.generated.contracts.CertificateRevocationResponseType
 import be.fedict.eid.pkira.generated.contracts.ResultType;
 import be.fedict.eid.pkira.portal.signing.AbstractDssSigningHandlerTest;
 import be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient;
+
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class RevocationContractDssSigningHandlerTest extends
 		AbstractDssSigningHandlerTest<RevocationContractDssSigningHandler, CertificateRevocationResponseType> {
