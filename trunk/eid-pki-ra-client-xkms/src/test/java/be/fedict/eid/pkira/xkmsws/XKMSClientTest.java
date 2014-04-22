@@ -1,6 +1,6 @@
 /*
  * eID PKI RA Project.
- * Copyright (C) 2010-2012 FedICT.
+ * Copyright (C) 2010-2014 FedICT.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -17,11 +17,6 @@
  */
 
 package be.fedict.eid.pkira.xkmsws;
-
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isA;
-import static org.mockito.Mockito.verify;
-import static org.testng.Assert.assertNotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,6 +54,11 @@ import be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProvider;
 import be.fedict.eid.pkira.xkmsws.keyinfo.KeyStoreKeyProviderTest;
 import be.fedict.eid.pkira.xkmsws.signing.XkmsXmlDocumentSigner;
 import be.fedict.eid.pkira.xkmsws.util.RequestMessageCreator;
+
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.verify;
+import static org.testng.Assert.assertNotNull;
 
 public class XKMSClientTest {
 

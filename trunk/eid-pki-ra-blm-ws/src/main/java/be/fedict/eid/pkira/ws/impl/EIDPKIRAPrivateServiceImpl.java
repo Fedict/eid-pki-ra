@@ -1,19 +1,19 @@
-/**
- * eID PKI RA Project. 
- * Copyright (C) 2010-2012 FedICT. 
- * 
- * This is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License version 
- * 3.0 as published by the Free Software Foundation. 
- * 
- * This software is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
- * Lesser General Public License for more details. 
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this software; if not, see 
- * http://www.gnu.org/licenses/. 
+/*
+ * eID PKI RA Project.
+ * Copyright (C) 2010-2014 FedICT.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version
+ * 3.0 as published by the Free Software Foundation.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, see
+ * http://www.gnu.org/licenses/.
  */
 
 package be.fedict.eid.pkira.ws.impl;
@@ -59,41 +59,8 @@ import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationRepository;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationStatus;
 import be.fedict.eid.pkira.blm.model.usermgmt.User;
 import be.fedict.eid.pkira.blm.model.usermgmt.UserRepository;
-import be.fedict.eid.pkira.generated.privatews.ChangeLocaleRequest;
-import be.fedict.eid.pkira.generated.privatews.ChangeLocaleResponse;
-import be.fedict.eid.pkira.generated.privatews.CreateOrUpdateRegistrationRequest;
-import be.fedict.eid.pkira.generated.privatews.CreateOrUpdateRegistrationResponse;
-import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserRequest;
-import be.fedict.eid.pkira.generated.privatews.CreateRegistrationForUserResponse;
-import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType;
-import be.fedict.eid.pkira.generated.privatews.FindCertificateDomainRequest;
-import be.fedict.eid.pkira.generated.privatews.FindCertificateDomainResponse;
-import be.fedict.eid.pkira.generated.privatews.FindCertificateRequest;
-import be.fedict.eid.pkira.generated.privatews.FindCertificateResponse;
-import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryRequest;
-import be.fedict.eid.pkira.generated.privatews.FindConfigurationEntryResponse;
-import be.fedict.eid.pkira.generated.privatews.FindContractDocumentRequest;
-import be.fedict.eid.pkira.generated.privatews.FindContractDocumentResponse;
-import be.fedict.eid.pkira.generated.privatews.FindContractsRequest;
-import be.fedict.eid.pkira.generated.privatews.FindContractsResponse;
-import be.fedict.eid.pkira.generated.privatews.FindRegisteredCertificateDomainsForUserRequest;
-import be.fedict.eid.pkira.generated.privatews.FindRegisteredCertificateDomainsForUserResponse;
-import be.fedict.eid.pkira.generated.privatews.FindRegistrationByIdRequest;
-import be.fedict.eid.pkira.generated.privatews.FindRegistrationByIdResponse;
-import be.fedict.eid.pkira.generated.privatews.FindRegistrationsByUserRRNRequest;
-import be.fedict.eid.pkira.generated.privatews.FindRegistrationsByUserRRNResponse;
-import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsForUserRequest;
-import be.fedict.eid.pkira.generated.privatews.FindRemainingCertificateDomainsForUserResponse;
-import be.fedict.eid.pkira.generated.privatews.FindUserRequest;
-import be.fedict.eid.pkira.generated.privatews.FindUserResponse;
-import be.fedict.eid.pkira.generated.privatews.GetAllowedCertificateTypesRequest;
-import be.fedict.eid.pkira.generated.privatews.GetAllowedCertificateTypesResponse;
-import be.fedict.eid.pkira.generated.privatews.GetLegalNoticeRequest;
+import be.fedict.eid.pkira.generated.privatews.*;
 import be.fedict.eid.pkira.generated.privatews.GetLegalNoticeRequest.ByDN;
-import be.fedict.eid.pkira.generated.privatews.GetLegalNoticeResponse;
-import be.fedict.eid.pkira.generated.privatews.ListCertificatesRequest;
-import be.fedict.eid.pkira.generated.privatews.ListCertificatesResponse;
-import be.fedict.eid.pkira.generated.privatews.ObjectFactory;
 
 @Stateless
 @WebService(endpointInterface = "be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType")

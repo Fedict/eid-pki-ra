@@ -1,13 +1,22 @@
-package be.fedict.eid.pkira.blm.model.contracthandler.services;
+/*
+ * eID PKI RA Project.
+ * Copyright (C) 2010-2014 FedICT.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version
+ * 3.0 as published by the Free Software Foundation.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, see
+ * http://www.gnu.org/licenses/.
+ */
 
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.fail;
+package be.fedict.eid.pkira.blm.model.contracthandler.services;
 
 import java.math.BigInteger;
 import java.security.Security;
@@ -38,6 +47,12 @@ import be.fedict.eid.pkira.crypto.csr.CSRInfo;
 import be.fedict.eid.pkira.crypto.csr.CSRParser;
 import be.fedict.eid.pkira.xkmsws.XKMSClient;
 import be.fedict.eid.pkira.xkmsws.XKMSClientException;
+
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.fail;
 
 public class XKMSServiceBeanTest {
 

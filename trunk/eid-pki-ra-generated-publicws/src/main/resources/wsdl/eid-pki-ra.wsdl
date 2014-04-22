@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-	<!--  eID PKI RA Project. -->
-	<!--  Copyright (C) 2010-2012 FedICT. -->
-	<!-- -->
-	<!--  This is free software; you can redistribute it and/or modify it -->
-	<!--  under the terms of the GNU Lesser General Public License version -->
-	<!--  3.0 as published by the Free Software Foundation. -->
-	<!-- -->
-	<!--  This software is distributed in the hope that it will be useful, -->
-	<!--  but WITHOUT ANY WARRANTY; without even the implied warranty of -->
-	<!--  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU -->
-	<!--  Lesser General Public License for more details. -->
-	<!-- -->
-	<!--  You should have received a copy of the GNU Lesser General Public -->
-	<!--  License along with this software; if not, see -->
-	<!--  http://www.gnu.org/licenses/. -->
+	<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
 <wsdl:definitions xmlns:tns="urn:be:fedict:eid:pkira:publicws" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="eid-pki-ra" targetNamespace="urn:be:fedict:eid:pkira:publicws"
 	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:types="urn:be:fedict:eid:pkira:publicws:types">

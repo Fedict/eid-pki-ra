@@ -1,23 +1,21 @@
 /*
  * eID PKI RA Project.
- * Copyright (C) 2010-2012 FedICT.
- * 
+ * Copyright (C) 2010-2014 FedICT.
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
  * 3.0 as published by the Free Software Foundation.
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
 package be.fedict.eid.pkira.contracts;
-
-import static be.fedict.eid.pkira.contracts.util.JAXBUtil.getMarshaller;
-import static be.fedict.eid.pkira.contracts.util.JAXBUtil.getUnmarshaller;
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -35,6 +33,9 @@ import org.apache.commons.codec.binary.Base64;
 import org.w3c.dom.Document;
 
 import be.fedict.eid.pkira.generated.contracts.EIDPKIRAContractType;
+
+import static be.fedict.eid.pkira.contracts.util.JAXBUtil.getMarshaller;
+import static be.fedict.eid.pkira.contracts.util.JAXBUtil.getUnmarshaller;
 
 /**
  * Client library to easily manipulate the XML contract documents.
