@@ -367,6 +367,7 @@
                     <xsd:enumeration value="DSS_FINGERPRINT_ROLLOVER" />
                     <xsd:enumeration value="IDP_MAXTIMEOFFSET" />
                     <xsd:enumeration value="SP_RETURN_URL_PORTAL" />
+                    <xsd:enumeration value="CSV_EXPORT_FIELD_SEPARATOR" />
                 </xsd:restriction>
             </xsd:simpleType>
 
