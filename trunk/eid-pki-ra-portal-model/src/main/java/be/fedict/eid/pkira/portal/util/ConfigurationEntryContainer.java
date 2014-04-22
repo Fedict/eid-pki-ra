@@ -109,4 +109,8 @@ public class ConfigurationEntryContainer implements Serializable {
 	public String getSPReturnUrl() {
 		return findConfigurationEntry(ConfigurationEntryKeyWS.SP_RETURN_URL_PORTAL);
 	}
+
+    public String getCsvExportFieldSeparator() {
+        return findConfigurationEntry(ConfigurationEntryKeyWS.CSV_EXPORT_FIELD_SEPARATOR);
+    }
 }

@@ -34,9 +34,10 @@
 			<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBoxTop">
 				<s:button 	id="requestCertificateTop"
 							action="requestCertificate"
-							value="#{messages['button.csr']}"
-							/>
-			</s:decorate>
+							value="#{messages['button.csr']}"/>
+                <h:commandButton id="csvExport" action="#{certificateExportHandler.exportToCSV}"
+                                 value="#{messages['general.exportToCSV']}" />
+            </s:decorate>
 			
 			<s:decorate id="CertificateDomainDecorator" template="/layout/edit.xhtml">
            		<ui:define name="label">#{messages['certificate.domain.selection.label']}:</ui:define>
