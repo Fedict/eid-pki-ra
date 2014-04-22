@@ -68,7 +68,7 @@
         <xsl:apply-templates select="dsig:Signature" />
     </xsl:template>
 
-    <xsl:template mode="body" match="/contract:CertificateRevocationRequest">
+	<xsl:template mode="body" match="/contract:CertificateRevocationRequest" xmlns:xs="http://www.w3.org/2001/XMLSchema">
         <h1>Certificate Revocation Request</h1>
 
         <h2>Certificate</h2>
