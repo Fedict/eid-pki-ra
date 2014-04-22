@@ -54,5 +54,5 @@ public class Document implements Serializable {
 
 	public byte[] getData() {
 		return data;
-	}	
+	}
 }

@@ -31,9 +31,14 @@
 					<h:outputText value="#{messages['contracts.title']}" />
 				</f:facet>
 
+                <s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBoxTop">
+                    <h:commandButton id="csvExport" action="#{contractExportHandler.exportToCSV}"
+                                     value="#{messages['general.exportToCSV']}" />
+                </s:decorate>
+
 				<s:decorate id="certificateDomainDecorator" template="/layout/edit.xhtml">
 	           		<ui:define name="label">#{messages['certificate.domain.selection.label']}:</ui:define>
-					<h:selectOneMenu id="selectRegisteredCertificateDomain" value="#{contractWSQuery.certificateDomainId}" required="true">
+					<h:selectOneMenu id="selectRegisteredCertificateDomain" value="#{contractWSQuery.certificateDomainId}">
 						<s:selectItems value="#{certificateDomainWSQuery.findRegisteredCertificateDomains}"
 								var="certificateDomain" label="#{certificateDomain.name}" itemValue="#{certificateDomain.id}"
 								noSelectionLabel="#{messages['general.noselectionlabel']}" />

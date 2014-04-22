@@ -1,4 +1,3 @@
-
 /*
  * eID PKI RA Project.
  * Copyright (C) 2010-2014 FedICT.
@@ -18,90 +17,50 @@
  */
 package be.fedict.eid.pkira.portal.certificate;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
-import be.fedict.eid.pkira.common.download.Document;
-import be.fedict.eid.pkira.common.download.DownloadManager;
-import be.fedict.eid.pkira.portal.util.ConfigurationEntryContainer;
+import be.fedict.eid.pkira.portal.util.AbstractCsvCreatorBean;
 
 @Name(CertificateExportHandler.NAME)
 @Scope(ScopeType.CONVERSATION)
-public class CertificateExportHandlerBean implements CertificateExportHandler {
-
-    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
-    private static final String LINE_SEPARATOR = "\r\n";
+public class CertificateExportHandlerBean extends AbstractCsvCreatorBean implements CertificateExportHandler {
 
     @In(value = CertificateHandler.NAME, create = true)
     private CertificateHandler certificateHandler;
 
-    @In(value = ConfigurationEntryContainer.NAME, create=true)
-    private ConfigurationEntryContainer configurationEntryContainer;
-
-    @In(value= DownloadManager.NAME, create = true)
-    private DownloadManager downloadManager;
-
-    @In private Map<String, String> messages;
-
     @Override
     public void exportToCSV() {
         List<Certificate> certificates = certificateHandler.findCertificateList();
-
-        StringBuilder csv = new StringBuilder();
-        String fieldSeparator = configurationEntryContainer.getCsvExportFieldSeparator();
+        CsvBuilder csv = new CsvBuilder();
 
         // add column headers
         csv
-            .append(messages.get("certificate.serialNumber")).append(fieldSeparator)
-            .append(messages.get("certificate.validityStart")).append(fieldSeparator)
-            .append(messages.get("certificate.validityEnd")).append(fieldSeparator)
-            .append(messages.get("certificate.issuer")).append(fieldSeparator)
-            .append(messages.get("certificate.type")).append(fieldSeparator)
-            .append(messages.get("certificate.dn")).append(LINE_SEPARATOR);
+            .append(messages.get("certificate.serialNumber"))
+            .append(messages.get("certificate.validityStart"))
+            .append(messages.get("certificate.validityEnd"))
+            .append(messages.get("certificate.issuer"))
+            .append(messages.get("certificate.type"))
+            .append(messages.get("certificate.dn"))
+            .nextRow();
 
         // add rows
         for (Certificate certificate : certificates) {
-            appendField(csv, certificate.getSerialNumber());
-            csv.append(fieldSeparator);
-
-            appendField(csv, certificate.getValidityStart());
-            csv.append(fieldSeparator);
-
-            appendField(csv, certificate.getValidityEnd());
-            csv.append(fieldSeparator);
-
-            appendField(csv, certificate.getIssuer());
-            csv.append(fieldSeparator);
-
-            appendField(csv, messages.get(certificate.getType().getMessageKey()));
-            csv.append(fieldSeparator);
-
-            appendField(csv, certificate.getDistinguishedName());
-            csv.append(LINE_SEPARATOR);
+            csv
+                .append(certificate.getSerialNumber())
+                .append(certificate.getValidityStart())
+                .append(certificate.getValidityEnd())
+                .append(certificate.getIssuer())
+                .append(translateCertificateType(certificate.getType()))
+                .append(certificate.getDistinguishedName())
+                .nextRow();
         }
 
-        downloadManager.download(new Document("pkira-certificate-list.csv", "text/csv", csv.toString().getBytes()));
+        csv.download("pkira-certificate-list.csv", "text/csv");
     }
 
-    private void appendField(StringBuilder csv, String value) {
-        if (!StringUtils.isEmpty(value)) {
-            csv.append(StringEscapeUtils.escapeCsv(value));
-        }
-    }
-
-    private void appendField(StringBuilder csv, Date value) {
-        if (value!=null) {
-            appendField(csv, DATE_FORMAT.format(value));
-        }
-    }
 }
