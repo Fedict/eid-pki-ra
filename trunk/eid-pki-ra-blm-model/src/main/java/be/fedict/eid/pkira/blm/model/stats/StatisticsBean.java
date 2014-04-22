@@ -14,7 +14,8 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
- */e.fedict.eid.pkira.blm.model.stats;
+ */
+package be.fedict.eid.pkira.blm.model.stats;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
