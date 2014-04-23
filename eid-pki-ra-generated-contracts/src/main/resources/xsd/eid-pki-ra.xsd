@@ -129,7 +129,7 @@
 
 	<simpleType name="distinguishedNameType">
 		<restriction base="string">
-			<maxLength value="256" />
+			<maxLength value="1024" />
 		</restriction>
 	</simpleType>
 
