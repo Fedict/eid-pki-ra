@@ -17,166 +17,173 @@
   -->
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:s="http://jboss.com/products/seam/taglib"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:rich="http://richfaces.org/rich"
-	xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a="http://richfaces.org/a4j" template="/layout/template.xhtml">
 
-	<ui:define name="center">
-		<h:form id="certificatesListForm">
-		<rich:panel id="panel">
-			<f:facet name="header">
-				<h:outputText value="#{messages['certificates.title']}" rendered="#{empty certificates}"/>
-			</f:facet>
-			
-			<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBoxTop">
-				<s:button 	id="requestCertificateTop"
-							action="requestCertificate"
-							value="#{messages['button.csr']}"/>
-                <h:commandButton id="csvExport" action="#{certificateExportHandler.exportToCSV}"
-                                 value="#{messages['general.exportToCSV']}" />
+    <ui:define name="center">
+        <rich:panel id="panel">
+            <f:facet name="header">
+                <h:outputText value="#{messages['certificates.title']}" rendered="#{empty certificates}"/>
+            </f:facet>
+
+            <s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBoxTop">
+                <h:form>
+                    <s:button id="requestCertificateTop" action="requestCertificate" value="#{messages['button.csr']}"/>
+                    <h:commandButton id="csvExport" action="#{certificateExportHandler.exportToCSV}"
+                                     value="#{messages['general.exportToCSV']}" type="button"/>
+                </h:form>
             </s:decorate>
-			
-			<s:decorate id="CertificateDomainDecorator" template="/layout/edit.xhtml">
-           		<ui:define name="label">#{messages['certificate.domain.selection.label']}:</ui:define>
-				
-				<h:selectOneMenu id="selectRegisteredCertificateDomain" value="#{certificateHandler.certificateDomainWSID}" >
-						<s:selectItems 
-							value="#{certificateDomainWSQuery.findRegisteredCertificateDomains}" 
-							var="certificateDomain" 
-							label="#{certificateDomain.name}" 
-							itemValue="#{certificateDomain.id}"
-							noSelectionLabel="#{messages['general.noselectionlabel']}" />
-							<a:support event="onchange" action="#{certificateHandler.findCertificateList()}" reRender="cerList,certificateDomainName"/>
-					</h:selectOneMenu>
-           	</s:decorate>
-			
-			<s:decorate id="distinguishedNameDecorator" template="/layout/edit.xhtml">
-				<ui:define name="label">#{messages['certificatedomain.dnExpression']}:</ui:define>
-				<h:outputText  id="certificateDomainName" value="#{certificateHandler.certificateDomainExpressionShortened}" title="#{certificateHandler.certificateDomainExpression}" />
-			</s:decorate>
-			
-			<s:decorate id="cerListDecorator" template="/layout/edit.xhtml">
-			<rich:dataTable id="cerList" var="cer" value="#{certificates}" rendered="#{not empty certificates}" width="75%">
-				<rich:column sortBy="#{cer.serialNumber}" filterBy="#{cer.serialNumber}" filterEvent="onkeyup">
-					<f:facet name="header">
-						<h:outputText value="#{messages['certificate.serialNumber']}" />
-					</f:facet>
-					<h:outputText value="#{cer.serialNumber}" />
-				</rich:column>
 
-				<rich:column filterMethod="#{certificateHandler.filterByStartDate}">
-					<f:facet name="header">
-						<h:panelGroup>
-						<h:outputText value="#{messages['certificate.validityStart']}" />
-						<br/>
-                       	<rich:calendar id="startDateFrom" 
-                       		value="#{certificateHandler.startDateFrom}"
-                           	datePattern="dd/MM/yyyy"
-                           	enableManualInput="false"
-                           	showWeekDaysBar="false"
-                           	showWeeksBar="false"
-                           	inputStyle="width: 75px">
-                           	<a:support event="onchanged" ignoreDupResponses="true" reRender="cerList" />
-                       </rich:calendar>
-						-
-                       <rich:calendar id="startDateTo" 
-                       		value="#{certificateHandler.startDateTo}"
-                           	datePattern="dd/MM/yyyy"
-                           	enableManualInput="false"                         
-                           	showWeekDaysBar="false"
-                           	showWeeksBar="false"
-                           	inputStyle="width: 75px">
-                           	<a:support event="onchanged" ignoreDupResponses="true" reRender="cerList" />
-                       </rich:calendar>
-                       </h:panelGroup>
-					</f:facet>
-					<h:outputText value="#{cer.validityStart}">
-						<f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
-    				</h:outputText>
-				</rich:column>
+            <s:decorate id="CertificateDomainDecorator" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages['certificate.domain.selection.label']}:</ui:define>
 
-				<rich:column filterMethod="#{certificateHandler.filterByEndDate}">
-					<f:facet name="header">
-						<h:panelGroup>
-						<h:outputText value="#{messages['certificate.validityEnd']}" />
-						<br/>
-                       	<rich:calendar id="endDateFrom" 
-                       		value="#{certificateHandler.endDateFrom}"
-                           	datePattern="dd/MM/yyyy"
-                           	enableManualInput="false"
-                           	showWeekDaysBar="false"
-                           	showWeeksBar="false"
-                           	inputStyle="width: 75px">
-                           	<a:support event="onchanged" ignoreDupResponses="true" reRender="cerList" />
-                       </rich:calendar>
-						-
-                       <rich:calendar id="endDateTo" 
-                       		value="#{certificateHandler.endDateTo}"
-                           	datePattern="dd/MM/yyyy"
-                           	enableManualInput="false"                         
-                           	showWeekDaysBar="false"
-                           	showWeeksBar="false"
-                           	inputStyle="width: 75px">
-                           	<a:support event="onchanged" ignoreDupResponses="true" reRender="cerList" />
-                       </rich:calendar>
-                       </h:panelGroup>
-					</f:facet>
-					<h:outputText value="#{cer.validityEnd}">
-						<f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
-					</h:outputText>
-				</rich:column>
+                <h:selectOneMenu id="selectRegisteredCertificateDomain"
+                                 value="#{certificateHandler.certificateDomainWSID}">
+                    <s:selectItems
+                            value="#{certificateDomainWSQuery.findRegisteredCertificateDomains}" var="certificateDomain"
+                            label="#{certificateDomain.name}" itemValue="#{certificateDomain.id}"
+                            noSelectionLabel="#{messages['general.noselectionlabel']}"/>
+                    <a:support event="onchange" action="#{certificateHandler.findCertificateList()}"
+                               reRender="cerList,certificateDomainName"/>
+                </h:selectOneMenu>
+            </s:decorate>
 
-				<rich:column sortBy="#{cer.issuer}" filterBy="#{cer.issuer}" filterEvent="onkeyup">
-					<f:facet name="header">
-						<h:outputText value="#{messages['certificate.issuer']}" />
-					</f:facet>
-					<h:outputText value="#{cer.issuer}" />
-				</rich:column>
+            <s:decorate id="distinguishedNameDecorator" template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages['certificatedomain.dnExpression']}:</ui:define>
+                <h:outputText id="certificateDomainName"
+                              value="#{certificateHandler.certificateDomainExpressionShortened}"
+                              title="#{certificateHandler.certificateDomainExpression}"/>
+            </s:decorate>
 
-				<rich:column sortBy="#{cer.type}" filterBy="#{cer.type}" filterEvent="onkeyup">
-					<f:facet name="header">
-						<h:outputText value="#{messages['certificate.type']}" />
-					</f:facet>
-					<h:outputText value="#{cer.type}" />
-				</rich:column>
+            <s:decorate id="cerListDecorator" template="/layout/edit.xhtml">
 
-				<rich:column filterMethod="#{certificateHandler.filterByDN}">
-					<f:facet name="header">
-	     				<h:panelGroup>
-	        				<h:outputText value="#{messages['certificate.dn']}" />
-							<br />
-							<h:inputText value="#{certificateHandler.dnFilterValue}" id="dnFilterInput">
-			   					<a:support event="onkeyup" ignoreDupResponses="true" reRender="cerList" requestDelay="1000" oncomplete="var x=$('certificatesListForm:cerListDecorator:cerList:dnFilterInput');x.focus();x.selectionStart=x.selectionEnd" />
-							</h:inputText>
-		     			</h:panelGroup>
-					</f:facet>
-					<h:outputText value="#{cer.distinguishedName}" />
-				</rich:column>
+                <h:form id="certificatesListForm">
+                    <rich:dataTable id="cerList" var="cer" value="#{certificates}" rendered="#{not empty certificates}"
+                                    width="75%">
+                        <rich:column sortBy="#{cer.serialNumber}" filterBy="#{cer.serialNumber}" filterEvent="onkeyup">
+                            <f:facet name="header">
+                                <h:outputText value="#{messages['certificate.serialNumber']}"/>
+                            </f:facet>
+                            <h:outputText value="#{cer.serialNumber}"/>
+                        </rich:column>
 
-				<rich:column>
-					<s:link id="detailCertificate" view="/page/certificates/certificate-detail.xhtml" value="#{messages['link.detail']}">
-						<f:param name="certificateId" value="#{cer.id}" />
-					</s:link>
-					
-					<s:link id="revokeCertificate" value="#{messages['link.revoke']}"
-						action="#{certificateHandler.prepareRevocation(cer.id)}" />
-				</rich:column>
+                        <rich:column filterMethod="#{certificateHandler.filterByStartDate}">
+                            <f:facet name="header">
+                                <h:panelGroup>
+                                    <h:outputText value="#{messages['certificate.validityStart']}"/>
+                                    <br/>
+                                    <rich:calendar id="startDateFrom"
+                                                   value="#{certificateHandler.startDateFrom}"
+                                                   datePattern="dd/MM/yyyy"
+                                                   enableManualInput="false"
+                                                   showWeekDaysBar="false"
+                                                   showWeeksBar="false"
+                                                   inputStyle="width: 75px">
+                                        <a:support event="onchanged" ignoreDupResponses="true" reRender="cerList"/>
+                                    </rich:calendar>
+                                    -
+                                    <rich:calendar id="startDateTo"
+                                                   value="#{certificateHandler.startDateTo}"
+                                                   datePattern="dd/MM/yyyy"
+                                                   enableManualInput="false"
+                                                   showWeekDaysBar="false"
+                                                   showWeeksBar="false"
+                                                   inputStyle="width: 75px">
+                                        <a:support event="onchanged" ignoreDupResponses="true" reRender="cerList"/>
+                                    </rich:calendar>
+                                </h:panelGroup>
+                            </f:facet>
+                            <h:outputText value="#{cer.validityStart}">
+                                <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss"/>
+                            </h:outputText>
+                        </rich:column>
 
-				<f:facet name="footer">
-					<rich:datascroller maxPages="10" rows="10" renderIfSinglePage="false" />
-				</f:facet>
-			</rich:dataTable>
-			</s:decorate>
+                        <rich:column filterMethod="#{certificateHandler.filterByEndDate}">
+                            <f:facet name="header">
+                                <h:panelGroup>
+                                    <h:outputText value="#{messages['certificate.validityEnd']}"/>
+                                    <br/>
+                                    <rich:calendar id="endDateFrom"
+                                                   value="#{certificateHandler.endDateFrom}"
+                                                   datePattern="dd/MM/yyyy"
+                                                   enableManualInput="false"
+                                                   showWeekDaysBar="false"
+                                                   showWeeksBar="false"
+                                                   inputStyle="width: 75px">
+                                        <a:support event="onchanged" ignoreDupResponses="true" reRender="cerList"/>
+                                    </rich:calendar>
+                                    -
+                                    <rich:calendar id="endDateTo"
+                                                   value="#{certificateHandler.endDateTo}"
+                                                   datePattern="dd/MM/yyyy"
+                                                   enableManualInput="false"
+                                                   showWeekDaysBar="false"
+                                                   showWeeksBar="false"
+                                                   inputStyle="width: 75px">
+                                        <a:support event="onchanged" ignoreDupResponses="true" reRender="cerList"/>
+                                    </rich:calendar>
+                                </h:panelGroup>
+                            </f:facet>
+                            <h:outputText value="#{cer.validityEnd}">
+                                <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss"/>
+                            </h:outputText>
+                        </rich:column>
 
-				<s:decorate template="/layout/buttonbox.xhtml"
-					id="submitButtonBoxBottom" rendered="#{certificates.size > 0}">
-					<s:button id="requestCertificateBottom" action="requestCertificate"
-						value="#{messages['button.csr']}" />
-				</s:decorate>
-			</rich:panel>
-		</h:form>
-	</ui:define>
+                        <rich:column sortBy="#{cer.issuer}" filterBy="#{cer.issuer}" filterEvent="onkeyup">
+                            <f:facet name="header">
+                                <h:outputText value="#{messages['certificate.issuer']}"/>
+                            </f:facet>
+                            <h:outputText value="#{cer.issuer}"/>
+                        </rich:column>
+
+                        <rich:column sortBy="#{cer.type}" filterBy="#{cer.type}" filterEvent="onkeyup">
+                            <f:facet name="header">
+                                <h:outputText value="#{messages['certificate.type']}"/>
+                            </f:facet>
+                            <h:outputText value="#{cer.type}"/>
+                        </rich:column>
+
+                        <rich:column filterMethod="#{certificateHandler.filterByDN}">
+                            <f:facet name="header">
+                                <h:panelGroup>
+                                    <h:outputText value="#{messages['certificate.dn']}"/>
+                                    <br/>
+                                    <h:inputText value="#{certificateHandler.dnFilterValue}" id="dnFilterInput">
+                                        <a:support event="onkeyup" ignoreDupResponses="true" reRender="cerList"
+                                                   requestDelay="1000"
+                                                   oncomplete="var x=$('certificatesListForm:cerListDecorator:cerList:dnFilterInput');x.focus();x.selectionStart=x.selectionEnd"/>
+                                    </h:inputText>
+                                </h:panelGroup>
+                            </f:facet>
+                            <h:outputText value="#{cer.distinguishedName}"/>
+                        </rich:column>
+
+                        <rich:column>
+                            <s:link id="detailCertificate" view="/page/certificates/certificate-detail.xhtml"
+                                    value="#{messages['link.detail']}">
+                                <f:param name="certificateId" value="#{cer.id}"/>
+                            </s:link>
+
+                            <s:link id="revokeCertificate" value="#{messages['link.revoke']}"
+                                    action="#{certificateHandler.prepareRevocation(cer.id)}"/>
+                        </rich:column>
+
+                        <f:facet name="footer">
+                            <rich:datascroller maxPages="10" rows="10" renderIfSinglePage="false"/>
+                        </f:facet>
+                    </rich:dataTable>
+                </h:form>
+            </s:decorate>
+
+            <s:decorate template="/layout/buttonbox.xhtml"
+                        id="submitButtonBoxBottom" rendered="#{certificates.size > 0}">
+                <s:button id="requestCertificateBottom" action="requestCertificate"
+                          value="#{messages['button.csr']}"/>
+            </s:decorate>
+        </rich:panel>
+    </ui:define>
 </ui:composition>
