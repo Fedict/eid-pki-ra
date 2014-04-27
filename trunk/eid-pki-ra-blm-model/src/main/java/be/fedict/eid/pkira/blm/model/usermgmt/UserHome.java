@@ -48,7 +48,7 @@ public class UserHome extends ValidatingEntityHome<User> {
 
 	public static final String NAME = "be.fedict.eid.pkira.blm.userHome";
 
-    @In(required = false)
+    @In(value = EIdUserCredentials.NAME, required = false)
 	private EIdUserCredentials credentials;
 
 	@In(create = true, value = CertificateParser.NAME)

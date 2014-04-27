@@ -62,17 +62,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.richfaces.framework</groupId>
-			<artifactId>richfaces-api</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-collections</groupId>
-					<artifactId>commons-collections</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<exclusions>
@@ -101,28 +90,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
-		<dependency>
-			<groupId>be.fedict.eid-pki-ra</groupId>
-			<artifactId>eid-pki-ra-portal-model</artifactId>
-			<type>ejb</type>
-			<classifier>${environment}</classifier>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.faces</groupId>
-					<artifactId>jsf-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>javax.servlet</groupId>
-					<artifactId>servlet-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -140,39 +107,10 @@
 							<contextRoot>eid-pki-ra/portal</contextRoot>
 						</webModule>
 
-						<ejbModule>
-							<groupId>be.fedict.eid-pki-ra</groupId>
-							<artifactId>eid-pki-ra-portal-model</artifactId>
-						</ejbModule>
-
-						<ejbModule>
-							<groupId>org.jboss.seam</groupId>
-							<artifactId>jboss-seam</artifactId>
-						</ejbModule>
-
-						<jarModule>
-							<groupId>org.richfaces.framework</groupId>
-							<artifactId>richfaces-api</artifactId>
-							<bundleDir>lib</bundleDir>
-						</jarModule>
-
-						<jarModule>
-							<groupId>org.jboss.el</groupId>
-							<artifactId>jboss-el</artifactId>
-							<bundleDir>lib</bundleDir>
-						</jarModule>
-
-						<jarModule>
-							<groupId>commons-beanutils</groupId>
-							<artifactId>commons-beanutils</artifactId>
-							<bundleDir>lib</bundleDir>
-						</jarModule>
-						
-						<jarModule>
-							<groupId>javax.servlet</groupId>
-							<artifactId>servlet-api</artifactId>
-							<excluded>true</excluded>
-						</jarModule>
+                        <ejbModule>
+                            <groupId>org.jboss.seam</groupId>
+                            <artifactId>jboss-seam</artifactId>
+                        </ejbModule>
 					</modules>
 
 					<jboss>

@@ -60,19 +60,51 @@
 	</build>
 
 	<dependencies>
-		<dependency>
-			<groupId>be.fedict.eid-pki-ra</groupId>
-			<artifactId>eid-pki-ra-portal-model</artifactId>
-			<scope>provided</scope>
-			<type>ejb</type>
-			<classifier>${environment}</classifier>
-		</dependency>
+        <dependency>
+            <groupId>be.fedict.eid-pki-ra</groupId>
+            <artifactId>eid-pki-ra-common-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>be.fedict.eid-pki-ra</groupId>
+            <artifactId>eid-pki-ra-client-privatews</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>be.fedict.eid-pki-ra</groupId>
+            <artifactId>eid-pki-ra-client-publicws</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>be.fedict.eid-pki-ra</groupId>
+            <artifactId>eid-pki-ra-client-contracts</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>be.fedict.eid-pki-ra</groupId>
+            <artifactId>eid-pki-ra-util-crypto</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>be.fedict.eid-pki-ra</groupId>
+            <artifactId>eid-pki-ra-util-dnfilter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>be.fedict.eid-dss</groupId>
+            <artifactId>eid-dss-protocol-simple-client</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
 		<dependency>
 			<groupId>org.jboss.seam</groupId>
 			<artifactId>jboss-seam</artifactId>
-			<scope>provided</scope>
 			<type>ejb</type>
+            <scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -90,6 +122,50 @@
 			<groupId>org.jboss.seam</groupId>
 			<artifactId>jboss-seam-debug</artifactId>
 		</dependency>
+
+        <dependency>
+            <groupId>org.jboss.el</groupId>
+            <artifactId>jboss-el</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.el</groupId>
+                    <artifactId>el-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>el-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.faces</groupId>
+            <artifactId>jsf-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
 		
 		<dependency>
 			<groupId>com.sun.facelets</groupId>
@@ -104,22 +180,50 @@
 		<dependency>
 			<groupId>org.richfaces.framework</groupId>
 			<artifactId>richfaces-impl</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.richfaces.framework</groupId>
-					<artifactId>richfaces-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>commons-beanutils</groupId>
-					<artifactId>commons-beanutils</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
-		
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
+
+        <dependency>
+            <groupId>javax.ejb</groupId>
+            <artifactId>ejb-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.faces</groupId>
+            <artifactId>jsf-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
+            <classifier>jdk15</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging-api</artifactId>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 </project>

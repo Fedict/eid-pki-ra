@@ -38,11 +38,7 @@ import be.fedict.eid.pkira.generated.contracts.ResultType;
 @DiscriminatorColumn(name = "TYPE", discriminatorType = DiscriminatorType.STRING, length = 16)
 @NamedQueries(
 	{
-		@NamedQuery(name = AbstractContract.NQ_FIND_CONTRACTS_BY_USER_RRN, 
-				query = "SELECT contract FROM AbstractContract contract, Registration registration WHERE registration.requester.nationalRegisterNumber = :nationalRegisterNumber AND registration.status = :registrationStatus AND registration.certificateDomain = contract.certificateDomain ORDER BY contract.creationDate DESC"),
-		@NamedQuery(name = AbstractContract.NQ_FIND_CONTRACTS_BY_USER_RRN_AND_CERTIFICATE_DOMAIN_ID, 
-				query = "SELECT contract FROM AbstractContract contract, Registration registration WHERE registration.requester.nationalRegisterNumber = :nationalRegisterNumber AND registration.status = :registrationStatus AND registration.certificateDomain = contract.certificateDomain AND contract.certificateDomain.id = :certificateDomainId ORDER BY contract.creationDate DESC"),
-		@NamedQuery(name = AbstractContract.NQ_FIND_CONTRACTS_BY_CERTIFICATE_DOMAIN_ID, 
+		@NamedQuery(name = AbstractContract.NQ_FIND_CONTRACTS_BY_CERTIFICATE_DOMAIN_ID,
 				query = "SELECT contract FROM AbstractContract contract WHERE contract.certificateDomain.id = :certificateDomainId ORDER BY contract.creationDate DESC")
 	}
 )
@@ -50,10 +46,6 @@ public abstract class AbstractContract implements Serializable {
 
 	private static final long serialVersionUID = -5082287440865809644L;
 
-	public static final String NQ_FIND_CONTRACTS_BY_USER_RRN = "findContractsByUserRrn";
-
-	public static final String NQ_FIND_CONTRACTS_BY_USER_RRN_AND_CERTIFICATE_DOMAIN_ID = "findContractsByUserRrnAndCertificateDomainId";
-	
 	public static final String NQ_FIND_CONTRACTS_BY_CERTIFICATE_DOMAIN_ID = "findContractsByDomainId";
 
 	@Id

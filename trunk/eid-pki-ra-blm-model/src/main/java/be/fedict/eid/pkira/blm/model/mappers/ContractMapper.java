@@ -32,6 +32,7 @@ public interface ContractMapper {
 	
 	public static final String NAME = "be.fedict.eid.pkira.blm.contractMapper";
 
-	Collection<ContractWS> map(List<AbstractContract> contracts);
+    ContractWS map(AbstractContract contract);
 
+	Collection<ContractWS> map(List<AbstractContract> contracts);
 }

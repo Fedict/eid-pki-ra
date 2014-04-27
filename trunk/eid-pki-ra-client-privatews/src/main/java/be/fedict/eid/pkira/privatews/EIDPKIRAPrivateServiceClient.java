@@ -129,13 +129,31 @@ public class EIDPKIRAPrivateServiceClient {
 		return response.getConfigurationEntry();
 	}
 	
-	public List<ContractWS> findContracts(Integer certificateDomainId, String userRrn) {
+	public List<ContractWS> findContracts(String userRrn, ContractsFilterWS contractsFilter, OrderingWS ordering, PagingWS paging) {
 		FindContractsRequest request = factory.createFindContractsRequest();
-		request.setCertificateDomainId(certificateDomainId);
 		request.setUserRrn(userRrn);
-		FindContractsResponse response = getWebservicePort().findContracts(request);
-		return response.getContracts();
+		request.setContractsFilter(contractsFilter);
+        request.setOrdering(ordering);
+        request.setPaging(paging);
+
+        FindContractsResponse response = getWebservicePort().findContracts(request);
+        return response.getContracts();
 	}
+
+    public ContractWS findContract(int contractId) {
+        FindContractRequest request = factory.createFindContractRequest();
+        request.setContractId(contractId);
+        return getWebservicePort().findContract(request).getContract();
+    }
+
+    public int countContracts(String userRrn, ContractsFilterWS contractsFilter) {
+        CountContractsRequest request = factory.createCountContractsRequest();
+        request.setUserRrn(userRrn);
+        request.setContractsFilter(contractsFilter);
+
+        CountContractsResponse response = getWebservicePort().countContracts(request);
+        return response.getSize();
+    }
 	
 	public String getLegalNoticeByDN(String certificateDN, List<String> alternativeNames, CertificateTypeWS certificateType, String userRRN) {
 		GetLegalNoticeRequest request = factory.createGetLegalNoticeRequest();
