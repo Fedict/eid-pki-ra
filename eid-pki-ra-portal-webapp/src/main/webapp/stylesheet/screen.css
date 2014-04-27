@@ -95,6 +95,19 @@ a:hover,.itemSelected {
 	text-decoration: none;
 }
 
+.rich-table-headercell a:hover {
+    background: none;
+    text-decoration: underline;
+}
+
+.rich-table-headercell {
+    white-space: nowrap;
+}
+
+.rich-table-headercell img {
+    vertical-align: middle;
+}
+
 .rich-page-content {
 	margin: 0 auto;
 }

@@ -40,7 +40,7 @@ public abstract class AbstractAuthenticationHandlerBean implements Authenticatio
 	@In(value = AuthenticationRequestDecoder.NAME, create = true)
 	private AuthenticationRequestDecoder authenticationRequestDecoder;
 
-	@In
+    @In(EIdUserCredentials.NAME)
 	private EIdUserCredentials credentials;
 
 	@In(value = "org.jboss.seam.international.localeSelector", create = true)

@@ -48,6 +48,7 @@ import be.fedict.eid.pkira.blm.model.mappers.CertificateDomainMapper;
 import be.fedict.eid.pkira.blm.model.mappers.CertificateMapper;
 import be.fedict.eid.pkira.blm.model.mappers.ConfigurationEntryMapper;
 import be.fedict.eid.pkira.blm.model.mappers.ContractMapper;
+import be.fedict.eid.pkira.blm.model.mappers.ContractsFilterMapper;
 import be.fedict.eid.pkira.blm.model.mappers.RegistrationMapper;
 import be.fedict.eid.pkira.blm.model.mappers.UserMapper;
 import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
@@ -237,13 +238,67 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 
 	@Override
 	public FindContractsResponse findContracts(FindContractsRequest request) {
-		List<AbstractContract> contracts = getContractQuery().getFindContracts(request.getCertificateDomainId(), request.getUserRrn());
-		FindContractsResponse response = new ObjectFactory().createFindContractsResponse();
+        ContractQuery.ContractsFilter contractsFilter = getContractsFilterMapper().mapContractsFilter(request.getContractsFilter());
+
+        Integer firstRow = null, endRow = null;
+        PagingWS paging = request.getPaging();
+        if (paging !=null) {
+            firstRow = paging.getFirstRow();
+            endRow = paging.getEndRow();
+        }
+
+        String sortColumn = null;
+        boolean sortAscending = true;
+        OrderingWS ordering = request.getOrdering();
+        if (ordering !=null) {
+            sortAscending = ordering.getOrder()==SortOrderWS.ASC;
+            sortColumn = mapSortColumn(ordering.getField());
+        }
+
+		List<AbstractContract> contracts = getContractQuery().findContractsByFilter(
+                request.getUserRrn(), contractsFilter,
+                sortColumn, sortAscending,
+                firstRow, endRow);
+
+        FindContractsResponse response = new ObjectFactory().createFindContractsResponse();
 		response.getContracts().addAll(getContractMapper().map(contracts));
 		return response;
 	}
 
-	@Override
+
+
+    private String mapSortColumn(String field) {
+        if (field==null) return null;
+        if (field.equals("contractType")) return "class";
+        if (field.equals("requesterName")) return "requester";
+        if (field.equals("certificateType")) return "certificateType";
+        if (field.equals("dnExpression")) return "subject";
+        if (field.equals("creationDate")) return "creationDate";
+        if (field.equals("result")) return "result";
+        if (field.equals("resultMessage")) return "resultMessage";
+        return null;
+    }
+
+    @Override
+    public CountContractsResponse countContracts(CountContractsRequest request) {
+        ContractQuery.ContractsFilter contractsFilter = getContractsFilterMapper().mapContractsFilter(request.getContractsFilter());
+        int size = getContractQuery().countContractsByFilter(request.getUserRrn(), contractsFilter);
+
+        CountContractsResponse response = new ObjectFactory().createCountContractsResponse();
+        response.setSize(size);
+        return response;
+    }
+
+    @Override
+    public FindContractResponse findContract(FindContractRequest request) {
+        AbstractContract contract = getContractQuery().findContractById(request.getContractId());
+
+        FindContractResponse response = new FindContractResponse();
+        response.setContract(getContractMapper().map(contract));
+        return response;
+    }
+
+    @Override
 	public FindContractDocumentResponse findContractDocument(FindContractDocumentRequest request) {
 		FindContractDocumentResponse response = new ObjectFactory().createFindContractDocumentResponse();
 		ContractHome contractHome = getContractHome();
@@ -346,6 +401,10 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	private ContractMapper getContractMapper() {
 		return (ContractMapper) Component.getInstance(ContractMapper.NAME, true);
 	}
+
+    private ContractsFilterMapper getContractsFilterMapper() {
+        return (ContractsFilterMapper) Component.getInstance(ContractsFilterMapper.NAME, true);
+    }
 
 	private ContractHome getContractHome() {
 		return (ContractHome) Component.getInstance(ContractHome.NAME, true);

@@ -244,8 +244,10 @@
             <xsd:element name="FindContractsRequest">
                 <xsd:complexType>
                     <xsd:sequence>
-                        <xsd:element name="certificateDomainId" type="xsd:int" nillable="true" />
                         <xsd:element name="userRrn" type="xsd:string" />
+                        <xsd:element name="contractsFilter" type="types:contractsFilterWS"/>
+                        <xsd:element name="paging" type="types:pagingWS" />
+                        <xsd:element name="ordering" type="types:orderingWS" />
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
@@ -254,6 +256,39 @@
                 <xsd:complexType>
                     <xsd:sequence>
                         <xsd:element name="contracts" type="types:contractWS" maxOccurs="unbounded" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="FindContractRequest">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="contractId" type="xsd:int"  />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="FindContractResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="contract" type="types:contractWS" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="CountContractsRequest">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="userRrn" type="xsd:string" />
+                        <xsd:element name="contractsFilter" type="types:contractsFilterWS"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="CountContractsResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="size" type="xsd:int" />
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
@@ -419,6 +454,40 @@
                     <xsd:enumeration value="REVOCATION" />
                 </xsd:restriction>
             </xsd:simpleType>
+
+            <xsd:complexType name="contractsFilterWS">
+                <xsd:sequence>
+                    <xsd:element name="certificateDomainId" type="xsd:int" nillable="true" />
+                    <xsd:element name="contractType" type="types:contractTypeWS" nillable="true"/>
+                    <xsd:element name="certificateType" type="types:certificateTypeWS" nillable="true"/>
+                    <xsd:element name="requesterName" type="xsd:string" nillable="true"/>
+                    <xsd:element name="dnExpression" type="xsd:string" nillable="true"/>
+                    <xsd:element name="creationDateFrom" type="xsd:dateTime" nillable="true"/>
+                    <xsd:element name="creationDateTo" type="xsd:dateTime" nillable="true"/>
+                    <xsd:element name="resultMessage" type="xsd:string" nillable="true" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="pagingWS">
+                <xsd:sequence>
+                    <xsd:element name="firstRow" type="xsd:int"/>
+                    <xsd:element name="endRow" type="xsd:int"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:simpleType name="sortOrderWS">
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="ASC"/>
+                    <xsd:enumeration value="DESC"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:complexType name="orderingWS">
+                <xsd:sequence>
+                    <xsd:element name="field" type="xsd:string" />
+                    <xsd:element name="order" type="types:sortOrderWS" />
+                </xsd:sequence>
+            </xsd:complexType>
         </xsd:schema>
     </wsdl:types>
 
@@ -526,6 +595,22 @@
         <wsdl:part name="request" element="types:FindContractsResponse" />
     </wsdl:message>
 
+    <wsdl:message name="FindContractRequest">
+        <wsdl:part name="request" element="types:FindContractRequest" />
+    </wsdl:message>
+
+    <wsdl:message name="FindContractResponse">
+        <wsdl:part name="request" element="types:FindContractResponse" />
+    </wsdl:message>
+
+    <wsdl:message name="CountContractsRequest">
+        <wsdl:part name="request" element="types:CountContractsRequest" />
+    </wsdl:message>
+
+    <wsdl:message name="CountContractsResponse">
+        <wsdl:part name="request" element="types:CountContractsResponse" />
+    </wsdl:message>
+
     <wsdl:message name="FindContractDocumentRequest">
         <wsdl:part name="request" element="types:FindContractDocumentRequest" />
     </wsdl:message>
@@ -602,6 +687,14 @@
         <wsdl:operation name="FindContracts">
             <wsdl:input message="tns:FindContractsRequest" />
             <wsdl:output message="tns:FindContractsResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="FindContract">
+            <wsdl:input message="tns:FindContractRequest" />
+            <wsdl:output message="tns:FindContractResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="CountContracts">
+            <wsdl:input message="tns:CountContractsRequest" />
+            <wsdl:output message="tns:CountContractsResponse" />
         </wsdl:operation>
         <wsdl:operation name="FindContractDocument">
             <wsdl:input message="tns:FindContractDocumentRequest" />
@@ -733,6 +826,24 @@
                 <soap:body use="literal" />
             </wsdl:input>
             <wsdl:output message="tns:FindContractsResponse">
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="FindContract">
+            <soap:operation />
+            <wsdl:input message="tns:FindContractRequest">
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output message="tns:FindContractResponse">
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="CountContracts">
+            <soap:operation />
+            <wsdl:input message="tns:CountContractsRequest">
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output message="tns:CountContractsResponse">
                 <soap:body use="literal" />
             </wsdl:output>
         </wsdl:operation>

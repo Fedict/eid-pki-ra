@@ -29,13 +29,14 @@ import static org.jboss.seam.ScopeType.SESSION;
  * 
  * @author Jan Van den Bergh
  */
-@Name("org.jboss.seam.security.credentials")
+@Name(EIdUserCredentials.NAME)
 @Scope(SESSION)
 public class EIdUserCredentials extends Credentials {
 
 	private static final long serialVersionUID = -5978049996605832344L;
+    public static final String NAME = "org.jboss.seam.security.credentials";
 
-	private EIdUser user;
+    private EIdUser user;
 
 	public EIdUser getUser() {
 		return user;

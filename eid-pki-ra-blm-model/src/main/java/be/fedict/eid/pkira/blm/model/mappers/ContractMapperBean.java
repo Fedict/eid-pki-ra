@@ -62,7 +62,8 @@ public class ContractMapperBean implements Serializable, ContractMapper {
 		return contractWSList;
 	}
 
-	private ContractWS map(AbstractContract contract) {
+    @Override
+	public ContractWS map(AbstractContract contract) {
 		ContractWS contractWS = factory.createContractWS();
 		contractWS.setContractId(contract.getId());
 		contractWS.setCreationDate(createXmlGregorianCalendar(contract.getCreationDate()));
