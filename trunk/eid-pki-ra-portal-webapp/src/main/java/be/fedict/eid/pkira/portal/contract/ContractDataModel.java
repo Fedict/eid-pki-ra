@@ -18,150 +18,70 @@
 
 package be.fedict.eid.pkira.portal.contract;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import javax.faces.context.FacesContext;
-
-import org.ajax4jsf.model.DataVisitor;
-import org.ajax4jsf.model.Range;
-import org.ajax4jsf.model.SequenceRange;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.richfaces.model.DataProvider;
-import org.richfaces.model.ExtendedTableDataModel;
-import org.richfaces.model.FilterField;
-import org.richfaces.model.Modifiable;
-import org.richfaces.model.SortField2;
 
-import be.fedict.eid.pkira.common.security.EIdUserCredentials;
-import be.fedict.eid.pkira.common.util.StringShortener;
 import be.fedict.eid.pkira.generated.privatews.CertificateTypeWS;
 import be.fedict.eid.pkira.generated.privatews.ContractTypeWS;
 import be.fedict.eid.pkira.generated.privatews.ContractsFilterWS;
-import be.fedict.eid.pkira.generated.privatews.OrderingWS;
-import be.fedict.eid.pkira.generated.privatews.PagingWS;
-import be.fedict.eid.pkira.generated.privatews.SortOrderWS;
 import be.fedict.eid.pkira.portal.certificate.CertificateType;
-import be.fedict.eid.pkira.portal.certificatedomain.CertificateDomainWSHome;
-import be.fedict.eid.pkira.portal.util.TypeMapper;
-import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
+import be.fedict.eid.pkira.portal.framework.DataModelBase;
+import be.fedict.eid.pkira.portal.framework.DataProviderBase;
+import be.fedict.eid.pkira.portal.util.ExtraStringUtil;
 
 @Name(ContractDataModel.NAME)
 @Scope(ScopeType.SESSION)
-public class ContractDataModel extends ExtendedTableDataModel<Contract> implements Modifiable {
+public class ContractDataModel extends DataModelBase<Contract> {
 
-    private class ContractDataProvider implements DataProvider<Contract> {
-        private int rowCount = -1;
-        private List<Contract> contracts = null;
-        private int firstRowOfData;
-        private int endRowOfData;
-
+    private class ContractDataProvider extends DataProviderBase<Contract> {
         @Override
-        public int getRowCount() {
-            if (rowCount == -1)
-                rowCount = privateServiceClient.countContracts(credentials.getUser().getRRN(), buildContractsFilter());
-
-            return rowCount;
+        protected int fetchRowCount() {
+            return privateServiceClient.countContracts(credentials.getUser().getRRN(), buildContractsFilter());
         }
 
         @Override
-        public List<Contract> getItemsByRange(int firstRow, int endRow) {
-            if (contracts==null || firstRow!=firstRowOfData || endRow!=endRowOfData) {
-                contracts = typeMapper.map(privateServiceClient.findContracts(credentials.getUser().getRRN(), buildContractsFilter(), buildOrdering(), buildPaging(firstRow, endRow)));
-                firstRowOfData = firstRow;
-                endRowOfData = endRow;
-            }
-
-            return contracts;
+        protected List<Contract> fetchData(int firstRow, int endRow) {
+            return typeMapper.map(privateServiceClient.findContracts(
+                    credentials.getUser().getRRN(),
+                    buildContractsFilter(),
+                    buildOrdering(sortField, sortOrder),
+                    buildPaging(firstRow, endRow)));
         }
 
         @Override
-        public Contract getItemByKey(Object key) {
-            Integer theKey = (Integer) key;
-            if (theKey==null) return null;
-
-            if (contracts!=null)
-                for (Contract contract : contracts)
-                    if (ObjectUtils.equals(contract.getId(), theKey)) return contract;
-
-            return typeMapper.map(privateServiceClient.findContract((Integer) key));
+        protected Contract fetchItem(Integer key) {
+            return typeMapper.map(privateServiceClient.findContract(key));
         }
 
         @Override
-        public Object getKey(Contract item) {
+        public Integer getKey(Contract item) {
             return item.getId();
-        }
-
-        public void invalidateFilter() {
-            rowCount = -1;
-            contracts = null;
-
-            pageNumber = 1;
-        }
-
-        public void invalidateOrdering() {
-            contracts = null;
         }
 
         private ContractsFilterWS buildContractsFilter() {
             ContractsFilterWS result = new ContractsFilterWS();
             result.setContractType(typeMapper.getEnum(ContractTypeWS.class, contractTypeFilter));
-            result.setRequesterName(blankAsNull(requesterNameFilter));
+            result.setRequesterName(ExtraStringUtil.blankAsNull(requesterNameFilter));
             result.setCertificateType(typeMapper.getEnum(CertificateTypeWS.class, certificateTypeFilter));
-            result.setDnExpression(blankAsNull(dnExpressionFilter));
+            result.setDnExpression(ExtraStringUtil.blankAsNull(dnExpressionFilter));
             result.setCreationDateFrom(typeMapper.map(creationDateFromFilter));
             result.setCreationDateTo(typeMapper.map(creationDateToFilter));
-            result.setResultMessage(blankAsNull(resultMessageFilter));
-            result.setCertificateDomainId(certificateDomainId);
+            result.setResultMessage(ExtraStringUtil.blankAsNull(resultMessageFilter));
+            result.setCertificateDomainId(getCertificateDomainId());
 
             return result;
-        }
-
-        private OrderingWS buildOrdering() {
-            OrderingWS result = new OrderingWS();
-            result.setOrder(sortOrder);
-            result.setField(sortField);
-            return result;
-        }
-
-        private PagingWS buildPaging(int firstRow, int endRow) {
-            PagingWS paging = new PagingWS();
-            paging.setFirstRow(firstRow);
-            paging.setEndRow(endRow);
-            return paging;
-        }
-
-        private String blankAsNull(String s) {
-            return StringUtils.isBlank(s) ? null : s;
         }
     }
 
     public static final String NAME = "be.fedict.eid.pkira.portal.contractDataModel";
 
-    private static final int DEFAULT_ROWS = 10;
-    private static final int DEFAULT_MAX_PAGES = 10;
-    private static final int DEFAULT_FAST_STEP = 5;
-
-    @In(EIdUserCredentials.NAME)
-    private EIdUserCredentials credentials;
-
-    @In(value = EIDPKIRAPrivateServiceClient.NAME, create = true)
-    private EIDPKIRAPrivateServiceClient privateServiceClient;
-
-    @In(value = TypeMapper.NAME, create = true)
-    private TypeMapper typeMapper;
-
-    @In(value=CertificateDomainWSHome.NAME, create = true)
-    private CertificateDomainWSHome certificateDomainWSHome;
-
-    private Integer certificateDomainId;
     private String contractTypeFilter;
     private String requesterNameFilter="";
     private String certificateTypeFilter;
@@ -169,42 +89,10 @@ public class ContractDataModel extends ExtendedTableDataModel<Contract> implemen
     private String resultMessageFilter="";
     private Date creationDateFromFilter, creationDateToFilter;
 
-    private String sortField;
-    private SortOrderWS sortOrder;
-
     private int pageNumber;
 
     public ContractDataModel() {
-        super(null);
         super.setDataProvider(new ContractDataProvider());
-    }
-
-    @Override
-    public void walk(FacesContext context, DataVisitor visitor, Range range, Object argument) throws IOException {
-        SequenceRange sequenceRange = (SequenceRange) range;
-
-        int totalRowCount = getDataProvider().getRowCount();
-        int firstRow = sequenceRange.getFirstRow();
-        int numberOfRows = sequenceRange.getRows();
-        if (numberOfRows <= 0) numberOfRows = totalRowCount;
-
-
-        int endRow = firstRow + numberOfRows;
-        if (endRow > totalRowCount) endRow = totalRowCount;
-
-        for (Contract item : getDataProvider().getItemsByRange(firstRow, endRow)) {
-            visitor.process(context, getKey(item), argument);
-        }
-    }
-
-    @Override
-    public int getRowCount() {
-        return getDataProvider().getRowCount();
-    }
-
-    @Override
-    public void modify(List<FilterField> filterFields, List<SortField2> sortFields) {
-        // do nothing, since filtering and sorting is handled externally
     }
 
     public void setPageNumber(int pageNumber) {
@@ -213,33 +101,6 @@ public class ContractDataModel extends ExtendedTableDataModel<Contract> implemen
 
     public int getPageNumber() {
         return pageNumber;
-    }
-
-    public void sortBy(String sortField) {
-        if (StringUtils.equals(sortField, this.sortField)) {
-            sortOrder = sortOrder==SortOrderWS.ASC ? SortOrderWS.DESC : SortOrderWS.ASC;
-        } else {
-            this.sortField = sortField;
-            this.sortOrder = SortOrderWS.ASC;
-        }
-
-        getDataProvider().invalidateOrdering();
-    }
-
-    public String getSortIcon(String sortField) {
-        String icon = "none";
-        if (StringUtils.equals(sortField, this.sortField)) {
-            if (sortOrder == SortOrderWS.ASC)
-                icon = "asc";
-            else
-                icon = "desc";
-        }
-
-        return "../../img/sort_icon_" + icon + ".gif";
-    }
-
-    public ContractDataProvider getDataProvider() {
-        return (ContractDataProvider) super.getDataProvider();
     }
 
     public String getDnExpressionFilter() {
@@ -327,42 +188,5 @@ public class ContractDataModel extends ExtendedTableDataModel<Contract> implemen
         }
     }
 
-    public Integer getCertificateDomainId() {
-        return certificateDomainId;
-    }
-
-    public void setCertificateDomainId(Integer certificateDomainId) {
-        if (!ObjectUtils.equals(certificateDomainId, this.certificateDomainId)) {
-            this.certificateDomainId = certificateDomainId;
-            getDataProvider().invalidateFilter();
-        }
-    }
-
-    public CertificateDomainWSHome getCertificateDomainWSHome() {
-        if (certificateDomainId != null) {
-            certificateDomainWSHome.setId(certificateDomainId);
-        }
-        return certificateDomainWSHome;
-    }
-
-    public String getCertificateDomainExpressionShortened() {
-        return StringShortener.shorten(getCertificateDomainExpression(), 120);
-    }
-
-    public String getCertificateDomainExpression() {
-        return getCertificateDomainWSHome().getInstance().getDnExpression();
-    }
-
-    public int getRows() {
-        return DEFAULT_ROWS;
-    }
-
-    public int getMaxPages() {
-        return DEFAULT_MAX_PAGES;
-    }
-
-    public int getFastStep() {
-        return DEFAULT_FAST_STEP;
-    }
 }
 
