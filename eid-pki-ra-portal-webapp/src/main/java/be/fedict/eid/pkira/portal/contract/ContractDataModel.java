@@ -145,6 +145,10 @@ public class ContractDataModel extends ExtendedTableDataModel<Contract> implemen
 
     public static final String NAME = "be.fedict.eid.pkira.portal.contractDataModel";
 
+    private static final int DEFAULT_ROWS = 10;
+    private static final int DEFAULT_MAX_PAGES = 10;
+    private static final int DEFAULT_FAST_STEP = 5;
+
     @In(EIdUserCredentials.NAME)
     private EIdUserCredentials credentials;
 
@@ -349,5 +353,16 @@ public class ContractDataModel extends ExtendedTableDataModel<Contract> implemen
         return getCertificateDomainWSHome().getInstance().getDnExpression();
     }
 
+    public int getRows() {
+        return DEFAULT_ROWS;
+    }
+
+    public int getMaxPages() {
+        return DEFAULT_MAX_PAGES;
+    }
+
+    public int getFastStep() {
+        return DEFAULT_FAST_STEP;
+    }
 }
 
