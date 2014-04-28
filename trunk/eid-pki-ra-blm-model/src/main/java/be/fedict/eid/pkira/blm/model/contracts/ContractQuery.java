@@ -19,7 +19,6 @@
 package be.fedict.eid.pkira.blm.model.contracts;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -55,18 +54,16 @@ public class ContractQuery extends EntityQuery<AbstractContract> {
     }
 
     @SuppressWarnings("unchecked")
-    public List<AbstractContract> findContractsByFilter(String userRrn, ContractsFilter contractsFilter,
-                                                        String orderByField, boolean orderByAscending,
-                                                        Integer firstRow, Integer endRow) {
+    public List<AbstractContract> findContractsByFilter(String userRrn, ContractsFilter contractsFilter, Ordering ordering, Paging paging) {
         StringBuilder queryString = new StringBuilder();
 
         queryString.append("SELECT contract FROM ");
         appendFromAndWhere(contractsFilter, queryString);
-        appendOrderBy(orderByField, orderByAscending, queryString);
+        appendOrderBy(ordering, queryString);
 
         Query query = getEntityManager().createQuery(queryString.toString());
         addQueryParameters(userRrn, contractsFilter, query);
-        setPaging(firstRow, endRow, query);
+        setPaging(paging, query);
 
         return query.getResultList();
     }
@@ -112,7 +109,7 @@ public class ContractQuery extends EntityQuery<AbstractContract> {
         if ((contractsFilter.isIncludeRequestContracts() || !contractsFilter.isIncludeRevocationContracts()) && contractsFilter.getCertificateType() != null)
             queryString.append(" AND contract.certificateType = :certificateType");
         if (isNotBlank(contractsFilter.getRequesterName()))
-            queryString.append(" AND lower(contract.requester) LIKE :requesterName");
+            queryString.append(" AND lower(contract.requesterName) LIKE :requesterName");
         if (isNotBlank(contractsFilter.getDnExpression()))
             queryString.append(" AND lower(contract.subject) LIKE :dnExpression");
         if (contractsFilter.getCreationDateFrom() != null)
@@ -128,7 +125,7 @@ public class ContractQuery extends EntityQuery<AbstractContract> {
         query.setParameter("registrationStatus", RegistrationStatus.APPROVED);
         if (contractsFilter.getCertificateDomainId() != null)
             query.setParameter("certificateDomainId", contractsFilter.getCertificateDomainId());
-        if ((contractsFilter.includeRequestContracts || !contractsFilter.includeRevocationContracts) && contractsFilter.getCertificateType() != null)
+        if ((contractsFilter.isIncludeRequestContracts() || !contractsFilter.isIncludeRevocationContracts()) && contractsFilter.getCertificateType() != null)
             query.setParameter("certificateType", contractsFilter.getCertificateType());
         if (isNotBlank(contractsFilter.getRequesterName()))
             query.setParameter("requesterName", "%" + contractsFilter.getRequesterName().toLowerCase() + "%");
@@ -142,103 +139,20 @@ public class ContractQuery extends EntityQuery<AbstractContract> {
             query.setParameter("resultMessage", "%" + contractsFilter.getResultMessage().toLowerCase() + "%");
     }
 
-    private void appendOrderBy(String orderByField, boolean orderByAscending, StringBuilder queryString) {
-        if (orderByField != null)
-            queryString.append(" ORDER BY contract.").append(orderByField).append(orderByAscending ? " ASC" : " DESC");
+    private void appendOrderBy(Ordering ordering, StringBuilder queryString) {
+        if (ordering!=null && ordering.getOrderByField() != null)
+            queryString.append(" ORDER BY contract.").append(ordering.getOrderByField()).append(ordering.isOrderByAscending() ? " ASC" : " DESC");
         else
             queryString.append(" ORDER BY contract.creationDate DESC");
     }
 
-    private void setPaging(Integer firstRow, Integer endRow, Query query) {
-        if (firstRow != null && endRow != null)
-            query.setFirstResult(firstRow).setMaxResults(endRow - firstRow);
+    private void setPaging(Paging paging, Query query) {
+        if (paging!=null && paging.getFirstRow() != null && paging.getEndRow() != null)
+            query.setFirstResult(paging.getFirstRow()).setMaxResults(paging.getEndRow() - paging.getFirstRow());
     }
 
     public CertificateDomainHome getCertificateDomainHome() {
         return certificateDomainHome;
     }
 
-    public static class ContractsFilter {
-        private boolean includeRequestContracts;
-        private boolean includeRevocationContracts;
-        private Integer certificateDomainId;
-        private CertificateType certificateType;
-        private String requesterName;
-        private String dnExpression;
-        private Date creationDateFrom;
-        private Date creationDateTo;
-        private String resultMessage;
-
-        public boolean isIncludeRequestContracts() {
-            return includeRequestContracts;
-        }
-
-        public boolean isIncludeRevocationContracts() {
-            return includeRevocationContracts;
-        }
-
-        public Integer getCertificateDomainId() {
-            return certificateDomainId;
-        }
-
-        public CertificateType getCertificateType() {
-            return certificateType;
-        }
-
-        public String getRequesterName() {
-            return requesterName;
-        }
-
-        public String getDnExpression() {
-            return dnExpression;
-        }
-
-        public Date getCreationDateFrom() {
-            return creationDateFrom;
-        }
-
-        public Date getCreationDateTo() {
-            return creationDateTo;
-        }
-
-        public String getResultMessage() {
-            return resultMessage;
-        }
-
-        public void setIncludeRequestContracts(boolean includeRequestContracts) {
-            this.includeRequestContracts = includeRequestContracts;
-        }
-
-        public void setIncludeRevocationContracts(boolean includeRevocationContracts) {
-            this.includeRevocationContracts = includeRevocationContracts;
-        }
-
-        public void setCertificateDomainId(Integer certificateDomainId) {
-            this.certificateDomainId = certificateDomainId;
-        }
-
-        public void setCertificateType(CertificateType certificateType) {
-            this.certificateType = certificateType;
-        }
-
-        public void setRequesterName(String requesterName) {
-            this.requesterName = requesterName;
-        }
-
-        public void setDnExpression(String dnExpression) {
-            this.dnExpression = dnExpression;
-        }
-
-        public void setCreationDateFrom(Date creationDateFrom) {
-            this.creationDateFrom = creationDateFrom;
-        }
-
-        public void setCreationDateTo(Date creationDateTo) {
-            this.creationDateTo = creationDateTo;
-        }
-
-        public void setResultMessage(String resultMessage) {
-            this.resultMessage = resultMessage;
-        }
-    }
 }

@@ -25,10 +25,9 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
-import be.fedict.eid.pkira.blm.model.contracts.ContractQuery;
+import be.fedict.eid.pkira.blm.model.contracts.ContractsFilter;
 import be.fedict.eid.pkira.generated.privatews.ContractTypeWS;
 import be.fedict.eid.pkira.generated.privatews.ContractsFilterWS;
-import be.fedict.eid.pkira.generated.privatews.ObjectFactory;
 
 /**
  * @author Bram Baeyens
@@ -40,15 +39,9 @@ public class ContractsFilterMapperBean implements Serializable, ContractsFilterM
 
 	private static final long serialVersionUID = 518966394376372668L;
 
-	private final ObjectFactory factory;
-
-	public ContractsFilterMapperBean() {
-		this.factory = new ObjectFactory();
-	}
-
     @Override
-    public ContractQuery.ContractsFilter mapContractsFilter(ContractsFilterWS contractsFilterWS) {
-        ContractQuery.ContractsFilter contractsFilter = new ContractQuery.ContractsFilter();
+    public ContractsFilter mapContractsFilter(ContractsFilterWS contractsFilterWS) {
+        ContractsFilter contractsFilter = new ContractsFilter();
         if (contractsFilterWS !=null) {
             contractsFilter.setCertificateDomainId(contractsFilterWS.getCertificateDomainId());
             contractsFilter.setIncludeRequestContracts(contractsFilterWS.getContractType() != ContractTypeWS.REVOCATION);

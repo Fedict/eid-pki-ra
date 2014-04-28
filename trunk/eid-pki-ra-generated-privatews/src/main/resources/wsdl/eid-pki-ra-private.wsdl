@@ -22,18 +22,38 @@
 
     <wsdl:types>
         <xsd:schema targetNamespace="urn:be:fedict:eid:pkira:privatews:types">
-            <xsd:element name="ListCertificatesRequest">
+            <xsd:element name="FindCertificatesRequest">
                 <xsd:complexType>
                     <xsd:sequence>
-                        <xsd:element name="userRRN" type="xsd:string" />
-                        <xsd:element name="certificateDomainId" type="xsd:string" />
+                        <xsd:element name="userRrn" type="xsd:string" />
+                        <xsd:element name="certificatesFilter" type="types:certificatesFilterWS"/>
+                        <xsd:element name="paging" type="types:pagingWS" />
+                        <xsd:element name="ordering" type="types:orderingWS" />
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
-            <xsd:element name="ListCertificatesResponse">
+
+            <xsd:element name="FindCertificatesResponse">
                 <xsd:complexType>
                     <xsd:sequence>
                         <xsd:element name="certificates" type="types:certificateWS" maxOccurs="unbounded" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="CountCertificatesRequest">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="userRrn" type="xsd:string" />
+                        <xsd:element name="certificatesFilter" type="types:certificatesFilterWS"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="CountCertificatesResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="size" type="xsd:int" />
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
@@ -45,7 +65,6 @@
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
-
 
             <xsd:element name="FindCertificateResponse">
                 <xsd:complexType>
@@ -468,6 +487,21 @@
                 </xsd:sequence>
             </xsd:complexType>
 
+            <xsd:complexType name="certificatesFilterWS">
+                <xsd:sequence>
+                    <xsd:element name="certificateDomainId" type="xsd:int" nillable="true" />
+                    <xsd:element name="distinguishedName" type="xsd:string" nillable="true"/>
+                    <xsd:element name="issuer" type="xsd:string" nillable="true"/>
+                    <xsd:element name="requesterName" type="xsd:string" nillable="true"/>
+                    <xsd:element name="serialNumber" type="xsd:string" nillable="true"/>
+                    <xsd:element name="certificateType" type="types:certificateTypeWS" nillable="true"/>
+                    <xsd:element name="validityStartFrom" type="xsd:dateTime" nillable="true"/>
+                    <xsd:element name="validityStartTo" type="xsd:dateTime" nillable="true"/>
+                    <xsd:element name="validityEndFrom" type="xsd:dateTime" nillable="true"/>
+                    <xsd:element name="validityEndTo" type="xsd:dateTime" nillable="true"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
             <xsd:complexType name="pagingWS">
                 <xsd:sequence>
                     <xsd:element name="firstRow" type="xsd:int"/>
@@ -491,12 +525,20 @@
         </xsd:schema>
     </wsdl:types>
 
-    <wsdl:message name="ListCertificatesRequest">
-        <wsdl:part name="request" element="types:ListCertificatesRequest" />
+    <wsdl:message name="FindCertificatesRequest">
+        <wsdl:part name="request" element="types:FindCertificatesRequest" />
     </wsdl:message>
 
-    <wsdl:message name="ListCertificatesResult">
-        <wsdl:part name="response" element="types:ListCertificatesResponse" />
+    <wsdl:message name="FindCertificatesResult">
+        <wsdl:part name="response" element="types:FindCertificatesResponse" />
+    </wsdl:message>
+
+    <wsdl:message name="CountCertificatesRequest">
+        <wsdl:part name="request" element="types:CountCertificatesRequest" />
+    </wsdl:message>
+
+    <wsdl:message name="CountCertificatesResult">
+        <wsdl:part name="response" element="types:CountCertificatesResponse" />
     </wsdl:message>
 
     <wsdl:message name="FindCertificateRequest">
@@ -636,9 +678,13 @@
     </wsdl:message>
 
     <wsdl:portType name="EIDPKIRAPrivatePortType">
-        <wsdl:operation name="ListCertificates">
-            <wsdl:input message="tns:ListCertificatesRequest" />
-            <wsdl:output message="tns:ListCertificatesResult" />
+        <wsdl:operation name="FindCertificates">
+            <wsdl:input message="tns:FindCertificatesRequest" />
+            <wsdl:output message="tns:FindCertificatesResult" />
+        </wsdl:operation>
+        <wsdl:operation name="CountCertificates">
+            <wsdl:input message="tns:CountCertificatesRequest" />
+            <wsdl:output message="tns:CountCertificatesResult" />
         </wsdl:operation>
         <wsdl:operation name="FindCertificate">
             <wsdl:input message="tns:FindCertificateRequest" />
@@ -712,12 +758,21 @@
 
     <wsdl:binding name="SOAPBinding" type="tns:EIDPKIRAPrivatePortType">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
-        <wsdl:operation name="ListCertificates">
+        <wsdl:operation name="FindCertificates">
             <soap:operation />
-            <wsdl:input message="tns:ListCertificatesRequest">
+            <wsdl:input message="tns:FindCertificatesRequest">
                 <soap:body use="literal" />
             </wsdl:input>
-            <wsdl:output message="tns:ListCertificatesResult">
+            <wsdl:output message="tns:FindCertificatesResult">
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="CountCertificates">
+            <soap:operation />
+            <wsdl:input message="tns:CountCertificatesRequest">
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output message="tns:CountCertificatesResult">
                 <soap:body use="literal" />
             </wsdl:output>
         </wsdl:operation>

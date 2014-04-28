@@ -48,14 +48,25 @@ public class EIDPKIRAPrivateServiceClient {
 		this.factory = new ObjectFactory();
 	}
 
-	public List<CertificateWS> listCertificates(String userRRN, String certificateDomainId) {
-		ListCertificatesRequest request = factory.createListCertificatesRequest();
-		request.setUserRRN(userRRN);
-		request.setCertificateDomainId(certificateDomainId);
-		ListCertificatesResponse response = getWebservicePort().listCertificates(request);
+	public List<CertificateWS> findCertificates(String userRrn, CertificatesFilterWS certificatesFilter, OrderingWS ordering, PagingWS paging) {
+        FindCertificatesRequest request = factory.createFindCertificatesRequest();
+        request.setUserRrn(userRrn);
+        request.setCertificatesFilter(certificatesFilter);
+        request.setOrdering(ordering);
+        request.setPaging(paging);
 
-		return response.getCertificates();
-	}
+        FindCertificatesResponse response = getWebservicePort().findCertificates(request);
+        return response.getCertificates();
+    }
+
+    public int countCertificates(String userRrn, CertificatesFilterWS certificatesFilter) {
+        CountCertificatesRequest request = factory.createCountCertificatesRequest();
+        request.setUserRrn(userRrn);
+        request.setCertificatesFilter(certificatesFilter);
+
+        CountCertificatesResponse response = getWebservicePort().countCertificates(request);
+        return response.getSize();
+    }
 
 	public CertificateWS findCertificate(Integer certificateId) {
 		FindCertificateRequest request = factory.createFindCertificateRequest();

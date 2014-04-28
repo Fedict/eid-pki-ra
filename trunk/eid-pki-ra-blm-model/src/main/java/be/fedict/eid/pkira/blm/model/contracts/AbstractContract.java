@@ -62,7 +62,7 @@ public abstract class AbstractContract implements Serializable {
 	private String subject;
 
 	@Column(name = "REQUESTER", nullable = false)
-	private String requester;
+	private String requesterName;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "CERTIFICATE_DOMAIN_ID", nullable = false)
@@ -97,12 +97,12 @@ public abstract class AbstractContract implements Serializable {
 		this.subject = subject;
 	}
 
-	public String getRequester() {
-		return requester;
+	public String getRequesterName() {
+		return requesterName;
 	}
 
-	public void setRequester(String requester) {
-		this.requester = requester;
+	public void setRequesterName(String requester) {
+		this.requesterName = requester;
 	}
 
 	public Integer getId() {
@@ -163,7 +163,7 @@ public abstract class AbstractContract implements Serializable {
 	protected void appendFields(StringBuilder builder) {
 		appendField(builder, "Id", getId());
 		appendField(builder, "Subject", getSubject());
-		appendField(builder, "Requester", getRequester());
+		appendField(builder, "Requester", getRequesterName());
 		appendField(builder, "Certificate domain", getCertificateDomain().getName());
 		appendField(builder, "Contract document", getContractDocument());
 	}

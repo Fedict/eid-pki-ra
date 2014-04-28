@@ -34,6 +34,8 @@ import org.jboss.seam.annotations.Name;
 
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationStatus;
 
+import static org.apache.commons.lang.StringUtils.isNotBlank;
+
 /**
  * Implementation of the domain repository.
  * 
@@ -72,36 +74,45 @@ public class ContractRepositoryBean implements ContractRepository {
 		entityManager.persist(contract);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Certificate> findAllCertificates(String userRRN, String certificateDomainID) {		
-		String squery = "SELECT c" +
-						" FROM Certificate c, Registration r" +
-						" WHERE c.certificateDomain=r.certificateDomain" +
-						" AND r.status='" + RegistrationStatus.APPROVED.name() + "'" +
-						" AND r.requester.nationalRegisterNumber=" + userRRN;
-		
-		if(certificateDomainID != null){
-			squery += " AND c.certificateDomain.id = " + certificateDomainID ;
-		}
-		Query query = entityManager.createQuery(squery);
-		return query.getResultList();
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Certificate> findCertificatesByFilter(String userRrn, CertificatesFilter certificatesFilter, Ordering ordering, Paging paging) {
+        StringBuilder queryString = new StringBuilder();
 
-	/**
+        queryString.append("SELECT certificate FROM ");
+        appendFromAndWhere(certificatesFilter, queryString);
+        appendOrderBy(ordering, queryString);
+
+        Query query = entityManager.createQuery(queryString.toString());
+        addQueryParameters(userRrn, certificatesFilter, query);
+        setPaging(paging, query);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public int countCertificatesByFilter(String userRrn, CertificatesFilter certificatesFilter) {
+        StringBuilder queryString = new StringBuilder();
+
+        queryString.append("SELECT COUNT(certificate) FROM ");
+        appendFromAndWhere(certificatesFilter, queryString);
+
+        Query query = entityManager.createQuery(queryString.toString());
+        addQueryParameters(userRrn, certificatesFilter, query);
+
+        return ((Long) query.getSingleResult()).intValue();
+    }
+
+    /**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Certificate findCertificate(String issuer, BigInteger serialNumber) {
-		Query query = entityManager.createQuery("SELECT c from Certificate c WHERE serialNumber=?");
-		query.setParameter(1, serialNumber);
+		Query query = entityManager.createQuery("SELECT c from Certificate c WHERE serialNumber=:serialNumber");
+		query.setParameter("serialNumber", serialNumber);
 		
 		try {
-			Certificate result = (Certificate) query.getSingleResult();
-			return result;
+            return (Certificate) query.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		} catch (EntityNotFoundException e) {
@@ -115,13 +126,12 @@ public class ContractRepositoryBean implements ContractRepository {
 	 */
 	@Override
 	public Certificate findCertificate(int certificateID) {
-		Query query = entityManager.createQuery("SELECT c from Certificate c WHERE id=?");
+		Query query = entityManager.createQuery("SELECT c from Certificate c WHERE id=:id");
 		//query.setParameter(1, issuer);
-		query.setParameter(1, certificateID);
+		query.setParameter("id", certificateID);
 		
 		try {
-			Certificate result = (Certificate) query.getSingleResult();
-			return result;
+            return (Certificate) query.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		} catch (EntityNotFoundException e) {
@@ -153,4 +163,71 @@ public class ContractRepositoryBean implements ContractRepository {
 	public void updateContract(AbstractContract contract) {
 		entityManager.merge(contract);		
 	}
+
+    private void appendFromAndWhere(CertificatesFilter certificatesFilter, StringBuilder queryString) {
+        queryString.append(" Certificate certificate, Registration registration WHERE registration.requester.nationalRegisterNumber = :nationalRegisterNumber AND registration.status = :registrationStatus AND registration.certificateDomain = certificate.certificateDomain ");
+
+        if (certificatesFilter.getCertificateDomainId() != null)
+            queryString.append(" AND certificate.certificateDomain.id = :certificateDomainId");
+        if (isNotBlank(certificatesFilter.getDistinguishedName()))
+            queryString.append(" AND lower(certificate.distinguishedName) LIKE :distinguishedName");
+        if (isNotBlank(certificatesFilter.getIssuer()))
+            queryString.append(" AND lower(certificate.issuer) LIKE :issuer");
+        if (isNotBlank(certificatesFilter.getSerialNumber()))
+            queryString.append(" AND serialNumber=:serialNumber");
+        if (certificatesFilter.getCertificateType()!=null) {
+            queryString.append(" AND certificate.certificateType=:certificateType");
+        }
+        if (certificatesFilter.getValidityStartFrom() != null)
+            queryString.append(" AND certificate.validityStart >= :validityStartFrom");
+        if (certificatesFilter.getValidityStartTo() != null)
+            queryString.append(" AND certificate.validityStart <= :validityStartTo");
+        if (certificatesFilter.getValidityEndFrom() != null)
+            queryString.append(" AND certificate.validityEnd >= :validityEndFrom");
+        if (certificatesFilter.getValidityEndTo() != null)
+            queryString.append(" AND certificate.validityEnd <= :validityEndTo");
+    }
+
+    private void addQueryParameters(String userRrn, CertificatesFilter certificatesFilter, Query query) {
+        query.setParameter("nationalRegisterNumber", userRrn);
+        query.setParameter("registrationStatus", RegistrationStatus.APPROVED);
+        if (certificatesFilter.getCertificateDomainId() != null)
+            query.setParameter("certificateDomainId", certificatesFilter.getCertificateDomainId());
+        if (isNotBlank(certificatesFilter.getDistinguishedName()))
+            query.setParameter("distinguishedName", certificatesFilter.getDistinguishedName());
+        if (isNotBlank(certificatesFilter.getIssuer()))
+            query.setParameter("issuer", certificatesFilter.getIssuer());
+        if (isNotBlank(certificatesFilter.getSerialNumber())) {
+            BigInteger serialNumber;
+            try {
+                serialNumber = new BigInteger(certificatesFilter.getSerialNumber());
+            } catch (NumberFormatException e) {
+                serialNumber = BigInteger.ZERO;
+            }
+            query.setParameter("serialNumber", serialNumber);
+        }
+        if (certificatesFilter.getCertificateType()!=null) {
+            query.setParameter("certificateType", certificatesFilter.getCertificateType());
+        }
+        if (certificatesFilter.getValidityStartFrom() != null)
+            query.setParameter("validityStartFrom", certificatesFilter.getValidityStartFrom());
+        if (certificatesFilter.getValidityStartTo() != null)
+            query.setParameter("validityStartTo", certificatesFilter.getValidityStartTo());
+        if (certificatesFilter.getValidityEndFrom() != null)
+            query.setParameter("validityEndFrom", certificatesFilter.getValidityEndFrom());
+        if (certificatesFilter.getValidityEndTo() != null)
+            query.setParameter("validityEndTo", certificatesFilter.getValidityEndTo());
+    }
+
+    private void appendOrderBy(Ordering ordering, StringBuilder queryString) {
+        if (ordering!=null && ordering.getOrderByField() != null)
+            queryString.append(" ORDER BY certificate.").append(ordering.getOrderByField()).append(ordering.isOrderByAscending() ? " ASC" : " DESC");
+        else
+            queryString.append(" ORDER BY certificate.validityStart DESC");
+    }
+
+    private void setPaging(Paging paging, Query query) {
+        if (paging!=null && paging.getFirstRow() != null && paging.getEndRow() != null)
+            query.setFirstResult(paging.getFirstRow()).setMaxResults(paging.getEndRow() - paging.getFirstRow());
+    }
 }
