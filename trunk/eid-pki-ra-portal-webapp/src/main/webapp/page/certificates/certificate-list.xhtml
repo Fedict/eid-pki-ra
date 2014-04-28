@@ -62,7 +62,7 @@
             <s:decorate id="cerListDecorator" template="/layout/edit.xhtml">
 
                 <h:form id="certificatesListForm">
-                    <rich:dataTable id="certificateTable" var="certificate" value="#{certificateDataModel}"
+                    <rich:dataTable id="certificateTable" var="cer" value="#{certificateDataModel}"
                                     rows="#{certificateDataModel.rows}"
                                     reRender="certificateTable, certificateTableDataScroller" width="75%">
                         <f:facet name="header">
@@ -120,7 +120,7 @@
                                     <a:support event="onchange" reRender="certificateTable,certificateTableDataScroller"/>
                                 </h:inputText>
                             </f:facet>
-                            <h:outputText value="#{certificate.serialNumber}"/>
+                            <h:outputText value="#{cer.serialNumber}"/>
                         </rich:column>
 
                         <rich:column>
@@ -147,7 +147,7 @@
                                     </rich:calendar>
                                 </h:panelGroup>
                             </f:facet>
-                            <h:outputText value="#{certificate.validityStart}">
+                            <h:outputText value="#{cer.validityStart}">
                                 <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss"/>
                             </h:outputText>
                         </rich:column>
@@ -176,7 +176,7 @@
                                     </rich:calendar>
                                 </h:panelGroup>
                             </f:facet>
-                            <h:outputText value="#{certificate.validityEnd}">
+                            <h:outputText value="#{cer.validityEnd}">
                                 <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss"/>
                             </h:outputText>
                         </rich:column>
@@ -188,7 +188,7 @@
                                     <a:support event="onchange" reRender="certificateTable,certificateTableDataScroller"/>
                                 </h:inputText>
                             </f:facet>
-                            <h:outputText value="#{certificate.issuer}"/>
+                            <h:outputText value="#{cer.issuer}"/>
                         </rich:column>
 
                         <rich:column>
@@ -201,7 +201,7 @@
                                     <a:support event="onchange" reRender="certificateTable,certificateTableDataScroller"/>
                                 </h:selectOneMenu>
                             </f:facet>
-                            <h:outputText value="#{messages[certificate.type]}"/>
+                            <h:outputText value="#{messages[cer.type]}"/>
                         </rich:column>
 
                         <rich:column>
@@ -211,19 +211,17 @@
                                     <a:support event="onchange" reRender="certificateTable,certificateTableDataScroller"/>
                                 </h:inputText>
                             </f:facet>
-                            <h:outputText value="#{certificate.distinguishedName}"/>
+                            <h:outputText value="#{cer.distinguishedName}"/>
                         </rich:column>
 
                         <rich:column>
                             <s:link id="detailCertificate" view="/page/certificates/certificate-detail.xhtml"
                                     value="#{messages['link.detail']}">
-                                <f:param name="certificateId" value="#{certificate.id}"/>
+                                <f:param name="certificateId" value="#{cer.id}"/>
                             </s:link>
 
-                            <s:link id="revokeCertificate" action="#{certificateHandler.prepareRevocation(certificate.id)}"
-                                    value="#{messages['link.revoke']}">
-                                <f:param name="certificateId" value="#{certificate.id}"/>
-                            </s:link>
+                            <s:link id="revokeCertificate" action="#{certificateHandler.prepareRevocation(cer.id)}"
+                                    value="#{messages['link.revoke']}"/>
                         </rich:column>
 
                         <f:facet name="footer">
