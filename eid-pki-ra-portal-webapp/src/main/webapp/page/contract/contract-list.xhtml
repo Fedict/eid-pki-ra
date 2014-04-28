@@ -222,8 +222,8 @@
                 <f:facet name="footer">
                     <rich:datascroller id="contractTableDataScroller" for="contractTable" renderIfSinglePage="true"
                                        page="#{contractDataModel.pageNumber}"
-                                       maxPages="#{contractWSQuery.maxPages}"
-                                       fastStep="#{contractWSQuery.fastStep}"/>
+                                       maxPages="#{contractDataModel.maxPages}"
+                                       fastStep="#{contractDataModel.fastStep}"/>
                 </f:facet>
             </rich:dataTable>
         </h:form>
