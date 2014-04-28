@@ -43,7 +43,7 @@
             <ui:define name="label">#{messages['certificate.domain.selection.label']}:</ui:define>
             <h:form>
                 <h:selectOneMenu id="selectRegisteredCertificateDomain"
-                                 value="#{contractWSQuery.dataModel.certificateDomainId}">
+                                 value="#{contractDataModel.certificateDomainId}">
                     <s:selectItems value="#{certificateDomainWSQuery.findRegisteredCertificateDomains}"
                                    var="certificateDomain" label="#{certificateDomain.name}"
                                    itemValue="#{certificateDomain.id}"
@@ -57,56 +57,56 @@
         <s:decorate id="dnExpressionDecorator" template="/layout/edit.xhtml">
             <ui:define name="label">#{messages['certificatedomain.dnExpression']}:</ui:define>
             <h:outputText id="certificateDomainDnExpression"
-                          value="#{contractWSQuery.dataModel.certificateDomainExpressionShortened}"
-                          title="#{contractWSQuery.dataModel.certificateDomainExpression}"/>
+                          value="#{contractDataModel.certificateDomainExpressionShortened}"
+                          title="#{contractDataModel.certificateDomainExpression}"/>
         </s:decorate>
 
         <h:form id="contractListForm">
-            <rich:dataTable id="contractTable" var="contract" value="#{contractWSQuery.dataModel}"
+            <rich:dataTable id="contractTable" var="contract" value="#{contractDataModel}"
                             rows="#{contractWSQuery.rows}"
                             reRender="contractTable,contractTableDataScroller" width="75%" sortMode="single">
                 <f:facet name="header">
                     <rich:columnGroup>
                         <rich:column>
-                            <a:commandLink action="#{contractWSQuery.dataModel.sortBy('contractType')}"
+                            <a:commandLink action="#{contractDataModel.sortBy('contractType')}"
                                            reRender="contractTable,contractTableDataScroller">
                                 <h:outputText value="#{messages['contract.type']}"/>
-                                <h:graphicImage value="#{contractWSQuery.dataModel.getSortIcon('contractType')}"/>
+                                <h:graphicImage value="#{contractDataModel.getSortIcon('contractType')}"/>
                             </a:commandLink>
                         </rich:column>
                         <rich:column>
-                            <a:commandLink action="#{contractWSQuery.dataModel.sortBy('requesterName')}"
+                            <a:commandLink action="#{contractDataModel.sortBy('requesterName')}"
                                            reRender="contractTable,contractTableDataScroller">
                                 <h:outputText value="#{messages['contract.requestername']}"/>
-                                <h:graphicImage value="#{contractWSQuery.dataModel.getSortIcon('requesterName')}"/>
+                                <h:graphicImage value="#{contractDataModel.getSortIcon('requesterName')}"/>
                             </a:commandLink>
                         </rich:column>
                         <rich:column>
-                            <a:commandLink action="#{contractWSQuery.dataModel.sortBy('certificateType')}"
+                            <a:commandLink action="#{contractDataModel.sortBy('certificateType')}"
                                            reRender="contractTable,contractTableDataScroller">
                                 <h:outputText value="#{messages['certificate.type']}"/>
-                                <h:graphicImage value="#{contractWSQuery.dataModel.getSortIcon('certificateType')}"/>
+                                <h:graphicImage value="#{contractDataModel.getSortIcon('certificateType')}"/>
                             </a:commandLink>
                         </rich:column>
                         <rich:column>
-                            <a:commandLink action="#{contractWSQuery.dataModel.sortBy('dnExpression')}"
+                            <a:commandLink action="#{contractDataModel.sortBy('dnExpression')}"
                                            reRender="contractTable,contractTableDataScroller">
                                 <h:outputText value="#{messages['contract.dnexpression']}"/>
-                                <h:graphicImage value="#{contractWSQuery.dataModel.getSortIcon('dnExpression')}"/>
+                                <h:graphicImage value="#{contractDataModel.getSortIcon('dnExpression')}"/>
                             </a:commandLink>
                         </rich:column>
                         <rich:column>
-                            <a:commandLink action="#{contractWSQuery.dataModel.sortBy('creationDate')}"
+                            <a:commandLink action="#{contractDataModel.sortBy('creationDate')}"
                                            reRender="contractTable,contractTableDataScroller">
                                 <h:outputText value="#{messages['contract.creationdate']}"/>
-                                <h:graphicImage value="#{contractWSQuery.dataModel.getSortIcon('creationDate')}"/>
+                                <h:graphicImage value="#{contractDataModel.getSortIcon('creationDate')}"/>
                             </a:commandLink>
                         </rich:column>
                         <rich:column>
-                            <a:commandLink action="#{contractWSQuery.dataModel.sortBy('result')}"
+                            <a:commandLink action="#{contractDataModel.sortBy('result')}"
                                            reRender="contractTable,contractTableDataScroller">
                                 <h:outputText value="#{messages['contract.result']}"/>
-                                <h:graphicImage value="#{contractWSQuery.dataModel.getSortIcon('result')}"/>
+                                <h:graphicImage value="#{contractDataModel.getSortIcon('result')}"/>
                             </a:commandLink>
                         </rich:column>
                         <rich:column>
@@ -119,8 +119,8 @@
                 <rich:column filterMethod="#myBean.filter}">
                     <f:facet name="header">
                         <h:selectOneMenu id="contractTypeFilter"
-                                         value="#{contractWSQuery.dataModel.contractTypeFilter}">
-                            <s:selectItems value="#{contractWSQuery.dataModel.contractTypes}"
+                                         value="#{contractDataModel.contractTypeFilter}">
+                            <s:selectItems value="#{contractDataModel.contractTypes}"
                                            var="contractType" label="#{messages[contractType.messageKey]}"
                                            itemValue="#{contractType.name()}"
                                            noSelectionLabel="#{messages['general.noselectionlabel']}"/>
@@ -133,7 +133,7 @@
                 <rich:column>
                     <f:facet name="header">
                         <h:inputText id="requesterNameFilter"
-                                     value="#{contractWSQuery.dataModel.requesterNameFilter}">
+                                     value="#{contractDataModel.requesterNameFilter}">
                             <a:support event="onchange" reRender="contractTable,contractTableDataScroller"/>
                         </h:inputText>
                     </f:facet>
@@ -143,8 +143,8 @@
                 <rich:column>
                     <f:facet name="header">
                         <h:selectOneMenu id="certificateTypeFilter"
-                                         value="#{contractWSQuery.dataModel.certificateTypeFilter}">
-                            <s:selectItems value="#{contractWSQuery.dataModel.certificateTypes}"
+                                         value="#{contractDataModel.certificateTypeFilter}">
+                            <s:selectItems value="#{contractDataModel.certificateTypes}"
                                            var="certificateType" label="#{messages[certificateType.messageKey]}"
                                            itemValue="#{certificateType.name()}"
                                            noSelectionLabel="#{messages['general.noselectionlabel']}"/>
@@ -157,7 +157,7 @@
                 <rich:column>
                     <f:facet name="header">
                         <h:inputText id="dnExpressionFilter"
-                                     value="#{contractWSQuery.dataModel.dnExpressionFilter}">
+                                     value="#{contractDataModel.dnExpressionFilter}">
                             <a:support event="onchange" reRender="contractTable,contractTableDataScroller"/>
                         </h:inputText>
                     </f:facet>
@@ -168,7 +168,7 @@
                     <f:facet name="header">
                         <h:panelGroup>
                             <rich:calendar id="creationDateFromFilter"
-                                           value="#{contractWSQuery.dataModel.creationDateFromFilter}"
+                                           value="#{contractDataModel.creationDateFromFilter}"
                                            datePattern="dd/MM/yyyy"
                                            enableManualInput="false"
                                            showWeekDaysBar="false"
@@ -178,7 +178,7 @@
                             </rich:calendar>
                             -
                             <rich:calendar id="creationDateToFilter"
-                                           value="#{contractWSQuery.dataModel.creationDateToFilter}"
+                                           value="#{contractDataModel.creationDateToFilter}"
                                            datePattern="dd/MM/yyyy"
                                            enableManualInput="false"
                                            showWeekDaysBar="false"
@@ -200,7 +200,7 @@
                 <rich:column>
                     <f:facet name="header">
                         <h:inputText id="resultMessageFilter"
-                                     value="#{contractWSQuery.dataModel.resultMessageFilter}">
+                                     value="#{contractDataModel.resultMessageFilter}">
                             <a:support event="onchange" reRender="contractTable,contractTableDataScroller"/>
                         </h:inputText>
                     </f:facet>
@@ -221,7 +221,7 @@
 
                 <f:facet name="footer">
                     <rich:datascroller id="contractTableDataScroller" for="contractTable" renderIfSinglePage="true"
-                                       page="#{contractWSQuery.dataModel.pageNumber}"
+                                       page="#{contractDataModel.pageNumber}"
                                        maxPages="#{contractWSQuery.maxPages}"
                                        fastStep="#{contractWSQuery.fastStep}"/>
                 </f:facet>
