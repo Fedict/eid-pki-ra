@@ -18,16 +18,16 @@
 
 package be.fedict.eid.pkira.blm.model.mappers;
 
-import be.fedict.eid.pkira.blm.model.contracts.ContractsFilter;
-import be.fedict.eid.pkira.generated.privatews.ContractsFilterWS;
+import be.fedict.eid.pkira.blm.model.contracts.CertificatesFilter;
+import be.fedict.eid.pkira.generated.privatews.CertificatesFilterWS;
 
 /**
  * @author Bram Baeyens
  *
  */
-public interface ContractsFilterMapper {
+public interface CertificatesFilterMapper {
 	
-	public static final String NAME = "be.fedict.eid.pkira.blm.contractsFilterMapper";
+	public static final String NAME = "be.fedict.eid.pkira.blm.certificatesFilterMapper";
 
-    ContractsFilter mapContractsFilter(ContractsFilterWS contractsFilter);
+    CertificatesFilter mapCertificatesFilter(CertificatesFilterWS certificatesFilter);
 }

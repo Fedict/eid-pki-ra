@@ -67,7 +67,7 @@ public class ReportManagerBeanTest {
 		verify(reportEntryHome).persist();
 		assertEquals(entry.getCertificateAuthorityName(), CA_NAME);
 		assertEquals(entry.getCertificateDomainName(), CD_NAME);
-		assertEquals(entry.getRequester(), contract.getRequester());
+		assertEquals(entry.getRequester(), contract.getRequesterName());
 		assertEquals(entry.getSubject(), contract.getSubject());
 		assertEquals(entry.getContractType(), ReportEntry.ContractType.REQUEST);
 		assertEquals(entry.getMonth(), getMonth());
@@ -84,7 +84,7 @@ public class ReportManagerBeanTest {
 		verify(reportEntryHome).persist();
 		assertEquals(entry.getCertificateAuthorityName(), CA_NAME);
 		assertEquals(entry.getCertificateDomainName(), CD_NAME);
-		assertEquals(entry.getRequester(), contract.getRequester());
+		assertEquals(entry.getRequester(), contract.getRequesterName());
 		assertEquals(entry.getSubject(), contract.getSubject());
 		assertEquals(entry.getContractType(), ReportEntry.ContractType.REVOCATION);
 		assertEquals(entry.getMonth(), getMonth());
@@ -95,7 +95,7 @@ public class ReportManagerBeanTest {
 		result.setCertificateDomain(createCertificateDomain());
 		result.setCertificateType(CertificateType.SERVER);
 		result.setContractDocument("contractDocument");
-		result.setRequester("requester");
+		result.setRequesterName("requester");
 		result.setSubject("subject");
 		result.setValidityPeriodMonths(15);
 		return result;
@@ -105,7 +105,7 @@ public class ReportManagerBeanTest {
 		CertificateRevocationContract result = new CertificateRevocationContract();
 		result.setCertificateDomain(createCertificateDomain());
 		result.setContractDocument("contractDocument");
-		result.setRequester("requester");
+		result.setRequesterName("requester");
 		result.setSubject("subject");
 		return result;
 	}

@@ -51,9 +51,15 @@ public interface ContractRepository {
 	/**
 	 * Retrieves a list of all certificates.
 	 */
-	public List<Certificate> findAllCertificates(String userRRN, String certificateDomainID);
+	public List<Certificate> findCertificatesByFilter(String userRRN, CertificatesFilter certificatesFilter, Ordering ordering, Paging paging);
 
-	/**
+    /**
+     * Count the certificates.
+     */
+    public int countCertificatesByFilter(String userRRN, CertificatesFilter certificatesFilter);
+
+
+    /**
 	 * Finds a certificate using its issuer's DN and its serial number.
 	 * @param issuer DN of the issuer.
 	 * @param serialNumber serial number of the certificate.
@@ -79,4 +85,5 @@ public interface ContractRepository {
 	 * @param contract contract to update. This has to be saved before.
 	 */
 	public void updateContract(AbstractContract contract);
+
 }

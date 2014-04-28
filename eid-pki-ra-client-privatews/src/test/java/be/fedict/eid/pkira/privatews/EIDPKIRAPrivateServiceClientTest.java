@@ -24,8 +24,8 @@ import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.generated.privatews.CertificateWS;
 import be.fedict.eid.pkira.generated.privatews.EIDPKIRAPrivatePortType;
-import be.fedict.eid.pkira.generated.privatews.ListCertificatesRequest;
-import be.fedict.eid.pkira.generated.privatews.ListCertificatesResponse;
+import be.fedict.eid.pkira.generated.privatews.FindCertificatesRequest;
+import be.fedict.eid.pkira.generated.privatews.FindCertificatesResponse;
 
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.*;
@@ -52,18 +52,18 @@ public class EIDPKIRAPrivateServiceClientTest {
 	@Test
 	public void testGetCertificates() {
 		// Prepare
-		ListCertificatesResponse response = new ListCertificatesResponse();
+		FindCertificatesResponse response = new FindCertificatesResponse();
 		CertificateWS testCertificate = new CertificateWS();
 		response.getCertificates().add(testCertificate);
 		String userRRN = "testRRN";
 		
-		when(port.listCertificates(isA(ListCertificatesRequest.class))).thenReturn(response);
+		when(port.findCertificates(isA(FindCertificatesRequest.class))).thenReturn(response);
 		
 		// Call
-		List<CertificateWS> result = serviceClient.listCertificates(userRRN, null);
+		List<CertificateWS> result = serviceClient.findCertificates(userRRN, null, null, null);
 		
 		// Verify
-		verify(port).listCertificates(isA(ListCertificatesRequest.class));
+		verify(port).findCertificates(isA(FindCertificatesRequest.class));
 		verifyNoMoreInteractions(port);
 		
 		assertNotNull(result);

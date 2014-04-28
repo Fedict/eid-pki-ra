@@ -18,6 +18,7 @@
 package be.fedict.eid.pkira.blm.model.mappers;
 
 import java.util.Collection;
+import java.util.List;
 
 import be.fedict.eid.pkira.blm.model.contracts.Certificate;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
@@ -52,4 +53,9 @@ public interface CertificateMapper {
 	 * Maps a certificate to the WS version.
 	 */
 	CertificateWS map(Certificate certificate, boolean includeX509);
+
+    /**
+     * Maps a list of certificates to the WS version.
+     */
+    List<CertificateWS> map(List<Certificate> certificates, boolean includeX509);
 }

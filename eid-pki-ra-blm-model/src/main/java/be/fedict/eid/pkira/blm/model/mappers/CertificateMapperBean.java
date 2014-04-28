@@ -17,7 +17,9 @@
  */
 package be.fedict.eid.pkira.blm.model.mappers;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
@@ -66,7 +68,17 @@ public class CertificateMapperBean implements CertificateMapper {
 		return result;
 	}
 
-	/**
+    @Override
+    public List<CertificateWS> map(List<Certificate> certificates, boolean includeX509) {
+        List<CertificateWS> result = new ArrayList<CertificateWS>();
+        for (Certificate certificate : certificates) {
+            result.add(map(certificate, includeX509));
+        }
+
+        return result;
+    }
+
+    /**
 	 * {@inheritDoc}
 	 */
 	@Override

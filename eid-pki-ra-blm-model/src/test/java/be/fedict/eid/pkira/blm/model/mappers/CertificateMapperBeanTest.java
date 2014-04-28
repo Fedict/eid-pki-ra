@@ -93,7 +93,7 @@ public class CertificateMapperBeanTest {
 
 	@Test
 	public void testMapCertificateNull() {
-		assertNull(bean.map(null, true));
+		assertNull(bean.map((Certificate) null, true));
 	}
 
 	private void validateCertificateWS(CertificateWS certificateWS) {

@@ -67,7 +67,7 @@ public class ReportManagerBean implements ReportManager {
 		entry.setCertificateAuthorityName(contract.getCertificateDomain().getCertificateAuthority().getName());
 		entry.setCertificateDomainName(contract.getCertificateDomain().getName());
 		entry.setSubject(contract.getSubject());
-		entry.setRequester(contract.getRequester());
+		entry.setRequester(contract.getRequesterName());
 		entry.setSuccess(success);
 		entry.setMonth(new SimpleDateFormat("yyyy-MM").format(new Date()));
 		entry.setContractType(mapToContractType(contract));

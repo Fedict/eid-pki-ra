@@ -18,6 +18,7 @@
 package be.fedict.eid.pkira.portal.certificate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -92,8 +93,8 @@ public class CertificateHandlerBean implements CertificateHandler {
 
 	@Override
 	public List<Certificate> findCertificateList(String userRRN) {
-		List<CertificateWS> listCertificates = eidpkiraPrivateServiceClient.listCertificates(userRRN,
-				getCertificateDomainWSID());
+        // TODO rewrite
+		List<CertificateWS> listCertificates = Collections.emptyList();//eidpkiraPrivateServiceClient.listCertificates(userRRN, getCertificateDomainWSID());
 		certificates = new ArrayList<Certificate>();
 		for (CertificateWS certificatews : listCertificates) {
 			certificates.add(typeMapper.map(certificatews));

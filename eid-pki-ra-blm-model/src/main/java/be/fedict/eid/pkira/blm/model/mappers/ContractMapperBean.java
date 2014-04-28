@@ -68,7 +68,7 @@ public class ContractMapperBean implements Serializable, ContractMapper {
 		contractWS.setContractId(contract.getId());
 		contractWS.setCreationDate(createXmlGregorianCalendar(contract.getCreationDate()));
 		contractWS.setDnExpression(contract.getSubject());
-		contractWS.setRequesterName(contract.getRequester());
+		contractWS.setRequesterName(contract.getRequesterName());
 		contractWS.setCertificateDomainName(contract.getCertificateDomain().getName());
 		contractWS.setContractType(deriveContractType(contract));
 		contractWS.setCertificateType(getCertificateType(contract));

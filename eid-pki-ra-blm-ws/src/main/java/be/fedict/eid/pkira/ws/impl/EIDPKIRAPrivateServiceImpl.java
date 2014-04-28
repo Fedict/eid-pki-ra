@@ -44,8 +44,11 @@ import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 import be.fedict.eid.pkira.blm.model.contracts.ContractHome;
 import be.fedict.eid.pkira.blm.model.contracts.ContractQuery;
 import be.fedict.eid.pkira.blm.model.contracts.ContractRepository;
+import be.fedict.eid.pkira.blm.model.contracts.Ordering;
+import be.fedict.eid.pkira.blm.model.contracts.Paging;
 import be.fedict.eid.pkira.blm.model.mappers.CertificateDomainMapper;
 import be.fedict.eid.pkira.blm.model.mappers.CertificateMapper;
+import be.fedict.eid.pkira.blm.model.mappers.CertificatesFilterMapper;
 import be.fedict.eid.pkira.blm.model.mappers.ConfigurationEntryMapper;
 import be.fedict.eid.pkira.blm.model.mappers.ContractMapper;
 import be.fedict.eid.pkira.blm.model.mappers.ContractsFilterMapper;
@@ -73,22 +76,31 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 
 	private Log log = Logging.getLog(EIDPKIRAPrivateServiceImpl.class);
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ListCertificatesResponse listCertificates(ListCertificatesRequest request) {
-		List<Certificate> allCertificates = getDomainRepository().findAllCertificates(request.getUserRRN(),
-				request.getCertificateDomainId());
+    @Override
+    public FindCertificatesResponse findCertificates(FindCertificatesRequest request) {
+        List<Certificate> certificates = getContractRepository().findCertificatesByFilter(
+                request.getUserRrn(),
+                getCertificatesFilterMapper().mapCertificatesFilter(request.getCertificatesFilter()),
+                mapOrdering(request.getOrdering()),
+                mapPaging(request.getPaging()));
 
-		ListCertificatesResponse certificatesResponse = new ObjectFactory().createListCertificatesResponse();
-		for (Certificate certificate : allCertificates) {
-			certificatesResponse.getCertificates().add(getCertificateMapper().map(certificate, false));
-		}
-		return certificatesResponse;
-	}
+        FindCertificatesResponse response = new ObjectFactory().createFindCertificatesResponse();
+        response.getCertificates().addAll(getCertificateMapper().map(certificates, false));
+        return response;
+    }
 
-	/**
+    @Override
+    public CountCertificatesResponse countCertificates(CountCertificatesRequest request) {
+        int size = getContractRepository().countCertificatesByFilter(
+                request.getUserRrn(),
+                getCertificatesFilterMapper().mapCertificatesFilter(request.getCertificatesFilter()));
+
+        CountCertificatesResponse response = new ObjectFactory().createCountCertificatesResponse();
+        response.setSize(size);
+        return response;
+    }
+
+    /**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -140,7 +152,6 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 				.createFindRegisteredCertificateDomainsForUserResponse();
 		response.getCertificateDomains().addAll(getCertificateDomainMapper().map(domains));
 		return response;
-
 	}
 
 	/**
@@ -238,51 +249,23 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 
 	@Override
 	public FindContractsResponse findContracts(FindContractsRequest request) {
-        ContractQuery.ContractsFilter contractsFilter = getContractsFilterMapper().mapContractsFilter(request.getContractsFilter());
-
-        Integer firstRow = null, endRow = null;
-        PagingWS paging = request.getPaging();
-        if (paging !=null) {
-            firstRow = paging.getFirstRow();
-            endRow = paging.getEndRow();
-        }
-
-        String sortColumn = null;
-        boolean sortAscending = true;
-        OrderingWS ordering = request.getOrdering();
-        if (ordering !=null) {
-            sortAscending = ordering.getOrder()==SortOrderWS.ASC;
-            sortColumn = mapSortColumn(ordering.getField());
-        }
-
-		List<AbstractContract> contracts = getContractQuery().findContractsByFilter(
-                request.getUserRrn(), contractsFilter,
-                sortColumn, sortAscending,
-                firstRow, endRow);
+        List<AbstractContract> contracts = getContractQuery().findContractsByFilter(
+                request.getUserRrn(),
+                getContractsFilterMapper().mapContractsFilter(request.getContractsFilter()),
+                mapOrdering(request.getOrdering()),
+                mapPaging(request.getPaging())
+        );
 
         FindContractsResponse response = new ObjectFactory().createFindContractsResponse();
 		response.getContracts().addAll(getContractMapper().map(contracts));
 		return response;
 	}
 
-
-
-    private String mapSortColumn(String field) {
-        if (field==null) return null;
-        if (field.equals("contractType")) return "class";
-        if (field.equals("requesterName")) return "requester";
-        if (field.equals("certificateType")) return "certificateType";
-        if (field.equals("dnExpression")) return "subject";
-        if (field.equals("creationDate")) return "creationDate";
-        if (field.equals("result")) return "result";
-        if (field.equals("resultMessage")) return "resultMessage";
-        return null;
-    }
-
     @Override
     public CountContractsResponse countContracts(CountContractsRequest request) {
-        ContractQuery.ContractsFilter contractsFilter = getContractsFilterMapper().mapContractsFilter(request.getContractsFilter());
-        int size = getContractQuery().countContractsByFilter(request.getUserRrn(), contractsFilter);
+        int size = getContractQuery().countContractsByFilter(
+                request.getUserRrn(), 
+                getContractsFilterMapper().mapContractsFilter(request.getContractsFilter()));
 
         CountContractsResponse response = new ObjectFactory().createCountContractsResponse();
         response.setSize(size);
@@ -332,15 +315,38 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 		for(Registration registration: registrations) {
 			certificateTypes.addAll(registration.getCertificateDomain().getCertificateTypes());
 		}
-		
+
 		GetAllowedCertificateTypesResponse response = new GetAllowedCertificateTypesResponse();
 		getCertificateMapper().map(certificateTypes, response.getCertificateType());
 		return response;
 	}
 
-	private ContractRepository getDomainRepository() {
-		return (ContractRepository) Component.getInstance(ContractRepository.NAME, true);
-	}
+    private Ordering mapOrdering(OrderingWS ordering) {
+        if (ordering !=null) {
+            return new Ordering(
+                    mapSortColumn(ordering.getField()),
+                    ordering.getOrder()== SortOrderWS.ASC);
+        }
+
+        return new Ordering();
+    }
+
+    private Paging mapPaging(PagingWS paging) {
+        if (paging !=null) {
+            return new Paging(paging.getFirstRow(), paging.getEndRow());
+        }
+        return new Paging();
+    }
+
+    private String mapSortColumn(String field) {
+        if (field==null) return null;
+
+        // Special cases
+        if (field.equals("contractType")) return "class"; // contract type mapped via subclass
+        if (field.equals("dnExpression")) return "subject";
+
+        return field;
+    }
 
 	private UserRepository getUserRepository() {
 		return (UserRepository) Component.getInstance(UserRepository.NAME, true);
@@ -404,6 +410,10 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 
     private ContractsFilterMapper getContractsFilterMapper() {
         return (ContractsFilterMapper) Component.getInstance(ContractsFilterMapper.NAME, true);
+    }
+
+    private CertificatesFilterMapper getCertificatesFilterMapper() {
+        return (CertificatesFilterMapper) Component.getInstance(CertificatesFilterMapper.NAME, true);
     }
 
 	private ContractHome getContractHome() {

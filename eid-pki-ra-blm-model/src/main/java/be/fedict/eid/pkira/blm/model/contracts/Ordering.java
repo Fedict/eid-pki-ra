@@ -16,18 +16,24 @@
  * http://www.gnu.org/licenses/.
  */
 
-package be.fedict.eid.pkira.blm.model.mappers;
+package be.fedict.eid.pkira.blm.model.contracts;
 
-import be.fedict.eid.pkira.blm.model.contracts.ContractsFilter;
-import be.fedict.eid.pkira.generated.privatews.ContractsFilterWS;
+public class Ordering {
+    private String orderByField;
+    private boolean orderByAscending;
 
-/**
- * @author Bram Baeyens
- *
- */
-public interface ContractsFilterMapper {
-	
-	public static final String NAME = "be.fedict.eid.pkira.blm.contractsFilterMapper";
+    public Ordering() {}
 
-    ContractsFilter mapContractsFilter(ContractsFilterWS contractsFilter);
+    public Ordering(String orderByField, boolean orderByAscending) {
+        this.orderByField = orderByField;
+        this.orderByAscending = orderByAscending;
+    }
+
+    public String getOrderByField() {
+        return orderByField;
+    }
+
+    public boolean isOrderByAscending() {
+        return orderByAscending;
+    }
 }

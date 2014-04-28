@@ -328,7 +328,7 @@ public class ContractHandlerBean implements ContractHandler {
 	private AbstractContract saveContract(Registration registration, String requestMsg,
 			CertificateRevocationRequestType request, String signer) {
 		CertificateRevocationContract contract = new CertificateRevocationContract();
-		contract.setRequester(signer);
+		contract.setRequesterName(signer);
 		contract.setCreationDate(new Date());
 		contract.setContractDocument(requestMsg);
 		contract.setSubject(request.getDistinguishedName());
@@ -343,7 +343,7 @@ public class ContractHandlerBean implements ContractHandler {
 	private CertificateSigningContract saveContract(Registration registration, String requestMsg,
 			CertificateSigningRequestType request, String signer, CertificateType certificateType) {
 		CertificateSigningContract contract = new CertificateSigningContract();
-		contract.setRequester(signer);
+		contract.setRequesterName(signer);
 		contract.setCreationDate(new Date());
 		contract.setCertificateType(certificateType);
 		contract.setContractDocument(requestMsg);

@@ -16,18 +16,24 @@
  * http://www.gnu.org/licenses/.
  */
 
-package be.fedict.eid.pkira.blm.model.mappers;
+package be.fedict.eid.pkira.blm.model.contracts;
 
-import be.fedict.eid.pkira.blm.model.contracts.ContractsFilter;
-import be.fedict.eid.pkira.generated.privatews.ContractsFilterWS;
+public class Paging {
+    private Integer firstRow;
+    private Integer endRow;
 
-/**
- * @author Bram Baeyens
- *
- */
-public interface ContractsFilterMapper {
-	
-	public static final String NAME = "be.fedict.eid.pkira.blm.contractsFilterMapper";
+    public Paging() {}
 
-    ContractsFilter mapContractsFilter(ContractsFilterWS contractsFilter);
+    public Paging(Integer firstRow, Integer endRow) {
+        this.firstRow = firstRow;
+        this.endRow = endRow;
+    }
+
+    public Integer getFirstRow() {
+        return firstRow;
+    }
+
+    public Integer getEndRow() {
+        return endRow;
+    }
 }
