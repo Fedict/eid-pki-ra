@@ -24,7 +24,7 @@
 	
 	<restrict>#{s:hasRole('REGISTERED_USER')}</restrict>
 
-	<navigation from-action="#{certificateHandler.prepareRevocation(cer.id)}">
+	<navigation from-action="#{certificateDataModel.prepareRevocation(cer.id)}">
 		<rule if-outcome="revokeContract">
 			<redirect view-id="/page/contract/revocationContract.xhtml" />
 		</rule>

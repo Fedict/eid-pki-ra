@@ -34,9 +34,6 @@ import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 @Scope(ScopeType.CONVERSATION)
 public class CertificateExportHandlerBean extends AbstractCsvCreatorBean implements CertificateExportHandler, Serializable {
 
-    @In(value = CertificateHandler.NAME, create = true)
-    private CertificateHandler certificateHandler;
-
     @In(value=EIdUserCredentials.NAME, create=true)
     private EIdUserCredentials userCredentials;
 
