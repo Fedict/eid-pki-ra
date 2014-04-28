@@ -18,22 +18,11 @@
 package be.fedict.eid.pkira.portal.certificate;
 
 import java.io.Serializable;
-import java.util.List;
 
 
 public interface CertificateHandler extends Serializable {
 	
 	String NAME = "be.fedict.eid.pkira.portal.certificateHandler";
 	
-	List<Certificate> findCertificateList(String userRRN);
-	
 	String prepareRevocation(Integer certificateId);
-
-	List<Certificate> findCertificateList();
-	
-	boolean filterByDN(Object current);
-
-	boolean filterByStartDate(Object current);
-	
-	boolean filterByEndDate(Object current);
 }

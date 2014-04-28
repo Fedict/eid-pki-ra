@@ -74,7 +74,7 @@ public class ContractExportHandlerBeanTest {
         Contract contract = new Contract();
         contract.setContractType(ContractType.SIGNING);
         contract.setCertificateType(CertificateType.CLIENT);
-        doReturn(Collections.singletonList(contract)).when(typeMapper).map(contractWSes);
+        doReturn(Collections.singletonList(contract)).when(typeMapper).mapContracts(contractWSes);
 
         contractExportHandlerBean.exportToCSV();
 

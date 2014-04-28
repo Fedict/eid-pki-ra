@@ -45,7 +45,7 @@ public class ContractExportHandlerBean extends AbstractCsvCreatorBean implements
 
     @Override
     public void exportToCSV() {
-        List<Contract> contracts = typeMapper.map(privateServiceClient.findContracts(credentials.getUser().getRRN(), null, null, null));
+        List<Contract> contracts = typeMapper.mapContracts(privateServiceClient.findContracts(credentials.getUser().getRRN(), null, null, null));
         CsvBuilder csv = new CsvBuilder();
 
         // add column headers

@@ -62,9 +62,8 @@
         </s:decorate>
 
         <h:form id="contractListForm">
-            <rich:dataTable id="contractTable" var="contract" value="#{contractDataModel}"
-                            rows="#{contractWSQuery.rows}"
-                            reRender="contractTable,contractTableDataScroller" width="75%" sortMode="single">
+            <rich:dataTable id="contractTable" var="contract" value="#{contractDataModel}" rows="#{contractDataModel.rows}"
+                            reRender="contractTable,contractTableDataScroller" width="75%">
                 <f:facet name="header">
                     <rich:columnGroup>
                         <rich:column>
@@ -116,7 +115,7 @@
                     </rich:columnGroup>
                 </f:facet>
 
-                <rich:column filterMethod="#myBean.filter}">
+                <rich:column>
                     <f:facet name="header">
                         <h:selectOneMenu id="contractTypeFilter"
                                          value="#{contractDataModel.contractTypeFilter}">
@@ -221,7 +220,6 @@
 
                 <f:facet name="footer">
                     <rich:datascroller id="contractTableDataScroller" for="contractTable" renderIfSinglePage="true"
-                                       page="#{contractDataModel.pageNumber}"
                                        maxPages="#{contractDataModel.maxPages}"
                                        fastStep="#{contractDataModel.fastStep}"/>
                 </f:facet>

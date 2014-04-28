@@ -48,7 +48,7 @@ public class ContractDataModel extends DataModelBase<Contract> {
 
         @Override
         protected List<Contract> fetchData(int firstRow, int endRow) {
-            return typeMapper.map(privateServiceClient.findContracts(
+            return typeMapper.mapContracts(privateServiceClient.findContracts(
                     credentials.getUser().getRRN(),
                     buildContractsFilter(),
                     buildOrdering(sortField, sortOrder),

@@ -76,7 +76,7 @@ public class TypeMapper {
         return Enum.valueOf(ContractTypeWS.class, contractType.name());
     }
 
-    public List<Contract> map(List<ContractWS> contracts) {
+    public List<Contract> mapContracts(List<ContractWS> contracts) {
         List<Contract> result = new ArrayList<Contract>();
         for (ContractWS contract : contracts) {
             result.add(map(contract));
@@ -97,6 +97,14 @@ public class TypeMapper {
         certificate.setRequesterName(certificateWS.getRequesterName());
         certificate.setX509(certificateWS.getX509());
         return certificate;
+    }
+
+    public List<Certificate> mapCertificates(List<CertificateWS> certificates) {
+        List<Certificate> result = new ArrayList<Certificate>();
+        for (CertificateWS certificate : certificates) {
+            result.add(map(certificate));
+        }
+        return result;
     }
 
     public CertificateType map(CertificateTypeWS certificateTypeWS) {
