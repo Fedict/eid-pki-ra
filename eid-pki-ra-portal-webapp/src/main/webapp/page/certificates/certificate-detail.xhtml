@@ -76,7 +76,7 @@
 			<s:button id="downloadCertificate" view="/page/certificates/certificate-download.xhtml" value="#{messages['certificate.download']}">
 				<f:param name="certificateId" value="#{certificateWSHome.instance.id}" />
 			</s:button>
-			<s:button id="revokeCertificate" action="#{certificateHandler.prepareRevocation(certificateWSHome.instance.id)}" value="#{messages['link.revoke']}" />
+			<s:button id="revokeCertificate" action="#{certificateDataModel.prepareRevocation(certificateWSHome.instance.id)}" value="#{messages['link.revoke']}" />
 			<s:button id="backButton"  value="#{messages['general.list']}" view="/page/certificates/certificate-list.xhtml"/>
 		</s:decorate>
 		

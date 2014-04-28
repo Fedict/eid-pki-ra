@@ -219,9 +219,6 @@
                                     value="#{messages['link.detail']}">
                                 <f:param name="certificateId" value="#{cer.id}"/>
                             </s:link>
-
-                            <s:link id="revokeCertificate" action="#{certificateHandler.prepareRevocation(cer.id)}"
-                                    value="#{messages['link.revoke']}"/>
                         </rich:column>
 
                         <f:facet name="footer">

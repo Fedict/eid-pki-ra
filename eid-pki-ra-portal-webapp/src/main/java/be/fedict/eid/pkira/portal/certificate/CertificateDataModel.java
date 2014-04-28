@@ -25,7 +25,10 @@ import java.util.List;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.Begin;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
 
 import be.fedict.eid.pkira.generated.privatews.CertificateTypeWS;
@@ -81,6 +84,12 @@ public class CertificateDataModel extends DataModelBase<Certificate> {
     }
 
     public static final String NAME = "be.fedict.eid.pkira.portal.certificateDataModel";
+
+    @In(value = CertificateWSHome.NAME, create = true)
+    private CertificateWSHome certificateWSHome;
+
+    @Out(value = Certificate.NAME, required = false)
+    private Certificate certificate;
 
     private String serialNumberFilter = "";
     private String certificateTypeFilter;
@@ -182,6 +191,13 @@ public class CertificateDataModel extends DataModelBase<Certificate> {
 
     public List<CertificateType> getCertificateTypes() {
         return Arrays.asList(CertificateType.values());
+    }
+
+    @Begin(join = true)
+    public String prepareRevocation(Integer certificateId) {
+        certificateWSHome.setId(certificateId);
+        certificate = certificateWSHome.getInstance();
+        return "revokeContract";
     }
 }
 
