@@ -46,7 +46,7 @@ public class CertificatesFilterMapperBean implements Serializable, CertificatesF
         CertificatesFilter certificatesFilter = new CertificatesFilter();
         if (certificatesFilterWS !=null) {
             certificatesFilter.setCertificateDomainId(certificatesFilterWS.getCertificateDomainId());
-            certificatesFilter.setCertificateType(CertificateType.valueOf(certificatesFilterWS.getCertificateType().name()));
+            if (certificatesFilterWS.getCertificateType()!=null) certificatesFilter.setCertificateType(CertificateType.valueOf(certificatesFilterWS.getCertificateType().name()));
             certificatesFilter.setRequesterName(certificatesFilterWS.getRequesterName());
             certificatesFilter.setIssuer(certificatesFilterWS.getIssuer());
             certificatesFilter.setDistinguishedName(certificatesFilterWS.getDistinguishedName());

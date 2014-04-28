@@ -25,7 +25,10 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
+import be.fedict.eid.pkira.common.security.EIdUserCredentials;
 import be.fedict.eid.pkira.portal.util.AbstractCsvCreatorBean;
+import be.fedict.eid.pkira.portal.util.TypeMapper;
+import be.fedict.eid.pkira.privatews.EIDPKIRAPrivateServiceClient;
 
 @Name(CertificateExportHandler.NAME)
 @Scope(ScopeType.CONVERSATION)
@@ -34,9 +37,18 @@ public class CertificateExportHandlerBean extends AbstractCsvCreatorBean impleme
     @In(value = CertificateHandler.NAME, create = true)
     private CertificateHandler certificateHandler;
 
+    @In(value=EIdUserCredentials.NAME, create=true)
+    private EIdUserCredentials userCredentials;
+
+    @In(value=TypeMapper.NAME, create=true)
+    private TypeMapper typeMapper;
+
+    @In(value= EIDPKIRAPrivateServiceClient.NAME, create=true)
+    private EIDPKIRAPrivateServiceClient privateServiceClient;
+
     @Override
     public void exportToCSV() {
-        List<Certificate> certificates = certificateHandler.findCertificateList();
+        List<Certificate> certificates = typeMapper.mapCertificates(privateServiceClient.findCertificates(userCredentials.getUser().getRRN(), null, null, null));
         CsvBuilder csv = new CsvBuilder();
 
         // add column headers
@@ -46,7 +58,7 @@ public class CertificateExportHandlerBean extends AbstractCsvCreatorBean impleme
             .append(messages.get("certificate.validityEnd"))
             .append(messages.get("certificate.issuer"))
             .append(messages.get("certificate.type"))
-            .append(messages.get("certificate.dn"))
+            .append(messages.get("certificate.distinguishedName"))
             .nextRow();
 
         // add rows

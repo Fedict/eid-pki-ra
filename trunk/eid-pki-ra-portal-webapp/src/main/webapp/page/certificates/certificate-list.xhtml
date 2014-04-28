@@ -27,7 +27,7 @@
     <ui:define name="center">
         <rich:panel id="panel">
             <f:facet name="header">
-                <h:outputText value="#{messages['certificates.title']}" rendered="#{empty certificates}"/>
+                <h:outputText value="#{messages['certificates.title']}"/>
             </f:facet>
 
             <s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBoxTop">
@@ -42,147 +42,198 @@
                 <ui:define name="label">#{messages['certificate.domain.selection.label']}:</ui:define>
 
                 <h:selectOneMenu id="selectRegisteredCertificateDomain"
-                                 value="#{certificateHandler.certificateDomainWSID}">
+                                 value="#{certificateDataModel.certificateDomainId}">
                     <s:selectItems
                             value="#{certificateDomainWSQuery.findRegisteredCertificateDomains}" var="certificateDomain"
                             label="#{certificateDomain.name}" itemValue="#{certificateDomain.id}"
                             noSelectionLabel="#{messages['general.noselectionlabel']}"/>
-                    <a:support event="onchange" action="#{certificateHandler.findCertificateList()}"
-                               reRender="cerList,certificateDomainName"/>
+                    <a:support event="onchange"
+                               reRender="certificateTable,certificateDomainName,certificateTableDataScroller"/>
                 </h:selectOneMenu>
             </s:decorate>
 
             <s:decorate id="distinguishedNameDecorator" template="/layout/edit.xhtml">
                 <ui:define name="label">#{messages['certificatedomain.dnExpression']}:</ui:define>
                 <h:outputText id="certificateDomainName"
-                              value="#{certificateHandler.certificateDomainExpressionShortened}"
-                              title="#{certificateHandler.certificateDomainExpression}"/>
+                              value="#{certificateDataModel.certificateDomainExpressionShortened}"
+                              title="#{certificateDataModel.certificateDomainExpression}"/>
             </s:decorate>
 
             <s:decorate id="cerListDecorator" template="/layout/edit.xhtml">
 
                 <h:form id="certificatesListForm">
-                    <rich:dataTable id="cerList" var="cer" value="#{certificates}" rendered="#{not empty certificates}"
-                                    width="75%">
-                        <rich:column sortBy="#{cer.serialNumber}" filterBy="#{cer.serialNumber}" filterEvent="onkeyup">
+                    <rich:dataTable id="certificateTable" var="certificate" value="#{certificateDataModel}"
+                                    rows="#{certificateDataModel.rows}"
+                                    reRender="certificateTable, certificateTableDataScroller" width="75%">
+                        <f:facet name="header">
+                            <rich:columnGroup>
+                                <rich:column>
+                                    <a:commandLink action="#{certificateDataModel.sortBy('serialNumber')}"
+                                                   reRender="certificateTable,certificateTableDataScroller">
+                                        <h:outputText value="#{messages['certificate.serialNumber']}"/>
+                                        <h:graphicImage value="#{certificateDataModel.getSortIcon('serialNumber')}"/>
+                                    </a:commandLink>
+                                </rich:column>
+                                <rich:column>
+                                    <a:commandLink action="#{certificateDataModel.sortBy('validityStart')}"
+                                                   reRender="certificateTable,certificateTableDataScroller">
+                                        <h:outputText value="#{messages['certificate.validityStart']}"/>
+                                        <h:graphicImage value="#{certificateDataModel.getSortIcon('validityStart')}"/>
+                                    </a:commandLink>
+                                </rich:column>
+                                <rich:column>
+                                    <a:commandLink action="#{certificateDataModel.sortBy('validityEnd')}"
+                                                   reRender="certificateTable,certificateTableDataScroller">
+                                        <h:outputText value="#{messages['certificate.validityEnd']}"/>
+                                        <h:graphicImage value="#{certificateDataModel.getSortIcon('validityEnd')}"/>
+                                    </a:commandLink>
+                                </rich:column>
+                                <rich:column>
+                                    <a:commandLink action="#{certificateDataModel.sortBy('issuer')}"
+                                                   reRender="certificateTable,certificateTableDataScroller">
+                                        <h:outputText value="#{messages['certificate.issuer']}"/>
+                                        <h:graphicImage value="#{certificateDataModel.getSortIcon('issuer')}"/>
+                                    </a:commandLink>
+                                </rich:column>
+                                <rich:column>
+                                    <a:commandLink action="#{certificateDataModel.sortBy('certificateType')}"
+                                                   reRender="certificateTable,certificateTableDataScroller">
+                                        <h:outputText value="#{messages['certificate.type']}"/>
+                                        <h:graphicImage value="#{certificateDataModel.getSortIcon('certificateType')}"/>
+                                    </a:commandLink>
+                                </rich:column>
+                                <rich:column>
+                                    <a:commandLink action="#{certificateDataModel.sortBy('distinguishedName')}"
+                                                   reRender="certificateTable,certificateTableDataScroller">
+                                        <h:outputText value="#{messages['certificate.distinguishedName']}"/>
+                                        <h:graphicImage value="#{certificateDataModel.getSortIcon('distinguishedName')}"/>
+                                    </a:commandLink>
+                                </rich:column>
+                                <rich:column/>
+                            </rich:columnGroup>
+                        </f:facet>
+
+                        <rich:column>
                             <f:facet name="header">
-                                <h:outputText value="#{messages['certificate.serialNumber']}"/>
+                                <h:inputText id="serialNumberFilter"
+                                             value="#{certificateDataModel.serialNumberFilter}">
+                                    <a:support event="onchange" reRender="certificateTable,certificateTableDataScroller"/>
+                                </h:inputText>
                             </f:facet>
-                            <h:outputText value="#{cer.serialNumber}"/>
+                            <h:outputText value="#{certificate.serialNumber}"/>
                         </rich:column>
 
-                        <rich:column filterMethod="#{certificateHandler.filterByStartDate}">
+                        <rich:column>
                             <f:facet name="header">
                                 <h:panelGroup>
-                                    <h:outputText value="#{messages['certificate.validityStart']}"/>
-                                    <br/>
-                                    <rich:calendar id="startDateFrom"
-                                                   value="#{certificateHandler.startDateFrom}"
+                                    <rich:calendar id="validityStartFromFilter"
+                                                   value="#{certificateDataModel.validityStartFromFilter}"
                                                    datePattern="dd/MM/yyyy"
                                                    enableManualInput="false"
                                                    showWeekDaysBar="false"
                                                    showWeeksBar="false"
                                                    inputStyle="width: 75px">
-                                        <a:support event="onchanged" ignoreDupResponses="true" reRender="cerList"/>
+                                        <a:support event="onchanged" reRender="certificateTable,certificateTableDataScroller"/>
                                     </rich:calendar>
                                     -
-                                    <rich:calendar id="startDateTo"
-                                                   value="#{certificateHandler.startDateTo}"
+                                    <rich:calendar id="validityStartToFilter"
+                                                   value="#{certificateDataModel.validityStartToFilter}"
                                                    datePattern="dd/MM/yyyy"
                                                    enableManualInput="false"
                                                    showWeekDaysBar="false"
                                                    showWeeksBar="false"
                                                    inputStyle="width: 75px">
-                                        <a:support event="onchanged" ignoreDupResponses="true" reRender="cerList"/>
+                                        <a:support event="onchanged" reRender="certificateTable,certificateTableDataScroller"/>
                                     </rich:calendar>
                                 </h:panelGroup>
                             </f:facet>
-                            <h:outputText value="#{cer.validityStart}">
+                            <h:outputText value="#{certificate.validityStart}">
                                 <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss"/>
                             </h:outputText>
                         </rich:column>
 
-                        <rich:column filterMethod="#{certificateHandler.filterByEndDate}">
+                        <rich:column>
                             <f:facet name="header">
                                 <h:panelGroup>
-                                    <h:outputText value="#{messages['certificate.validityEnd']}"/>
-                                    <br/>
-                                    <rich:calendar id="endDateFrom"
-                                                   value="#{certificateHandler.endDateFrom}"
+                                    <rich:calendar id="validityEndFromFilter"
+                                                   value="#{certificateDataModel.validityEndFromFilter}"
                                                    datePattern="dd/MM/yyyy"
                                                    enableManualInput="false"
                                                    showWeekDaysBar="false"
                                                    showWeeksBar="false"
                                                    inputStyle="width: 75px">
-                                        <a:support event="onchanged" ignoreDupResponses="true" reRender="cerList"/>
+                                        <a:support event="onchanged" reRender="certificateTable,certificateTableDataScroller"/>
                                     </rich:calendar>
                                     -
-                                    <rich:calendar id="endDateTo"
-                                                   value="#{certificateHandler.endDateTo}"
+                                    <rich:calendar id="validityEndToFilter"
+                                                   value="#{certificateDataModel.validityEndToFilter}"
                                                    datePattern="dd/MM/yyyy"
                                                    enableManualInput="false"
                                                    showWeekDaysBar="false"
                                                    showWeeksBar="false"
                                                    inputStyle="width: 75px">
-                                        <a:support event="onchanged" ignoreDupResponses="true" reRender="cerList"/>
+                                        <a:support event="onchanged" reRender="certificateTable,certificateTableDataScroller"/>
                                     </rich:calendar>
                                 </h:panelGroup>
                             </f:facet>
-                            <h:outputText value="#{cer.validityEnd}">
+                            <h:outputText value="#{certificate.validityEnd}">
                                 <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss"/>
                             </h:outputText>
                         </rich:column>
 
-                        <rich:column sortBy="#{cer.issuer}" filterBy="#{cer.issuer}" filterEvent="onkeyup">
+                        <rich:column>
                             <f:facet name="header">
-                                <h:outputText value="#{messages['certificate.issuer']}"/>
+                                <h:inputText id="issuerFilter"
+                                             value="#{certificateDataModel.issuerFilter}">
+                                    <a:support event="onchange" reRender="certificateTable,certificateTableDataScroller"/>
+                                </h:inputText>
                             </f:facet>
-                            <h:outputText value="#{cer.issuer}"/>
+                            <h:outputText value="#{certificate.issuer}"/>
                         </rich:column>
 
-                        <rich:column sortBy="#{cer.type}" filterBy="#{cer.type}" filterEvent="onkeyup">
+                        <rich:column>
                             <f:facet name="header">
-                                <h:outputText value="#{messages['certificate.type']}"/>
+                                <h:selectOneMenu id="certificateTypeFilter" value="#{certificateDataModel.certificateTypeFilter}">
+                                    <s:selectItems value="#{certificateDataModel.certificateTypes}"
+                                                   var="certificateType" label="#{messages[certificateType.messageKey]}"
+                                                   itemValue="#{certificateType.name()}"
+                                                   noSelectionLabel="#{messages['general.noselectionlabel']}"/>
+                                    <a:support event="onchange" reRender="certificateTable,certificateTableDataScroller"/>
+                                </h:selectOneMenu>
                             </f:facet>
-                            <h:outputText value="#{cer.type}"/>
+                            <h:outputText value="#{messages[certificate.type]}"/>
                         </rich:column>
 
-                        <rich:column filterMethod="#{certificateHandler.filterByDN}">
+                        <rich:column>
                             <f:facet name="header">
-                                <h:panelGroup>
-                                    <h:outputText value="#{messages['certificate.dn']}"/>
-                                    <br/>
-                                    <h:inputText value="#{certificateHandler.dnFilterValue}" id="dnFilterInput">
-                                        <a:support event="onkeyup" ignoreDupResponses="true" reRender="cerList"
-                                                   requestDelay="1000"
-                                                   oncomplete="var x=$('certificatesListForm:cerListDecorator:cerList:dnFilterInput');x.focus();x.selectionStart=x.selectionEnd"/>
-                                    </h:inputText>
-                                </h:panelGroup>
+                                <h:inputText id="distinguishedNameFilter"
+                                             value="#{certificateDataModel.distinguishedNameFilter}">
+                                    <a:support event="onchange" reRender="certificateTable,certificateTableDataScroller"/>
+                                </h:inputText>
                             </f:facet>
-                            <h:outputText value="#{cer.distinguishedName}"/>
+                            <h:outputText value="#{certificate.distinguishedName}"/>
                         </rich:column>
 
                         <rich:column>
                             <s:link id="detailCertificate" view="/page/certificates/certificate-detail.xhtml"
                                     value="#{messages['link.detail']}">
-                                <f:param name="certificateId" value="#{cer.id}"/>
+                                <f:param name="certificateId" value="#{certificate.id}"/>
                             </s:link>
 
-                            <s:link id="revokeCertificate" value="#{messages['link.revoke']}"
-                                    action="#{certificateHandler.prepareRevocation(cer.id)}"/>
+                            <s:link id="revokeCertificate" action="#{certificateHandler.prepareRevocation(certificate.id)}"
+                                    value="#{messages['link.revoke']}">
+                                <f:param name="certificateId" value="#{certificate.id}"/>
+                            </s:link>
                         </rich:column>
 
                         <f:facet name="footer">
-                            <rich:datascroller maxPages="10" rows="10" renderIfSinglePage="false"/>
+                            <rich:datascroller id="certificateTableDataScroller" for="certificateTable"
+                                               renderIfSinglePage="true"
+                                               maxPages="#{certificateDataModel.maxPages}"
+                                               fastStep="#{certificateDataModel.fastStep}"/>
                         </f:facet>
                     </rich:dataTable>
                 </h:form>
-            </s:decorate>
-
-            <s:decorate template="/layout/buttonbox.xhtml"
-                        id="submitButtonBoxBottom" rendered="#{certificates.size > 0}">
-                <s:button id="requestCertificateBottom" action="requestCertificate"
-                          value="#{messages['button.csr']}"/>
             </s:decorate>
         </rich:panel>
     </ui:define>
