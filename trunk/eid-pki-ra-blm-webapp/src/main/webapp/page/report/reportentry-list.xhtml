@@ -33,7 +33,7 @@
 				<rich:calendar id="reportDate"
 					           value="#{reportEntryListQuery.reportDate}" datePattern="dd/MM/yyyy">
 					<a4j:support event="onchanged" ignoreDupResponses="true"
-						         action="#{reportEntryListQuery.reportDateChanged()}"
+						         action="#{reportEntryListQuery.filterChanged()}"
 						         reRender="reportDateDecorator,reportEntryListTable" />
 				</rich:calendar>
 			</s:decorate>
@@ -59,14 +59,36 @@
 
 					<rich:column sortBy="#{reportEntry.certificateDomainName}">
 						<f:facet name="header">
-							<h:outputText value="#{messages['reportentry.list.certificateDomainName']}" />
+                            <h:panelGroup>
+							    <h:outputText value="#{messages['reportentry.list.certificateDomainName']}" />
+                                <br/>
+                                <h:inputText id="certificateDomainNameFilter" value="#{reportEntryListQuery.certificateDomainNameFilter}" onclick="cancelBubble()">
+                                    <a4j:support event="onchange" ignoreDupResponses="true"
+                                                 action="#{reportEntryListQuery.filterChanged()}"
+                                                 reRender="reportEntryListTable"/>
+                                </h:inputText>
+                            </h:panelGroup>
 						</f:facet>
 						<h:outputText value="#{reportEntry.certificateDomainName}" />
 					</rich:column>
 					
 					<rich:column sortBy="#{reportEntry.contractType}">
 						<f:facet name="header">
-							<h:outputText value="#{messages['reportentry.list.contractType']}" />
+                            <h:panelGroup>
+							    <h:outputText value="#{messages['reportentry.list.contractType']}" />
+                                <br/>
+                                <h:selectOneMenu id="contractTypeFilter"
+                                                 value="#{reportEntryListQuery.contractTypeFilter}"
+                                                 onclick="cancelBubble()">
+                                    <s:selectItems value="#{reportEntryListQuery.contractTypes}"
+                                                   var="contractType" label="#{contractType}"
+                                                   itemValue="#{certificateType.name()}"
+                                                   noSelectionLabel="#{messages['general.noselectionlabel']}"/>
+                                    <a4j:support event="onchange" ignoreDupResponses="true"
+                                                 action="#{reportEntryListQuery.filterChanged()}"
+                                                 reRender="reportEntryListTable"/>
+                                </h:selectOneMenu>
+                            </h:panelGroup>
 						</f:facet>
 						<h:outputText value="#{reportEntry.contractType}" />
 					</rich:column>
@@ -80,14 +102,37 @@
 					
 					<rich:column sortBy="#{reportEntry.subject}">
 						<f:facet name="header">
-							<h:outputText value="#{messages['reportentry.list.subject']}" />
+                            <h:panelGroup>
+							    <h:outputText value="#{messages['reportentry.list.subject']}" />
+                                <br/>
+                                <h:inputText id="subjectFilter" value="#{reportEntryListQuery.subjectFilter}" onclick="cancelBubble()">
+                                    <a4j:support event="onchange" ignoreDupResponses="true"
+                                                 action="#{reportEntryListQuery.filterChanged()}"
+                                                 reRender="reportEntryListTable"/>
+                                </h:inputText>
+                            </h:panelGroup>
 						</f:facet>
 						<h:outputText value="#{reportEntry.subject}" />
 					</rich:column>
 					
 					<rich:column sortBy="#{reportEntry.success}">
 						<f:facet name="header">
-							<h:outputText value="#{messages['reportentry.list.success']}" />
+                            <h:panelGroup>
+							    <h:outputText value="#{messages['reportentry.list.success']}" />
+                                <br/>
+                                <h:selectOneMenu id="successFilter"
+                                                 value="#{reportEntryListQuery.successFilter}"
+                                                 onclick="cancelBubble()">
+                                    <s:selectItems value="#{reportEntryListQuery.successValues}"
+                                                   var="successValue"
+                                                   label="#{messages['reportentry.list.success.'.concat(successValue)]}"
+                                                   itemValue="#{successValue}"
+                                                   noSelectionLabel="#{messages['general.noselectionlabel']}"/>
+                                    <a4j:support event="onchange" ignoreDupResponses="true"
+                                                 action="#{reportEntryListQuery.filterChanged()}"
+                                                 reRender="reportEntryListTable"/>
+                                </h:selectOneMenu>
+                            </h:panelGroup>
 						</f:facet>
 						<h:outputText value="#{messages['reportentry.list.success.'.concat(reportEntry.success)]}" />
 					</rich:column>
