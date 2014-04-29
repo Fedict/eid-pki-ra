@@ -32,7 +32,7 @@
                 <rich:calendar id="reportDate"
                                value="#{xkmsLogEntryQuery.reportDate}" datePattern="dd/MM/yyyy">
                     <a4j:support event="onchanged" ignoreDupResponses="true"
-                                 action="#{xkmsLogEntryQuery.reportDateChanged()}"
+                                 action="#{xkmsLogEntryQuery.filterChanged()}"
                                  reRender="reportDateDecorator,xmksLogTable" />
                 </rich:calendar>
             </s:decorate>

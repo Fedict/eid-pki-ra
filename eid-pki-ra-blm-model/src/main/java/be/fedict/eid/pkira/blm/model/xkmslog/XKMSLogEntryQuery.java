@@ -56,7 +56,7 @@ public class XKMSLogEntryQuery extends EntityQuery<XKMSLogEntry> {
         this.reportDate = reportDate;
     }
 
-    public void reportDateChanged() {
+    public void filterChanged() {
         this.refresh();
     }
 

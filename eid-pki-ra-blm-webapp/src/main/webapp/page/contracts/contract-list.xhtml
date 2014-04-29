@@ -59,12 +59,12 @@
 							<h:outputText value="#{messages[contract.type]}" />
 						</rich:column>
 						
-						<rich:column sortBy="#{contract.requester}"
-							filterBy="#{contract.requester}" filterEvent="onkeyup">
+						<rich:column sortBy="#{contract.requesterName}"
+							filterBy="#{contract.requesterName}" filterEvent="onkeyup">
 							<f:facet name="header">
-								<h:outputText value="#{messages['contract.requester']}" />
+								<h:outputText value="#{messages['contract.requesterName']}" />
 							</f:facet>
-							<h:outputText value="#{contract.requester}" />
+							<h:outputText value="#{contract.requesterName}" />
 						</rich:column>
 						
 						<rich:column sortBy="#{contract.certificateType}"

@@ -17,13 +17,16 @@
  */
 package be.fedict.eid.pkira.blm.model.reporting;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 
+import org.apache.commons.lang.StringUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
@@ -40,13 +43,24 @@ public class ReportEntryListQuery extends EntityQuery<ReportEntry> {
 
 	public static final String NAME = "be.fedict.eid.pkira.blm.reportEntryListQuery";
 
-	private static final long serialVersionUID = 1171619330822348557L;
-
 	private Date reportDate = new Date();
+    private ReportEntry.ContractType contractTypeFilter;
+    private String certificateDomainNameFilter;
+    private String subjectFilter;
+    private Boolean successFilter;
 
-	@Override
-	public String getEjbql() {
-		return "SELECT e FROM ReportEntry e WHERE logTime BETWEEN :start AND :end";
+    public ReportEntryListQuery() {
+        determineEjbql();
+    }
+
+    private void determineEjbql() {
+        StringBuilder queryBuilder = new StringBuilder("SELECT e FROM ReportEntry e WHERE logTime BETWEEN :start AND :end");
+        if (contractTypeFilter!=null) queryBuilder.append(" AND contractType=:contractType");
+        if (StringUtils.isNotBlank(certificateDomainNameFilter)) queryBuilder.append(" AND lower(certificateDomainName) LIKE :certificateDomainName");
+        if (StringUtils.isNotBlank(subjectFilter)) queryBuilder.append(" AND lower(subject) LIKE :subject");
+        if (successFilter!=null) queryBuilder.append(" AND success=:success");
+
+        setEjbql(queryBuilder.toString());
 	}
 
 	public Date getReportDate() {
@@ -56,12 +70,52 @@ public class ReportEntryListQuery extends EntityQuery<ReportEntry> {
 	public void setReportDate(Date reportDate) {
 		this.reportDate = reportDate;
 	}
-	
-	public void reportDateChanged() {
-		this.refresh();
-	}
 
-	@Override
+    public String getCertificateDomainNameFilter() {
+        return certificateDomainNameFilter;
+    }
+
+    public void setCertificateDomainNameFilter(String certificateDomainNameFilter) {
+        this.certificateDomainNameFilter = certificateDomainNameFilter;
+    }
+
+    public List<ReportEntry.ContractType> getContractTypes() {
+        return Arrays.asList(ReportEntry.ContractType.values());
+    }
+
+    public ReportEntry.ContractType getContractTypeFilter() {
+        return contractTypeFilter;
+    }
+
+    public void setContractTypeFilter(ReportEntry.ContractType contractTypeFilter) {
+        this.contractTypeFilter = contractTypeFilter;
+    }
+
+    public String getSubjectFilter() {
+        return subjectFilter;
+    }
+
+    public void setSubjectFilter(String subjectFilter) {
+        this.subjectFilter = subjectFilter;
+    }
+
+    public Boolean getSuccessFilter() {
+        return successFilter;
+    }
+
+    public void setSuccessFilter(Boolean successFilter) {
+        this.successFilter = successFilter;
+    }
+
+    public List<Boolean> getSuccessValues() {
+        return Arrays.asList(true, false);
+    }
+
+    public void filterChanged() {
+        determineEjbql();
+    }
+
+    @Override
 	protected Query createQuery() {
 		Query query = super.createQuery();
 		setQueryParameters(query);
@@ -82,6 +136,11 @@ public class ReportEntryListQuery extends EntityQuery<ReportEntry> {
 
 		query.setParameter("start", start, TemporalType.TIMESTAMP);
 		query.setParameter("end", end, TemporalType.TIMESTAMP);
+
+        if (contractTypeFilter!=null) query.setParameter("contractType", contractTypeFilter);
+        if (StringUtils.isNotBlank(certificateDomainNameFilter)) query.setParameter("certificateDomainName", "%" + certificateDomainNameFilter.toLowerCase() + "%");
+        if (StringUtils.isNotBlank(subjectFilter)) query.setParameter("subject", "%" + subjectFilter.toLowerCase() + "%");
+        if (successFilter!=null) query.setParameter("success", successFilter);
 	}
 
 	@Override
