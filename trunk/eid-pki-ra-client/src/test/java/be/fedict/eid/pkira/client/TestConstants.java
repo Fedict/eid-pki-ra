@@ -33,7 +33,7 @@ public class TestConstants {
 			+ "dGQjZWpctP14R3C0iBHi6G8C7E5zhHWRyFtzxT3MVBFH33kuHxcRkAlDKZNAWyu8\n"
 			+ "/pH4Z3DIUVriyhH2pUweqSXaaAaqmgocOH7vJzXLQ3WpNR1UsC/69kNpmpE=\n" + "-----END CERTIFICATE REQUEST-----\n";
 
-	public static final String OPERATOR = "<Operator><Name>Name</Name><Function>Function</Function><Phone>+32 2 1234567</Phone></Operator>";
+    public static final String OPERATOR = "<Operator><Name>Name</Name><Function>Function</Function><Phone>+32 2 1234567</Phone></Operator>";
 
 	public static final String CERTIFICATE_SIGNING_CONTRACT = "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>"
 			+ "<CertificateSigningRequest Id='request' xmlns:ns2='http://www.w3.org/2000/09/xmldsig#' xmlns='urn:be:fedict:eid:pkira:contracts'>"

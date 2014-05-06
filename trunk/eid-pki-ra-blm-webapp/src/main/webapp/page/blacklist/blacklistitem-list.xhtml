@@ -1,0 +1,95 @@
+<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                template="/layout/template.xhtml">
+
+    <ui:define name="center">
+        <h:form id="blacklistItemListForm">
+            <rich:panel id="panel">
+                <f:facet name="header">#{messages['blacklistItem.list.title']}</f:facet>
+                <rich:dataTable id="blacklistItemTable" var="blacklistItem" rows="#{blacklistItemQuery.rows}"
+                                value="#{blacklistItemQuery.resultList}" width="100%"
+                                reRender="blacklistItemTableDataScroller">
+                    <rich:column sortBy="#{blacklistItem.blockedCN}" filterBy="#{blacklistItem.blockedCN}"
+                                 filterEvent="onkeyup">
+                        <f:facet name="header">
+                            <h:outputText value="#{messages['blacklistitem.list.blockedCN']}"/>
+                        </f:facet>
+                        <h:outputText value="#{blacklistItem.blockedCN}"/>
+                    </rich:column>
+
+                    <rich:column sortBy="#{blacklistItem.global}" filterBy="#{blacklistItem.global}"
+                                 filterEvent="onkeyup" width="300px">
+                        <f:facet name="header">
+                            <h:outputText value="#{messages['blacklistitem.list.global']}"/>
+                        </f:facet>
+                        <h:outputText
+                                value="#{blacklistItem.global ? messages['general.yes'] : messages['general.no']}"/>
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{messages['blacklistitem.list.certificateDomains']}"/>
+                        </f:facet>
+                        <ui:repeat value="#{blacklistItem.certificateDomains}" var="certificateDomain">
+                            <h:outputText value="#{certificateDomain.name}"
+                                          title="#{certificateDomain.dnExpression}"/><br/>
+                        </ui:repeat>
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{messages['blacklistitem.list.users']}"/>
+                        </f:facet>
+                        <ui:repeat value="#{blacklistItem.users}" var="user">
+                            <h:outputText value='#{user.fullName}'/>
+                            <br/>
+                        </ui:repeat>
+                    </rich:column>
+
+                    <rich:column>
+                        <s:link view="/page/blacklist/blacklistitem-edit.xhtml" value="#{messages['link.edit']}"
+                                id="edit">
+                            <f:param name="blacklistItemId" value="#{blacklistItem.id}"/>
+                        </s:link>
+                    </rich:column>
+
+                    <f:facet name="footer">
+                        <rich:datascroller id="blacklistItemTableDataScroller" for="blacklistItemTable"
+                                           renderIfSinglePage="false"
+                                           maxPages="#{blacklistItemQuery.maxPages}"
+                                           fastStep="#{blacklistItemQuery.fastStep}"/>
+                    </f:facet>
+                </rich:dataTable>
+
+                <s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
+                    <s:button view="/page/blacklist/blacklistitem-edit.xhtml" value="#{messages['button.new']}"
+                              id="newBlacklistItem">
+                        <f:param name="blacklistItemId"/>
+                    </s:button>
+                </s:decorate>
+            </rich:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

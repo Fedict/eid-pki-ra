@@ -105,6 +105,10 @@ public class User implements Serializable {
 		this.firstName = firstName;
 	}
 
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
 	public String getNationalRegisterNumber() {
 		return nationalRegisterNumber;
 	}
@@ -180,8 +184,7 @@ public class User implements Serializable {
 
 	@Override
 	public String toString() {
-		return new StringBuilder("User[").append("nationalRegisterNumber=").append(nationalRegisterNumber)
-				.append(", lastName=").append(lastName).append(", firstName=").append(firstName).append(']').toString();
+		return "User[" + "nationalRegisterNumber=" + nationalRegisterNumber + ", lastName=" + lastName + ", firstName=" + firstName + ']';
 	}
 
 	public String getLocale() {

@@ -19,6 +19,7 @@
 package be.fedict.eid.pkira.ws.impl;
 
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -54,15 +55,7 @@ import be.fedict.eid.pkira.blm.model.mappers.ContractMapper;
 import be.fedict.eid.pkira.blm.model.mappers.ContractsFilterMapper;
 import be.fedict.eid.pkira.blm.model.mappers.RegistrationMapper;
 import be.fedict.eid.pkira.blm.model.mappers.UserMapper;
-import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
-import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationException;
-import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationHome;
-import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationManager;
-import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationQuery;
-import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationRepository;
-import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationStatus;
-import be.fedict.eid.pkira.blm.model.usermgmt.User;
-import be.fedict.eid.pkira.blm.model.usermgmt.UserRepository;
+import be.fedict.eid.pkira.blm.model.usermgmt.*;
 import be.fedict.eid.pkira.generated.privatews.*;
 import be.fedict.eid.pkira.generated.privatews.GetLegalNoticeRequest.ByDN;
 
@@ -225,9 +218,14 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 		ByDN byDN = request.getByDN();
 		if (byDN != null) {
 			CertificateType certificateType = getCertificateMapper().map(byDN.getCertificateType());
-			List<Registration> registrations = getRegistrationManager().findRegistrationForUserDNAndCertificateType(byDN.getUserRRN(),
-					byDN.getCertificateDN(), byDN.getAlternativeName(), certificateType);
-			if (registrations.size() != 0) {
+            List<Registration> registrations = Collections.emptyList();
+            try {
+                registrations = getRegistrationManager().findRegistrationForUserDNAndCertificateType(byDN.getUserRRN(),
+                        byDN.getCertificateDN(), byDN.getAlternativeName(), certificateType);
+            } catch (BlacklistedException e) {
+                log.error("CN is blacklisted. No registrations found");
+            }
+            if (registrations.size() != 0) {
 				legalNotice = registrations.get(0).getCertificateDomain().getCertificateAuthority().getLegalNotice();
 			}
 		}
@@ -310,8 +308,13 @@ public class EIDPKIRAPrivateServiceImpl implements EIDPKIRAPrivatePortType {
 	public GetAllowedCertificateTypesResponse getAllowedCertificateTypes(GetAllowedCertificateTypesRequest request) {
 		String userRRN = request.getUserRRN();
 
-		List<Registration> registrations = getRegistrationManager().findRegistrationForUserDNAndCertificateType(userRRN, request.getCertificateDN(), request.getAlternativeName(), null);
-		Set<CertificateType> certificateTypes = new HashSet<CertificateType>();
+        List<Registration> registrations = Collections.emptyList();
+        try {
+            registrations = getRegistrationManager().findRegistrationForUserDNAndCertificateType(userRRN, request.getCertificateDN(), request.getAlternativeName(), null);
+        } catch (BlacklistedException e) {
+            log.warn("CN is blacklisted. No registrations found");
+        }
+        Set<CertificateType> certificateTypes = new HashSet<CertificateType>();
 		for(Registration registration: registrations) {
 			certificateTypes.addAll(registration.getCertificateDomain().getCertificateTypes());
 		}

@@ -25,6 +25,7 @@
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<jta-data-source>${jta.dataSource}</jta-data-source>
 
+		<class>be.fedict.eid.pkira.blm.model.blacklist.BlacklistItem</class>
 		<class>be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain</class>
 		<class>be.fedict.eid.pkira.blm.model.contracts.Certificate</class>
 		<class>be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract</class>

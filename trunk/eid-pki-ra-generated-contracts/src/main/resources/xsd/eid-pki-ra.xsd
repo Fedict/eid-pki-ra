@@ -186,6 +186,7 @@
 			<enumeration value="Invalid Signature" />
 			<enumeration value="Unknown Certificate" />
 			<enumeration value="Not Authorized" />
+			<enumeration value="CN Blacklisted" />
 			<enumeration value="Backend Error" />
 			<enumeration value="General Failure" />
 		</restriction>

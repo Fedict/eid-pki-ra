@@ -51,6 +51,7 @@ import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 import be.fedict.eid.pkira.blm.model.contracts.ContractRepository;
 import be.fedict.eid.pkira.blm.model.mail.MailTemplate;
+import be.fedict.eid.pkira.blm.model.usermgmt.BlacklistedException;
 import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationManager;
 import be.fedict.eid.pkira.blm.model.usermgmt.User;
@@ -309,11 +310,16 @@ public class ContractHandlerBean implements ContractHandler {
 		return certificate;
 	}
 
-	private Registration getMatchingRegistration(String signer, String distinguishedName,
-			List<String> alternativeNames, CertificateType type) throws ContractHandlerBeanException {
-		List<Registration> registrations = registrationManager.findRegistrationForUserDNAndCertificateType(signer,
-				distinguishedName, alternativeNames, type);
-		if (registrations.size()==0) {
+	private Registration getMatchingRegistration(String signer, String distinguishedName, List<String> alternativeNames, CertificateType type) throws ContractHandlerBeanException {
+        List<Registration> registrations;
+        try {
+            registrations = registrationManager.findRegistrationForUserDNAndCertificateType(signer,
+                    distinguishedName, alternativeNames, type);
+        } catch (BlacklistedException e) {
+            throw new ContractHandlerBeanException(ResultType.CN_BLACKLISTED, "CN not allowed");
+        }
+
+        if (registrations.size()==0) {
 			throw new ContractHandlerBeanException(ResultType.NOT_AUTHORIZED,
 					"User is not authorized for the DN in the contract");
 		}
@@ -321,8 +327,7 @@ public class ContractHandlerBean implements ContractHandler {
 	}
 
 	private CertificateType mapCertificateType(CertificateSigningRequestType request) {
-		CertificateType certificateType = Enum.valueOf(CertificateType.class, request.getCertificateType().name());
-		return certificateType;
+        return Enum.valueOf(CertificateType.class, request.getCertificateType().name());
 	}
 
 	private AbstractContract saveContract(Registration registration, String requestMsg,

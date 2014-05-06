@@ -1,0 +1,75 @@
+<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich"
+                template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:form id="blacklistItemForm">
+			<rich:panel id="panel">
+				<f:facet name="header">
+					#{blacklistItemHome.managed ? messages['blacklistitem.edit.title'] : messages['blacklistitem.create.title']}
+				</f:facet>
+				
+				<s:decorate id="blockedCNDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['blacklistitem.edit.blockedCN']}:</ui:define>
+	               	<h:inputText id="blockedCNEdit" value="#{blacklistItemHome.instance.blockedCN}" required="true" size="30" />
+	           	</s:decorate>
+
+                <s:decorate id="globalDecoration" template="/layout/edit.xhtml">
+                    <ui:define name="label">#{messages['blacklistitem.edit.global']}:</ui:define>
+                    <h:selectBooleanCheckbox id="globalEdit" value="#{blacklistItemHome.instance.global}" />
+                </s:decorate>
+
+                <s:decorate id="certificateDomainsDecoration" template="/layout/edit.xhtml">
+                    <ui:define name="label">#{messages['blacklistitem.edit.certificateDomains']}:</ui:define>
+                    <rich:pickList value="#{blacklistItemHome.instance.certificateDomains}" showButtonsLabel="false" required="false">
+                        <f:selectItems value="#{blacklistItemHome.allCertificateDomains}" />
+                    </rich:pickList>
+                </s:decorate>
+
+                <s:decorate id="usersDecoration" template="/layout/edit.xhtml">
+                    <ui:define name="label">#{messages['blacklistitem.edit.users']}:</ui:define>
+                    <rich:pickList value="#{blacklistItemHome.instance.users}" showButtonsLabel="false" required="false">
+                        <f:selectItems value="#{blacklistItemHome.allUsers}" />
+                    </rich:pickList>
+                </s:decorate>
+	           	
+	          	<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
+					<h:commandButton id="save" 
+							action="#{blacklistItemHome.persist}"
+							value="#{messages['button.save']}"
+							rendered="#{not blacklistItemHome.managed}" />
+					<h:commandButton  id="update"
+							action="#{blacklistItemHome.update}"
+							value="#{messages['button.update']}"
+							rendered="#{blacklistItemHome.managed}" />
+                    <h:commandButton  id="delete"
+                                      action="#{blacklistItemHome.remove}"
+                                      value="#{messages['button.delete']}"
+                                      rendered="#{blacklistItemHome.managed}" />
+					<s:button id="back" 
+							value="#{messages['button.back']}" 
+							view="/page/blacklist/blacklistitem-list.xhtml" />
+				</s:decorate> 
+			</rich:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -40,14 +40,11 @@ public class MenuHandler implements Serializable {
 	}
 	
 	public boolean isSelected(String item){
-		if(selectedItem.equals(item)){
-			return true;
-		}
-		return false;
-	}
+        return selectedItem.equals(item);
+    }
 	
 	public String styleIfSelected(String item){
-		if(isSelected(item) == true){ 
+		if(isSelected(item)){
 			return "itemSelected";
 		}
 		return "itemNotSelected";
@@ -60,4 +57,60 @@ public class MenuHandler implements Serializable {
 	public String getSelectedItem() {
 		return selectedItem;
 	}
+
+    public String openHomePage() {
+        return "/home.xhtml";
+    }
+
+    public String openCertificateAuthoritiesPage() {
+        return "/page/certificateauthority/certificateauthority-list.xhtml";
+    }
+
+    public String openCertificateDomainsPage() {
+        return "/page/certificatedomain/certificatedomain-list.xhtml";
+    }
+
+    public String openUsersPage() {
+        return "/page/user/user-list.xhtml";
+    }
+
+    public String openRegistrationsPage() {
+        return "/page/registration/bulkapproval.xhtml";
+    }
+
+    public String openBlacklistPage() {
+        return "/page/blacklist/blacklistitem-list.xhtml";
+    }
+
+    public String openCertificatesPage() {
+        return "/page/certificates/certificate-list.xhtml";
+    }
+
+    public String openContractsPage() {
+        return "/page/contracts/contract-list.xhtml";
+    }
+
+    public String openConfigurationPage() {
+        return "/page/configurationentry/configurationentry-list.xhtml";
+    }
+
+    public String openReportGenerationPage() {
+        return "/page/report/report-generation.xhtml";
+    }
+
+    public String openReportEntryListPage() {
+        return "/page/report/reportentry-list.xhtml";
+    }
+
+    public String openStatisticsPage() {
+        return "/page/stats/statistics.xhtml";
+    }
+
+    public String openXkmsLogListPage() {
+        return "/page/xkmslog/xkms-log-list.xhtml";
+    }
+
+    public String openLoginPage() {
+        return "/login.xhtml";
+    }
 }
