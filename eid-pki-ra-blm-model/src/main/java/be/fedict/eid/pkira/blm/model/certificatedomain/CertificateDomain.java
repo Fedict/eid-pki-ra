@@ -37,9 +37,6 @@ import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
 import be.fedict.eid.pkira.common.util.StringShortener;
 
-/**
- * @author Bram Baeyens
- */
 @Entity
 @Table(name = "CERTIFICATE_DOMAIN")
 @NamedQueries(
@@ -123,7 +120,7 @@ public class CertificateDomain implements Serializable {
 			return false;
 		}
 		CertificateDomain that = (CertificateDomain) obj;
-		return this.id == null ? false : this.id.equals(that.id);
+		return this.id != null && this.id.equals(that.id);
 	}
 
 	@Override
@@ -133,8 +130,7 @@ public class CertificateDomain implements Serializable {
 
 	@Override
 	public String toString() {
-		return new StringBuilder("CertificateDomain[").append("name=").append(name).append(", dnExpression=")
-				.append(dnExpression).append(']').toString();
+		return "CertificateDomain[" + "name=" + name + ", dnExpression=" + dnExpression + ']';
 	}
 
 	public boolean isServerCertificate() {

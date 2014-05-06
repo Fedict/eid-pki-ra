@@ -26,17 +26,21 @@ import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import be.fedict.eid.pkira.blm.model.blacklist.BlacklistItem;
+import be.fedict.eid.pkira.blm.model.blacklist.BlacklistRepository;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainHome;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 import be.fedict.eid.pkira.dnfilter.DistinguishedName;
 import be.fedict.eid.pkira.dnfilter.DistinguishedNameExpression;
 import be.fedict.eid.pkira.dnfilter.DistinguishedNameManager;
+import be.fedict.eid.pkira.dnfilter.InvalidDistinguishedNameException;
 
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.fail;
 
 /**
  * @author Jan Van den Bergh
@@ -69,6 +73,8 @@ public class RegistrationManagerBeanTest {
 	private DistinguishedNameManager distinguishedNameManager;
 	@Mock
 	private UserHome userHome;
+    @Mock
+    private BlacklistRepository blacklistRepository;
 
 	@BeforeMethod
 	public void setup() {
@@ -81,6 +87,7 @@ public class RegistrationManagerBeanTest {
 		bean.setLog(log);
 		bean.setDistinguishedNameManager(distinguishedNameManager);
 		bean.setUserHome(userHome);
+        bean.setBlacklistRepository(blacklistRepository);
 	}
 
 	@Test
@@ -197,4 +204,37 @@ public class RegistrationManagerBeanTest {
 		List<Registration> theRegistrations = bean.findRegistrationForUserDNAndCertificateType(TEST_RRN, TEST_DN1, Collections.<String>emptyList(), CertificateType.CLIENT);
 		assertEquals(theRegistrations.size(), 0);
 	}
+
+    @Test
+    public void blacklistedCNsAreNotAllowed() throws InvalidDistinguishedNameException {
+        User user = new User();
+        CertificateDomain domain = new CertificateDomain();
+        domain.setDnExpression(TEST_DN2);
+        domain.setClientCertificate(true);
+        Registration registration = new Registration();
+        registration.setCertificateDomain(domain);
+        registration.setRequester(user);
+
+        BlacklistItem blackListItem = new BlacklistItem();
+        blackListItem.setBlockedCN(".google.com");
+
+        DistinguishedName dn1 = mock(DistinguishedName.class);
+        DistinguishedNameExpression dn2 = mock(DistinguishedNameExpression.class);
+
+        when(userRepository.findByNationalRegisterNumber(eq(TEST_RRN))).thenReturn(user);
+        when(registrationRepository.findApprovedRegistrationsByUser(eq(user))).thenReturn(Collections.singletonList(registration));
+        when(distinguishedNameManager.createDistinguishedName(TEST_DN1)).thenReturn(dn1);
+        when(distinguishedNameManager.createDistinguishedNameExpression(TEST_DN2)).thenReturn(dn2);
+        when(dn2.matches(eq(dn1))).thenReturn(true);
+        when(dn1.getPart("cn")).thenReturn(Collections.singleton("www.google.com"));
+
+        when(blacklistRepository.getAllBlacklistItemsForRegistration(registration)).thenReturn(Collections.singletonList(blackListItem));
+
+        try {
+            bean.findRegistrationForUserDNAndCertificateType(TEST_RRN, TEST_DN1, Collections.<String>emptyList(), CertificateType.CLIENT);
+            fail("Expected blacklisted cn");
+        } catch (BlacklistedException e) {
+            // Ok!
+        }
+    }
 }

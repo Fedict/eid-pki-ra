@@ -44,6 +44,7 @@ import be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
 import be.fedict.eid.pkira.blm.model.contracts.ContractRepository;
 import be.fedict.eid.pkira.blm.model.mail.MailTemplate;
+import be.fedict.eid.pkira.blm.model.usermgmt.BlacklistedException;
 import be.fedict.eid.pkira.blm.model.usermgmt.Registration;
 import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationManager;
 import be.fedict.eid.pkira.blm.model.usermgmt.User;
@@ -382,7 +383,7 @@ public class ContractHandlerBeanTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testSignCertificateXKMSFailure() throws ContractHandlerBeanException {
+	public void testSignCertificateXKMSFailure() throws BlacklistedException, ContractHandlerBeanException {
 		// Setup test
 		when(contractParser.unmarshalRequestMessage(eq(REQUEST_MESSAGE), eq(CertificateSigningRequestType.class)))
 				.thenReturn(VALID_SIGNING_REQUEST);

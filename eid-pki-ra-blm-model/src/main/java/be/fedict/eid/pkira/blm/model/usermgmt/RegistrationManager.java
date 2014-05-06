@@ -60,7 +60,7 @@ public interface RegistrationManager {
 	 * @return the registration for this user and certificate domain (null if
 	 *         the user is not authorized).
 	 */
-	List<Registration> findRegistrationForUserDNAndCertificateType(String userIdentification, String dn, List<String> alternativeNames, CertificateType type);
+	List<Registration> findRegistrationForUserDNAndCertificateType(String userIdentification, String dn, List<String> alternativeNames, CertificateType type) throws BlacklistedException;
 
 	/**
 	 * Checks if a user is allowed to change certificates for this certificate

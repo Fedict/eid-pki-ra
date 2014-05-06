@@ -20,6 +20,7 @@ package be.fedict.eid.pkira.blm.model.usermgmt;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -33,6 +34,8 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.log.Log;
 
+import be.fedict.eid.pkira.blm.model.blacklist.BlacklistItem;
+import be.fedict.eid.pkira.blm.model.blacklist.BlacklistRepository;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomainHome;
 import be.fedict.eid.pkira.blm.model.contracts.CertificateType;
@@ -44,7 +47,7 @@ import be.fedict.eid.pkira.generated.privatews.RegistrationWS;
 
 /**
  * Registration manager implementation.
- * 
+ *
  * @author Jan Van den Bergh
  */
 @Stateless
@@ -74,6 +77,9 @@ public class RegistrationManagerBean implements RegistrationManager {
 
 	@In(value = UserHome.NAME, create = true)
 	private UserHome userHome;
+
+    @In(value = BlacklistRepository.NAME, create = true)
+    private BlacklistRepository blacklistRepository;
 
 	/**
 	 * {@inheritDoc}
@@ -148,7 +154,7 @@ public class RegistrationManagerBean implements RegistrationManager {
 		registration.setCertificateDomain(certificateDomainHome.find());
 		registration.setRequester(userQuery.getFindByUserRRN(registrationWS.getUserRRN()));
 		if (registrationHome.isManaged()) {
-			return registrationHome.update() != null ? true : false;
+			return registrationHome.update() != null;
 		} else {
 			registration.setStatus(RegistrationStatus.NEW);
 			boolean result = registrationHome.persist() != null;
@@ -164,8 +170,7 @@ public class RegistrationManagerBean implements RegistrationManager {
 	 */
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Registration> findRegistrationForUserDNAndCertificateType(String userIdentification, String dn,
-			List<String> alternativeNames, CertificateType certificateType) {
+	public List<Registration> findRegistrationForUserDNAndCertificateType(String userIdentification, String dn, List<String> alternativeNames, CertificateType certificateType) throws BlacklistedException {
 		// Parse the DNs
 		List<DistinguishedName> theDNs = parseDNs(dn, alternativeNames);
 		if (theDNs.size() == 0) {
@@ -177,18 +182,19 @@ public class RegistrationManagerBean implements RegistrationManager {
 
 		// Filter the registrations
 		List<Registration> validRegistrations = new ArrayList<Registration>();
+        boolean blacklisted = false;
 		nextRegistration: for (Registration registration : allRegistrations) {
 			CertificateDomain certificateDomain = registration.getCertificateDomain();
 
 			// Check certificate types
 			if (certificateType != null && !certificateDomain.getCertificateTypes().contains(certificateType)) {
-				continue nextRegistration;
+				continue;
 			}
 
 			// Check DNs
 			DistinguishedNameExpression dnExpression = parseDNExpression(certificateDomain.getDnExpression());
 			if (dnExpression == null) {
-				continue nextRegistration;
+				continue;
 			}
 			for (DistinguishedName theDN : theDNs) {
 				if (!dnExpression.matches(theDN)) {
@@ -196,9 +202,17 @@ public class RegistrationManagerBean implements RegistrationManager {
 				}
 			}
 
+            // Check blacklist
+            if (!checkBlacklist(theDNs, registration)) {
+                blacklisted=true;
+                continue;
+            }
+
 			// All ok
 			validRegistrations.add(registration);
 		}
+
+        if (blacklisted) throw new BlacklistedException();
 
 		// Return the result
 		return validRegistrations;
@@ -246,7 +260,7 @@ public class RegistrationManagerBean implements RegistrationManager {
 		}
 		return theDN;
 	}
-	
+
 	private List<DistinguishedName> parseDNs(String dn, List<String> alternativeNames) {
 		List<DistinguishedName> theDNs = new ArrayList<DistinguishedName>();
 
@@ -276,6 +290,21 @@ public class RegistrationManagerBean implements RegistrationManager {
 		}
 		return theDN;
 	}
+
+    private boolean checkBlacklist(List<DistinguishedName> dns, Registration registration) {
+        List<BlacklistItem> blacklistItems = blacklistRepository.getAllBlacklistItemsForRegistration(registration);
+
+        for (DistinguishedName dn : dns) {
+            Set<String> cns = dn.getPart("cn");
+            for (String cn : cns) {
+                for (BlacklistItem blacklistItem : blacklistItems) {
+                    if (cn.endsWith(blacklistItem.getBlockedCN())) return false;
+                }
+            }
+        }
+
+        return true;
+    }
 
 	private EmailValidator createEmailValidator() {
 		EmailValidator emailValidator = new EmailValidator();
@@ -314,5 +343,9 @@ public class RegistrationManagerBean implements RegistrationManager {
 	protected void setUserHome(UserHome userHome) {
 		this.userHome = userHome;
 	}
+
+    protected void setBlacklistRepository(BlacklistRepository blacklistRepository) {
+        this.blacklistRepository = blacklistRepository;
+    }
 
 }

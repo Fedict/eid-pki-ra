@@ -23,6 +23,7 @@
 	<persistence-unit name="PersistenceUnitTest">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 
+        <class>be.fedict.eid.pkira.blm.model.blacklist.BlacklistItem</class>
 		<class>be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain</class>
 		<class>be.fedict.eid.pkira.blm.model.contracts.Certificate</class>
 		<class>be.fedict.eid.pkira.blm.model.contracts.CertificateSigningContract</class>

@@ -88,7 +88,7 @@ a {
 	text-decoration: none;
 }
 
-a:hover,.itemSelected {
+a:hover,.itemSelected, .rich-toolbar-item:hover {
 	display: block;
 	background: none repeat scroll 0 0 #FF9000;
 	cursor: pointer;
@@ -97,6 +97,10 @@ a:hover,.itemSelected {
 
 .rich-page-content {
 	margin: 0 auto;
+}
+
+.rich-ddmenu-label-select, .rich-menu-item-hover, .rich-menu-group-hover {
+    background-color: #FF9000 !important;
 }
 
 .dr-pnl {
