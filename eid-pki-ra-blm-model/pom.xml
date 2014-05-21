@@ -135,14 +135,6 @@
 			<artifactId>eid-pki-ra-util-dnfilter</artifactId>
 		</dependency>
 
-        <dependency>
-            <groupId>be.fedict.eid-pki-ra</groupId>
-            <artifactId>eid-pki-ra-blm-model</artifactId>
-            <type>ejb</type>
-            <classifier>${environment}-${database}</classifier>
-            <scope>provided</scope>
-        </dependency>
-
 		<dependency>
 			<groupId>javax.ejb</groupId>
 			<artifactId>ejb-api</artifactId>
