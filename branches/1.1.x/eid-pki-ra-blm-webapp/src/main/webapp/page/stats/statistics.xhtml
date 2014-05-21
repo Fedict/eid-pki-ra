@@ -1,0 +1,77 @@
+<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j" template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:form id="certificateRequestListForm">
+
+			<s:decorate id="reportTypeDecorator" template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['stats.reporttype']}:</ui:define>
+				<h:selectOneMenu id="reportType"
+					value="#{statistics.reportGeneratorName}">
+					<s:selectItems value="#{statistics.reportGenerators}"
+						var="reportGenerator" label="#{messages[reportGenerator.name]}"
+						itemValue="#{reportGenerator.name}"
+						noSelectionLabel="#{messages['general.noselectionlabel']}" />
+					<a4j:support event="onchange"
+						action="#{statistics.selectReportType()}"
+						reRender="reportType,statisticsTableDecorator,csvExportDecorator" />
+				</h:selectOneMenu>
+			</s:decorate>
+
+			<s:decorate id="statisticsTableDecorator"
+				template="/layout/edit.xhtml">
+				<rich:dataTable id="statisticsTable" var="row"
+					value="#{statistics.reportGenerator.report}"
+					rendered="#{not empty statistics.reportGenerator}" rows="25">
+
+					<rich:columns value="#{statistics.reportGenerator.reportColumns}"
+						var="reportColumn" index="index">
+						<f:facet name="header">
+							<h:outputText value="#{messages[reportColumn.name]}" />
+						</f:facet>
+						<h:outputText value="#{row.values[index].value}"
+							rendered="#{empty reportColumn.format}" id="reportnf-#{index}" />
+						<h:outputText value="#{row.values[index].value}"
+							rendered="#{not empty reportColumn.format}" id="reportf-#{index}">
+							<f:convertDateTime pattern="#{reportColumn.format}"
+								timeZone="UTC" />
+						</h:outputText>
+					</rich:columns>
+
+					<f:facet name="footer">
+						<rich:datascroller maxPages="10" renderIfSinglePage="false" />
+					</f:facet>
+				</rich:dataTable>
+			</s:decorate>
+
+			<s:decorate template="/layout/buttonbox.xhtml"
+				id="csvExportDecorator">
+				<h:commandButton id="csvExport" action="#{statistics.csvExport}"
+					value="#{messages['stats.csvExport']}" rendered="#{not empty statistics.reportGenerator}"/>
+			</s:decorate>
+		</h:form>
+	</ui:define>
+</ui:composition>

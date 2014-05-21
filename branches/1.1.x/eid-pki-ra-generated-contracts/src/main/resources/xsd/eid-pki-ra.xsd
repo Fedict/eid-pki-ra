@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:be:fedict:eid:pkira:contracts"
+	xmlns:tns="urn:be:fedict:eid:pkira:contracts" elementFormDefault="qualified"
+	xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+
+	<import id="xmldsig" namespace="http://www.w3.org/2000/09/xmldsig#"
+		schemaLocation="xmldsig-core-schema.xsd" />
+
+	<element name="CertificateRevocationRequest" type="tns:certificateRevocationRequestType" />
+	<element name="CertificateRevocationResponse" type="tns:certificateRevocationResponseType" />
+	<element name="CertificateSigningRequest" type="tns:certificateSigningRequestType" />
+	<element name="CertificateSigningResponse" type="tns:certificateSigningResponseType" />
+
+	<complexType name="eIDPKIRAContractType" abstract="true" />
+
+	<complexType name="requestType" abstract="true">
+		<complexContent>
+			<extension base="tns:eIDPKIRAContractType">
+				<sequence>
+					<element name="RequestId" type="tns:idType" />
+					<element name="Description" type="tns:descriptionType" />
+					<element name="Operator" type="tns:entityType" />
+					<element name="LegalNotice" type="tns:legalNoticeType" />
+				</sequence>
+				<attribute name="Id" use="required" />
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="responseType" abstract="true">
+		<complexContent>
+			<extension base="tns:eIDPKIRAContractType">
+				<sequence>
+					<element name="RequestId" type="tns:idType" minOccurs="0" />
+					<element name="ResponseId" type="tns:idType" />
+					<element name="Result" type="tns:resultType" />
+					<element name="ResultMessage" type="tns:resultMessageType"
+						minOccurs="0" />
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="certificateSigningRequestType">
+		<complexContent>
+			<extension base="tns:requestType">
+				<sequence>
+					<element name="DistinguishedName" type="tns:distinguishedNameType" />
+                    <element name="AlternativeName" type="tns:distinguishedNameType" minOccurs="0" maxOccurs="unbounded" />
+					<element name="CertificateType" type="tns:certificateTypeType" />
+					<element name="ValidityPeriodMonths" type="tns:validityPeriodMonthsType" />
+					<element name="CSR" type="tns:pemEncodedType" />
+					<element ref="dsig:Signature" minOccurs="0" />
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="certificateSigningResponseType">
+		<complexContent>
+			<extension base="tns:responseType">
+				<sequence>
+					<element name="certificateID" type="int" minOccurs="0" />
+					<element name="certificatePEM" type="string" minOccurs="0" maxOccurs="unbounded" />
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="certificateRevocationRequestType">
+		<complexContent>
+			<extension base="tns:requestType">
+				<sequence>
+					<element name="DistinguishedName" type="tns:distinguishedNameType" />
+					<element name="ValidityStart" type="dateTime" />
+					<element name="ValidityEnd" type="dateTime" />
+					<element name="Certificate" type="tns:pemEncodedType" />
+					<element ref="dsig:Signature" minOccurs="0" />
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="certificateRevocationResponseType">
+		<complexContent>
+			<extension base="tns:responseType" />
+		</complexContent>
+	</complexType>
+
+	<complexType name="entityType">
+		<sequence>
+			<element name="Name" type="tns:nameType" />
+			<element name="Function" type="tns:functionType" />
+			<element name="Phone" type="tns:phoneNumberType" />
+		</sequence>
+	</complexType>
+
+	<simpleType name="certificateTypeType">
+		<restriction base="string">
+			<enumeration value="Server" />
+			<enumeration value="Client" />
+			<enumeration value="Code" />
+			<enumeration value="Persons" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="descriptionType">
+		<restriction base="string">
+			<maxLength value="512" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="distinguishedNameType">
+		<restriction base="string">
+			<maxLength value="1024" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="emailAddressType">
+		<restriction base="string">
+			<maxLength value="128" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="functionType">
+		<restriction base="string">
+			<maxLength value="64" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="idType">
+		<restriction base="string">
+			<maxLength value="64" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="legalNoticeType">
+		<restriction base="string" />
+	</simpleType>
+
+	<simpleType name="nameType">
+		<restriction base="string">
+			<maxLength value="64" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="pemEncodedType">
+		<restriction base="string">
+			<maxLength value="65536" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="phoneNumberType">
+		<restriction base="string">
+			<maxLength value="32" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="resultMessageType">
+		<restriction base="string">
+			<maxLength value="256" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="resultType">
+		<restriction base="string">
+			<enumeration value="Success" />
+			<enumeration value="Invalid Message" />
+			<enumeration value="Invalid Signature" />
+			<enumeration value="Unknown Certificate" />
+			<enumeration value="Not Authorized" />
+			<enumeration value="CN Blacklisted" />
+			<enumeration value="Backend Error" />
+			<enumeration value="General Failure" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="validityPeriodMonthsType">
+		<restriction base="integer" />
+	</simpleType>
+</schema>

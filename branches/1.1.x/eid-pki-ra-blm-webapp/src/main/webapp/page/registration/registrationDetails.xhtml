@@ -1,0 +1,85 @@
+<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/layout/template.xhtml"
+                login-required="true">
+
+	<ui:define name="center">
+		<h:form id="approvalDetailForm">
+			<h:panelGrid columns="1" title="Approval Detail">
+				<f:facet name="header">
+					<h:outputText value="#{messages['registration.detail.title']}" />
+				</f:facet>
+
+				<s:decorate id="requesterRrnDecoration" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['registrations.requesterrrn']}:</ui:define>
+					<h:outputText value="#{registrationHome.instance.requester.nationalRegisterNumber}" />
+				</s:decorate>
+
+				<s:decorate id="requesterNameDecoration" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['registrations.requestername']}:</ui:define>
+					<h:outputText value="#{registrationHome.instance.requester.name}" />
+				</s:decorate>
+
+				<s:decorate id="emailDecorator" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['registrations.email']}:</ui:define>
+					<h:outputText value="#{registrationHome.instance.email}" />
+				</s:decorate>
+
+				<s:decorate id="certificateDomainDecorator"
+					template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['registrations.certificateDomain']}:</ui:define>
+					<h:selectOneMenu value="#{registrationHome.instance.certificateDomain}">
+						<s:selectItems value="#{registrationHome.certificateDomains}"
+							var="certificateDomain" label="#{certificateDomain.name}"/>
+						<s:convertEntity />
+					</h:selectOneMenu>
+				</s:decorate>
+
+				<s:decorate id="ReasonDecorator" template="/layout/edit.xhtml" rendered="#{registrationHome.instance.new}">
+					<ui:define name="label">#{messages['registrations.reason']}:</ui:define>
+					<h:inputTextarea id="reasonTextArray" rows="5" cols="50"  value="#{registrationHome.reason}" />
+				</s:decorate>
+
+				<s:decorate id="updateButtonDecorator" template="/layout/edit.xhtml">
+					<h:commandButton
+						action="#{registrationHome.update}"
+						value="#{messages['registrations.update']}" id="update" />
+					<s:button
+						view="/page/registration/bulkapproval.xhtml"
+						value="#{messages['button.back']}" id="back" />
+				</s:decorate>
+				<s:decorate id="buttonDecorator" template="/layout/edit.xhtml">
+					<h:commandButton
+						action="#{registrationHome.approve}"
+						value="#{messages['registrations.approve']}" id="approve" 
+						rendered="#{registrationHome.instance.new}"/>
+					<h:commandButton
+						action="#{registrationHome.disapprove}"
+						value="#{messages['registrations.disapprove']}" id="disapprove"
+						rendered="#{registrationHome.instance.new}" />
+				</s:decorate>
+			</h:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>

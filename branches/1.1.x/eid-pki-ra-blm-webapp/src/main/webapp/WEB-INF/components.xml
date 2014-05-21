@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+
+<components xmlns="http://jboss.com/products/seam/components"
+            xmlns:core="http://jboss.com/products/seam/core"
+            xmlns:security="http://jboss.com/products/seam/security"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:web="http://jboss.com/products/seam/web"
+            xsi:schemaLocation="http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.2.xsd
+
+
+
+			http://jboss.com/products/seam/security http://jboss.com/products/seam/security-2.2.xsd                  
+
+			http://jboss.com/products/seam/components http://jboss.com/products/seam/components-2.2.xsd 
+
+			http://jboss.com/products/seam/web http://jboss.com/products/seam/web-2.2.xsd">
+
+	<import>be.fedict.eid.pkira.blm</import>
+	<import>be.fedict.eid.pkira.common</import>
+
+	<web:multipart-filter create-temp-files="false" max-request-size="1000000" url-pattern="*.seam"/>
+
+	<component name="org.jboss.seam.core.init">
+		<property name="debug">${seam.debug}</property>
+		<property name="jndi-pattern">eid-pki-ra-blm-ear-${version}-${environment}-${database}/#{ejbName}/local</property>
+	</component>
+
+	<core:manager concurrent-request-timeout="500"
+		conversation-id-parameter="cid" conversation-timeout="120000" />
+
+	<security:identity authenticate-method="#{authenticationHandler.authenticate}" />
+
+	<event type="org.jboss.seam.security.notLoggedIn">
+		<action execute="#{redirect.captureCurrentView}" />
+	</event>
+<!--	<event type="org.jboss.seam.security.quietLogin">-->
+<!--		<action execute="#{identity.login}" />-->
+<!--	</event>-->
+	<event type="org.jboss.seam.security.loginSuccessful">
+		<action execute="#{redirect.returnToCapturedView}" />
+	</event>
+	
+</components>
