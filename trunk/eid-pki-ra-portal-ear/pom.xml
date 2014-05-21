@@ -24,7 +24,7 @@
 	<parent>
 		<groupId>be.fedict.eid-pki-ra</groupId>
 		<artifactId>eid-pki-ra</artifactId>
-		<version>1.0.17-SNAPSHOT</version>
+		<version>1.2.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
