@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+	<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+<wsdl:definitions xmlns:tns="urn:be:fedict:eid:pkira:publicws" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="eid-pki-ra" targetNamespace="urn:be:fedict:eid:pkira:publicws"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:types="urn:be:fedict:eid:pkira:publicws:types">
+
+	<wsdl:types>
+		<xsd:schema targetNamespace="urn:be:fedict:eid:pkira:publicws:types">
+			<xsd:element name="CertificateSigningRequest" type="xsd:string" />
+			<xsd:element name="CertificateSigningResult" type="xsd:string" />
+			<xsd:element name="CertificateRevocationRequest" type="xsd:string" />
+			<xsd:element name="CertificateRevocationResult" type="xsd:string" />
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="CertificateSigningRequest">
+		<wsdl:part name="request" element="types:CertificateSigningRequest">
+			<wsdl:documentation>The contract containing the CSR to be signed (unencoded - plain XML).</wsdl:documentation>
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="CertificateSigningResult">
+		<wsdl:part name="response" element="types:CertificateSigningResult">
+			<wsdl:documentation>Response to a certificate signing request (unencoded - plain XML).</wsdl:documentation>
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="CertificateRevocationRequest">
+		<wsdl:part name="request" element="types:CertificateRevocationRequest">
+			<wsdl:documentation>The contract containing the certificate to be revoked (unencoded - plain XML).</wsdl:documentation>
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="CertificateRevocationResult">
+		<wsdl:part name="response" element="types:CertificateRevocationResult">
+			<wsdl:documentation>Response to a certificate revocation request (unencoded - plain XML).</wsdl:documentation>
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:portType name="EIDPKIRAPortType">
+		<wsdl:operation name="SignCertificate">
+			<wsdl:input message="tns:CertificateSigningRequest" />
+			<wsdl:output message="tns:CertificateSigningResult" />
+		</wsdl:operation>
+		<wsdl:operation name="RevokeCertificate">
+			<wsdl:input message="tns:CertificateRevocationRequest" />
+			<wsdl:output message="tns:CertificateRevocationResult" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="SOAPBinding" type="tns:EIDPKIRAPortType">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+		<wsdl:operation name="SignCertificate">
+			<soap:operation />
+			<wsdl:input message="tns:CertificateSigningRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output message="tns:CertificateSigningResult">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="RevokeCertificate">
+			<soap:operation />
+			<wsdl:input message="tns:CertificateRevocationRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output message="tns:CertificateRevocationResult">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="EIDPKIRAService">
+		<wsdl:port name="EIDPKIRAPort" binding="tns:SOAPBinding">
+			<soap:address location="http://localhost:8080/eid-pki-ra/webservice/eid-pki-ra-service" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

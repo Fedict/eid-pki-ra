@@ -1,0 +1,82 @@
+<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:form id="registrationForm">
+			<rich:panel id="registrationPanel">
+				<f:facet name="header">
+					<h:panelGroup>
+						<h:outputText value="#{messages['registration.update.title']}" rendered="#{registrationWSHome.managed}" />
+						<h:outputText value="#{messages['registration.create.title']}" rendered="#{not registrationWSHome.managed}" />
+					</h:panelGroup>
+				</f:facet>
+				
+				<h:inputHidden id="registrationStatus" value="#{registrationWSHome.instance.status}" rendered="#{registrationWSHome.managed}">
+					<s:convertEnum />
+				</h:inputHidden>
+
+				<s:decorate id="requesterNameDecoration" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['registration.requester']}:</ui:define>
+					<h:outputText id="requesterName" value="#{credentials.fullName}" />
+				</s:decorate>
+
+				<s:decorate id="emailDecoration" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['registration.email']}:</ui:define>
+					<h:inputText id="email" value="#{registrationWSHome.instance.emailAddress}" required="true"/>
+				</s:decorate>
+				
+				<s:decorate id="emailVerificationDecoration" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['registration.emailVerification']}:</ui:define>
+					<h:inputText id="emailVerification" value="#{registrationWSHome.instance.emailAddressVerification}" required="true"/>
+				</s:decorate>
+
+				<s:decorate id="certificateDomainDecoration" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['registration.certificatedomain']}:</ui:define>
+					<h:outputText id="certificateDomainName" value="#{registrationWSHome.instance.certificateDomainName}" rendered="#{registrationWSHome.managed}" />
+					<h:inputHidden id="certificateDomainId" value="#{registrationWSHome.instance.certificateDomainId}" rendered="#{registrationWSHome.managed}" />	
+					<h:selectOneMenu id="selectCertificateDomain" value="#{registrationWSHome.instance.certificateDomainId}" 
+							rendered="#{not registrationWSHome.managed}" required="true">
+						<s:selectItems 
+							value="#{certificateDomainWSQuery.findRemainingCertificateDomains}" 
+							var="certificateDomain" 
+							label="#{certificateDomain.name}" 
+							itemValue="#{certificateDomain.id}"
+							noSelectionLabel="#{messages['general.noselectionlabel']}" />
+					</h:selectOneMenu>				
+				</s:decorate>
+	           	
+	          	<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
+					<h:commandButton id="createOrUpdate" 
+							action="#{registrationWSHome.createOrUpdate}" 
+							value="#{registrationWSHome.managed ? messages['button.update'] : messages['button.save']}" />
+					<s:button id="back" 
+							value="#{messages['button.back']}" 
+							view="/page/registration/registration-list.xhtml" />
+				</s:decorate>
+			</rich:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,78 @@
+<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:form id="reportConfigurationForm">
+			<rich:panel id="panelNormal" rendered="#{reportMonthQuery.resultCount!=0}">
+				<f:facet name="header">
+					#{messages['reports.title']}
+				</f:facet>
+				
+				<s:decorate id="startMonthDecoration" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['reports.startMonth']}:</ui:define>
+					<h:selectOneMenu id="startMonth" value="#{reportConfigurationHandler.startMonth}">
+						<s:selectItems value="#{reportMonthQuery.resultList}" var="month" label="#{month}" />
+					</h:selectOneMenu>
+				</s:decorate>
+				
+				<s:decorate id="endMonthDecoration" template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['reports.endMonth']}:</ui:define>
+					<h:selectOneMenu id="endMonth" value="#{reportConfigurationHandler.endMonth}">
+						<s:selectItems value="#{reportMonthQuery.resultList}" var="month" label="#{month}" />
+					</h:selectOneMenu>
+				</s:decorate>
+
+				<s:decorate id="includeCAReportDecoration"
+					template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['reports.includeCA']}:</ui:define>
+					<h:selectBooleanCheckbox id="includeCAReport"
+						value="#{reportConfigurationHandler.includeCertificateAuthorityReport}" />
+				</s:decorate>
+
+				<s:decorate id="includeCDReportDecoration"
+					template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['reports.includeCD']}:</ui:define>
+					<h:selectBooleanCheckbox id="includeCDReport"
+						value="#{reportConfigurationHandler.includeCertificateDomainReport}" />
+				</s:decorate>
+
+				<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
+					<h:commandButton id="generateReport"
+						action="#{reportConfigurationHandler.generateReport}"
+						value="#{messages['button.generateReport']}" />
+				</s:decorate>
+			</rich:panel>
+			
+			<rich:panel id="panelNoData" rendered="#{reportMonthQuery.resultCount==0}">
+				<f:facet name="header">
+					#{messages['reports.title']}
+				</f:facet>
+				
+				#{messages['reports.noData']}
+			</rich:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

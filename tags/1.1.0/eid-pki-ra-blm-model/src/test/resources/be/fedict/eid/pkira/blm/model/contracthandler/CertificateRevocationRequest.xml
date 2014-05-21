@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+
+<tns:CertificateRevocationRequest
+        xmlns:tns="urn:be:fedict:eid:pkira:contracts">
+	<tns:RequestId>REQUEST-123</tns:RequestId>
+	<tns:Description>Sample</tns:Description>
+	<tns:Operator>
+		<tns:Name>Pietje Puk</tns:Name>
+		<tns:Function>Administrator</tns:Function>
+		<tns:Email>pietje.puk@mail.com</tns:Email>
+		<tns:Phone>12346789</tns:Phone>
+	</tns:Operator>
+	<tns:LegalNotice>LegalNotice</tns:LegalNotice>
+	<tns:DistinguishedName>testDN</tns:DistinguishedName>
+	<tns:StartDate>2010-01-01</tns:StartDate>
+	<tns:EndDate>2011-12-31</tns:EndDate>
+	<tns:Certificate>CERTIFICATE_DATA</tns:Certificate>
+</tns:CertificateRevocationRequest>

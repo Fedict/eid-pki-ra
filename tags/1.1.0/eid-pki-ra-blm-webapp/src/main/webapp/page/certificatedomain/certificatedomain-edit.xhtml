@@ -1,0 +1,113 @@
+<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich"
+                template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:form id="certificateDetailForm">
+			<rich:panel id="panel">
+				<f:facet name="header">
+					#{certificateDomainHome.managed ? messages['certificatedomain.edit.title'] : messages['certificatedomain.create.title']}
+				</f:facet>
+				
+				<s:decorate id="nameDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['certificatedomain.edit.name']}:</ui:define>
+	               	<h:inputText id="nameEdit" value="#{certificateDomainHome.instance.name}" rendered="#{not certificateDomainHome.managed}" required="true" size="30" />
+	               	<h:outputText id="nameView" value="#{certificateDomainHome.instance.name}" rendered="#{certificateDomainHome.managed}" />
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="dnPatternDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['certificatedomain.edit.dnExpression']}:</ui:define>
+	               	<h:inputText id="dnPattern" value="#{certificateDomainHome.instance.dnExpression}" required="true" size="40" />
+	               	<rich:toolTip for="dnPattern">
+	               		<h4>Expression syntax:</h4>
+	               		<p>
+	               			Example: <code>c=be,o=fedict,*ou=*,cn=(fedict.be|*.fedict.be)</code>
+	               		</p>
+	               		<p>
+							An <b>expression</b> is a comma-separated list of parts.<br/>
+							<code>expression ::= expressionPart ("," expressionPart)*</code>
+							</p><p>
+							Each <b>expression part</b> is either in the form key=value or *key=*<br/>
+							<code>expressionPart ::= (key "=" values)  |  ("*"key = "*)</code>
+						</p><p>
+							A <b>key</b> contains a number of letters:<br/>
+							<code>key ::= (LETTER)+</code>
+						</p><p>
+							The <b>values</b> contain a number of values, separated by a pipe symbol and in parentheses<br/>
+							<code>values ::= "(" value ( "|" value )* ")"</code>
+						</p><p>
+							A <b>value</b> consists of letters, numbers, spaces and symbols. It can start with an asterisk to indicate a wildcard.<br/>
+							<code>value ::= ("*")? LETTER|DIGIT|symbol</code>
+						</p><p>
+							A <b>symbol</b> can be the most common symbols. However, backslash, comma, asterisk, pipes and parentheses have to be escaped with a backslash.<br/>
+							<code>symbol ::= "-" | "_" | "." | "@" | "/" | "+" | ":" | "&amp;" | "?" | "#" | "&lt;" | "&gt;" | ";" | """ | "'" | "=" | specialSymbol</code><br/>
+							<code>specialSymbol ::= "\" ("\" | "," | "*" | "|" | "(" | ")")</code>
+							</p>
+					</rich:toolTip>
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="CertificateAuthorityDecoration" template="/layout/edit.xhtml">
+	           		<ui:define name="label">#{messages['certificatedomain.edit.certificateAuthority']}:</ui:define>
+	           		<h:selectOneMenu value="#{certificateDomainHome.instance.certificateAuthority}" required="true">
+   						<s:selectItems value="#{certificateAuthorityQuery.resultList}" var="ca" 
+                  						label="#{ca.name}"/>
+   						<s:convertEntity />
+					</h:selectOneMenu>    
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="serverCertDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['certificatedomain.edit.serverCertificates']}:</ui:define>
+	               	<h:selectBooleanCheckbox id="serverCert" value="#{certificateDomainHome.instance.serverCertificate}" />
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="clientCertDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['certificatedomain.edit.clientCertificates']}:</ui:define>
+	               	<h:selectBooleanCheckbox id="clientCert" value="#{certificateDomainHome.instance.clientCertificate}" />           
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="codeSigningCertDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['certificatedomain.edit.codeSigningCertificates']}:</ui:define>
+	               	<h:selectBooleanCheckbox id="codeSigningCert" value="#{certificateDomainHome.instance.codeSigningCertificate}" />           	           	           
+	           	</s:decorate>
+	           	
+	           	<s:decorate id="personsCertDecoration" template="/layout/edit.xhtml">
+	               	<ui:define name="label">#{messages['certificatedomain.edit.personsCertificates']}:</ui:define>
+	               	<h:selectBooleanCheckbox id="personsCert" value="#{certificateDomainHome.instance.personsCertificate}" />
+	           	</s:decorate>
+	           	
+	          	<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
+					<h:commandButton id="save" 
+							action="#{certificateDomainHome.persist}" 
+							value="#{messages['button.save']}"
+							rendered="#{not certificateDomainHome.managed}" />
+					<h:commandButton  id="update"
+							action="#{certificateDomainHome.update}" 
+							value="#{messages['button.update']}"
+							rendered="#{certificateDomainHome.managed}" />
+					<s:button id="back" 
+							value="#{messages['button.back']}" 
+							view="/page/certificatedomain/certificatedomain-list.xhtml" />
+				</s:decorate> 
+			</rich:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

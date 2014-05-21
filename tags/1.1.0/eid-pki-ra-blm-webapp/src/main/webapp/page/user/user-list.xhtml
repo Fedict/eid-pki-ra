@@ -1,0 +1,91 @@
+<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:form id="userListForm">
+			<rich:panel id="userListPanel">
+				<f:facet name="header">
+					#{messages['user.list.title']}
+				</f:facet>
+				
+				<rich:dataTable id="userTable" value="#{userQuery.resultList}" var="user" reRender="userTableDataScroller" rows="#{userQuery.rows}" width="100%">
+					<rich:column sortBy="#{user.lastName}" filterBy="#{user.lastName}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['user.lastName']}" />
+						</f:facet>
+						<h:outputText value="#{user.lastName}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{user.firstName}" filterBy="#{user.firstName}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['user.firstName']}" />
+						</f:facet>
+						<h:outputText value="#{user.firstName}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{user.nationalRegisterNumber}" filterBy="#{user.nationalRegisterNumber}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['user.nationalRegisterNumber']}" />
+						</f:facet>
+						<h:outputText value="#{user.nationalRegisterNumber}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{user.certificateSubject}" filterBy="#{user.certificateSubject}" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="#{messages['user.certificateSubject']}" />
+						</f:facet>
+						<h:outputText value="#{user.certificateSubject}" />
+					</rich:column>
+					
+					<rich:column sortBy="#{user.admin}">
+		                <f:facet name="header">
+							<h:outputText value="#{messages['user.admin']}" />
+		                </f:facet>
+		                <h:outputText value="#{user.admin ? messages['general.yes'] : messages['general.no']}" />
+		            </rich:column>
+		            
+		            <rich:column sortBy="#{user.adminEmail}">
+		                <f:facet name="header">
+							<h:outputText value="#{messages['user.adminEmail']}" />
+		                </f:facet>
+		                <h:outputText value="#{user.adminEmail}" />
+		            </rich:column>
+					
+					<rich:column>
+						<s:link view="/page/user/user-edit.xhtml" value="#{messages['link.detail']}" id="edit" >
+							<f:param name="userId" value="#{user.id}" />
+						</s:link>
+					</rich:column>
+		            
+		            <f:facet name="footer">
+		                <rich:datascroller id="userTableDataScroller" for="userTable" renderIfSinglePage="false" 
+		                		maxPages="#{userQuery.maxPages}" fastStep="#{userQuery.fastStep}" />
+		            </f:facet>
+				</rich:dataTable>
+			</rich:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

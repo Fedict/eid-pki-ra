@@ -1,0 +1,44 @@
+<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="WebServiceTestSuite" verbose="1">
+	<parameter name="context" value="ws" />
+	<test name="Database setup">
+		<classes>
+			<class name="be.fedict.eid.integration.setup.db.SetupDatabase" />
+		</classes>
+	</test>
+	<test name="Public Web Service Signing Test">
+		<classes>
+			<class name="be.fedict.eid.integration.publicws.PublicWebserviceSigningTest" />
+		</classes>
+	</test>
+	<test name="Public Web Service Revocation Test">
+		<classes>
+			<class name="be.fedict.eid.integration.publicws.PublicWebserviceRevocationTest" />
+		</classes>
+	</test>
+	<test name="Private Web Service Test">
+		<classes>
+			<class name="be.fedict.eid.integration.privatews.PrivateWebserviceTest" />
+			<class name="be.fedict.eid.integration.privatews.PrivateWebserviceCertificateDomainTest" />
+			<class name="be.fedict.eid.integration.privatews.PrivateWebserviceRegistrationTest" />
+		</classes>
+	</test>
+</suite>
