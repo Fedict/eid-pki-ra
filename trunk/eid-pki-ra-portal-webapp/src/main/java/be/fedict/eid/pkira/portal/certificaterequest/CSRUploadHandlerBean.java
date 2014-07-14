@@ -52,7 +52,9 @@ public class CSRUploadHandlerBean implements CSRUploadHandler, Serializable {
 
 	private static final long serialVersionUID = -8223326678483303162L;
 
-	@In(create = true, value = CSRUpload.NAME)
+    private static final int MIN_KEY_LENGTH = 2048;
+
+    @In(create = true, value = CSRUpload.NAME)
 	private CSRUpload csrUpload;
 
 	@In(value = Operator.NAME, scope = ScopeType.SESSION)
@@ -103,6 +105,12 @@ public class CSRUploadHandlerBean implements CSRUploadHandler, Serializable {
 	 * Validates the CSR.
 	 */
 	private boolean validateCsrAndPopulateContract(CSRInfo csrInfo) {
+        // Verify the key length
+        if (csrInfo.getKeyLength()<MIN_KEY_LENGTH) {
+            addTranslatedMessage("validator.invalid.csr");
+            return false;
+        }
+
 		// Extract the SANs
 		List<String> subjectAlternativeNames;
 		try {

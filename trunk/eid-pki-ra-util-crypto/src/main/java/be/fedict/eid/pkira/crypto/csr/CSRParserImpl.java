@@ -72,9 +72,7 @@ public class CSRParserImpl extends BouncyCastleProviderUser implements CSRParser
 			throw new CryptoException("Cannot verify CSR signature: " + e.getMessage(), e);
 		}
 
-		CSRInfo csrInfo = new CSRInfo(certificationRequest);
-
-		return csrInfo;
+        return new CSRInfo(certificationRequest);
 	}
 
 }
