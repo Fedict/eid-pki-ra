@@ -45,7 +45,6 @@ import static org.testng.Assert.assertNull;
 
 /**
  * @author Bram Baeyens
- * 
  */
 public class CSRUploadHandlerBeanTest {
 
@@ -82,7 +81,8 @@ public class CSRUploadHandlerBeanTest {
 	public void uploadCertificateSigningRequestValid() throws Exception {
 		when(csrUpload.extractCsrInfo()).thenReturn(csrInfo);
 		when(csrInfo.getSubject()).thenReturn("testDN");
-		when(csrUpload.getBase64Csr()).thenReturn("testBase64CSR");
+        when(csrInfo.getKeyLength()).thenReturn(2048);
+        when(csrUpload.getBase64Csr()).thenReturn("testBase64CSR");
 		when(eidpkiraPrivateServiceClient.getAllowedCertificateTypes("USER", "testDN", new ArrayList<String>())).thenReturn(Collections.singletonList(CertificateTypeWS.CODE));
 		
 		String result = handler.uploadCertificateSigningRequest();
@@ -102,4 +102,15 @@ public class CSRUploadHandlerBeanTest {
 		assertNull(result);
 		verify(facesMessages).addFromResourceBundle("validator.invalid.csr");
 	}
+
+    @Test
+    public void uploadCertificateSigningRequestWithTooSmallKey() throws CryptoException {
+        when(csrUpload.extractCsrInfo()).thenReturn(csrInfo);
+        when(csrInfo.getSubject()).thenReturn("testDN");
+        when(csrInfo.getKeyLength()).thenReturn(1024);
+        when(csrUpload.getBase64Csr()).thenReturn("testBase64CSR");
+
+        String result = handler.uploadCertificateSigningRequest();
+        assertNull(result);
+    }
 }

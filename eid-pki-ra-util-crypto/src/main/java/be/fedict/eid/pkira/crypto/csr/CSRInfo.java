@@ -19,6 +19,9 @@ package be.fedict.eid.pkira.crypto.csr;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.security.GeneralSecurityException;
+import java.security.interfaces.RSAKey;
+import java.security.interfaces.RSAPublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,8 +58,6 @@ public class CSRInfo {
 
 	/**
 	 * Returns the subject (distinguished name) found in the CSR.
-	 * 
-	 * @return
 	 */
 	@SuppressWarnings("deprecation")
 	public String getSubject() {
@@ -119,8 +120,6 @@ public class CSRInfo {
 
 	/**
 	 * Returns the DER encoded version of the CSR.
-	 * 
-	 * @return
 	 */
 	public byte[] getDerEncoded() {
 		return certificationRequest.getDEREncoded();
@@ -128,8 +127,6 @@ public class CSRInfo {
 
 	/**
 	 * Returns the PEM encoded CSR.
-	 * 
-	 * @return
 	 */
 	public String getPemEncoded() {
 		StringWriter writer = new StringWriter();
@@ -146,8 +143,34 @@ public class CSRInfo {
 		return writer.toString();
 	}
 
-	@Override
+    /**
+     * Returns the length of the key.
+     */
+    public int getKeyLength() {
+        return getKeyLength(getPublicKey());
+    }
+
+    private RSAPublicKey getPublicKey() {
+        try {
+            return (RSAPublicKey) certificationRequest.getPublicKey();
+        } catch (GeneralSecurityException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private int getKeyLength(RSAKey rsaKey) {
+        int bitLength = rsaKey.getModulus().bitLength();
+
+        int length = 128;
+        while(bitLength>length) {
+            length *= 2;
+        }
+
+        return length;
+    }
+
+    @Override
 	public String toString() {
-		return new StringBuilder("CSRInfo[").append("subject=").append(getSubject()).append(']').toString();
+		return "CSRInfo[" + "subject=" + getSubject() + ']';
 	}
 }
