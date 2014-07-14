@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+
+<wsdl:definitions name="XMLKeyManagement" targetNamespace="http://www.w3.org/2002/03/xkms-xbulk#wsdl"
+	xmlns:tns="http://www.w3.org/2002/03/xkms-xbulk#wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xbulk="http://www.w3.org/2002/03/xkms-xbulk">
+
+	<types>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema">
+			<import namespace="http://www.w3.org/2002/03/xkms-xbulk" schemaLocation="xkms2-xbulk.xsd" />
+			<import namespace="http://xkms.ubizen.com/kitoshi" schemaLocation="ogcm.xsd" />
+		</schema>
+	</types>
+
+	<message name="BulkRegister">
+		<part name="BulkRegister" element="xbulk:BulkRegister" />
+	</message>
+	<message name="BulkRegisterResult">
+		<part name="BulkRegisterResult" element="xbulk:BulkRegisterResult" />
+	</message>
+
+	<portType name="XKMSPortType">
+		<operation name="BulkRegister">
+			<input message="tns:BulkRegister" />
+			<output message="tns:BulkRegisterResult" />
+		</operation>
+	</portType>
+
+	<binding name="SOAPBinding" type="tns:XKMSPortType">
+		<wsdlsoap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+		<operation name="BulkRegister">
+			<wsdlsoap:operation />
+			<input>
+				<wsdlsoap:body use="literal" />
+			</input>
+			<output>
+				<wsdlsoap:body use="literal" />
+			</output>
+		</operation>
+	</binding>
+
+	<service name="XKMSService">
+		<port name="XKMSPort" binding="tns:SOAPBinding">
+			<wsdlsoap:address location="http://localhost:8080/eid-pki-ra-ws/xkms-xbulk" />
+		</port>
+	</service>
+</wsdl:definitions>
+

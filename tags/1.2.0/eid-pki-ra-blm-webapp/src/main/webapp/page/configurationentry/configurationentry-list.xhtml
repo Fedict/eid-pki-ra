@@ -1,0 +1,62 @@
+<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                template="/layout/template.xhtml">
+	<ui:define name="center">
+		<h:form id="configurationEntryListForm">
+			<rich:panel id="panel">
+				<f:facet name="header">#{messages['configurationentry.title']}</f:facet>
+				<rich:dataTable id="configurationEntriesTable" var="configurationEntry" rows="#{configurationEntryQuery.rows}" 
+						value="#{configurationEntryQuery.resultList}" width="100%" reRender="configurationEntriesTableDataScroller">
+					
+					<rich:column sortBy="#{messages[configurationEntry.key.message]}" filterBy="#{messages[configurationEntry.key.message]}" filterEvent="onkeyup">
+						<f:facet name="header" id="entryKeyHeader">
+							<h:outputText value="#{messages['configurationentry.list.key']}" />
+						</f:facet>
+						<h:outputText value="#{messages[configurationEntry.key.message]}" />
+					</rich:column>
+	
+					<rich:column sortBy="#{configurationEntry.value}" filterBy="#{configurationEntry.value}" filterEvent="onkeyup">
+						<f:facet name="header" id="entryValueHeader">
+							<h:outputText value="#{messages['configurationentry.list.value']}" />
+						</f:facet>
+						<h:outputText value="#{configurationEntry.value}" />
+					</rich:column>
+	
+					<rich:column>
+							<s:link view="/page/configurationentry/configurationentry-edit.xhtml" value="#{messages['link.edit']}" id="edit" style="editLink">
+								<f:param name="configurationEntryId" value="#{configurationEntry.id}" />
+							</s:link>
+					</rich:column>
+					
+					<f:facet name="footer">
+						<rich:datascroller id="configurationEntriesTableDataScroller" for="configurationEntriesTable" renderIfSinglePage="false" 
+								maxPages="#{configurationEntryQuery.maxPages}" fastStep="#{configurationEntryQuery.fastStep}" />
+					</f:facet>
+				</rich:dataTable>
+			</rich:panel> 
+		</h:form>
+
+	</ui:define>
+</ui:composition>

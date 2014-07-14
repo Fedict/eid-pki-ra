@@ -1,0 +1,230 @@
+<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a="http://richfaces.org/a4j"
+                template="/layout/template.xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://java.sun.com/jsf/facelets ">
+
+<ui:define name="center">
+    <rich:panel id="contractPanel">
+        <f:facet name="header">
+            <h:outputText value="#{messages['contracts.title']}"/>
+        </f:facet>
+
+        <s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBoxTop">
+            <h:form>
+                <h:commandButton id="csvExport" action="#{contractExportHandler.exportToCSV}"
+                                 value="#{messages['general.exportToCSV']}" type="button"/>
+            </h:form>
+        </s:decorate>
+
+        <s:decorate id="certificateDomainDecorator" template="/layout/edit.xhtml">
+            <ui:define name="label">#{messages['certificate.domain.selection.label']}:</ui:define>
+            <h:form>
+                <h:selectOneMenu id="selectRegisteredCertificateDomain"
+                                 value="#{contractDataModel.certificateDomainId}">
+                    <s:selectItems value="#{certificateDomainWSQuery.findRegisteredCertificateDomains}"
+                                   var="certificateDomain" label="#{certificateDomain.name}"
+                                   itemValue="#{certificateDomain.id}"
+                                   noSelectionLabel="#{messages['general.noselectionlabel']}"/>
+                    <a:support event="onchange"
+                               reRender="contractTable,certificateDomainDnExpression,contractTableDataScroller"/>
+                </h:selectOneMenu>
+            </h:form>
+        </s:decorate>
+
+        <s:decorate id="dnExpressionDecorator" template="/layout/edit.xhtml">
+            <ui:define name="label">#{messages['certificatedomain.dnExpression']}:</ui:define>
+            <h:outputText id="certificateDomainDnExpression"
+                          value="#{contractDataModel.certificateDomainExpressionShortened}"
+                          title="#{contractDataModel.certificateDomainExpression}"/>
+        </s:decorate>
+
+        <h:form id="contractListForm">
+            <rich:dataTable id="contractTable" var="contract" value="#{contractDataModel}" rows="#{contractDataModel.rows}"
+                            reRender="contractTable,contractTableDataScroller" width="75%">
+                <f:facet name="header">
+                    <rich:columnGroup>
+                        <rich:column>
+                            <a:commandLink action="#{contractDataModel.sortBy('contractType')}"
+                                           reRender="contractTable,contractTableDataScroller">
+                                <h:outputText value="#{messages['contract.type']}"/>
+                                <h:graphicImage value="#{contractDataModel.getSortIcon('contractType')}"/>
+                            </a:commandLink>
+                        </rich:column>
+                        <rich:column>
+                            <a:commandLink action="#{contractDataModel.sortBy('requesterName')}"
+                                           reRender="contractTable,contractTableDataScroller">
+                                <h:outputText value="#{messages['contract.requestername']}"/>
+                                <h:graphicImage value="#{contractDataModel.getSortIcon('requesterName')}"/>
+                            </a:commandLink>
+                        </rich:column>
+                        <rich:column>
+                            <a:commandLink action="#{contractDataModel.sortBy('certificateType')}"
+                                           reRender="contractTable,contractTableDataScroller">
+                                <h:outputText value="#{messages['certificate.type']}"/>
+                                <h:graphicImage value="#{contractDataModel.getSortIcon('certificateType')}"/>
+                            </a:commandLink>
+                        </rich:column>
+                        <rich:column>
+                            <a:commandLink action="#{contractDataModel.sortBy('dnExpression')}"
+                                           reRender="contractTable,contractTableDataScroller">
+                                <h:outputText value="#{messages['contract.dnexpression']}"/>
+                                <h:graphicImage value="#{contractDataModel.getSortIcon('dnExpression')}"/>
+                            </a:commandLink>
+                        </rich:column>
+                        <rich:column>
+                            <a:commandLink action="#{contractDataModel.sortBy('creationDate')}"
+                                           reRender="contractTable,contractTableDataScroller">
+                                <h:outputText value="#{messages['contract.creationdate']}"/>
+                                <h:graphicImage value="#{contractDataModel.getSortIcon('creationDate')}"/>
+                            </a:commandLink>
+                        </rich:column>
+                        <rich:column>
+                            <a:commandLink action="#{contractDataModel.sortBy('result')}"
+                                           reRender="contractTable,contractTableDataScroller">
+                                <h:outputText value="#{messages['contract.result']}"/>
+                                <h:graphicImage value="#{contractDataModel.getSortIcon('result')}"/>
+                            </a:commandLink>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{messages['contract.resultMessage']}"/>
+                        </rich:column>
+                        <rich:column/>
+                    </rich:columnGroup>
+                </f:facet>
+
+                <rich:column>
+                    <f:facet name="header">
+                        <h:selectOneMenu id="contractTypeFilter"
+                                         value="#{contractDataModel.contractTypeFilter}">
+                            <s:selectItems value="#{contractDataModel.contractTypes}"
+                                           var="contractType" label="#{messages[contractType.messageKey]}"
+                                           itemValue="#{contractType.name()}"
+                                           noSelectionLabel="#{messages['general.noselectionlabel']}"/>
+                            <a:support event="onchange" reRender="contractTable,contractTableDataScroller"/>
+                        </h:selectOneMenu>
+                    </f:facet>
+                    <h:outputText value="#{messages[contract.contractType.messageKey]}"/>
+                </rich:column>
+
+                <rich:column>
+                    <f:facet name="header">
+                        <h:inputText id="requesterNameFilter"
+                                     value="#{contractDataModel.requesterNameFilter}">
+                            <a:support event="onchange" reRender="contractTable,contractTableDataScroller"/>
+                        </h:inputText>
+                    </f:facet>
+                    <h:outputText value="#{contract.requesterName}"/>
+                </rich:column>
+
+                <rich:column>
+                    <f:facet name="header">
+                        <h:selectOneMenu id="certificateTypeFilter"
+                                         value="#{contractDataModel.certificateTypeFilter}">
+                            <s:selectItems value="#{contractDataModel.certificateTypes}"
+                                           var="certificateType" label="#{messages[certificateType.messageKey]}"
+                                           itemValue="#{certificateType.name()}"
+                                           noSelectionLabel="#{messages['general.noselectionlabel']}"/>
+                            <a:support event="onchange" reRender="contractTable,contractTableDataScroller"/>
+                        </h:selectOneMenu>
+                    </f:facet>
+                    <h:outputText value="#{messages[contract.certificateType.messageKey]}"/>
+                </rich:column>
+
+                <rich:column>
+                    <f:facet name="header">
+                        <h:inputText id="dnExpressionFilter"
+                                     value="#{contractDataModel.dnExpressionFilter}">
+                            <a:support event="onchange" reRender="contractTable,contractTableDataScroller"/>
+                        </h:inputText>
+                    </f:facet>
+                    <h:outputText value="#{contract.dnExpression}"/>
+                </rich:column>
+
+                <rich:column>
+                    <f:facet name="header">
+                        <h:panelGroup>
+                            <rich:calendar id="creationDateFromFilter"
+                                           value="#{contractDataModel.creationDateFromFilter}"
+                                           datePattern="dd/MM/yyyy"
+                                           enableManualInput="false"
+                                           showWeekDaysBar="false"
+                                           showWeeksBar="false"
+                                           inputStyle="width: 75px">
+                                <a:support event="onchanged" reRender="contractTable,contractTableDataScroller"/>
+                            </rich:calendar>
+                            -
+                            <rich:calendar id="creationDateToFilter"
+                                           value="#{contractDataModel.creationDateToFilter}"
+                                           datePattern="dd/MM/yyyy"
+                                           enableManualInput="false"
+                                           showWeekDaysBar="false"
+                                           showWeeksBar="false"
+                                           inputStyle="width: 75px">
+                                <a:support event="onchanged" reRender="contractTable,contractTableDataScroller"/>
+                            </rich:calendar>
+                        </h:panelGroup>
+                    </f:facet>
+                    <h:outputText value="#{contract.creationDate}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="Europe/Brussels"/>
+                    </h:outputText>
+                </rich:column>
+
+                <rich:column>
+                    <h:outputText value="#{contract.result}"/>
+                </rich:column>
+
+                <rich:column>
+                    <f:facet name="header">
+                        <h:inputText id="resultMessageFilter"
+                                     value="#{contractDataModel.resultMessageFilter}">
+                            <a:support event="onchange" reRender="contractTable,contractTableDataScroller"/>
+                        </h:inputText>
+                    </f:facet>
+                    <h:outputText value="#{contract.resultMessage}"/>
+                </rich:column>
+
+                <rich:column>
+                    <s:link id="downloadContractDocument" view="/page/contract/contract-download.xhtml"
+                            value="#{messages['link.download']}">
+                        <f:param name="contractId" value="#{contract.id}"/>
+                    </s:link>
+                    <h:outputText value=" "/>
+                    <s:link id="certificateDetail" view="/page/certificates/certificate-detail.xhtml"
+                            value="#{messages['link.detail']}" rendered="#{contract.hasCertificate}">
+                        <f:param name="certificateId" value="#{contract.certificateId}"/>
+                    </s:link>
+                </rich:column>
+
+                <f:facet name="footer">
+                    <rich:datascroller id="contractTableDataScroller" for="contractTable" renderIfSinglePage="true"
+                                       maxPages="#{contractDataModel.maxPages}"
+                                       fastStep="#{contractDataModel.fastStep}"/>
+                </f:facet>
+            </rich:dataTable>
+        </h:form>
+    </rich:panel>
+</ui:define>
+</ui:composition>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+
+<page xmlns="http://jboss.com/products/seam/pages"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+	login-required="true">
+	
+	<restrict>#{s:hasRole('REGISTERED_USER')}</restrict>
+
+	<navigation from-action="#{certificateDataModel.prepareRevocation(cer.id)}">
+		<rule if-outcome="revokeContract">
+			<redirect view-id="/page/contract/revocationContract.xhtml" />
+		</rule>
+	</navigation>
+	<navigation>
+		<rule if-outcome="requestCertificate">
+			<redirect view-id="/page/contract/upload-csr.xhtml" />
+		</rule>
+	</navigation>
+</page>

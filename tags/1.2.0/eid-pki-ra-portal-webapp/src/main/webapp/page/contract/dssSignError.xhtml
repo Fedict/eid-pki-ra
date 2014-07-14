@@ -1,0 +1,37 @@
+<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich"
+                template="/layout/template.xhtml"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://java.sun.com/jsf/facelets facelets-ui-2.0.xsd http://java.sun.com/jsf/core jsf-core-2.0.xsd http://java.sun.com/jsf/html html-basic-2.0.xsd">
+
+	<ui:define name="center">
+		<h:form id="dssSignErrorForm">
+			<rich:panel id="panel">
+				<f:facet name="header">#{messages['dssSignError.title']}</f:facet>
+	          	<s:decorate template="/layout/buttonbox.xhtml" id="dssSignErrorButtonBox">
+					<s:button id="continue" view="/page/certificates/certificate-list.xhtml" 
+							propagation="end" value="#{messages['general.continue']}" />
+				</s:decorate> 
+			</rich:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

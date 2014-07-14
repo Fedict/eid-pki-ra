@@ -1,0 +1,102 @@
+<!--
+  ~ eID PKI RA Project.
+  ~ Copyright (C) 2010-2014 FedICT.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version
+  ~ 3.0 as published by the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, see
+  ~ http://www.gnu.org/licenses/.
+  -->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                template="/layout/template.xhtml">
+
+	<ui:define name="center">
+		<h:form id="certificateDomainListForm">
+<rich:panel id="panel">
+			<f:facet name="header">#{messages['certificateDomain.list.title']}</f:facet>
+			<rich:dataTable id="certificateDomainTable" var="certificateDomain" rows="#{certificateDomainQuery.rows}"
+					value="#{certificateDomainQuery.resultList}" width="100%" reRender="certificateDomainTableDataScroller">
+				<rich:column sortBy="#{certificateDomain.name}" filterBy="#{certificateDomain.name}" filterEvent="onkeyup">
+					<f:facet name="header">
+						<h:outputText value="#{messages['certificatedomain.list.name']}" />
+					</f:facet>
+					<h:outputText value="#{certificateDomain.name}" />
+				</rich:column>
+
+				<rich:column sortBy="#{certificateDomain.dnExpression}" filterBy="#{certificateDomain.dnExpression}" filterEvent="onkeyup" width="300px">
+					<f:facet name="header">
+						<h:outputText value="#{messages['certificatedomain.list.dnexpression']}" />
+					</f:facet>
+					<h:outputText value='#{certificateDomain.dnExpression.replaceAll("([^ ]{60})", "$1 ")}' />
+				</rich:column>
+
+				<rich:column sortBy="#{certificateDomain.certificateAuthority.name}" filterBy="#{certificateDomain.certificateAuthority.name}" filterEvent="onkeyup">
+					<f:facet name="header">
+						<h:outputText value="#{messages['certificatedomain.list.certificateAuthority.name']}" />
+					</f:facet>
+					<h:outputText value="#{certificateDomain.certificateAuthority.name}" />
+				</rich:column>
+				
+				<rich:column sortBy="#{certificateDomain.serverCertificate}">
+	                <f:facet name="header">
+						<h:outputText value="#{messages['certificatedomain.list.servercertificates']}" />
+	                </f:facet>
+	                <h:outputText value="#{certificateDomain.serverCertificate ? messages['general.yes'] : messages['general.no']}" />
+	            </rich:column>
+				
+				<rich:column sortBy="#{certificateDomain.clientCertificate}">
+	                <f:facet name="header">
+						<h:outputText value="#{messages['certificatedomain.list.clientcertificates']}" />
+	                </f:facet>
+	                <h:outputText value="#{certificateDomain.clientCertificate ? messages['general.yes'] : messages['general.no']}" />
+	            </rich:column>
+				
+				<rich:column sortBy="#{certificateDomain.codeSigningCertificate}">
+	                <f:facet name="header">
+						<h:outputText value="#{messages['certificatedomain.list.codesigningcertificates']}" />
+	                </f:facet>
+	                <h:outputText value="#{certificateDomain.codeSigningCertificate ? messages['general.yes'] : messages['general.no']}" />
+	            </rich:column>
+	            
+	            <rich:column sortBy="#{certificateDomain.personsCertificate}">
+	                <f:facet name="header">
+						<h:outputText value="#{messages['certificatedomain.list.personscertificates']}" />
+	                </f:facet>
+	                <h:outputText value="#{certificateDomain.personsCertificate ? messages['general.yes'] : messages['general.no']}" />
+	            </rich:column>
+
+				<rich:column>
+					<s:link view="/page/certificatedomain/certificatedomain-edit.xhtml" value="#{messages['link.edit']}" id="edit" >
+						<f:param name="certificateDomainId" value="#{certificateDomain.id}" />
+					</s:link>
+				</rich:column>
+
+				<f:facet name="footer">
+					<rich:datascroller id="certificateDomainTableDataScroller" for="certificateDomainTable" renderIfSinglePage="false" 
+							maxPages="#{certificateDomainQuery.maxPages}" fastStep="#{certificateDomainQuery.fastStep}" />
+				</f:facet>
+			</rich:dataTable>
+				           	
+          	<s:decorate template="/layout/buttonbox.xhtml" id="submitButtonBox">
+				<s:button view="/page/certificatedomain/certificatedomain-edit.xhtml" value="#{messages['button.new']}" id="newCertificateDomain">
+					<f:param name="certificateDomainId" />
+				</s:button>
+			</s:decorate>
+</rich:panel> 
+		</h:form>
+	</ui:define>
+</ui:composition>
