@@ -79,8 +79,9 @@ public class PKIRAClientTest {
 	public void testCreateCertificateRevocationRequestContract() throws Exception {
 		String contract = client.createCertificateRevocationRequestContract(REQUEST_ID, CERTIFICATE, OPERATOR_NAME,
 				OPERATOR_FUNCTION, OPERATOR_PHONE, DESCRIPTION, LEGAL_NOTICE);
+
 		Diff diff = XMLUnit.compareXML(CERTIFICATE_REVOCATION_CONTRACT, contract);
-		assertTrue(diff.identical(), diff.toString());
+		assertTrue(diff.similar(), diff.toString());
 	}
 
 	@Test
@@ -88,7 +89,7 @@ public class PKIRAClientTest {
 		String contract = client.createCertificateSigningRequestContract(REQUEST_ID, CSR, CERTIFICATE_TYPE,
 				OPERATOR_NAME, OPERATOR_FUNCTION, OPERATOR_PHONE, VALIDITY_PERIOD, DESCRIPTION, LEGAL_NOTICE);
 		Diff diff = XMLUnit.compareXML(CERTIFICATE_SIGNING_CONTRACT, contract);
-		assertTrue(diff.identical(), diff.toString());
+		assertTrue(diff.similar(), diff.toString());
 	}
 
 	@Test
