@@ -17,22 +17,15 @@
  */
 package be.fedict.eid.pkira.blm.model.contracts;
 
-import java.math.BigInteger;
-import java.util.List;
+import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationStatus;
+import org.jboss.seam.annotations.Name;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-
-import org.jboss.seam.annotations.Name;
-
-import be.fedict.eid.pkira.blm.model.usermgmt.RegistrationStatus;
+import javax.persistence.*;
+import java.math.BigInteger;
+import java.util.List;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
@@ -170,11 +163,11 @@ public class ContractRepositoryBean implements ContractRepository {
         if (certificatesFilter.getCertificateDomainId() != null)
             queryString.append(" AND certificate.certificateDomain.id = :certificateDomainId");
         if (isNotBlank(certificatesFilter.getDistinguishedName()))
-            queryString.append(" AND lower(certificate.distinguishedName) LIKE :distinguishedName");
+            queryString.append(" AND lower(certificate.distinguishedName) LIKE lower(:distinguishedName)");
         if (isNotBlank(certificatesFilter.getIssuer()))
-            queryString.append(" AND lower(certificate.issuer) LIKE :issuer");
+            queryString.append(" AND lower(certificate.issuer) LIKE lower(:issuer)");
         if (isNotBlank(certificatesFilter.getSerialNumber()))
-            queryString.append(" AND serialNumber=:serialNumber");
+            queryString.append(" AND certificate.serialNumber=:serialNumber");
         if (certificatesFilter.getCertificateType()!=null) {
             queryString.append(" AND certificate.certificateType=:certificateType");
         }
