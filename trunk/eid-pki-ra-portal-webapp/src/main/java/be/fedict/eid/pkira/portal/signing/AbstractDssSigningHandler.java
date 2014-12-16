@@ -18,10 +18,14 @@
 
 package be.fedict.eid.pkira.portal.signing;
 
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-
+import be.fedict.eid.dss.protocol.simple.client.SignatureResponse;
+import be.fedict.eid.dss.protocol.simple.client.SignatureResponseProcessor;
+import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
+import be.fedict.eid.pkira.contracts.XmlMarshallingException;
+import be.fedict.eid.pkira.generated.contracts.ResponseType;
+import be.fedict.eid.pkira.generated.contracts.ResultType;
+import be.fedict.eid.pkira.portal.util.ConfigurationEntryContainer;
+import be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -33,14 +37,8 @@ import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.StatusMessage.Severity;
 import org.jboss.seam.log.Log;
 
-import be.fedict.eid.dss.protocol.simple.client.SignatureResponse;
-import be.fedict.eid.dss.protocol.simple.client.SignatureResponseProcessor;
-import be.fedict.eid.pkira.contracts.EIDPKIRAContractsClient;
-import be.fedict.eid.pkira.contracts.XmlMarshallingException;
-import be.fedict.eid.pkira.generated.contracts.ResponseType;
-import be.fedict.eid.pkira.generated.contracts.ResultType;
-import be.fedict.eid.pkira.portal.util.ConfigurationEntryContainer;
-import be.fedict.eid.pkira.publicws.EIDPKIRAServiceClient;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 public abstract class AbstractDssSigningHandler<T extends ResponseType> {
 
@@ -114,7 +112,7 @@ public abstract class AbstractDssSigningHandler<T extends ResponseType> {
 			}
 		} catch (Exception e) {
 			getFacesMessages().addFromResourceBundle("validator.error.sign");
-			log.info("<<< handleRequest: exception");
+			log.info("<<< handleRequest: exception", e);
 		}
 
 		return handleRedirect(redirectStatus, serviceClientResponse);
@@ -134,17 +132,6 @@ public abstract class AbstractDssSigningHandler<T extends ResponseType> {
 	protected abstract String invokeServiceClient(String signedRequest) throws Exception;
 
 	protected abstract T unmarshall(String result) throws XmlMarshallingException;
-
-	protected String nullSafeGetRequestParameter(HttpServletRequest request, String parameterName)
-			throws ServletException {
-		log.info(">>> nullSafeGetRequestParameter(parameterName[" + parameterName + "])");
-		String parameter = request.getParameter(parameterName);
-		if (parameter == null) {
-			throw new ServletException(parameterName + " parameter not present");
-		}
-		log.info("<<< nullSafeGetRequestParameter: " + parameter);
-		return parameter;
-	}
 
 	/**
 	 * Make sure to call this method in a Seam contextual context.
@@ -168,9 +155,7 @@ public abstract class AbstractDssSigningHandler<T extends ResponseType> {
 	}
 
 	protected HttpServletRequest getRequest() {
-		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
-				.getRequest();
-		return request;
+		return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 	}
 
 	protected abstract String getTarget();
