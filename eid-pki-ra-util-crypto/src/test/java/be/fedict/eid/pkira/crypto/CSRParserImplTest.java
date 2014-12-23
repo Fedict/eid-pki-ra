@@ -24,8 +24,12 @@ import be.fedict.eid.pkira.crypto.csr.CSRInfo;
 import be.fedict.eid.pkira.crypto.csr.CSRParserImpl;
 import be.fedict.eid.pkira.crypto.exception.CryptoException;
 
+import java.io.IOException;
+import java.util.List;
+
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
 /**
  * @author Jan Van den Bergh
@@ -40,7 +44,7 @@ public class CSRParserImplTest {
 	}
 	
 	@Test
-	public void testParseCSR() throws CryptoException {
+	public void testParseCSR() throws CryptoException, IOException {
 		CSRInfo csrInfo = csrParser.parseCSR(TestConstants.VALID_CSR);
 
 		assertNotNull(csrInfo);
@@ -49,29 +53,25 @@ public class CSRParserImplTest {
 		assertNotNull(csrInfo.getPemEncoded());
 	}
 	
-//	@Test
-//	Need to create a new CSR For this test!
-//	public void testParseCSRNoAttributes() throws CryptoException {
-//		CSRInfo csrInfo = csrParser.parseCSR(TestConstants.VALID_CSR_NO_ATTRIBUTES);
-//
-//		assertNotNull(csrInfo);
-//		assertEquals(csrInfo.getSubject(), TestConstants.CSR_SUBJECT2);
-//		assertNotNull(csrInfo.getDerEncoded());
-//		assertNotNull(csrInfo.getPemEncoded());
-//		assertNotNull(csrInfo.getSubjectAlternativeNames());
-//		assertEquals(0, csrInfo.getSubjectAlternativeNames().size());
-//	}
-	
 	@Test
 	public void testParseCRSWithSAN() throws CryptoException {
 		CSRInfo csrInfo = csrParser.parseCSR(TestConstants.VALID_CSR_WITH_SAN);
 		csrInfo.getSubjectAlternativeNames();
 	}
+
+	@Test
+	public void testParseCRSWithMultipleExtensionsAnsMultipleSAN() throws CryptoException {
+		CSRInfo csrInfo = csrParser.parseCSR(TestConstants.VALID_CSR_WITH_MULTIPLE_SAN);
+		List<String> subjectAlternativeNames = csrInfo.getSubjectAlternativeNames();
+		assertEquals(2, subjectAlternativeNames.size());
+		assertTrue(subjectAlternativeNames.contains("aca-it.be"));
+		assertTrue(subjectAlternativeNames.contains("www.aca-it.be"));
+	}
 	
 	@Test(expectedExceptions = CryptoException.class)
 	public void testParseCRSWithWildcardInSAN() throws CryptoException {
 		CSRInfo csrInfo = csrParser.parseCSR(TestConstants.INVALID_CSR_WILDCARD_IN_SAN);
-		assertEquals(2, csrInfo.getSubjectAlternativeNames().size());
+		csrInfo.getSubjectAlternativeNames();
 	}
 	
 	@Test(expectedExceptions = CryptoException.class)

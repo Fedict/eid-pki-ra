@@ -91,6 +91,25 @@ public class TestConstants {
 			+ "xeO8TBlb4nHj2SBEjcB15Ec/wikMjdpOj0KFxc7FCoIwYmGNxUY9kUYjwCcGcPZ1\r\n" + "7WObH1abpFPS0H9lccj/Qx0=\r\n"
 			+ "-----END CERTIFICATE REQUEST-----";
 
+	public static final String VALID_CSR_WITH_MULTIPLE_SAN = "-----BEGIN CERTIFICATE REQUEST-----\n" +
+			"MIIC4TCCAckCAQAwTjELMAkGA1UEBhMCQkUxEDAOBgNVBAcMB0hhc3NlbHQxGTAX\n" +
+			"BgNVBAsMEEFDQS1JVCBTb2x1dGlvbnMxEjAQBgNVBAMMCWFjYS1pdC5iZTCCASIw\n" +
+			"DQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANFbxoS1gjSlZ+ZPRiBCY4z0DDm2\n" +
+			"wrrYWeBkbVkgCt+fo7tFrMG3C/K6+1vd4xVVikPN02/4eEEl4WAK7TGdrdSUkgw/\n" +
+			"D9FYb51r7i6VeP0v2OhEOVhfQc+Mafl5KnYa5nVGepNC/zaJSCQbD3SLIG5F1shS\n" +
+			"6OmRN8iq0oCXnKPeDHfKxzFAcSrCmD0T9k4s5JKOcmn0VkAGtNF0lKi9fJkIwlBR\n" +
+			"m+VjGXV8K68Ml8HamhdU+eoBI2qatQT6KhS1OXPwK0XgGbQf5ymJ8nOwYyvH4UBf\n" +
+			"YsPt9DtVKbc/XoJoRyiHaOp4frHE3H/+wDXYtSpHnXQ4r2mBptmB+ETeMfkCAwEA\n" +
+			"AaBOMEwGCSqGSIb3DQEJDjE/MD0wCQYDVR0TBAIwADALBgNVHQ8EBAMCBeAwIwYD\n" +
+			"VR0RBBwwGoINd3d3LmFjYS1pdC5iZYIJYWNhLWl0LmJlMA0GCSqGSIb3DQEBBQUA\n" +
+			"A4IBAQAmC4+Wx98a7uSj3wvXiSgF3DL6+CWgAjiCocvrggWr+BXz2jZSi8W9wHpW\n" +
+			"OFZ5Yas2FEcLPrWymPQOV5jOZ01NhWSibi/GP8P6llNqlDJdthb8yOcN+UllOUBT\n" +
+			"qduXw9qv1+Nvpjbxs0fqNyX6geAxA/U3ImIuIpaoXtmjWIxPz4p0HW7Bae9nr5mw\n" +
+			"E48bk9nQu1meS6oUusv0iK3P8TZb5DUPwnT6vANZHJfzPXQlI7AAKiCSdVEdxUXt\n" +
+			"2oZakRrCQoAT79cVAYsv0auRqgFXBeMCh2fZSv1+Wx1zVI2Dl/VW65Q1gIg+iD4Y\n" +
+			"nDw2Z5+VFcm8ZamlfjBgYxRdO6ul\n" +
+			"-----END CERTIFICATE REQUEST-----\n";
+
 	public static final String VALID_CERTIFICATE = "-----BEGIN CERTIFICATE-----\r\n"
 			+ "MIIE5zCCA8+gAwIBAgILAQAAAAABJZRviPgwDQYJKoZIhvcNAQEFBQAwcTELMAkG\r\n"
 			+ "A1UEBhMCQkUxHTAbBgNVBAsTFERvbWFpbiBWYWxpZGF0aW9uIENBMRkwFwYDVQQK\r\n"
@@ -140,8 +159,6 @@ public class TestConstants {
 			+ "/6gk3Nl1n2kUS1WAufRh+b3ckvcf\r\n" + "-----END CERTIFICATE-----\r\n";
 
 	public static final String CSR_SUBJECT = "C=BE,ST=Limburg,L=Hasselt,O=ACA,OU=test,CN=Jan Van den Bergh";
-	
-	public static final String CSR_SUBJECT2 = "C=BE,O=Federal Government,OU=SSIN\\=73122525352,OU=DORIEN VANHOUT,OU=eHealth-platform Belgium,CN=SSIN\\=73122525352";
 
 	public static final String CERTIFICATE_DN = "C=BE,OU=Domain Control Validated,O=*.aca-it.be,CN=*.aca-it.be";
 
@@ -152,7 +169,5 @@ public class TestConstants {
 	public static final Date CERTIFICATE_END_DATE = new Date(1418679256000L);
 
 	public static final BigInteger SERIAL_NUMBER = new BigInteger("1208925819615890090461432");
-
-	public static final String CERTIFICATE_DN_SAN = "C=BE,O=Fedict,CN=test.test.be";
 
 }
