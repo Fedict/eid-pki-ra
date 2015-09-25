@@ -1,0 +1,1 @@
+The eID PKI Registration Authority is a project to build a front-end for the PKI XKMS to automate the certificate delivery process using the eID card.
