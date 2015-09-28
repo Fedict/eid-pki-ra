@@ -1,8 +1,8 @@
-.project
-.classpath
-.settings
 target
+.settings
+.classpath
+.project
 *.iml
 .idea
-*.sh
-*.zip
+build
+.DS_Store
