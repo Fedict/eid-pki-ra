@@ -140,30 +140,9 @@
             </snapshots>
         </repository>
         <repository>
-            <id>shibboleth-release</id>
-            <name>Internet2 Releases</name>
-            <layout>default</layout>
-            <url>http://shibboleth.internet2.edu/downloads/maven2</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
             <id>openqa-releases</id>
             <name>Openqa Release Repository</name>
             <url>http://nexus.openqa.org/content/repositories/releases</url>
-            <layout>default</layout>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-        <repository>
-            <id>java.net</id>
-            <name>java.net</name>
-            <url>http://download.java.net/maven/2/</url>
             <layout>default</layout>
             <snapshots>
                 <enabled>false</enabled>
@@ -338,6 +317,12 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.opensaml</groupId>
+                <artifactId>xmltooling</artifactId>
+                <version>1.3.4</version>
+            </dependency>
+
             <dependency>
                 <groupId>be.fedict.eid-idp</groupId>
                 <artifactId>eid-idp-sp-protocol-saml2</artifactId>
