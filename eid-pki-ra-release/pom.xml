@@ -32,6 +32,9 @@
 	<profiles>
 		<profile>
 			<id>oracle</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<properties>
 				<database.schema>oracle</database.schema>
 				<environment>production</environment>
@@ -203,7 +206,7 @@
 				<!-- Generate a key pair -->
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>keytool-maven-plugin</artifactId>
-                <version>1.2</version>
+                <version>1.5</version>
 				<executions>
 					<execution>
 						<phase>process-resources</phase>
