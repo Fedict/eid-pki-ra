@@ -22,7 +22,7 @@
 	<parent>
 		<artifactId>eid-pki-ra</artifactId>
 		<groupId>be.fedict.eid-pki-ra</groupId>
-		<version>1.3.1-SNAPSHOT</version>
+		<version>1.4.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
     <artifactId>eid-pki-ra-release</artifactId>
@@ -171,7 +171,7 @@
 						</goals>
 						<configuration>
 							<tasks>
-								<copy file="target/dependency/jboss-${jboss.version}/docs/examples/jca/${database.template}.xml" tofile="target/dependency/jboss-${jboss.version}/server/default/deploy/eid-pki-ra-ds.xml"/>
+								<copy file="target/dependency/jboss-${jboss.version}/docs/examples/jca/${database.template}.xml" tofile="target/dependency/jboss-${jboss.version}/server/default/deploy/eid-pki-ra-ds.xml" />
 							</tasks>
 						</configuration>
 					</execution>
