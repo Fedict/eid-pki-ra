@@ -110,7 +110,7 @@ public class XKMSIntegrationTest {
 		xkmsClientParameters.put(XKMSClient.PARAMETER_LOG_PREFIX, "tests/" + DATE_STR + "certificate-request");
 
 		// Generate the certificate
-		byte[] certificate = xkmsClient.createCertificate(csrInfo.getDerEncoded(), 15, "client", 5);
+		byte[] certificate = xkmsClient.createCertificate(csrInfo.getDerEncoded(), 15, "persons", 5);
 		assertNotNull(certificate);
 
 		CertificateInfo certificateInfo = certificateParser.parseCertificate(certificate);
