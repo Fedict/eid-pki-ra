@@ -68,7 +68,6 @@
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<scope>test</scope>
-			<classifier>jdk15</classifier>
 		</dependency>
 		<dependency>
 			<groupId>javax.persistence</groupId>

@@ -18,6 +18,13 @@
 
 package be.fedict.eid.pkira.blm.model.usermgmt;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertSame;
+import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.fail;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -28,10 +35,6 @@ import org.testng.annotations.Test;
 
 import be.fedict.eid.pkira.blm.model.DatabaseTest;
 import be.fedict.eid.pkira.blm.model.certificatedomain.CertificateDomain;
-
-import static org.junit.Assert.*;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
 
 /**
  * @author Bram Baeyens
