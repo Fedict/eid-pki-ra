@@ -22,7 +22,7 @@
 	<parent>
 		<artifactId>eid-pki-ra</artifactId>
 		<groupId>be.fedict.eid-pki-ra</groupId>
-		<version>1.4.0</version>
+		<version>1.4.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
     <artifactId>eid-pki-ra-release</artifactId>
