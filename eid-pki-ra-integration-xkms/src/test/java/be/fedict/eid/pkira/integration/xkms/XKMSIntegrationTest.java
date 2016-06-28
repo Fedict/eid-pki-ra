@@ -6,17 +6,13 @@ import static org.testng.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.security.Provider;
-import java.security.Security;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.mockito.MockitoAnnotations;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -55,7 +51,6 @@ public class XKMSIntegrationTest {
 	// }
 
 	private static final String PARAMETER_XKMS_URL = "xkms.url";
-	private static final Provider PROVIDER = new BouncyCastleProvider();
 
 	private static BigInteger serialNumber;
 	private static String DATE_STR = new SimpleDateFormat("yyyyMMdd-HHmmss-").format(new Date());
@@ -63,11 +58,6 @@ public class XKMSIntegrationTest {
 	private CertificateParserImpl certificateParser;
 	private XKMSClient xkmsClient;
 	private Map<String, String> xkmsClientParameters;
-
-	@BeforeClass
-	public void registerProvider() {
-		Security.addProvider(PROVIDER);
-	}
 
 	@BeforeMethod
 	public void setup() throws IOException {
@@ -97,7 +87,7 @@ public class XKMSIntegrationTest {
 		xkmsClient = new XKMSClient(properties.getProperty(PARAMETER_XKMS_URL), xkmsClientParameters);
 	}
 
-	@Test
+	@Test(enabled = false)
 	public void testXKMSCreateCertificate() throws XKMSClientException, CryptoException {
 		// Generate a CSR and validate it
 		CSRInfo csrInfo = Util.generateCSR();
@@ -129,7 +119,7 @@ public class XKMSIntegrationTest {
 	// "certificate-request-signed.xml");
 	// }
 
-	@Test(dependsOnMethods = "testXKMSCreateCertificate")
+	@Test(enabled = false, dependsOnMethods = "testXKMSCreateCertificate")
 	public void testXKMSRevokeCertificateRequest() throws XKMSClientException, CryptoException {
 		// Revoke the certificate
 		xkmsClientParameters.put(XKMSClient.PARAMETER_LOG_PREFIX, "tests/" + DATE_STR + "certificate-revocation");

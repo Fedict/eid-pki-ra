@@ -115,7 +115,7 @@ public class XMLMarshallingUtil {
 
 	/**
 	 * Extracts the first element from the list matching the type.
-	 * 
+	 *
 	 * @param name
 	 *            name of the element to get.
 	 * @param list
@@ -142,7 +142,7 @@ public class XMLMarshallingUtil {
 
 	/**
 	 * Extracts the first element from the list matching the type.
-	 * 
+	 *
 	 * @param <T>
 	 *            expected type.
 	 * @param clazz
@@ -175,6 +175,32 @@ public class XMLMarshallingUtil {
 		try {
 			Document doc = documentBuilder.newDocument();
 			Marshaller marshaller = jaxbContext.createMarshaller();
+
+			try {
+				Object mapper = new com.sun.xml.bind.marshaller.NamespacePrefixMapper() {
+					@Override
+					public String getPreferredPrefix(String namespaceUri, String suggestion, boolean requirePrefix) {
+						if (namespaceUri.equals("http://www.w3.org/2002/03/xkms-xbulk")) {
+							return "xbulk";
+						}
+						if (namespaceUri.equals("http://www.xkms.org/schema/xkms-2001-01-20")) {
+							return "xkms";
+						}
+						if (namespaceUri.equals("http://www.w3.org/2000/09/xmldsig#")) {
+							return "ds";
+						}
+						if (namespaceUri.equals("http://xkms.ubizen.com/kitoshi")) {
+							return "ki";
+						}
+
+						throw new RuntimeException("Unknown namespace " + namespaceUri);
+					}
+				};
+				marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", mapper);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+
 			marshaller.marshal(jaxbElement, doc);
 
 			return doc;

@@ -147,7 +147,7 @@ public class PKIRACertificateRequestIntegrationTest {
 		return connection;
 	}
 
-	@Test
+	@Test(enabled = false)
 	public void createSignAndSubmitContract() throws XmlMarshallingException, XKMSClientException, CryptoException {
 		Document requestDocument = createRequestContract();
 		signRequestDocument(requestDocument);

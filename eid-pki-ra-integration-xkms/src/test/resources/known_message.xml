@@ -16,5 +16,40 @@
   ~ License along with this software; if not, see
   ~ http://www.gnu.org/licenses/.
   -->
-
-<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><ns4:BulkRegister><ns4:SignedPart Id="signed-part"><ns4:BatchHeader><ns4:BatchID>batch-id-15bdc194-f07b-43b8-9a00-b06c41df81d4</ns4:BatchID><ns4:BatchTime>2010-10-15T10:49:45.451Z</ns4:BatchTime><ns4:NumberOfRequests>1</ns4:NumberOfRequests></ns4:BatchHeader><ns2:Respond><ns2:string>RetrievalMethod</ns2:string><ns2:string>X509Cert</ns2:string></ns2:Respond><ns4:Requests number="1"><ns4:Request><ns2:Status>Indeterminate</ns2:Status><ns2:KeyID>key-id-13ebc155-83ea-4349-8b7f-bfd8b5462f6a</ns2:KeyID><KeyInfo><KeyName>http://xkms.og.ubizen.com/keyname?buc_id=4631410331</KeyName><ns4:PKCS10>MIICjTCCAXUCAQAwSjELMAkGA1UEBhMCYmUxDzANBgNVBAoMBmZlZGljdDENMAsGA1UECwwEdGVzdDEbMBkGA1UEAwwSdGVzdC0xMjg3MTM5NzgzODcyMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0eMYoULE8EK3BtVq5dhOCAiK1h9d2ZhikhpMGjFKYMapUnPwWsIkVQUu0VedyTykPCWWDEAtjY1w1zKzKDTcfnXD+O75HrJnQhCww51+Vq7yBP+ihWzicKj53dZ2JQq3QVseIFGcC435qeb9MJn9mYHHnYbemW04Dil1whoNaMPrZgRny8V4um7d6bgp1nuwlCvFS3sREgmCUE91n2eko6I4Tu5q91FhHG0ye2j8HT6gPdnd8ugJZrRMjze3JOpXGvJs30kLRSTkImXBfQVmKdfW4KJIsqVhTNY3HIde1mpWua1xLpfZdy74xxod3ott1gH0r1p42ypx4WDbQtrhPwIDAQABMA0GCSqGSIb3DQEBBAUAA4IBAQCo+hKvYwAcaq+LRU7H/+77U/XSjjEjYtEPVnZN07qIYzHPu8z4Q6uu0XxSf2ijv0/L8Hdf0yDN4p7x3IJr5Q4Y9ZLLjtoKPALWehM5Gq0zcTTL8jtbEob1VDrhAvsb7NyCUFf8XjpygJvfd/vonbnJBm5Uxd2KflunJtlLIqL6KUtlEgJ+aolGDHg6wP0ooRFeuel9E8fOSTpBf6zEWRwRX0yhUAh3FXeYdHy7QSR7LwwvG0ReTMhU1vb/BJ3kK8pGSHFS3zOvN0dK8O+sEoXOnaRgGKCBS6WIkM1Pd7d7/HMYlQf7xGTF8uDczoW4sLZcZNnfl/coSIJn9yw806q+</ns4:PKCS10></KeyInfo><ns4:ProcessInfo><ns3:Publish>true</ns3:Publish><ns3:AttributeCertificate><ns3:ValidityInterval><ns3:NotBefore>2010-10-15T10:49:45.447Z</ns3:NotBefore><ns3:NotAfter>2012-01-15T10:49:45.447Z</ns3:NotAfter></ns3:ValidityInterval></ns3:AttributeCertificate></ns4:ProcessInfo></ns4:Request></ns4:Requests></ns4:SignedPart></ns4:BulkRegister></S:Body></S:Envelope>
+<xbulk:BulkRegister xmlns:xbulk="http://www.w3.org/2002/03/xkms-xbulk"
+					xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+					xmlns:ki="http://xkms.ubizen.com/kitoshi"
+					xmlns:xkms="http://www.xkms.org/schema/xkms-2001-01-20">
+	<xbulk:SignedPart Id="signed-part">
+		<xbulk:BatchHeader>
+			<xbulk:BatchID>batch-id-73f6d942-7162-4cd3-82e2-3cdb7da73f03</xbulk:BatchID>
+			<xbulk:BatchTime>2016-06-28T13:14:34.376Z</xbulk:BatchTime>
+			<xbulk:NumberOfRequests>1</xbulk:NumberOfRequests>
+		</xbulk:BatchHeader>
+		<xkms:Respond>
+			<xkms:string>RetrievalMethod</xkms:string>
+			<xkms:string>X509Cert</xkms:string>
+		</xkms:Respond>
+		<xbulk:Requests number="1">
+			<xbulk:Request>
+				<xkms:Status>Valid</xkms:Status>
+				<xkms:KeyID>key-id-0bdba161-a1d7-41fe-898e-efad969e0909</xkms:KeyID>
+				<ds:KeyInfo>
+					<ds:KeyName>http://xkms.og.ubizen.com/keyname?buc_id=3651465631</ds:KeyName>
+					<xbulk:PKCS10>
+						MIICojCCAYoCAQAwXzEbMBkGA1UEAwwSdGVzdC0xNDY3MTE5NjczOTMzMQ8wDQYDVQQKDAZGZWRpY3QxEDAOBgNVBAcMB0JydXNzZWwxEDAOBgNVBAgMB0JydXNzZWwxCzAJBgNVBAYTAkJFMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAh+VyS4O8e9IEDev5iOV5J/3/28IFiCaOdibP2UqP8IDJ5vNr18i/B1nMraWL3JP44gZp6SSb5QqVmXGShSc+ilr/U/Qo7fj0d6KrKmThPJcrOrqc34SaZ13slyQkhoXBaYzI+T9gKbL/Ei8alJ50TKUEjLhvG6+8sDldbdapweQ6nAUQho+dIGPjDxGubNYswjQQU/wQF/ivN3QWBuXxveLVsCTplV/5GCBp4D8BF4KwJZO+aiuyICDOj3Wb22ErkbCa0U5CHZ+tYVBg/bNqfUvPLf1zLvWOwNPWUi8niC+UwATi/ZHq+bHMs8Cn0q7C8UJmoGfKuVePZJI3FXHLKwIDAQABMA0GCSqGSIb3DQEBBAUAA4IBAQBed8rlj3DOIEtm6xj/zEBym17bQJ+TF3TP4Y+p7UrPSQ7sCpfmIesClH5Hx5ZBW5nlx/9yzTM8gvgNQUi32qirdobpDJ2mYxJXtj2VuGZeDzlx91004+UGr5DCenQYPIjd+Go1jRjU30c21WBnBC4GWWJPu4e5QqF/nya5e9WPug+BpVlIPXo5XHHyloV2MT+Vf1hvqC+aLpMpSXfZXM3lm+3ttanir+CzsnhSgdGN8IAzpHTR8NtaD5oP3w9qb7kvgs1Fd5/xWznE867PL9KcbiGN4Nn0qLOFUivwqbql0tOaA0cVwT/UYPINbnQFmZh/ALCVjT3L1wsn+TeNkMw8
+					</xbulk:PKCS10>
+				</ds:KeyInfo>
+				<xbulk:ProcessInfo>
+					<ki:Publish>true</ki:Publish>
+					<ki:AttributeCertificate>
+						<ki:ValidityInterval>
+							<ki:NotBefore>2016-06-28T13:14:39.373Z</ki:NotBefore>
+							<ki:NotAfter>2017-09-28T13:14:39.373Z</ki:NotAfter>
+						</ki:ValidityInterval>
+					</ki:AttributeCertificate>
+				</xbulk:ProcessInfo>
+			</xbulk:Request>
+		</xbulk:Requests>
+	</xbulk:SignedPart>
+</xbulk:BulkRegister>

@@ -58,7 +58,7 @@ public class DigestTest {
 		String digestValue = document.getElementsByTagNameNS("http://www.w3.org/2000/09/xmldsig#", "DigestValue")
 				.item(0).getTextContent();
 
-		assertEquals(digestValue, "iRYw7DMWtMEdxcHPMg+dNU6srBU=");
+		assertEquals(digestValue, "DMvbXqa2u1DtEomzbryJwe2llv0=");
 	}
 
 	private void writeDocument(Document doc) throws Exception {
